@@ -1,0 +1,26 @@
+{
+    "name": "voku/portable-utf8",
+    "description": "Portable UTF-8 library",
+    "keywords": ["php", "utf", "utf8", "clean"],
+    "type": "library",
+    "homepage": "https://github.com/voku/portable-utf8",
+    "license": "",
+    "authors": [
+        {
+          "name": "Hamid Sarfraz",
+          "homepage": "http://pageconfig.com/"
+        },
+        {
+            "name": "Lars Moelleken",
+            "homepage": "http://www.moelleken.org/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "classmap": [
+            "src"
+        ]
+    }
+}
