@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/voku/portable-utf8.svg?branch=master)](https://travis-ci.org/voku/portable-utf8)
+
 UTF8 Encoding
 =============
 
