@@ -12,6 +12,12 @@ Description
 
 It is written in PHP and can work without "mbstring", "iconv", UTF-8 support in "PCRE", or any other library. The benefit of Portable UTF-8 is that it is very light-weight, fast, easy to use, easy to bundle, and it always works (no dependencies).
 
+phpDocumentor
+=============
+
+[http://htmlpreview.github.io/?https://github.com/voku/portable-utf8/master/doc/classes/voku.helper.UTF8.html](http://htmlpreview.github.io/?https://github.com/voku/portable-utf8/master/doc/classes/voku.helper.UTF8.html)
+
+
 ##  Why Portable UTF-8?[]()
 PHP 5 and earlier versions have no native Unicode support. PHP 6 or 7 [[1]](http://schlueters.de/blog/archives/128-Future-of-PHP-6.html), where the Unicode support has been promised, may take years. To bridge the gap, there exist several extensions like "mbstring", "iconv" and "intl".
 
