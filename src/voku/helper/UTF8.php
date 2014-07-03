@@ -509,8 +509,8 @@ class UTF8
    */
   public static function removeBOM($string = "")
   {
-    if (self::substr($string, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
-      $string = self::substr($string, 3);
+    if (substr($string, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
+      $string = substr($string, 3);
     }
 
     return $string;
