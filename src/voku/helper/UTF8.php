@@ -734,7 +734,7 @@ class UTF8
     return implode(
         array_map(
             array(
-                'UTF8',
+                '\\voku\\helper\\UTF8',
                 'single_chr_html_encode'
             ), self::split($str)
         )
@@ -963,7 +963,7 @@ class UTF8
 
     $arg = array_map(
         array(
-            'UTF8',
+            '\\voku\\helper\\UTF8',
             'ord'
         ), $arg
     );
@@ -971,7 +971,7 @@ class UTF8
     if ($u_style) {
       $arg = array_map(
           array(
-              'UTF8',
+              '\\voku\\helper\\UTF8',
               'int_to_hex'
           ), $arg
       );
@@ -2192,7 +2192,7 @@ class UTF8
 
     return array_map(
         array(
-            'UTF8',
+            '\\voku\\helper\\UTF8',
             'chr'
         ), range($start, $end)
     );
@@ -2216,7 +2216,7 @@ class UTF8
       if (self::$support['pcre_utf8'] === true) {
         $chars = array_map(
             array(
-                'UTF8',
+                '\\voku\\helper\\UTF8',
                 'chr'
             ), range(48, 0xffff)
         );
@@ -2319,7 +2319,7 @@ class UTF8
     return implode(
         array_map(
             array(
-                'UTF8',
+                '\\voku\\helper\\UTF8',
                 'chr'
             ), $array
         )
