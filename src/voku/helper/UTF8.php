@@ -547,7 +547,7 @@ class UTF8
       $str = self::clean($str);
 
       if ($length === null) {
-        $length = PHP_INT_MAX;
+        $length = self::strlen($str);
       }
 
       return iconv_substr($str, $start, $length, 'UTF-8');
@@ -557,7 +557,7 @@ class UTF8
       $str = self::clean($str);
 
       if ($length === null) {
-        $length = PHP_INT_MAX;
+        $length = self::strlen($str);
       }
 
       return mb_substr($str, $start, $length, 'UTF-8');
