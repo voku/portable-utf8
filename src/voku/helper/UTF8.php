@@ -538,6 +538,9 @@ class UTF8
    */
   static public function substr($str, $start = 0, $length = null)
   {
+    if (empty($str)) {
+      return $str;
+    }
     self::checkForSupport();
 
     //iconv and mbstring are not tolerant to invalid encoding
@@ -634,7 +637,7 @@ class UTF8
       $ret = array_map('implode', $ret);
     }
 
-    if ($ret[0] === '') {
+    if (isset($ret[0]) && $ret[0] === '') {
       return array();
     }
 
