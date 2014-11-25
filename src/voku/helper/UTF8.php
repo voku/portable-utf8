@@ -551,6 +551,10 @@ class UTF8
    */
   static public function substr($str, $start = 0, $length = null)
   {
+    if (empty($str)) {
+      return $str;
+    }
+    
     self::checkForSupport();
 
     //iconv and mbstring are not tolerant to invalid encoding
@@ -647,7 +651,7 @@ class UTF8
       $ret = array_map('implode', $ret);
     }
 
-    if (count($ret) == 0 || $ret[0] === '') {
+    if (isset($ret[0]) && $ret[0] === '') {
       return array();
     }
 
@@ -709,25 +713,25 @@ class UTF8
     switch (strlen($chr)) {
       case 1:
         return
-          ord($chr);
+            ord($chr);
 
       case 2:
         return
-          ((ord($chr[0]) & 0x1F) << 6)
-          | (ord($chr[1]) & 0x3F);
+            ((ord($chr[0]) & 0x1F) << 6)
+            | (ord($chr[1]) & 0x3F);
 
       case 3:
         return
-          ((ord($chr[0]) & 0x0F) << 12)
-          | ((ord($chr[1]) & 0x3F) << 6)
-          | (ord($chr[2]) & 0x3F);
+            ((ord($chr[0]) & 0x0F) << 12)
+            | ((ord($chr[1]) & 0x3F) << 6)
+            | (ord($chr[2]) & 0x3F);
 
       case 4:
         return
-          ((ord($chr[0]) & 0x07) << 18)
-          | ((ord($chr[1]) & 0x3F) << 12)
-          | ((ord($chr[2]) & 0x3F) << 6)
-          | (ord($chr[3]) & 0x3F);
+            ((ord($chr[0]) & 0x07) << 18)
+            | ((ord($chr[1]) & 0x3F) << 12)
+            | ((ord($chr[2]) & 0x3F) << 6)
+            | (ord($chr[3]) & 0x3F);
     }
 
     return 0;
@@ -745,12 +749,12 @@ class UTF8
   static public function html_encode($str)
   {
     return implode(
-      array_map(
-        array(
-          '\\voku\\helper\\UTF8',
-          'single_chr_html_encode'
-        ), self::split($str)
-      )
+        array_map(
+            array(
+                '\\voku\\helper\\UTF8',
+                'single_chr_html_encode'
+            ), self::split($str)
+        )
     );
   }
 
@@ -975,18 +979,18 @@ class UTF8
     }
 
     $arg = array_map(
-      array(
-        '\\voku\\helper\\UTF8',
-        'ord'
-      ), $arg
+        array(
+            '\\voku\\helper\\UTF8',
+            'ord'
+        ), $arg
     );
 
     if ($u_style) {
       $arg = array_map(
-        array(
-          '\\voku\\helper\\UTF8',
-          'int_to_hex'
-        ), $arg
+          array(
+              '\\voku\\helper\\UTF8',
+              'int_to_hex'
+          ), $arg
       );
     }
 
@@ -2204,10 +2208,10 @@ class UTF8
     }
 
     return array_map(
-      array(
-        '\\voku\\helper\\UTF8',
-        'chr'
-      ), range($start, $end)
+        array(
+            '\\voku\\helper\\UTF8',
+            'chr'
+        ), range($start, $end)
     );
   }
 
@@ -2228,10 +2232,10 @@ class UTF8
     if (!$chars) {
       if (self::$support['pcre_utf8'] === true) {
         $chars = array_map(
-          array(
-            '\\voku\\helper\\UTF8',
-            'chr'
-          ), range(48, 0xffff)
+            array(
+                '\\voku\\helper\\UTF8',
+                'chr'
+            ), range(48, 0xffff)
         );
 
         $chars = preg_replace('/[^\p{N}\p{Lu}\p{Ll}]/u', '', $chars);
@@ -2335,12 +2339,12 @@ class UTF8
   static public function string($array)
   {
     return implode(
-      array_map(
-        array(
-          '\\voku\\helper\\UTF8',
-          'chr'
-        ), $array
-      )
+        array_map(
+            array(
+                '\\voku\\helper\\UTF8',
+                'chr'
+            ), $array
+        )
     );
   }
 
@@ -2863,24 +2867,24 @@ class UTF8
    */
   static public function whitespace_table() {
     $whitespace = array(
-      "SPACE"                     => "\x20",
-      "NO-BREAK SPACE"            => "\xc2\xa0",
-      "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
-      "EN QUAD"                   => "\xe2\x80\x80",
-      "EM QUAD"                   => "\xe2\x80\x81",
-      "EN SPACE"                  => "\xe2\x80\x82",
-      "EM SPACE"                  => "\xe2\x80\x83",
-      "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
-      "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
-      "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
-      "FIGURE SPACE"              => "\xe2\x80\x87",
-      "PUNCTUATION SPACE"         => "\xe2\x80\x88",
-      "THIN SPACE"                => "\xe2\x80\x89",
-      "HAIR SPACE"                => "\xe2\x80\x8a",
-      "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
-      "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
-      "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
-      "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
+        "SPACE"                     => "\x20",
+        "NO-BREAK SPACE"            => "\xc2\xa0",
+        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
+        "EN QUAD"                   => "\xe2\x80\x80",
+        "EM QUAD"                   => "\xe2\x80\x81",
+        "EN SPACE"                  => "\xe2\x80\x82",
+        "EM SPACE"                  => "\xe2\x80\x83",
+        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
+        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
+        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
+        "FIGURE SPACE"              => "\xe2\x80\x87",
+        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
+        "THIN SPACE"                => "\xe2\x80\x89",
+        "HAIR SPACE"                => "\xe2\x80\x8a",
+        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
+        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
+        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
+        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
     );
 
     return $whitespace;
