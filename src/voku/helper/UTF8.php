@@ -22,17 +22,11 @@ class UTF8
 
   /**
    * show UTF8-Support && exit
-   *
-   * @param bool $exit
    */
-  static public function showSupport($exit = true)
+  static public function showSupport()
   {
     foreach (self::$support as $utf8Support) {
       echo $utf8Support . "\n<br>";
-    }
-
-    if ($exit === true) {
-      exit();
     }
   }
 
@@ -473,18 +467,6 @@ class UTF8
       return iconv_strlen($str, 'UTF-8');
     }
 
-    //PCRE \X is buggy in many recent versions of PHP
-    //See the original post.
-
-    //if( self::$support['pcre_utf8'] === true )
-    //{
-    //	$str	= self::clean( $str );
-    //
-    //	preg_match_all( '/\X/u' , $str , $matches  );
-    //
-    //	return count( $matches[0] );
-    //}
-
     return count(self::split($string));
   }
 
@@ -500,7 +482,6 @@ class UTF8
   {
     // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
     // caused connection reset problem on larger strings
-    // $regx = '/((?:[\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3}){1,})|./';
 
     $regx = '/([\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})|./s';
 
@@ -551,11 +532,9 @@ class UTF8
       //	http://stackoverflow.com/a/8780076/369005
       $ret = preg_split('/(?<!^)(?!$)/u', $str);
 
-      // \X is buggy in many recent versions of PHP
-      //preg_match_all( '/\X/u' , $str , $ret );
-      //$ret	= $ret[0];
     } else {
-      //Fallback
+
+      // fallback
 
       $len = strlen($str);
 
@@ -844,17 +823,6 @@ class UTF8
       }
     }
 
-    //json not working properly for larger code points
-    //See the original post.
-
-    //if( extension_loaded( 'json' ) )
-    //{
-    //	$hex	= dechex( $i );
-    //
-    //	return json_decode('"\u'. ( strlen( $hex ) < 4 ? substr( '000' . $hex , -4 ) : $hex ) .'"');
-    //}
-    //else
-
     if (self::$support['mbstring'] === true) {
       return mb_convert_encoding("&#$i;", 'UTF-8', 'HTML-ENTITIES');
     } else if (version_compare(phpversion(), '5.0.0') === 1) {
@@ -866,19 +834,24 @@ class UTF8
 
     $bits = ( int )(log($i, 2) + 1);
 
-    if ($bits <= 7) //Single Byte
+    if ($bits <= 7) // Single Byte
     {
       return chr($i);
-    } else if ($bits <= 11) //Two Bytes
+    }
+    else if ($bits <= 11) // Two Bytes
     {
       return chr((($i >> 6) & 0x1F) | 0xC0) . chr(($i & 0x3F) | 0x80);
-    } else if ($bits <= 16) //Three Bytes
+    }
+    else if ($bits <= 16) // Three Bytes
     {
       return chr((($i >> 12) & 0x0F) | 0xE0) . chr((($i >> 6) & 0x3F) | 0x80) . chr(($i & 0x3F) | 0x80);
-    } else if ($bits <= 21) //Four Bytes
+    }
+    else if ($bits <= 21) //Four Bytes
     {
       return chr((($i >> 18) & 0x07) | 0xF0) . chr((($i >> 12) & 0x3F) | 0x80) . chr((($i >> 6) & 0x3F) | 0x80) . chr(($i & 0x3F) | 0x80);
-    } else {
+    }
+    else
+    {
       return ''; //Cannot be encoded as Valid UTF-8
     }
   }
@@ -1065,6 +1038,7 @@ class UTF8
     } else {
 
       // fallback
+
       if (empty($table)) {
         $table = array_flip(self::case_table());
       }
@@ -2133,12 +2107,12 @@ class UTF8
       return mb_substr($str, $start, $length, 'UTF-8');
     }
 
-    //Fallback
+    // fallback
 
-    //Split to array, and remove invalid characters
+    // split to array, and remove invalid characters
     $array = self::split($str);
 
-    //Extract relevant part, and join to make sting again
+    // extract relevant part, and join to make sting again
     return implode(array_slice($array, $start, $length));
   }
 
@@ -2701,12 +2675,6 @@ class UTF8
     // remove all none UTF-8 symbols
     $text = self::clean($text);
 
-    // remove non-breaking spaces and other non-standard spaces
-    //$text = preg_replace('/\s+/u', ' ', $text);
-
-    // replace controls symbols with nothing
-    //$text = preg_replace('/\p{C}+/u', '', $text);
-
     return (string)$text;
   }
 
@@ -2742,6 +2710,7 @@ class UTF8
     } else {
 
       // fallback
+
       if (empty($table)) {
         $table = self::case_table();
       }

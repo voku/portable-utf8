@@ -4,7 +4,7 @@
     "keywords": ["php", "utf", "utf8", "clean"],
     "type": "library",
     "homepage": "https://github.com/voku/portable-utf8",
-    "license": "",
+    "license": "Creative Commons BY 3.0",
     "authors": [
         {
           "name": "Hamid Sarfraz",
