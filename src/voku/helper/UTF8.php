@@ -37,48 +37,6 @@ class UTF8
   }
 
   /**
-   * check for UTF8-Support
-   */
-  static public function checkForSupport()
-  {
-    if (count(self::$support) === 0) {
-      self::$support['mbstring'] = self::mbstring_loaded();
-      self::$support['iconv'] = self::iconv_loaded();
-      self::$support['pcre_utf8'] = self::pcre_utf8_support();
-    }
-  }
-
-  /**
-   * checks whether mbstring is available on the server
-   *
-   * @return   bool True if available, False otherwise
-   */
-  static public function mbstring_loaded()
-  {
-    return extension_loaded('mbstring') ? true : false;
-  }
-
-  /**
-   * checks whether iconv is available on the server
-   *
-   * @return   bool True if available, False otherwise
-   */
-  static public function iconv_loaded()
-  {
-    return extension_loaded('iconv') ? true : false;
-  }
-
-  /**
-   * checks if \u modifier is available that enables Unicode support in PCRE.
-   *
-   * @return   bool True if support is available, false otherwise
-   */
-  static public function pcre_utf8_support()
-  {
-    return @preg_match('//u', '');
-  }
-
-  /**
    * UTF-8 version of htmlentities()
    *
    * Convert all applicable characters to HTML entities
@@ -428,6 +386,48 @@ class UTF8
   }
 
   /**
+   * check for UTF8-Support
+   */
+  static public function checkForSupport()
+  {
+    if (count(self::$support) === 0) {
+      self::$support['mbstring'] = self::mbstring_loaded();
+      self::$support['iconv'] = self::iconv_loaded();
+      self::$support['pcre_utf8'] = self::pcre_utf8_support();
+    }
+  }
+
+  /**
+   * checks whether mbstring is available on the server
+   *
+   * @return   bool True if available, False otherwise
+   */
+  static public function mbstring_loaded()
+  {
+    return extension_loaded('mbstring') ? true : false;
+  }
+
+  /**
+   * checks whether iconv is available on the server
+   *
+   * @return   bool True if available, False otherwise
+   */
+  static public function iconv_loaded()
+  {
+    return extension_loaded('iconv') ? true : false;
+  }
+
+  /**
+   * checks if \u modifier is available that enables Unicode support in PCRE.
+   *
+   * @return   bool True if support is available, false otherwise
+   */
+  static public function pcre_utf8_support()
+  {
+    return @preg_match('//u', '');
+  }
+
+  /**
    * checks if the number of Unicode characters in a string are not
    * more than the specified integer.
    *
@@ -527,66 +527,6 @@ class UTF8
     }
 
     return $string;
-  }
-
-  /**
-   * Get part of string
-   *
-   * @link http://php.net/manual/en/function.mb-substr.php
-   *
-   * @param string $str    <p>
-   *                       The string being checked.
-   *                       </p>
-   * @param int    $start  <p>
-   *                       The first position used in str.
-   *                       </p>
-   * @param int    $length [optional] <p>
-   *                       The maximum length of the returned string.
-   *                       </p>
-   *
-   * @return string mb_substr returns the portion of
-   * str specified by the
-   * start and
-   * length parameters.
-   */
-  static public function substr($str, $start = 0, $length = null)
-  {
-    if (empty($str)) {
-      return $str;
-    }
-    
-    self::checkForSupport();
-
-    //iconv and mbstring are not tolerant to invalid encoding
-    //further, their behaviour is inconsistent with that of PHP's substr
-
-    if (self::$support['iconv'] === true) {
-      $str = self::clean($str);
-
-      if ($length === null) {
-        $length = self::strlen($str);
-      }
-
-      return iconv_substr($str, $start, $length, 'UTF-8');
-    }
-
-    if (self::$support['mbstring'] === true) {
-      $str = self::clean($str);
-
-      if ($length === null) {
-        $length = self::strlen($str);
-      }
-
-      return mb_substr($str, $start, $length, 'UTF-8');
-    }
-
-    //Fallback
-
-    //Split to array, and remove invalid characters
-    $array = self::split($str);
-
-    //Extract relevant part, and join to make sting again
-    return implode(array_slice($array, $start, $length));
   }
 
   /**
@@ -713,25 +653,25 @@ class UTF8
     switch (strlen($chr)) {
       case 1:
         return
-            ord($chr);
+          ord($chr);
 
       case 2:
         return
-            ((ord($chr[0]) & 0x1F) << 6)
-            | (ord($chr[1]) & 0x3F);
+          ((ord($chr[0]) & 0x1F) << 6)
+          | (ord($chr[1]) & 0x3F);
 
       case 3:
         return
-            ((ord($chr[0]) & 0x0F) << 12)
-            | ((ord($chr[1]) & 0x3F) << 6)
-            | (ord($chr[2]) & 0x3F);
+          ((ord($chr[0]) & 0x0F) << 12)
+          | ((ord($chr[1]) & 0x3F) << 6)
+          | (ord($chr[2]) & 0x3F);
 
       case 4:
         return
-            ((ord($chr[0]) & 0x07) << 18)
-            | ((ord($chr[1]) & 0x3F) << 12)
-            | ((ord($chr[2]) & 0x3F) << 6)
-            | (ord($chr[3]) & 0x3F);
+          ((ord($chr[0]) & 0x07) << 18)
+          | ((ord($chr[1]) & 0x3F) << 12)
+          | ((ord($chr[2]) & 0x3F) << 6)
+          | (ord($chr[3]) & 0x3F);
     }
 
     return 0;
@@ -749,12 +689,12 @@ class UTF8
   static public function html_encode($str)
   {
     return implode(
-        array_map(
-            array(
-                '\\voku\\helper\\UTF8',
-                'single_chr_html_encode'
-            ), self::split($str)
-        )
+      array_map(
+        array(
+          '\\voku\\helper\\UTF8',
+          'single_chr_html_encode'
+        ), self::split($str)
+      )
     );
   }
 
@@ -979,18 +919,18 @@ class UTF8
     }
 
     $arg = array_map(
-        array(
-            '\\voku\\helper\\UTF8',
-            'ord'
-        ), $arg
+      array(
+        '\\voku\\helper\\UTF8',
+        'ord'
+      ), $arg
     );
 
     if ($u_style) {
       $arg = array_map(
-          array(
-              '\\voku\\helper\\UTF8',
-              'int_to_hex'
-          ), $arg
+        array(
+          '\\voku\\helper\\UTF8',
+          'int_to_hex'
+        ), $arg
       );
     }
 
@@ -2143,6 +2083,66 @@ class UTF8
   }
 
   /**
+   * Get part of string
+   *
+   * @link http://php.net/manual/en/function.mb-substr.php
+   *
+   * @param string $str    <p>
+   *                       The string being checked.
+   *                       </p>
+   * @param int    $start  <p>
+   *                       The first position used in str.
+   *                       </p>
+   * @param int    $length [optional] <p>
+   *                       The maximum length of the returned string.
+   *                       </p>
+   *
+   * @return string mb_substr returns the portion of
+   * str specified by the
+   * start and
+   * length parameters.
+   */
+  static public function substr($str, $start = 0, $length = null)
+  {
+    if (empty($str)) {
+      return $str;
+    }
+
+    self::checkForSupport();
+
+    //iconv and mbstring are not tolerant to invalid encoding
+    //further, their behaviour is inconsistent with that of PHP's substr
+
+    if (self::$support['iconv'] === true) {
+      $str = self::clean($str);
+
+      if ($length === null) {
+        $length = self::strlen($str);
+      }
+
+      return iconv_substr($str, $start, $length, 'UTF-8');
+    }
+
+    if (self::$support['mbstring'] === true) {
+      $str = self::clean($str);
+
+      if ($length === null) {
+        $length = self::strlen($str);
+      }
+
+      return mb_substr($str, $start, $length, 'UTF-8');
+    }
+
+    //Fallback
+
+    //Split to array, and remove invalid characters
+    $array = self::split($str);
+
+    //Extract relevant part, and join to make sting again
+    return implode(array_slice($array, $start, $length));
+  }
+
+  /**
    * count the number of sub string occurrences
    *
    * @param    string $haystack The string to search in
@@ -2208,10 +2208,10 @@ class UTF8
     }
 
     return array_map(
-        array(
-            '\\voku\\helper\\UTF8',
-            'chr'
-        ), range($start, $end)
+      array(
+        '\\voku\\helper\\UTF8',
+        'chr'
+      ), range($start, $end)
     );
   }
 
@@ -2232,10 +2232,10 @@ class UTF8
     if (!$chars) {
       if (self::$support['pcre_utf8'] === true) {
         $chars = array_map(
-            array(
-                '\\voku\\helper\\UTF8',
-                'chr'
-            ), range(48, 0xffff)
+          array(
+            '\\voku\\helper\\UTF8',
+            'chr'
+          ), range(48, 0xffff)
         );
 
         $chars = preg_replace('/[^\p{N}\p{Lu}\p{Ll}]/u', '', $chars);
@@ -2339,12 +2339,12 @@ class UTF8
   static public function string($array)
   {
     return implode(
-        array_map(
-            array(
-                '\\voku\\helper\\UTF8',
-                'chr'
-            ), $array
-        )
+      array_map(
+        array(
+          '\\voku\\helper\\UTF8',
+          'chr'
+        ), $array
+      )
     );
   }
 
@@ -2865,26 +2865,27 @@ class UTF8
    * @return array an array with all known whitespace characters as values and the type of whitespace as keys
    *         as defined in above URL
    */
-  static public function whitespace_table() {
+  static public function whitespace_table()
+  {
     $whitespace = array(
-        "SPACE"                     => "\x20",
-        "NO-BREAK SPACE"            => "\xc2\xa0",
-        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
-        "EN QUAD"                   => "\xe2\x80\x80",
-        "EM QUAD"                   => "\xe2\x80\x81",
-        "EN SPACE"                  => "\xe2\x80\x82",
-        "EM SPACE"                  => "\xe2\x80\x83",
-        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
-        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
-        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
-        "FIGURE SPACE"              => "\xe2\x80\x87",
-        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
-        "THIN SPACE"                => "\xe2\x80\x89",
-        "HAIR SPACE"                => "\xe2\x80\x8a",
-        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
-        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
-        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
-        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
+      "SPACE"                     => "\x20",
+      "NO-BREAK SPACE"            => "\xc2\xa0",
+      "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
+      "EN QUAD"                   => "\xe2\x80\x80",
+      "EM QUAD"                   => "\xe2\x80\x81",
+      "EN SPACE"                  => "\xe2\x80\x82",
+      "EM SPACE"                  => "\xe2\x80\x83",
+      "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
+      "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
+      "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
+      "FIGURE SPACE"              => "\xe2\x80\x87",
+      "PUNCTUATION SPACE"         => "\xe2\x80\x88",
+      "THIN SPACE"                => "\xe2\x80\x89",
+      "HAIR SPACE"                => "\xe2\x80\x8a",
+      "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
+      "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
+      "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
+      "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
     );
 
     return $whitespace;
