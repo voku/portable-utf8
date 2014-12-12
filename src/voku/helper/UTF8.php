@@ -140,74 +140,6 @@ class UTF8
   }
 
   /**
-   * UTF-8 version of html_entity_decode()
-   *
-   * Convert all HTML entities to their applicable characters
-   *
-   * @link http://php.net/manual/en/function.html-entity-decode.php
-   *
-   * @param string $string   <p>
-   *                         The input string.
-   *                         </p>
-   * @param int    $flags    [optional] <p>
-   *                         A bitmask of one or more of the following flags, which specify how to handle quotes and
-   *                         which document type to use. The default is ENT_COMPAT | ENT_HTML401.
-   *                         <table>
-   *                         Available <i>flags</i> constants
-   *                         <tr valign="top">
-   *                         <td>Constant Name</td>
-   *                         <td>Description</td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_COMPAT</b></td>
-   *                         <td>Will convert double-quotes and leave single-quotes alone.</td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_QUOTES</b></td>
-   *                         <td>Will convert both double and single quotes.</td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_NOQUOTES</b></td>
-   *                         <td>Will leave both double and single quotes unconverted.</td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_HTML401</b></td>
-   *                         <td>
-   *                         Handle code as HTML 4.01.
-   *                         </td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_XML1</b></td>
-   *                         <td>
-   *                         Handle code as XML 1.
-   *                         </td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_XHTML</b></td>
-   *                         <td>
-   *                         Handle code as XHTML.
-   *                         </td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_HTML5</b></td>
-   *                         <td>
-   *                         Handle code as HTML 5.
-   *                         </td>
-   *                         </tr>
-   *                         </table>
-   *                         </p>
-   * @param string $encoding [optional] <p>
-   *                         Encoding to use.
-   *                         </p>
-   *
-   * @return string the decoded string.
-   */
-  static public function html_entity_decode($string, $flags = ENT_COMPAT, $encoding = 'UTF-8')
-  {
-    return html_entity_decode($string, $flags, $encoding);
-  }
-
-  /**
    * UTF-8 version of htmlspecialchars()
    *
    * Convert special characters to HTML entities
@@ -632,25 +564,25 @@ class UTF8
     switch (strlen($chr)) {
       case 1:
         return
-          ord($chr);
+            ord($chr);
 
       case 2:
         return
-          ((ord($chr[0]) & 0x1F) << 6)
-          | (ord($chr[1]) & 0x3F);
+            ((ord($chr[0]) & 0x1F) << 6)
+            | (ord($chr[1]) & 0x3F);
 
       case 3:
         return
-          ((ord($chr[0]) & 0x0F) << 12)
-          | ((ord($chr[1]) & 0x3F) << 6)
-          | (ord($chr[2]) & 0x3F);
+            ((ord($chr[0]) & 0x0F) << 12)
+            | ((ord($chr[1]) & 0x3F) << 6)
+            | (ord($chr[2]) & 0x3F);
 
       case 4:
         return
-          ((ord($chr[0]) & 0x07) << 18)
-          | ((ord($chr[1]) & 0x3F) << 12)
-          | ((ord($chr[2]) & 0x3F) << 6)
-          | (ord($chr[3]) & 0x3F);
+            ((ord($chr[0]) & 0x07) << 18)
+            | ((ord($chr[1]) & 0x3F) << 12)
+            | ((ord($chr[2]) & 0x3F) << 6)
+            | (ord($chr[3]) & 0x3F);
     }
 
     return 0;
@@ -668,12 +600,12 @@ class UTF8
   static public function html_encode($str)
   {
     return implode(
-      array_map(
-        array(
-          '\\voku\\helper\\UTF8',
-          'single_chr_html_encode'
-        ), self::split($str)
-      )
+        array_map(
+            array(
+                '\\voku\\helper\\UTF8',
+                'single_chr_html_encode'
+            ), self::split($str)
+        )
     );
   }
 
@@ -808,7 +740,7 @@ class UTF8
    *
    * @param    int $code_point The code point for which to generate a character
    *
-   * @return   string Milti-Byte character
+   * @return   string Multi-Byte character
    *           returns empty string on failure to encode
    */
   static public function chr($code_point)
@@ -823,37 +755,7 @@ class UTF8
       }
     }
 
-    if (self::$support['mbstring'] === true) {
-      return mb_convert_encoding("&#$i;", 'UTF-8', 'HTML-ENTITIES');
-    } else if (version_compare(phpversion(), '5.0.0') === 1) {
-      //html_entity_decode did not support Multi-Byte before PHP 5.0.0
-      return html_entity_decode("&#{$i};", ENT_QUOTES, 'UTF-8');
-    }
-
-    // fallback
-
-    $bits = ( int )(log($i, 2) + 1);
-
-    if ($bits <= 7) // Single Byte
-    {
-      return chr($i);
-    }
-    else if ($bits <= 11) // Two Bytes
-    {
-      return chr((($i >> 6) & 0x1F) | 0xC0) . chr(($i & 0x3F) | 0x80);
-    }
-    else if ($bits <= 16) // Three Bytes
-    {
-      return chr((($i >> 12) & 0x0F) | 0xE0) . chr((($i >> 6) & 0x3F) | 0x80) . chr(($i & 0x3F) | 0x80);
-    }
-    else if ($bits <= 21) //Four Bytes
-    {
-      return chr((($i >> 18) & 0x07) | 0xF0) . chr((($i >> 12) & 0x3F) | 0x80) . chr((($i >> 6) & 0x3F) | 0x80) . chr(($i & 0x3F) | 0x80);
-    }
-    else
-    {
-      return ''; //Cannot be encoded as Valid UTF-8
-    }
+    return self::html_entity_decode("&#{$i};", ENT_QUOTES);
   }
 
   /**
@@ -875,6 +777,74 @@ class UTF8
   }
 
   /**
+   * UTF-8 version of html_entity_decode()
+   *
+   * Convert all HTML entities to their applicable characters
+   *
+   * @link http://php.net/manual/en/function.html-entity-decode.php
+   *
+   * @param string $string   <p>
+   *                         The input string.
+   *                         </p>
+   * @param int    $flags    [optional] <p>
+   *                         A bitmask of one or more of the following flags, which specify how to handle quotes and
+   *                         which document type to use. The default is ENT_COMPAT | ENT_HTML401.
+   *                         <table>
+   *                         Available <i>flags</i> constants
+   *                         <tr valign="top">
+   *                         <td>Constant Name</td>
+   *                         <td>Description</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_COMPAT</b></td>
+   *                         <td>Will convert double-quotes and leave single-quotes alone.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_QUOTES</b></td>
+   *                         <td>Will convert both double and single quotes.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_NOQUOTES</b></td>
+   *                         <td>Will leave both double and single quotes unconverted.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_HTML401</b></td>
+   *                         <td>
+   *                         Handle code as HTML 4.01.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_XML1</b></td>
+   *                         <td>
+   *                         Handle code as XML 1.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_XHTML</b></td>
+   *                         <td>
+   *                         Handle code as XHTML.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_HTML5</b></td>
+   *                         <td>
+   *                         Handle code as HTML 5.
+   *                         </td>
+   *                         </tr>
+   *                         </table>
+   *                         </p>
+   * @param string $encoding [optional] <p>
+   *                         Encoding to use.
+   *                         </p>
+   *
+   * @return string the decoded string.
+   */
+  static public function html_entity_decode($string, $flags = ENT_COMPAT, $encoding = 'UTF-8')
+  {
+    return html_entity_decode($string, $flags, $encoding);
+  }
+
+  /**
    * accepts a string and returns an array of Unicode Code Points
    *
    * @since 1.0
@@ -892,18 +862,18 @@ class UTF8
     }
 
     $arg = array_map(
-      array(
-        '\\voku\\helper\\UTF8',
-        'ord'
-      ), $arg
+        array(
+            '\\voku\\helper\\UTF8',
+            'ord'
+        ), $arg
     );
 
     if ($u_style) {
       $arg = array_map(
-        array(
-          '\\voku\\helper\\UTF8',
-          'int_to_hex'
-        ), $arg
+          array(
+              '\\voku\\helper\\UTF8',
+              'int_to_hex'
+          ), $arg
       );
     }
 
@@ -2182,10 +2152,10 @@ class UTF8
     }
 
     return array_map(
-      array(
-        '\\voku\\helper\\UTF8',
-        'chr'
-      ), range($start, $end)
+        array(
+            '\\voku\\helper\\UTF8',
+            'chr'
+        ), range($start, $end)
     );
   }
 
@@ -2206,10 +2176,10 @@ class UTF8
     if (!$chars) {
       if (self::$support['pcre_utf8'] === true) {
         $chars = array_map(
-          array(
-            '\\voku\\helper\\UTF8',
-            'chr'
-          ), range(48, 0xffff)
+            array(
+                '\\voku\\helper\\UTF8',
+                'chr'
+            ), range(48, 0xffff)
         );
 
         $chars = preg_replace('/[^\p{N}\p{Lu}\p{Ll}]/u', '', $chars);
@@ -2313,12 +2283,12 @@ class UTF8
   static public function string($array)
   {
     return implode(
-      array_map(
-        array(
-          '\\voku\\helper\\UTF8',
-          'chr'
-        ), $array
-      )
+        array_map(
+            array(
+                '\\voku\\helper\\UTF8',
+                'chr'
+            ), $array
+        )
     );
   }
 
@@ -2665,10 +2635,26 @@ class UTF8
   {
     self::checkForSupport();
 
+    // init
+    $utf8CheckDone = false;
+
     // strip invalid characters from UTF-8 strings (so that we can insert it into the db)
     if (self::$support['mbstring'] === true) {
-      $text = mb_convert_encoding($text, 'UTF-8');
-    } else if (function_exists('iconv')) {
+      $sEncoding = mb_detect_encoding($text, "auto", true);
+      $utf8CheckDone = true;
+
+      if (
+          ($sEncoding != 'UTF-8')
+          && !mb_check_encoding($text, 'UTF-8')
+      ) {
+        $text = mb_convert_encoding($text, 'UTF-8', $sEncoding);
+      }
+    }
+
+    if (
+        $utf8CheckDone === false
+        && function_exists('iconv')
+    ) {
       $text = iconv('UTF-8', 'UTF-8//TRANSLIT//IGNORE', $text);
     }
 
@@ -2837,24 +2823,24 @@ class UTF8
   static public function whitespace_table()
   {
     $whitespace = array(
-      "SPACE"                     => "\x20",
-      "NO-BREAK SPACE"            => "\xc2\xa0",
-      "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
-      "EN QUAD"                   => "\xe2\x80\x80",
-      "EM QUAD"                   => "\xe2\x80\x81",
-      "EN SPACE"                  => "\xe2\x80\x82",
-      "EM SPACE"                  => "\xe2\x80\x83",
-      "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
-      "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
-      "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
-      "FIGURE SPACE"              => "\xe2\x80\x87",
-      "PUNCTUATION SPACE"         => "\xe2\x80\x88",
-      "THIN SPACE"                => "\xe2\x80\x89",
-      "HAIR SPACE"                => "\xe2\x80\x8a",
-      "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
-      "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
-      "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
-      "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
+        "SPACE"                     => "\x20",
+        "NO-BREAK SPACE"            => "\xc2\xa0",
+        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
+        "EN QUAD"                   => "\xe2\x80\x80",
+        "EM QUAD"                   => "\xe2\x80\x81",
+        "EN SPACE"                  => "\xe2\x80\x82",
+        "EM SPACE"                  => "\xe2\x80\x83",
+        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
+        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
+        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
+        "FIGURE SPACE"              => "\xe2\x80\x87",
+        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
+        "THIN SPACE"                => "\xe2\x80\x89",
+        "HAIR SPACE"                => "\xe2\x80\x8a",
+        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
+        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
+        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
+        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
     );
 
     return $whitespace;
