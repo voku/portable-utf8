@@ -90,4 +90,12 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   }
 
+  public function testWhitespace()
+  {
+    $whitespaces = UTF8::whitespace_table();
+    foreach ($whitespaces as $whitespace) {
+      $this->assertEquals(" ", UTF8::clean($whitespace, false, true));
+    }
+  }
+
 }
