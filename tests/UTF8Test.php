@@ -120,4 +120,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       $this->assertEquals($after, UTF8::strtoupper($before));
     }
   }
+
+  public function testStrrpos()
+  {
+    $this->assertEquals(0, UTF8::strrpos("κόσμε", "κ"));
+    $this->assertEquals(2, UTF8::strrpos("κόσμε", "σ"));
+    $this->assertEquals(8, UTF8::strrpos("ABC-ÖÄÜ-中文空白", "中"));
+  }
 }
