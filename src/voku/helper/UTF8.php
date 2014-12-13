@@ -2658,8 +2658,8 @@ class UTF8
       $text = iconv('UTF-8', 'UTF-8//TRANSLIT//IGNORE', $text);
     }
 
-    // remove all none UTF-8 symbols
-    $text = self::clean($text);
+    // remove all none UTF-8 symbols && remove BOM
+    $text = self::clean($text, true);
 
     return (string)$text;
   }
