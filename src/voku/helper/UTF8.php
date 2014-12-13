@@ -2644,7 +2644,8 @@ class UTF8
       $utf8CheckDone = true;
 
       if (
-          ($sEncoding != 'UTF-8')
+          $sEncoding
+          && $sEncoding != 'UTF-8'
           && !mb_check_encoding($text, 'UTF-8')
       ) {
         $text = mb_convert_encoding($text, 'UTF-8', $sEncoding);
