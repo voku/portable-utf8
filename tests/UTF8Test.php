@@ -83,7 +83,6 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        //$this->assertEquals($before, $testString);
         $this->assertEquals($after, UTF8::cleanup($testString));
       }
     }
@@ -98,4 +97,27 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testStrtolower()
+  {
+    $tests = array(
+      "ABC-中文空白" => "abc-中文空白",
+      "ÖÄÜ" => "öäü"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::strtolower($before));
+    }
+  }
+
+  public function testStrtoupper()
+  {
+    $tests = array(
+        "abc-中文空白" => "ABC-中文空白",
+        "öäü" => "ÖÄÜ"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::strtoupper($before));
+    }
+  }
 }
