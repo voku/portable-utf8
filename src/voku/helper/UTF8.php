@@ -328,7 +328,7 @@ class UTF8
    *
    * @return   bool True if available, False otherwise
    */
-  static public function mbstring_loaded()
+  static protected function mbstring_loaded()
   {
     return extension_loaded('mbstring') ? true : false;
   }
@@ -338,7 +338,7 @@ class UTF8
    *
    * @return   bool True if available, False otherwise
    */
-  static public function iconv_loaded()
+  static protected function iconv_loaded()
   {
     return extension_loaded('iconv') ? true : false;
   }
@@ -348,7 +348,7 @@ class UTF8
    *
    * @return   bool True if support is available, false otherwise
    */
-  static public function pcre_utf8_support()
+  static protected function pcre_utf8_support()
   {
     return @preg_match('//u', '');
   }
@@ -557,7 +557,13 @@ class UTF8
    */
   static public function max_chr_width($str)
   {
-    return max(self::chr_size_list($str));
+    $bytes = self::chr_size_list($str);
+    if (count($bytes) > 0) {
+      return max($bytes);
+    } else {
+      return 0;
+    }
+
   }
 
   /**
@@ -570,6 +576,10 @@ class UTF8
 
   static public function chr_size_list($str)
   {
+    if (!$str) {
+      return array();
+    }
+
     return array_map('strlen', self::split($str));
   }
 
@@ -582,6 +592,10 @@ class UTF8
    */
   static public function single_chr_html_encode($chr)
   {
+    if (!$chr) {
+      return '';
+    }
+
     return '&#' . self::ord($chr) . ';';
   }
 
@@ -595,6 +609,10 @@ class UTF8
    */
   static public function ord($chr)
   {
+    if (!$chr) {
+      return 0;
+    }
+
     $chr = self::split($chr);
 
     $chr = $chr[0];
@@ -661,6 +679,8 @@ class UTF8
 
   /**
    * checks if the given string is a Byte Order Mark
+   *
+   * INFO: use "UTF8::string_has_bom()" if you will check BOM in a string
    *
    * @param    string $utf8_chr The input string
    *
@@ -977,6 +997,12 @@ class UTF8
    */
   static public function word_count($str)
   {
+    $str = self::trim($str);
+
+    if (!$str) {
+      return 0;
+    }
+
     return count(explode('-', self::url_slug($str)));
   }
 
