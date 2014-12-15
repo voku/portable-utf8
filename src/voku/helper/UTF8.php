@@ -1022,8 +1022,8 @@ class UTF8
   {
     self::checkForSupport();
 
-    $str = self::clean($str, true); // INFO: true == $remove_bom
-
+    $str = self::trim($str);
+    $str = self::clean($str, true, true);
     $str = self::strtolower($str);
 
     if ($trns && self::$support['iconv'] === true) {

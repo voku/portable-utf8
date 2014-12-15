@@ -292,6 +292,39 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testUrlSlug()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "abc-中文空白",
+        "      - ÖÄÜ- "  => "öäü",
+        "öäü"            => "öäü"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::url_slug($before));
+    }
+
+    $tests = array(
+        "  -ABC-中文空白-  " => "abc",
+        "      - ÖÄÜ- "  => "öäü",
+        "  öäüabc"            => "öäüa"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::url_slug($before, 4));
+    }
+
+    $tests = array(
+        "  -ABC-中文空白-  " => "abc",
+        "      - ÖÄÜ- "  => "o-a-u",
+        "öäü"            => "o-a-u"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::url_slug($before, -1, true));
+    }
+  }
+
   public function testString()
   {
     $this->assertEquals("", UTF8::string(array()));
@@ -521,6 +554,36 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testMin()
+  {
+    $tests = array(
+        "abc-中文空白"     => "-",
+        "öäü"          => "ä",
+        "öäü test öäü" => " ",
+        "ÖÄÜ"          => 'Ä',
+        "中文空白"         => "中"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::min($before));
+    }
+  }
+
+  public function testMax()
+  {
+    $tests = array(
+        "abc-中文空白"     => "空",
+        "öäü"          => "ü",
+        "öäü test öäü" => "ü",
+        "ÖÄÜ"          => 'Ü',
+        "中文空白"         => "空"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::max($before));
+    }
+  }
+
   public function testUcfirst()
   {
     $this->assertEquals("Öäü", UTF8::ucfirst("Öäü"));
@@ -541,7 +604,6 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals(6, UTF8::strripos("κόσμε-κόσμε", "Κ"));
     $this->assertEquals(11, UTF8::strripos("test κόσμε κόσμε test", "Κ"));
     $this->assertEquals(7, UTF8::strripos("中文空白-ÖÄÜ-中文空白", "ü"));
-
   }
 
   public function testStrrpos()
