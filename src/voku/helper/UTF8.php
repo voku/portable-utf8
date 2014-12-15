@@ -1023,33 +1023,13 @@ class UTF8
 
     $str = self::trim($str);
     $str = self::clean($str, true, true);
-    $str = self::strtolower($str);
 
-    if (self::$support['pcre_utf8'] === true) {
-      $str = preg_replace('/[^\\p{L}\\p{Nd}\-_]+/u', '-', $str);
-    } else {
-      $str = preg_replace('/[\>\<\+\?\&\"\'\/\\\:\s\-\#\%\=]+/', '-', $str);
-    }
-
+    // fallback
     if ($maxl == -1) {
       $maxl = 100;
     }
 
-    $str = URLify::filter($str, $maxl, $language, false, true, true, '-');
-
-    if ($maxl > 0) {
-      $maxl = ( int )$maxl;
-
-      $str = self::substr($str, 0, $maxl);
-    }
-
-    $str = trim($str, '_-');
-
-    if (!strlen($str)) {
-      $str = substr(md5(microtime(true)), 0, ($maxl == -1 ? 32 : $maxl));
-    }
-
-    return $str;
+    return URLify::filter($str, $maxl, $language, false, true, true, '-');
   }
 
   /**
