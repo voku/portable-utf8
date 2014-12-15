@@ -295,9 +295,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testUrlSlug()
   {
     $tests = array(
-        "  -ABC-中文空白-  " => "abc-中文空白",
-        "      - ÖÄÜ- "  => "öäü",
-        "öäü"            => "öäü"
+        "  -ABC-中文空白-  " => "abc",
+        "      - ÖÄÜ- "  => "oau",
+        "öäü"            => "oau"
     );
 
     foreach ($tests as $before => $after) {
@@ -306,8 +306,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     $tests = array(
         "  -ABC-中文空白-  " => "abc",
-        "      - ÖÄÜ- "  => "öäü",
-        "  öäüabc"            => "öäüa"
+        "      - ÖÄÜ- "  => "oau",
+        "  öäüabc"            => "oaua"
     );
 
     foreach ($tests as $before => $after) {
@@ -315,13 +315,14 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
 
     $tests = array(
+        "Facebook bekämpft erstmals Durchsuchungsbefehle" => "facebook-bekaempft-erstmals-durchsuchungsbefehle",
         "  -ABC-中文空白-  " => "abc",
-        "      - ÖÄÜ- "  => "o-a-u",
-        "öäü"            => "o-a-u"
+        "      - ÖÄÜ- "  => "oeaeue",
+        "öäü"            => "oeaeue"
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::url_slug($before, -1, true));
+      $this->assertEquals($after, UTF8::url_slug($before, -1, 'de'));
     }
   }
 

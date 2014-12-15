@@ -2,6 +2,8 @@
 
 namespace voku\helper;
 
+use URLify;
+
 /**
  * UTF8-Helper-Class
  *
@@ -1007,18 +1009,15 @@ class UTF8
   }
 
   /**
-   * creates SEO Friendly URL Slugs with UTF-8 support
+   * creates SEO Friendly URL Slugs via "URLify"
    *
-   * INFO: Optionally can do transliteration
+   * @param string $str
+   * @param int    $maxl
+   * @param string $language
    *
-   * @param    string $str  The text which is to be converted Slug
-   * @param    int    $maxl Optional. Sets the maximum number of characters
-   *                        to be allowed in the slug. Default is UNLIMITED.
-   * @param    bool   $trns
-   *
-   * @return   string The UTF-8 encoded URL Slug.
+   * @return mixed|String
    */
-  static public function url_slug($str = '', $maxl = -1, $trns = false)
+  static public function url_slug($str = '', $maxl = -1, $language = "latin")
   {
     self::checkForSupport();
 
@@ -1026,15 +1025,17 @@ class UTF8
     $str = self::clean($str, true, true);
     $str = self::strtolower($str);
 
-    if ($trns && self::$support['iconv'] === true) {
-      $str = iconv('UTF-8', 'US-ASCII//TRANSLIT//IGNORE', $str);
-    }
-
     if (self::$support['pcre_utf8'] === true) {
       $str = preg_replace('/[^\\p{L}\\p{Nd}\-_]+/u', '-', $str);
     } else {
       $str = preg_replace('/[\>\<\+\?\&\"\'\/\\\:\s\-\#\%\=]+/', '-', $str);
     }
+
+    if ($maxl == -1) {
+      $maxl = 100;
+    }
+
+    $str = URLify::filter($str, $maxl, $language, false, true, true, '-');
 
     if ($maxl > 0) {
       $maxl = ( int )$maxl;
