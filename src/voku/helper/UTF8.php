@@ -373,11 +373,8 @@ class UTF8
    *
    * @link     http://php.net/manual/en/function.mb-strlen.php
    *
-   * @param $string
+   * @param string $string The string being checked for length.
    *
-   * @internal param string $str <p>
-   *           The string being checked for length.
-   *           </p>
    * @return int the number of characters in
    *           string str having character encoding
    *           encoding. A multi-byte character is
@@ -2168,28 +2165,32 @@ class UTF8
    */
   static public function range($var1, $var2)
   {
+    if (!$var1 || !$var2) {
+      return array();
+    }
+
     if (ctype_digit(( string )$var1)) {
       $start = ( int )$var1;
-    } else if (!($start = ( int )self::hex_to_int($var1))) {
-      //if not u+0000 style codepoint
+    } else if (ctype_xdigit($var1)) {
+      $start = ( int )self::hex_to_int($var1);
+    } else {
+      $start = self::ord($var1);
+    }
 
-      if (!($start = self::ord($var1))) {
-        //if not a valid utf8 character
-
-        return array();
-      }
+    if (!$start) {
+      return array();
     }
 
     if (ctype_digit(( string )$var2)) {
       $end = ( int )$var2;
-    } else if (!($end = ( int )self::hex_to_int($var2))) {
-      //if not u+0000 style codepoint
+    } else if (ctype_xdigit($var2)) {
+      $end = ( int )self::hex_to_int($var2);
+    } else {
+      $end = self::ord($var2);
+    }
 
-      if (!($end = self::ord($var1))) {
-        //if not a valid utf8 character
-
-        return array();
-      }
+    if (!$end) {
+      return array();
     }
 
     return array_map(
@@ -2211,6 +2212,10 @@ class UTF8
   {
     static $chars = array();
     static $chars_len = null;
+
+    if ($len <= 0) {
+      return "";
+    }
 
     self::checkForSupport();
 
@@ -2315,7 +2320,7 @@ class UTF8
   }
 
   /**
-   * makes a UTF-8 string from Code  points
+   * makes a UTF-8 string from code points
    *
    * @param    array $array Integer or Hexadecimal codepoints
    *
@@ -2468,7 +2473,7 @@ class UTF8
    * @param    string $string The string to be trimmed
    * @param    string $chars  Optional characters to be stripped
    */
-  static public function trim_util(&$string, &$chars)
+  static protected function trim_util(&$string, &$chars)
   {
     if (empty($chars)) {
       $chars = self::ws();
@@ -2598,7 +2603,7 @@ class UTF8
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
-      return mb_stripos($haystack, $needle, $offset);
+      return mb_stripos($haystack, $needle, $offset, 'UTF-8');
     } else {
       return self::strpos(self::strtolower($haystack), self::strtolower($needle), $offset);
     }
