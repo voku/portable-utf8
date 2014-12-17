@@ -403,6 +403,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $examples = array(
       // Valid UTF-8
       "κόσμε"                    => array("κόσμε" => "κόσμε"),
+      "中"                       => array("中" => "中"),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"        => array("κόσμε-öäü" => "κόσμε-öäü"),
       // Valid ASCII
@@ -422,7 +423,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       // Invalid 3 Octet Sequence (in 3rd Octet)
       "\xe2\x82\x28"             => array("�(" => "("),
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"         => array("𐌼" => "𐌼"),
+      "\xf0\x90\x8c\xbc"         => array("𐌼" => ""),
       // Invalid 4 Octet Sequence (in 2nd Octet)
       "\xf0\x28\x8c\xbc"         => array("�(��" => "("),
       // Invalid 4 Octet Sequence (in 3rd Octet)
@@ -447,6 +448,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $examples = array(
       // Valid UTF-8 + UTF-8 NO-BREAK SPACE
       "κόσμε\xc2\xa0"                        => array("κόσμε" => "κόσμε "),
+      // Valid UTF-8
+      "中"                                   => array("中" => "中"),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"                    => array("κόσμε-öäü" => "κόσμε-öäü"),
       // Valid ASCII
@@ -466,7 +469,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       // Invalid 3 Octet Sequence (in 3rd Octet)
       "\xe2\x82\x28"                         => array("�(" => "("),
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"                     => array("𐌼" => "𐌼"),
+      "\xf0\x90\x8c\xbc"                     => array("𐌼" => ""),
       // Invalid 4 Octet Sequence (in 2nd Octet)
       "\xf0\x28\x8c\xbc"                     => array("�(��" => "("),
       // Invalid 4 Octet Sequence (in 3rd Octet)
