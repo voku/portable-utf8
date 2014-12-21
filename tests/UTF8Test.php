@@ -74,7 +74,21 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         '白'                => true,
         ''                 => true,
         ' '                => true,
-        "\xf0\x28\x8c\x28" => false
+        'Iñtërnâtiônàlizætiøn' => true,
+        'ABC 123'          => true,
+        "Iñtërnâtiôn\xE9àlizætiøn" => false,
+        "\xf0\x28\x8c\x28" => false,
+        "this is an invalid char '\xE9' here" => false,
+        "\xC3\xB1" => true,
+        "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn" => false,
+        "Iñtërnâtiônàlizætiøn\xA0\xA1Iñtërnâtiônàlizætiøn" => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn" => true,
+        "Iñtërnâtiônàlizætiøn\xE2\x28\xA1Iñtërnâtiônàlizætiøn" => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\x28Iñtërnâtiônàlizætiøn" => false,
+        "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiøn" => true,
+        "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiøn" => false,
+        "Iñtërnâtiônàlizætiøn\xF8\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => true,
+        "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => true
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -367,6 +381,21 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals("中文空白______", UTF8::str_pad("中文空白", 10, "_", STR_PAD_RIGHT));
     $this->assertEquals("______中文空白", UTF8::str_pad("中文空白", 10, "_", STR_PAD_LEFT));
     $this->assertEquals("___中文空白___", UTF8::str_pad("中文空白", 10, "_", STR_PAD_BOTH));
+
+    $toPad = '<IñtërnëT>'; // 10 characters
+    $padding = 'ø__'; // 4 characters
+
+    $this->assertEquals($toPad.'          ', UTF8::str_pad($toPad, 20));
+    $this->assertEquals('          '.$toPad, UTF8::str_pad($toPad, 20, ' ', STR_PAD_LEFT));
+    $this->assertEquals('     '.$toPad.'     ', UTF8::str_pad($toPad, 20, ' ', STR_PAD_BOTH));
+
+    $this->assertEquals($toPad, UTF8::str_pad($toPad, 10));
+    $this->assertEquals('5char', str_pad('5char', 4)); // str_pos won't truncate input string
+    $this->assertEquals($toPad, UTF8::str_pad($toPad, 8));
+
+    $this->assertEquals($toPad.'ø__ø__ø__ø', UTF8::str_pad($toPad, 20, $padding, STR_PAD_RIGHT));
+    $this->assertEquals('ø__ø__ø__ø'.$toPad, UTF8::str_pad($toPad, 20, $padding, STR_PAD_LEFT));
+    $this->assertEquals('ø__ø_'.$toPad.'ø__ø_', UTF8::str_pad($toPad, 20, $padding, STR_PAD_BOTH));
   }
 
   /**
@@ -509,6 +538,15 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       $this->assertEquals($after, UTF8::ltrim($before));
     }
+
+    $this->assertEquals("tërnâtiônàlizætiøn", UTF8::ltrim("ñtërnâtiônàlizætiøn", "ñ"));
+    $this->assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ltrim("Iñtërnâtiônàlizætiøn", "ñ"));
+    $this->assertEquals("", UTF8::ltrim(""));
+    $this->assertEquals("", UTF8::ltrim(" "));
+    $this->assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ltrim("/Iñtërnâtiônàlizætiøn", "/"));
+    $this->assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ltrim("Iñtërnâtiônàlizætiøn", "^s"));
+    $this->assertEquals("\nñtërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ"));
+    $this->assertEquals("tërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
   }
 
   public function testRtrim()
@@ -522,6 +560,12 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       $this->assertEquals($after, UTF8::rtrim($before));
     }
+
+    $this->assertEquals("Iñtërnâtiônàlizæti", UTF8::rtrim("Iñtërnâtiônàlizætiø", "ø"));
+    $this->assertEquals("Iñtërnâtiônàlizætiøn ", UTF8::rtrim("Iñtërnâtiônàlizætiøn ", "ø"));
+    $this->assertEquals("", UTF8::rtrim(""));
+    $this->assertEquals("Iñtërnâtiônàlizætiø\n", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "ø"));
+    $this->assertEquals("Iñtërnâtiônàlizæti", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "\nø"));
   }
 
   public function testStrtolower()
@@ -594,6 +638,22 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals("Öäü", UTF8::ucfirst("öäü"));
     $this->assertEquals("Κόσμε", UTF8::ucfirst("κόσμε"));
     $this->assertEquals("ABC-ÖÄÜ-中文空白", UTF8::ucfirst("aBC-ÖÄÜ-中文空白"));
+    $this->assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ucfirst("iñtërnâtiônàlizætiøn"));
+    $this->assertEquals("Ñtërnâtiônàlizætiøn", UTF8::ucfirst("ñtërnâtiônàlizætiøn"));
+    $this->assertEquals(" iñtërnâtiônàlizætiøn", UTF8::ucfirst(" iñtërnâtiônàlizætiøn"));
+    $this->assertEquals("Ñtërnâtiônàlizætiøn", UTF8::ucfirst("Ñtërnâtiônàlizætiøn"));
+    $this->assertEquals("", UTF8::ucfirst(""));
+    $this->assertEquals("Ñ", UTF8::ucfirst("ñ"));
+    $this->assertEquals("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
+  }
+
+  public function testUcWords()
+  {
+    $this->assertEquals("Iñt Ërn Âti Ônà Liz Æti Øn", UTF8::ucwords("iñt ërn âti ônà liz æti øn"));
+    $this->assertEquals("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
+    $this->assertEquals("", UTF8::ucwords(""));
+    $this->assertEquals("Ñ", UTF8::ucwords("ñ"));
+    $this->assertEquals("Iñt Ërn Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti øn"));
   }
 
   public function testLcfirst()
@@ -601,6 +661,13 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals("öäü", UTF8::lcfirst("Öäü"));
     $this->assertEquals("κόσμε", UTF8::lcfirst("Κόσμε"));
     $this->assertEquals("aBC-ÖÄÜ-中文空白", UTF8::lcfirst("ABC-ÖÄÜ-中文空白"));
+    $this->assertEquals("ñTËRNÂTIÔNÀLIZÆTIØN", UTF8::lcfirst("ÑTËRNÂTIÔNÀLIZÆTIØN"));
+    $this->assertEquals("ñTËRNÂTIÔNÀLIZÆTIØN", UTF8::lcfirst("ñTËRNÂTIÔNÀLIZÆTIØN"));
+    $this->assertEquals("", UTF8::lcfirst(""));
+    $this->assertEquals(" ", UTF8::lcfirst(" "));
+    $this->assertEquals("\t test", UTF8::lcfirst("\t test"));
+    $this->assertEquals("ñ", UTF8::lcfirst("Ñ"));
+    $this->assertEquals("ñTËRN\nâtiônàlizætiøn", UTF8::lcfirst("ÑTËRN\nâtiônàlizætiøn"));
   }
 
   public function testStrirpos()
@@ -634,12 +701,16 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testOrd()
   {
     $testArray = array(
-        "中" => "20013",
-        "κ" => "954",
-        "ö" => "246",
-        "{" => "123",
-        " " => "32",
-        ""  => "0",
+        "\xF0\x90\x8C\xBC" => 66364,
+        "中" => 20013,
+        "₧" => 8359,
+        "κ" => 954,
+        "ö" => 246,
+        "ñ" => 241,
+        "{" => 123,
+        "a" => 97,
+        " " => 32,
+        ""  => 0,
     );
 
     foreach ($testArray as $actual => $expected) {

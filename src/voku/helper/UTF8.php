@@ -442,6 +442,56 @@ class UTF8
     return $str;
   }
 
+  static function stristr($s, $needle, $before_needle = false)
+  {
+    if ('' === $needle .= '') {
+      return false;
+    }
+
+    return mb_stristr($s, $needle, $before_needle, 'UTF-8');
+  }
+
+  protected static function strtocasefold($s)
+  {
+    return self::strtolower($s);
+  }
+
+  protected static function strtonatfold($s)
+  {
+    $s = self::clean($s);
+    return preg_replace('/\p{Mn}+/u', '', $s);
+  }
+
+  static function strcmp($a, $b)
+  {
+    return $a . '' === $b . '' ? 0 : strcmp(self::clean($a), self::clean($b));
+  }
+
+  static function strnatcmp($a, $b)
+  {
+    return $a . '' === $b . '' ? 0 : strnatcmp(self::strtonatfold($a), self::strtonatfold($b));
+  }
+
+  static function strcasecmp($a, $b)
+  {
+    return self::strcmp(self::strtocasefold($a), self::strtocasefold($b));
+  }
+
+  static function strnatcasecmp($a, $b)
+  {
+    return self::strnatcmp(self::strtocasefold($a), self::strtocasefold($b));
+  }
+
+  static function strncasecmp($a, $b, $len)
+  {
+    return self::strncmp(self::strtocasefold($a), self::strtocasefold($b), $len);
+  }
+
+  static function strncmp($a, $b, $len)
+  {
+    return self::strcmp(self::substr($a, 0, $len), self::substr($b, 0, $len));
+  }
+
   /**
    * returns an array with all utf8 whitespace characters as per
    * http://www.bogofilter.org/pipermail/bogofilter/2003-March/001889.html
@@ -751,7 +801,6 @@ class UTF8
    *
    * @return   string The shuffled string
    */
-
   static public function str_shuffle($str)
   {
     $array = self::split($str);
@@ -759,6 +808,62 @@ class UTF8
     shuffle($array);
 
     return implode('', $array);
+  }
+
+  static function wordwrap($s, $width = 75, $break = "\n", $cut = false)
+  {
+    if (false === wordwrap('-', $width, $break, $cut)) {
+      return false;
+    }
+
+    if (is_string($break)) {
+      $break = (string) $break;
+    }
+
+    $w = '';
+    $s = explode($break, $s);
+    $iLen = count($s);
+    $chars = array();
+
+    if (1 === $iLen && '' === $s[0]) {
+      return '';
+    }
+
+    for ($i = 0; $i < $iLen; ++$i) {
+
+      if ($i) {
+        $chars[] = $break;
+        $w .= '#';
+      }
+
+      $c = $s[$i];
+      unset($s[$i]);
+
+      foreach (self::split($c) as $c) {
+        $chars[] = $c;
+        $w .= ' ' === $c ? ' ' : '?';
+      }
+    }
+
+    $s = '';
+    $j = 0;
+    $b = $i = -1;
+    $w = wordwrap($w, $width, '#', $cut);
+
+    while (false !== $b = self::strpos($w, '#', $b+1)) {
+      for (++$i; $i < $b; ++$i) {
+        $s .= $chars[$j];
+        unset($chars[$j++]);
+      }
+
+      if ($break === $chars[$j] || ' ' === $chars[$j]) {
+        unset($chars[$j++]);
+      }
+
+      $s .= $break;
+    }
+
+    return $s . implode('', $chars);
   }
 
   /**
@@ -2732,7 +2837,7 @@ class UTF8
   }
 
   /**
-   * makes string's first char Uppercase
+   * makes string's first char uppercase
    *
    * @param    string $str The input string
    *
@@ -2741,6 +2846,46 @@ class UTF8
   static public function ucfirst($str)
   {
     return self::strtoupper(self::substr($str, 0, 1)) . self::substr($str, 1);
+  }
+
+  /*
+   * alias for "UTF8::ucfirst"
+   *
+   * @param    string $str The input string
+   *
+   * @return   string The resulting string
+   */
+  static public function ucword($str)
+  {
+    return self::ucfirst($str);
+  }
+
+  /*
+   * makes words uppercase
+   *
+   * @param    string $str The input string
+   *
+   * @return   string The resulting string
+   */
+  static public function ucwords($string, $exceptions = array())
+  {
+    if (!$string) {
+      return '';
+    }
+
+    $words = split(" ", $string);
+    $newwords = array();
+
+    foreach ($words as $word)
+    {
+      if (!array_key_exists($word, $exceptions)) {
+        $word = self::strtolower($word);
+        $word = self::ucfirst($word);
+      }
+      array_push($newwords, $word);
+    }
+
+    return self::ucfirst(join(" ", $newwords));
   }
 
   /**
@@ -2772,6 +2917,27 @@ class UTF8
 
       return strtr($str, $table);
     }
+  }
+
+  static function str_ireplace($search, $replace, $subject, &$count = null)
+  {
+    $search = (array) $search;
+
+    foreach ($search as $i => $s)
+    {
+      if ('' === $s .= '') {
+        $s = '/^(?<=.)$/';
+      } else {
+        $s = '/' . preg_quote($s, '/') . '/ui';
+      }
+
+      $search[$i] = $s;
+    }
+
+    $subject = preg_replace($search, $replace, $subject, -1, $replace);
+    $count = $replace;
+
+    return $subject;
   }
 
   /**
