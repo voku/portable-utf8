@@ -2873,7 +2873,7 @@ class UTF8
       return '';
     }
 
-    $words = split(" ", $string);
+    $words = explode(" ", $string);
     $newwords = array();
 
     foreach ($words as $word)
