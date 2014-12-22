@@ -321,8 +321,14 @@ class UTF8
     if (count(self::$support) === 0) {
       self::$support['mbstring'] = self::mbstring_loaded();
       self::$support['iconv'] = self::iconv_loaded();
+      self::$support['intl'] = self::intl_loaded();
       self::$support['pcre_utf8'] = self::pcre_utf8_support();
     }
+  }
+
+  static protected function intl_loaded()
+  {
+    return extension_loaded('intl') ? true : false;
   }
 
   /**
@@ -1122,6 +1128,14 @@ class UTF8
     }
 
     return count(explode('-', self::url_slug($str)));
+  }
+
+  /**
+   * alias for "UTF8::url_slug"
+   */
+  static public function url($str)
+  {
+    return self::url_slug($str);
   }
 
   /**
@@ -2187,6 +2201,53 @@ class UTF8
     return $case;
   }
 
+  static function str_split($s, $len = 1)
+  {
+    if (1 > $len = (int) $len) {
+      $len = func_get_arg(1);
+      return str_split($s, $len);
+    }
+
+    if (self::$support['intl'] === true) {
+      $a = array();
+      $p = 0;
+      $l = strlen($s);
+      while ($p < $l) {
+        $a[] = grapheme_extract($s, 1, GRAPHEME_EXTR_COUNT, $p, $p);
+      }
+    } else {
+      preg_match_all('/' . GRAPHEME_CLUSTER_RX . '/u', $s, $a);
+      $a = $a[0];
+    }
+
+    if (1 == $len) {
+      return $a;
+    }
+
+    $s = array();
+    $p = -1;
+
+    foreach ($a as $l => $a) {
+      if ($l % $len) {
+        $s[$p] .= $a;
+      } else {
+        $s[++$p] = $a;
+      }
+    }
+
+    return $s;
+  }
+
+  static function substr_replace($s, $replace, $start, $len = 2147483647)
+  {
+    $s = self::str_split($s);
+    $replace = self::str_split($replace);
+
+    array_splice($s, $start, $len, $replace);
+
+    return implode('', $s);
+  }
+
   /**
    * Get part of string
    *
@@ -2724,6 +2785,9 @@ class UTF8
   static public function stripos($haystack, $needle, $offset = null)
   {
     self::checkForSupport();
+
+    $haystack = self::clean($haystack);
+    $needle = self::clean($needle);
 
     if (self::$support['mbstring'] === true) {
       return mb_stripos($haystack, $needle, $offset, 'UTF-8');
