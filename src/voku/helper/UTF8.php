@@ -1131,14 +1131,6 @@ class UTF8
   }
 
   /**
-   * alias for "UTF8::url_slug"
-   */
-  static public function url($str)
-  {
-    return self::url_slug($str);
-  }
-
-  /**
    * creates SEO Friendly URL Slugs via "URLify"
    *
    * @param string $str
