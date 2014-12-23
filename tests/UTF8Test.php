@@ -65,15 +65,38 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testFixBrokenUtf8()
+  {
+    $testArray = array(
+        'DÃ¼sseldorf'                                          => 'Düsseldorf',
+        'Ã¤'                                                   => 'ä',
+        ' '                                                    => ' ',
+        ''                                                     => '',
+        'test'                                                 => 'test',
+        "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn" => "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn"
+    );
+
+    foreach ($testArray as $before => $after) {
+      $this->assertEquals($after, UTF8::fix_broken_utf8($before));
+    }
+  }
+
   public function testIsUtf8()
   {
     $testArray = array(
         'κ'                                                                => true,
+        ''                                                                 => true,
+        ' '                                                                => true,
+        "\n"                                                               => true,
         'abc'                                                              => true,
         'abcöäü'                                                           => true,
         '白'                                                                => true,
-        ''                                                                 => true,
-        ' '                                                                => true,
+        "សាកល្បង!"                                                         => true,
+        "דיעס איז אַ פּרובירן!"                                            => true,
+        "Штампи іст Ейн тест!"                                             => true,
+        "Штампы гіст Эйн тэст!"                                            => true,
+        "測試！"                                                              => true,
+        "ການທົດສອບ!"                                                       => true,
         'Iñtërnâtiônàlizætiøn'                                             => true,
         'ABC 123'                                                          => true,
         "Iñtërnâtiôn\xE9àlizætiøn"                                         => false,
@@ -481,6 +504,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       "κόσμε\xc2\xa0"                        => array("κόσμε" => "κόσμε "),
       // Valid UTF-8
       "中"                                    => array("中" => "中"),
+      // Valid UTF-8 + ISO-Erros
+      "DÃ¼sseldorf"                         => array("Düsseldorf" => "Düsseldorf"),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"                    => array("κόσμε-öäü" => "κόσμε-öäü"),
       // Valid ASCII

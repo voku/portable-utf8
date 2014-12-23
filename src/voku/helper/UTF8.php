@@ -277,10 +277,9 @@ class UTF8
 
     // init
     self::checkForSupport();
-    $return = false;
 
     // "In PHP 5.3.x, the "mb-check-encoding"-function allows code points
-    // above U+10FFFF, which also allows five and six byte sequences.
+    // above U+10FFFF, which also allows five and six byte sequences."
     if (version_compare(PHP_VERSION, '5.4.0') < 0) {
       // From http://w3.org/International/questions/qa-forms-utf-8.html
       return preg_match(
@@ -297,7 +296,7 @@ class UTF8
       );
     }
 
-    if (self::$support['mbstring'] === true || $return === false) {
+    if (self::$support['mbstring'] === true) {
       return mb_check_encoding($str, 'UTF-8');
     }
 
@@ -310,128 +309,128 @@ class UTF8
     }
 
     // fallback
-    if ($return === false) {
+    $len = self::strlen($str);
 
+    $mState = 0;     // cached expected number of octets after the current octet
+    // until the beginning of the next UTF8 character sequence
+    $mUcs4 = 0;     // cached Unicode character
+    $mBytes = 1;     // cached expected number of octets in the current sequence
 
-      $len = self::strlen($str);
+    for ($i = 0; $i < $len; $i++) {
 
-      $mState = 0;     // cached expected number of octets after the current octet
-      // until the beginning of the next UTF8 character sequence
-      $mUcs4 = 0;     // cached Unicode character
-      $mBytes = 1;     // cached expected number of octets in the current sequence
+      $in = ord($str{$i});
 
-      for ($i = 0; $i < $len; $i++) {
+      if ($mState == 0) {
 
-        $in = ord($str{$i});
+        // When mState is zero we expect either a US-ASCII character or a
+        // multi-octet sequence.
+        if (0 == (0x80 & ($in))) {
+          // US-ASCII, pass straight through.
+          $mBytes = 1;
 
-        if ($mState == 0) {
+        } else if (0xC0 == (0xE0 & ($in))) {
+          // First octet of 2 octet sequence
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 0x1F) << 6;
+          $mState = 1;
+          $mBytes = 2;
 
-          // When mState is zero we expect either a US-ASCII character or a
-          // multi-octet sequence.
-          if (0 == (0x80 & ($in))) {
-            // US-ASCII, pass straight through.
-            $mBytes = 1;
+        } else if (0xE0 == (0xF0 & ($in))) {
+          // First octet of 3 octet sequence
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 0x0F) << 12;
+          $mState = 2;
+          $mBytes = 3;
 
-          } else if (0xC0 == (0xE0 & ($in))) {
-            // First octet of 2 octet sequence
-            $mUcs4 = ($in);
-            $mUcs4 = ($mUcs4 & 0x1F) << 6;
-            $mState = 1;
-            $mBytes = 2;
+        } else if (0xF0 == (0xF8 & ($in))) {
+          // First octet of 4 octet sequence
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 0x07) << 18;
+          $mState = 3;
+          $mBytes = 4;
 
-          } else if (0xE0 == (0xF0 & ($in))) {
-            // First octet of 3 octet sequence
-            $mUcs4 = ($in);
-            $mUcs4 = ($mUcs4 & 0x0F) << 12;
-            $mState = 2;
-            $mBytes = 3;
+        } else if (0xF8 == (0xFC & ($in))) {
+          /*
+           *  First octet of 5 octet sequence.
+           *
+           * This is illegal because the encoded codepoint must be either
+           * (a) not the shortest form or
+           * (b) outside the Unicode range of 0-0x10FFFF.
+           * Rather than trying to resynchronize, we will carry on until the end
+           * of the sequence and let the later error handling code catch it.
+           */
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 0x03) << 24;
+          $mState = 4;
+          $mBytes = 5;
 
-          } else if (0xF0 == (0xF8 & ($in))) {
-            // First octet of 4 octet sequence
-            $mUcs4 = ($in);
-            $mUcs4 = ($mUcs4 & 0x07) << 18;
-            $mState = 3;
-            $mBytes = 4;
+        } else if (0xFC == (0xFE & ($in))) {
+          // First octet of 6 octet sequence, see comments for 5 octet sequence.
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 1) << 30;
+          $mState = 5;
+          $mBytes = 6;
 
-          } else if (0xF8 == (0xFC & ($in))) {
-            /* First octet of 5 octet sequence.
-            *
-            * This is illegal because the encoded codepoint must be either
-            * (a) not the shortest form or
-            * (b) outside the Unicode range of 0-0x10FFFF.
-            * Rather than trying to resynchronize, we will carry on until the end
-            * of the sequence and let the later error handling code catch it.
-            */
-            $mUcs4 = ($in);
-            $mUcs4 = ($mUcs4 & 0x03) << 24;
-            $mState = 4;
-            $mBytes = 5;
+        } else {
+          /*
+           * Current octet is neither in the US-ASCII range nor a legal first
+           * octet of a multi-octet sequence.
+           */
+          return false;
 
-          } else if (0xFC == (0xFE & ($in))) {
-            // First octet of 6 octet sequence, see comments for 5 octet sequence.
-            $mUcs4 = ($in);
-            $mUcs4 = ($mUcs4 & 1) << 30;
-            $mState = 5;
-            $mBytes = 6;
+        }
 
-          } else {
-            /* Current octet is neither in the US-ASCII range nor a legal first
-             * octet of a multi-octet sequence.
+      } else {
+
+        // When mState is non-zero, we expect a continuation of the multi-octet
+        // sequence
+        if (0x80 == (0xC0 & ($in))) {
+
+          // Legal continuation.
+          $shift = ($mState - 1) * 6;
+          $tmp = $in;
+          $tmp = ($tmp & 0x0000003F) << $shift;
+          $mUcs4 |= $tmp;
+
+          /**
+           * End of the multi-octet sequence. mUcs4 now contains the final
+           * Unicode codepoint to be output
+           */
+          if (0 == --$mState) {
+
+            /*
+             * Check for illegal sequences and codepoints.
              */
-            return false;
 
+            // From Unicode 3.1, non-shortest form is illegal
+            if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
+                ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
+                ((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
+                (4 < $mBytes) ||
+                // From Unicode 3.2, surrogate characters are illegal
+                (($mUcs4 & 0xFFFFF800) == 0xD800) ||
+                // Codepoints outside the Unicode range are illegal
+                ($mUcs4 > 0x10FFFF)
+            ) {
+
+              return false;
+
+            }
+
+            // initialize UTF8 cache
+            $mState = 0;
+            $mUcs4 = 0;
+            $mBytes = 1;
           }
 
         } else {
 
-          // When mState is non-zero, we expect a continuation of the multi-octet
-          // sequence
-          if (0x80 == (0xC0 & ($in))) {
+          /**
+           * ((0xC0 & (*in) != 0x80) && (mState != 0))
+           * Incomplete multi-octet sequence.
+           */
 
-            // Legal continuation.
-            $shift = ($mState - 1) * 6;
-            $tmp = $in;
-            $tmp = ($tmp & 0x0000003F) << $shift;
-            $mUcs4 |= $tmp;
-
-            /**
-             * End of the multi-octet sequence. mUcs4 now contains the final
-             * Unicode codepoint to be output
-             */
-            if (0 == --$mState) {
-
-              /*
-              * Check for illegal sequences and codepoints.
-              */
-              // From Unicode 3.1, non-shortest form is illegal
-              if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
-                  ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
-                  ((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
-                  (4 < $mBytes) ||
-                  // From Unicode 3.2, surrogate characters are illegal
-                  (($mUcs4 & 0xFFFFF800) == 0xD800) ||
-                  // Codepoints outside the Unicode range are illegal
-                  ($mUcs4 > 0x10FFFF)
-              ) {
-
-                return false;
-
-              }
-
-              //initialize UTF8 cache
-              $mState = 0;
-              $mUcs4 = 0;
-              $mBytes = 1;
-            }
-
-          } else {
-            /**
-             *((0xC0 & (*in) != 0x80) && (mState != 0))
-             * Incomplete multi-octet sequence.
-             */
-
-            return false;
-          }
+          return false;
         }
       }
     }
@@ -3065,12 +3064,20 @@ class UTF8
       $text = iconv('UTF-8', 'UTF-8//TRANSLIT//IGNORE', $text);
     }
 
+    // fixed ISO <-> UTF-8 Errors
+    $text = self::fix_broken_utf8($text);
+
     // remove all none UTF-8 symbols
     // && remove BOM
     // && normalize whitespace chars
     $text = self::clean($text, true, true);
 
     return (string)$text;
+  }
+
+  static public function ucword($str)
+  {
+    return self::ucfirst($str);
   }
 
   /*
@@ -3080,10 +3087,6 @@ class UTF8
    *
    * @return string
    */
-  static public function ucword($str)
-  {
-    return self::ucfirst($str);
-  }
 
   /**
    * makes string's first char uppercase
@@ -3290,10 +3293,95 @@ class UTF8
    *
    * @return   string The chunked string
    */
-
   static public function chunk_split($body, $chunklen = 76, $end = "\r\n")
   {
     return implode($end, self::split($body, $chunklen));
+  }
+
+  /**
+   * fixed a broken UTF-8 string
+   *
+   * @param string $str
+   *
+   * @return mixed|string
+   */
+  static public function fix_broken_utf8($str)
+  {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    $chars = self::get_broken_utf8_array();
+    return str_replace(array_keys($chars), $chars, $str);
+  }
+
+  /**
+   * get a array of boken utf-8 chars
+   *
+   * @return array
+   */
+  static protected function get_broken_utf8_array()
+  {
+    return array(
+        'Ã¼'  => 'ü',
+        'Ã¤'  => 'ä',
+        'Ã¶'  => 'ö',
+        'Ã–'  => 'Ö',
+        'ÃŸ'  => 'ß',
+        'Ã '  => 'à',
+        'Ã¡'  => 'á',
+        'Ã¢'  => 'â',
+        'Ã£'  => 'ã',
+        'Ã¹'  => 'ù',
+        'Ãº'  => 'ú',
+        'Ã»'  => 'û',
+        'Ã™'  => 'Ù',
+        'Ãš'  => 'Ú',
+        'Ã›'  => 'Û',
+        'Ãœ'  => 'Ü',
+        'Ã²'  => 'ò',
+        'Ã³'  => 'ó',
+        'Ã´'  => 'ô',
+        'Ã¨'  => 'è',
+        'Ã©'  => 'é',
+        'Ãª'  => 'ê',
+        'Ã«'  => 'ë',
+        'Ã€'  => 'À',
+        'Ã'  => 'Á',
+        'Ã‚'  => 'Â',
+        'Ãƒ'  => 'Ã',
+        'Ã„'  => 'Ä',
+        'Ã…'  => 'Å',
+        'Ã‡'  => 'Ç',
+        'Ãˆ'  => 'È',
+        'Ã‰'  => 'É',
+        'ÃŠ'  => 'Ê',
+        'Ã‹'  => 'Ë',
+        'ÃŒ'  => 'Ì',
+        'Ã'  => 'Í',
+        'ÃŽ'  => 'Î',
+        'Ã'  => 'Ï',
+        'Ã‘'  => 'Ñ',
+        'Ã’'  => 'Ò',
+        'Ã“'  => 'Ó',
+        'Ã”'  => 'Ô',
+        'Ã•'  => 'Õ',
+        'Ã˜'  => 'Ø',
+        'Ã¥'  => 'å',
+        'Ã¦'  => 'æ',
+        'Ã§'  => 'ç',
+        'Ã¬'  => 'ì',
+        'Ã­'  => 'í',
+        'Ã®'  => 'î',
+        'Ã¯'  => 'ï',
+        'Ã°'  => 'ð',
+        'Ã±'  => 'ñ',
+        'Ãµ'  => 'õ',
+        'Ã¸'  => 'ø',
+        'Ã½'  => 'ý',
+        'Ã¿'  => 'ÿ',
+        'â‚¬' => '€'
+    );
   }
 
 }
