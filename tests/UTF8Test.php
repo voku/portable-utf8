@@ -91,8 +91,10 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => false
     );
 
+    $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::is_utf8($actual), 'error by ' . $actual);
+      $this->assertEquals($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
+      $conter++;
     }
   }
 

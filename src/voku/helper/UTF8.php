@@ -271,14 +271,30 @@ class UTF8
    */
   static public function is_utf8($str)
   {
-    self::checkForSupport();
+    if (!isset($str[0])) {
+      return true;
+    }
 
     // init
+    self::checkForSupport();
     $return = false;
-    $len = strlen($str);
 
-    if ($len == 0) {
-      return true;
+    // "In PHP 5.3.x, the "mb-check-encoding"-function allows code points
+    // above U+10FFFF, which also allows five and six byte sequences.
+    if (version_compare(PHP_VERSION, '5.4.0') < 0) {
+      // From http://w3.org/International/questions/qa-forms-utf-8.html
+      return preg_match(
+          '%^(?:
+          [\x09\x0A\x0D\x20-\x7E]            # ASCII
+        | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+        |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
+        | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+        |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
+        |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
+        | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+        |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
+        )*$%xs', $str
+      );
     }
 
     if (self::$support['mbstring'] === true || $return === false) {
@@ -290,11 +306,14 @@ class UTF8
       // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
       // invalid, nothing at all will match, even if the string contains
       // some valid sequences
-      return ( bool )preg_match('/^.{1}/us', $str);
+      return (bool)preg_match('//u', $str);
     }
 
     // fallback
     if ($return === false) {
+
+
+      $len = self::strlen($str);
 
       $mState = 0;     // cached expected number of octets after the current octet
       // until the beginning of the next UTF8 character sequence
@@ -488,6 +507,11 @@ class UTF8
    */
   static public function strlen($string)
   {
+    if (!isset($string[0])) {
+      return 0;
+    }
+
+    // init
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
@@ -607,10 +631,13 @@ class UTF8
    */
   static public function split($str, $split_length = 1)
   {
+    if (!isset($str[0])) {
+      return array();
+    }
+
+    // init
     self::checkForSupport();
-
-    $str = ( string )$str;
-
+    $str = (string)$str;
     $ret = array();
 
     if (self::$support['pcre_utf8'] === true) {
@@ -717,6 +744,11 @@ class UTF8
    */
   static public function strtolower($str)
   {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    // init
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
@@ -1790,10 +1822,11 @@ class UTF8
    */
   static public function substr($str, $start = 0, $length = null)
   {
-    if (empty($str)) {
-      return $str;
+    if (!isset($str[0])) {
+      return '';
     }
 
+    // init
     self::checkForSupport();
 
     //iconv and mbstring are not tolerant to invalid encoding
@@ -2112,7 +2145,13 @@ class UTF8
    */
   static public function strpos($haystack, $needle, $offset = null)
   {
+    if (!isset($haystack[0]) || !isset($needle[0])) {
+      return false;
+    }
+
+    // init
     self::checkForSupport();
+
     //iconv and mbstring do not support integer $needle
 
     if ((( int )$needle) === $needle && ($needle >= 0)) {
@@ -2736,9 +2775,10 @@ class UTF8
     static $chars_len = null;
 
     if ($len <= 0) {
-      return "";
+      return '';
     }
 
+    // init
     self::checkForSupport();
 
     if (!$chars) {
@@ -2970,6 +3010,11 @@ class UTF8
    */
   static public function stripos($haystack, $needle, $offset = null)
   {
+    if (!isset($haystack[0]) || !isset($needle[0])) {
+      return false;
+    }
+
+    // init
     self::checkForSupport();
 
     $haystack = self::clean($haystack);
@@ -2991,9 +3036,12 @@ class UTF8
    */
   static public function cleanup($text)
   {
-    self::checkForSupport();
+    if (!isset($text[0])) {
+      return '';
+    }
 
     // init
+    self::checkForSupport();
     $utf8CheckDone = false;
 
     // strip invalid characters from UTF-8 strings (so that we can insert it into the db)
@@ -3062,6 +3110,11 @@ class UTF8
    */
   static public function strtoupper($str)
   {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    // init
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
@@ -3183,6 +3236,11 @@ class UTF8
    */
   static public function strrpos($haystack, $needle, $offset = null)
   {
+    if (!isset($haystack[0]) || !isset($needle[0])) {
+      return false;
+    }
+
+    // init
     self::checkForSupport();
 
     if ((( int )$needle) === $needle && ($needle >= 0)) {
