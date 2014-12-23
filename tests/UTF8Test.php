@@ -72,12 +72,16 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'Ã¤'                                                   => 'ä',
         ' '                                                    => ' ',
         ''                                                     => '',
+        "\n"                                                   => "\n",
         'test'                                                 => 'test',
-        "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn" => "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn"
+        "FÃÂ©dération Camerounaise de Football"                => "Fédération Camerounaise de Football",
+        "FÃ©dÃ©ration Camerounaise de Football"                => "Fédération Camerounaise de Football",
+        "FÃÂ©dÃÂ©ration Camerounaise de Football"              => "Fédération Camerounaise de Football",
+        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football"        => "Fédération Camerounaise de Football"
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::fix_broken_utf8($before));
+      $this->assertEquals($after, UTF8::fix_utf8($before));
     }
   }
 
@@ -490,10 +494,12 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       "\xfc\xa1\xa1\xa1\xa1\xa1" => array("�" => ""),
     );
 
+    $counter = 0;
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        $this->assertEquals($after, UTF8::cleanup($testString));
+        $this->assertEquals($after, UTF8::cleanup($testString), $counter);
       }
+      $counter++;
     }
   }
 
@@ -505,7 +511,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       // Valid UTF-8
       "中"                                    => array("中" => "中"),
       // Valid UTF-8 + ISO-Erros
-      "DÃ¼sseldorf"                         => array("Düsseldorf" => "Düsseldorf"),
+      "DÃ¼sseldorf"                          => array("Düsseldorf" => "Düsseldorf"),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"                    => array("κόσμε-öäü" => "κόσμε-öäü"),
       // Valid ASCII
