@@ -2852,8 +2852,13 @@ class UTF8
    */
   static public function trim($string = '', $chars = '')
   {
-    $string = self::ltrim($string, $chars);
+    $string = self::clean($string);
 
+    if ($chars == '') {
+      return preg_replace("/(^\s+)|(\s+$)/us", "", $string);
+    }
+
+    $string = self::ltrim($string, $chars);
     return self::rtrim($string, $chars);
   }
 

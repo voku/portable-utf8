@@ -442,6 +442,10 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   {
     return array(
         array(
+            '  ',
+            '',
+        ),
+        array(
             '',
             '',
         ),
