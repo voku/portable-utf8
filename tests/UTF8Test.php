@@ -68,28 +68,27 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testIsUtf8()
   {
     $testArray = array(
-        'κ'                => true,
-        'abc'              => true,
-        'abcöäü'           => true,
-        '白'                => true,
-        ''                 => true,
-        ' '                => true,
-        'Iñtërnâtiônàlizætiøn' => true,
-        'ABC 123'          => true,
-        "Iñtërnâtiôn\xE9àlizætiøn" => false,
-        "\xf0\x28\x8c\x28" => false,
-        "this is an invalid char '\xE9' here" => false,
-        "\xC3\xB1" => true,
-        "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn" => false,
-        "Iñtërnâtiônàlizætiøn\xA0\xA1Iñtërnâtiônàlizætiøn" => false,
-        "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn" => true,
-        "Iñtërnâtiônàlizætiøn\xE2\x28\xA1Iñtërnâtiônàlizætiøn" => false,
-        "Iñtërnâtiônàlizætiøn\xE2\x82\x28Iñtërnâtiônàlizætiøn" => false,
-        "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiøn" => true,
-        "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiøn" => false,
-        // TODO
-        //"Iñtërnâtiônàlizætiøn\xF8\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => true,
-        //"Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => true
+        'κ'                                                                => true,
+        'abc'                                                              => true,
+        'abcöäü'                                                           => true,
+        '白'                                                                => true,
+        ''                                                                 => true,
+        ' '                                                                => true,
+        'Iñtërnâtiônàlizætiøn'                                             => true,
+        'ABC 123'                                                          => true,
+        "Iñtërnâtiôn\xE9àlizætiøn"                                         => false,
+        "\xf0\x28\x8c\x28"                                                 => false,
+        "this is an invalid char '\xE9' here"                              => false,
+        "\xC3\xB1"                                                         => true,
+        "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn"               => false,
+        "Iñtërnâtiônàlizætiøn\xA0\xA1Iñtërnâtiônàlizætiøn"                 => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn"             => true,
+        "Iñtërnâtiônàlizætiøn\xE2\x28\xA1Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\x28Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiøn"         => true,
+        "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiøn"         => false,
+        "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn"     => false,
+        "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => false
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -322,7 +321,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $tests = array(
         "  -ABC-中文空白-  " => "abc",
         "      - ÖÄÜ- "  => "oau",
-        "  öäüabc"            => "oaua"
+        "  öäüabc"       => "oaua"
     );
 
     foreach ($tests as $before => $after) {
@@ -331,9 +330,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     $tests = array(
         "Facebook bekämpft erstmals Durchsuchungsbefehle" => "facebook-bekaempft-erstmals-durchsuchungsbefehle",
-        "  -ABC-中文空白-  " => "abc",
-        "      - ÖÄÜ- "  => "oeaeue",
-        "öäü"            => "oeaeue"
+        "  -ABC-中文空白-  "                                  => "abc",
+        "      - ÖÄÜ- "                                   => "oeaeue",
+        "öäü"                                             => "oeaeue"
     );
 
     foreach ($tests as $before => $after) {
@@ -386,17 +385,17 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $toPad = '<IñtërnëT>'; // 10 characters
     $padding = 'ø__'; // 4 characters
 
-    $this->assertEquals($toPad.'          ', UTF8::str_pad($toPad, 20));
-    $this->assertEquals('          '.$toPad, UTF8::str_pad($toPad, 20, ' ', STR_PAD_LEFT));
-    $this->assertEquals('     '.$toPad.'     ', UTF8::str_pad($toPad, 20, ' ', STR_PAD_BOTH));
+    $this->assertEquals($toPad . '          ', UTF8::str_pad($toPad, 20));
+    $this->assertEquals('          ' . $toPad, UTF8::str_pad($toPad, 20, ' ', STR_PAD_LEFT));
+    $this->assertEquals('     ' . $toPad . '     ', UTF8::str_pad($toPad, 20, ' ', STR_PAD_BOTH));
 
     $this->assertEquals($toPad, UTF8::str_pad($toPad, 10));
     $this->assertEquals('5char', str_pad('5char', 4)); // str_pos won't truncate input string
     $this->assertEquals($toPad, UTF8::str_pad($toPad, 8));
 
-    $this->assertEquals($toPad.'ø__ø__ø__ø', UTF8::str_pad($toPad, 20, $padding, STR_PAD_RIGHT));
-    $this->assertEquals('ø__ø__ø__ø'.$toPad, UTF8::str_pad($toPad, 20, $padding, STR_PAD_LEFT));
-    $this->assertEquals('ø__ø_'.$toPad.'ø__ø_', UTF8::str_pad($toPad, 20, $padding, STR_PAD_BOTH));
+    $this->assertEquals($toPad . 'ø__ø__ø__ø', UTF8::str_pad($toPad, 20, $padding, STR_PAD_RIGHT));
+    $this->assertEquals('ø__ø__ø__ø' . $toPad, UTF8::str_pad($toPad, 20, $padding, STR_PAD_LEFT));
+    $this->assertEquals('ø__ø_' . $toPad . 'ø__ø_', UTF8::str_pad($toPad, 20, $padding, STR_PAD_BOTH));
   }
 
   /**
@@ -433,7 +432,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $examples = array(
       // Valid UTF-8
       "κόσμε"                    => array("κόσμε" => "κόσμε"),
-      "中"                       => array("中" => "中"),
+      "中"                        => array("中" => "中"),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"        => array("κόσμε-öäü" => "κόσμε-öäü"),
       // Valid ASCII
@@ -479,7 +478,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       // Valid UTF-8 + UTF-8 NO-BREAK SPACE
       "κόσμε\xc2\xa0"                        => array("κόσμε" => "κόσμε "),
       // Valid UTF-8
-      "中"                                   => array("中" => "中"),
+      "中"                                    => array("中" => "中"),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"                    => array("κόσμε-öäü" => "κόσμε-öäü"),
       // Valid ASCII
@@ -703,15 +702,15 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   {
     $testArray = array(
         "\xF0\x90\x8C\xBC" => 66364,
-        "中" => 20013,
-        "₧" => 8359,
-        "κ" => 954,
-        "ö" => 246,
-        "ñ" => 241,
-        "{" => 123,
-        "a" => 97,
-        " " => 32,
-        ""  => 0,
+        "中"                => 20013,
+        "₧"                => 8359,
+        "κ"                => 954,
+        "ö"                => 246,
+        "ñ"                => 241,
+        "{"                => 123,
+        "a"                => 97,
+        " "                => 32,
+        ""                 => 0,
     );
 
     foreach ($testArray as $actual => $expected) {
