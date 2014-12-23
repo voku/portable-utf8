@@ -2829,7 +2829,7 @@ class UTF8
    *
    * @return   int The number of words in the string
    */
-  static public function word_count($str)
+  static public function str_word_count($str)
   {
     $str = self::trim($str);
 

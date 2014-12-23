@@ -68,16 +68,16 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testFixBrokenUtf8()
   {
     $testArray = array(
-        'DÃ¼sseldorf'                                          => 'Düsseldorf',
-        'Ã¤'                                                   => 'ä',
-        ' '                                                    => ' ',
-        ''                                                     => '',
-        "\n"                                                   => "\n",
-        'test'                                                 => 'test',
-        "FÃÂ©dération Camerounaise de Football"                => "Fédération Camerounaise de Football",
-        "FÃ©dÃ©ration Camerounaise de Football"                => "Fédération Camerounaise de Football",
-        "FÃÂ©dÃÂ©ration Camerounaise de Football"              => "Fédération Camerounaise de Football",
-        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football"        => "Fédération Camerounaise de Football"
+        'DÃ¼sseldorf'                                   => 'Düsseldorf',
+        'Ã¤'                                            => 'ä',
+        ' '                                             => ' ',
+        ''                                              => '',
+        "\n"                                            => "\n",
+        'test'                                          => 'test',
+        "FÃÂ©dération Camerounaise de Football"         => "Fédération Camerounaise de Football",
+        "FÃ©dÃ©ration Camerounaise de Football"         => "Fédération Camerounaise de Football",
+        "FÃÂ©dÃÂ©ration Camerounaise de Football"       => "Fédération Camerounaise de Football",
+        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football" => "Fédération Camerounaise de Football"
     );
 
     foreach ($testArray as $before => $after) {
@@ -432,7 +432,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
    */
   public function testTrim($input, $output)
   {
-    $this->assertSame($output, UTF8::trim($input));
+    $this->assertEquals($output, UTF8::trim($input));
   }
 
   /**
@@ -582,6 +582,24 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals("tërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
   }
 
+  function testStr_split()
+  {
+    $this->assertEquals(
+        array(
+            'd',
+            'é',
+            'j',
+            'à'
+        ), UTF8::str_split('déjà', 1)
+    );
+    $this->assertEquals(
+        array(
+            'dé',
+            'jà'
+        ), UTF8::str_split('déjà', 2)
+    );
+  }
+
   public function testRtrim()
   {
     $tests = array(
@@ -705,6 +723,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testStrirpos()
   {
+    $this->assertEquals(3, UTF8::strripos('DÉJÀ', 'à'));
+    $this->assertEquals(false, UTF8::strripos('aςσb', 'ΣΣ'));
     $this->assertEquals(6, UTF8::strripos("κόσμε-κόσμε", "Κ"));
     $this->assertEquals(11, UTF8::strripos("test κόσμε κόσμε test", "Κ"));
     $this->assertEquals(7, UTF8::strripos("中文空白-ÖÄÜ-中文空白", "ü"));
@@ -712,6 +732,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testStrrpos()
   {
+    $this->assertEquals(false, UTF8::strrpos('한국어', ''));
+    $this->assertEquals(1, UTF8::strrpos('한국어', '국'));
     $this->assertEquals(6, UTF8::strrpos("κόσμε-κόσμε", "κ"));
     $this->assertEquals(13, UTF8::strrpos("test κόσμε κόσμε test", "σ"));
     $this->assertEquals(9, UTF8::strrpos("中文空白-ÖÄÜ-中文空白", "中"));
@@ -719,6 +741,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testStrpos()
   {
+    $this->assertEquals(false, UTF8::strpos('abc', ''));
+    $this->assertEquals(false, UTF8::strpos('abc', 'd'));
+    $this->assertEquals(false, UTF8::strpos('abc', 'a', 3));
+    //$this->assertEquals(0, UTF8::strpos('abc', 'a', -1));
+    $this->assertEquals(1, UTF8::strpos('한국어', '국'));
     $this->assertEquals(0, UTF8::strpos("κόσμε-κόσμε-κόσμε", "κ"));
     $this->assertEquals(7, UTF8::strpos("test κόσμε test κόσμε", "σ"));
     $this->assertEquals(8, UTF8::strpos("ABC-ÖÄÜ-中文空白-中文空白", "中"));
@@ -726,6 +753,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testStripos()
   {
+    $this->assertEquals(3, UTF8::stripos('DÉJÀ', 'à'));
+    $this->assertEquals(1, UTF8::stripos('aςσb', 'ΣΣ'));
+    $this->assertEquals(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
     $this->assertEquals(4, UTF8::stripos("öäü-κόσμε-κόσμε-κόσμε", "Κ"));
     $this->assertEquals(5, UTF8::stripos("Test κόσμε test κόσμε", "Κ"));
     $this->assertEquals(4, UTF8::stripos("ABC-ÖÄÜ-中文空白-中文空白", "ö"));
@@ -831,7 +861,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::word_count($actual));
+      $this->assertEquals($expected, UTF8::str_word_count($actual));
     }
   }
 
