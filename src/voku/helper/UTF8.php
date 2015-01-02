@@ -219,8 +219,7 @@ class UTF8
       return $text;
     }
 
-    $max = (function_exists('mb_strlen') && ((int)ini_get('mbstring.func_overload')) & 2) ?
-        mb_strlen($text, '8bit') : strlen($text);
+    $max = self::strlen($text, '8bit');
 
     $buf = "";
     for ($i = 0; $i < $max; $i++) {
@@ -813,14 +812,15 @@ class UTF8
    *
    * @link     http://php.net/manual/en/function.mb-strlen.php
    *
-   * @param string $string The string being checked for length.
+   * @param string $string   The string being checked for length.
+   * @param string $encoding Set the charset for e.g. "mb_" function
    *
    * @return int the number of characters in
    *           string str having character encoding
    *           encoding. A multi-byte character is
    *           counted as 1.
    */
-  static public function strlen($string)
+  static public function strlen($string, $encoding = 'UTF-8')
   {
     if (!isset($string[0])) {
       return 0;
@@ -830,15 +830,25 @@ class UTF8
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
-      $str = self::clean($string);
 
-      return mb_strlen($str, 'UTF-8');
+      if ($encoding == 'UTF-8') {
+        $str = self::clean($string);
+      } else {
+        $str = $string;
+      }
+
+      return mb_strlen($str, $encoding);
     }
 
     if (self::$support['iconv'] === true) {
-      $str = self::clean($string);
 
-      return iconv_strlen($str, 'UTF-8');
+      if ($encoding == 'UTF-8') {
+        $str = self::clean($string);
+      } else {
+        $str = $string;
+      }
+
+      return iconv_strlen($str, $encoding);
     }
 
     return count(self::split($string));

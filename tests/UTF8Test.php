@@ -68,16 +68,20 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testFixBrokenUtf8()
   {
     $testArray = array(
-        'DÃ¼sseldorf'                                   => 'Düsseldorf',
-        'Ã¤'                                            => 'ä',
-        ' '                                             => ' ',
-        ''                                              => '',
-        "\n"                                            => "\n",
-        'test'                                          => 'test',
-        "FÃÂ©dération Camerounaise de Football"         => "Fédération Camerounaise de Football",
-        "FÃ©dÃ©ration Camerounaise de Football"         => "Fédération Camerounaise de Football",
-        "FÃÂ©dÃÂ©ration Camerounaise de Football"       => "Fédération Camerounaise de Football",
-        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football" => "Fédération Camerounaise de Football"
+        'DÃ¼sseldorf'                                     => 'Düsseldorf',
+        'Ã¤'                                              => 'ä',
+        ' '                                               => ' ',
+        ''                                                => '',
+        "\n"                                              => "\n",
+        'test'                                            => 'test',
+        "FÃÂ©dération Camerounaise de Football"           => "Fédération Camerounaise de Football",
+        "FÃÂ©dération Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
+        "FÃ©dÃ©ration Camerounaise de Football"           => "Fédération Camerounaise de Football",
+        "FÃ©dÃ©ration Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
+        "FÃÂ©dÃÂ©ration Camerounaise de Football"         => "Fédération Camerounaise de Football",
+        "FÃÂ©dÃÂ©ration Camerounaise de Football\n"       => "Fédération Camerounaise de Football\n",
+        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football"   => "Fédération Camerounaise de Football",
+        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football\n" => "Fédération Camerounaise de Football\n",
     );
 
     foreach ($testArray as $before => $after) {
@@ -429,6 +433,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   /**
    * @dataProvider trimProvider
+   *
+   * @param $input
+   * @param $output
    */
   public function testTrim($input, $output)
   {
