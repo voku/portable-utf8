@@ -25,25 +25,25 @@
 <path fill="none" stroke="gray" d="M44,-132C44,-132 120,-132 120,-132 126,-132 132,-138 132,-144 132,-144 132,-408 132,-408 132,-414 126,-420 120,-420 120,-420 44,-420 44,-420 38,-420 32,-414 32,-408 32,-408 32,-144 32,-144 32,-138 38,-132 44,-132"/>
 <text text-anchor="middle" x="82" y="-407.2" font-family="Times,serif" font-size="11.00" fill="gray">shim</text>
 </g>
-<!-- \\voku\\helper\\shim\\Normalizer -->
-<g id="node1" class="node"><title>\\voku\\helper\\shim\\Normalizer</title>
-<polygon fill="none" stroke="black" points="124,-392 40,-392 40,-356 124,-356 124,-392"/>
-<text text-anchor="middle" x="82" y="-371.2" font-family="Courier,monospace" font-size="11.00">Normalizer</text>
-</g>
-<!-- \\voku\\helper\\shim\\Intl -->
-<g id="node2" class="node"><title>\\voku\\helper\\shim\\Intl</title>
-<polygon fill="none" stroke="black" points="109,-338 55,-338 55,-302 109,-302 109,-338"/>
-<text text-anchor="middle" x="82" y="-317.2" font-family="Courier,monospace" font-size="11.00">Intl</text>
-</g>
 <!-- \\voku\\helper\\shim\\Iconv -->
-<g id="node3" class="node"><title>\\voku\\helper\\shim\\Iconv</title>
-<polygon fill="none" stroke="black" points="109,-284 55,-284 55,-248 109,-248 109,-284"/>
-<text text-anchor="middle" x="82" y="-263.2" font-family="Courier,monospace" font-size="11.00">Iconv</text>
+<g id="node1" class="node"><title>\\voku\\helper\\shim\\Iconv</title>
+<polygon fill="none" stroke="black" points="109,-392 55,-392 55,-356 109,-356 109,-392"/>
+<text text-anchor="middle" x="82" y="-371.2" font-family="Courier,monospace" font-size="11.00">Iconv</text>
 </g>
 <!-- \\voku\\helper\\shim\\Xml -->
-<g id="node4" class="node"><title>\\voku\\helper\\shim\\Xml</title>
+<g id="node2" class="node"><title>\\voku\\helper\\shim\\Xml</title>
+<polygon fill="none" stroke="black" points="109,-338 55,-338 55,-302 109,-302 109,-338"/>
+<text text-anchor="middle" x="82" y="-317.2" font-family="Courier,monospace" font-size="11.00">Xml</text>
+</g>
+<!-- \\voku\\helper\\shim\\Normalizer -->
+<g id="node3" class="node"><title>\\voku\\helper\\shim\\Normalizer</title>
+<polygon fill="none" stroke="black" points="124,-284 40,-284 40,-248 124,-248 124,-284"/>
+<text text-anchor="middle" x="82" y="-263.2" font-family="Courier,monospace" font-size="11.00">Normalizer</text>
+</g>
+<!-- \\voku\\helper\\shim\\Intl -->
+<g id="node4" class="node"><title>\\voku\\helper\\shim\\Intl</title>
 <polygon fill="none" stroke="black" points="109,-230 55,-230 55,-194 109,-194 109,-230"/>
-<text text-anchor="middle" x="82" y="-209.2" font-family="Courier,monospace" font-size="11.00">Xml</text>
+<text text-anchor="middle" x="82" y="-209.2" font-family="Courier,monospace" font-size="11.00">Intl</text>
 </g>
 <!-- \\voku\\helper\\shim\\Mbstring -->
 <g id="node5" class="node"><title>\\voku\\helper\\shim\\Mbstring</title>

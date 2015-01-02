@@ -3,13 +3,13 @@
 //use Normalizer as n;
 use voku\helper\shim\Normalizer as n;
 
-class NormalizationTest extends \PHPUnit_Framework_TestCase
+class ZNormalizationTest extends \PHPUnit_Framework_TestCase
 {
   public $unicodeVersion = 63;
 
   function testNormalize()
   {
-    $t = file(__DIR__ . '/NormalizationTest.' . $this->unicodeVersion . '.txt');
+    $t = file(__DIR__ . '/ZNormalizationTest.' . $this->unicodeVersion . '.txt');
     $c = array();
 
     foreach ($t as $s) {
