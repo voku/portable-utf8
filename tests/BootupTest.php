@@ -1,6 +1,6 @@
 <?php
 
-class BootupTest extends \PHPUnit_Framework_TestCase
+class BootupTest extends PHPUnit_Framework_TestCase
 {
   function testFilterRequestInputs()
   {

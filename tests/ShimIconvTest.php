@@ -2,7 +2,7 @@
 
 use voku\helper\shim\Iconv as p;
 
-class ShimIconvTest extends \PHPUnit_Framework_TestCase
+class ShimIconvTest extends PHPUnit_Framework_TestCase
 {
   function testIconv()
   {
