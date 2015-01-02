@@ -862,16 +862,16 @@ class UTF8
     // init
     self::checkForSupport();
 
+    if (self::$support['mbstring'] === true) {
+      return mb_check_encoding($str, 'UTF-8');
+    }
+
     if (self::$support['pcre_utf8'] === true) {
       // If even just the first character can be matched, when the /u
       // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
       // invalid, nothing at all will match, even if the string contains
       // some valid sequences
       return (bool)preg_match('//u', $str);
-    }
-
-    if (self::$support['mbstring'] === true) {
-      return mb_check_encoding($str, 'UTF-8');
     }
 
     // fallback
