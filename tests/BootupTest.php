@@ -1,14 +1,11 @@
 <?php
 
-use Normalizer as n;
-use voku\helper\Bootup as b;
-
 class BootupTest extends \PHPUnit_Framework_TestCase
 {
   function testFilterRequestInputs()
   {
     $c = "à";
-    $d = n::normalize($c, n::NFD);
+    $d = Normalizer::normalize($c, Normalizer::NFD);
 
     $bak = array(
         $_GET,
@@ -62,7 +59,7 @@ class BootupTest extends \PHPUnit_Framework_TestCase
         ),
     );
 
-    b::filterRequestInputs();
+    \voku\helper\Bootup::filterRequestInputs();
 
     $expect = array(
         'n' => 4,
@@ -87,16 +84,16 @@ class BootupTest extends \PHPUnit_Framework_TestCase
     $uriC = '/' . utf8_decode("bàr");
     $uriD = '/' . "bàr";
 
-    $u = b::filterRequestUri($uriA, false);
+    $u = \voku\helper\Bootup::filterRequestUri($uriA, false);
     $this->assertSame($uriA, $u);
 
-    $u = b::filterRequestUri($uriB, false);
+    $u = \voku\helper\Bootup::filterRequestUri($uriB, false);
     $this->assertSame($uriA, $u);
 
-    $u = b::filterRequestUri($uriC, false);
+    $u = \voku\helper\Bootup::filterRequestUri($uriC, false);
     $this->assertSame($uriA, $u);
 
-    $u = b::filterRequestUri($uriD, false);
+    $u = \voku\helper\Bootup::filterRequestUri($uriD, false);
     $this->assertSame($uriD, $u);
   }
 }

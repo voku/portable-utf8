@@ -2,7 +2,7 @@
 
 use voku\helper\shim\Xml as p;
 
-class XmlTest extends \PHPUnit_Framework_TestCase
+class ShimXmlTest extends \PHPUnit_Framework_TestCase
 {
   function testUtf8Encode()
   {

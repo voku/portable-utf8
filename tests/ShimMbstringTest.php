@@ -4,7 +4,7 @@ use Normalizer as n;
 use voku\helper\shim\Mbstring as p;
 
 
-class MbstringTest extends \PHPUnit_Framework_TestCase
+class ShimMbstringTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * @expectedException PHPUnit_Framework_Error_Warning

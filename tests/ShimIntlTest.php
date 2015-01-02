@@ -3,7 +3,7 @@
 use Normalizer as n;
 use voku\helper\shim\Intl as p;
 
-class IntlTest extends \PHPUnit_Framework_TestCase
+class ShimIntlTest extends \PHPUnit_Framework_TestCase
 {
   function testGrapheme_extract_arrayError()
   {

@@ -3,7 +3,7 @@
 use Normalizer as in;
 use voku\helper\shim\Normalizer as pn;
 
-class NormalizerTest extends \PHPUnit_Framework_TestCase
+class ShimNormalizerTest extends \PHPUnit_Framework_TestCase
 {
   function testConstants()
   {
