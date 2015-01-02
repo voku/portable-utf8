@@ -3,17 +3,19 @@
 [![Total Downloads](https://poser.pugx.org/voku/portable-utf8/downloads.svg)](https://packagist.org/packages/voku/portable-utf8)
 [![License](https://poser.pugx.org/voku/portable-utf8/license.svg)](https://packagist.org/packages/voku/portable-utf8)
 
-UTF8 Encoding
+UTF8
 =============
 
 Portable UTF-8 library is a Unicode aware alternative to PHP's native string handling API.
 
 Based on Hamid Sarfraz's work: http://pageconfig.com/attachments/portable-utf8.php
+Based on Nicolas Grekas's work: https://github.com/tchwork/utf8
+Based on Sebastián Grignoli's work: https://github.com/neitanod/forceutf8
 
 Description
 ===========
 
-It is written in PHP and can work without "mbstring", "iconv", UTF-8 support in "PCRE", or any other library. The benefit of Portable UTF-8 is that it is very light-weight, fast, easy to use, easy to bundle, and it always works (no dependencies).
+It is written in PHP and can work without "mbstring", "iconv" or any other extra encoding-library. The benefit of Portable UTF-8 is that it is easy to use, easy to bundle.
 
 phpDocumentor
 =============
@@ -29,15 +31,10 @@ The problem with "mbstring" and others is that most of the time you cannot ensur
 ## Requirements and Recommendations
 
 *   No extensions are required to run this library. Portable UTF-8 only needs PCRE library that is available by default since PHP 4.2.0 and cannot be disabled since PHP 5.3.0. "\u" modifier support in PCRE for UTF-8 handling is not a must.
-*   PHP 4.2 is the minimum requirement, and all later versions are fine with Portable UTF-8.
-*   To speed up string handling, it is recommended that you have "mbstring" or "iconv" available on your server, as well as the latest version of PCRE library.
+*   PHP 5.3 is the minimum requirement, and all later versions are fine with Portable UTF-8.
+*   To speed up string handling, it is recommended that you have "mbstring" or "iconv" available on your server, as well as the latest version of PCRE library
 *   Although Portable UTF-8 is easy to use; moving from native API to Portable UTF-8 may not be straight-forward for everyone. It is highly recommended that you do not update your scripts to include Portable UTF-8 or replace or change anything before you first know the reason and consequences. Most of the time, some native function may be all what you need.
-
-##  Portable UTF-8 on the web[]()
-
-*   Demo: [http://pageconfig.com/post/portable-utf-8-demo](http://pageconfig.com/post/portable-utf-8-demo)
-*   On Unicode Resource List: [http://www.unicode.org/resources/libraries.html](http://www.unicode.org/resources/libraries.html)
-*   On sitepoint: [http://www.sitepoint.com/bringing-unicode-to-php-with-portable-utf8](http://www.sitepoint.com/bringing-unicode-to-php-with-portable-utf8/)
+*   There is also a shim for "mbstring", "iconv" and "intl", so you can use it also on shared webspace. 
 
 Usage:
 ======
