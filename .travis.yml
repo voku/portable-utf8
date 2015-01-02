@@ -9,6 +9,7 @@ php:
 before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source --dev
+  - composer update
 
 script:
   - phpunit --coverage-text --verbose
