@@ -859,49 +859,92 @@ class UTF8
       return true;
     }
 
+    // If even just the first character can be matched, when the /u
+    // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
+    // invalid, nothing at all will match, even if the string contains
+    // some valid sequences
+    return (preg_match('/^.{1}/us', $str, $ar) == 1);
+  }
+
+  /**
+   * Finds the length of the initial segment of a string consisting entirely of characters contained within a given
+   * mask.
+   *
+   * @param string $s
+   * @param string $mask
+   * @param int    $start
+   * @param int    $len
+   *
+   * @return int|null
+   */
+  static function strspn($s, $mask, $start = 0, $len = 2147483647)
+  {
+    if ($start || 2147483647 != $len) {
+      $s = self::substr($s, $start, $len);
+    }
+
+    return preg_match('/^' . self::rxClass($mask) . '+/u', $s, $s) ? grapheme_strlen($s[0]) : 0;
+  }
+
+  /**
+   * Get part of string
+   *
+   * @link http://php.net/manual/en/function.mb-substr.php
+   *
+   * @param string $str    <p>
+   *                       The string being checked.
+   *                       </p>
+   * @param int    $start  <p>
+   *                       The first position used in str.
+   *                       </p>
+   * @param int    $length [optional] <p>
+   *                       The maximum length of the returned string.
+   *                       </p>
+   *
+   * @return string mb_substr returns the portion of
+   * str specified by the
+   * start and
+   * length parameters.
+   */
+  static public function substr($str, $start = 0, $length = null)
+  {
+    if (!isset($str[0])) {
+      return '';
+    }
+
     // init
     self::checkForSupport();
 
-    if (self::$support['pcre_utf8'] === true) {
-      // If even just the first character can be matched, when the /u
-      // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
-      // invalid, nothing at all will match, even if the string contains
-      // some valid sequences
-      return (bool)preg_match('//u', $str);
-    }
+    //iconv and mbstring are not tolerant to invalid encoding
+    //further, their behaviour is inconsistent with that of PHP's substr
 
     if (self::$support['mbstring'] === true) {
-      return mb_check_encoding($str, 'UTF-8');
-    }
+      $str = self::clean($str);
 
-    $len = strlen($str);
-    for ($i = 0; $i < $len; $i++) {
-      if (($str[$i] & "\x80") === "\x00") {
-        continue;
-      } else if ((($str[$i] & "\xE0") === "\xC0") && (isset($str[$i + 1]))) {
-        if (($str[$i + 1] & "\xC0") === "\x80") {
-          $i++;
-          continue;
-        }
-        return false;
-      } else if ((($str[$i] & "\xF0") === "\xE0") && (isset($str[$i + 2]))) {
-        if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80")) {
-          $i = $i + 2;
-          continue;
-        }
-        return false;
-      } else if ((($str[$i] & "\xF8") === "\xF0") && (isset($str[$i + 3]))) {
-        if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80") && (($str[$i + 3] & "\xC0") === "\x80")) {
-          $i = $i + 3;
-          continue;
-        }
-        return false;
-      } else {
-        return false;
+      if ($length === null) {
+        $length = self::strlen($str);
       }
+
+      return mb_substr($str, $start, $length, 'UTF-8');
     }
 
-    return true;
+    if (self::$support['iconv'] === true) {
+      $str = self::clean($str);
+
+      if ($length === null) {
+        $length = self::strlen($str);
+      }
+
+      return iconv_substr($str, $start, $length, 'UTF-8');
+    }
+
+    // fallback
+
+    // split to array, and remove invalid characters
+    $array = self::split($str);
+
+    // extract relevant part, and join to make sting again
+    return implode(array_slice($array, $start, $length));
   }
 
   /**
@@ -1019,86 +1062,6 @@ class UTF8
     }
 
     return $ret;
-  }
-
-  /**
-   * Finds the length of the initial segment of a string consisting entirely of characters contained within a given
-   * mask.
-   *
-   * @param string $s
-   * @param string $mask
-   * @param int    $start
-   * @param int    $len
-   *
-   * @return int|null
-   */
-  static function strspn($s, $mask, $start = 0, $len = 2147483647)
-  {
-    if ($start || 2147483647 != $len) {
-      $s = self::substr($s, $start, $len);
-    }
-    return preg_match('/^' . self::rxClass($mask) . '+/u', $s, $s) ? grapheme_strlen($s[0]) : 0;
-  }
-
-  /**
-   * Get part of string
-   *
-   * @link http://php.net/manual/en/function.mb-substr.php
-   *
-   * @param string $str    <p>
-   *                       The string being checked.
-   *                       </p>
-   * @param int    $start  <p>
-   *                       The first position used in str.
-   *                       </p>
-   * @param int    $length [optional] <p>
-   *                       The maximum length of the returned string.
-   *                       </p>
-   *
-   * @return string mb_substr returns the portion of
-   * str specified by the
-   * start and
-   * length parameters.
-   */
-  static public function substr($str, $start = 0, $length = null)
-  {
-    if (!isset($str[0])) {
-      return '';
-    }
-
-    // init
-    self::checkForSupport();
-
-    //iconv and mbstring are not tolerant to invalid encoding
-    //further, their behaviour is inconsistent with that of PHP's substr
-
-    if (self::$support['mbstring'] === true) {
-      $str = self::clean($str);
-
-      if ($length === null) {
-        $length = self::strlen($str);
-      }
-
-      return mb_substr($str, $start, $length, 'UTF-8');
-    }
-
-    if (self::$support['iconv'] === true) {
-      $str = self::clean($str);
-
-      if ($length === null) {
-        $length = self::strlen($str);
-      }
-
-      return iconv_substr($str, $start, $length, 'UTF-8');
-    }
-
-    // fallback
-
-    // split to array, and remove invalid characters
-    $array = self::split($str);
-
-    // extract relevant part, and join to make sting again
-    return implode(array_slice($array, $start, $length));
   }
 
   /**
