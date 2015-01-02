@@ -4,11 +4,11 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3fb2beb7061294af9fce87990d65ab44",
+    "hash": "e7448ae80c34a387e517c88e14cd0f5f",
     "packages": [
         {
             "name": "voku/urlify",
-            "version": "dev-master",
+            "version": "1.0.2-stable",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voku/urlify.git",
@@ -478,10 +478,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "voku/urlify": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.0"
     },
