@@ -864,34 +864,16 @@ class UTF8
     // init
     self::checkForSupport();
 
-    // "In PHP 5.3.x, the "mb-check-encoding"-function allows code points
-    // above U+10FFFF, which also allows five and six byte sequences."
-    if (version_compare(PHP_VERSION, '5.4.0') < 0) {
-      // From http://w3.org/International/questions/qa-forms-utf-8.html
-      return preg_match(
-          '%^(?:
-          [\x09\x0A\x0D\x20-\x7E]            # ASCII
-        | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
-        |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
-        | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
-        |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
-        |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
-        | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
-        |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
-        )*$%xs', $str
-      );
-    }
-
-    if (self::$support['mbstring'] === true) {
-      return mb_check_encoding($str, 'UTF-8');
-    }
-
     if (self::$support['pcre_utf8'] === true) {
       // If even just the first character can be matched, when the /u
       // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
       // invalid, nothing at all will match, even if the string contains
       // some valid sequences
       return (bool)preg_match('//u', $str);
+    }
+
+    if (self::$support['mbstring'] === true) {
+      return mb_check_encoding($str, 'UTF-8');
     }
 
     // fallback
