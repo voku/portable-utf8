@@ -2965,8 +2965,8 @@ class UTF8
   /**
    * get hexadecimal code point (U+xxxx) of a UTF-8 encoded character
    *
-   * @param    string $chr The input character
-   * @param string    $pfix
+   * @param    string  $chr The input character
+   * @param    string  $pfix
    *
    * @return   string The Code Point encoded as U+xxxx
    */
@@ -3605,7 +3605,7 @@ class UTF8
   /**
    * fix a double (or multiple) encoded UTF8 string
    *
-   * @param        $text
+   * @param string $text
    *
    * @return array|string
    */
@@ -3853,13 +3853,15 @@ class UTF8
   }
 
   /**
-   * convert to ISO8859
+   * convert to ISO-8859
    *
-   * @param $text
+   * -> alias for to_win1252()
    *
-   * @return array|string
+   * @param   string $text
+   *
+   * @return  array|string
    */
-  protected static function toISO8859($text)
+  protected static function to_iso8859($text)
   {
     return self::to_win1252($text);
   }
@@ -3867,9 +3869,9 @@ class UTF8
   /**
    * fix -> utf8-win1252 chars
    *
-   * @param $text
+   * @param   string $text
    *
-   * @return mixed
+   * @return  mixed
    */
   static protected function utf8_fix_win1252_chars($text)
   {

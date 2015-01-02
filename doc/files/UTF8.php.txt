@@ -2,6 +2,8 @@
 
 namespace voku\helper;
 
+use URLify;
+
 /**
  * UTF8-Helper-Class
  *
@@ -14,10 +16,310 @@ namespace voku\helper;
  */
 class UTF8
 {
+  // (CRLF|([ZWNJ-ZWJ]|T+|L*(LV?V+|LV|LVT)T*|L+|[^Control])[Extend]*|[Control])
+  // This regular expression is a work around for http://bugs.exim.org/1279
+
+  const GRAPHEME_CLUSTER_RX = '(?:\r\n|(?:[ -~\x{200C}\x{200D}]|[ᆨ-ᇹ]+|[ᄀ-ᅟ]*(?:[가개갸걔거게겨계고과괘괴교구궈궤귀규그긔기까깨꺄꺠꺼께껴꼐꼬꽈꽤꾀꾜꾸꿔꿰뀌뀨끄끠끼나내냐냬너네녀녜노놔놰뇌뇨누눠눼뉘뉴느늬니다대댜댸더데뎌뎨도돠돼되됴두둬뒈뒤듀드듸디따때땨떄떠떼뗘뗴또똬뙈뙤뚀뚜뚸뛔뛰뜌뜨띄띠라래랴럐러레려례로롸뢔뢰료루뤄뤠뤼류르릐리마매먀먜머메며몌모뫄뫠뫼묘무뭐뭬뮈뮤므믜미바배뱌뱨버베벼볘보봐봬뵈뵤부붜붸뷔뷰브븨비빠빼뺘뺴뻐뻬뼈뼤뽀뽜뽸뾔뾰뿌뿨쀄쀠쀼쁘쁴삐사새샤섀서세셔셰소솨쇄쇠쇼수숴쉐쉬슈스싀시싸쌔쌰썌써쎄쎠쎼쏘쏴쐐쐬쑈쑤쒀쒜쒸쓔쓰씌씨아애야얘어에여예오와왜외요우워웨위유으의이자재쟈쟤저제져졔조좌좨죄죠주줘줴쥐쥬즈즤지짜째쨔쨰쩌쩨쪄쪠쪼쫘쫴쬐쬬쭈쭤쮀쮜쮸쯔쯰찌차채챠챼처체쳐쳬초촤쵀최쵸추춰췌취츄츠츼치카캐캬컈커케켜켸코콰쾌쾨쿄쿠쿼퀘퀴큐크킈키타태탸턔터테텨톄토톼퇘퇴툐투퉈퉤튀튜트틔티파패퍄퍠퍼페펴폐포퐈퐤푀표푸풔풰퓌퓨프픠피하해햐햬허헤혀혜호화홰회효후훠훼휘휴흐희히]?[ᅠ-ᆢ]+|[가-힣])[ᆨ-ᇹ]*|[ᄀ-ᅟ]+|[^\p{Cc}\p{Cf}\p{Zl}\p{Zp}])[\p{Mn}\p{Me}\x{09BE}\x{09D7}\x{0B3E}\x{0B57}\x{0BBE}\x{0BD7}\x{0CC2}\x{0CD5}\x{0CD6}\x{0D3E}\x{0D57}\x{0DCF}\x{0DDF}\x{200C}\x{200D}\x{1D165}\x{1D16E}-\x{1D172}]*|[\p{Cc}\p{Cf}\p{Zl}\p{Zp}])';
+
+  /**
+   * @var array
+   */
+  protected static $win1252ToUtf8 = array(
+      128 => "\xe2\x82\xac",
+      130 => "\xe2\x80\x9a",
+      131 => "\xc6\x92",
+      132 => "\xe2\x80\x9e",
+      133 => "\xe2\x80\xa6",
+      134 => "\xe2\x80\xa0",
+      135 => "\xe2\x80\xa1",
+      136 => "\xcb\x86",
+      137 => "\xe2\x80\xb0",
+      138 => "\xc5\xa0",
+      139 => "\xe2\x80\xb9",
+      140 => "\xc5\x92",
+      142 => "\xc5\xbd",
+      145 => "\xe2\x80\x98",
+      146 => "\xe2\x80\x99",
+      147 => "\xe2\x80\x9c",
+      148 => "\xe2\x80\x9d",
+      149 => "\xe2\x80\xa2",
+      150 => "\xe2\x80\x93",
+      151 => "\xe2\x80\x94",
+      152 => "\xcb\x9c",
+      153 => "\xe2\x84\xa2",
+      154 => "\xc5\xa1",
+      155 => "\xe2\x80\xba",
+      156 => "\xc5\x93",
+      158 => "\xc5\xbe",
+      159 => "\xc5\xb8"
+  );
+
+  /**
+   * @var array
+   */
+  protected static $brokenUtf8ToUtf8 = array(
+      "\xc2\x80" => "\xe2\x82\xac",
+      "\xc2\x82" => "\xe2\x80\x9a",
+      "\xc2\x83" => "\xc6\x92",
+      "\xc2\x84" => "\xe2\x80\x9e",
+      "\xc2\x85" => "\xe2\x80\xa6",
+      "\xc2\x86" => "\xe2\x80\xa0",
+      "\xc2\x87" => "\xe2\x80\xa1",
+      "\xc2\x88" => "\xcb\x86",
+      "\xc2\x89" => "\xe2\x80\xb0",
+      "\xc2\x8a" => "\xc5\xa0",
+      "\xc2\x8b" => "\xe2\x80\xb9",
+      "\xc2\x8c" => "\xc5\x92",
+      "\xc2\x8e" => "\xc5\xbd",
+      "\xc2\x91" => "\xe2\x80\x98",
+      "\xc2\x92" => "\xe2\x80\x99",
+      "\xc2\x93" => "\xe2\x80\x9c",
+      "\xc2\x94" => "\xe2\x80\x9d",
+      "\xc2\x95" => "\xe2\x80\xa2",
+      "\xc2\x96" => "\xe2\x80\x93",
+      "\xc2\x97" => "\xe2\x80\x94",
+      "\xc2\x98" => "\xcb\x9c",
+      "\xc2\x99" => "\xe2\x84\xa2",
+      "\xc2\x9a" => "\xc5\xa1",
+      "\xc2\x9b" => "\xe2\x80\xba",
+      "\xc2\x9c" => "\xc5\x93",
+      "\xc2\x9e" => "\xc5\xbe",
+      "\xc2\x9f" => "\xc5\xb8"
+  );
+
+  /**
+   * @var array
+   */
+  protected static $utf8ToWin1252 = array(
+      "\xe2\x82\xac" => "\x80",
+      "\xe2\x80\x9a" => "\x82",
+      "\xc6\x92"     => "\x83",
+      "\xe2\x80\x9e" => "\x84",
+      "\xe2\x80\xa6" => "\x85",
+      "\xe2\x80\xa0" => "\x86",
+      "\xe2\x80\xa1" => "\x87",
+      "\xcb\x86"     => "\x88",
+      "\xe2\x80\xb0" => "\x89",
+      "\xc5\xa0"     => "\x8a",
+      "\xe2\x80\xb9" => "\x8b",
+      "\xc5\x92"     => "\x8c",
+      "\xc5\xbd"     => "\x8e",
+      "\xe2\x80\x98" => "\x91",
+      "\xe2\x80\x99" => "\x92",
+      "\xe2\x80\x9c" => "\x93",
+      "\xe2\x80\x9d" => "\x94",
+      "\xe2\x80\xa2" => "\x95",
+      "\xe2\x80\x93" => "\x96",
+      "\xe2\x80\x94" => "\x97",
+      "\xcb\x9c"     => "\x98",
+      "\xe2\x84\xa2" => "\x99",
+      "\xc5\xa1"     => "\x9a",
+      "\xe2\x80\xba" => "\x9b",
+      "\xc5\x93"     => "\x9c",
+      "\xc5\xbe"     => "\x9e",
+      "\xc5\xb8"     => "\x9f"
+  );
+
+  /**
+   * @var array
+   */
   private static $support = array();
 
   public function __construct()
   {
+  }
+
+  /**
+   * encode to UTF8 or LATIN1
+   *
+   * @param string $encodingLabel ISO-8859-1 || UTF-8
+   * @param string $text
+   *
+   * @return array|bool|string will return false on error
+   */
+  public static function encode($encodingLabel, $text)
+  {
+    $encodingLabel = self::normalizeEncoding($encodingLabel);
+
+    if ($encodingLabel == 'UTF-8') {
+      return self::to_utf8($text);
+    }
+
+    if ($encodingLabel == 'ISO-8859-1') {
+      return self::to_latin1($text);
+    }
+
+    return false;
+  }
+
+  /**
+   * normalize encoding-name
+   *
+   * @param $encodingLabel
+   *
+   * @return string
+   */
+  protected static function normalizeEncoding($encodingLabel)
+  {
+    $encoding = strtoupper($encodingLabel);
+    $encoding = preg_replace('/[^a-zA-Z0-9\s]/', '', $encoding);
+    $equivalences = array(
+        'ISO88591'    => 'ISO-8859-1',
+        'ISO8859'     => 'ISO-8859-1',
+        'ISO'         => 'ISO-8859-1',
+        'LATIN1'      => 'ISO-8859-1',
+        'LATIN'       => 'ISO-8859-1',
+        'UTF8'        => 'UTF-8',
+        'UTF'         => 'UTF-8',
+        'WIN1252'     => 'ISO-8859-1',
+        'WINDOWS1252' => 'ISO-8859-1'
+    );
+    if (empty($equivalences[$encoding])) {
+      return 'UTF-8';
+    }
+    return $equivalences[$encoding];
+  }
+
+  /**
+   * Function UTF8::to_utf8
+   *
+   * This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.
+   *
+   * It assumes that the encoding of the original string is either Windows-1252 or ISO 8859-1.
+   *
+   * It may fail to convert characters to UTF-8 if they fall into one of these scenarios:
+   *
+   * 1) when any of these characters:   ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß
+   *    are followed by any of these:  ("group B")
+   *                                    ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶•¸¹º»¼½¾¿
+   * For example:   %ABREPRESENT%C9%BB. «REPRESENTÉ»
+   * The "«" (%AB) character will be converted, but the "É" followed by "»" (%C9%BB)
+   * is also a valid unicode character, and will be left unchanged.
+   *
+   * 2) when any of these: àáâãäåæçèéêëìíîï  are followed by TWO chars from group B,
+   * 3) when any of these: ðñòó  are followed by THREE chars from group B.
+   *
+   * @name         to_utf8
+   *
+   * @param string $text Any string.
+   *
+   * @return string  The same string, UTF8 encoded
+   *
+   */
+  public static function to_utf8($text)
+  {
+    if (is_array($text)) {
+      foreach ($text as $k => $v) {
+        $text[$k] = self::to_utf8($v);
+      }
+      return $text;
+    }
+
+    if (!is_string($text)) {
+      return $text;
+    }
+
+    $max = self::strlen($text, '8bit');
+
+    $buf = "";
+    for ($i = 0; $i < $max; $i++) {
+      $c1 = $text{$i};
+      if ($c1 >= "\xc0") { //Should be converted to UTF8, if it's not UTF8 already
+        $c2 = $i + 1 >= $max ? "\x00" : $text{$i + 1};
+        $c3 = $i + 2 >= $max ? "\x00" : $text{$i + 2};
+        $c4 = $i + 3 >= $max ? "\x00" : $text{$i + 3};
+        if ($c1 >= "\xc0" & $c1 <= "\xdf") { //looks like 2 bytes UTF8
+          if ($c2 >= "\x80" && $c2 <= "\xbf") { //yeah, almost sure it's UTF8 already
+            $buf .= $c1 . $c2;
+            $i++;
+          } else { //not valid UTF8.  Convert it.
+            $cc1 = (chr(ord($c1) / 64) | "\xc0");
+            $cc2 = ($c1 & "\x3f") | "\x80";
+            $buf .= $cc1 . $cc2;
+          }
+        } elseif ($c1 >= "\xe0" & $c1 <= "\xef") { //looks like 3 bytes UTF8
+          if ($c2 >= "\x80" && $c2 <= "\xbf" && $c3 >= "\x80" && $c3 <= "\xbf") { //yeah, almost sure it's UTF8 already
+            $buf .= $c1 . $c2 . $c3;
+            $i = $i + 2;
+          } else { //not valid UTF8.  Convert it.
+            $cc1 = (chr(ord($c1) / 64) | "\xc0");
+            $cc2 = ($c1 & "\x3f") | "\x80";
+            $buf .= $cc1 . $cc2;
+          }
+        } elseif ($c1 >= "\xf0" & $c1 <= "\xf7") { //looks like 4 bytes UTF8
+          if ($c2 >= "\x80" && $c2 <= "\xbf" && $c3 >= "\x80" && $c3 <= "\xbf" && $c4 >= "\x80" && $c4 <= "\xbf") { //yeah, almost sure it's UTF8 already
+            $buf .= $c1 . $c2 . $c3 . $c4;
+            $i = $i + 3;
+          } else { //not valid UTF8.  Convert it.
+            $cc1 = (chr(ord($c1) / 64) | "\xc0");
+            $cc2 = ($c1 & "\x3f") | "\x80";
+            $buf .= $cc1 . $cc2;
+          }
+        } else { //doesn't look like UTF8, but should be converted
+          $cc1 = (chr(ord($c1) / 64) | "\xc0");
+          $cc2 = (($c1 & "\x3f") | "\x80");
+          $buf .= $cc1 . $cc2;
+        }
+      } elseif (($c1 & "\xc0") == "\x80") { // needs conversion
+        if (isset(self::$win1252ToUtf8[ord($c1)])) { //found in Windows-1252 special cases
+          $buf .= self::$win1252ToUtf8[ord($c1)];
+        } else {
+          $cc1 = (chr(ord($c1) / 64) | "\xc0");
+          $cc2 = (($c1 & "\x3f") | "\x80");
+          $buf .= $cc1 . $cc2;
+        }
+      } else { // it doesn't need conversion
+        $buf .= $c1;
+      }
+    }
+    return $buf;
+  }
+
+  /**
+   * Get string length
+   *
+   * @link     http://php.net/manual/en/function.mb-strlen.php
+   *
+   * @param string $string   The string being checked for length.
+   * @param string $encoding Set the charset for e.g. "mb_" function
+   *
+   * @return int the number of characters in
+   *           string str having character encoding
+   *           encoding. A multi-byte character is
+   *           counted as 1.
+   */
+  static public function strlen($string, $encoding = 'UTF-8')
+  {
+    if (!isset($string[0])) {
+      return 0;
+    }
+
+    // init
+    self::checkForSupport();
+
+    if (self::$support['mbstring'] === true) {
+
+      if ($encoding == 'UTF-8') {
+        $str = self::clean($string);
+      } else {
+        $str = $string;
+      }
+
+      return mb_strlen($str, $encoding);
+    }
+
+    if (self::$support['iconv'] === true) {
+
+      if ($encoding == 'UTF-8') {
+        $str = self::clean($string);
+      } else {
+        $str = $string;
+      }
+
+      return iconv_strlen($str, $encoding);
+    }
+
+    return count(self::split($string));
   }
 
   /**
@@ -28,10 +330,8 @@ class UTF8
     if (count(self::$support) === 0) {
       self::$support['mbstring'] = self::mbstring_loaded();
       self::$support['iconv'] = self::iconv_loaded();
+      self::$support['intl'] = self::intl_loaded();
       self::$support['pcre_utf8'] = self::pcre_utf8_support();
-
-      // DEBUG
-      //dump(self::$support, false);
     }
   }
 
@@ -40,9 +340,15 @@ class UTF8
    *
    * @return   bool True if available, False otherwise
    */
-  static public function mbstring_loaded()
+  static protected function mbstring_loaded()
   {
-    return extension_loaded('mbstring') ? true : false;
+    $return = extension_loaded('mbstring');
+
+    if ($return === true) {
+      mb_internal_encoding('UTF-8');
+    }
+
+    return $return;
   }
 
   /**
@@ -50,9 +356,19 @@ class UTF8
    *
    * @return   bool True if available, False otherwise
    */
-  static public function iconv_loaded()
+  static protected function iconv_loaded()
   {
     return extension_loaded('iconv') ? true : false;
+  }
+
+  /**
+   * checks whether intl is available on the server
+   *
+   * @return   bool True if available, False otherwise
+   */
+  static protected function intl_loaded()
+  {
+    return extension_loaded('intl') ? true : false;
   }
 
   /**
@@ -60,9 +376,405 @@ class UTF8
    *
    * @return   bool True if support is available, false otherwise
    */
-  static public function pcre_utf8_support()
+  static protected function pcre_utf8_support()
   {
     return @preg_match('//u', '');
+  }
+
+  /**
+   * accepts a string and removes all non-UTF-8 characters from it.
+   *
+   * @param string $str The string to be sanitized.
+   * @param bool   $remove_bom
+   * @param bool   $normalise_whitespace
+   *
+   * @return string Clean UTF-8 encoded string
+   */
+  static public function clean($str, $remove_bom = false, $normalise_whitespace = false)
+  {
+    // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
+    // caused connection reset problem on larger strings
+
+    $regx = '/
+					(
+						(?: [\x00-\x7F]                  # single-byte sequences   0xxxxxxx
+						|   [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
+						|   \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
+						|   [\xE1-\xEC][\x80-\xBF]{2}
+						|   \xED[\x80-\x9F][\x80-\xBF]
+						|   [\xEE-\xEF][\x80-\xBF]{2}
+						){1,50}                          # ...one or more times
+					)
+					| .                                  # anything else
+					/x';
+    $str = preg_replace($regx, '$1', $str);
+
+    if ($normalise_whitespace === true) {
+      $whitespaces = implode('|', self::whitespace_table());
+      $regx = '/(' . $whitespaces . ')/s';
+      $str = preg_replace($regx, " ", $str);
+    }
+
+    if ($remove_bom === true) {
+      $str = self::removeBOM($str);
+    }
+
+    return $str;
+  }
+
+  /**
+   * returns an array with all utf8 whitespace characters as per
+   * http://www.bogofilter.org/pipermail/bogofilter/2003-March/001889.html
+   *
+   * @author: Derek E. derek.isname@gmail.com
+   *
+   * @return array an array with all known whitespace characters as values and the type of whitespace as keys
+   *         as defined in above URL
+   */
+  static public function whitespace_table()
+  {
+    $whitespace = array(
+        "SPACE"                     => "\x20",
+        "NO-BREAK SPACE"            => "\xc2\xa0",
+        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
+        "EN QUAD"                   => "\xe2\x80\x80",
+        "EM QUAD"                   => "\xe2\x80\x81",
+        "EN SPACE"                  => "\xe2\x80\x82",
+        "EM SPACE"                  => "\xe2\x80\x83",
+        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
+        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
+        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
+        "FIGURE SPACE"              => "\xe2\x80\x87",
+        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
+        "THIN SPACE"                => "\xe2\x80\x89",
+        "HAIR SPACE"                => "\xe2\x80\x8a",
+        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
+        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
+        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
+        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
+    );
+
+    return $whitespace;
+  }
+
+  /**
+   * remove the BOM from UTF-8
+   *
+   * @param string $str
+   *
+   * @return string
+   */
+  static public function removeBOM($str = "")
+  {
+    if (substr($str, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
+      $str = substr($str, 3);
+    }
+    return $str;
+  }
+
+  /**
+   * convert a string to an array of Unicode characters.
+   *
+   * @param    string $str          The string to split into array.
+   * @param    int    $split_length Max character length of each array element
+   *
+   * @return   array An array containing chunks of the string
+   */
+  static public function split($str, $split_length = 1)
+  {
+    if (!isset($str[0])) {
+      return array();
+    }
+
+    // init
+    self::checkForSupport();
+    $str = (string)$str;
+    $ret = array();
+
+    if (self::$support['pcre_utf8'] === true) {
+      $str = self::clean($str);
+
+      //	http://stackoverflow.com/a/8780076/369005
+      $ret = preg_split('/(?<!^)(?!$)/u', $str);
+
+    } else {
+
+      // fallback
+
+      $len = strlen($str);
+
+      for ($i = 0; $i < $len; $i++) {
+        if (($str[$i] & "\x80") === "\x00") {
+          $ret[] = $str[$i];
+        } else if ((($str[$i] & "\xE0") === "\xC0") && (isset($str[$i + 1]))) {
+          if (($str[$i + 1] & "\xC0") === "\x80") {
+            $ret[] = $str[$i] . $str[$i + 1];
+
+            $i++;
+          }
+        } else if ((($str[$i] & "\xF0") === "\xE0") && (isset($str[$i + 2]))) {
+          if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80")) {
+            $ret[] = $str[$i] . $str[$i + 1] . $str[$i + 2];
+
+            $i = $i + 2;
+          }
+        } else if ((($str[$i] & "\xF8") === "\xF0") && (isset($str[$i + 3]))) {
+          if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80") && (($str[$i + 3] & "\xC0") === "\x80")) {
+            $ret[] = $str[$i] . $str[$i + 1] . $str[$i + 2] . $str[$i + 3];
+
+            $i = $i + 3;
+          }
+        }
+      }
+    }
+
+
+    if ($split_length > 1) {
+      $ret = array_chunk($ret, $split_length);
+
+      $ret = array_map('implode', $ret);
+    }
+
+    if (isset($ret[0]) && $ret[0] === '') {
+      return array();
+    }
+
+    return $ret;
+  }
+
+  /**
+   * convert to latin1
+   *
+   * @param $text
+   *
+   * @return array|string
+   */
+  public static function to_latin1($text)
+  {
+    return self::to_win1252($text);
+  }
+
+  /**
+   * convert to win1252
+   *
+   * @param        $text
+   *
+   * @return array|string
+   */
+  protected static function to_win1252($text)
+  {
+    if (is_array($text)) {
+      foreach ($text as $k => $v) {
+        $text[$k] = self::to_win1252($v);
+      }
+      return $text;
+    } elseif (is_string($text)) {
+      return static::utf8_decode($text);
+    } else {
+      return $text;
+    }
+  }
+
+  /**
+   * utf8 - decode
+   *
+   * @param string $text
+   *
+   * @return string
+   */
+  protected static function utf8_decode($text)
+  {
+    if (!isset($text[0])) {
+      return '';
+    }
+
+    // init
+    self::checkForSupport();
+
+    if (self::$support['iconv'] === false) {
+      $o = utf8_decode(
+          str_replace(
+              array_keys(self::$utf8ToWin1252), array_values(self::$utf8ToWin1252), self::to_utf8($text)
+          )
+      );
+    } else {
+      $o = iconv("UTF-8", "Windows-1252//TRANSLIT//IGNORE", $text);
+    }
+    return $o;
+  }
+
+  /**
+   * convert to ASCII
+   *
+   * @param string $s The input string e.g. a UTF-8 String
+   * @param string $lang The language of the output string
+   *
+   * @return string
+   */
+  static function to_ascii($s, $lang = 'en')
+  {
+    if (!isset($s[0])) {
+      return '';
+    }
+
+    if (preg_match("/[\x80-\xFF]/", $s)) {
+      $s = self::cleanup($s);
+
+      preg_match_all('/./u', $s, $s);
+      foreach ($s[0] as &$c) {
+
+        if (!isset($c[1])) {
+          continue;
+        }
+
+        if (self::$support['mbstring'] === true) {
+          $t = mb_convert_encoding($c, "ISO-8859-1", "HTML-ENTITIES");
+        } else if (self::$support['iconv'] === true) {
+          if ('glibc' === ICONV_IMPL) {
+            $t = iconv('UTF-8', 'ASCII//TRANSLIT', $c);
+          } else {
+            $t = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', $c);
+          }
+        }
+
+        if (!isset($t[0])) {
+          $t = '?';
+        } else if (isset($t[1])) {
+          $t = ltrim($t, '\'`"^~');
+        }
+
+        $c = $t;
+      }
+
+      $s = implode('', $s[0]);
+    }
+
+    $s = URLify::downcode($s, $lang);
+
+    return $s;
+  }
+
+  /**
+   * clean-up a UTF-8 string and show only printable chars at the end
+   *
+   * @param $text
+   *
+   * @return string
+   */
+  static public function cleanup($text)
+  {
+    if (!isset($text[0])) {
+      return '';
+    }
+
+    // init
+    self::checkForSupport();
+
+    // fixed ISO <-> UTF-8 Errors
+    $text = self::fix_simple_utf8($text);
+
+    // remove all none UTF-8 symbols
+    // && remove BOM
+    // && normalize whitespace chars
+    $text = self::clean($text, true, true);
+
+    return (string)$text;
+  }
+
+  /**
+   * fixed a broken UTF-8 string
+   *
+   * @param string $str
+   *
+   * @return mixed|string
+   */
+  static public function fix_simple_utf8($str)
+  {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    $chars = self::get_broken_utf8_array();
+    return str_replace(array_keys($chars), $chars, $str);
+  }
+
+  /**
+   * get a array of boken utf-8 chars
+   *
+   * @return array
+   */
+  static protected function get_broken_utf8_array()
+  {
+    return array(
+        'Ã¼'  => 'ü',
+        'Ã¤'  => 'ä',
+        'Ã¶'  => 'ö',
+        'Ã–'  => 'Ö',
+        'ÃŸ'  => 'ß',
+        'Ã '  => 'à',
+        'Ã¡'  => 'á',
+        'Ã¢'  => 'â',
+        'Ã£'  => 'ã',
+        'Ã¹'  => 'ù',
+        'Ãº'  => 'ú',
+        'Ã»'  => 'û',
+        'Ã™'  => 'Ù',
+        'Ãš'  => 'Ú',
+        'Ã›'  => 'Û',
+        'Ãœ'  => 'Ü',
+        'Ã²'  => 'ò',
+        'Ã³'  => 'ó',
+        'Ã´'  => 'ô',
+        'Ã¨'  => 'è',
+        'Ã©'  => 'é',
+        'Ãª'  => 'ê',
+        'Ã«'  => 'ë',
+        'Ã€'  => 'À',
+        'Ã'  => 'Á',
+        'Ã‚'  => 'Â',
+        'Ãƒ'  => 'Ã',
+        'Ã„'  => 'Ä',
+        'Ã…'  => 'Å',
+        'Ã‡'  => 'Ç',
+        'Ãˆ'  => 'È',
+        'Ã‰'  => 'É',
+        'ÃŠ'  => 'Ê',
+        'Ã‹'  => 'Ë',
+        'ÃŒ'  => 'Ì',
+        'Ã'  => 'Í',
+        'ÃŽ'  => 'Î',
+        'Ã'  => 'Ï',
+        'Ã‘'  => 'Ñ',
+        'Ã’'  => 'Ò',
+        'Ã“'  => 'Ó',
+        'Ã”'  => 'Ô',
+        'Ã•'  => 'Õ',
+        'Ã˜'  => 'Ø',
+        'Ã¥'  => 'å',
+        'Ã¦'  => 'æ',
+        'Ã§'  => 'ç',
+        'Ã¬'  => 'ì',
+        'Ã­'  => 'í',
+        'Ã®'  => 'î',
+        'Ã¯'  => 'ï',
+        'Ã°'  => 'ð',
+        'Ã±'  => 'ñ',
+        'Ãµ'  => 'õ',
+        'Ã¸'  => 'ø',
+        'Ã½'  => 'ý',
+        'Ã¿'  => 'ÿ',
+        'â‚¬' => '€',
+    );
+  }
+
+  /**
+   * show UTF8-Support && exit
+   */
+  static public function showSupport()
+  {
+    foreach (self::$support as $utf8Support) {
+      echo $utf8Support . "\n<br>";
+    }
   }
 
   /**
@@ -172,74 +884,6 @@ class UTF8
   static public function htmlentities($string, $flags = ENT_COMPAT, $encoding = 'UTF-8', $double_encode = true)
   {
     return htmlentities($string, $flags, $encoding, $double_encode);
-  }
-
-  /**
-   * UTF-8 version of html_entity_decode()
-   *
-   * Convert all HTML entities to their applicable characters
-   *
-   * @link http://php.net/manual/en/function.html-entity-decode.php
-   *
-   * @param string $string   <p>
-   *                         The input string.
-   *                         </p>
-   * @param int    $flags    [optional] <p>
-   *                         A bitmask of one or more of the following flags, which specify how to handle quotes and
-   *                         which document type to use. The default is ENT_COMPAT | ENT_HTML401.
-   *                         <table>
-   *                         Available <i>flags</i> constants
-   *                         <tr valign="top">
-   *                         <td>Constant Name</td>
-   *                         <td>Description</td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_COMPAT</b></td>
-   *                         <td>Will convert double-quotes and leave single-quotes alone.</td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_QUOTES</b></td>
-   *                         <td>Will convert both double and single quotes.</td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_NOQUOTES</b></td>
-   *                         <td>Will leave both double and single quotes unconverted.</td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_HTML401</b></td>
-   *                         <td>
-   *                         Handle code as HTML 4.01.
-   *                         </td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_XML1</b></td>
-   *                         <td>
-   *                         Handle code as XML 1.
-   *                         </td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_XHTML</b></td>
-   *                         <td>
-   *                         Handle code as XHTML.
-   *                         </td>
-   *                         </tr>
-   *                         <tr valign="top">
-   *                         <td><b>ENT_HTML5</b></td>
-   *                         <td>
-   *                         Handle code as HTML 5.
-   *                         </td>
-   *                         </tr>
-   *                         </table>
-   *                         </p>
-   * @param string $encoding [optional] <p>
-   *                         Encoding to use.
-   *                         </p>
-   *
-   * @return string the decoded string.
-   */
-  static public function html_entity_decode($string, $flags = ENT_COMPAT, $encoding = 'UTF-8')
-  {
-    return html_entity_decode($string, $flags, $encoding);
   }
 
   /**
@@ -368,46 +1012,167 @@ class UTF8
    */
   static public function is_utf8($str)
   {
+    if (!isset($str[0])) {
+      return true;
+    }
+
+    // init
     self::checkForSupport();
 
-    if (self::$support['pcre_utf8'] === true) {
-      return ( bool )preg_match('//u', $str);
+    // "In PHP 5.3.x, the "mb-check-encoding"-function allows code points
+    // above U+10FFFF, which also allows five and six byte sequences."
+    if (version_compare(PHP_VERSION, '5.4.0') < 0) {
+      // From http://w3.org/International/questions/qa-forms-utf-8.html
+      return preg_match(
+          '%^(?:
+          [\x09\x0A\x0D\x20-\x7E]            # ASCII
+        | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+        |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
+        | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+        |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
+        |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
+        | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+        |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
+        )*$%xs', $str
+      );
     }
 
     if (self::$support['mbstring'] === true) {
       return mb_check_encoding($str, 'UTF-8');
     }
 
-    // fallback
+    if (self::$support['pcre_utf8'] === true) {
+      // If even just the first character can be matched, when the /u
+      // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
+      // invalid, nothing at all will match, even if the string contains
+      // some valid sequences
+      return (bool)preg_match('//u', $str);
+    }
 
-    $len = strlen($str);
+    // fallback
+    $len = self::strlen($str);
+
+    $mState = 0;     // cached expected number of octets after the current octet
+    // until the beginning of the next UTF8 character sequence
+    $mUcs4 = 0;     // cached Unicode character
+    $mBytes = 1;     // cached expected number of octets in the current sequence
 
     for ($i = 0; $i < $len; $i++) {
-      if (($str[$i] & "\x80") === "\x00") {
-        continue;
-      } else if ((($str[$i] & "\xE0") === "\xC0") && (isset($str[$i + 1]))) {
-        if (($str[$i + 1] & "\xC0") === "\x80") {
-          $i++;
-          continue;
+
+      $in = ord($str{$i});
+
+      if ($mState == 0) {
+
+        // When mState is zero we expect either a US-ASCII character or a
+        // multi-octet sequence.
+        if (0 == (0x80 & ($in))) {
+          // US-ASCII, pass straight through.
+          $mBytes = 1;
+
+        } else if (0xC0 == (0xE0 & ($in))) {
+          // First octet of 2 octet sequence
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 0x1F) << 6;
+          $mState = 1;
+          $mBytes = 2;
+
+        } else if (0xE0 == (0xF0 & ($in))) {
+          // First octet of 3 octet sequence
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 0x0F) << 12;
+          $mState = 2;
+          $mBytes = 3;
+
+        } else if (0xF0 == (0xF8 & ($in))) {
+          // First octet of 4 octet sequence
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 0x07) << 18;
+          $mState = 3;
+          $mBytes = 4;
+
+        } else if (0xF8 == (0xFC & ($in))) {
+          /*
+           *  First octet of 5 octet sequence.
+           *
+           * This is illegal because the encoded codepoint must be either
+           * (a) not the shortest form or
+           * (b) outside the Unicode range of 0-0x10FFFF.
+           * Rather than trying to resynchronize, we will carry on until the end
+           * of the sequence and let the later error handling code catch it.
+           */
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 0x03) << 24;
+          $mState = 4;
+          $mBytes = 5;
+
+        } else if (0xFC == (0xFE & ($in))) {
+          // First octet of 6 octet sequence, see comments for 5 octet sequence.
+          $mUcs4 = ($in);
+          $mUcs4 = ($mUcs4 & 1) << 30;
+          $mState = 5;
+          $mBytes = 6;
+
+        } else {
+          /*
+           * Current octet is neither in the US-ASCII range nor a legal first
+           * octet of a multi-octet sequence.
+           */
+          return false;
+
         }
 
-        return false;
-      } else if ((($str[$i] & "\xF0") === "\xE0") && (isset($str[$i + 2]))) {
-        if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80")) {
-          $i = $i + 2;
-          continue;
-        }
-
-        return false;
-      } else if ((($str[$i] & "\xF8") === "\xF0") && (isset($str[$i + 3]))) {
-        if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80") && (($str[$i + 3] & "\xC0") === "\x80")) {
-          $i = $i + 3;
-          continue;
-        }
-
-        return false;
       } else {
-        return false;
+
+        // When mState is non-zero, we expect a continuation of the multi-octet
+        // sequence
+        if (0x80 == (0xC0 & ($in))) {
+
+          // Legal continuation.
+          $shift = ($mState - 1) * 6;
+          $tmp = $in;
+          $tmp = ($tmp & 0x0000003F) << $shift;
+          $mUcs4 |= $tmp;
+
+          /**
+           * End of the multi-octet sequence. mUcs4 now contains the final
+           * Unicode codepoint to be output
+           */
+          if (0 == --$mState) {
+
+            /*
+             * Check for illegal sequences and codepoints.
+             */
+
+            // From Unicode 3.1, non-shortest form is illegal
+            if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
+                ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
+                ((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
+                (4 < $mBytes) ||
+                // From Unicode 3.2, surrogate characters are illegal
+                (($mUcs4 & 0xFFFFF800) == 0xD800) ||
+                // Codepoints outside the Unicode range are illegal
+                ($mUcs4 > 0x10FFFF)
+            ) {
+
+              return false;
+
+            }
+
+            // initialize UTF8 cache
+            $mState = 0;
+            $mUcs4 = 0;
+            $mBytes = 1;
+          }
+
+        } else {
+
+          /**
+           * ((0xC0 & (*in) != 0x80) && (mState != 0))
+           * Incomplete multi-octet sequence.
+           */
+
+          return false;
+        }
       }
     }
 
@@ -430,661 +1195,60 @@ class UTF8
   }
 
   /**
-   * Get string length
+   * Returns all of haystack starting from and including the first occurrence of needle to the end.
    *
-   * @link     http://php.net/manual/en/function.mb-strlen.php
+   * @param string $string
+   * @param string $needle
+   * @param bool   $before_needle
    *
-   * @param $string
-   *
-   * @internal param string $str <p>
-   *           The string being checked for length.
-   *           </p>
-   * @return int the number of characters in
-   *           string str having character encoding
-   *           encoding. A multi-byte character is
-   *           counted as 1.
+   * @return bool|string
    */
-  static public function strlen($string)
+  public static function stristr($string, $needle, $before_needle = false)
   {
-    self::checkForSupport();
-
-    if (self::$support['mbstring'] === true) {
-      $str = self::clean($string);
-
-      return mb_strlen($str, 'UTF-8');
+    if ('' === $needle .= '') {
+      return false;
     }
 
-    if (self::$support['iconv'] === true) {
-      $str = self::clean($string);
-
-      return iconv_strlen($str, 'UTF-8');
-    }
-
-    //PCRE \X is buggy in many recent versions of PHP
-    //See the original post.
-
-    //if( self::$support['pcre_utf8'] === true )
-    //{
-    //	$str	= self::clean( $str );
-    //
-    //	preg_match_all( '/\X/u' , $str , $matches  );
-    //
-    //	return count( $matches[0] );
-    //}
-
-    return count(self::split($string));
+    return mb_stristr($string, $needle, $before_needle, 'UTF-8');
   }
 
   /**
-   * accepts a string and removes all non-UTF-8 characters from it.
+   * case-insensitive string comparison
    *
-   * @param    string  $str The string to be sanitized.
-   * @param    Boolean $remove_bom
+   * @param string $str1
+   * @param string $str2
    *
-   * @return   string Clean UTF-8 encoded string
+   * @return int Returns < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
    */
-  static public function clean($str, $remove_bom = false)
+  public static function strcasecmp($str1, $str2)
   {
-    // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
-    // caused connection reset problem on larger strings
-    // $regx = '/((?:[\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3}){1,})|./';
-
-    $regx = '/([\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})|./s';
-
-    $str = preg_replace($regx, '$1', $str);
-
-    if ($remove_bom) {
-      $str = self::removeBOM($str);
-    }
-
-    return $str;
+    return self::strcmp(self::strtocasefold($str1), self::strtocasefold($str2));
   }
 
   /**
-   * removing UTF-8 BOM
+   * string comparison
    *
-   * @param String $string
+   * @param string $str1
+   * @param string $str2
    *
-   * @return String
+   * @return int Returns < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
    */
-  public static function removeBOM($string = "")
+  public static function strcmp($str1, $str2)
   {
-    if (self::substr($string, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
-      $string = self::substr($string, 3);
-    }
-
-    return $string;
+    return $str1 . '' === $str2 . '' ? 0 : strcmp(self::clean($str1), self::clean($str2));
   }
 
   /**
-   * Get part of string
+   * Unicode transformation for caseless matching
+   * see http://unicode.org/reports/tr21/tr21-5.html
    *
-   * @link http://php.net/manual/en/function.mb-substr.php
+   * @param string $string
    *
-   * @param string $str    <p>
-   *                       The string being checked.
-   *                       </p>
-   * @param int    $start  <p>
-   *                       The first position used in str.
-   *                       </p>
-   * @param int    $length [optional] <p>
-   *                       The maximum length of the returned string.
-   *                       </p>
-   *
-   * @return string mb_substr returns the portion of
-   * str specified by the
-   * start and
-   * length parameters.
+   * @return string
    */
-  static public function substr($str, $start = 0, $length = null)
+  protected static function strtocasefold($string)
   {
-    self::checkForSupport();
-
-    //iconv and mbstring are not tolerant to invalid encoding
-    //further, their behaviour is inconsistent with that of PHP's substr
-
-    if (self::$support['iconv'] === true) {
-      $str = self::clean($str);
-
-      if ($length === null) {
-        $length = PHP_INT_MAX;
-      }
-
-      return iconv_substr($str, $start, $length, 'UTF-8');
-    }
-
-    if (self::$support['mbstring'] === true) {
-      $str = self::clean($str);
-
-      if ($length === null) {
-        $length = PHP_INT_MAX;
-      }
-
-      return mb_substr($str, $start, $length, 'UTF-8');
-    }
-
-    //Fallback
-
-    //Split to array, and remove invalid characters
-    $array = self::split($str);
-
-    //Extract relevant part, and join to make sting again
-    return implode(array_slice($array, $start, $length));
-  }
-
-  /**
-   * convert a string to an array of Unicode characters.
-   *
-   * @param    string $str          The string to split into array.
-   * @param    int    $split_length Max character length of each array element
-   *
-   * @return   array An array containing chunks of the string
-   */
-  static public function split($str, $split_length = 1)
-  {
-    self::checkForSupport();
-
-    $str = ( string )$str;
-
-    $ret = array();
-
-    if (self::$support['pcre_utf8'] === true) {
-      $str = self::clean($str);
-
-      //	http://stackoverflow.com/a/8780076/369005
-      $ret = preg_split('/(?<!^)(?!$)/u', $str);
-
-      // \X is buggy in many recent versions of PHP
-      //preg_match_all( '/\X/u' , $str , $ret );
-      //$ret	= $ret[0];
-    } else {
-      //Fallback
-
-      $len = strlen($str);
-
-      for ($i = 0; $i < $len; $i++) {
-        if (($str[$i] & "\x80") === "\x00") {
-          $ret[] = $str[$i];
-        } else if ((($str[$i] & "\xE0") === "\xC0") && (isset($str[$i + 1]))) {
-          if (($str[$i + 1] & "\xC0") === "\x80") {
-            $ret[] = $str[$i] . $str[$i + 1];
-
-            $i++;
-          }
-        } else if ((($str[$i] & "\xF0") === "\xE0") && (isset($str[$i + 2]))) {
-          if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80")) {
-            $ret[] = $str[$i] . $str[$i + 1] . $str[$i + 2];
-
-            $i = $i + 2;
-          }
-        } else if ((($str[$i] & "\xF8") === "\xF0") && (isset($str[$i + 3]))) {
-          if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80") && (($str[$i + 3] & "\xC0") === "\x80")) {
-            $ret[] = $str[$i] . $str[$i + 1] . $str[$i + 2] . $str[$i + 3];
-
-            $i = $i + 3;
-          }
-        }
-      }
-    }
-
-
-    if ($split_length > 1) {
-      $ret = array_chunk($ret, $split_length);
-
-      $ret = array_map('implode', $ret);
-    }
-
-    if ($ret[0] === '') {
-      return array();
-    }
-
-    return $ret;
-  }
-
-  /**
-   * calculates and returns the maximum number of bytes taken by any
-   * UTF-8 encoded character in the given string
-   *
-   * @param    string $str The original Unicode string
-   *
-   * @return   array An array of byte lengths of each character.
-   */
-  static public function max_chr_width($str)
-  {
-    return max(self::chr_size_list($str));
-  }
-
-  /**
-   * generates an array of byte length of each character of a Unicode string.
-   *
-   * @param    string $str The original Unicode string
-   *
-   * @return   array An array of byte lengths of each character.
-   */
-
-  static public function chr_size_list($str)
-  {
-    return array_map('strlen', self::split($str));
-  }
-
-  /**
-   * converts a UTF-8 character to HTML Numbered Entity like &#123;
-   *
-   * @param    string $chr The Unicode character to be encoded as numbered entity
-   *
-   * @return   string HTML numbered entity
-   */
-  static public function single_chr_html_encode($chr)
-  {
-    return '&#' . self::ord($chr) . ';';
-  }
-
-  /**
-   * calculates Unicode Code Point of the given UTF-8 encoded character
-   *
-   * @param    string $chr The character of which to calculate Code Point
-   *
-   * @return   int Unicode Code Point of the given character
-   *           0 on invalid UTF-8 byte sequence
-   */
-  static public function ord($chr)
-  {
-    $chr = self::split($chr);
-
-    $chr = $chr[0];
-
-    switch (strlen($chr)) {
-      case 1:
-        return
-            ord($chr);
-
-      case 2:
-        return
-            ((ord($chr[0]) & 0x1F) << 6)
-            | (ord($chr[1]) & 0x3F);
-
-      case 3:
-        return
-            ((ord($chr[0]) & 0x0F) << 12)
-            | ((ord($chr[1]) & 0x3F) << 6)
-            | (ord($chr[2]) & 0x3F);
-
-      case 4:
-        return
-            ((ord($chr[0]) & 0x07) << 18)
-            | ((ord($chr[1]) & 0x3F) << 12)
-            | ((ord($chr[2]) & 0x3F) << 6)
-            | (ord($chr[3]) & 0x3F);
-    }
-
-    return 0;
-  }
-
-  /**
-   * converts a UTF-8 string to a series of
-   *
-   * INFO: HTML Numbered Entities like &#123;&#39;&#1740;...
-   *
-   * @param    string $str The Unicode string to be encoded as numbered entities
-   *
-   * @return   string HTML numbered entities
-   */
-  static public function html_encode($str)
-  {
-    return implode(
-        array_map(
-            array(
-                'UTF8',
-                'single_chr_html_encode'
-            ), self::split($str)
-        )
-    );
-  }
-
-  /**
-   * checks if a file starts with BOM character
-   *
-   * @param    string $file_path Path to a valid file
-   *
-   * @return   bool True if the file has BOM at the start, False otherwise
-   */
-  static public function file_has_bom($file_path)
-  {
-    return self::is_bom(file_get_contents($file_path, 0, null, -1, 3));
-  }
-
-  /**
-   * checks if the given string is a Byte Order Mark
-   *
-   * @param    string $utf8_chr The input string
-   *
-   * @return   bool True if the $utf8_chr is Byte Order Mark, False otherwise
-   */
-  static public function is_bom($utf8_chr)
-  {
-    return ($utf8_chr === self::bom());
-  }
-
-  /**
-   * returns the Byte Order Mark Character
-   *
-   * @return   string Byte Order Mark
-   */
-  static public function bom()
-  {
-    return "\xef\xbb\xbf";
-  }
-
-  /**
-   * checks if string starts with BOM character
-   *
-   * @param    string $str The input string
-   *
-   * @return   bool True if the string has BOM at the start, False otherwise
-   */
-  static public function string_has_bom($str)
-  {
-    return self::is_bom(substr($str, 0, 3));
-  }
-
-  /**
-   * prepends BOM character to the string and returns the whole string.
-   *
-   * INFO: If BOM already existed there, the Input string is returned.
-   *
-   * @param    string $str The input string
-   *
-   * @return   string The output string that contains BOM
-   */
-  static public function add_bom_to_string($str)
-  {
-    if (!self::is_bom(substr($str, 0, 3))) {
-      $str = self::bom() . $str;
-    }
-
-    return $str;
-  }
-
-  /**
-   * shuffles all the characters in the string.
-   *
-   * @param    string $str The input string
-   *
-   * @return   string The shuffled string
-   */
-
-  static public function str_shuffle($str)
-  {
-    $array = self::split($str);
-
-    shuffle($array);
-
-    return implode('', $array);
-  }
-
-  /**
-   * returns count of characters used in a string
-   *
-   * @param    string $str The input string
-   *
-   * @return   array An associative array of Character as keys and
-   *           their count as values
-   */
-  static public function count_chars($str) //there is no $mode parameters
-  {
-    $array = array_count_values(self::split($str));
-
-    ksort($array);
-
-    return $array;
-  }
-
-  /**
-   * reverses characters order in the string
-   *
-   * @param    string $str The input string
-   *
-   * @return   string The string with characters in the reverse sequence
-   */
-  static public function strrev($str)
-  {
-    return implode(array_reverse(self::split($str)));
-  }
-
-  /**
-   * returns the UTF-8 character with the maximum code point in the given data
-   *
-   * @param    mixed $arg A UTF-8 encoded string or an array of such strings
-   *
-   * @return   string The character with the highest code point than others
-   */
-  static public function max($arg)
-  {
-    if (is_array($arg)) {
-      $arg = implode($arg);
-    }
-
-    return self::chr(max(self::codepoints($arg)));
-  }
-
-  /**
-   * generates a UTF-8 encoded character from the given Code Point
-   *
-   * @param    int $code_point The code point for which to generate a character
-   *
-   * @return   string Milti-Byte character
-   *           returns empty string on failure to encode
-   */
-  static public function chr($code_point)
-  {
-    self::checkForSupport();
-
-    if (($i = ( int )$code_point) !== $code_point) {
-      //$code_point is a string, lets extract int code point from it
-
-      if (!($i = ( int )self::hex_to_int($code_point))) {
-        return '';
-      }
-    }
-
-    //json not working properly for larger code points
-    //See the original post.
-
-    //if( extension_loaded( 'json' ) )
-    //{
-    //	$hex	= dechex( $i );
-    //
-    //	return json_decode('"\u'. ( strlen( $hex ) < 4 ? substr( '000' . $hex , -4 ) : $hex ) .'"');
-    //}
-    //else
-
-    if (self::$support['mbstring'] === true) {
-      return mb_convert_encoding("&#$i;", 'UTF-8', 'HTML-ENTITIES');
-    } else if (version_compare(phpversion(), '5.0.0') === 1) {
-      //html_entity_decode did not support Multi-Byte before PHP 5.0.0
-      return html_entity_decode("&#{$i};", ENT_QUOTES, 'UTF-8');
-    }
-
-    // fallback
-
-    $bits = ( int )(log($i, 2) + 1);
-
-    if ($bits <= 7) //Single Byte
-    {
-      return chr($i);
-    } else if ($bits <= 11) //Two Bytes
-    {
-      return chr((($i >> 6) & 0x1F) | 0xC0) . chr(($i & 0x3F) | 0x80);
-    } else if ($bits <= 16) //Three Bytes
-    {
-      return chr((($i >> 12) & 0x0F) | 0xE0) . chr((($i >> 6) & 0x3F) | 0x80) . chr(($i & 0x3F) | 0x80);
-    } else if ($bits <= 21) //Four Bytes
-    {
-      return chr((($i >> 18) & 0x07) | 0xF0) . chr((($i >> 12) & 0x3F) | 0x80) . chr((($i >> 6) & 0x3F) | 0x80) . chr(($i & 0x3F) | 0x80);
-    } else {
-      return ''; //Cannot be encoded as Valid UTF-8
-    }
-  }
-
-  /**
-   * converts hexadecimal U+xxxx code point representation to Integer
-   *
-   * INFO: opposite to UTF8::int_to_hex( )
-   *
-   * @param    string $str The Hexadecimal Code Point representation
-   *
-   * @return   int The Code Point, or 0 on failure
-   */
-  static public function hex_to_int($str)
-  {
-    if (preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $str, $match)) {
-      return ( int )hexdec($match[1]);
-    }
-
-    return 0;
-  }
-
-  /**
-   * accepts a string and returns an array of Unicode Code Points
-   *
-   * @since 1.0
-   *
-   * @param    mixed $arg     A UTF-8 encoded string or an array of such strings
-   * @param    bool  $u_style If True, will return Code Points in U+xxxx format,
-   *                          default, Code Points will be returned as integers
-   *
-   * @return   array The array of code points
-   */
-  static public function codepoints($arg, $u_style = false)
-  {
-    if (is_string($arg)) {
-      $arg = self::split($arg);
-    }
-
-    $arg = array_map(
-        array(
-            'UTF8',
-            'ord'
-        ), $arg
-    );
-
-    if ($u_style) {
-      $arg = array_map(
-          array(
-              'UTF8',
-              'int_to_hex'
-          ), $arg
-      );
-    }
-
-    return $arg;
-  }
-
-  /**
-   * returns the UTF-8 character with the minimum code point in the given data
-   *
-   * @param    mixed $arg A UTF-8 encoded string or an array of such strings
-   *
-   * @return   string The character with the lowest code point than others
-   */
-  static public function min($arg)
-  {
-    if (is_array($arg)) {
-      $arg = implode($arg);
-    }
-
-    return self::chr(min(self::codepoints($arg)));
-  }
-
-  /**
-   * get hexadecimal code point (U+xxxx) of a UTF-8 encoded character
-   *
-   * @param    string $chr The input character
-   * @param string    $pfix
-   *
-   * @return   string The Code Point encoded as U+xxxx
-   */
-  static public function chr_to_hex($chr, $pfix = 'U+')
-  {
-    return self::int_to_hex(self::ord($chr), $pfix);
-  }
-
-  /**
-   * converts Integer to hexadecimal U+xxxx code point representation
-   *
-   * @param    int    $int The integer to be converted to hexadecimal code point
-   * @param    string $pfix
-   *
-   * @return   string The Code Point, or empty string on failure
-   */
-  static public function int_to_hex($int, $pfix = 'U+')
-  {
-    if (ctype_digit(( string )$int)) {
-      $hex = dechex(( int )$int);
-
-      $hex = (strlen($hex) < 4 ? substr('0000' . $hex, -4) : $hex);
-
-      return $pfix . $hex;
-    }
-
-    return '';
-  }
-
-  /**
-   * counts number of words in the UTF-8 string
-   *
-   * @param    string $str The input string
-   *
-   * @return   int The number of words in the string
-   */
-  static public function word_count($str)
-  {
-    return count(explode('-', self::url_slug($str)));
-  }
-
-  /**
-   * creates SEO Friendly URL Slugs with UTF-8 support
-   *
-   * INFO: Optionally can do transliteration
-   *
-   * @param    string $str  The text which is to be converted Slug
-   * @param    int    $maxl Optional. Sets the maximum number of characters
-   *                        to be allowed in the slug. Default is UNLIMITED.
-   * @param    bool   $trns
-   *
-   * @return   string The UTF-8 encoded URL Slug.
-   */
-  static public function url_slug($str = '', $maxl = -1, $trns = false)
-  {
-    self::checkForSupport();
-
-    $str = self::clean($str, true); // INFO: true == $remove_bom
-
-    $str = self::strtolower($str);
-
-    if ($trns && self::$support['iconv'] === true) {
-      $str = iconv('UTF-8', 'US-ASCII//TRANSLIT//IGNORE', $str);
-    }
-
-    if (self::$support['pcre_utf8'] === true) {
-      $str = preg_replace('/[^\\p{L}\\p{Nd}\-_]+/u', '-', $str);
-    } else {
-      $str = preg_replace('/[\>\<\+\?\&\"\'\/\\\:\s\-\#\%\=]+/', '-', $str);
-    }
-
-    if ($maxl > 0) {
-      $maxl = ( int )$maxl;
-
-      $str = self::substr($str, 0, $maxl);
-    }
-
-    $str = trim($str, '_-');
-
-    if (!strlen($str)) {
-      $str = substr(md5(microtime(true)), 0, ($maxl == -1 ? 32 : $maxl));
-    }
-
-    return $str;
+    return self::strtolower($string);
   }
 
   /**
@@ -1101,6 +1265,11 @@ class UTF8
    */
   static public function strtolower($str)
   {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    // init
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
@@ -1108,6 +1277,7 @@ class UTF8
     } else {
 
       // fallback
+
       if (empty($table)) {
         $table = array_flip(self::case_table());
       }
@@ -2126,6 +2296,971 @@ class UTF8
   }
 
   /**
+   * Case insensitive string comparisons using a "natural order" algorithm
+   *
+   * @param string $str1
+   * @param string $str2
+   *
+   * @return int Similar to other string comparison functions, this one returns < 0 if str1 is less than str2 > 0 if
+   *             str1 is greater than str2, and 0 if they are equal.
+   */
+  public static function strnatcasecmp($str1, $str2)
+  {
+    return self::strnatcmp(self::strtocasefold($str1), self::strtocasefold($str2));
+  }
+
+  /**
+   * String comparisons using a "natural order" algorithm
+   *
+   * @param string $str1
+   * @param string $str2
+   *
+   * @return int Similar to other string comparison functions, this one returns < 0 if str1 is less than str2; > 0 if
+   *             str1 is greater than str2, and 0 if they are equal.
+   */
+  public static function strnatcmp($str1, $str2)
+  {
+    return $str1 . '' === $str2 . '' ? 0 : strnatcmp(self::strtonatfold($str1), self::strtonatfold($str2));
+  }
+
+  /**
+   * generic case sensitive transformation for collation matching
+   *
+   * @param string $string
+   *
+   * @return mixed
+   */
+  protected static function strtonatfold($string)
+  {
+    $string = self::clean($string);
+    return preg_replace('/\p{Mn}+/u', '', $string);
+  }
+
+  /**
+   * case-insensitive string comparison of the first n characters
+   *
+   * @param string $str1
+   * @param string $str2
+   * @param int    $len
+   *
+   * @return int Returns < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+   */
+  public static function strncasecmp($str1, $str2, $len)
+  {
+    return self::strncmp(self::strtocasefold($str1), self::strtocasefold($str2), $len);
+  }
+
+  /**
+   * comparison of the first n characters
+   *
+   * @param string $str1
+   * @param string $str2
+   * @param int    $len
+   *
+   * @return int Returns < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+   */
+  public static function strncmp($str1, $str2, $len)
+  {
+    return self::strcmp(self::substr($str1, 0, $len), self::substr($str2, 0, $len));
+  }
+
+  /**
+   * Get part of string
+   *
+   * @link http://php.net/manual/en/function.mb-substr.php
+   *
+   * @param string $str    <p>
+   *                       The string being checked.
+   *                       </p>
+   * @param int    $start  <p>
+   *                       The first position used in str.
+   *                       </p>
+   * @param int    $length [optional] <p>
+   *                       The maximum length of the returned string.
+   *                       </p>
+   *
+   * @return string mb_substr returns the portion of
+   * str specified by the
+   * start and
+   * length parameters.
+   */
+  static public function substr($str, $start = 0, $length = null)
+  {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    // init
+    self::checkForSupport();
+
+    //iconv and mbstring are not tolerant to invalid encoding
+    //further, their behaviour is inconsistent with that of PHP's substr
+
+    if (self::$support['mbstring'] === true) {
+      $str = self::clean($str);
+
+      if ($length === null) {
+        $length = self::strlen($str);
+      }
+
+      return mb_substr($str, $start, $length, 'UTF-8');
+    }
+
+    if (self::$support['iconv'] === true) {
+      $str = self::clean($str);
+
+      if ($length === null) {
+        $length = self::strlen($str);
+      }
+
+      return iconv_substr($str, $start, $length, 'UTF-8');
+    }
+
+    // fallback
+
+    // split to array, and remove invalid characters
+    $array = self::split($str);
+
+    // extract relevant part, and join to make sting again
+    return implode(array_slice($array, $start, $length));
+  }
+
+  /**
+   * calculates and returns the maximum number of bytes taken by any
+   * UTF-8 encoded character in the given string
+   *
+   * @param    string $str The original Unicode string
+   *
+   * @return   array An array of byte lengths of each character.
+   */
+  static public function max_chr_width($str)
+  {
+    $bytes = self::chr_size_list($str);
+    if (count($bytes) > 0) {
+      return max($bytes);
+    } else {
+      return 0;
+    }
+  }
+
+  /**
+   * generates an array of byte length of each character of a Unicode string.
+   *
+   * @param    string $str The original Unicode string
+   *
+   * @return   array An array of byte lengths of each character.
+   */
+  static public function chr_size_list($str)
+  {
+    if (!$str) {
+      return array();
+    }
+
+    return array_map('strlen', self::split($str));
+  }
+
+  /**
+   * converts a UTF-8 character to HTML Numbered Entity like &#123;
+   *
+   * @param    string $chr The Unicode character to be encoded as numbered entity
+   *
+   * @return   string HTML numbered entity
+   */
+  static public function single_chr_html_encode($chr)
+  {
+    if (!$chr) {
+      return '';
+    }
+
+    return '&#' . self::ord($chr) . ';';
+  }
+
+  /**
+   * calculates Unicode Code Point of the given UTF-8 encoded character
+   *
+   * @param    string $chr The character of which to calculate Code Point
+   *
+   * @return   int Unicode Code Point of the given character
+   *           0 on invalid UTF-8 byte sequence
+   */
+  static public function ord($chr)
+  {
+    if (!$chr) {
+      return 0;
+    }
+
+    $chr = self::split($chr);
+
+    $chr = $chr[0];
+
+    switch (strlen($chr)) {
+      case 1:
+        return
+            ord($chr);
+
+      case 2:
+        return
+            ((ord($chr[0]) & 0x1F) << 6)
+            | (ord($chr[1]) & 0x3F);
+
+      case 3:
+        return
+            ((ord($chr[0]) & 0x0F) << 12)
+            | ((ord($chr[1]) & 0x3F) << 6)
+            | (ord($chr[2]) & 0x3F);
+
+      case 4:
+        return
+            ((ord($chr[0]) & 0x07) << 18)
+            | ((ord($chr[1]) & 0x3F) << 12)
+            | ((ord($chr[2]) & 0x3F) << 6)
+            | (ord($chr[3]) & 0x3F);
+    }
+
+    return 0;
+  }
+
+  /**
+   * converts a UTF-8 string to a series of
+   *
+   * INFO: HTML Numbered Entities like &#123;&#39;&#1740;...
+   *
+   * @param    string $str The Unicode string to be encoded as numbered entities
+   *
+   * @return   string HTML numbered entities
+   */
+  static public function html_encode($str)
+  {
+    return implode(
+        array_map(
+            array(
+                '\\voku\\helper\\UTF8',
+                'single_chr_html_encode'
+            ), self::split($str)
+        )
+    );
+  }
+
+  /**
+   * checks if a file starts with BOM character
+   *
+   * @param    string $file_path Path to a valid file
+   *
+   * @return   bool True if the file has BOM at the start, False otherwise
+   */
+  static public function file_has_bom($file_path)
+  {
+    return self::is_bom(file_get_contents($file_path, 0, null, -1, 3));
+  }
+
+  /**
+   * checks if the given string is a Byte Order Mark
+   *
+   * INFO: use "UTF8::string_has_bom()" if you will check BOM in a string
+   *
+   * @param    string $utf8_chr The input string
+   *
+   * @return   bool True if the $utf8_chr is Byte Order Mark, False otherwise
+   */
+  static public function is_bom($utf8_chr)
+  {
+    return ($utf8_chr === self::bom());
+  }
+
+  /**
+   * returns the Byte Order Mark Character
+   *
+   * @return   string Byte Order Mark
+   */
+  static public function bom()
+  {
+    return "\xef\xbb\xbf";
+  }
+
+  /**
+   * checks if string starts with BOM character
+   *
+   * @param    string $str The input string
+   *
+   * @return   bool True if the string has BOM at the start, False otherwise
+   */
+  static public function string_has_bom($str)
+  {
+    return self::is_bom(substr($str, 0, 3));
+  }
+
+  /**
+   * prepends BOM character to the string and returns the whole string.
+   *
+   * INFO: If BOM already existed there, the Input string is returned.
+   *
+   * @param    string $str The input string
+   *
+   * @return   string The output string that contains BOM
+   */
+  static public function add_bom_to_string($str)
+  {
+    if (!self::is_bom(substr($str, 0, 3))) {
+      $str = self::bom() . $str;
+    }
+
+    return $str;
+  }
+
+  /**
+   * shuffles all the characters in the string.
+   *
+   * @param    string $str The input string
+   *
+   * @return   string The shuffled string
+   */
+  static public function str_shuffle($str)
+  {
+    $array = self::split($str);
+
+    shuffle($array);
+
+    return implode('', $array);
+  }
+
+  /**
+   * Wraps a string to a given number of characters
+   *
+   * @param string $string
+   * @param int    $width
+   * @param string $break
+   * @param bool   $cut
+   *
+   * @return bool|string Returns the given string wrapped at the specified length.
+   */
+  public static function wordwrap($string, $width = 75, $break = "\n", $cut = false)
+  {
+    if (false === wordwrap('-', $width, $break, $cut)) {
+      return false;
+    }
+
+    if (is_string($break)) {
+      $break = (string)$break;
+    }
+
+    $w = '';
+    $string = explode($break, $string);
+    $iLen = count($string);
+    $chars = array();
+
+    if (1 === $iLen && '' === $string[0]) {
+      return '';
+    }
+
+    for ($i = 0; $i < $iLen; ++$i) {
+
+      if ($i) {
+        $chars[] = $break;
+        $w .= '#';
+      }
+
+      $c = $string[$i];
+      unset($string[$i]);
+
+      foreach (self::split($c) as $c) {
+        $chars[] = $c;
+        $w .= ' ' === $c ? ' ' : '?';
+      }
+    }
+
+    $string = '';
+    $j = 0;
+    $b = $i = -1;
+    $w = wordwrap($w, $width, '#', $cut);
+
+    while (false !== $b = self::strpos($w, '#', $b + 1)) {
+      for (++$i; $i < $b; ++$i) {
+        $string .= $chars[$j];
+        unset($chars[$j++]);
+      }
+
+      if ($break === $chars[$j] || ' ' === $chars[$j]) {
+        unset($chars[$j++]);
+      }
+
+      $string .= $break;
+    }
+
+    return $string . implode('', $chars);
+  }
+
+  /**
+   * Find position of first occurrence of string in a string
+   *
+   * @link http://php.net/manual/en/function.mb-strpos.php
+   *
+   * @param string $haystack <p>
+   *                         The string being checked.
+   *                         </p>
+   * @param string $needle   <p>
+   *                         The position counted from the beginning of haystack.
+   *                         </p>
+   * @param int    $offset   [optional] <p>
+   *                         The search offset. If it is not specified, 0 is used.
+   *                         </p>
+   *
+   * @return int the numeric position of
+   * the first occurrence of needle in the
+   * haystack string. If
+   * needle is not found, it returns false.
+   */
+  public static function strpos($haystack, $needle, $offset = null)
+  {
+    if (!isset($haystack[0]) || !isset($needle[0])) {
+      return false;
+    }
+
+    // init
+    self::checkForSupport();
+
+    //iconv and mbstring do not support integer $needle
+
+    if ((( int )$needle) === $needle && ($needle >= 0)) {
+      $needle = self::chr($needle);
+    }
+
+    $needle = self::clean(( string )$needle);
+
+    $offset = ( int )$offset;
+
+    //mb_strpos returns wrong position if invalid characters are found in $haystack before $needle
+    //iconv_strpos is not tolerant to invalid characters
+
+    $haystack = self::clean($haystack);
+
+    if (self::$support['mbstring'] === true) {
+      return mb_strpos($haystack, $needle, $offset, 'UTF-8');
+    }
+
+    if (self::$support['iconv'] === true) {
+      return iconv_strpos($haystack, $needle, $offset, 'UTF-8');
+    }
+
+    if ($offset > 0) {
+      $haystack = self::substr($haystack, $offset);
+    }
+
+    //Negative Offset not supported in PHP strpos(), ignoring
+
+    if (($pos = strpos($haystack, $needle)) !== false) {
+      $left = substr($haystack, 0, $pos);
+
+      return ($offset > 0 ? $offset : 0) + self::strlen($left);
+    }
+
+    return false;
+  }
+
+  /**
+   * generates a UTF-8 encoded character from the given Code Point
+   *
+   * @param    int $code_point The code point for which to generate a character
+   *
+   * @return   string Multi-Byte character
+   *           returns empty string on failure to encode
+   */
+  public static function chr($code_point)
+  {
+    self::checkForSupport();
+
+    if (($i = ( int )$code_point) !== $code_point) {
+      //$code_point is a string, lets extract int code point from it
+
+      if (!($i = ( int )self::hex_to_int($code_point))) {
+        return '';
+      }
+    }
+
+    return self::html_entity_decode("&#{$i};", ENT_QUOTES);
+  }
+
+  /**
+   * converts hexadecimal U+xxxx code point representation to Integer
+   *
+   * INFO: opposite to UTF8::int_to_hex( )
+   *
+   * @param    string $str The Hexadecimal Code Point representation
+   *
+   * @return   int The Code Point, or 0 on failure
+   */
+  public static function hex_to_int($str)
+  {
+    if (preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $str, $match)) {
+      return ( int )hexdec($match[1]);
+    }
+
+    return 0;
+  }
+
+  /**
+   * UTF-8 version of html_entity_decode()
+   *
+   * Convert all HTML entities to their applicable characters
+   *
+   * @link http://php.net/manual/en/function.html-entity-decode.php
+   *
+   * @param string $string   <p>
+   *                         The input string.
+   *                         </p>
+   * @param int    $flags    [optional] <p>
+   *                         A bitmask of one or more of the following flags, which specify how to handle quotes and
+   *                         which document type to use. The default is ENT_COMPAT | ENT_HTML401.
+   *                         <table>
+   *                         Available <i>flags</i> constants
+   *                         <tr valign="top">
+   *                         <td>Constant Name</td>
+   *                         <td>Description</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_COMPAT</b></td>
+   *                         <td>Will convert double-quotes and leave single-quotes alone.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_QUOTES</b></td>
+   *                         <td>Will convert both double and single quotes.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_NOQUOTES</b></td>
+   *                         <td>Will leave both double and single quotes unconverted.</td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_HTML401</b></td>
+   *                         <td>
+   *                         Handle code as HTML 4.01.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_XML1</b></td>
+   *                         <td>
+   *                         Handle code as XML 1.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_XHTML</b></td>
+   *                         <td>
+   *                         Handle code as XHTML.
+   *                         </td>
+   *                         </tr>
+   *                         <tr valign="top">
+   *                         <td><b>ENT_HTML5</b></td>
+   *                         <td>
+   *                         Handle code as HTML 5.
+   *                         </td>
+   *                         </tr>
+   *                         </table>
+   *                         </p>
+   * @param string $encoding [optional] <p>
+   *                         Encoding to use.
+   *                         </p>
+   *
+   * @return string the decoded string.
+   */
+  public static function html_entity_decode($string, $flags = ENT_COMPAT, $encoding = 'UTF-8')
+  {
+    return html_entity_decode($string, $flags, $encoding);
+  }
+
+  /**
+   * returns count of characters used in a string
+   *
+   * @param    string $str The input string
+   *
+   * @return   array An associative array of Character as keys and
+   *           their count as values
+   */
+  public static function count_chars($str) //there is no $mode parameters
+  {
+    $array = array_count_values(self::split($str));
+
+    ksort($array);
+
+    return $array;
+  }
+
+  /**
+   * reverses characters order in the string
+   *
+   * @param    string $str The input string
+   *
+   * @return   string The string with characters in the reverse sequence
+   */
+  public static function strrev($str)
+  {
+    return implode(array_reverse(self::split($str)));
+  }
+
+  /**
+   * returns the UTF-8 character with the maximum code point in the given data
+   *
+   * @param    mixed $arg A UTF-8 encoded string or an array of such strings
+   *
+   * @return   string The character with the highest code point than others
+   */
+  public static function max($arg)
+  {
+    if (is_array($arg)) {
+      $arg = implode($arg);
+    }
+
+    return self::chr(max(self::codepoints($arg)));
+  }
+
+  /**
+   * accepts a string and returns an array of Unicode Code Points
+   *
+   * @since 1.0
+   *
+   * @param    mixed $arg     A UTF-8 encoded string or an array of such strings
+   * @param    bool  $u_style If True, will return Code Points in U+xxxx format,
+   *                          default, Code Points will be returned as integers
+   *
+   * @return   array The array of code points
+   */
+  public static function codepoints($arg, $u_style = false)
+  {
+    if (is_string($arg)) {
+      $arg = self::split($arg);
+    }
+
+    $arg = array_map(
+        array(
+            '\\voku\\helper\\UTF8',
+            'ord'
+        ), $arg
+    );
+
+    if ($u_style) {
+      $arg = array_map(
+          array(
+              '\\voku\\helper\\UTF8',
+              'int_to_hex'
+          ), $arg
+      );
+    }
+
+    return $arg;
+  }
+
+  /**
+   * returns the UTF-8 character with the minimum code point in the given data
+   *
+   * @param    mixed $arg A UTF-8 encoded string or an array of such strings
+   *
+   * @return   string The character with the lowest code point than others
+   */
+  static public function min($arg)
+  {
+    if (is_array($arg)) {
+      $arg = implode($arg);
+    }
+
+    return self::chr(min(self::codepoints($arg)));
+  }
+
+  /**
+   * get hexadecimal code point (U+xxxx) of a UTF-8 encoded character
+   *
+   * @param    string  $chr The input character
+   * @param    string  $pfix
+   *
+   * @return   string The Code Point encoded as U+xxxx
+   */
+  static public function chr_to_hex($chr, $pfix = 'U+')
+  {
+    return self::int_to_hex(self::ord($chr), $pfix);
+  }
+
+  /**
+   * converts Integer to hexadecimal U+xxxx code point representation
+   *
+   * @param    int    $int The integer to be converted to hexadecimal code point
+   * @param    string $pfix
+   *
+   * @return   string The Code Point, or empty string on failure
+   */
+  static public function int_to_hex($int, $pfix = 'U+')
+  {
+    if (ctype_digit(( string )$int)) {
+      $hex = dechex(( int )$int);
+
+      $hex = (strlen($hex) < 4 ? substr('0000' . $hex, -4) : $hex);
+
+      return $pfix . $hex;
+    }
+
+    return '';
+  }
+
+  /**
+   * counts number of words in the UTF-8 string
+   *
+   * @param    string $str The input string
+   *
+   * @return   int The number of words in the string
+   */
+  static public function str_word_count($str)
+  {
+    $str = self::trim($str);
+
+    if (!$str) {
+      return 0;
+    }
+
+    return count(explode('-', self::url_slug($str)));
+  }
+
+  /**
+   * strip whitespace or other characters from beginning or end of a UTF-8 string
+   *
+   * WARNING: this is much slower then "trim()" !!!!
+   *
+   * @param    string $string The string to be trimmed
+   * @param    string $chars  Optional characters to be stripped
+   *
+   * @return   string The trimmed string
+   */
+  static public function trim($string = '', $chars = '')
+  {
+    $string = self::clean($string);
+
+    if ($chars == '') {
+      return preg_replace("/(^\s+)|(\s+$)/us", "", $string);
+    }
+
+    $string = self::ltrim($string, $chars);
+    return self::rtrim($string, $chars);
+  }
+
+  /**
+   * strip whitespace or other characters from beginning of a UTF-8 string
+   *
+   * WARNING: this is much slower then "ltrim()" !!!!
+   *
+   * @param    string $string The string to be trimmed
+   * @param    string $chars  Optional characters to be stripped
+   *
+   * @return   string The string with unwanted characters stripped from the left
+   */
+  static public function ltrim($string = '', $chars = '')
+  {
+    self::trim_util($string, $chars);
+
+    $s_look = self::split($string);
+
+    $count = 0;
+
+    while (isset($s_look[$count]) && isset($chars[$s_look[$count]])) {
+      ++$count;
+    }
+
+    return self::substr($string, $count);
+  }
+
+  /**
+   * for internal use - Prepares a string and given chars for trim operations
+   *
+   * @param    string $string The string to be trimmed
+   * @param    string $chars  Optional characters to be stripped
+   */
+  static protected function trim_util(&$string, &$chars)
+  {
+    if (empty($chars)) {
+      $chars = self::ws();
+    } else if (is_string($chars)) {
+      $chars = self::split($chars);
+    }
+
+    $chars = array_flip($chars);
+
+    $string = self::clean($string); //Cleanup is necessary here, or trim functions may break
+  }
+
+  /**
+   * returns an array of Unicode White Space characters
+   *
+   * @return   array An array with numeric code point as key and White Space Character as value
+   */
+  static public function ws()
+  {
+    Static $white = array(
+
+      //    Numeric Code Point    => UTF-8 Character
+
+      0     => "\x0",
+      //NUL Byte
+      9     => "\x9",
+      //Tab
+      10    => "\xa",
+      //New Line
+      11    => "\xb",
+      //Vertical Tab
+      13    => "\xd",
+      //Carriage Return
+      32    => "\x20",
+      //Ordinary Space
+      160   => "\xc2\xa0",
+      //NO-BREAK SPACE
+      5760  => "\xe1\x9a\x80",
+      //OGHAM SPACE MARK
+      6158  => "\xe1\xa0\x8e",
+      //MONGOLIAN VOWEL SEPARATOR
+      8192  => "\xe2\x80\x80",
+      //EN QUAD
+      8193  => "\xe2\x80\x81",
+      //EM QUAD
+      8194  => "\xe2\x80\x82",
+      //EN SPACE
+      8195  => "\xe2\x80\x83",
+      //EM SPACE
+      8196  => "\xe2\x80\x84",
+      //THREE-PER-EM SPACE
+      8197  => "\xe2\x80\x85",
+      //FOUR-PER-EM SPACE
+      8198  => "\xe2\x80\x86",
+      //SIX-PER-EM SPACE
+      8199  => "\xe2\x80\x87",
+      //FIGURE SPACE
+      8200  => "\xe2\x80\x88",
+      //PUNCTUATION SPACE
+      8201  => "\xe2\x80\x89",
+      //THIN SPACE
+      8202  => "\xe2\x80\x8a",
+      //HAIR SPACE
+      8232  => "\xe2\x80\xa8",
+      //LINE SEPARATOR
+      8233  => "\xe2\x80\xa9",
+      //PARAGRAPH SEPARATOR
+      8239  => "\xe2\x80\xaf",
+      //NARROW NO-BREAK SPACE
+      8287  => "\xe2\x81\x9f",
+      //MEDIUM MATHEMATICAL SPACE
+      12288 => "\xe3\x80\x80"
+      //IDEOGRAPHIC SPACE
+    );
+
+    return $white;
+  }
+
+  /**
+   * strip whitespace or other characters from end of a UTF-8 string
+   *
+   * WARNING: this is much slower then "rtrim()" !!!!
+   *
+   * @param    string $string The string to be trimmed
+   * @param    string $chars  Optional characters to be stripped
+   *
+   * @return   string The string with unwanted characters stripped from the right
+   */
+  static public function rtrim($string = '', $chars = '')
+  {
+    self::trim_util($string, $chars);
+
+    $s_look = self::split($string);
+
+    $len = count($s_look);
+
+    while ($len && isset($chars[$s_look[$len - 1]])) {
+      --$len;
+    }
+
+    return self::substr($string, 0, $len);
+  }
+
+  /**
+   * creates SEO Friendly URL Slugs via "URLify"
+   *
+   * @param string $str
+   * @param int    $maxl
+   * @param string $language
+   *
+   * @return mixed|String
+   */
+  static public function url_slug($str = '', $maxl = -1, $language = "latin")
+  {
+    self::checkForSupport();
+
+    $str = self::trim($str);
+    $str = self::clean($str, true, true);
+
+    // fallback
+    if ($maxl == -1) {
+      $maxl = 100;
+    }
+
+    return URLify::filter($str, $maxl, $language, false, true, true, '-');
+  }
+
+  /**
+   * Replace text within a portion of a string
+   *
+   * @param string $string
+   * @param string $replace
+   * @param int    $start
+   * @param int    $len
+   *
+   * @return string
+   */
+  public static function substr_replace($string, $replace, $start, $len = 2147483647)
+  {
+    $string = self::str_split($string);
+    $replace = self::str_split($replace);
+
+    array_splice($string, $start, $len, $replace);
+
+    return implode('', $string);
+  }
+
+  /**
+   * Convert a string to an array
+   *
+   * @param string $string
+   * @param int    $len
+   *
+   * @return array
+   */
+  public static function str_split($string, $len = 1)
+  {
+    if (1 > $len = (int)$len) {
+      $len = func_get_arg(1);
+      return str_split($string, $len);
+    }
+
+    if (self::$support['intl'] === true) {
+      $a = array();
+      $p = 0;
+      $l = strlen($string);
+      while ($p < $l) {
+        $a[] = grapheme_extract($string, 1, GRAPHEME_EXTR_COUNT, $p, $p);
+      }
+    } else {
+      preg_match_all('/' . self::GRAPHEME_CLUSTER_RX . '/u', $string, $a);
+      $a = $a[0];
+    }
+
+    if (1 == $len) {
+      return $a;
+    }
+
+    $string = array();
+    $p = -1;
+
+    foreach ($a as $l => $a) {
+      if ($l % $len) {
+        $string[$p] .= $a;
+      } else {
+        $string[++$p] = $a;
+      }
+    }
+
+    return $string;
+  }
+
+  /**
    * count the number of sub string occurrences
    *
    * @param    string $haystack The string to search in
@@ -2166,33 +3301,37 @@ class UTF8
    */
   static public function range($var1, $var2)
   {
+    if (!$var1 || !$var2) {
+      return array();
+    }
+
     if (ctype_digit(( string )$var1)) {
       $start = ( int )$var1;
-    } else if (!($start = ( int )self::hex_to_int($var1))) {
-      //if not u+0000 style codepoint
+    } else if (ctype_xdigit($var1)) {
+      $start = ( int )self::hex_to_int($var1);
+    } else {
+      $start = self::ord($var1);
+    }
 
-      if (!($start = self::ord($var1))) {
-        //if not a valid utf8 character
-
-        return array();
-      }
+    if (!$start) {
+      return array();
     }
 
     if (ctype_digit(( string )$var2)) {
       $end = ( int )$var2;
-    } else if (!($end = ( int )self::hex_to_int($var2))) {
-      //if not u+0000 style codepoint
+    } else if (ctype_xdigit($var2)) {
+      $end = ( int )self::hex_to_int($var2);
+    } else {
+      $end = self::ord($var2);
+    }
 
-      if (!($end = self::ord($var1))) {
-        //if not a valid utf8 character
-
-        return array();
-      }
+    if (!$end) {
+      return array();
     }
 
     return array_map(
         array(
-            'UTF8',
+            '\\voku\\helper\\UTF8',
             'chr'
         ), range($start, $end)
     );
@@ -2210,13 +3349,18 @@ class UTF8
     static $chars = array();
     static $chars_len = null;
 
+    if ($len <= 0) {
+      return '';
+    }
+
+    // init
     self::checkForSupport();
 
     if (!$chars) {
       if (self::$support['pcre_utf8'] === true) {
         $chars = array_map(
             array(
-                'UTF8',
+                '\\voku\\helper\\UTF8',
                 'chr'
             ), range(48, 0xffff)
         );
@@ -2244,6 +3388,11 @@ class UTF8
    * callback( )
    *
    * @alias of UTF8::chr_map( )
+   *
+   * @param $callback
+   * @param $str
+   *
+   * @return array
    */
   static public function callback($callback, $str)
   {
@@ -2308,7 +3457,7 @@ class UTF8
   }
 
   /**
-   * makes a UTF-8 string from Code  points
+   * makes a UTF-8 string from code points
    *
    * @param    array $array Integer or Hexadecimal codepoints
    *
@@ -2319,7 +3468,7 @@ class UTF8
     return implode(
         array_map(
             array(
-                'UTF8',
+                '\\voku\\helper\\UTF8',
                 'chr'
             ), $array
         )
@@ -2414,152 +3563,6 @@ class UTF8
   }
 
   /**
-   * strip whitespace or other characters from beginning or end of a UTF-8 string
-   *
-   * @param    string $string The string to be trimmed
-   * @param    string $chars  Optional characters to be stripped
-   *
-   * @return   string The trimmed string
-   */
-  static public function trim($string = '', $chars = '')
-  {
-    $string = self::ltrim($string, $chars);
-
-    return self::rtrim($string, $chars);
-  }
-
-  /**
-   * strip whitespace or other characters from beginning of a UTF-8 string
-   *
-   * @param    string $string The string to be trimmed
-   * @param    string $chars  Optional characters to be stripped
-   *
-   * @return   string The string with unwanted characters stripped from the left
-   */
-  static public function ltrim($string = '', $chars = '')
-  {
-    self::trim_util($string, $chars);
-
-    $s_look = self::split($string);
-
-    $count = 0;
-
-    while (isset($s_look[$count]) && isset($chars[$s_look[$count]])) {
-      ++$count;
-    }
-
-    return self::substr($string, $count);
-  }
-
-  /**
-   * for internal use - Prepares a string and given chars for trim operations
-   *
-   * @param    string $string The string to be trimmed
-   * @param    string $chars  Optional characters to be stripped
-   */
-  static public function trim_util(&$string, &$chars)
-  {
-    if (empty($chars)) {
-      $chars = self::ws();
-    } else if (is_string($chars)) {
-      $chars = self::split($chars);
-    }
-
-    $chars = array_flip($chars);
-
-    $string = self::clean($string); //Cleanup is necessary here, or trim functions may break
-  }
-
-  /**
-   * returns an array of Unicode White Space characters
-   *
-   * @return   array An array with numeric code point as key and White Space Character as value
-   */
-  static public function ws()
-  {
-    Static $white = array(
-
-      //    Numeric Code Point    => UTF-8 Character
-
-      0     => "\x0",
-      //NUL Byte
-      9     => "\x9",
-      //Tab
-      10    => "\xa",
-      //New Line
-      11    => "\xb",
-      //Vertical Tab
-      13    => "\xd",
-      //Carriage Return
-      32    => "\x20",
-      //Ordinary Space
-      160   => "\xc2\xa0",
-      //NO-BREAK SPACE
-      5760  => "\xe1\x9a\x80",
-      //OGHAM SPACE MARK
-      6158  => "\xe1\xa0\x8e",
-      //MONGOLIAN VOWEL SEPARATOR
-      8192  => "\xe2\x80\x80",
-      //EN QUAD
-      8193  => "\xe2\x80\x81",
-      //EM QUAD
-      8194  => "\xe2\x80\x82",
-      //EN SPACE
-      8195  => "\xe2\x80\x83",
-      //EM SPACE
-      8196  => "\xe2\x80\x84",
-      //THREE-PER-EM SPACE
-      8197  => "\xe2\x80\x85",
-      //FOUR-PER-EM SPACE
-      8198  => "\xe2\x80\x86",
-      //SIX-PER-EM SPACE
-      8199  => "\xe2\x80\x87",
-      //FIGURE SPACE
-      8200  => "\xe2\x80\x88",
-      //PUNCTUATION SPACE
-      8201  => "\xe2\x80\x89",
-      //THIN SPACE
-      8202  => "\xe2\x80\x8a",
-      //HAIR SPACE
-      8232  => "\xe2\x80\xa8",
-      //LINE SEPARATOR
-      8233  => "\xe2\x80\xa9",
-      //PARAGRAPH SEPARATOR
-      8239  => "\xe2\x80\xaf",
-      //NARROW NO-BREAK SPACE
-      8287  => "\xe2\x81\x9f",
-      //MEDIUM MATHEMATICAL SPACE
-      12288 => "\xe3\x80\x80"
-      //IDEOGRAPHIC SPACE
-    );
-
-    return $white;
-  }
-
-  /**
-   * strip whitespace or other characters from end of a UTF-8 string
-   *
-   * @param    string $string The string to be trimmed
-   * @param    string $chars  Optional characters to be stripped
-   *
-   * @return   string The string with unwanted characters stripped from the right
-   */
-  static public function rtrim($string = '', $chars = '')
-  {
-    self::trim_util($string, $chars);
-
-    $s_look = self::split($string);
-
-    $len = count($s_look);
-
-    while ($len && isset($chars[$s_look[$len - 1]])) {
-      --$len;
-    }
-
-    return self::substr($string, 0, $len);
-  }
-
-  /**
    * Finds position of first occurrence of a string within another, case insensitive
    *
    * @link http://php.net/manual/en/function.mb-stripos.php
@@ -2582,108 +3585,61 @@ class UTF8
    */
   static public function stripos($haystack, $needle, $offset = null)
   {
+    if (!isset($haystack[0]) || !isset($needle[0])) {
+      return false;
+    }
+
+    // init
     self::checkForSupport();
 
+    $haystack = self::clean($haystack);
+    $needle = self::clean($needle);
+
     if (self::$support['mbstring'] === true) {
-      return mb_stripos($haystack, $needle, $offset);
+      return mb_stripos($haystack, $needle, $offset, 'UTF-8');
     } else {
       return self::strpos(self::strtolower($haystack), self::strtolower($needle), $offset);
     }
   }
 
   /**
-   * Find position of first occurrence of string in a string
+   * fix a double (or multiple) encoded UTF8 string
    *
-   * @link http://php.net/manual/en/function.mb-strpos.php
+   * @param string $text
    *
-   * @param string $haystack <p>
-   *                         The string being checked.
-   *                         </p>
-   * @param string $needle   <p>
-   *                         The position counted from the beginning of haystack.
-   *                         </p>
-   * @param int    $offset   [optional] <p>
-   *                         The search offset. If it is not specified, 0 is used.
-   *                         </p>
-   *
-   * @return int the numeric position of
-   * the first occurrence of needle in the
-   * haystack string. If
-   * needle is not found, it returns false.
+   * @return array|string
    */
-  static public function strpos($haystack, $needle, $offset = null)
+  static public function fix_utf8($text)
   {
-    self::checkForSupport();
-    //iconv and mbstring do not support integer $needle
-
-    if ((( int )$needle) === $needle && ($needle >= 0)) {
-      $needle = self::chr($needle);
+    if (is_array($text)) {
+      foreach ($text as $k => $v) {
+        $text[$k] = self::fix_utf8($v);
+      }
+      return $text;
     }
-
-    $needle = self::clean(( string )$needle);
-
-    $offset = ( int )$offset;
-
-    //mb_strpos returns wrong position if invalid characters are found in $haystack before $needle
-    //iconv_strpos is not tolerant to invalid characters
-
-    $haystack = self::clean($haystack);
-
-    if (self::$support['mbstring'] === true) {
-      return mb_strpos($haystack, $needle, $offset, 'UTF-8');
+    $last = "";
+    while ($last <> $text) {
+      $last = $text;
+      $text = self::to_utf8(static::utf8_decode($text));
     }
-
-    if (self::$support['iconv'] === true) {
-      return iconv_strpos($haystack, $needle, $offset, 'UTF-8');
-    }
-
-    if ($offset > 0) {
-      $haystack = self::substr($haystack, $offset);
-    }
-
-    //Negative Offset not supported in PHP strpos(), ignoring
-
-    if (($pos = strpos($haystack, $needle)) !== false) {
-      $left = substr($haystack, 0, $pos);
-
-      return ($offset > 0 ? $offset : 0) + self::strlen($left);
-    }
-
-    return false;
+    $text = self::to_utf8(static::utf8_decode($text));
+    return $text;
   }
 
   /**
-   * clean-up a UTF-8 string and show only printable chars at the end
+   * alias for "UTF8::ucfirst"
    *
-   * @param $text
+   * @param $str
    *
    * @return string
    */
-  static public function cleanup($text)
+  static public function ucword($str)
   {
-    self::checkForSupport();
-
-    // strip invalid characters from UTF-8 strings (so that we can insert it into the db)
-    if (self::$support['mbstring'] === true) {
-      $text = mb_convert_encoding($text, 'UTF-8');
-    } else if (function_exists('iconv')) {
-      $text = iconv('UTF-8', 'UTF-8//TRANSLIT//IGNORE', $text);
-    }
-
-    // remove all none UTF-8 symbols
-    $text = self::clean($text);
-
-    // remove non-breaking spaces and other non-standard spaces
-    //$text = preg_replace('/\s+/u', ' ', $text);
-
-    // replace controls symbols with nothing
-    //$text = preg_replace('/\p{C}+/u', '', $text);
-
-    return (string)$text;
+    return self::ucfirst($str);
   }
 
   /**
-   * makes string's first char Uppercase
+   * makes string's first char uppercase
    *
    * @param    string $str The input string
    *
@@ -2695,7 +3651,7 @@ class UTF8
   }
 
   /**
-   * Make a string uppercase
+   * make a string uppercase
    *
    * @link http://php.net/manual/en/function.mb-strtoupper.php
    *
@@ -2707,6 +3663,11 @@ class UTF8
    */
   static public function strtoupper($str)
   {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    // init
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
@@ -2714,6 +3675,7 @@ class UTF8
     } else {
 
       // fallback
+
       if (empty($table)) {
         $table = self::case_table();
       }
@@ -2722,6 +3684,64 @@ class UTF8
 
       return strtr($str, $table);
     }
+  }
+
+  /**
+   * uppercase for all words in the string
+   *
+   * @param       $string
+   * @param array $exceptions
+   *
+   * @return string
+   */
+  static public function ucwords($string, $exceptions = array())
+  {
+    if (!$string) {
+      return '';
+    }
+
+    $words = explode(" ", $string);
+    $newwords = array();
+
+    foreach ($words as $word) {
+      if (!array_key_exists($word, $exceptions)) {
+        $word = self::strtolower($word);
+        $word = self::ucfirst($word);
+      }
+      array_push($newwords, $word);
+    }
+
+    return self::ucfirst(join(" ", $newwords));
+  }
+
+  /**
+   * str_ireplace
+   *
+   * @param      $search
+   * @param      $replace
+   * @param      $subject
+   * @param null $count
+   *
+   * @return mixed
+   */
+  public static function str_ireplace($search, $replace, $subject, &$count = null)
+  {
+    $search = (array)$search;
+
+    foreach ($search as $i => $s) {
+      if ('' === $s .= '') {
+        $s = '/^(?<=.)$/';
+      } else {
+        $s = '/' . preg_quote($s, '/') . '/ui';
+      }
+
+      $search[$i] = $s;
+    }
+
+    $subject = preg_replace($search, $replace, $subject, -1, $replace);
+    $count = $replace;
+
+    return $subject;
   }
 
   /**
@@ -2773,6 +3793,11 @@ class UTF8
    */
   static public function strrpos($haystack, $needle, $offset = null)
   {
+    if (!isset($haystack[0]) || !isset($needle[0])) {
+      return false;
+    }
+
+    // init
     self::checkForSupport();
 
     if ((( int )$needle) === $needle && ($needle >= 0)) {
@@ -2822,44 +3847,39 @@ class UTF8
    *
    * @return   string The chunked string
    */
-
   static public function chunk_split($body, $chunklen = 76, $end = "\r\n")
   {
     return implode($end, self::split($body, $chunklen));
   }
 
   /**
-   * returns an array with all utf8 whitespace characters as per
-   * http://www.bogofilter.org/pipermail/bogofilter/2003-March/001889.html
+   * convert to ISO-8859
    *
-   * @author: Derek E. derek.isname@gmail.com
+   * -> alias for to_win1252()
    *
-   * @return array an array with all known whitespace characters as values and the type of whitespace as keys
-   *         as defined in above URL
+   * @param   string $text
+   *
+   * @return  array|string
    */
-  static public function whitespace_table() {
-    $whitespace = array(
-        "SPACE"                     => "\x20",
-        "NO-BREAK SPACE"            => "\xc2\xa0",
-        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
-        "EN QUAD"                   => "\xe2\x80\x80",
-        "EM QUAD"                   => "\xe2\x80\x81",
-        "EN SPACE"                  => "\xe2\x80\x82",
-        "EM SPACE"                  => "\xe2\x80\x83",
-        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
-        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
-        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
-        "FIGURE SPACE"              => "\xe2\x80\x87",
-        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
-        "THIN SPACE"                => "\xe2\x80\x89",
-        "HAIR SPACE"                => "\xe2\x80\x8a",
-        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
-        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
-        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
-        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
-    );
-
-    return $whitespace;
+  protected static function to_iso8859($text)
+  {
+    return self::to_win1252($text);
   }
 
-} 
+  /**
+   * fix -> utf8-win1252 chars
+   *
+   * @param   string $text
+   *
+   * @return  mixed
+   */
+  static protected function utf8_fix_win1252_chars($text)
+  {
+    // If you received an UTF-8 string that was converted from Windows-1252 as it was ISO8859-1
+    // (ignoring Windows-1252 chars from 80 to 9F) use this function to fix it.
+    // See: http://en.wikipedia.org/wiki/Windows-1252
+    return str_replace(array_keys(self::$brokenUtf8ToUtf8), array_values(self::$brokenUtf8ToUtf8), $text);
+  }
+
+}
+
