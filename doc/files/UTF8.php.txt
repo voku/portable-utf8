@@ -3,6 +3,7 @@
 namespace voku\helper;
 
 use URLify;
+use voku\helper\shim\Normalizer;
 
 /**
  * UTF8-Helper-Class
@@ -127,6 +128,70 @@ class UTF8
 
   public function __construct()
   {
+    self::checkForSupport();
+  }
+
+  /**
+   * check for UTF8-Support
+   */
+  static public function checkForSupport()
+  {
+    if (count(self::$support) === 0) {
+      self::$support['mbstring'] = self::mbstring_loaded();
+      self::$support['iconv'] = self::iconv_loaded();
+      self::$support['intl'] = self::intl_loaded();
+      self::$support['pcre_utf8'] = self::pcre_utf8_support();
+
+      Bootup::initAll(); // Enables the portablity layer and configures PHP for UTF-8
+      Bootup::filterRequestUri(); // Redirects to an UTF-8 encoded URL if it's not already the case
+      Bootup::filterRequestInputs(); // Normalizes HTTP inputs to UTF-8 NFC
+    }
+  }
+
+  /**
+   * checks whether mbstring is available on the server
+   *
+   * @return   bool True if available, False otherwise
+   */
+  static protected function mbstring_loaded()
+  {
+    $return = extension_loaded('mbstring');
+
+    if ($return === true) {
+      mb_internal_encoding('UTF-8');
+    }
+
+    return $return;
+  }
+
+  /**
+   * checks whether iconv is available on the server
+   *
+   * @return   bool True if available, False otherwise
+   */
+  static protected function iconv_loaded()
+  {
+    return extension_loaded('iconv') ? true : false;
+  }
+
+  /**
+   * checks whether intl is available on the server
+   *
+   * @return   bool True if available, False otherwise
+   */
+  static protected function intl_loaded()
+  {
+    return extension_loaded('intl') ? true : false;
+  }
+
+  /**
+   * checks if \u modifier is available that enables Unicode support in PCRE.
+   *
+   * @return   bool True if support is available, false otherwise
+   */
+  static protected function pcre_utf8_support()
+  {
+    return @preg_match('//u', '');
   }
 
   /**
@@ -320,65 +385,6 @@ class UTF8
     }
 
     return count(self::split($string));
-  }
-
-  /**
-   * check for UTF8-Support
-   */
-  static public function checkForSupport()
-  {
-    if (count(self::$support) === 0) {
-      self::$support['mbstring'] = self::mbstring_loaded();
-      self::$support['iconv'] = self::iconv_loaded();
-      self::$support['intl'] = self::intl_loaded();
-      self::$support['pcre_utf8'] = self::pcre_utf8_support();
-    }
-  }
-
-  /**
-   * checks whether mbstring is available on the server
-   *
-   * @return   bool True if available, False otherwise
-   */
-  static protected function mbstring_loaded()
-  {
-    $return = extension_loaded('mbstring');
-
-    if ($return === true) {
-      mb_internal_encoding('UTF-8');
-    }
-
-    return $return;
-  }
-
-  /**
-   * checks whether iconv is available on the server
-   *
-   * @return   bool True if available, False otherwise
-   */
-  static protected function iconv_loaded()
-  {
-    return extension_loaded('iconv') ? true : false;
-  }
-
-  /**
-   * checks whether intl is available on the server
-   *
-   * @return   bool True if available, False otherwise
-   */
-  static protected function intl_loaded()
-  {
-    return extension_loaded('intl') ? true : false;
-  }
-
-  /**
-   * checks if \u modifier is available that enables Unicode support in PCRE.
-   *
-   * @return   bool True if support is available, false otherwise
-   */
-  static protected function pcre_utf8_support()
-  {
-    return @preg_match('//u', '');
   }
 
   /**
@@ -606,7 +612,7 @@ class UTF8
   /**
    * convert to ASCII
    *
-   * @param string $s The input string e.g. a UTF-8 String
+   * @param string $s    The input string e.g. a UTF-8 String
    * @param string $lang The language of the output string
    *
    * @return string
@@ -2965,8 +2971,8 @@ class UTF8
   /**
    * get hexadecimal code point (U+xxxx) of a UTF-8 encoded character
    *
-   * @param    string  $chr The input character
-   * @param    string  $pfix
+   * @param    string $chr The input character
+   * @param    string $pfix
    *
    * @return   string The Code Point encoded as U+xxxx
    */
@@ -3259,6 +3265,58 @@ class UTF8
 
     return $string;
   }
+
+  /**
+   * filter
+   *
+   * @param        $var
+   * @param int    $normalization_form
+   * @param string $leading_combining
+   *
+   * @return mixed|string
+   */
+  static function filter($var, $normalization_form = 4, $leading_combining = '◌')
+  {
+    switch (gettype($var)) {
+      case 'array':
+        foreach ($var as $k => $v)
+          $var[$k] = static::filter($v, $normalization_form, $leading_combining);
+        break;
+      case 'object':
+        foreach ($var as $k => $v)
+          $var->$k = static::filter($v, $normalization_form, $leading_combining);
+        break;
+      case 'string':
+        if (false !== strpos($var, "\r")) {
+          // Workaround https://bugs.php.net/65732
+          $var = str_replace("\r\n", "\n", $var);
+          $var = strtr($var, "\r", "\n");
+        }
+        if (preg_match('/[\x80-\xFF]/', $var)) {
+          if (Normalizer::isNormalized($var, $normalization_form)) {
+            $n = '-';
+          } else {
+            $n = Normalizer::normalize($var, $normalization_form);
+
+            if (isset($n[0])) {
+              $var = $n;
+            } else {
+              $var = self::encode('UTF-8', $var);
+            }
+
+          }
+          if ($var[0] >= "\x80" && isset($n[0], $leading_combining[0]) && preg_match('/^\p{Mn}/u', $var)) {
+            // Prevent leading combining chars
+            // for NFC-safe concatenations.
+            $var = $leading_combining . $var;
+          }
+        }
+        break;
+    }
+
+    return $var;
+  }
+
 
   /**
    * count the number of sub string occurrences
