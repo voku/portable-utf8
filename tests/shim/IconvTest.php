@@ -1,7 +1,5 @@
 <?php
 
-namespace Patchwork\Tests\PHP\Shim;
-
 use voku\helper\shim\Iconv as p;
 
 class IconvTest extends \PHPUnit_Framework_TestCase

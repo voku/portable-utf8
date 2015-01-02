@@ -1,7 +1,5 @@
 <?php
 
-namespace Patchwork\Tests\PHP\Shim;
-
 use voku\helper\shim\Xml as p;
 
 class XmlTest extends \PHPUnit_Framework_TestCase

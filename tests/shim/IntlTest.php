@@ -1,7 +1,5 @@
 <?php
 
-namespace Patchwork\Tests\PHP\Shim;
-
 use Normalizer as n;
 use voku\helper\shim\Intl as p;
 

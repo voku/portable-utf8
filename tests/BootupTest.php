@@ -1,8 +1,6 @@
 <?php
 
-namespace Patchwork\Tests\Utf8;
-
-use voku\helper\shim\Normalizer as n;
+use Normalizer as n;
 use voku\helper\Bootup as b;
 
 class BootupTest extends \PHPUnit_Framework_TestCase
