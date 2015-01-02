@@ -3,7 +3,7 @@
 namespace Patchwork\Tests\Utf8;
 
 use Normalizer as n;
-use voku\helper\Bootup;
+use voku\helper\Bootup as b;
 
 class BootupTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,7 +64,7 @@ class BootupTest extends \PHPUnit_Framework_TestCase
         ),
     );
 
-    Bootup::filterRequestInputs();
+    b::filterRequestInputs();
 
     $expect = array(
         'n' => 4,
@@ -89,16 +89,16 @@ class BootupTest extends \PHPUnit_Framework_TestCase
     $uriC = '/' . utf8_decode("bàr");
     $uriD = '/' . "bàr";
 
-    $u = Bootup::filterRequestUri($uriA, false);
+    $u = b::filterRequestUri($uriA, false);
     $this->assertSame($uriA, $u);
 
-    $u = Bootup::filterRequestUri($uriB, false);
+    $u = b::filterRequestUri($uriB, false);
     $this->assertSame($uriA, $u);
 
-    $u = Bootup::filterRequestUri($uriC, false);
+    $u = b::filterRequestUri($uriC, false);
     $this->assertSame($uriA, $u);
 
-    $u = Bootup::filterRequestUri($uriD, false);
+    $u = b::filterRequestUri($uriD, false);
     $this->assertSame($uriD, $u);
   }
 }
