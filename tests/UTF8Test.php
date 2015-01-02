@@ -119,7 +119,18 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiøn"         => true,
         "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiøn"         => false,
         "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn"     => false,
-        "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => false
+        "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => false,
+        "\xC3\x28"                                                         => false,
+        "\xA0\xA1"                                                         => false,
+        "\xE2\x82\xA1"                                                     => true,
+        "\xE2\x28\xA1"                                                     => false,
+        "\xE2\x82\x28"                                                     => false,
+        "\xF0\x90\x8C\xBC"                                                 => true,
+        "\xF0\x28\x8C\xBC"                                                 => false,
+        "\xF0\x90\x28\xBC"                                                 => false,
+        "\xF0\x28\x8C\x28"                                                 => false,
+        "\xF8\xA1\xA1\xA1\xA1"                                             => false,
+        "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
     );
 
     $conter = 0;
@@ -563,6 +574,15 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   }
 
+  public function testToASCII()
+  {
+    $this->assertEquals('', UTF8::to_ascii(''));
+    $this->assertEquals('i', UTF8::to_ascii('ı'));
+    $this->assertEquals('deja vu', UTF8::to_ascii('déjà vu'));
+    $this->assertEquals('deja sss iiii', UTF8::to_ascii('déjà σσς iıii'));
+    $this->assertEquals('Internationalizaetion', UTF8::to_ascii('Iñtërnâtiônàlizætiøn'));
+  }
+
   public function testWhitespace()
   {
     $whitespaces = UTF8::whitespace_table();
@@ -633,15 +653,16 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testStrtolower()
   {
     $tests = array(
-        "ABC-中文空白"    => "abc-中文空白",
-        "ÖÄÜ"         => "öäü",
-        "öäü"         => "öäü",
-        "κόσμε"       => "κόσμε",
-        "Κόσμε"       => "κόσμε",
-        "ㅋㅋ-Lol"      => "ㅋㅋ-lol",
-        "ㅎㄹ..-Daebak" => "ㅎㄹ..-daebak",
-        "ㅈㅅ-Sorry"    => "ㅈㅅ-sorry",
-        "ㅡㅡ-WTF"      => "ㅡㅡ-wtf"
+        "ABC-中文空白"      => "abc-中文空白",
+        "ÖÄÜ"           => "öäü",
+        "öäü"           => "öäü",
+        "κόσμε"         => "κόσμε",
+        "Κόσμε"         => "κόσμε",
+        "ㅋㅋ-Lol"        => "ㅋㅋ-lol",
+        "ㅎㄹ..-Daebak"   => "ㅎㄹ..-daebak",
+        "ㅈㅅ-Sorry"      => "ㅈㅅ-sorry",
+        "ㅡㅡ-WTF"        => "ㅡㅡ-wtf",
+        "DÉJÀ Σσς Iıİi" => "déjà σσς iıii",
     );
 
     foreach ($tests as $before => $after) {
@@ -652,11 +673,12 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testStrtoupper()
   {
     $tests = array(
-        "abc-中文空白"     => "ABC-中文空白",
-        "öäü"          => "ÖÄÜ",
-        "öäü test öäü" => "ÖÄÜ TEST ÖÄÜ",
-        "ÖÄÜ"          => "ÖÄÜ",
-        "中文空白"         => "中文空白"
+        "abc-中文空白"      => "ABC-中文空白",
+        "öäü"           => "ÖÄÜ",
+        "öäü test öäü"  => "ÖÄÜ TEST ÖÄÜ",
+        "ÖÄÜ"           => "ÖÄÜ",
+        "中文空白"          => "中文空白",
+        "Déjà Σσς Iıİi" => "DÉJÀ ΣΣΣ IIİI",
     );
 
     foreach ($tests as $before => $after) {
