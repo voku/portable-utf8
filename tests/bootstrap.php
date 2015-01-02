@@ -1,3 +1,3 @@
 <?php
 
-require_once dirname(__DIR__) . '/vendor/composer/autoload_classmap.php';
+require_once dirname(__DIR__) . '/vendor/composer/autoload_real.php';
