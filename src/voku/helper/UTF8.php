@@ -4,6 +4,7 @@ namespace voku\helper;
 
 use URLify;
 use voku\helper\shim\Normalizer;
+use voku\helper\shim\Xml;
 
 /**
  * UTF8-Helper-Class
@@ -237,6 +238,7 @@ class UTF8
   static public function checkForSupport()
   {
     if (count(self::$support) === 0) {
+
       self::$support['mbstring'] = self::mbstring_loaded();
       self::$support['iconv'] = self::iconv_loaded();
       self::$support['intl'] = self::intl_loaded();
@@ -323,9 +325,12 @@ class UTF8
       return '';
     }
 
+    // init
+    self::checkForSupport();
+
     if (preg_match("/[\x80-\xFF]/", $s)) {
       static $translitExtra = array();
-      $translitExtra or $translitExtra = static::getData('translit_extra');
+      $translitExtra or $translitExtra = self::getData('translit_extra');
 
       $s = Normalizer::normalize($s, Normalizer::NFKC);
 
@@ -1249,11 +1254,11 @@ class UTF8
     $s = str_replace(self::$commonCaseFold[0], self::$commonCaseFold[1], $s);
     if ($full) {
       static $fullCaseFold = false;
-      $fullCaseFold || $fullCaseFold = static::getData('caseFolding_full');
+      $fullCaseFold || $fullCaseFold = self::getData('caseFolding_full');
       $s = str_replace($fullCaseFold[0], $fullCaseFold[1], $s);
     }
 
-    return static::strtolower($s);
+    return self::strtolower($s);
   }
 
   /**
@@ -2318,7 +2323,7 @@ class UTF8
       $var = filter_input($type, $var, $filter, $option);
     }
 
-    return static::filter($var);
+    return self::filter($var);
   }
 
   /**
@@ -2335,11 +2340,11 @@ class UTF8
     switch (gettype($var)) {
       case 'array':
         foreach ($var as $k => $v)
-          $var[$k] = static::filter($v, $normalization_form, $leading_combining);
+          $var[$k] = self::filter($v, $normalization_form, $leading_combining);
         break;
       case 'object':
         foreach ($var as $k => $v)
-          $var->$k = static::filter($v, $normalization_form, $leading_combining);
+          $var->$k = self::filter($v, $normalization_form, $leading_combining);
         break;
       case 'string':
         if (false !== strpos($var, "\r")) {
@@ -2374,6 +2379,9 @@ class UTF8
 
   /**
    * encode to UTF8 or LATIN1
+   *
+   * INFO:  the different to "UTF8::utf8_encode()" is that this function, try to fix also broken / double encoding,
+   *        so you can call this function also on a UTF-8 String and you don't mess the string
    *
    * @param string $encodingLabel ISO-8859-1 || UTF-8
    * @param string $text
@@ -2545,7 +2553,7 @@ class UTF8
       }
       return $text;
     } elseif (is_string($text)) {
-      return static::utf8_decode($text);
+      return self::utf8_decode($text);
     } else {
       return $text;
     }
@@ -2566,16 +2574,14 @@ class UTF8
 
     // init
     self::checkForSupport();
+    $text = self::to_utf8($text);
 
-    if (self::$support['iconv'] === false) {
-      $o = utf8_decode(
-          str_replace(
-              array_keys(self::$utf8ToWin1252), array_values(self::$utf8ToWin1252), self::to_utf8($text)
-          )
-      );
-    } else {
-      $o = iconv("UTF-8", "Windows-1252//TRANSLIT//IGNORE", $text);
-    }
+    $o = Xml::utf8_decode(
+        str_replace(
+            array_keys(self::$utf8ToWin1252), array_values(self::$utf8ToWin1252), $text
+        )
+    );
+
     return $o;
   }
 
@@ -2589,6 +2595,7 @@ class UTF8
   public static function utf8_encode($s)
   {
     $s = utf8_encode($s);
+
     if (false === strpos($s, "\xC2")) {
       return $s;
     } else {
@@ -2614,7 +2621,7 @@ class UTF8
       $json = json_decode($json, $assoc, $depth, $options);
     }
 
-    return static::filter($json);
+    return self::filter($json);
   }
 
   /**
@@ -2633,7 +2640,7 @@ class UTF8
     } else {
       $a = filter_input_array($type, $def, $add_empty);
     }
-    return static::filter($a);
+    return self::filter($a);
   }
 
   /**
@@ -3766,9 +3773,9 @@ class UTF8
     $last = "";
     while ($last <> $text) {
       $last = $text;
-      $text = self::to_utf8(static::utf8_decode($text));
+      $text = self::to_utf8(self::utf8_decode($text));
     }
-    $text = self::to_utf8(static::utf8_decode($text));
+    $text = self::to_utf8(self::utf8_decode($text));
     return $text;
   }
 
@@ -3872,7 +3879,7 @@ class UTF8
   static function substr_compare($a, $b, $offset, $len = 2147483647, $i = 0)
   {
     $a = self::substr($a, $offset, $len);
-    return $i ? static::strcasecmp($a, $b) : self::strcmp($a, $b);
+    return $i ? self::strcasecmp($a, $b) : self::strcmp($a, $b);
   }
 
   /**

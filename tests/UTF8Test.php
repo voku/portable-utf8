@@ -350,12 +350,153 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testUtf8DecodeUtf8Encode()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-????-  ",
+        "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
+        "öäü"            => "öäü",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::utf8_encode((UTF8::utf8_decode($before))));
+    }
+  }
+
+  public function testUtf8EncodeUtf8Decode()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-中文空白-  ",
+        "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
+        "öäü"            => "öäü",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::utf8_decode(UTF8::utf8_encode($before)));
+    }
+  }
+
+  public function testEncodeUtf8EncodeUtf8()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-中文空白-  ",
+        "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
+        "öäü"            => "öäü",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after,  UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
+    }
+  }
+
+  public function testEncodeUtf8()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-中文空白-  ",
+        "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
+        "öäü"            => "öäü",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::encode('UTF-8', $before));
+    }
+  }
+
+  public function testUtf8DecodeEncodeUtf8()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-????-  ",
+        "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
+        "öäü"            => "öäü",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)));
+    }
+  }
+
+  public function testEncodeUtf8Utf8Encode()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-ä¸­æ–‡ç©ºç™½-  ",
+        "      - ÖÄÜ- "  => "      - Ã–Ã„Ãœ- ",
+        "öäü"            => "Ã¶Ã¤Ã¼",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::utf8_encode(UTF8::encode('UTF-8', $before)));
+    }
+  }
+
+  public function testUtf8EncodeEncodeUtf8()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-ä¸­æ–‡ç©ºç™½-  ",
+        "      - ÖÄÜ- "  => "      - Ã–Ã„Ãœ- ",
+        "öäü"            => "Ã¶Ã¤Ã¼",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::encode('UTF-8', UTF8::utf8_encode($before)));
+    }
+  }
+
+  public function testUtf8EncodeUtf8Encode()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-Ã¤Â¸Â­Ã¦â€“â€¡Ã§Â©ÂºÃ§â„¢Â½-  ",
+        "      - ÖÄÜ- "  => "      - Ãƒâ€“Ãƒâ€žÃƒÅ“- ",
+        "öäü"            => "ÃƒÂ¶ÃƒÂ¤ÃƒÂ¼",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after,  UTF8::utf8_encode(UTF8::utf8_encode($before)));
+    }
+  }
+
+  public function testUtf8Encode()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-ä¸­æ–‡ç©ºç™½-  ",
+        "      - ÖÄÜ- "  => "      - Ã–Ã„Ãœ- ",
+        "öäü"            => "Ã¶Ã¤Ã¼",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::utf8_encode($before));
+    }
+  }
+
+  public function testToLatin1Utf8()
+  {
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-????-  ",
+        "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
+        "öäü"            => "öäü",
+        "" => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::to_utf8(UTF8::to_latin1($before)));
+    }
+  }
+
   public function testUrlSlug()
   {
     $tests = array(
         "  -ABC-中文空白-  " => "abc",
         "      - ÖÄÜ- "  => "oau",
-        "öäü"            => "oau"
+        "öäü"            => "oau",
+        "" => ""
     );
 
     foreach ($tests as $before => $after) {

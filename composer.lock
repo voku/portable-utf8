@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e7448ae80c34a387e517c88e14cd0f5f",
+    "hash": "30ffef2465ca396291fc800ea56188f1",
     "packages": [
         {
             "name": "voku/urlify",
