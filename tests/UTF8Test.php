@@ -356,7 +356,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-????-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
@@ -370,7 +370,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-中文空白-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
@@ -384,11 +384,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-中文空白-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after,  UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
+      $this->assertEquals($after, UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
     }
   }
 
@@ -398,7 +398,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-中文空白-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
@@ -412,7 +412,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-????-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
@@ -426,7 +426,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-ä¸­æ–‡ç©ºç™½-  ",
         "      - ÖÄÜ- "  => "      - Ã–Ã„Ãœ- ",
         "öäü"            => "Ã¶Ã¤Ã¼",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
@@ -440,7 +440,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-ä¸­æ–‡ç©ºç™½-  ",
         "      - ÖÄÜ- "  => "      - Ã–Ã„Ãœ- ",
         "öäü"            => "Ã¶Ã¤Ã¼",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
@@ -454,11 +454,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-Ã¤Â¸Â­Ã¦â€“â€¡Ã§Â©ÂºÃ§â„¢Â½-  ",
         "      - ÖÄÜ- "  => "      - Ãƒâ€“Ãƒâ€žÃƒÅ“- ",
         "öäü"            => "ÃƒÂ¶ÃƒÂ¤ÃƒÂ¼",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after,  UTF8::utf8_encode(UTF8::utf8_encode($before)));
+      $this->assertEquals($after, UTF8::utf8_encode(UTF8::utf8_encode($before)));
     }
   }
 
@@ -468,7 +468,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-ä¸­æ–‡ç©ºç™½-  ",
         "      - ÖÄÜ- "  => "      - Ã–Ã„Ãœ- ",
         "öäü"            => "Ã¶Ã¤Ã¼",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
@@ -482,7 +482,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-????-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
@@ -496,7 +496,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "abc",
         "      - ÖÄÜ- "  => "oau",
         "öäü"            => "oau",
-        "" => ""
+        ""               => ""
     );
 
     foreach ($tests as $before => $after) {
@@ -617,6 +617,84 @@ class UTF8Test extends PHPUnit_Framework_TestCase
             'do not go gentle into that good night',
         ),
     );
+  }
+
+  public function testToUtf8()
+  {
+    $examples = array(
+      // Valid UTF-8
+      "κόσμε"                    => array("κόσμε" => "κόσμε"),
+      "中"                        => array("中" => "中"),
+      // Valid UTF-8 + Invalied Chars
+      "κόσμε\xa0\xa1-öäü"        => array("κόσμε-öäü" => "κόσμε-öäü"),
+      // Valid ASCII
+      "a"                        => array("a" => "a"),
+      // Valid ASCII + Invalied Chars
+      "a\xa0\xa1-öäü"            => array("a-öäü" => "a-öäü"),
+      // Valid 2 Octet Sequence
+      "\xc3\xb1"                 => array("ñ" => "ñ"),
+      // Invalid 2 Octet Sequence
+      "\xc3\x28"                 => array("�(" => "("),
+      // Invalid Sequence Identifier
+      "\xa0\xa1"                 => array("��" => ""),
+      // Valid 3 Octet Sequence
+      "\xe2\x82\xa1"             => array("₡" => "₡"),
+      // Invalid 3 Octet Sequence (in 2nd Octet)
+      "\xe2\x28\xa1"             => array("�(�" => "("),
+      // Invalid 3 Octet Sequence (in 3rd Octet)
+      "\xe2\x82\x28"             => array("�(" => "("),
+      // Valid 4 Octet Sequence
+      "\xf0\x90\x8c\xbc"         => array("𐌼" => ""),
+      // Invalid 4 Octet Sequence (in 2nd Octet)
+      "\xf0\x28\x8c\xbc"         => array("�(��" => "("),
+      // Invalid 4 Octet Sequence (in 3rd Octet)
+      "\xf0\x90\x28\xbc"         => array("�(�" => "("),
+      // Invalid 4 Octet Sequence (in 4th Octet)
+      "\xf0\x28\x8c\x28"         => array("�(�(" => "(("),
+      // Valid 5 Octet Sequence (but not Unicode!)
+      "\xf8\xa1\xa1\xa1\xa1"     => array("�" => ""),
+      // Valid 6 Octet Sequence (but not Unicode!)
+      "\xfc\xa1\xa1\xa1\xa1\xa1" => array("�" => ""),
+    );
+
+    $counter = 0;
+    foreach ($examples as $testString => $testResults) {
+      foreach ($testResults as $before => $after) {
+        $this->assertEquals($after, UTF8::to_utf8(UTF8::cleanup($testString)), $counter);
+      }
+      $counter++;
+    }
+  }
+
+  public function testToUtf8_v2()
+  {
+    $testArray = array(
+        'Düsseldorf' => 'Düsseldorf',
+        'Ã'          => 'Ã',
+        ' '          => ' ',
+        ''           => '',
+        "\n"         => "\n",
+        'test'       => 'test'
+    );
+
+    foreach ($testArray as $before => $after) {
+      $this->assertEquals($after, UTF8::to_utf8($before));
+    }
+  }
+
+  public function testToUtf8_v3()
+  {
+    $utf8File = file_get_contents(dirname(__FILE__) . "/test1Utf8.txt");
+    $latinFile = file_get_contents(dirname(__FILE__) . "/test1Latin.txt");
+
+    $utf8File = explode("\n", $utf8File);
+    $latinFile = explode("\n", $latinFile);
+
+    $testArray = array_combine($latinFile, $utf8File);
+
+    foreach ($testArray as $before => $after) {
+      $this->assertEquals($after, UTF8::to_utf8($before));
+    }
   }
 
   public function testClean()

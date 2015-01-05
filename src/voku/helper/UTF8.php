@@ -2432,6 +2432,19 @@ class UTF8
   }
 
   /**
+   * alias for "UTF8::to_utf8"
+   *
+   * @param string $text
+   *
+   * @return string
+   */
+  public static function toUTF8($text)
+  {
+    return self::to_utf8($text);
+  }
+
+
+  /**
    * Function UTF8::to_utf8
    *
    * This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.
@@ -2454,7 +2467,7 @@ class UTF8
    *
    * @param string $text Any string.
    *
-   * @return string  The same string, UTF8 encoded
+   * @return string The same string, UTF8 encoded
    *
    */
   public static function to_utf8($text)
