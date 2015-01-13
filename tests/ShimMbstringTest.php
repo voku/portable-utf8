@@ -28,9 +28,9 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
   {
     $this->assertSame(utf8_decode('déjà'), p::mb_convert_encoding('déjà', 'Windows-1252'));
     $this->assertSame(base64_encode('déjà'), p::mb_convert_encoding('déjà', 'Base64'));
-    $this->assertSame('d&eacute;j&agrave;', p::mb_convert_encoding('déjà', 'Html-entities'));
+    $this->assertSame('&#23455;<&>d&eacute;j&agrave;', p::mb_convert_encoding('実<&>déjà', 'Html-entities'));
     $this->assertSame('déjà', p::mb_convert_encoding(base64_encode('déjà'), 'Utf-8', 'Base64'));
-    $this->assertSame('déjà', p::mb_convert_encoding('d&eacute;j&agrave;', 'Utf-8', 'Html-entities'));
+    $this->assertSame('déjà', p::mb_convert_encoding('d&eacute;j&#224;', 'Utf-8', 'Html-entities'));
   }
 
   function testStrCase()
@@ -171,12 +171,12 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     $this->assertSame('UTF8', p::mb_detect_encoding('abc', 'UTF8, ASCII'));
     $this->assertSame(
         'ISO-8859-1', p::mb_detect_encoding(
-            "\x9D", array(
-                'UTF-8',
-                'ASCII',
-                'ISO-8859-1'
-            )
+        "\x9D", array(
+            'UTF-8',
+            'ASCII',
+            'ISO-8859-1'
         )
+    )
     );
   }
 
@@ -209,5 +209,12 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
   {
     $this->assertSame(array('utf8'), p::mb_encoding_aliases('UTF-8'));
     $this->assertFalse(p::mb_encoding_aliases('ASCII'));
+  }
+
+  function testmb_strwidth()
+  {
+    $this->assertSame(2, p::mb_strwidth("\0実"));
+    $this->assertSame(4, p::mb_strwidth('déjà'));
+    $this->assertSame(4, p::mb_strwidth(utf8_decode('déjà'), 'CP1252'));
   }
 }

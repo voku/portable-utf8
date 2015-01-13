@@ -666,6 +666,24 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  function testStrwidth()
+  {
+    $testArray = array(
+        "testtest" => 8,
+        'Ã'        => 1,
+        ' '        => 1,
+        ''         => 0,
+        "\n"       => 1,
+        'test'     => 4,
+        "ひらがな\r"   => 9,
+        "○●◎\r"    => 4
+    );
+
+    foreach ($testArray as $before => $after) {
+      $this->assertEquals($after, UTF8::strwidth($before));
+    }
+  }
+
   public function testToUtf8_v2()
   {
     $testArray = array(

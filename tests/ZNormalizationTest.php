@@ -5,7 +5,7 @@ use voku\helper\shim\Normalizer as n;
 
 class ZNormalizationTest extends \PHPUnit_Framework_TestCase
 {
-  public $unicodeVersion = 63;
+  public $unicodeVersion = 70;
 
   function testNormalize()
   {
