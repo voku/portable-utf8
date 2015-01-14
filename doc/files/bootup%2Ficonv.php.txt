@@ -93,20 +93,17 @@ if (extension_loaded('mbstring')) {
 
   function iconv_strpos($s, $needle, $offset = 0, $enc = INF)
   {
-    INF === $enc && $enc = Iconv::$internal_encoding;
-    return Mbstring::mb_strpos($s, $needle, $offset, $enc);
+    return Iconv::iconv_strpos($s, $needle, $offset, $enc);
   }
 
   function iconv_strrpos($s, $needle, $enc = INF)
   {
-    INF === $enc && $enc = Iconv::$internal_encoding;
-    return Mbstring::mb_strrpos($s, $needle, $enc);
+    return Iconv::iconv_strrpos($s, $needle, $enc);
   }
 
   function iconv_substr($s, $start, $length = 2147483647, $enc = INF)
   {
-    INF === $enc && $enc = Iconv::$internal_encoding;
-    return Mbstring::mb_substr($s, $start, $length, $enc);
+    return Iconv::iconv_substr($s, $start, $length, $enc);
   }
 
   function iconv_mime_decode($encoded_headers, $mode = 0, $enc = INF)

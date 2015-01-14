@@ -103,11 +103,6 @@ function mb_substitute_character($char = INF)
   return Mbstring::mb_substitute_character($char);
 }
 
-function mb_substr_count($s, $needle)
-{
-  return substr_count($s, $needle);
-}
-
 function mb_substr($s, $start, $length = 2147483647, $enc = INF)
 {
   return Mbstring::mb_substr($s, $start, $length, $enc);
@@ -148,4 +143,32 @@ function mb_strstr($s, $needle, $part = false, $enc = INF)
   return Mbstring::mb_strstr($s, $needle, $part, $enc);
 }
 
+function mb_get_info($type = 'all')
+{
+  return Mbstring::mb_get_info($type);
+}
 
+function mb_http_output($enc = INF)
+{
+  return Mbstring::mb_http_output($enc);
+}
+
+function mb_strwidth($s, $enc = INF)
+{
+  return Mbstring::mb_strwidth($s, $enc);
+}
+
+function mb_substr_count($haystack, $needle, $enc = INF)
+{
+  return Mbstring::mb_substr_count($haystack, $needle, $enc);
+}
+
+function mb_output_handler($contents, $status)
+{
+  return Mbstring::mb_output_handler($contents, $status);
+}
+
+function mb_http_input($type = '')
+{
+  return Mbstring::mb_http_input($type);
+}
