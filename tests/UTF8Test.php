@@ -506,7 +506,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $tests = array(
         "  -ABC-中文空白-  " => "abc",
         "      - ÖÄÜ- "  => "oau",
-        "  öäüabc"       => "oaua"
+        "  öäüabc"       => "oau",
+        " DÃ¼sseldorf" => "das",
+        "Abcdef" => "abcd",
     );
 
     foreach ($tests as $before => $after) {
