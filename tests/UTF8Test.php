@@ -507,8 +507,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "abc",
         "      - ÖÄÜ- "  => "oau",
         "  öäüabc"       => "oau",
-        " DÃ¼sseldorf" => "das",
-        "Abcdef" => "abcd",
+        " DÃ¼sseldorf"   => "das",
+        "Abcdef"         => "abcd",
     );
 
     foreach ($tests as $before => $after) {
@@ -728,7 +728,10 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         ' ' => ' ',
         '' => '',
         "\n" => "\n",
-        'DÃ¼sseldorf' => 'Düsseldorf',
+        "D%FCsseldorf" => "Düsseldorf",
+        "D&#xFC;sseldorf" => "Düsseldorf",
+        "D%26%23xFC%3Bsseldorf" => "Düsseldorf",
+        'DÃ¼sseldorf' => "Düsseldorf",
         "Düsseldorf" => "Düsseldorf",
         "D%C3%BCsseldorf" => "Düsseldorf",
         "D%C3%83%C2%BCsseldorf" => "Düsseldorf",
