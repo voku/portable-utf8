@@ -2348,11 +2348,6 @@ class UTF8
    */
   public static function urldecode($string)
   {
-    if (empty($urldecode_fix)) {
-      $urldecode_fix = self::urldecode_fix_win1252_chars();
-    }
-
-    $string = str_replace(array_keys($urldecode_fix), $urldecode_fix, $string);
     $string = preg_replace("/%u([0-9a-f]{3,4})/i","&#x\\1;", urldecode($string));
 
     return self::html_entity_decode(self::fix_simple_utf8(self::toUTF8($string)));
