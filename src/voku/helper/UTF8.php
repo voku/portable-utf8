@@ -2340,6 +2340,8 @@ class UTF8
   /**
    * urldecode & fixing urlencoded-win1252-chars
    *
+   * @since 1.0.4
+   *
    * @param string $string
    *
    * @return string
