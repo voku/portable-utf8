@@ -700,6 +700,52 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testUtf8FixWin1252Chars()
+  {
+    $testArray = array(
+        'Düsseldorf'   => 'Düsseldorf',
+        'Ã'            => 'Ã',
+        ' '            => ' ',
+        ''             => '',
+        "\n"           => "\n",
+        "test\xc2\x88" => 'testˆ',
+        'DÃ¼sseldorf'  => 'DÃ¼sseldorf',
+        'Ã¤'           => 'Ã¤'
+    );
+
+    foreach ($testArray as $before => $after) {
+      $this->assertEquals($after, UTF8::utf8_fix_win1252_chars($before));
+    }
+  }
+
+  public function testUrldecode()
+  {
+    $testArray = array(
+        'W%F6bse' => 'Wöbse',
+        'Ã' => 'Ã',
+        ' ' => ' ',
+        '' => '',
+        "\n" => "\n",
+        'DÃ¼sseldorf' => 'Düsseldorf',
+        "Düsseldorf" => "Düsseldorf",
+        'Ã¤' => 'ä',
+        "%e7%ab%a0%e5%ad%90%e6%80%a1" => "章å­æ`¡",
+        "Fran%c3%a7ois Truffaut" => "François Truffaut",
+        "%e1%83%a1%e1%83%90%e1%83%a5%e1%83%90%e1%83%a0%e1%83%97%e1%83%95%e1%83%94%e1%83%9a%e1%83%9d" => "áƒ¡áƒáƒ¥áƒáƒ áƒ—áƒ•áƒ”áƒšáƒ",
+        "Bj%c3%b6rk Gu%c3%b0mundsd%c3%b3ttir" => "Björk Guðmundsdóttir",
+        "%e5%ae%ae%e5%b4%8e%e3%80%80%e9%a7%bf" => "宮崎ã``駿",
+        "%u7AE0%u5B50%u6021" => "章子怡",
+        "%u0046%u0072%u0061%u006E%u00E7%u006F%u0069%u0073%u0020%u0054%u0072%u0075%u0066%u0066%u0061%u0075%u0074" => "François Truffaut",
+        "%u10E1%u10D0%u10E5%u10D0%u10E0%u10D7%u10D5%u10D4%u10DA%u10DD" => "საქართველო",
+        "%u0042%u006A%u00F6%u0072%u006B%u0020%u0047%u0075%u00F0%u006D%u0075%u006E%u0064%u0073%u0064%u00F3%u0074%u0074%u0069%u0072" => "Björk Guðmundsdóttir",
+        "%u5BAE%u5D0E%u3000%u99FF" => "宮崎　駿",
+    );
+
+    foreach ($testArray as $before => $after) {
+      $this->assertEquals($after, UTF8::urldecode($before));
+    }
+  }
+
   public function testToUtf8_v3()
   {
     $utf8File = file_get_contents(dirname(__FILE__) . "/test1Utf8.txt");

@@ -16,7 +16,10 @@ use voku\helper\shim\Normalizer;
 
 class Bootup
 {
-  static function initAll()
+  /**
+   * bootstrap
+   */
+  public static function initAll()
   {
     ini_set('default_charset', 'UTF-8');
 
@@ -28,12 +31,18 @@ class Bootup
     self::initLocale();
   }
 
-  static function initUtf8Encode()
+  /**
+   * init utf8_encode
+   */
+  protected static function initUtf8Encode()
   {
     function_exists('utf8_encode') or require __DIR__ . '/bootup/utf8_encode.php';
   }
 
-  static function initIconv()
+  /**
+   * init iconv
+   */
+  protected static function initIconv()
   {
     if (extension_loaded('iconv')) {
       if ('UTF-8' !== iconv_get_encoding('input_encoding')) {
@@ -52,7 +61,10 @@ class Bootup
     }
   }
 
-  static function initMbstring()
+  /**
+   * init mbstring
+   */
+  protected static function initMbstring()
   {
     if (extension_loaded('mbstring')) {
       if (((int)ini_get('mbstring.encoding_translation') || in_array(
@@ -116,7 +128,10 @@ class Bootup
     }
   }
 
-  static function initExif()
+  /**
+   * init exif
+   */
+  protected static function initExif()
   {
     if (extension_loaded('exif')) {
       if (ini_get('exif.encode_unicode') && 'UTF-8' !== strtoupper(ini_get('exif.encode_unicode'))) {
@@ -129,7 +144,10 @@ class Bootup
     }
   }
 
-  static function initIntl()
+  /**
+   * init intl
+   */
+  protected static function initIntl()
   {
     if (defined('GRAPHEME_CLUSTER_RX')) {
       return;
@@ -145,7 +163,10 @@ class Bootup
     }
   }
 
-  static function initLocale()
+  /**
+   * init locale
+   */
+  protected static function initLocale()
   {
     // With non-UTF-8 locale, basename() bugs.
     // Be aware that setlocale() can be slow.
@@ -165,7 +186,7 @@ class Bootup
    *
    * @return bool|mixed|null
    */
-  static function filterRequestUri($uri = null, $exit = true)
+  public static function filterRequestUri($uri = null, $exit = true)
   {
     if (!isset($uri)) {
       if (!isset($_SERVER['REQUEST_URI'])) {
@@ -206,12 +227,18 @@ class Bootup
     return $uri;
   }
 
-  static function filterRequestInputs($normalization_form = 4 /* n::NFC */, $leading_combining = '◌')
+  /**
+   * filter request inputs
+   *
+   * Ensures inputs are well formed UTF-8
+   * When not, assumes Windows-1252 and converts to UTF-8
+   * Tests only values, not keys
+   *
+   * @param int    $normalization_form
+   * @param string $leading_combining
+   */
+  public static function filterRequestInputs($normalization_form = 4 /* n::NFC */, $leading_combining = '◌')
   {
-    // Ensures inputs are well formed UTF-8
-    // When not, assumes Windows-1252 and converts to UTF-8
-    // Tests only values, not keys
-
     $a = array(
         &$_FILES,
         &$_ENV,
@@ -244,7 +271,14 @@ class Bootup
     }
   }
 
-  static function filterString($s, $normalization_form = 4 /* n::NFC */, $leading_combining = '◌')
+  /**
+   * @param        $s
+   * @param int    $normalization_form
+   * @param string $leading_combining
+   *
+   * @return array|bool|mixed|string
+   */
+  public static function filterString($s, $normalization_form = 4 /* n::NFC */, $leading_combining = '◌')
   {
     if (false !== strpos($s, "\r")) {
       // Workaround https://bugs.php.net/65732
