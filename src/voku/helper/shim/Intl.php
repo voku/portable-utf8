@@ -25,6 +25,8 @@ namespace voku\helper\shim;
  * - grapheme_strrpos  - Find position (in grapheme units) of last occurrence of a string
  * - grapheme_strstr   - Returns part of haystack string from the first occurrence of needle to the end of haystack
  * - grapheme_substr   - Return part of a string
+ *
+ * @package voku\helper\shim
  */
 class Intl
 {

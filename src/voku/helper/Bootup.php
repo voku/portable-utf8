@@ -14,6 +14,13 @@ namespace voku\helper;
 use voku\helper\shim\Intl;
 use voku\helper\shim\Normalizer;
 
+/**
+ * Class Bootup
+ *
+ * this is a bootstrap for the polyfills (iconv / intl / mbstring / normalizer / xml)
+ *
+ * @package voku\helper
+ */
 class Bootup
 {
   /**

@@ -11,8 +11,11 @@
 
 namespace voku\helper\shim;
 
+
 /**
- * utf8_encode/decode
+ * Class Xml for utf8_encode / utf8_decode
+ *
+ * @package voku\helper\shim
  */
 class Xml
 {

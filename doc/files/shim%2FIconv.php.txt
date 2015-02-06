@@ -30,6 +30,8 @@ namespace voku\helper\shim;
  * Charsets available for convertion are defined by files
  * in the charset/ directory and by Iconv::$alias below.
  * You're welcome to send back any addition you make.
+ *
+ * @package voku\helper\shim
  */
 class Iconv
 {

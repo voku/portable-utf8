@@ -55,6 +55,8 @@ namespace voku\helper\shim;
  * - mb_split                - Split multibyte string using regular expression
  * - mb_strcut               - Get part of string
  * - mb_strimwidth           - Get truncated string with specified width
+ *
+ * @package voku\helper\shim
  */
 class Mbstring
 {
