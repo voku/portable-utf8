@@ -623,9 +623,19 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testStripTags()
   {
-    $this->assertEquals("", UTF8::strip_tags(""));
-    $this->assertEquals("中文空白 ", UTF8::strip_tags("<nav>中文空白 </nav>"));
-    $this->assertEquals("wtf", UTF8::strip_tags("<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>"));
+    $tests = array(
+        ""                                                                        => "",
+        " "                                                                       => " ",
+        "<nav>中文空白 </nav>"                                                        => "中文空白 ",
+        "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => "wtf",
+        "<nav>DÃ¼sseldorf</nav>"                                                  => "DÃ¼sseldorf",
+        "Abcdef"                                                                  => "Abcdef",
+        "<span>κόσμε\xa0\xa1</span>-<span>öäü</span>öäü"                          => "κόσμε-öäüöäü"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::strip_tags($before));
+    }
   }
 
   public function testStrPad()

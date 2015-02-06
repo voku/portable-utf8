@@ -2776,21 +2776,28 @@ class UTF8
   }
 
   /**
-   * strip HTML and PHP tags from a string
+   * Strip HTML and PHP tags from a string
    *
-   * @since 1.2
-   *
-   * @param    string $string         UTF-8 string
-   * @param    string $allowable_tags The tags to allow in the string.
-   *
-   * @return   string The stripped string.
+   * @link http://php.net/manual/en/function.strip-tags.php
+   * @param string $str <p>
+   * The input string.
+   * </p>
+   * @param string $allowable_tags [optional] <p>
+   * You can use the optional second parameter to specify tags which should
+   * not be stripped.
+   * </p>
+   * <p>
+   * HTML comments and PHP tags are also stripped. This is hardcoded and
+   * can not be changed with allowable_tags.
+   * </p>
+   * @return string the stripped string.
    */
-  public static function strip_tags($string, $allowable_tags = '')
+  public static function strip_tags($str, $allowable_tags = null)
   {
     //clean broken utf8
-    $string = self::clean($string);
+    $str = self::clean($str);
 
-    return strip_tags($string, $allowable_tags);
+    return strip_tags($str, $allowable_tags);
   }
 
   /**
