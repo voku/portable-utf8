@@ -21,6 +21,14 @@ class Utf8SubstrReplaceTest extends PHPUnit_Framework_TestCase
   public function test_negative()
   {
     $str = 'testing';
+    $replaced = substr_replace($str, 'foo', 0, -2);
+    $this->assertEquals($replaced, u::substr_replace($str, 'foo', 0, -2));
+
+    $str = 'testing';
+    $replaced = substr_replace($str, 'foo', -2, 0);
+    $this->assertEquals($replaced, u::substr_replace($str, 'foo', -2, 0));
+
+    $str = 'testing';
     $replaced = substr_replace($str, 'foo', -2, -2);
     $this->assertEquals($replaced, u::substr_replace($str, 'foo', -2, -2));
   }

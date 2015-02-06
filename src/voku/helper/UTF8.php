@@ -3448,8 +3448,30 @@ class UTF8
    *
    * @return string
    */
-  public static function substr_replace($string, $replace, $start, $len = 2147483647)
+  public static function substr_replace($string, $replace, $start = 0, $len = 0)
   {
+    $issetString = isset($string[0]);
+    $issetReplace = isset($replace[0]);
+
+    if (!$issetString && !$issetReplace) {
+      return '';
+    }
+
+    if (!$issetString && $issetReplace) {
+      return $replace;
+    }
+
+    if ($start == 0 && $len == 0) {
+      return $replace . $string;
+    }
+
+    // init
+    self::checkForSupport();
+
+    if (self::$support['mbstring'] === true && $len >= 0 && $start >= 0) {
+      return mb_substr($string, 0, $start, 'UTF-8') . $replace . mb_substr($string, 0, $len, 'UTF-8');
+    }
+
     $string = self::str_split($string);
     $replace = self::str_split($replace);
 
