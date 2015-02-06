@@ -3,10 +3,10 @@
 [![Total Downloads](https://poser.pugx.org/voku/portable-utf8/downloads.svg)](https://packagist.org/packages/voku/portable-utf8)
 [![License](https://poser.pugx.org/voku/portable-utf8/license.svg)](https://packagist.org/packages/voku/portable-utf8)
 
-UTF8
+Portable UTF-8
 =============
 
-Portable UTF-8 library is a Unicode aware alternative to PHP's native string handling API.
+This library is a Unicode aware alternative to PHP's native string handling API.
 
 Based on Hamid Sarfraz's work: http://pageconfig.com/attachments/portable-utf8.php
 Based on Nicolas Grekas's work: https://github.com/tchwork/utf8
