@@ -209,11 +209,48 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'abc'    => true,
         'abcöäü' => false,
         '白'      => false,
+        ' '      => true,
         ''       => true
     );
 
     foreach ($testArray as $actual => $expected) {
       $this->assertEquals($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
+    }
+  }
+
+  public function testStrrichr()
+  {
+    $testArray = array(
+        'κόσμε'                                                                            => 'κόσμε',
+        'Κόσμε'                                                                            => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                               => 'κόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'κόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'κόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
+        '  '                                                                               => false,
+        ''                                                                                 => false
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      $this->assertEquals($expected, UTF8::strrichr($actual, "κόσμε"), 'error by ' . $actual);
+    }
+  }
+
+  public function testStrrchr()
+  {
+    $testArray = array(
+        'κόσμε'                                                                            => 'κόσμε',
+        'Κόσμε'                                                                            => false,
+        'öäü-κόσμεκόσμε-äöü'                                                               => 'κόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'κόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'κόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
+        '  '                                                                               => false,
+        ''                                                                                 => false
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      $this->assertEquals($expected, UTF8::strrchr($actual, "κόσμε"), 'error by ' . $actual);
     }
   }
 
@@ -349,6 +386,41 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       $this->assertEquals($after, UTF8::str_sort($before, true, true));
     }
   }
+
+  public function testUtf8Strstr()
+  {
+    $tests = array(
+        "ABC@中文空白.com" => array(
+            'ABC',
+            '@中文空白.com'
+        ),
+        " @ - ÖÄÜ- "   => array(
+            ' ',
+            '@ - ÖÄÜ- '
+        ),
+        "öä@ü"         => array(
+            'öä',
+            '@ü'
+        ),
+        ""             => array(
+            '',
+            ''
+        ),
+        "  "           => array(
+            '',
+            ''
+        )
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after[0], UTF8::strstr($before, '@', true), $before);
+    }
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after[1], UTF8::strstr($before, '@'), $before);
+    }
+  }
+
 
   public function testUtf8DecodeUtf8Encode()
   {
