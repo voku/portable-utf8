@@ -383,7 +383,7 @@ class UTF8
    */
   protected static function getData($file)
   {
-    $file = __DIR__ . '/utf8/data/' . $file . '.ser';
+    $file = __DIR__ . '/data/' . $file . '.ser';
     if (file_exists($file)) {
       return unserialize(file_get_contents($file));
     } else {
@@ -2779,17 +2779,19 @@ class UTF8
    * Strip HTML and PHP tags from a string
    *
    * @link http://php.net/manual/en/function.strip-tags.php
-   * @param string $str <p>
-   * The input string.
-   * </p>
+   *
+   * @param string $str            <p>
+   *                               The input string.
+   *                               </p>
    * @param string $allowable_tags [optional] <p>
-   * You can use the optional second parameter to specify tags which should
-   * not be stripped.
-   * </p>
-   * <p>
-   * HTML comments and PHP tags are also stripped. This is hardcoded and
-   * can not be changed with allowable_tags.
-   * </p>
+   *                               You can use the optional second parameter to specify tags which should
+   *                               not be stripped.
+   *                               </p>
+   *                               <p>
+   *                               HTML comments and PHP tags are also stripped. This is hardcoded and
+   *                               can not be changed with allowable_tags.
+   *                               </p>
+   *
    * @return string the stripped string.
    */
   public static function strip_tags($str, $allowable_tags = null)
