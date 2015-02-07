@@ -568,7 +568,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "abc",
         "      - ÖÄÜ- "  => "oau",
         "öäü"            => "oau",
-        ""               => ""
+        ""               => "",
+        " test test"     => "test-test",
+        "أبز"            => "abz"
     );
 
     foreach ($tests as $before => $after) {
@@ -604,20 +606,20 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals("", UTF8::string(array()));
     $this->assertEquals(
         "öäü", UTF8::string(
-            array(
-                246,
-                228,
-                252
-            )
+        array(
+            246,
+            228,
+            252
         )
+    )
     );
     $this->assertEquals(
         "ㅡㅡ", UTF8::string(
-            array(
-                12641,
-                12641
-            )
+        array(
+            12641,
+            12641
         )
+    )
     );
   }
 
@@ -805,41 +807,41 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testUrldecode()
   {
     $testArray = array(
-        'W%F6bse'                                                                                                                  => 'Wöbse',
-        'Ã'                                                                                                                        => 'Ã',
-        'Ã¤'                                                                                                                       => 'ä',
-        ' '                                                                                                                        => ' ',
-        ''                                                                                                                         => '',
-        "\n"                                                                                                                       => "\n",
-        "\u00ed"                                                                                                                   => "í",
-        "tes%20öäü%20\u00edtest"                                                                                                   => "tes öäü ítest",
-        "Düsseldorf"                                                                                                               => "Düsseldorf",
-        "Duesseldorf"                                                                                                              => "Duesseldorf",
-        "D&#252;sseldorf"                                                                                                          => "Düsseldorf",
-        "D%FCsseldorf"                                                                                                             => "Düsseldorf",
-        "D&#xFC;sseldorf"                                                                                                          => "Düsseldorf",
-        "D%26%23xFC%3Bsseldorf"                                                                                                    => "Düsseldorf",
-        'DÃ¼sseldorf'                                                                                                              => "Düsseldorf",
-        "D%C3%BCsseldorf"                                                                                                          => "Düsseldorf",
-        "D%C3%83%C2%BCsseldorf"                                                                                                    => "Düsseldorf",
-        "D%25C3%2583%25C2%25BCsseldorf"                                                                                            => "Düsseldorf",
-        "<strong>D&#252;sseldorf</strong>"                                                                                         => "<strong>Düsseldorf</strong>",
-        "Hello%2BWorld%2B%253E%2Bhow%2Bare%2Byou%253F"                                                                             => "Hello+World+>+how+are+you?",
-        "%e7%ab%a0%e5%ad%90%e6%80%a1"                                                                                              => "章子怡",
-        "Fran%c3%a7ois Truffaut"                                                                                                   => "François Truffaut",
-        "%e1%83%a1%e1%83%90%e1%83%a5%e1%83%90%e1%83%a0%e1%83%97%e1%83%95%e1%83%94%e1%83%9a%e1%83%9d"                               => "საქართველო",
-        "Bj%c3%b6rk Gu%c3%b0mundsd%c3%b3ttir"                                                                                      => "Björk Guðmundsdóttir",
-        "%e5%ae%ae%e5%b4%8e%e3%80%80%e9%a7%bf"                                                                                     => "宮崎　駿",
-        "%u7AE0%u5B50%u6021"                                                                                                       => "章子怡",
-        "%u0046%u0072%u0061%u006E%u00E7%u006F%u0069%u0073%u0020%u0054%u0072%u0075%u0066%u0066%u0061%u0075%u0074"                   => "François Truffaut",
-        "%u10E1%u10D0%u10E5%u10D0%u10E0%u10D7%u10D5%u10D4%u10DA%u10DD"                                                             => "საქართველო",
+        'W%F6bse' => 'Wöbse',
+        'Ã' => 'Ã',
+        'Ã¤' => 'ä',
+        ' ' => ' ',
+        '' => '',
+        "\n" => "\n",
+        "\u00ed" => "í",
+        "tes%20öäü%20\u00edtest" => "tes öäü ítest",
+        "Düsseldorf" => "Düsseldorf",
+        "Duesseldorf" => "Duesseldorf",
+        "D&#252;sseldorf" => "Düsseldorf",
+        "D%FCsseldorf" => "Düsseldorf",
+        "D&#xFC;sseldorf" => "Düsseldorf",
+        "D%26%23xFC%3Bsseldorf" => "Düsseldorf",
+        'DÃ¼sseldorf' => "Düsseldorf",
+        "D%C3%BCsseldorf" => "Düsseldorf",
+        "D%C3%83%C2%BCsseldorf" => "Düsseldorf",
+        "D%25C3%2583%25C2%25BCsseldorf" => "Düsseldorf",
+        "<strong>D&#252;sseldorf</strong>" => "<strong>Düsseldorf</strong>",
+        "Hello%2BWorld%2B%253E%2Bhow%2Bare%2Byou%253F" => "Hello+World+>+how+are+you?",
+        "%e7%ab%a0%e5%ad%90%e6%80%a1" => "章子怡",
+        "Fran%c3%a7ois Truffaut" => "François Truffaut",
+        "%e1%83%a1%e1%83%90%e1%83%a5%e1%83%90%e1%83%a0%e1%83%97%e1%83%95%e1%83%94%e1%83%9a%e1%83%9d" => "საქართველო",
+        "Bj%c3%b6rk Gu%c3%b0mundsd%c3%b3ttir" => "Björk Guðmundsdóttir",
+        "%e5%ae%ae%e5%b4%8e%e3%80%80%e9%a7%bf" => "宮崎　駿",
+        "%u7AE0%u5B50%u6021" => "章子怡",
+        "%u0046%u0072%u0061%u006E%u00E7%u006F%u0069%u0073%u0020%u0054%u0072%u0075%u0066%u0066%u0061%u0075%u0074" => "François Truffaut",
+        "%u10E1%u10D0%u10E5%u10D0%u10E0%u10D7%u10D5%u10D4%u10DA%u10DD" => "საქართველო",
         "%u0042%u006A%u00F6%u0072%u006B%u0020%u0047%u0075%u00F0%u006D%u0075%u006E%u0064%u0073%u0064%u00F3%u0074%u0074%u0069%u0072" => "Björk Guðmundsdóttir",
-        "%u5BAE%u5D0E%u3000%u99FF"                                                                                                 => "宮崎　駿",
-        "&#31456;&#23376;&#24609;"                                                                                                 => "章子怡",
-        "&#70;&#114;&#97;&#110;&#231;&#111;&#105;&#115;&#32;&#84;&#114;&#117;&#102;&#102;&#97;&#117;&#116;"                        => "François Truffaut",
-        "&#4321;&#4304;&#4325;&#4304;&#4320;&#4311;&#4309;&#4308;&#4314;&#4317;"                                                   => "საქართველო",
-        "&#66;&#106;&#246;&#114;&#107;&#32;&#71;&#117;&#240;&#109;&#117;&#110;&#100;&#115;&#100;&#243;&#116;&#116;&#105;&#114;"    => "Björk Guðmundsdóttir",
-        "&#23470;&#23822;&#12288;&#39423;"                                                                                         => "宮崎　駿",
+        "%u5BAE%u5D0E%u3000%u99FF" => "宮崎　駿",
+        "&#31456;&#23376;&#24609;" => "章子怡",
+        "&#70;&#114;&#97;&#110;&#231;&#111;&#105;&#115;&#32;&#84;&#114;&#117;&#102;&#102;&#97;&#117;&#116;" => "François Truffaut",
+        "&#4321;&#4304;&#4325;&#4304;&#4320;&#4311;&#4309;&#4308;&#4314;&#4317;" => "საქართველო",
+        "&#66;&#106;&#246;&#114;&#107;&#32;&#71;&#117;&#240;&#109;&#117;&#110;&#100;&#115;&#100;&#243;&#116;&#116;&#105;&#114;" => "Björk Guðmundsdóttir",
+        "&#23470;&#23822;&#12288;&#39423;" => "宮崎　駿",
     );
 
     foreach ($testArray as $before => $after) {
@@ -961,18 +963,19 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testToASCII()
   {
     $tests = array(
-        ' '                     => ' ',
-        ''                      => '',
-        "\xe2\x80\x99"          => '\'',
-        "Ɓtest" => "Btest",
-        "  -ABC-中文空白-  "        => "  -ABC-????-  ",
+        ' '                             => ' ',
+        ''                              => '',
+        "أبز"                           => '???',
+        "\xe2\x80\x99"                  => '\'',
+        "Ɓtest"                         => "Btest",
+        "  -ABC-中文空白-  "                => "  -ABC-????-  ",
         "      - abc- \xc2\x87"         => "      - abc- ?",
-        "abc"                   => "abc",
-        'deja vu'               => 'deja vu',
-        'déjà vu'               => 'deja vu',
-        'déjà σσς iıii'         => 'deja ??? iiii',
-        "test\x80-\xBFöäü"      => '',
-        "Internationalizaetion" => 'Internationalizaetion',
+        "abc"                           => "abc",
+        'deja vu'                       => 'deja vu',
+        'déjà vu'                       => 'deja vu',
+        'déjà σσς iıii'                 => 'deja ??? iiii',
+        "test\x80-\xBFöäü"              => '',
+        "Internationalizaetion"         => 'Internationalizaetion',
         "中 - &#20013; - %&? - \xc2\x80" => "? - &#20013; - %&? - ?"
     );
 

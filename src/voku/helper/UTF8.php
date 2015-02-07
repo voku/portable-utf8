@@ -2420,20 +2420,30 @@ class UTF8
   }
 
   /**
+   * alias for "UTF8::url_slug()"
+   *
+   * @param string $str
+   * @param int    $maxl
+   * @param string $language
+   *
+   * @return String
+   */
+  public static function urlSlug($str = '', $maxl = -1, $language = "latin")
+  {
+    return self::url_slug($str = '', $maxl = -1, $language = "latin");
+  }
+
+  /**
    * creates SEO Friendly URL Slugs via "URLify"
    *
    * @param string $str
    * @param int    $maxl
    * @param string $language
    *
-   * @return mixed|String
+   * @return String
    */
   public static function url_slug($str = '', $maxl = -1, $language = "latin")
   {
-    self::checkForSupport();
-
-    $str = self::clean($str, true, true);
-
     // fallback
     if ($maxl == -1) {
       $maxl = 100;
