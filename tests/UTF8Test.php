@@ -581,7 +581,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "abc",
         "      - ÖÄÜ- "  => "oau",
         "  öäüabc"       => "oau",
-        " DÃ¼sseldorf"   => "das",
+        " DÃ¼sseldorf"   => "dus",
         "Abcdef"         => "abcd",
     );
 

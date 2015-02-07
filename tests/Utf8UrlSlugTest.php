@@ -20,6 +20,9 @@ class Utf8UrlSlugTest extends PHPUnit_Framework_TestCase
   {
     $str = "tes\xE9ting";
     $this->assertEquals("testing", u::url_slug($str));
+
+    $str = "W%F6bse";
+    $this->assertEquals("wobse", u::url_slug($str));
   }
 
   public function test_empty_str()

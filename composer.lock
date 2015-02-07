@@ -4,24 +4,25 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "30ffef2465ca396291fc800ea56188f1",
+    "hash": "a1647b0d2e5b7d57f543609d3ef65cd9",
     "packages": [
         {
             "name": "voku/urlify",
-            "version": "1.0.5-stable",
+            "version": "1.0.6.1-stable",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voku/urlify.git",
-                "reference": "35ac874c343ba0681d3be976260b44758aee6d97"
+                "reference": "23e44e72653361a5dafaba30d110cca13e19b1e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/urlify/zipball/35ac874c343ba0681d3be976260b44758aee6d97",
-                "reference": "35ac874c343ba0681d3be976260b44758aee6d97",
+                "url": "https://api.github.com/repos/voku/urlify/zipball/23e44e72653361a5dafaba30d110cca13e19b1e6",
+                "reference": "23e44e72653361a5dafaba30d110cca13e19b1e6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3"
+                "php": ">=5.3",
+                "voku/portable-utf8": "1.0.*"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.*"
@@ -46,6 +47,11 @@
                     "name": "Lars Moelleken",
                     "email": "lars@moelleken.org",
                     "homepage": "http://moelleken.org/"
+                },
+                {
+                    "name": "Johnny Broadway",
+                    "email": "johnny@johnnybroadway.com",
+                    "homepage": "http://www.johnnybroadway.com/"
                 }
             ],
             "description": "PHP port of URLify.js from the Django project. Transliterates non-ascii characters for use in URLs.",
@@ -61,7 +67,7 @@
                 "url",
                 "urlify"
             ],
-            "time": "2015-01-28 22:13:05"
+            "time": "2015-02-07 01:57:41"
         }
     ],
     "packages-dev": [
