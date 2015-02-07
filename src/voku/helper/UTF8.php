@@ -300,61 +300,63 @@ class UTF8
   /**
    * alias for "UTF8::to_ascii()"
    *
-   * @param string $s    The input string e.g. a UTF-8 String
+   * @param string $s The input string e.g. a UTF-8 String
    * @param string $subst_chr
-   * @param string $lang The language of the output string
    *
    * @return string
    */
-  public static function toAscii($s, $subst_chr = '?', $lang = 'en')
+  public static function toAscii($s, $subst_chr = '?')
   {
-    return self::to_ascii($s, $subst_chr, $lang);
+    return self::to_ascii($s, $subst_chr);
   }
 
   /**
    * convert to ASCII
    *
-   * @param string $s    The input string e.g. a UTF-8 String
+   * @param string $s The input string e.g. a UTF-8 String
    * @param string $subst_chr
-   * @param string $lang The language of the output string
    *
    * @return string
    */
-  public static function to_ascii($s, $subst_chr = '?', $lang = 'en')
+  public static function to_ascii($s, $subst_chr = '?')
   {
     if (!isset($s[0])) {
       return '';
     }
 
-    // init
-    self::checkForSupport();
-
     if (preg_match("/[\x80-\xFF]/", $s)) {
-      static $translitExtra = array();
-      $translitExtra or $translitExtra = self::getData('translit_extra');
-
       $s = Normalizer::normalize($s, Normalizer::NFKC);
 
-      preg_match_all('/./u', $s, $s);
-      foreach ($s[0] as &$c) {
+      $glibc = 'glibc' === ICONV_IMPL;
 
+      preg_match_all('/./u', $s, $s);
+
+      foreach ($s[0] as &$c) {
         if (!isset($c[1])) {
           continue;
         }
 
-        $t = mb_convert_encoding($c, "ISO-8859-1", "HTML-ENTITIES");
+        if ($glibc) {
+          $t = iconv('UTF-8', 'ASCII//TRANSLIT', $c);
+        } else {
+          $t = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', $c);
 
-        if (!isset($t[0])) {
-          $t = '?';
-        } else if (isset($t[1])) {
-          $t = ltrim($t, '\'`"^~');
+          if (!isset($t[0])) {
+            $t = '?';
+          } else if (isset($t[1])) {
+            $t = ltrim($t, '\'`"^~');
+          }
         }
 
         if ('?' === $t) {
+          static $translitExtra = array();
+          $translitExtra or $translitExtra = static::getData('translit_extra');
+
           if (isset($translitExtra[$c])) {
             $t = $translitExtra[$c];
           } else {
             $t = Normalizer::normalize($c, Normalizer::NFD);
+
             if ($t[0] < "\x80") {
               $t = $t[0];
             } else {
@@ -368,8 +370,6 @@ class UTF8
 
       $s = implode('', $s[0]);
     }
-
-    $s = URLify::downcode($s, $lang);
 
     return $s;
   }

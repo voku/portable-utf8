@@ -963,21 +963,21 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $tests = array(
         ' '                     => ' ',
         ''                      => '',
-        "\xe2\x80\x99"          => "’",
-        "Ɓtest" => "Ɓtest",
-        "  -ABC-中文空白-  "        => "  -ABC-中文空白-  ",
-        "      - abc- \xc2\x87"         => "      - abc- ",
+        "\xe2\x80\x99"          => '\'',
+        "Ɓtest" => "Btest",
+        "  -ABC-中文空白-  "        => "  -ABC-????-  ",
+        "      - abc- \xc2\x87"         => "      - abc- ?",
         "abc"                   => "abc",
         'deja vu'               => 'deja vu',
         'déjà vu'               => 'deja vu',
-        'déjà σσς iıii'         => 'deja sss iiii',
+        'déjà σσς iıii'         => 'deja ??? iiii',
         "test\x80-\xBFöäü"      => '',
         "Internationalizaetion" => 'Internationalizaetion',
-        "中 - &#20013; - %&? - \xc2\x80" => "中 - &#20013; - %&? - "
+        "中 - &#20013; - %&? - \xc2\x80" => "? - &#20013; - %&? - ?"
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::to_ascii($before));
+      $this->assertEquals($after, UTF8::to_ascii($before), $before);
     }
   }
 
