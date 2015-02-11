@@ -1,6 +1,5 @@
 <?php
 if (is_file(dirname(__DIR__) . '/src/voku/helper/UTF8.php')) {
-  require_once dirname(__DIR__) . '/vendor/voku/urlify/URLify.php';
   require_once dirname(__DIR__) . '/src/voku/helper/UTF8.php';
   require_once dirname(__DIR__) . '/src/voku/helper/Bootup.php';
   require_once dirname(__DIR__) . '/src/voku/helper/shim/Iconv.php';
