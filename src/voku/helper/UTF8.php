@@ -297,6 +297,70 @@ class UTF8
   }
 
   /**
+   * convert to ASCII
+   *
+   * @param string $s The input string e.g. a UTF-8 String
+   * @param string $subst_chr
+   *
+   * @return string
+   */
+  public static function to_ascii($s, $subst_chr = '?')
+  {
+    if (!isset($s[0])) {
+      return '';
+    }
+
+    if (preg_match("/[\x80-\xFF]/", $s)) {
+      $s = Normalizer::normalize($s, Normalizer::NFKC);
+
+      $glibc = 'glibc' === ICONV_IMPL;
+
+      preg_match_all('/./u', $s, $s);
+
+      foreach ($s[0] as &$c) {
+        if (!isset($c[1])) {
+          continue;
+        }
+
+        if ($glibc) {
+          $t = iconv('UTF-8', 'ASCII//TRANSLIT', $c);
+        } else {
+          $t = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', $c);
+
+          if (!isset($t[0])) {
+            $t = '?';
+          } else if (isset($t[1])) {
+            $t = ltrim($t, '\'`"^~');
+          }
+        }
+
+        if ('?' === $t) {
+          static $translitExtra = array();
+          $translitExtra or $translitExtra = static::getData('translit_extra');
+
+          if (isset($translitExtra[$c])) {
+            $t = $translitExtra[$c];
+          } else {
+            $t = Normalizer::normalize($c, Normalizer::NFD);
+
+            if ($t[0] < "\x80") {
+              $t = $t[0];
+            } else {
+              $t = $subst_chr;
+            }
+          }
+        }
+
+        $c = $t;
+      }
+
+      $s = implode('', $s[0]);
+    }
+
+    return $s;
+  }
+
+  /**
    * alias for "UTF8::to_ascii()"
    *
    * @param string $s The input string e.g. a UTF-8 String
@@ -326,7 +390,7 @@ class UTF8
    *
    * @return string US-ASCII string
    */
-  public static function to_ascii($str, $unknown = '?')
+  public static function str_transliterate($str, $unknown = '?')
   {
     static $UTF8_TO_ASCII;
 
