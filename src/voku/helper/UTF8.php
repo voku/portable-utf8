@@ -297,6 +297,19 @@ class UTF8
   }
 
   /**
+   * alias for "UTF8::to_ascii()"
+   *
+   * @param string $s The input string e.g. a UTF-8 String
+   * @param string $subst_chr
+   *
+   * @return string
+   */
+  public static function toAscii($s, $subst_chr = '?')
+  {
+    return self::to_ascii($s, $subst_chr);
+  }
+
+  /**
    * convert to ASCII
    *
    * @param string $s The input string e.g. a UTF-8 String
@@ -361,16 +374,20 @@ class UTF8
   }
 
   /**
-   * alias for "UTF8::to_ascii()"
+   * get data
    *
-   * @param string $s The input string e.g. a UTF-8 String
-   * @param string $subst_chr
+   * @param $file
    *
-   * @return string
+   * @return bool|mixed
    */
-  public static function toAscii($s, $subst_chr = '?')
+  protected static function getData($file)
   {
-    return self::to_ascii($s, $subst_chr);
+    $file = __DIR__ . '/data/' . $file . '.ser';
+    if (file_exists($file)) {
+      return unserialize(file_get_contents($file));
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -1215,7 +1232,6 @@ class UTF8
       }
     }
 
-
     if ($split_length > 1) {
       $ret = array_chunk($ret, $split_length);
 
@@ -1435,23 +1451,6 @@ class UTF8
     }
 
     return self::strtolower($s);
-  }
-
-  /**
-   * get data
-   *
-   * @param $file
-   *
-   * @return bool|mixed
-   */
-  protected static function getData($file)
-  {
-    $file = __DIR__ . '/data/' . $file . '.ser';
-    if (file_exists($file)) {
-      return unserialize(file_get_contents($file));
-    } else {
-      return false;
-    }
   }
 
   /**
