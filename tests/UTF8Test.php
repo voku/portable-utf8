@@ -926,6 +926,30 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $tests = array(
         ' '                             => ' ',
         ''                              => '',
+        "أبز"                           => '???',
+        "\xe2\x80\x99"                  => '\'',
+        "Ɓtest"                         => "Btest",
+        "  -ABC-中文空白-  "                => "  -ABC-????-  ",
+        "      - abc- \xc2\x87"         => "      - abc- ?",
+        "abc"                           => "abc",
+        'deja vu'                       => 'deja vu',
+        'déjà vu'                       => 'deja vu',
+        'déjà σσς iıii'                 => 'deja ??? iiii',
+        "test\x80-\xBFöäü"              => 'test-oau',
+        "Internationalizaetion"         => 'Internationalizaetion',
+        "中 - &#20013; - %&? - \xc2\x80" => "? - &#20013; - %&? - ?"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::to_ascii($before), $before);
+    }
+  }
+
+  public function testStrTransliterate()
+  {
+    $tests = array(
+        ' '                             => ' ',
+        ''                              => '',
         "أبز"                           => '\'bz',
         "\xe2\x80\x99"                  => '\'',
         "Ɓtest"                         => "Btest",
@@ -941,7 +965,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::to_ascii($before), $before);
+      $this->assertEquals($after, UTF8::str_transliterate($before), $before);
     }
   }
 

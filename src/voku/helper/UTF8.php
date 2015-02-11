@@ -323,6 +323,8 @@ class UTF8
       return '';
     }
 
+    $s = self::clean($s);
+
     if (preg_match("/[\x80-\xFF]/", $s)) {
       $s = Normalizer::normalize($s, Normalizer::NFKC);
 
