@@ -2,7 +2,6 @@
 
 namespace voku\helper;
 
-use URLify;
 use voku\helper\shim\Intl;
 use voku\helper\shim\Normalizer;
 use voku\helper\shim\Xml;
@@ -311,84 +310,173 @@ class UTF8
   }
 
   /**
-   * convert to ASCII
+   * US-ASCII transliterations of Unicode text
+   * Ported Sean M. Burke's Text::Unidecode Perl module (He did all the hard work!)
+   * Warning: you should only pass this well formed UTF-8!
+   * Be aware it works by making a copy of the input string which it appends transliterated
+   * characters to - it uses a PHP output buffer to do this - it means, memory use will increase,
+   * requiring up to the same amount again as the input string
    *
-   * @param string $s The input string e.g. a UTF-8 String
-   * @param string $subst_chr
+   * @see    http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm
    *
-   * @return string
+   * @author <hsivonen@iki.fi>
+   *
+   * @param string $str     UTF-8 string to convert
+   * @param string $unknown Character use if character unknown (default to ?)
+   *
+   * @return string US-ASCII string
    */
-  public static function to_ascii($s, $subst_chr = '?')
+  public static function to_ascii($str, $unknown = '?')
   {
-    if (!isset($s[0])) {
+    static $UTF8_TO_ASCII;
+
+    if (!isset($str[0])) {
       return '';
     }
 
-    if (preg_match("/[\x80-\xFF]/", $s)) {
-      $s = Normalizer::normalize($s, Normalizer::NFKC);
+    $str = self::clean($str);
 
-      $glibc = 'glibc' === ICONV_IMPL;
-
-      preg_match_all('/./u', $s, $s);
-
-      foreach ($s[0] as &$c) {
-        if (!isset($c[1])) {
-          continue;
-        }
-
-        if ($glibc) {
-          $t = iconv('UTF-8', 'ASCII//TRANSLIT', $c);
-        } else {
-          $t = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', $c);
-
-          if (!isset($t[0])) {
-            $t = '?';
-          } else if (isset($t[1])) {
-            $t = ltrim($t, '\'`"^~');
-          }
-        }
-
-        if ('?' === $t) {
-          static $translitExtra = array();
-          $translitExtra or $translitExtra = static::getData('translit_extra');
-
-          if (isset($translitExtra[$c])) {
-            $t = $translitExtra[$c];
-          } else {
-            $t = Normalizer::normalize($c, Normalizer::NFD);
-
-            if ($t[0] < "\x80") {
-              $t = $t[0];
-            } else {
-              $t = $subst_chr;
-            }
-          }
-        }
-
-        $c = $t;
+    preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
+    $chars = $ar[0];
+    foreach ($chars as $i => $c) {
+      if (ord($c{0}) >= 0 && ord($c{0}) <= 127) {
+        continue;
+      } // ASCII - next please
+      if (ord($c{0}) >= 192 && ord($c{0}) <= 223) {
+        $ord = (ord($c{0}) - 192) * 64 + (ord($c{1}) - 128);
+      }
+      if (ord($c{0}) >= 224 && ord($c{0}) <= 239) {
+        $ord = (ord($c{0}) - 224) * 4096 + (ord($c{1}) - 128) * 64 + (ord($c{2}) - 128);
+      }
+      if (ord($c{0}) >= 240 && ord($c{0}) <= 247) {
+        $ord = (ord($c{0}) - 240) * 262144 + (ord($c{1}) - 128) * 4096 + (ord($c{2}) - 128) * 64 + (ord($c{3}) - 128);
+      }
+      if (ord($c{0}) >= 248 && ord($c{0}) <= 251) {
+        $ord = (ord($c{0}) - 248) * 16777216 + (ord($c{1}) - 128) * 262144 + (ord($c{2}) - 128) * 4096 + (ord($c{3}) - 128) * 64 + (ord($c{4}) - 128);
+      }
+      if (ord($c{0}) >= 252 && ord($c{0}) <= 253) {
+        $ord = (ord($c{0}) - 252) * 1073741824 + (ord($c{1}) - 128) * 16777216 + (ord($c{2}) - 128) * 262144 + (ord($c{3}) - 128) * 4096 + (ord($c{4}) - 128) * 64 + (ord($c{5}) - 128);
       }
 
-      $s = implode('', $s[0]);
+      if (ord($c{0}) >= 254 && ord($c{0}) <= 255) {
+        $chars{$i} = $unknown;
+        continue;
+      }
+
+      if (!isset($ord)) {
+        $chars{$i} = $unknown;
+        continue;
+      }
+
+      $bank = $ord >> 8;
+      if (!array_key_exists($bank, (array)$UTF8_TO_ASCII)) {
+        $bankfile = __DIR__ . '/data/' . sprintf("x%02x", $bank) . '.php';
+        if (file_exists($bankfile)) {
+          include $bankfile;
+        } else {
+          $UTF8_TO_ASCII[$bank] = array();
+        }
+      }
+      $newchar = $ord & 255;
+      if (array_key_exists($newchar, $UTF8_TO_ASCII[$bank])) {
+        $chars{$i} = $UTF8_TO_ASCII[$bank][$newchar];
+      } else {
+        $chars{$i} = $unknown;
+      }
     }
 
-    return $s;
+    return implode('', $chars);
   }
 
   /**
-   * get data
+   * accepts a string and removes all non-UTF-8 characters from it.
    *
-   * @param $file
+   * @param string $str The string to be sanitized.
+   * @param bool   $remove_bom
+   * @param bool   $normalise_whitespace
    *
-   * @return bool|mixed
+   * @return string Clean UTF-8 encoded string
    */
-  protected static function getData($file)
+  public static function clean($str, $remove_bom = false, $normalise_whitespace = false)
   {
-    $file = __DIR__ . '/data/' . $file . '.ser';
-    if (file_exists($file)) {
-      return unserialize(file_get_contents($file));
-    } else {
-      return false;
+    // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
+    // caused connection reset problem on larger strings
+
+    $regx = '/
+					(
+						(?: [\x00-\x7F]                  # single-byte sequences   0xxxxxxx
+						|   [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
+						|   \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
+						|   [\xE1-\xEC][\x80-\xBF]{2}
+						|   \xED[\x80-\x9F][\x80-\xBF]
+						|   [\xEE-\xEF][\x80-\xBF]{2}
+						){1,50}                          # ...one or more times
+					)
+					| .                                  # anything else
+					/x';
+    $str = preg_replace($regx, '$1', $str);
+
+    if ($normalise_whitespace === true) {
+      $whitespaces = implode('|', self::whitespace_table());
+      $regx = '/(' . $whitespaces . ')/s';
+      $str = preg_replace($regx, " ", $str);
     }
+
+    if ($remove_bom === true) {
+      $str = self::removeBOM($str);
+    }
+
+    return $str;
+  }
+
+  /**
+   * returns an array with all utf8 whitespace characters as per
+   * http://www.bogofilter.org/pipermail/bogofilter/2003-March/001889.html
+   *
+   * @author: Derek E. derek.isname@gmail.com
+   *
+   * @return array an array with all known whitespace characters as values and the type of whitespace as keys
+   *         as defined in above URL
+   */
+  public static function whitespace_table()
+  {
+    $whitespace = array(
+        "SPACE"                     => "\x20",
+        "NO-BREAK SPACE"            => "\xc2\xa0",
+        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
+        "EN QUAD"                   => "\xe2\x80\x80",
+        "EM QUAD"                   => "\xe2\x80\x81",
+        "EN SPACE"                  => "\xe2\x80\x82",
+        "EM SPACE"                  => "\xe2\x80\x83",
+        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
+        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
+        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
+        "FIGURE SPACE"              => "\xe2\x80\x87",
+        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
+        "THIN SPACE"                => "\xe2\x80\x89",
+        "HAIR SPACE"                => "\xe2\x80\x8a",
+        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
+        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
+        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
+        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
+    );
+
+    return $whitespace;
+  }
+
+  /**
+   * remove the BOM from UTF-8
+   *
+   * @param string $str
+   *
+   * @return string
+   */
+  public static function removeBOM($str = "")
+  {
+    if (substr($str, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
+      $str = substr($str, 3);
+    }
+    return $str;
   }
 
   /**
@@ -502,97 +590,6 @@ class UTF8
         'Ã¿'  => 'ÿ',
         'â‚¬' => '€',
     );
-  }
-
-  /**
-   * accepts a string and removes all non-UTF-8 characters from it.
-   *
-   * @param string $str The string to be sanitized.
-   * @param bool   $remove_bom
-   * @param bool   $normalise_whitespace
-   *
-   * @return string Clean UTF-8 encoded string
-   */
-  public static function clean($str, $remove_bom = false, $normalise_whitespace = false)
-  {
-    // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
-    // caused connection reset problem on larger strings
-
-    $regx = '/
-					(
-						(?: [\x00-\x7F]                  # single-byte sequences   0xxxxxxx
-						|   [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
-						|   \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
-						|   [\xE1-\xEC][\x80-\xBF]{2}
-						|   \xED[\x80-\x9F][\x80-\xBF]
-						|   [\xEE-\xEF][\x80-\xBF]{2}
-						){1,50}                          # ...one or more times
-					)
-					| .                                  # anything else
-					/x';
-    $str = preg_replace($regx, '$1', $str);
-
-    if ($normalise_whitespace === true) {
-      $whitespaces = implode('|', self::whitespace_table());
-      $regx = '/(' . $whitespaces . ')/s';
-      $str = preg_replace($regx, " ", $str);
-    }
-
-    if ($remove_bom === true) {
-      $str = self::removeBOM($str);
-    }
-
-    return $str;
-  }
-
-  /**
-   * returns an array with all utf8 whitespace characters as per
-   * http://www.bogofilter.org/pipermail/bogofilter/2003-March/001889.html
-   *
-   * @author: Derek E. derek.isname@gmail.com
-   *
-   * @return array an array with all known whitespace characters as values and the type of whitespace as keys
-   *         as defined in above URL
-   */
-  public static function whitespace_table()
-  {
-    $whitespace = array(
-        "SPACE"                     => "\x20",
-        "NO-BREAK SPACE"            => "\xc2\xa0",
-        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
-        "EN QUAD"                   => "\xe2\x80\x80",
-        "EM QUAD"                   => "\xe2\x80\x81",
-        "EN SPACE"                  => "\xe2\x80\x82",
-        "EM SPACE"                  => "\xe2\x80\x83",
-        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
-        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
-        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
-        "FIGURE SPACE"              => "\xe2\x80\x87",
-        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
-        "THIN SPACE"                => "\xe2\x80\x89",
-        "HAIR SPACE"                => "\xe2\x80\x8a",
-        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
-        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
-        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
-        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
-    );
-
-    return $whitespace;
-  }
-
-  /**
-   * remove the BOM from UTF-8
-   *
-   * @param string $str
-   *
-   * @return string
-   */
-  public static function removeBOM($str = "")
-  {
-    if (substr($str, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
-      $str = substr($str, 3);
-    }
-    return $str;
   }
 
   /**
@@ -845,7 +842,9 @@ class UTF8
    * checks whether the passed string contains only byte sequances that
    * appear valid UTF-8 characters.
    *
-   * @since 1.0
+   * @see    http://hsivonen.iki.fi/php-utf8/
+   *
+   * @since  1.0
    *
    * @param    string $str The string to be checked
    *
@@ -857,11 +856,118 @@ class UTF8
       return true;
     }
 
-    // If even just the first character can be matched, when the /u
-    // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
-    // invalid, nothing at all will match, even if the string contains
-    // some valid sequences
-    return (preg_match('/^.{1}/us', $str, $ar) == 1);
+    // init
+    self::checkForSupport();
+
+    if (self::$support['pcre_utf8'] === true) {
+      // If even just the first character can be matched, when the /u
+      // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
+      // invalid, nothing at all will match, even if the string contains
+      // some valid sequences
+      return (preg_match('/^.{1}/us', $str, $ar) == 1);
+    } else {
+      $mState = 0; // cached expected number of octets after the current octet
+      // until the beginning of the next UTF8 character sequence
+      $mUcs4 = 0; // cached Unicode character
+      $mBytes = 1; // cached expected number of octets in the current sequence
+      $len = strlen($str);
+      for ($i = 0; $i < $len; $i++) {
+        $in = ord($str{$i});
+        if ($mState == 0) {
+          // When mState is zero we expect either a US-ASCII character or a
+          // multi-octet sequence.
+          if (0 == (0x80 & ($in))) {
+            // US-ASCII, pass straight through.
+            $mBytes = 1;
+          } elseif (0xC0 == (0xE0 & ($in))) {
+            // First octet of 2 octet sequence
+            $mUcs4 = ($in);
+            $mUcs4 = ($mUcs4 & 0x1F) << 6;
+            $mState = 1;
+            $mBytes = 2;
+          } elseif (0xE0 == (0xF0 & ($in))) {
+            // First octet of 3 octet sequence
+            $mUcs4 = ($in);
+            $mUcs4 = ($mUcs4 & 0x0F) << 12;
+            $mState = 2;
+            $mBytes = 3;
+          } elseif (0xF0 == (0xF8 & ($in))) {
+            // First octet of 4 octet sequence
+            $mUcs4 = ($in);
+            $mUcs4 = ($mUcs4 & 0x07) << 18;
+            $mState = 3;
+            $mBytes = 4;
+          } elseif (0xF8 == (0xFC & ($in))) {
+            /* First octet of 5 octet sequence.
+            *
+            * This is illegal because the encoded codepoint must be either
+            * (a) not the shortest form or
+            * (b) outside the Unicode range of 0-0x10FFFF.
+            * Rather than trying to resynchronize, we will carry on until the end
+            * of the sequence and let the later error handling code catch it.
+            */
+            $mUcs4 = ($in);
+            $mUcs4 = ($mUcs4 & 0x03) << 24;
+            $mState = 4;
+            $mBytes = 5;
+          } elseif (0xFC == (0xFE & ($in))) {
+            // First octet of 6 octet sequence, see comments for 5 octet sequence.
+            $mUcs4 = ($in);
+            $mUcs4 = ($mUcs4 & 1) << 30;
+            $mState = 5;
+            $mBytes = 6;
+          } else {
+            /* Current octet is neither in the US-ASCII range nor a legal first
+             * octet of a multi-octet sequence.
+             */
+            return false;
+          }
+        } else {
+          // When mState is non-zero, we expect a continuation of the multi-octet
+          // sequence
+          if (0x80 == (0xC0 & ($in))) {
+            // Legal continuation.
+            $shift = ($mState - 1) * 6;
+            $tmp = $in;
+            $tmp = ($tmp & 0x0000003F) << $shift;
+            $mUcs4 |= $tmp;
+            /**
+             * End of the multi-octet sequence. mUcs4 now contains the final
+             * Unicode codepoint to be output
+             */
+            if (0 == --$mState) {
+              /*
+              * Check for illegal sequences and codepoints.
+              */
+              // From Unicode 3.1, non-shortest form is illegal
+              if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
+                  ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
+                  ((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
+                  (4 < $mBytes) ||
+                  // From Unicode 3.2, surrogate characters are illegal
+                  (($mUcs4 & 0xFFFFF800) == 0xD800) ||
+                  // Codepoints outside the Unicode range are illegal
+                  ($mUcs4 > 0x10FFFF)
+              ) {
+                return false;
+              }
+              //initialize UTF8 cache
+              $mState = 0;
+              $mUcs4 = 0;
+              $mBytes = 1;
+            }
+          } else {
+            /**
+             *((0xC0 & (*in) != 0x80) && (mState != 0))
+             * Incomplete multi-octet sequence.
+             */
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
   }
 
   /**
@@ -1265,6 +1371,23 @@ class UTF8
     }
 
     return self::strtolower($s);
+  }
+
+  /**
+   * get data
+   *
+   * @param $file
+   *
+   * @return bool|mixed
+   */
+  protected static function getData($file)
+  {
+    $file = __DIR__ . '/data/' . $file . '.ser';
+    if (file_exists($file)) {
+      return unserialize(file_get_contents($file));
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -2417,39 +2540,6 @@ class UTF8
     }
 
     return $charlist;
-  }
-
-  /**
-   * alias for "UTF8::url_slug()"
-   *
-   * @param string $str
-   * @param int    $maxl
-   * @param string $language
-   *
-   * @return String
-   */
-  public static function urlSlug($str = '', $maxl = -1, $language = "latin")
-  {
-    return self::url_slug($str = '', $maxl = -1, $language = "latin");
-  }
-
-  /**
-   * creates SEO Friendly URL Slugs via "URLify"
-   *
-   * @param string $str
-   * @param int    $maxl
-   * @param string $language
-   *
-   * @return String
-   */
-  public static function url_slug($str = '', $maxl = -1, $language = "latin")
-  {
-    // fallback
-    if ($maxl == -1) {
-      $maxl = 100;
-    }
-
-    return URLify::filter($str, $maxl, $language, false, true, true, '-');
   }
 
   /**

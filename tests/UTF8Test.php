@@ -562,45 +562,6 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testUrlSlug()
-  {
-    $tests = array(
-        "  -ABC-中文空白-  " => "abc",
-        "      - ÖÄÜ- "  => "oau",
-        "öäü"            => "oau",
-        ""               => "",
-        " test test"     => "test-test",
-        "أبز"            => "abz"
-    );
-
-    foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::url_slug($before));
-    }
-
-    $tests = array(
-        "  -ABC-中文空白-  " => "abc",
-        "      - ÖÄÜ- "  => "oau",
-        "  öäüabc"       => "oaua",
-        " DÃ¼sseldorf"   => "duss",
-        "Abcdef"         => "abcd",
-    );
-
-    foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::url_slug($before, 4));
-    }
-
-    $tests = array(
-        "Facebook bekämpft erstmals Durchsuchungsbefehle" => "facebook-bekaempft-erstmals-durchsuchungsbefehle",
-        "  -ABC-中文空白-  "                                  => "abc",
-        "      - ÖÄÜ- "                                   => "oeaeue",
-        "öäü"                                             => "oeaeue"
-    );
-
-    foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::url_slug($before, -1, 'de'));
-    }
-  }
-
   public function testString()
   {
     $this->assertEquals("", UTF8::string(array()));
@@ -965,18 +926,18 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $tests = array(
         ' '                             => ' ',
         ''                              => '',
-        "أبز"                           => '???',
+        "أبز"                           => '\'bz',
         "\xe2\x80\x99"                  => '\'',
         "Ɓtest"                         => "Btest",
-        "  -ABC-中文空白-  "                => "  -ABC-????-  ",
-        "      - abc- \xc2\x87"         => "      - abc- ?",
+        "  -ABC-中文空白-  "                => "  -ABC-Zhong Wen Kong Bai -  ",
+        "      - abc- \xc2\x87"         => "      - abc- ",
         "abc"                           => "abc",
         'deja vu'                       => 'deja vu',
         'déjà vu'                       => 'deja vu',
-        'déjà σσς iıii'                 => 'deja ??? iiii',
-        "test\x80-\xBFöäü"              => '',
+        'déjà σσς iıii'                 => 'deja sss iiii',
+        "test\x80-\xBFöäü"              => 'test-oau',
         "Internationalizaetion"         => 'Internationalizaetion',
-        "中 - &#20013; - %&? - \xc2\x80" => "? - &#20013; - %&? - ?"
+        "中 - &#20013; - %&? - \xc2\x80" => "Zhong  - &#20013; - %&? - "
     );
 
     foreach ($tests as $before => $after) {
