@@ -293,7 +293,7 @@ class UTF8
    */
   protected static function pcre_utf8_support()
   {
-    return @preg_match('//u', '');
+    return (bool)@preg_match('//u', '');
   }
 
   /**
@@ -373,6 +373,97 @@ class UTF8
     }
 
     return $s;
+  }
+
+  /**
+   * accepts a string and removes all non-UTF-8 characters from it.
+   *
+   * @param string $str The string to be sanitized.
+   * @param bool   $remove_bom
+   * @param bool   $normalise_whitespace
+   *
+   * @return string Clean UTF-8 encoded string
+   */
+  public static function clean($str, $remove_bom = false, $normalise_whitespace = false)
+  {
+    // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
+    // caused connection reset problem on larger strings
+
+    $regx = '/
+					(
+						(?: [\x00-\x7F]                  # single-byte sequences   0xxxxxxx
+						|   [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
+						|   \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
+						|   [\xE1-\xEC][\x80-\xBF]{2}
+						|   \xED[\x80-\x9F][\x80-\xBF]
+						|   [\xEE-\xEF][\x80-\xBF]{2}
+						){1,50}                          # ...one or more times
+					)
+					| .                                  # anything else
+					/x';
+    $str = preg_replace($regx, '$1', $str);
+
+    if ($normalise_whitespace === true) {
+      $whitespaces = implode('|', self::whitespace_table());
+      $regx = '/(' . $whitespaces . ')/s';
+      $str = preg_replace($regx, " ", $str);
+    }
+
+    if ($remove_bom === true) {
+      $str = self::removeBOM($str);
+    }
+
+    return $str;
+  }
+
+  /**
+   * returns an array with all utf8 whitespace characters as per
+   * http://www.bogofilter.org/pipermail/bogofilter/2003-March/001889.html
+   *
+   * @author: Derek E. derek.isname@gmail.com
+   *
+   * @return array an array with all known whitespace characters as values and the type of whitespace as keys
+   *         as defined in above URL
+   */
+  public static function whitespace_table()
+  {
+    $whitespace = array(
+        "SPACE"                     => "\x20",
+        "NO-BREAK SPACE"            => "\xc2\xa0",
+        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
+        "EN QUAD"                   => "\xe2\x80\x80",
+        "EM QUAD"                   => "\xe2\x80\x81",
+        "EN SPACE"                  => "\xe2\x80\x82",
+        "EM SPACE"                  => "\xe2\x80\x83",
+        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
+        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
+        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
+        "FIGURE SPACE"              => "\xe2\x80\x87",
+        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
+        "THIN SPACE"                => "\xe2\x80\x89",
+        "HAIR SPACE"                => "\xe2\x80\x8a",
+        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
+        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
+        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
+        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
+    );
+
+    return $whitespace;
+  }
+
+  /**
+   * remove the BOM from UTF-8
+   *
+   * @param string $str
+   *
+   * @return string
+   */
+  public static function removeBOM($str = "")
+  {
+    if (substr($str, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
+      $str = substr($str, 3);
+    }
+    return $str;
   }
 
   /**
@@ -469,97 +560,6 @@ class UTF8
     }
 
     return implode('', $chars);
-  }
-
-  /**
-   * accepts a string and removes all non-UTF-8 characters from it.
-   *
-   * @param string $str The string to be sanitized.
-   * @param bool   $remove_bom
-   * @param bool   $normalise_whitespace
-   *
-   * @return string Clean UTF-8 encoded string
-   */
-  public static function clean($str, $remove_bom = false, $normalise_whitespace = false)
-  {
-    // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
-    // caused connection reset problem on larger strings
-
-    $regx = '/
-					(
-						(?: [\x00-\x7F]                  # single-byte sequences   0xxxxxxx
-						|   [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
-						|   \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
-						|   [\xE1-\xEC][\x80-\xBF]{2}
-						|   \xED[\x80-\x9F][\x80-\xBF]
-						|   [\xEE-\xEF][\x80-\xBF]{2}
-						){1,50}                          # ...one or more times
-					)
-					| .                                  # anything else
-					/x';
-    $str = preg_replace($regx, '$1', $str);
-
-    if ($normalise_whitespace === true) {
-      $whitespaces = implode('|', self::whitespace_table());
-      $regx = '/(' . $whitespaces . ')/s';
-      $str = preg_replace($regx, " ", $str);
-    }
-
-    if ($remove_bom === true) {
-      $str = self::removeBOM($str);
-    }
-
-    return $str;
-  }
-
-  /**
-   * returns an array with all utf8 whitespace characters as per
-   * http://www.bogofilter.org/pipermail/bogofilter/2003-March/001889.html
-   *
-   * @author: Derek E. derek.isname@gmail.com
-   *
-   * @return array an array with all known whitespace characters as values and the type of whitespace as keys
-   *         as defined in above URL
-   */
-  public static function whitespace_table()
-  {
-    $whitespace = array(
-        "SPACE"                     => "\x20",
-        "NO-BREAK SPACE"            => "\xc2\xa0",
-        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
-        "EN QUAD"                   => "\xe2\x80\x80",
-        "EM QUAD"                   => "\xe2\x80\x81",
-        "EN SPACE"                  => "\xe2\x80\x82",
-        "EM SPACE"                  => "\xe2\x80\x83",
-        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
-        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
-        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
-        "FIGURE SPACE"              => "\xe2\x80\x87",
-        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
-        "THIN SPACE"                => "\xe2\x80\x89",
-        "HAIR SPACE"                => "\xe2\x80\x8a",
-        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
-        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
-        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
-        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
-    );
-
-    return $whitespace;
-  }
-
-  /**
-   * remove the BOM from UTF-8
-   *
-   * @param string $str
-   *
-   * @return string
-   */
-  public static function removeBOM($str = "")
-  {
-    if (substr($str, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
-      $str = substr($str, 3);
-    }
-    return $str;
   }
 
   /**
@@ -939,10 +939,7 @@ class UTF8
       return true;
     }
 
-    // init
-    self::checkForSupport();
-
-    if (self::$support['pcre_utf8'] === true) {
+    if (self::pcre_utf8_support() === true) {
       // If even just the first character can be matched, when the /u
       // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
       // invalid, nothing at all will match, even if the string contains
@@ -1200,7 +1197,7 @@ class UTF8
         $str = self::clean($str);
       }
 
-      //	http://stackoverflow.com/a/8780076/369005
+      // http://stackoverflow.com/a/8780076/369005
       $ret = preg_split('/(?<!^)(?!$)/u', $str);
 
     } else {
@@ -2827,7 +2824,7 @@ class UTF8
             array(
                 '\\voku\\helper\\UTF8',
                 'chr'
-            ), range(48, 0xffff)
+            ), range(48, 79)
         );
 
         $chars = preg_replace('/[^\p{N}\p{Lu}\p{Ll}]/u', '', $chars);
