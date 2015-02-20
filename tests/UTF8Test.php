@@ -775,7 +775,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         '' => '',
         "\n" => "\n",
         "\u00ed" => "í",
-        "con%5cu00%366irm " => 'confirm',
+        "con%5cu00%366irm" => 'confirm',
         "tes%20öäü%20\u00edtest" => "tes öäü ítest",
         "Düsseldorf" => "Düsseldorf",
         "Duesseldorf" => "Duesseldorf",
