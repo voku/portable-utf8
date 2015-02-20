@@ -19,7 +19,12 @@ namespace voku\helper\shim;
  */
 class Xml
 {
-  static function utf8_encode($s)
+  /**
+   * @param $s
+   *
+   * @return string
+   */
+  public static function utf8_encode($s)
   {
     $s .= $s;
     $len = strlen($s);
@@ -42,7 +47,12 @@ class Xml
     return substr($s, 0, $j);
   }
 
-  static function utf8_decode($s)
+  /**
+   * @param $s
+   *
+   * @return string
+   */
+  public static function utf8_decode($s)
   {
     $s .= '';
     $len = strlen($s);

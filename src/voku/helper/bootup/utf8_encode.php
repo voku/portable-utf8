@@ -11,11 +11,21 @@
 
 use voku\helper\shim as s;
 
+/**
+ * @param $s
+ *
+ * @return string
+ */
 function utf8_encode($s)
 {
   return s\Xml::utf8_encode($s);
 }
 
+/**
+ * @param $s
+ *
+ * @return string
+ */
 function utf8_decode($s)
 {
   return s\Xml::utf8_decode($s);

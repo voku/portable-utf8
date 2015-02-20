@@ -125,7 +125,14 @@ class Iconv
       'iso885916'   => 'iso-8859-16',
   );
 
-  static function iconv_mime_decode_headers($str, $mode = 0, $charset = INF)
+  /**
+   * @param     $str
+   * @param int $mode
+   * @param     $charset
+   *
+   * @return array|bool
+   */
+  public static function iconv_mime_decode_headers($str, $mode = 0, $charset = INF)
   {
     INF === $charset && $charset = self::$internal_encoding;
 
@@ -156,7 +163,14 @@ class Iconv
     return $headers;
   }
 
-  static function iconv_mime_decode($str, $mode = 0, $charset = INF)
+  /**
+   * @param     $str
+   * @param int $mode
+   * @param     $charset
+   *
+   * @return bool|string
+   */
+  public static function iconv_mime_decode($str, $mode = 0, $charset = INF)
   {
     INF === $charset && $charset = self::$internal_encoding;
 
@@ -210,7 +224,14 @@ class Iconv
     return $result;
   }
 
-  static function iconv($in_charset, $out_charset, $str)
+  /**
+   * @param $in_charset
+   * @param $out_charset
+   * @param $str
+   *
+   * @return bool|string
+   */
+  public static function iconv($in_charset, $out_charset, $str)
   {
     if ('' === $str .= '') {
       return '';
@@ -242,11 +263,12 @@ class Iconv
     isset(self::$alias[$in_charset]) && $in_charset = self::$alias[$in_charset];
     isset(self::$alias[$out_charset]) && $out_charset = self::$alias[$out_charset];
 
-
     // Load charset maps
 
-    if (('utf-8' !== $in_charset && !static::loadMap('from.', $in_charset, $in_map))
-        || ('utf-8' !== $out_charset && !static::loadMap('to.', $out_charset, $out_map))
+    if (
+        ('utf-8' !== $in_charset && !static::loadMap('from.', $in_charset, $in_map))
+        ||
+        ('utf-8' !== $out_charset && !static::loadMap('to.', $out_charset, $out_map))
     ) {
       user_error(sprintf(self::ERROR_WRONG_CHARSET, $in_charset, $out_charset));
       return false;
@@ -256,6 +278,7 @@ class Iconv
     if ('utf-8' !== $in_charset) {
       // Convert input to UTF-8
       $result = '';
+      /** @noinspection PhpUndefinedVariableInspection */
       if (self::map_to_utf8($result, $in_map, $str, $IGNORE)) {
         $str = $result;
       } else {
@@ -276,9 +299,14 @@ class Iconv
       }
     }
 
-    if ('utf-8' !== $out_charset && false !== $str) {
+    if (
+        'utf-8' !== $out_charset
+        &&
+        false !== $str
+    ) {
       // Convert output to UTF-8
       $result = '';
+      /** @noinspection PhpUndefinedVariableInspection */
       if (self::map_from_utf8($result, $out_map, $str, $IGNORE, $TRANSLIT)) {
         return $result;
       } else {
@@ -289,6 +317,13 @@ class Iconv
     }
   }
 
+  /**
+   * @param $type
+   * @param $charset
+   * @param $map
+   *
+   * @return bool
+   */
   protected static function loadMap($type, $charset, &$map)
   {
     if (!isset(self::$convert_map[$type . $charset])) {
@@ -308,6 +343,11 @@ class Iconv
     return true;
   }
 
+  /**
+   * @param $file
+   *
+   * @return bool|mixed
+   */
   protected static function getData($file)
   {
     $file = __DIR__ . '/charset/' . $file . '.ser';
@@ -318,6 +358,14 @@ class Iconv
     }
   }
 
+  /**
+   * @param $result
+   * @param $map
+   * @param $str
+   * @param $IGNORE
+   *
+   * @return bool
+   */
   protected static function map_to_utf8(&$result, $map, $str, $IGNORE)
   {
     $len = strlen($str);
@@ -335,6 +383,12 @@ class Iconv
     return true;
   }
 
+  /**
+   * @param $str
+   * @param $IGNORE
+   *
+   * @return bool|string
+   */
   protected static function utf8_to_utf8($str, $IGNORE)
   {
     $ulen_mask = self::$ulen_mask;
@@ -375,6 +429,15 @@ class Iconv
     return substr($u, 0, $j);
   }
 
+  /**
+   * @param $result
+   * @param $map
+   * @param $str
+   * @param $IGNORE
+   * @param $TRANSLIT
+   *
+   * @return bool
+   */
   protected static function map_from_utf8(&$result, $map, $str, $IGNORE, $TRANSLIT)
   {
     $ulen_mask = self::$ulen_mask;
@@ -431,7 +494,12 @@ class Iconv
     return true;
   }
 
-  static function iconv_get_encoding($type = 'all')
+  /**
+   * @param string $type
+   *
+   * @return array|string
+   */
+  public static function iconv_get_encoding($type = 'all')
   {
     switch ($type) {
       case 'input_encoding'   :
@@ -449,7 +517,13 @@ class Iconv
     );
   }
 
-  static function iconv_set_encoding($type, $charset)
+  /**
+   * @param $type
+   * @param $charset
+   *
+   * @return bool
+   */
+  public static function iconv_set_encoding($type, $charset)
   {
     switch ($type) {
       case 'input_encoding'   :
@@ -469,7 +543,14 @@ class Iconv
     return true;
   }
 
-  static function iconv_mime_encode($field_name, $field_value, $pref = INF)
+  /**
+   * @param $field_name
+   * @param $field_value
+   * @param $pref
+   *
+   * @return bool|string
+   */
+  public static function iconv_mime_encode($field_name, $field_value, $pref = INF)
   {
     is_array($pref) || $pref = array();
 
@@ -540,12 +621,26 @@ class Iconv
     return $field_name . ': ' . implode($pref['line-break-chars'] . ' ', $field_value);
   }
 
-  static function ob_iconv_handler($buffer, $mode)
+  /**
+   * @param $buffer
+   * @param $mode
+   *
+   * @return bool|string
+   */
+  public static function ob_iconv_handler($buffer, $mode)
   {
     return self::iconv(self::$internal_encoding, self::$output_encoding, $buffer);
   }
 
-  static function iconv_strpos($haystack, $needle, $offset = 0, $encoding = INF)
+  /**
+   * @param     $haystack
+   * @param     $needle
+   * @param int $offset
+   * @param     $encoding
+   *
+   * @return bool|int
+   */
+  public static function iconv_strpos($haystack, $needle, $offset = 0, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
 
@@ -566,7 +661,15 @@ class Iconv
     return false === $pos ? false : ($offset + ($pos ? self::iconv_strlen(substr($haystack, 0, $pos), 'utf-8') : 0));
   }
 
-  static function iconv_substr($s, $start, $length = 2147483647, $encoding = INF)
+  /**
+   * @param     $s
+   * @param     $start
+   * @param int $length
+   * @param     $encoding
+   *
+   * @return bool|string
+   */
+  public static function iconv_substr($s, $start, $length = 2147483647, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
     if (0 === strncasecmp($encoding, 'utf-8', 5)) {
@@ -620,7 +723,13 @@ class Iconv
     }
   }
 
-  static function iconv_strlen($s, $encoding = INF)
+  /**
+   * @param $s
+   * @param $encoding
+   *
+   * @return bool|int
+   */
+  public static function iconv_strlen($s, $encoding = INF)
   {
     if (extension_loaded('xml')) {
       return self::strlen1($s, $encoding);
@@ -629,7 +738,13 @@ class Iconv
     }
   }
 
-  static function strlen1($s, $encoding = INF)
+  /**
+   * @param $s
+   * @param $encoding
+   *
+   * @return bool|int
+   */
+  public static function strlen1($s, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
     if (0 !== strncasecmp($encoding, 'utf-8', 5) && false === $s = self::iconv($encoding, 'utf-8', $s)) {
@@ -661,6 +776,11 @@ class Iconv
     return $j;
   }
 
+  /**
+   * @param $offset
+   *
+   * @return string
+   */
   protected static function preg_offset($offset)
   {
     $rx = array();
@@ -674,7 +794,14 @@ class Iconv
     return implode('', $rx) . '.{' . $offset . '}';
   }
 
-  static function iconv_strrpos($haystack, $needle, $encoding = INF)
+  /**
+   * @param $haystack
+   * @param $needle
+   * @param $encoding
+   *
+   * @return bool|int
+   */
+  public static function iconv_strrpos($haystack, $needle, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
 
@@ -691,6 +818,11 @@ class Iconv
     return false === $pos ? false : self::iconv_strlen($pos ? substr($haystack, 0, $pos) : $haystack, 'utf-8');
   }
 
+  /**
+   * @param $m
+   *
+   * @return string
+   */
   protected static function qp_byte_callback($m)
   {
     return '=' . strtoupper(dechex(ord($m[0])));
