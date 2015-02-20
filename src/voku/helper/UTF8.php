@@ -1200,6 +1200,14 @@ class UTF8
       // http://stackoverflow.com/a/8780076/369005
       $ret = preg_split('/(?<!^)(?!$)/u', $str);
 
+      // HACK, while we can fix the regex
+      $lastChar = self::substr($str, -1);
+      $lastArrayElement = end($ret);
+      if ($lastChar != $lastArrayElement) {
+        array_splice($ret, -1, 1, self::substr($lastArrayElement, 1));
+        $ret[] = $lastChar;
+      }
+
     } else {
 
       // fallback

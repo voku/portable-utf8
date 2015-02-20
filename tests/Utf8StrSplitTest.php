@@ -71,7 +71,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
 
   public function test_split_newline()
   {
-    $str = "\nIñtërn\nâtiônàl\nizætiøn\n";
+    $str = "\nIñtërn\nâtiônàl\nizætiøn\n\n";
     $array = array(
         "\n",
         'I',
@@ -96,6 +96,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'i',
         'ø',
         'n',
+        "\n",
         "\n"
     );
 
