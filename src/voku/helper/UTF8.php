@@ -530,29 +530,29 @@ class UTF8
         if ($ordC0 <= 239) {
           $ord = ($ordC0 - 224) * 4096 + ($ordC1 - 128) * 64 + ($ordC2 - 128);
         }
-      }
 
-      if ($ordC0 >= 240) {
-        $ordC3 = ord($c{3});
+        if ($ordC0 >= 240) {
+          $ordC3 = ord($c{3});
 
-        if ($ordC0 <= 247) {
-          $ord = ($ordC0 - 240) * 262144 + ($ordC1 - 128) * 4096 + ($ordC2 - 128) * 64 + ($ordC3 - 128);
-        }
-      }
+          if ($ordC0 <= 247) {
+            $ord = ($ordC0 - 240) * 262144 + ($ordC1 - 128) * 4096 + ($ordC2 - 128) * 64 + ($ordC3 - 128);
+          }
 
-      if ($ordC0 >= 248) {
-        $ordC4 = ord($c{4});
+          if ($ordC0 >= 248) {
+            $ordC4 = ord($c{4});
 
-        if ($ordC0 <= 251) {
-          $ord = ($ordC0 - 248) * 16777216 + ($ordC1 - 128) * 262144 + ($ordC2 - 128) * 4096 + ($ordC3 - 128) * 64 + ($ordC4 - 128);
-        }
-      }
+            if ($ordC0 <= 251) {
+              $ord = ($ordC0 - 248) * 16777216 + ($ordC1 - 128) * 262144 + ($ordC2 - 128) * 4096 + ($ordC3 - 128) * 64 + ($ordC4 - 128);
+            }
 
-      if ($ordC0 >= 252) {
-        $ordC5 = ord($c{5});
+            if ($ordC0 >= 252) {
+              $ordC5 = ord($c{5});
 
-        if ($ordC0 <= 253) {
-          $ord = ($ordC0 - 252) * 1073741824 + ($ordC1 - 128) * 16777216 + ($ordC2 - 128) * 262144 + ($ordC3 - 128) * 4096 + ($ordC4 - 128) * 64 + ($ordC5 - 128);
+              if ($ordC0 <= 253) {
+                $ord = ($ordC0 - 252) * 1073741824 + ($ordC1 - 128) * 16777216 + ($ordC2 - 128) * 262144 + ($ordC3 - 128) * 4096 + ($ordC4 - 128) * 64 + ($ordC5 - 128);
+              }
+            }
+          }
         }
       }
 
@@ -570,6 +570,7 @@ class UTF8
       if (!array_key_exists($bank, (array)$UTF8_TO_ASCII)) {
         $bankfile = __DIR__ . '/data/' . sprintf("x%02x", $bank) . '.php';
         if (file_exists($bankfile)) {
+          /** @noinspection PhpIncludeInspection */
           include $bankfile;
         } else {
           $UTF8_TO_ASCII[$bank] = array();
@@ -4283,8 +4284,8 @@ class UTF8
   /**
    * uppercase for all words in the string
    *
-   * @param  string  $string
-   * @param array $exceptions
+   * @param  string $string
+   * @param array   $exceptions
    *
    * @return string
    */
