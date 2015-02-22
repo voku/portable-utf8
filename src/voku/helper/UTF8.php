@@ -1793,27 +1793,6 @@ class UTF8
   }
 
   /**
-   * filter input
-   *
-   * @param      $type
-   * @param      $var
-   * @param int  $filter
-   * @param null $option
-   *
-   * @return mixed|string
-   */
-  public static function filter_input($type, $var, $filter = FILTER_DEFAULT, $option = null)
-  {
-    if (4 > func_num_args()) {
-      $var = filter_input($type, $var, $filter);
-    } else {
-      $var = filter_input($type, $var, $filter, $option);
-    }
-
-    return self::filter($var);
-  }
-
-  /**
    * normalizes to UTF-8 NFC, converting from CP-1252 when needed
    *
    * @param        $var
@@ -1975,6 +1954,27 @@ class UTF8
     );
 
     return $o;
+  }
+
+  /**
+   * filter input
+   *
+   * @param      $type
+   * @param      $var
+   * @param int  $filter
+   * @param null $option
+   *
+   * @return mixed|string
+   */
+  public static function filter_input($type, $var, $filter = FILTER_DEFAULT, $option = null)
+  {
+    if (4 > func_num_args()) {
+      $var = filter_input($type, $var, $filter);
+    } else {
+      $var = filter_input($type, $var, $filter, $option);
+    }
+
+    return self::filter($var);
   }
 
   /**
@@ -4216,18 +4216,22 @@ class UTF8
   /**
    * Binary safe comparison of two strings from an offset, up to length characters
    *
-   * @param     $a
-   * @param     $b
-   * @param     $offset
-   * @param int $len
-   * @param int $i
+   * @param string $main_str            The main string being compared.
+   * @param string $str                 The secondary string being compared.
+   * @param int    $offset              The start position for the comparison. If negative, it starts counting from the
+   *                                    end of the string.
+   * @param int    $length              The length of the comparison. The default value is the largest of the length of
+   *                                    the str compared to the length of main_str less the offset.
+   * @param int    $case_insensitivity  If case_insensitivity is TRUE, comparison is case insensitive.
    *
    * @return int
    */
-  public static function substr_compare($a, $b, $offset, $len = 2147483647, $i = 0)
+  public static function substr_compare($main_str, $str, $offset, $length = 2147483647, $case_insensitivity = 0)
   {
-    $a = self::substr($a, $offset, $len);
-    return $i ? self::strcasecmp($a, $b) : self::strcmp($a, $b);
+    $main_str = self::substr($main_str, $offset, $length);
+    $str = self::substr($str, 0, self::strlen($main_str));
+
+    return $case_insensitivity ? self::strcasecmp($main_str, $str) : self::strcmp($main_str, $str);
   }
 
   /**
@@ -4474,6 +4478,72 @@ class UTF8
   }
 
   /**
+   * returns an array of Unicode White Space characters
+   *
+   * @return   array An array with numeric code point as key and White Space Character as value
+   */
+  public static function ws()
+  {
+    static $white = array(
+
+      //    Numeric Code Point    => UTF-8 Character
+
+      0     => "\x0",
+      //NUL Byte
+      9     => "\x9",
+      //Tab
+      10    => "\xa",
+      //New Line
+      11    => "\xb",
+      //Vertical Tab
+      13    => "\xd",
+      //Carriage Return
+      32    => "\x20",
+      //Ordinary Space
+      160   => "\xc2\xa0",
+      //NO-BREAK SPACE
+      5760  => "\xe1\x9a\x80",
+      //OGHAM SPACE MARK
+      6158  => "\xe1\xa0\x8e",
+      //MONGOLIAN VOWEL SEPARATOR
+      8192  => "\xe2\x80\x80",
+      //EN QUAD
+      8193  => "\xe2\x80\x81",
+      //EM QUAD
+      8194  => "\xe2\x80\x82",
+      //EN SPACE
+      8195  => "\xe2\x80\x83",
+      //EM SPACE
+      8196  => "\xe2\x80\x84",
+      //THREE-PER-EM SPACE
+      8197  => "\xe2\x80\x85",
+      //FOUR-PER-EM SPACE
+      8198  => "\xe2\x80\x86",
+      //SIX-PER-EM SPACE
+      8199  => "\xe2\x80\x87",
+      //FIGURE SPACE
+      8200  => "\xe2\x80\x88",
+      //PUNCTUATION SPACE
+      8201  => "\xe2\x80\x89",
+      //THIN SPACE
+      8202  => "\xe2\x80\x8a",
+      //HAIR SPACE
+      8232  => "\xe2\x80\xa8",
+      //LINE SEPARATOR
+      8233  => "\xe2\x80\xa9",
+      //PARAGRAPH SEPARATOR
+      8239  => "\xe2\x80\xaf",
+      //NARROW NO-BREAK SPACE
+      8287  => "\xe2\x81\x9f",
+      //MEDIUM MATHEMATICAL SPACE
+      12288 => "\xe3\x80\x80"
+      //IDEOGRAPHIC SPACE
+    );
+
+    return $white;
+  }
+
+  /**
    * return a array with "urlencoded"-win1252 -> UTF-8
    *
    * @return mixed
@@ -4708,72 +4778,6 @@ class UTF8
     );
 
     return $array;
-  }
-
-  /**
-   * returns an array of Unicode White Space characters
-   *
-   * @return   array An array with numeric code point as key and White Space Character as value
-   */
-  public static function ws()
-  {
-    static $white = array(
-
-      //    Numeric Code Point    => UTF-8 Character
-
-      0     => "\x0",
-      //NUL Byte
-      9     => "\x9",
-      //Tab
-      10    => "\xa",
-      //New Line
-      11    => "\xb",
-      //Vertical Tab
-      13    => "\xd",
-      //Carriage Return
-      32    => "\x20",
-      //Ordinary Space
-      160   => "\xc2\xa0",
-      //NO-BREAK SPACE
-      5760  => "\xe1\x9a\x80",
-      //OGHAM SPACE MARK
-      6158  => "\xe1\xa0\x8e",
-      //MONGOLIAN VOWEL SEPARATOR
-      8192  => "\xe2\x80\x80",
-      //EN QUAD
-      8193  => "\xe2\x80\x81",
-      //EM QUAD
-      8194  => "\xe2\x80\x82",
-      //EN SPACE
-      8195  => "\xe2\x80\x83",
-      //EM SPACE
-      8196  => "\xe2\x80\x84",
-      //THREE-PER-EM SPACE
-      8197  => "\xe2\x80\x85",
-      //FOUR-PER-EM SPACE
-      8198  => "\xe2\x80\x86",
-      //SIX-PER-EM SPACE
-      8199  => "\xe2\x80\x87",
-      //FIGURE SPACE
-      8200  => "\xe2\x80\x88",
-      //PUNCTUATION SPACE
-      8201  => "\xe2\x80\x89",
-      //THIN SPACE
-      8202  => "\xe2\x80\x8a",
-      //HAIR SPACE
-      8232  => "\xe2\x80\xa8",
-      //LINE SEPARATOR
-      8233  => "\xe2\x80\xa9",
-      //PARAGRAPH SEPARATOR
-      8239  => "\xe2\x80\xaf",
-      //NARROW NO-BREAK SPACE
-      8287  => "\xe2\x81\x9f",
-      //MEDIUM MATHEMATICAL SPACE
-      12288 => "\xe3\x80\x80"
-      //IDEOGRAPHIC SPACE
-    );
-
-    return $white;
   }
 
 }

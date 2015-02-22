@@ -570,6 +570,26 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals('1,3', UTF8::number_format('1.298765', 1, ',', ''));
   }
 
+  public function testSubstrCompare()
+  {
+    $this->assertEquals(0, substr_compare("abcde", "bc", 1, 2));
+    $this->assertEquals(0, substr_compare("abcde", "de", -2, 2));
+    $this->assertEquals(0, substr_compare("abcde", "bcg", 1, 2));
+    $this->assertEquals(0, substr_compare("abcde", "BC", 1, 2, true));
+    $this->assertEquals(1, substr_compare("abcde", "bc", 1, 3));
+    $this->assertEquals(-1, substr_compare("abcde", "cd", 1, 2));
+
+    $this->assertEquals(0, UTF8::substr_compare("abcde", "bc", 1, 2));
+    $this->assertEquals(0, UTF8::substr_compare("abcde", "de", -2, 2));
+    $this->assertEquals(0, UTF8::substr_compare("abcde", "bcg", 1, 2));
+    $this->assertEquals(0, UTF8::substr_compare("abcde", "BC", 1, 2, true));
+    $this->assertEquals(1, UTF8::substr_compare("abcde", "bc", 1, 3));
+    $this->assertEquals(-1, UTF8::substr_compare("abcde", "cd", 1, 2));
+
+    // UTF-8
+    $this->assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2));
+  }
+
   public function testFilterInput()
   {
     $options = array(
