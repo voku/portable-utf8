@@ -476,6 +476,17 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       $this->assertEquals($after, UTF8::encode('UTF-8', $before));
     }
+
+    $tests = array(
+        "  -ABC-中文空白-  " => "  -ABC-????-  ",
+        "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
+        "öäü"            => "öäü",
+        ""               => ""
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::filter(UTF8::encode('ISO-8859-1', $before)));
+    }
   }
 
   public function testUtf8DecodeEncodeUtf8()
