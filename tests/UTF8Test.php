@@ -587,7 +587,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals(-1, UTF8::substr_compare("abcde", "cd", 1, 2));
 
     // UTF-8
-    $this->assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2));
+    $this->assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2, false));
+    $this->assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2, true));
   }
 
   public function testStrtr()

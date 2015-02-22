@@ -4216,22 +4216,22 @@ class UTF8
   /**
    * Binary safe comparison of two strings from an offset, up to length characters
    *
-   * @param string $main_str            The main string being compared.
-   * @param string $str                 The secondary string being compared.
-   * @param int    $offset              The start position for the comparison. If negative, it starts counting from the
+   * @param string  $main_str           The main string being compared.
+   * @param string  $str                The secondary string being compared.
+   * @param int     $offset             The start position for the comparison. If negative, it starts counting from the
    *                                    end of the string.
-   * @param int    $length              The length of the comparison. The default value is the largest of the length of
+   * @param int     $length             The length of the comparison. The default value is the largest of the length of
    *                                    the str compared to the length of main_str less the offset.
-   * @param int    $case_insensitivity  If case_insensitivity is TRUE, comparison is case insensitive.
+   * @param boolean $case_insensitivity If case_insensitivity is TRUE, comparison is case insensitive.
    *
    * @return int
    */
-  public static function substr_compare($main_str, $str, $offset, $length = 2147483647, $case_insensitivity = 0)
+  public static function substr_compare($main_str, $str, $offset, $length = 2147483647, $case_insensitivity = false)
   {
     $main_str = self::substr($main_str, $offset, $length);
     $str = self::substr($str, 0, self::strlen($main_str));
 
-    return $case_insensitivity ? self::strcasecmp($main_str, $str) : self::strcmp($main_str, $str);
+    return $case_insensitivity === true ? self::strcasecmp($main_str, $str) : self::strcmp($main_str, $str);
   }
 
   /**
