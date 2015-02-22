@@ -1292,6 +1292,19 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
   }
 
+  public function testStrtonatfold()
+  {
+    $utf8 = new UTF8();
+
+    // valid utf-8
+    $string = $this->invokeMethod($utf8, 'strtonatfold', array("Hello world 中文空白"));
+    $this->assertEquals('Hello world 中文空白', $string);
+
+    // invalid utf-8
+    $string = $this->invokeMethod($utf8, 'strtonatfold', array("Iñtërnâtiôn\xE9àlizætiøn"));
+    $this->assertEquals('', $string);
+  }
+
   public function testWordCount()
   {
     $testArray = array(
@@ -1347,5 +1360,23 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $expected = "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε";
 
     $this->assertEquals($expected, $result);
+  }
+
+  /**
+   * Call protected/private method of a class.
+   *
+   * @param object &$object    Instantiated object that we will run method on.
+   * @param string $methodName Method name to call
+   * @param array  $parameters Array of parameters to pass into method.
+   *
+   * @return mixed Method return.
+   */
+  public function invokeMethod(&$object, $methodName, array $parameters = array())
+  {
+    $reflection = new \ReflectionClass(get_class($object));
+    $method = $reflection->getMethod($methodName);
+    $method->setAccessible(true);
+
+    return $method->invokeArgs($object, $parameters);
   }
 }
