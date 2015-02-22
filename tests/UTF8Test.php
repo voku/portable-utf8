@@ -590,6 +590,17 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2));
   }
 
+  public function testStrtr()
+  {
+    $arr = array("Hello" => "Hi", "world" => "earth");
+    $this->assertEquals('Hi earth', strtr("Hello world", $arr));
+    $this->assertEquals('Hi earth', UTF8::strtr("Hello world", $arr));
+
+    // UTF-8
+    $arr = array("Hello" => "○●◎", "中文空白" => "earth");
+    $this->assertEquals('○●◎ earth', UTF8::strtr("Hello 中文空白", $arr));
+  }
+
   public function testFilterInput()
   {
     $options = array(
