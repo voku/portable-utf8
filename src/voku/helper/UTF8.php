@@ -4578,6 +4578,28 @@ class UTF8
   }
 
   /**
+   * Parses the string into variables
+   *
+   * @link http://php.net/manual/en/function.parse-str.php
+   *
+   * @param string     $str <p>
+   *                        The input string.
+   *                        </p>
+   * @param array      $arr <p>
+   *                        If the second parameter arr is present,
+   *                        variables are stored in this variable as array elements instead.
+   *                        </p>
+   *
+   * @return void
+   */
+  public static function parse_str($str, &$arr)
+  {
+    $str = self::filter($str);
+
+    parse_str($str, $arr);
+  }
+
+  /**
    * return a array with "urlencoded"-win1252 -> UTF-8
    *
    * @return mixed

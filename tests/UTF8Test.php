@@ -89,6 +89,17 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testParseStr()
+  {
+    $str = "Iñtërnâtiôn\xE9àlizætiøn=測試&arr[]=foo+測試&arr[]=ການທົດສອບ";
+    UTF8::parse_str($str, $array);
+
+    $this->assertEquals('測試', $array['Iñtërnâtiônéàlizætiøn']);
+    $this->assertEquals('foo 測試', $array['arr'][0]);
+    $this->assertEquals('ການທົດສອບ', $array['arr'][1]);
+
+  }
+
   public function testIsUtf8()
   {
     $testArray = array(
