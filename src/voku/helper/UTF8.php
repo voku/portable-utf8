@@ -1773,6 +1773,26 @@ class UTF8
   }
 
   /**
+   * filter var
+   *
+   * @param      $var
+   * @param int  $filter
+   * @param null $option
+   *
+   * @return mixed|string
+   */
+  public static function filter_var($var, $filter = FILTER_DEFAULT, $option = null)
+  {
+    if (3 > func_num_args()) {
+      $var = filter_var($var, $filter);
+    } else {
+      $var = filter_var($var, $filter, $option);
+    }
+
+    return self::filter($var);
+  }
+
+  /**
    * filter input
    *
    * @param      $type

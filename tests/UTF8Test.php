@@ -564,6 +564,25 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
   }
 
+  public function testFilterInput()
+  {
+    $options = array(
+        'options' => array(
+            'default'   => -1,
+            // value to return if the filter fails
+            'min_range' => 90,
+            'max_range' => 99
+        )
+    );
+
+    $this->assertEquals('  -ABC-中文空白-  ', UTF8::filter_var("  -ABC-中文空白-  ", FILTER_DEFAULT));
+    $this->assertEquals(false, UTF8::filter_var("  -ABC-中文空白-  ", FILTER_VALIDATE_URL));
+    $this->assertEquals(false, UTF8::filter_var("  -ABC-中文空白-  ", FILTER_VALIDATE_EMAIL));
+    $this->assertEquals(-1, UTF8::filter_var("中文空白 ", FILTER_VALIDATE_INT, $options));
+    $this->assertEquals('99', UTF8::filter_var(99, FILTER_VALIDATE_INT, $options));
+    $this->assertEquals(-1, UTF8::filter_var(100, FILTER_VALIDATE_INT, $options));
+  }
+
   public function testString()
   {
     $this->assertEquals("", UTF8::string(array()));
@@ -1307,6 +1326,24 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals('', $string);
   }
 
+  /**
+   * Call protected/private method of a class.
+   *
+   * @param object &$object    Instantiated object that we will run method on.
+   * @param string $methodName Method name to call
+   * @param array  $parameters Array of parameters to pass into method.
+   *
+   * @return mixed Method return.
+   */
+  public function invokeMethod(&$object, $methodName, array $parameters = array())
+  {
+    $reflection = new \ReflectionClass(get_class($object));
+    $method = $reflection->getMethod($methodName);
+    $method->setAccessible(true);
+
+    return $method->invokeArgs($object, $parameters);
+  }
+
   public function testWordCount()
   {
     $testArray = array(
@@ -1362,23 +1399,5 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $expected = "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε";
 
     $this->assertEquals($expected, $result);
-  }
-
-  /**
-   * Call protected/private method of a class.
-   *
-   * @param object &$object    Instantiated object that we will run method on.
-   * @param string $methodName Method name to call
-   * @param array  $parameters Array of parameters to pass into method.
-   *
-   * @return mixed Method return.
-   */
-  public function invokeMethod(&$object, $methodName, array $parameters = array())
-  {
-    $reflection = new \ReflectionClass(get_class($object));
-    $method = $reflection->getMethod($methodName);
-    $method->setAccessible(true);
-
-    return $method->invokeArgs($object, $parameters);
   }
 }
