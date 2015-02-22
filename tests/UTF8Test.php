@@ -560,6 +560,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       $this->assertEquals($after, UTF8::to_utf8(UTF8::to_latin1($before)));
     }
+
+    $this->assertEquals($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
   }
 
   public function testString()
