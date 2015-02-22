@@ -4711,25 +4711,6 @@ class UTF8
   }
 
   /**
-   * for internal use - Prepares a string and given chars for trim operations
-   *
-   * @param    string $string The string to be trimmed
-   * @param    string $chars  Optional characters to be stripped
-   */
-  protected static function trim_util(&$string, &$chars)
-  {
-    if (empty($chars)) {
-      $chars = self::ws();
-    } else if (is_string($chars)) {
-      $chars = self::split($chars);
-    }
-
-    $chars = array_flip($chars);
-
-    $string = self::clean($string); //Cleanup is necessary here, or trim functions may break
-  }
-
-  /**
    * returns an array of Unicode White Space characters
    *
    * @return   array An array with numeric code point as key and White Space Character as value

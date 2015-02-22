@@ -564,6 +564,12 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
   }
 
+  public function testNumberFormat()
+  {
+    $this->assertEquals('1.23', UTF8::number_format('1.234567', 2, '.', ''));
+    $this->assertEquals('1,3', UTF8::number_format('1.298765', 1, ',', ''));
+  }
+
   public function testFilterInput()
   {
     $options = array(
