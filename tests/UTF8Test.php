@@ -1272,9 +1272,24 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testStrnatcasecmp()
   {
+    $this->assertEquals(0, UTF8::strnatcasecmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
+    $this->assertEquals(1, UTF8::strnatcasecmp("Hello world 中文空白!", "Hello WORLD 中文空白"));
+    $this->assertEquals(-1, UTF8::strnatcasecmp("Hello world 中文空白", "Hello WORLD 中文空白!"));
     $this->assertEquals(-1, UTF8::strnatcasecmp("2Hello world 中文空白!", "10Hello WORLD 中文空白!"));
     $this->assertEquals(1, UTF8::strnatcasecmp("10Hello world 中文空白!", "2Hello WORLD 中文空白!"));
     $this->assertEquals(0, UTF8::strnatcasecmp("10Hello world 中文空白!", "10Hello world 中文空白!"));
+    $this->assertEquals(0, UTF8::strnatcasecmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
+  }
+
+  public function testStrnatcmp()
+  {
+    $this->assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
+    $this->assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白"));
+    $this->assertEquals(1, UTF8::strnatcmp("Hello world 中文空白", "Hello WORLD 中文空白!"));
+    $this->assertEquals(-1, UTF8::strnatcmp("2Hello world 中文空白!", "10Hello WORLD 中文空白!"));
+    $this->assertEquals(1, UTF8::strnatcmp("10Hello world 中文空白!", "2Hello WORLD 中文空白!"));
+    $this->assertEquals(0, UTF8::strnatcmp("10Hello world 中文空白!", "10Hello world 中文空白!"));
+    $this->assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
   }
 
   public function testWordCount()
