@@ -1805,12 +1805,14 @@ class UTF8
   {
     switch (gettype($var)) {
       case 'array':
-        foreach ($var as $k => $v)
+        foreach ($var as $k => $v) {
           $var[$k] = self::filter($v, $normalization_form, $leading_combining);
+        }
         break;
       case 'object':
-        foreach ($var as $k => $v)
+        foreach ($var as $k => $v) {
           $var->$k = self::filter($v, $normalization_form, $leading_combining);
+        }
         break;
       case 'string':
         if (false !== strpos($var, "\r")) {
