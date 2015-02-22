@@ -51,9 +51,11 @@ class Normalizer
     if (strspn($s .= '', self::$ASCII) === strlen($s)) {
       return true;
     }
+
     if (self::NFC === $form && preg_match('//u', $s) && !preg_match('/[^\x00-\x{2FF}]/u', $s)) {
       return true;
     }
+
     return false; // Pretend false as quick checks implementented in PHP won't be so quick
   }
 
@@ -171,9 +173,16 @@ class Normalizer
         $ulen = $ulen_mask[$s[$i] & "\xF0"];
         $uchr = substr($s, $i, $ulen);
 
-        if ($last_uchr < "\xE1\x84\x80" || "\xE1\x84\x92" < $last_uchr
-            || $uchr < "\xE1\x85\xA1" || "\xE1\x85\xB5" < $uchr
-            || $last_ucls
+        if (
+            $last_uchr < "\xE1\x84\x80"
+            ||
+            "\xE1\x84\x92" < $last_uchr
+            ||
+            $uchr < "\xE1\x85\xA1"
+            ||
+            "\xE1\x85\xB5" < $uchr
+            ||
+            $last_ucls
         ) {
           // Table lookup and combining chars composition
 

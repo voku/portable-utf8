@@ -74,14 +74,20 @@ class Bootup
   protected static function initMbstring()
   {
     if (extension_loaded('mbstring')) {
-      if (((int)ini_get('mbstring.encoding_translation') || in_array(
+      if (
+          (
+              (int)ini_get('mbstring.encoding_translation')
+              ||
+              in_array(
                   strtolower(ini_get('mbstring.encoding_translation')), array(
                       'on',
                       'yes',
                       'true'
                   )
-              ))
-          && !in_array(
+              )
+          )
+          &&
+          !in_array(
               strtolower(ini_get('mbstring.http_input')), array(
                   'pass',
                   '8bit',

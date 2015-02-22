@@ -552,14 +552,19 @@ class Iconv
    */
   public static function iconv_mime_encode($field_name, $field_value, $pref = INF)
   {
-    is_array($pref) || $pref = array();
+    if (is_array($pref) === false) {
+      $pref = array();
+    }
 
-    $pref += array(
-        'scheme'           => 'B',
-        'input-charset'    => self::$internal_encoding,
-        'output-charset'   => self::$internal_encoding,
-        'line-length'      => 76,
-        'line-break-chars' => "\r\n"
+    $pref = array_merge(
+        array(
+            'scheme'           => 'B',
+            'input-charset'    => self::$internal_encoding,
+            'output-charset'   => self::$internal_encoding,
+            'line-length'      => 76,
+            'line-break-chars' => "\r\n"
+        ),
+        $pref
     );
 
     preg_match('/[\x80-\xFF]/', $field_name) && $field_name = '';
@@ -754,7 +759,7 @@ class Iconv
     return strlen(utf8_decode($s));
   }
 
-  static function strlen2($s, $encoding = INF)
+  public static function strlen2($s, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
     if (0 !== strncasecmp($encoding, 'utf-8', 5) && false === $s = self::iconv($encoding, 'utf-8', $s)) {

@@ -9,9 +9,6 @@ use voku\helper\shim\Xml;
 /**
  * UTF8-Helper-Class
  *
- * used all functions from "http://pageconfig.com/post/portable-utf8" and added changed from Dethnull@github
- *
- * @author      Hamid Sarfraz
  * @author      Lars Moelleken
  *
  * @package     voku\helper
@@ -406,7 +403,7 @@ class UTF8
     if ($normalise_whitespace === true) {
       $whitespaces = implode('|', self::whitespace_table());
       $regx = '/(' . $whitespaces . ')/s';
-      $str = preg_replace($regx, " ", $str);
+      $str = preg_replace($regx, ' ', $str);
     }
 
     if ($remove_bom === true) {
@@ -428,24 +425,24 @@ class UTF8
   public static function whitespace_table()
   {
     $whitespace = array(
-        "SPACE"                     => "\x20",
-        "NO-BREAK SPACE"            => "\xc2\xa0",
-        "OGHAM SPACE MARK"          => "\xe1\x9a\x80",
-        "EN QUAD"                   => "\xe2\x80\x80",
-        "EM QUAD"                   => "\xe2\x80\x81",
-        "EN SPACE"                  => "\xe2\x80\x82",
-        "EM SPACE"                  => "\xe2\x80\x83",
-        "THREE-PER-EM SPACE"        => "\xe2\x80\x84",
-        "FOUR-PER-EM SPACE"         => "\xe2\x80\x85",
-        "SIX-PER-EM SPACE"          => "\xe2\x80\x86",
-        "FIGURE SPACE"              => "\xe2\x80\x87",
-        "PUNCTUATION SPACE"         => "\xe2\x80\x88",
-        "THIN SPACE"                => "\xe2\x80\x89",
-        "HAIR SPACE"                => "\xe2\x80\x8a",
-        "ZERO WIDTH SPACE"          => "\xe2\x80\x8b",
-        "NARROW NO-BREAK SPACE"     => "\xe2\x80\xaf",
-        "MEDIUM MATHEMATICAL SPACE" => "\xe2\x81\x9f",
-        "IDEOGRAPHIC SPACE"         => "\xe3\x80\x80",
+        'SPACE'                     => "\x20",
+        'NO-BREAK SPACE'            => "\xc2\xa0",
+        'OGHAM SPACE MARK'          => "\xe1\x9a\x80",
+        'EN QUAD'                   => "\xe2\x80\x80",
+        'EM QUAD'                   => "\xe2\x80\x81",
+        'EN SPACE'                  => "\xe2\x80\x82",
+        'EM SPACE'                  => "\xe2\x80\x83",
+        'THREE-PER-EM SPACE'        => "\xe2\x80\x84",
+        'FOUR-PER-EM SPACE'         => "\xe2\x80\x85",
+        'SIX-PER-EM SPACE'          => "\xe2\x80\x86",
+        'FIGURE SPACE'              => "\xe2\x80\x87",
+        'PUNCTUATION SPACE'         => "\xe2\x80\x88",
+        'THIN SPACE'                => "\xe2\x80\x89",
+        'HAIR SPACE'                => "\xe2\x80\x8a",
+        'ZERO WIDTH SPACE'          => "\xe2\x80\x8b",
+        'NARROW NO-BREAK SPACE'     => "\xe2\x80\xaf",
+        'MEDIUM MATHEMATICAL SPACE' => "\xe2\x81\x9f",
+        'IDEOGRAPHIC SPACE'         => "\xe3\x80\x80"
     );
 
     return $whitespace;
@@ -458,9 +455,9 @@ class UTF8
    *
    * @return string
    */
-  public static function removeBOM($str = "")
+  public static function removeBOM($str = '')
   {
-    if (substr($str, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
+    if (substr($str, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
       $str = substr($str, 3);
     }
     return $str;
@@ -513,26 +510,45 @@ class UTF8
     preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
     $chars = $ar[0];
     foreach ($chars as $i => $c) {
-      if (ord($c{0}) >= 0 && ord($c{0}) <= 127) {
+
+      $ordC0 = ord($c{0});
+
+      if ($ordC0 >= 0 && $ordC0 <= 127) {
         continue;
-      } // ASCII - next please
-      if (ord($c{0}) >= 192 && ord($c{0}) <= 223) {
-        $ord = (ord($c{0}) - 192) * 64 + (ord($c{1}) - 128);
-      }
-      if (ord($c{0}) >= 224 && ord($c{0}) <= 239) {
-        $ord = (ord($c{0}) - 224) * 4096 + (ord($c{1}) - 128) * 64 + (ord($c{2}) - 128);
-      }
-      if (ord($c{0}) >= 240 && ord($c{0}) <= 247) {
-        $ord = (ord($c{0}) - 240) * 262144 + (ord($c{1}) - 128) * 4096 + (ord($c{2}) - 128) * 64 + (ord($c{3}) - 128);
-      }
-      if (ord($c{0}) >= 248 && ord($c{0}) <= 251) {
-        $ord = (ord($c{0}) - 248) * 16777216 + (ord($c{1}) - 128) * 262144 + (ord($c{2}) - 128) * 4096 + (ord($c{3}) - 128) * 64 + (ord($c{4}) - 128);
-      }
-      if (ord($c{0}) >= 252 && ord($c{0}) <= 253) {
-        $ord = (ord($c{0}) - 252) * 1073741824 + (ord($c{1}) - 128) * 16777216 + (ord($c{2}) - 128) * 262144 + (ord($c{3}) - 128) * 4096 + (ord($c{4}) - 128) * 64 + (ord($c{5}) - 128);
       }
 
-      if (ord($c{0}) >= 254 && ord($c{0}) <= 255) {
+      $ordC1 = ord($c{1});
+
+      // ASCII - next please
+      if ($ordC0 >= 192 && $ordC0 <= 223) {
+        $ord = ($ordC0 - 192) * 64 + ($ordC1 - 128);
+      }
+
+      $ordC2 = ord($c{2});
+
+      if ($ordC0 >= 224 && $ordC0 <= 239) {
+        $ord = ($ordC0 - 224) * 4096 + ($ordC1 - 128) * 64 + ($ordC2 - 128);
+      }
+
+      $ordC3 = ord($c{3});
+
+      if ($ordC0 >= 240 && $ordC0 <= 247) {
+        $ord = ($ordC0 - 240) * 262144 + ($ordC1 - 128) * 4096 + ($ordC2 - 128) * 64 + ($ordC3 - 128);
+      }
+
+      $ordC4 = ord($c{4});
+
+      if ($ordC0 >= 248 && $ordC0 <= 251) {
+        $ord = ($ordC0 - 248) * 16777216 + ($ordC1 - 128) * 262144 + ($ordC2 - 128) * 4096 + ($ordC3 - 128) * 64 + ($ordC4 - 128);
+      }
+
+      $ordC5 = ord($c{5});
+
+      if ($ordC0 >= 252 && $ordC0 <= 253) {
+        $ord = ($ordC0 - 252) * 1073741824 + ($ordC1 - 128) * 16777216 + ($ordC2 - 128) * 262144 + ($ordC3 - 128) * 4096 + ($ordC4 - 128) * 64 + ($ordC5 - 128);
+      }
+
+      if ($ordC0 >= 254 && $ordC0 <= 255) {
         $chars{$i} = $unknown;
         continue;
       }
@@ -551,6 +567,7 @@ class UTF8
           $UTF8_TO_ASCII[$bank] = array();
         }
       }
+
       $newchar = $ord & 255;
       if (array_key_exists($newchar, $UTF8_TO_ASCII[$bank])) {
         $chars{$i} = $UTF8_TO_ASCII[$bank][$newchar];
@@ -671,7 +688,7 @@ class UTF8
         'Ã¸'  => 'ø',
         'Ã½'  => 'ý',
         'Ã¿'  => 'ÿ',
-        'â‚¬' => '€',
+        'â‚¬' => '€'
     );
   }
 
@@ -1020,7 +1037,8 @@ class UTF8
               * Check for illegal sequences and codepoints.
               */
               // From Unicode 3.1, non-shortest form is illegal
-              if (((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
+              if (
+                  ((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
                   ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
                   ((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
                   (4 < $mBytes) ||
@@ -1162,7 +1180,7 @@ class UTF8
     // init
     self::checkForSupport();
 
-    if ($encoding == 'UTF-8' && $cleanUtf8 === true) {
+    if ($encoding === 'UTF-8' && $cleanUtf8 === true) {
       $str = self::clean($string);
     } else {
       $str = $string;
@@ -1309,19 +1327,19 @@ class UTF8
       return $a;
     }
 
-    $string = array();
+    $arrayOutput = array();
     $p = -1;
 
     /** @noinspection PhpForeachArrayIsUsedAsValueInspection */
     foreach ($a as $l => $a) {
       if ($l % $len) {
-        $string[$p] .= $a;
+        $arrayOutput[$p] .= $a;
       } else {
-        $string[++$p] = $a;
+        $arrayOutput[++$p] = $a;
       }
     }
 
-    return $string;
+    return $arrayOutput;
   }
 
   /**
@@ -1601,9 +1619,9 @@ class UTF8
    * 2) when any of these: àáâãäåæçèéêëìíîï  are followed by TWO chars from group B,
    * 3) when any of these: ðñòó  are followed by THREE chars from group B.
    *
-   * @name         to_utf8
+   * @name               to_utf8
    *
-   * @param string $text Any string.
+   * @param string|array $text Any string.
    *
    * @return string The same string, UTF8 encoded
    *
@@ -1623,7 +1641,7 @@ class UTF8
 
     $max = self::strlen($text, '8bit');
 
-    $buf = "";
+    $buf = '';
     for ($i = 0; $i < $max; $i++) {
       $c1 = $text{$i};
       if ($c1 >= "\xc0") { //Should be converted to UTF8, if it's not UTF8 already
@@ -1860,11 +1878,11 @@ class UTF8
   {
     $encodingLabel = self::normalizeEncoding($encodingLabel);
 
-    if ($encodingLabel == 'UTF-8') {
+    if ($encodingLabel === 'UTF-8') {
       return self::to_utf8($text);
     }
 
-    if ($encodingLabel == 'ISO-8859-1') {
+    if ($encodingLabel === 'ISO-8859-1') {
       return self::to_latin1($text);
     }
 
@@ -1914,7 +1932,7 @@ class UTF8
   /**
    * convert to win1252
    *
-   * @param  string $text
+   * @param  string|array $text
    *
    * @return string
    */
@@ -2160,15 +2178,19 @@ class UTF8
     }
 
     $a = ($s = unpack('C*', substr($s, 0, 4))) ? $s[1] : 0;
+
     if (0xF0 <= $a) {
       return (($a - 0xF0) << 18) + (($s[2] - 0x80) << 12) + (($s[3] - 0x80) << 6) + $s[4] - 0x80;
     }
+
     if (0xE0 <= $a) {
       return (($a - 0xE0) << 12) + (($s[2] - 0x80) << 6) + $s[3] - 0x80;
     }
+
     if (0xC0 <= $a) {
       return (($a - 0xC0) << 6) + $s[2] - 0x80;
     }
+
     return $a;
   }
 
@@ -2434,7 +2456,6 @@ class UTF8
 
     if (($i = (int)$code_point) !== $code_point) {
       // $code_point is a string, lets extract int code point from it
-
       if (!($i = (int)self::hex_to_int($code_point))) {
         return '';
       }
@@ -3036,8 +3057,8 @@ class UTF8
   /**
    * removes duplicate occurrences of a string in another string
    *
-   * @param    string $str  The base string
-   * @param    string $what String to search for in the base string
+   * @param    string       $str  The base string
+   * @param    string|array $what String to search for in the base string
    *
    * @return   string The result string with removed duplicates
    */
@@ -3098,9 +3119,9 @@ class UTF8
   /**
    * fix a double (or multiple) encoded UTF8 string
    *
-   * @param string $text
+   * @param array|string $text
    *
-   * @return array|string
+   * @return string
    */
   public static function fix_utf8($text)
   {
@@ -3108,14 +3129,16 @@ class UTF8
       foreach ($text as $k => $v) {
         $text[$k] = self::fix_utf8($v);
       }
+
       return $text;
     }
-    $last = "";
+
+    $last = '';
     while ($last <> $text) {
       $last = $text;
       $text = self::to_utf8(self::utf8_decode($text));
     }
-    $text = self::to_utf8(self::utf8_decode($text));
+
     return $text;
   }
 
@@ -4252,7 +4275,7 @@ class UTF8
   /**
    * uppercase for all words in the string
    *
-   * @param       $string
+   * @param  string  $string
    * @param array $exceptions
    *
    * @return string
@@ -4263,7 +4286,7 @@ class UTF8
       return '';
     }
 
-    $words = explode(" ", $string);
+    $words = explode(' ', $string);
     $newwords = array();
 
     foreach ($words as $word) {
@@ -4274,7 +4297,7 @@ class UTF8
       array_push($newwords, $word);
     }
 
-    return self::ucfirst(join(" ", $newwords));
+    return self::ucfirst(implode(' ', $newwords));
   }
 
   /**

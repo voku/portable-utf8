@@ -255,9 +255,9 @@ class Mbstring
   }
 
   /**
-   * @param      $str
-   * @param      $encoding_list
-   * @param bool $strict
+   * @param string       $str
+   * @param string|array $encoding_list
+   * @param bool         $strict
    *
    * @return bool
    */
@@ -296,7 +296,7 @@ class Mbstring
   }
 
   /**
-   * @param $encoding_list
+   * @param string|array $encoding_list
    *
    * @return array|bool
    */
@@ -551,10 +551,10 @@ class Mbstring
   }
 
   /**
-   * @param      $s
-   * @param      $start
-   * @param null $length
-   * @param      $encoding
+   * @param string   $s
+   * @param int      $start
+   * @param null|int $length
+   * @param string   $encoding
    *
    * @return string
    */
@@ -762,6 +762,7 @@ class Mbstring
     if (false === $pos) {
       return false;
     }
+
     if ($part) {
       return substr($haystack, 0, $pos);
     } else {
