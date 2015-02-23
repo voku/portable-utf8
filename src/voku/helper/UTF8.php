@@ -4594,9 +4594,12 @@ class UTF8
    */
   public static function parse_str($str, &$arr)
   {
+    // init
+    self::checkForSupport();
+    
     $str = self::filter($str);
 
-    parse_str($str, $arr);
+    mb_parse_str($str, $arr);
   }
 
   /**
