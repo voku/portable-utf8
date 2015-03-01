@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/voku/portable-utf8.svg?branch=master)](https://travis-ci.org/voku/portable-utf8)
 [![Coverage Status](https://coveralls.io/repos/voku/portable-utf8/badge.svg)](https://coveralls.io/r/voku/portable-utf8)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/portable-utf8/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/portable-utf8/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/be5bf087-366c-463e-ac9f-c184db6347ba/mini.png)](https://insight.sensiolabs.com/projects/be5bf087-366c-463e-ac9f-c184db6347ba)
 [![Dependency Status](https://www.versioneye.com/php/voku:portable-utf8/dev-master/badge.svg)](https://www.versioneye.com/php/voku:portable-utf8/dev-master)
 [![Reference Status](https://www.versioneye.com/php/voku:portable-utf8/reference_badge.svg?style=flat)](https://www.versioneye.com/php/voku:portable-utf8/references)
