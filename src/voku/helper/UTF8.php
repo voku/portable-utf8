@@ -2389,16 +2389,16 @@ class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strpos.php
    *
-   * @param string  $haystack  <p>
-   *                           The string being checked.
-   *                           </p>
-   * @param string  $needle    <p>
-   *                           The position counted from the beginning of haystack.
-   *                           </p>
-   * @param int     $offset    [optional] <p>
-   *                           The search offset. If it is not specified, 0 is used.
-   *                           </p>
-   * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
+   * @param string     $haystack  <p>
+   *                              The string being checked.
+   *                              </p>
+   * @param string|int $needle    <p>
+   *                              The position counted from the beginning of haystack.
+   *                              </p>
+   * @param int        $offset    [optional] <p>
+   *                              The search offset. If it is not specified, 0 is used.
+   *                              </p>
+   * @param boolean    $cleanUtf8 Clean non UTF-8 chars from the string
    *
    * @return int the numeric position of
    * the first occurrence of needle in the
@@ -2444,7 +2444,7 @@ class UTF8
     if (($pos = strpos($haystack, $needle)) !== false) {
       $left = substr($haystack, 0, $pos);
 
-      // Negative Offset not supported in PHP strpos(), ignoring
+      // negative offset not supported in PHP strpos(), ignoring
       return ($offset > 0 ? $offset : 0) + self::strlen($left);
     }
 
@@ -4401,17 +4401,17 @@ class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strrpos.php
    *
-   * @param string  $haystack  <p>
-   *                           The string being checked, for the last occurrence
-   *                           of needle
-   *                           </p>
-   * @param string  $needle    <p>
-   *                           The string to find in haystack.
-   *                           </p>
-   * @param int     $offset    [optional] May be specified to begin searching an arbitrary number of characters into
-   *                           the string. Negative values will stop searching at an arbitrary point
-   *                           prior to the end of the string.
-   * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
+   * @param string     $haystack  <p>
+   *                              The string being checked, for the last occurrence
+   *                              of needle
+   *                              </p>
+   * @param string|int $needle    <p>
+   *                              The string to find in haystack.
+   *                              </p>
+   * @param int        $offset    [optional] May be specified to begin searching an arbitrary number of characters into
+   *                              the string. Negative values will stop searching at an arbitrary point
+   *                              prior to the end of the string.
+   * @param boolean    $cleanUtf8 Clean non UTF-8 chars from the string
    *
    * @return int the numeric position of
    * the last occurrence of needle in the
@@ -4460,6 +4460,7 @@ class UTF8
     if (($pos = strrpos($haystack, $needle)) !== false) {
       $left = substr($haystack, 0, $pos);
 
+      // negative offset not supported in PHP strpos(), ignoring
       return ($offset > 0 ? $offset : 0) + self::strlen($left);
     }
 
@@ -4582,10 +4583,10 @@ class UTF8
    *
    * @link http://php.net/manual/en/function.parse-str.php
    *
-   * @param string     $str <p>
+   * @param string $str     <p>
    *                        The input string.
    *                        </p>
-   * @param array      $arr <p>
+   * @param array  $arr     <p>
    *                        If the second parameter arr is present,
    *                        variables are stored in this variable as array elements instead.
    *                        </p>
@@ -4596,7 +4597,7 @@ class UTF8
   {
     // init
     self::checkForSupport();
-    
+
     $str = self::filter($str);
 
     mb_parse_str($str, $arr);
