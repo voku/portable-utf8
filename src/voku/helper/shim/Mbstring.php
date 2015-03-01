@@ -425,8 +425,9 @@ class Mbstring
 
           if ($nlen == $ulen) {
             $nlen = $i;
-            do $s[--$nlen] = $uchr[--$ulen];
-            while ($ulen);
+            do {
+              $s[--$nlen] = $uchr[--$ulen];
+            } while ($ulen);
           } else {
             $s = substr_replace($s, $uchr, $i - $ulen, $ulen);
             $len += $nlen - $ulen;

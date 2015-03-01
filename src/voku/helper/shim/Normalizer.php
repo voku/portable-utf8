@@ -302,8 +302,9 @@ class Normalizer
                   $i = 0;
                 }
 
-                while ($j--)
+                while ($j--) {
                   $s[$i + $j] = $uchr[$ulen + $j];
+                }
 
                 $uchr = substr($uchr, 0, $ulen);
               }

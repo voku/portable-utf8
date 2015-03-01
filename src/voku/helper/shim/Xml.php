@@ -29,7 +29,7 @@ class Xml
     $s .= $s;
     $len = strlen($s);
 
-    for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j)
+    for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
       switch (true) {
         case $s[$i] < "\x80":
           $s[$j] = $s[$i];
@@ -43,6 +43,7 @@ class Xml
           $s[++$j] = chr(ord($s[$i]) - 64);
           break;
       }
+    }
 
     return substr($s, 0, $j);
   }

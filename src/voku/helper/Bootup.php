@@ -262,11 +262,12 @@ class Bootup
         &$_REQUEST
     );
 
-    foreach ($a[0] as &$r)
+    foreach ($a[0] as &$r) {
       $a[] = array(
           &$r['name'],
           &$r['type']
       );
+    }
     unset($a[0]);
 
     $len = count($a) + 1;
