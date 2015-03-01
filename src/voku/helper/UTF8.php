@@ -466,7 +466,7 @@ class UTF8
   /**
    * get data
    *
-   * @param $file
+   * @param string $file
    *
    * @return bool|mixed
    */
@@ -620,7 +620,7 @@ class UTF8
    *
    * @param string $str
    *
-   * @return mixed|string
+   * @return string
    */
   public static function fix_simple_utf8($str)
   {
@@ -1275,7 +1275,7 @@ class UTF8
   /**
    * rxClass
    *
-   * @param        $s
+   * @param        string $s
    * @param string $class
    *
    * @return string
@@ -1408,7 +1408,7 @@ class UTF8
    * @param string $needle
    * @param bool   $before_needle
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function stristr($string, $needle, $before_needle = false)
   {
@@ -1452,7 +1452,7 @@ class UTF8
    *
    * @param string $s
    *
-   * @return mixed
+   * @return string
    */
   protected static function strtonatfold($s)
   {
@@ -1463,7 +1463,7 @@ class UTF8
    * Unicode transformation for caseless matching
    * see http://unicode.org/reports/tr21/tr21-5.html
    *
-   * @param      $s
+   * @param      string $s
    * @param bool $full
    *
    * @return string
@@ -1630,7 +1630,7 @@ class UTF8
    *
    * @name               to_utf8
    *
-   * @param string|array $text Any string.
+   * @param string $text Any string.
    *
    * @return string The same string, UTF8 encoded
    *
@@ -1881,7 +1881,7 @@ class UTF8
    * @param string $encodingLabel ISO-8859-1 || UTF-8
    * @param string $text
    *
-   * @return array|bool|string will return false on error
+   * @return string will return false on error
    */
   public static function encode($encodingLabel, $text)
   {
@@ -2011,7 +2011,7 @@ class UTF8
    *
    * @param string $s
    *
-   * @return mixed|string
+   * @return string
    */
   public static function utf8_encode($s)
   {
@@ -2070,7 +2070,7 @@ class UTF8
    * @param string $s
    * @param string $charlist
    *
-   * @return bool|string
+   * @return string|false
    */
   public static function strpbrk($s, $charlist)
   {
@@ -2265,7 +2265,7 @@ class UTF8
    *
    * @param string $utf8_chr
    *
-   * @return mixed
+   * @return boolean
    */
   public static function isBom($utf8_chr)
   {
@@ -2326,7 +2326,7 @@ class UTF8
    * @param string $break
    * @param bool   $cut
    *
-   * @return bool|string Returns the given string wrapped at the specified length.
+   * @return false|string Returns the given string wrapped at the specified length.
    */
   public static function wordwrap($string, $width = 75, $break = "\n", $cut = false)
   {
@@ -2392,7 +2392,7 @@ class UTF8
    * @param string     $haystack  <p>
    *                              The string being checked.
    *                              </p>
-   * @param string|int $needle    <p>
+   * @param string $needle    <p>
    *                              The position counted from the beginning of haystack.
    *                              </p>
    * @param int        $offset    [optional] <p>
@@ -3214,7 +3214,7 @@ class UTF8
   /**
    * returns an array of all lower and upper case UTF-8 encoded characters
    *
-   * @return   array An array with lower case chars as keys and upper chars as values
+   * @return   string An array with lower case chars as keys and upper chars as values
    */
   protected static function case_table()
   {
@@ -4317,7 +4317,7 @@ class UTF8
    * @param string $dec_point
    * @param string $thousands_sep
    *
-   * @return mixed|string
+   * @return string
    */
   public static function number_format($number, $decimals = 0, $dec_point = '.', $thousands_sep = ',')
   {
@@ -4405,7 +4405,7 @@ class UTF8
    *                              The string being checked, for the last occurrence
    *                              of needle
    *                              </p>
-   * @param string|int $needle    <p>
+   * @param string $needle    <p>
    *                              The string to find in haystack.
    *                              </p>
    * @param int        $offset    [optional] May be specified to begin searching an arbitrary number of characters into
@@ -4505,7 +4505,7 @@ class UTF8
    *
    * @param   string $text
    *
-   * @return  mixed
+   * @return  string
    */
   public static function utf8_fix_win1252_chars($text)
   {
