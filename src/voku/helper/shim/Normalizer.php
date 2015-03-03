@@ -67,7 +67,7 @@ class Normalizer
    * @param string $s
    * @param int    $form
    *
-   * @return bool|string false on error
+   * @return false|string false on error
    */
   public static function normalize($s, $form = self::NFC)
   {
