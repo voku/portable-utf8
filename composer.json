@@ -1,11 +1,13 @@
 {
   "name": "voku/portable-utf8",
-  "description": "Portable UTF-8 library",
+  "description": "Portable UTF-8 library with polyfill / shim for Iconv, Intl, Mbstring, Normalizrer etc.",
   "keywords": [
     "php",
     "utf",
     "utf8",
-    "clean"
+    "utf-8",
+    "clean",
+    "unicode"
   ],
   "type": "library",
   "homepage": "https://github.com/voku/portable-utf8",
@@ -26,6 +28,11 @@
   "require-dev": {
     "phpunit/phpunit": "4.*",
     "satooshi/php-coveralls": "0.7.*@dev"
+  },
+  "suggest": {
+    "ext-intl": "Use Intl for best performance",
+    "ext-iconv": "Use iconv for best performance",
+    "ext-mbstring": "Use Mbstring for best performance"
   },
   "autoload": {
     "psr-0": {
