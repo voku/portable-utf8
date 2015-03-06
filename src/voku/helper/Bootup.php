@@ -229,11 +229,14 @@ class Bootup
           $uri
       );
 
-      if ($exit) {
-        header('HTTP/1.1 301 Moved Permanently');
-        header('Location: ' . $uri);
-
-        exit; // TODO: remove this in 1.2 (BC)
+      if ($exit === true) {
+        // Use ob_start() to buffer content and avoid problem of headers already sent...
+        if (headers_sent() === false) {
+          $severProtocol = (isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : 'HTTP/1.1' );
+          header($severProtocol . ' 301 Moved Permanently');
+          header('Location: ' . $uri);
+          exit();
+        }
       }
     }
 

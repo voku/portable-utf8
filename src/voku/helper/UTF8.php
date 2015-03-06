@@ -763,7 +763,7 @@ class UTF8
   }
 
   /**
-   * show UTF8-Support && exit
+   * echo native UTF8-Support libs
    */
   public static function showSupport()
   {
