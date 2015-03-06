@@ -649,6 +649,57 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals(-1, UTF8::filter_var(100, FILTER_VALIDATE_INT, $options));
   }
 
+  public function testReplaceDiamondQuestionMark()
+  {
+    $tests = array(
+        ""                                                                        => "",
+        " "                                                                       => " ",
+        "�"                                                                      => "",
+        "中文空白 �"                                                              => "中文空白 ",
+        "<ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>",
+        "DÃ¼�sseldorf"                                                           => "DÃ¼sseldorf",
+        "Abcdef"                                                                  => "Abcdef"
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::replace_diamond_question_mark($before, ''));
+    }
+  }
+
+  public function testNormalizeMsword()
+  {
+    $tests = array(
+        ""                                                                        => "",
+        " "                                                                       => " ",
+        "«foobar»"                                                                => '"foobar"',
+        "中文空白 ‟"                                                              => '中文空白 "',
+        "<ㅡㅡ></ㅡㅡ><div>…</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div>...</div><input type='email' name='user[email]' /><a>wtf</a>",
+        "– DÃ¼sseldorf —"                                                           => "- DÃ¼sseldorf -",
+        "„Abcdef…”"                                                                  => '"Abcdef..."'
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::normalize_msword($before, ''));
+    }
+  }
+
+  public function testNormalizeWhitespace()
+  {
+    $tests = array(
+        ""                                                                        => "",
+        " "                                                                       => " ",
+        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                        => '« foobar »',
+        "中文空白 ‟"                                                               => '中文空白 ‟',
+        "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div> </div><input type='email' name='user[email]' /><a>wtf</a>",
+        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                   => "– DÃ¼sseldorf —",
+        "„Abcdef\xe2\x81\x9f”"                                                    => '„Abcdef ”'
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::normalize_whitespace($before, ''));
+    }
+  }
+
   public function testString()
   {
     $this->assertEquals("", UTF8::string(array()));
@@ -918,7 +969,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $examples = array(
       // Valid UTF-8
       "κόσμε"                    => array("κόσμε" => "κόσμε"),
-      "中"                        => array("中" => "中"),
+      "中"                       => array("中" => "中"),
+      "«foobar»"                 => array("«foobar»" => "«foobar»"),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"        => array("κόσμε-öäü" => "κόσμε-öäü"),
       // Valid ASCII

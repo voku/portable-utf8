@@ -15,9 +15,6 @@ use voku\helper\shim\Xml;
  */
 class UTF8
 {
-  // (CRLF|([ZWNJ-ZWJ]|T+|L*(LV?V+|LV|LVT)T*|L+|[^Control])[Extend]*|[Control])
-  // This regular expression is a work around for http://bugs.exim.org/1279
-
   /**
    * @var array
    */
@@ -223,7 +220,7 @@ class UTF8
    * @var array
    */
   protected static $utf8MSWord = array(
-         "\xC2\xAB"     => '"', // « (U+00AB) in UTF-8
+        "\xC2\xAB"     => '"', // « (U+00AB) in UTF-8
         "\xC2\xBB"     => '"', // » (U+00BB) in UTF-8
         "\xE2\x80\x98" => "'", // ‘ (U+2018) in UTF-8
         "\xE2\x80\x99" => "'", // ’ (U+2019) in UTF-8
@@ -399,7 +396,7 @@ class UTF8
    * @param string $str The string to be sanitized.
    * @param bool   $remove_bom
    * @param bool   $normalize_whitespace
-   * @param bool   $normalize_msword
+   * @param bool   $normalize_msword e.g.: "…" => "..."
    * @return string Clean UTF-8 encoded string
    */
   public static function clean($str, $remove_bom = false, $normalize_whitespace = false, $normalize_msword = false)
@@ -420,8 +417,9 @@ class UTF8
 					| .                                  # anything else
 					/x';
     $str = preg_replace($regx, '$1', $str);
-    //remove diamond question mark
-    $str = str_replace("\xEF\xBF\xBD", "", $str);
+
+    $str = self::replace_diamond_question_mark($str, '');
+
     if ($normalize_whitespace === true) {
       $str = self::normalize_whitespace($str);
     }
@@ -435,6 +433,18 @@ class UTF8
     }
 
     return $str;
+  }
+
+  /**
+   * replace diamond question mark (�)
+   *
+   * @param string $str
+   * @param string $unknown
+   * @return string
+   */
+  public static function replace_diamond_question_mark($str, $unknown = '?')
+  {
+    return str_replace("\xEF\xBF\xBD", $unknown, $str);
   }
 
   /**
@@ -460,7 +470,7 @@ class UTF8
   {
     $whitespaces = implode('|', self::whitespace_table());
     $regx = '/(' . $whitespaces . ')/s';
-    return preg_replace($regx, ' ', $str);;
+    return preg_replace($regx, ' ', $str);
   }
 
   /**
@@ -658,10 +668,10 @@ class UTF8
     $text = self::fix_simple_utf8($text);
 
     // remove all none UTF-8 symbols
+    // remove diamond question mark (�)
     // && remove BOM
     // && normalize whitespace chars
-    // && normalize MS Word
-    $text = self::clean($text, true, true, true);
+    $text = self::clean($text, true, true, false);
 
     return (string)$text;
   }
