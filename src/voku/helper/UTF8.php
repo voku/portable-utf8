@@ -420,7 +420,8 @@ class UTF8
 					| .                                  # anything else
 					/x';
     $str = preg_replace($regx, '$1', $str);
-
+    //remove diamond question mark
+    $str = str_replace("\xEF\xBF\xBD", "", $str);
     if ($normalize_whitespace === true) {
       $str = self::normalize_whitespace($str);
     }
