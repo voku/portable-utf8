@@ -222,6 +222,27 @@ class UTF8
   /**
    * @var array
    */
+  protected static $utf8MSWord = array(
+         "\xC2\xAB"     => '"', // « (U+00AB) in UTF-8
+        "\xC2\xBB"     => '"', // » (U+00BB) in UTF-8
+        "\xE2\x80\x98" => "'", // ‘ (U+2018) in UTF-8
+        "\xE2\x80\x99" => "'", // ’ (U+2019) in UTF-8
+        "\xE2\x80\x9A" => "'", // ‚ (U+201A) in UTF-8
+        "\xE2\x80\x9B" => "'", // ‛ (U+201B) in UTF-8
+        "\xE2\x80\x9C" => '"', // “ (U+201C) in UTF-8
+        "\xE2\x80\x9D" => '"', // ” (U+201D) in UTF-8
+        "\xE2\x80\x9E" => '"', // „ (U+201E) in UTF-8
+        "\xE2\x80\x9F" => '"', // ‟ (U+201F) in UTF-8
+        "\xE2\x80\xB9" => "'", // ‹ (U+2039) in UTF-8
+        "\xE2\x80\xBA" => "'", // › (U+203A) in UTF-8
+        "\xE2\x80\x93" => "-", // – (U+2013) in UTF-8
+        "\xE2\x80\x94" => "-", // — (U+2014) in UTF-8
+        "\xE2\x80\xA6" => "..."  // … (U+2026) in UTF-8
+  );
+
+  /**
+   * @var array
+   */
   private static $support = array();
 
   public function __construct()
@@ -377,11 +398,11 @@ class UTF8
    *
    * @param string $str The string to be sanitized.
    * @param bool   $remove_bom
-   * @param bool   $normalise_whitespace
-   *
+   * @param bool   $normalize_whitespace
+   * @param bool   $normalize_msword
    * @return string Clean UTF-8 encoded string
    */
-  public static function clean($str, $remove_bom = false, $normalise_whitespace = false)
+  public static function clean($str, $remove_bom = false, $normalize_whitespace = false, $normalize_msword = false)
   {
     // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
     // caused connection reset problem on larger strings
@@ -400,10 +421,12 @@ class UTF8
 					/x';
     $str = preg_replace($regx, '$1', $str);
 
-    if ($normalise_whitespace === true) {
-      $whitespaces = implode('|', self::whitespace_table());
-      $regx = '/(' . $whitespaces . ')/s';
-      $str = preg_replace($regx, ' ', $str);
+    if ($normalize_whitespace === true) {
+      $str = self::normalize_whitespace($str);
+    }
+
+    if ($normalize_msword === true) {
+      $str = self::normalize_msword($str);
     }
 
     if ($remove_bom === true) {
@@ -411,6 +434,32 @@ class UTF8
     }
 
     return $str;
+  }
+
+  /**
+   * normalize MS Word Special Chars
+   *
+   * @param string $str The string to be normalized.
+   *
+   * @return string
+   */
+  public static function normalize_msword($str)
+  {
+    return strtr($str, self::$utf8MSWord);
+  }
+
+  /**
+   * normalize whitespace
+   *
+   * @param string $str The string to be normalized.
+   *
+   * @return string
+   */
+  public static function normalize_whitespace($str)
+  {
+    $whitespaces = implode('|', self::whitespace_table());
+    $regx = '/(' . $whitespaces . ')/s';
+    return preg_replace($regx, ' ', $str);;
   }
 
   /**
@@ -610,7 +659,8 @@ class UTF8
     // remove all none UTF-8 symbols
     // && remove BOM
     // && normalize whitespace chars
-    $text = self::clean($text, true, true);
+    // && normalize MS Word
+    $text = self::clean($text, true, true, true);
 
     return (string)$text;
   }
