@@ -39,6 +39,53 @@ class Bootup
   }
 
   /**
+   * Determines if the current version of PHP is equal to or greater than the supplied value
+   *
+   * @param  string
+   *
+   * @return  bool  TRUE if the current version is $version or higher
+   */
+  public static function is_php($version)
+  {
+    static $_is_php;
+    $version = (string)$version;
+    if (!isset($_is_php[$version])) {
+      $_is_php[$version] = version_compare(PHP_VERSION, $version, '>=');
+    }
+    return $_is_php[$version];
+  }
+  /**
+   * Get random bytes
+   *
+   * @param  int $length Output length
+   *
+   * @return  string
+   */
+  public static function get_random_bytes($length)
+  {
+    if (empty($length) OR !ctype_digit((string)$length)) {
+      return false;
+    }
+    // Unfortunately, none of the following PRNGs is guaranteed to exist ...
+    if (defined('MCRYPT_DEV_URANDOM') && ($output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)) !== false) {
+      return $output;
+    }
+    if (is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
+      // Try not to waste entropy ...
+      Bootup::is_php('5.4') && stream_set_chunk_size($fp, $length);
+      $output = fread($fp, $length);
+      fclose($fp);
+      if ($output !== false) {
+        return $output;
+      }
+    }
+    if (function_exists('openssl_random_pseudo_bytes')) {
+      return openssl_random_pseudo_bytes($length);
+    }
+    return false;
+  }
+
+  /**
    * init utf8_encode
    */
   protected static function initUtf8Encode()

@@ -1448,6 +1448,34 @@ class UTF8
   }
 
   /**
+   * Remove Invisible Characters
+   *
+   * This prevents sandwiching null characters
+   * between ascii characters, like Java\0script.
+   *
+   * copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
+   *
+   * @param	string     $str
+   * @param	bool       $url_encoded
+   * @return	string
+   */
+  public static function remove_invisible_characters($str, $url_encoded = true)
+  {
+    $non_displayables = array();
+    // every control character except newline (dec 10),
+    // carriage return (dec 13) and horizontal tab (dec 09)
+    if ($url_encoded) {
+      $non_displayables[] = '/%0[0-8bcef]/';	// url encoded 00-08, 11, 12, 14, 15
+      $non_displayables[] = '/%1[0-9a-f]/';	// url encoded 16-31
+    }
+    $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S';	// 00-08, 11, 12, 14-31, 127
+    do {
+      $str = preg_replace($non_displayables, '', $str, -1, $count);
+    } while ($count);
+    return $str;
+  }
+
+  /**
    * checks if the number of Unicode characters in a string are not
    * more than the specified integer.
    *
@@ -1591,7 +1619,14 @@ class UTF8
   }
 
   /**
+   *
    * UTF-8 version of html_entity_decode()
+   *
+   * The reason we are not using html_entity_decode() by itself is because
+   * while it is not technically correct to leave out the semicolon
+   * at the end of an entity most browsers will still interpret the entity
+   * correctly. html_entity_decode() does not convert entities without
+   * semicolons, so we are left with our own little solution here. Bummer.
    *
    * Convert all HTML entities to their applicable characters
    *
@@ -1653,9 +1688,60 @@ class UTF8
    *
    * @return string the decoded string.
    */
-  public static function html_entity_decode($string, $flags = ENT_COMPAT, $encoding = 'UTF-8')
+  public static function html_entity_decode($string, $flags = null, $encoding = 'UTF-8')
   {
-    return html_entity_decode($string, $flags, $encoding);
+    if (strpos($string, '&') === false) {
+      return $string;
+    }
+
+    static $_entities;
+    if ($flags === null) {
+      $flags = Bootup::is_php('5.4') ? ENT_COMPAT | ENT_HTML5 : ENT_COMPAT;
+    }
+
+    do {
+      $str_compare = $string;
+      // decode standard entities, avoiding false positives
+      if (preg_match_all('/&[a-z]{2,}(?![a-z;])/i', $string, $matches)) {
+        if (!isset($_entities)) {
+
+          /** @noinspection PhpMethodParametersCountMismatchInspection */
+          $_entities = array_map(
+              'strtolower',
+              Bootup::is_php('5.3.4') ? get_html_translation_table(HTML_ENTITIES, $flags, $encoding) : get_html_translation_table(HTML_ENTITIES, $flags)
+          );
+
+          // if we're not on PHP 5.4+, add the possibly dangerous HTML 5
+          // entities to the array manually
+          if ($flags === ENT_COMPAT) {
+            $_entities[':'] = '&colon;';
+            $_entities['('] = '&lpar;';
+            $_entities[')'] = '&rpar';
+            $_entities["\n"] = '&newline;';
+            $_entities["\t"] = '&tab;';
+          }
+        }
+
+        $replace = array();
+        $matches = array_unique(array_map(array('voku\helper\UTF8', 'strtolower'), $matches[0]));
+        for ($i = 0, $c = count($matches); $i < $c; $i++) {
+          if (($char = array_search($matches[$i] . ';', $_entities, true)) !== false) {
+            $replace[$matches[$i]] = $char;
+          }
+        }
+        $string = UTF8::str_ireplace(array_keys($replace), array_values($replace), $string);
+      }
+
+      // decode numeric & UTF16 two byte entities
+      $string = html_entity_decode(
+          preg_replace('/(&#(?:x0*[0-9a-f]{2,5}(?![0-9a-f;])|(?:0*\d{2,4}(?![0-9;]))))/iS', '$1;', $string),
+          $flags,
+          $encoding
+      );
+    }
+    while ($str_compare !== $string);
+
+    return $string;
   }
 
   /**
