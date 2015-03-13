@@ -1026,7 +1026,7 @@ class UTF8
       return true;
     }
 
-    if (self::pcre_utf8_support() === true) {
+    if (self::pcre_utf8_support() !== true) {
       // If even just the first character can be matched, when the /u
       // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
       // invalid, nothing at all will match, even if the string contains
@@ -1907,12 +1907,69 @@ class UTF8
     }
 
     $encoding = self::str_detect_encoding($data);
-    if ($encoding != 'UTF-8') {
+    if ($encoding != 'UTF-8' && self::is_binary($data, false)) {
       $data = iconv($encoding, 'UTF-8', $data);
     }
 
     // clean utf-8 string
     return self::cleanup($data);
+  }
+
+  /**
+   * is_binary_file
+   *
+   * @param $file
+   * @return mixed
+   */
+  public static function is_binary_file($file) {
+    try {
+      $fp = fopen($file,'r');
+      $block = fread($fp, 512);
+      fclose($fp);
+    }
+    catch(\Exception $e) {
+      $block = "";
+    }
+    return self::is_binary($block);
+  }
+
+  /**
+   * is_binary
+   *
+   * @param $block
+   * @param bool $utf
+   * @return bool
+   */
+  public static function is_binary($block, $utf = true) {
+    $test = (
+        0 or substr_count($block, "^ -~")/strlen($block) > 0.3
+        or substr_count($block, "\x00") > 0
+    );
+    if ($test && !($utf && self::is_utf16($block))) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * is_utf16
+   *
+   * @param $string
+   * @return bool
+   */
+  public static function is_utf16($string) {
+    if (self::is_binary($string, false)) {
+      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16');
+      if (strlen($test) > 1) {
+        $test2 = mb_convert_encoding($test, 'UTF-16', 'UTF-8');
+        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16');
+        if ($test3 == $test) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**
@@ -2475,18 +2532,27 @@ class UTF8
     }
 
     if (!$encoding || $encoding == 'UTF-8') {
-      $detectOrder = array('UTF-16', 'utf-32', 'UTF-8', 'windows-1251', 'ISO-8859-1');
+      $detectOrder = array('UTF-32', 'UTF-16', 'UTF-8' );
 
       foreach ($detectOrder as $encodingItemFirst) {
         foreach ($detectOrder as $encodingItemSecond) {
 
           $strTmp = @iconv($encodingItemFirst, $encodingItemSecond, $str);
-          if ($encodingItemSecond == 'UTF-16' || $encodingItemSecond == 'utf-32') {
+          if ($encodingItemSecond == 'UTF-16') {
             $strTmp = substr($strTmp, 2);
           }
+          if ($encodingItemSecond == 'UTF-32') {
+            $strTmp = substr($strTmp, 4);
+          }
 
-          if ($strTmp === $str) {
-            return $encodingItemSecond;
+          $stringCompare = self::strcasecmp($strTmp, $str);
+          if (
+              $strTmp === $str
+              &&
+              $stringCompare === 0
+          ) {
+            echo $encodingItemFirst;
+            return $encodingItemFirst;
           }
 
         }
