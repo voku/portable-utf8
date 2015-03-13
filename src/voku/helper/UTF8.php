@@ -1421,6 +1421,9 @@ class UTF8
    */
   public static function strwidth($s)
   {
+    // init
+    self::checkForSupport();
+
     return mb_strwidth($s, 'UTF-8');
   }
 
@@ -1504,6 +1507,9 @@ class UTF8
     if ('' === $needle .= '') {
       return false;
     }
+
+    // init
+    self::checkForSupport();
 
     return mb_stristr($string, $needle, $before_needle, 'UTF-8');
   }
@@ -1906,6 +1912,7 @@ class UTF8
       return false;
     }
 
+    self::checkForSupport();
     $encoding = self::str_detect_encoding($data);
     if ($encoding != 'UTF-8' && self::is_binary($data, false)) {
       $data = iconv($encoding, 'UTF-8', $data);
@@ -1970,6 +1977,8 @@ class UTF8
    */
   public static function is_utf32($string) {
     if (self::is_binary($string, false)) {
+      self::checkForSupport();
+
       $test = mb_convert_encoding($string, 'UTF-8', 'UTF-32');
 
       if (strlen($test) > 1) {
@@ -1993,6 +2002,8 @@ class UTF8
    */
   public static function is_utf16($string) {
     if (self::is_binary($string, false)) {
+      self::checkForSupport();
+
       $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16');
 
       if (strlen($test) > 1) {
@@ -2562,6 +2573,8 @@ class UTF8
 
 
     if (!$encoding) {
+      self::checkForSupport();
+
       // For UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always.
       $detectOrder = ['UTF-8', 'windows-1251', 'ISO-8859-1',];
       $encoding = mb_detect_encoding($str, $detectOrder, true);
