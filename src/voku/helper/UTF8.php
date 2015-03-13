@@ -2576,7 +2576,7 @@ class UTF8
       self::checkForSupport();
 
       // For UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always.
-      $detectOrder = ['UTF-8', 'windows-1251', 'ISO-8859-1',];
+      $detectOrder = array('UTF-8', 'windows-1251', 'ISO-8859-1');
       $encoding = mb_detect_encoding($str, $detectOrder, true);
     }
 
