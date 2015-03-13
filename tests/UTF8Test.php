@@ -812,7 +812,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
     $testString = UTF8::file_get_contents(dirname(__FILE__) . "/test1Latin.txt");
-    $this->assertContains('Itrntinliztin', $testString);
+    $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
   }
 

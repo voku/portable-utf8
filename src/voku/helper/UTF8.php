@@ -1914,7 +1914,7 @@ class UTF8
 
     self::checkForSupport();
     $encoding = self::str_detect_encoding($data);
-    if ($encoding != 'UTF-8' && self::is_binary($data, false)) {
+    if ($encoding != 'UTF-8') {
       $data = iconv($encoding, 'UTF-8', $data);
     }
 
@@ -1972,7 +1972,7 @@ class UTF8
   /**
    * is_utf32
    *
-   * @param $string
+   * @param string $string
    * @return bool
    */
   public static function is_utf32($string) {
@@ -1997,7 +1997,7 @@ class UTF8
   /**
    * is_utf16
    *
-   * @param $string
+   * @param string $string
    * @return bool
    */
   public static function is_utf16($string) {
@@ -2580,32 +2580,13 @@ class UTF8
       $encoding = mb_detect_encoding($str, $detectOrder, true);
     }
 
-    if (!$encoding || $encoding == 'UTF-8') {
-      $detectOrder = array('UTF-32', 'UTF-16', 'UTF-8' );
-
-      foreach ($detectOrder as $encodingItemFirst) {
-        foreach ($detectOrder as $encodingItemSecond) {
-
-          $strTmp = @iconv($encodingItemFirst, $encodingItemSecond, $str);
-          if ($encodingItemSecond == 'UTF-16') {
-            $strTmp = substr($strTmp, 2);
-          }
-          if ($encodingItemSecond == 'UTF-32') {
-            $strTmp = substr($strTmp, 4);
-          }
-
-          $stringCompare = self::strcasecmp($strTmp, $str);
-          if (
-              $strTmp === $str
-              &&
-              $stringCompare === 0
-          ) {
-            return $encodingItemFirst;
-          }
-
-        }
+    if (self::is_binary($str, false)) {
+      if (self::is_utf16($str)) {
+        return 'UTF-16';
       }
-
+      else if (self::is_utf32($str)) {
+        return 'UTF-16';
+      }
     }
 
     if (!$encoding) {
