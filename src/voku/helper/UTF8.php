@@ -1942,14 +1942,47 @@ class UTF8
    */
   public static function is_binary($block, $utf = true) {
     $test = (
-        0 or substr_count($block, "^ -~")/strlen($block) > 0.3
-        or substr_count($block, "\x00") > 0
+        0
+        or
+        substr_count($block, "^ -~")/strlen($block) > 0.3
+        or
+        substr_count($block, "\x00") > 0
     );
-    if ($test && !($utf && self::is_utf16($block))) {
+
+    if (
+        $test
+        &&
+        !($utf && self::is_utf16($block))
+        &&
+        !($utf && self::is_utf32($block))
+    ) {
       return true;
     } else {
       return false;
     }
+  }
+
+  /**
+   * is_utf32
+   *
+   * @param $string
+   * @return bool
+   */
+  public static function is_utf32($string) {
+    if (self::is_binary($string, false)) {
+      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-32');
+
+      if (strlen($test) > 1) {
+        $test2 = mb_convert_encoding($test, 'UTF-32', 'UTF-8');
+        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-32');
+
+        if ($test3 == $test) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -1961,14 +1994,17 @@ class UTF8
   public static function is_utf16($string) {
     if (self::is_binary($string, false)) {
       $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16');
+
       if (strlen($test) > 1) {
         $test2 = mb_convert_encoding($test, 'UTF-16', 'UTF-8');
         $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16');
+
         if ($test3 == $test) {
           return true;
         }
       }
     }
+
     return false;
   }
 
@@ -2551,7 +2587,6 @@ class UTF8
               &&
               $stringCompare === 0
           ) {
-            echo $encodingItemFirst;
             return $encodingItemFirst;
           }
 
