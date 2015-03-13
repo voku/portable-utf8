@@ -2551,7 +2551,7 @@ class UTF8
     // init
     $encoding = '';
 
-    if (self::is_bom($str)) {
+    if (self::string_has_bom($str)) {
       return 'UTF-8';
     }
 
