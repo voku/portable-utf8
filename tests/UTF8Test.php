@@ -803,6 +803,13 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testFileGetContents()
+  {
+    $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16pe.txt');
+
+    $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+  }
+
   public function testToLatin1Utf8()
   {
     $tests = array(
@@ -1184,8 +1191,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testToUtf8_v3()
   {
-    $utf8File = file_get_contents(dirname(__FILE__) . "/test1Utf8.txt");
-    $latinFile = file_get_contents(dirname(__FILE__) . "/test1Latin.txt");
+    $utf8File = UTF8::file_get_contents(dirname(__FILE__) . "/test1Utf8.txt");
+    $latinFile = UTF8::file_get_contents(dirname(__FILE__) . "/test1Latin.txt");
 
     $utf8File = explode("\n", $utf8File);
     $latinFile = explode("\n", $latinFile);

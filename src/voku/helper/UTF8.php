@@ -444,7 +444,7 @@ class UTF8
    */
   public static function replace_diamond_question_mark($str, $unknown = '?')
   {
-    return str_replace("\xEF\xBF\xBD", $unknown, $str);
+    return str_replace(array("\xEF\xBF\xBD", "�"), array($unknown, $unknown), $str);
   }
 
   /**
@@ -1877,6 +1877,45 @@ class UTF8
   }
 
   /**
+   * fetch a remote file with correct encoding
+   *
+   * @param String $filename
+   * @param Int    $timeout (in sec)
+   *
+   * @return String or false (by error)
+   */
+  public static function file_get_contents($filename, $timeout = 10)
+  {
+    // init
+    $timeout = (int)$timeout;
+    $filename = filter_var($filename, FILTER_SANITIZE_STRING);
+
+    $ctx = stream_context_create(
+        array(
+            'http' =>
+                array(
+                    'timeout' => $timeout
+                )
+        )
+    );
+
+    $data = file_get_contents($filename, false, $ctx);
+
+    // return false on error
+    if ($data === false) {
+      return false;
+    }
+
+    $encoding = self::str_detect_encoding($data);
+    if ($encoding != 'UTF-8') {
+      $data = iconv($encoding, 'UTF-8', $data);
+    }
+
+    // clean utf-8 string
+    return self::cleanup($data);
+  }
+
+  /**
    * Finds the last occurrence of a character in a string within another
    *
    * @link http://php.net/manual/en/function.mb-strrchr.php
@@ -2398,13 +2437,78 @@ class UTF8
   }
 
   /**
+   * optimized "mb_detect_encoding()"-function -> with UTF-16 and UTF-32 support
+   *
+   * @param string $str
+   * @return bool|string false if we can't detect the string-encoding
+   */
+  public static function str_detect_encoding($str)
+  {
+    // init
+    $encoding = '';
+
+    if (self::is_bom($str)) {
+      return 'UTF-8';
+    }
+
+    if ("\x00\x00\xFE\xFF" === substr($str, 0, 4)) {
+      return 'UTF-32'; // BE
+    }
+
+    if ("\xFF\xFE\x00\x00" === substr($str, 0, 4)) {
+      return 'UTF-32'; // BE
+    }
+
+    if ("\xFE\xFF" === substr($str, 0, 2)) {
+      return 'UTF-16'; // LE
+    }
+
+    if ("\xFF\xFE" === substr($str, 0, 2)) {
+      return 'UTF-16'; // LE
+    }
+
+
+    if (!$encoding) {
+      // For UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always.
+      $detectOrder = ['UTF-8', 'windows-1251', 'ISO-8859-1',];
+      $encoding = mb_detect_encoding($str, $detectOrder, true);
+    }
+
+    if (!$encoding || $encoding == 'UTF-8') {
+      $detectOrder = array('UTF-16', 'utf-32', 'UTF-8', 'windows-1251', 'ISO-8859-1');
+
+      foreach ($detectOrder as $encodingItemFirst) {
+        foreach ($detectOrder as $encodingItemSecond) {
+
+          $strTmp = @iconv($encodingItemFirst, $encodingItemSecond, $str);
+          if ($encodingItemSecond == 'UTF-16' || $encodingItemSecond == 'utf-32') {
+            $strTmp = substr($strTmp, 2);
+          }
+
+          if ($strTmp === $str) {
+            return $encodingItemSecond;
+          }
+
+        }
+      }
+
+    }
+
+    if (!$encoding) {
+      $encoding = false;
+    }
+
+    return $encoding;
+  }
+
+  /**
    * returns the Byte Order Mark Character
    *
    * @return   string Byte Order Mark
    */
   public static function bom()
   {
-    return "\xef\xbb\xbf";
+    return "\xEF\xBB\xBF";
   }
 
   /**
