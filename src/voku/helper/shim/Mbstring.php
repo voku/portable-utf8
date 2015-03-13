@@ -128,9 +128,13 @@ class Mbstring
 
     if ('html-entities' === $to_encoding) {
       'html-entities' === $from_encoding && $from_encoding = 'Windows-1252';
+
       'utf-8' === $from_encoding
-      || 'utf8' === $from_encoding
-      || $s = iconv($from_encoding, 'UTF-8//IGNORE', $s);
+      ||
+      'utf8' === $from_encoding
+      ||
+      $s = iconv($from_encoding, 'UTF-8//IGNORE', $s);
+
       return preg_replace_callback(
           '/[\x80-\xFF]+/', array(
           __CLASS__,

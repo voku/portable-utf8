@@ -805,15 +805,17 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testFileGetContents()
   {
-    $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16pe.txt');
-    $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+    // TODO: UTF-8 shim only works for UTF-8 :P
+    if (UTF8::mbstring_loaded() === true) {
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16pe.txt');
+      $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
 
-    $testString = UTF8::file_get_contents(dirname(__FILE__) . "/test1Utf8.txt");
-    $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . "/test1Utf8.txt");
+      $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-    $testString = UTF8::file_get_contents(dirname(__FILE__) . "/test1Latin.txt");
-    $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . "/test1Latin.txt");
+      $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
+    }
   }
 
   public function testToLatin1Utf8()

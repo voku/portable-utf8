@@ -270,7 +270,7 @@ class UTF8
    *
    * @return   bool True if available, False otherwise
    */
-  protected static function mbstring_loaded()
+  public static function mbstring_loaded()
   {
     $return = extension_loaded('mbstring');
 
@@ -286,7 +286,7 @@ class UTF8
    *
    * @return   bool True if available, False otherwise
    */
-  protected static function iconv_loaded()
+  public static function iconv_loaded()
   {
     return extension_loaded('iconv') ? true : false;
   }
@@ -296,7 +296,7 @@ class UTF8
    *
    * @return   bool True if available, False otherwise
    */
-  protected static function intl_loaded()
+  public static function intl_loaded()
   {
     return extension_loaded('intl') ? true : false;
   }
@@ -306,7 +306,7 @@ class UTF8
    *
    * @return   bool True if support is available, false otherwise
    */
-  protected static function pcre_utf8_support()
+  public static function pcre_utf8_support()
   {
     return (bool)@preg_match('//u', '');
   }
@@ -1915,7 +1915,7 @@ class UTF8
     self::checkForSupport();
     $encoding = self::str_detect_encoding($data);
     if ($encoding != 'UTF-8') {
-      $data = iconv($encoding, 'UTF-8', $data);
+      $data = mb_convert_encoding($data, 'UTF-8', $encoding);
     }
 
     // clean utf-8 string
