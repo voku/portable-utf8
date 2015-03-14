@@ -1885,27 +1885,100 @@ class UTF8
   /**
    * fetch a remote file with correct encoding
    *
-   * @param String $filename
-   * @param Int    $timeout (in sec)
-   *
-   * @return String or false (by error)
+   * @link http://php.net/manual/en/function.file-get-contents.php
+   * @param string $filename <p>
+   * Name of the file to read.
+   * </p>
+   * @param int $flags [optional] <p>
+   * Prior to PHP 6, this parameter is called
+   * use_include_path and is a bool.
+   * As of PHP 5 the FILE_USE_INCLUDE_PATH can be used
+   * to trigger include path
+   * search.
+   * </p>
+   * <p>
+   * The value of flags can be any combination of
+   * the following flags (with some restrictions), joined with the
+   * binary OR (|)
+   * operator.
+   * </p>
+   * <p>
+   * <table>
+   * Available flags
+   * <tr valign="top">
+   * <td>Flag</td>
+   * <td>Description</td>
+   * </tr>
+   * <tr valign="top">
+   * <td>
+   * FILE_USE_INCLUDE_PATH
+   * </td>
+   * <td>
+   * Search for filename in the include directory.
+   * See include_path for more
+   * information.
+   * </td>
+   * </tr>
+   * <tr valign="top">
+   * <td>
+   * FILE_TEXT
+   * </td>
+   * <td>
+   * As of PHP 6, the default encoding of the read
+   * data is UTF-8. You can specify a different encoding by creating a
+   * custom context or by changing the default using
+   * stream_default_encoding. This flag cannot be
+   * used with FILE_BINARY.
+   * </td>
+   * </tr>
+   * <tr valign="top">
+   * <td>
+   * FILE_BINARY
+   * </td>
+   * <td>
+   * With this flag, the file is read in binary mode. This is the default
+   * setting and cannot be used with FILE_TEXT.
+   * </td>
+   * </tr>
+   * </table>
+   * </p>
+   * @param resource $context [optional] <p>
+   * A valid context resource created with
+   * stream_context_create. If you don't need to use a
+   * custom context, you can skip this parameter by &null;.
+   * </p>
+   * @param int $offset [optional] <p>
+   * The offset where the reading starts.
+   * </p>
+   * @param int $maxlen [optional] <p>
+   * Maximum length of data read. The default is to read until end
+   * of file is reached.
+   * </p>
+   * @param int $timeout
+   * @return string The function returns the read data or false on failure.
    */
-  public static function file_get_contents($filename, $timeout = 10)
+  public static function file_get_contents($filename, $flags = false, $context = null, $offset = null, $maxlen = null, $timeout = 10)
   {
     // init
     $timeout = (int)$timeout;
     $filename = filter_var($filename, FILTER_SANITIZE_STRING);
 
-    $ctx = stream_context_create(
-        array(
-            'http' =>
-                array(
-                    'timeout' => $timeout
-                )
-        )
-    );
+    if ($timeout && $context === null) {
+      $context = stream_context_create(
+          array(
+              'http' =>
+                  array(
+                      'timeout' => $timeout
+                  )
+          )
+      );
+    }
 
-    $data = file_get_contents($filename, false, $ctx);
+    if ($maxlen) {
+      $data = file_get_contents($filename, $flags, $context, $offset, $maxlen);
+    } else {
+      $data = file_get_contents($filename, $flags, $context, $offset);
+    }
 
     // return false on error
     if ($data === false) {
@@ -1948,10 +2021,11 @@ class UTF8
    * @return bool
    */
   public static function is_binary($block, $utf = true) {
+    $testLength = strlen($block);
     $test = (
         0
         or
-        substr_count($block, "^ -~")/strlen($block) > 0.3
+        ($testLength ? substr_count($block, "^ -~") / $testLength > 0.3 : 1 == 0)
         or
         substr_count($block, "\x00") > 0
     );
@@ -1984,11 +2058,11 @@ class UTF8
       if (strlen($test) > 1) {
         $test2 = mb_convert_encoding($test, 'UTF-32', 'UTF-8');
         $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-32');
-
         if ($test3 == $test) {
           return true;
         }
       }
+
     }
 
     return false;
@@ -2005,15 +2079,14 @@ class UTF8
       self::checkForSupport();
 
       $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16');
-
       if (strlen($test) > 1) {
         $test2 = mb_convert_encoding($test, 'UTF-16', 'UTF-8');
         $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16');
-
         if ($test3 == $test) {
           return true;
         }
       }
+
     }
 
     return false;
@@ -2523,7 +2596,7 @@ class UTF8
    */
   public static function file_has_bom($file_path)
   {
-    return self::is_bom(file_get_contents($file_path, 0, null, -1, 3));
+    return self::is_bom(file_get_contents($file_path, null, null, -1, 3));
   }
 
   /**
@@ -2581,11 +2654,11 @@ class UTF8
     }
 
     if (self::is_binary($str, false)) {
-      if (self::is_utf16($str)) {
+      if (self::is_utf16($str) === true) {
         return 'UTF-16';
       }
-      else if (self::is_utf32($str)) {
-        return 'UTF-16';
+      else if (self::is_utf32($str) === true) {
+        return 'UTF-32';
       }
     }
 

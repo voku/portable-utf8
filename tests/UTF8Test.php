@@ -803,17 +803,45 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testUtf8FileWithBom()
+  {
+    $bom = UTF8::file_has_bom(dirname(__FILE__) . '/test1Utf8Bom.txt');
+    $this->assertEquals(true, $bom);
+
+    $bom = UTF8::file_has_bom(dirname(__FILE__) . '/test1Utf8.txt');
+    $this->assertEquals(false, $bom);
+  }
+
+  public function testIsBinary()
+  {
+    $tests = array(
+        "öäü"            => false,
+        ""               => false
+    );
+
+    foreach ($tests as $before => $after) {
+      $this->assertEquals($after, UTF8::is_binary($before));
+    }
+  }
+
   public function testFileGetContents()
   {
     // TODO: UTF-8 shim only works for UTF-8 :P
     if (UTF8::mbstring_loaded() === true) {
+
       $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16pe.txt');
       $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . "/test1Utf8.txt");
+      //$testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16le.txt');
+      //$this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf8.txt');
       $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . "/test1Latin.txt");
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Latin.txt');
+      $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Iso8859-7.txt');
       $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
     }
   }
@@ -927,7 +955,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::normalize_msword($before, ''));
+      $this->assertEquals($after, UTF8::normalize_msword($before));
     }
   }
 
@@ -944,7 +972,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::normalize_whitespace($before, ''));
+      $this->assertEquals($after, UTF8::normalize_whitespace($before));
     }
   }
 
