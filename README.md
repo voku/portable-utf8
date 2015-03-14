@@ -12,10 +12,10 @@ Portable UTF-8
 
 This library is a Unicode aware alternative to PHP's native string handling API.
 
-Based on Hamid Sarfraz's work: http://pageconfig.com/attachments/portable-utf8.php
-Based on Nicolas Grekas's work: https://github.com/tchwork/utf8
-Based on Behat's work: https://github.com/Behat/Transliterator
-Based on Sebastián Grignoli's work: https://github.com/neitanod/forceutf8
+- Based on Hamid Sarfraz's work: http://pageconfig.com/attachments/portable-utf8.php
+- Based on Nicolas Grekas's work: https://github.com/tchwork/utf8
+- Based on Behat's work: https://github.com/Behat/Transliterator
+- Based on Sebastián Grignoli's work: https://github.com/neitanod/forceutf8
 
 Description
 ===========
