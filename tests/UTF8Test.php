@@ -265,6 +265,21 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testRemoveBom()
+  {
+    $testBom = array(
+        "\xEF\xBB\xBFΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
+        "\xFE\xFFΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
+        "\xFF\xFEΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
+        "\x00\x00\xFE\xFFΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
+        "\xFF\xFE\x00\x00Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα"
+    );
+
+    foreach ($testBom as $count => $test) {
+      $this->assertEquals("Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα", UTF8::removeBOM($test), 'error by ' . $count);
+    }
+  }
+
   public function testRemoveDuplicates()
   {
     $testArray = array(
@@ -1383,6 +1398,21 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       $this->assertEquals($after, UTF8::str_transliterate($before), $before);
     }
+  }
+
+  public function testcleanParameter()
+  {
+    $dirtyTestString = "\xEF\xBB\xBF„Abcdef\xc2\xa0…”";
+
+    $this->assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString));
+    $this->assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString, false, false, false));
+    $this->assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0...\"", UTF8::clean($dirtyTestString, false, false, true));
+    $this->assertEquals("\xEF\xBB\xBF„Abcdef …”", UTF8::clean($dirtyTestString, false, true, false));
+    $this->assertEquals("\xEF\xBB\xBF\"Abcdef ...\"", UTF8::clean($dirtyTestString, false, true, true));
+    $this->assertEquals("„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString, true, false, false));
+    $this->assertEquals("\"Abcdef\xc2\xa0...\"", UTF8::clean($dirtyTestString, true, false, true));
+    $this->assertEquals("„Abcdef …”", UTF8::clean($dirtyTestString, true, true, false));
+    $this->assertEquals('"Abcdef ..."', UTF8::clean($dirtyTestString, true, true, true));
   }
 
   public function testWhitespace()

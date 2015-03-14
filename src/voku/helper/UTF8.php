@@ -518,29 +518,29 @@ class UTF8
   public static function removeBOM($str = '')
   {
 
-    // UTF-8
-    if (substr($str, 0, 3) == @pack('CCC', 0xef, 0xbb, 0xbf)) {
-      $str = substr($str, 3);
-    }
-
-    // UTF-16 (BE)
-    if (substr($str, 0, 2) == @pack('CC', 0xfe, 0xff)) {
-      $str = substr($str, 2);
-    }
-
-    // UTF-16 (LE)
-    if (substr($str, 0, 2) == @pack('CC', 0xff, 0xfe)) {
-      $str = substr($str, 2);
-    }
-
     // UTF-32 (BE)
-    if (substr($str, 0, 4) == @pack('CC', 0x00, 0x00, 0xfe, 0xff)) {
+    if (substr($str, 0, 4) == pack('CCCC', 0x00, 0x00, 0xfe, 0xff)) {
       $str = substr($str, 4);
     }
 
     // UTF-32 (LE)
-    if (substr($str, 0, 4) == @pack('CC', 0xff, 0xfe, 0x00, 0x00)) {
+    if (substr($str, 0, 4) == pack('CCCC', 0xff, 0xfe, 0x00, 0x00)) {
       $str = substr($str, 4);
+    }
+
+    // UTF-8
+    if (substr($str, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
+      $str = substr($str, 3);
+    }
+
+    // UTF-16 (BE)
+    if (substr($str, 0, 2) == pack('CC', 0xfe, 0xff)) {
+      $str = substr($str, 2);
+    }
+
+    // UTF-16 (LE)
+    if (substr($str, 0, 2) == pack('CC', 0xff, 0xfe)) {
+      $str = substr($str, 2);
     }
 
     return $str;
