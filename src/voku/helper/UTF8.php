@@ -1883,7 +1883,7 @@ class UTF8
   }
 
   /**
-   * fetch a remote file with correct encoding
+   * Reads entire file into a string
    *
    * @link http://php.net/manual/en/function.file-get-contents.php
    * @param string $filename <p>
@@ -1957,7 +1957,7 @@ class UTF8
    * @param int $timeout
    * @return string The function returns the read data or false on failure.
    */
-  public static function file_get_contents($filename, $flags = false, $context = null, $offset = null, $maxlen = null, $timeout = 10)
+  public static function file_get_contents($filename, $flags = null, $context = null, $offset = null, $maxlen = null, $timeout = 10)
   {
     // init
     $timeout = (int)$timeout;
