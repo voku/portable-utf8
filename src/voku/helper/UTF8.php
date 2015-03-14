@@ -509,7 +509,7 @@ class UTF8
   }
 
   /**
-   * remove the BOM from UTF-8
+   * remove the BOM from UTF-8 / UTF-16 / UTF-32
    *
    * @param string $str
    *
@@ -517,9 +517,32 @@ class UTF8
    */
   public static function removeBOM($str = '')
   {
+
+    // UTF-8
     if (substr($str, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
       $str = substr($str, 3);
     }
+
+    // UTF-16 (BE)
+    if (substr($str, 0, 2) == pack('CC', 0xfe, 0xff)) {
+      $str = substr($str, 2);
+    }
+
+    // UTF-16 (LE)
+    if (substr($str, 0, 2) == pack('CC', 0xff, 0xfe)) {
+      $str = substr($str, 2);
+    }
+
+    // UTF-32 (BE)
+    if (substr($str, 0, 4) == pack('CC', 0x00, 0x00, 0xfe, 0xff)) {
+      $str = substr($str, 4);
+    }
+
+    // UTF-32 (LE)
+    if (substr($str, 0, 4) == pack('CC', 0xff, 0xfe, 0x00, 0x00)) {
+      $str = substr($str, 4);
+    }
+
     return $str;
   }
 

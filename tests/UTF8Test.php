@@ -832,8 +832,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16pe.txt');
       $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
 
-      //$testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16le.txt');
-      //$this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16le.txt');
+      $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
 
       $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf8.txt');
       $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
