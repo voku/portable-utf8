@@ -519,27 +519,27 @@ class UTF8
   {
 
     // UTF-8
-    if (substr($str, 0, 3) == pack('CCC', 0xef, 0xbb, 0xbf)) {
+    if (substr($str, 0, 3) == @pack('CCC', 0xef, 0xbb, 0xbf)) {
       $str = substr($str, 3);
     }
 
     // UTF-16 (BE)
-    if (substr($str, 0, 2) == pack('CC', 0xfe, 0xff)) {
+    if (substr($str, 0, 2) == @pack('CC', 0xfe, 0xff)) {
       $str = substr($str, 2);
     }
 
     // UTF-16 (LE)
-    if (substr($str, 0, 2) == pack('CC', 0xff, 0xfe)) {
+    if (substr($str, 0, 2) == @pack('CC', 0xff, 0xfe)) {
       $str = substr($str, 2);
     }
 
     // UTF-32 (BE)
-    if (substr($str, 0, 4) == pack('CC', 0x00, 0x00, 0xfe, 0xff)) {
+    if (substr($str, 0, 4) == @pack('CC', 0x00, 0x00, 0xfe, 0xff)) {
       $str = substr($str, 4);
     }
 
     // UTF-32 (LE)
-    if (substr($str, 0, 4) == pack('CC', 0xff, 0xfe, 0x00, 0x00)) {
+    if (substr($str, 0, 4) == @pack('CC', 0xff, 0xfe, 0x00, 0x00)) {
       $str = substr($str, 4);
     }
 
@@ -2070,19 +2070,47 @@ class UTF8
    * is_utf32
    *
    * @param string $string
-   * @return bool
+   * @return int|false false if is't not UTF16, 1 for UTF-16LE, 2 for UTF-16BE
    */
   public static function is_utf32($string) {
     if (self::is_binary($string, false)) {
       self::checkForSupport();
 
-      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-32');
-
+      $maybeUTF32LE = 0;
+      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-32LE');
       if (strlen($test) > 1) {
-        $test2 = mb_convert_encoding($test, 'UTF-32', 'UTF-8');
-        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-32');
+        $test2 = mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
+        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
         if ($test3 == $test) {
-          return true;
+          $stringChars = self::count_chars($string);
+          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+            if (in_array($test3char, $stringChars) === true) {
+              $maybeUTF32LE++;
+            }
+          }
+        }
+      }
+
+      $maybeUTF32BE = 0;
+      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-32BE');
+      if (strlen($test) > 1) {
+        $test2 = mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
+        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
+        if ($test3 == $test) {
+          $stringChars = self::count_chars($string);
+          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+            if (in_array($test3char, $stringChars) === true) {
+              $maybeUTF32BE++;
+            }
+          }
+        }
+      }
+
+      if ($maybeUTF32BE != $maybeUTF32LE) {
+        if ($maybeUTF32LE > $maybeUTF32BE) {
+          return 1;
+        } else {
+          return 2;
         }
       }
 
@@ -2095,18 +2123,47 @@ class UTF8
    * is_utf16
    *
    * @param string $string
-   * @return bool
+   * @return int|false false if is't not UTF16, 1 for UTF-16LE, 2 for UTF-16BE
    */
   public static function is_utf16($string) {
     if (self::is_binary($string, false)) {
       self::checkForSupport();
 
-      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16');
+      $maybeUTF16LE = 0;
+      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16LE');
       if (strlen($test) > 1) {
-        $test2 = mb_convert_encoding($test, 'UTF-16', 'UTF-8');
-        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16');
+        $test2 = mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
+        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
         if ($test3 == $test) {
-          return true;
+          $stringChars = self::count_chars($string);
+          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+            if (in_array($test3char, $stringChars) === true) {
+              $maybeUTF16LE++;
+            }
+          }
+        }
+      }
+
+      $maybeUTF16BE = 0;
+      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16BE');
+      if (strlen($test) > 1) {
+        $test2 = mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
+        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
+        if ($test3 == $test) {
+          $stringChars = self::count_chars($string);
+          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+            if (in_array($test3char, $stringChars) === true) {
+              $maybeUTF16BE++;
+            }
+          }
+        }
+      }
+
+      if ($maybeUTF16BE != $maybeUTF16LE) {
+        if ($maybeUTF16LE > $maybeUTF16BE) {
+          return 1;
+        } else {
+          return 2;
         }
       }
 
@@ -2623,9 +2680,9 @@ class UTF8
   }
 
   /**
-   * checks if the given string is a Byte Order Mark
+   * checks if the given string is exactly "UTF8 - Byte Order Mark"
    *
-   * INFO: use "UTF8::string_has_bom()" if you will check BOM in a string
+   * WARNING: use "UTF8::string_has_bom()" if you will check BOM in a string
    *
    * @param    string $utf8_chr The input string
    *
@@ -2647,26 +2704,30 @@ class UTF8
     // init
     $encoding = '';
 
-    if (self::string_has_bom($str)) {
+    // UTF-8
+    if (substr($str, 0, 3) == @pack('CCC', 0xef, 0xbb, 0xbf)) {
       return 'UTF-8';
     }
 
-    if ("\x00\x00\xFE\xFF" === substr($str, 0, 4)) {
-      return 'UTF-32'; // BE
+    // UTF-16 (BE)
+    if (substr($str, 0, 2) == @pack('CC', 0xfe, 0xff)) {
+      return 'UTF-16BE';
     }
 
-    if ("\xFF\xFE\x00\x00" === substr($str, 0, 4)) {
-      return 'UTF-32'; // BE
+    // UTF-16 (LE)
+    if (substr($str, 0, 2) == @pack('CC', 0xff, 0xfe)) {
+      return 'UTF-16LE';
     }
 
-    if ("\xFE\xFF" === substr($str, 0, 2)) {
-      return 'UTF-16'; // LE
+    // UTF-32 (BE)
+    if (substr($str, 0, 4) == @pack('CC', 0x00, 0x00, 0xfe, 0xff)) {
+      return 'UTF-32BE';
     }
 
-    if ("\xFF\xFE" === substr($str, 0, 2)) {
-      return 'UTF-16'; // LE
+    // UTF-32 (LE)
+    if (substr($str, 0, 4) == @pack('CC', 0xff, 0xfe, 0x00, 0x00)) {
+      return 'UTF32LE';
     }
-
 
     if (!$encoding) {
       self::checkForSupport();
@@ -2677,11 +2738,17 @@ class UTF8
     }
 
     if (self::is_binary($str, false)) {
-      if (self::is_utf16($str) === true) {
-        return 'UTF-16';
+      if (self::is_utf16($str) == 1) {
+        return 'UTF-16LE';
       }
-      else if (self::is_utf32($str) === true) {
-        return 'UTF-32';
+      else if (self::is_utf16($str) == 2) {
+        return 'UTF-16BE';
+      }
+      else if (self::is_utf32($str) == 1) {
+        return 'UTF-32LE';
+      }
+      else if (self::is_utf32($str) == 2) {
+        return 'UTF-32BE';
       }
     }
 
@@ -2715,7 +2782,7 @@ class UTF8
   }
 
   /**
-   * checks if string starts with BOM character
+   * checks if string starts with "UTF-8 BOM" character
    *
    * @param    string $str The input string
    *
