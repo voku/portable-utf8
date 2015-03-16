@@ -37,6 +37,6 @@ class Utf8ToAsciiTest extends PHPUnit_Framework_TestCase
   public function test_nul()
   {
     $str = "a\x00b\x00c";
-    $this->assertEquals(abc, u::toAscii($str));
+    $this->assertEquals("abc", u::toAscii($str));
   }
 }
