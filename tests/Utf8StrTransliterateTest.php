@@ -34,12 +34,12 @@ class Utf8StrTransliterateTest extends PHPUnit_Framework_TestCase
   public function test_nul_and_non_7_bit()
   {
     $str = "a\x00ñ\x00c";
-    $this->assertEquals("a\x00n\x00c", u::str_transliterate($str));
+    $this->assertEquals("anc", u::str_transliterate($str));
   }
 
   public function test_nul()
   {
     $str = "a\x00b\x00c";
-    $this->assertEquals($str, u::str_transliterate($str));
+    $this->assertEquals('abc', u::str_transliterate($str));
   }
 }
