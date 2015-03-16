@@ -31,12 +31,12 @@ class Utf8ToAsciiTest extends PHPUnit_Framework_TestCase
   public function test_nul_and_non_7_bit()
   {
     $str = "a\x00ñ\x00c";
-    $this->assertEquals("a\x00n\x00c", u::toAscii($str));
+    $this->assertEquals("anc", u::toAscii($str));
   }
 
   public function test_nul()
   {
     $str = "a\x00b\x00c";
-    $this->assertEquals($str, u::toAscii($str));
+    $this->assertEquals(abc, u::toAscii($str));
   }
 }
