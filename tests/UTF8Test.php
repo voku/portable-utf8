@@ -265,6 +265,51 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testHtmlEntityDecode()
+  {
+    $testArray = array(
+        'κόσμε'                                                                            => 'κόσμε',
+        'Κόσμε'                                                                            => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                               => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                               => '  ',
+        ''                                                                                 => '',
+        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                           => '<abcd>\'$1\'("&2")',
+        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
+        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'      => '<script>alert("XSS")</script>',
+        'who&#039;s online'                                                                => 'who\'s online',
+        'who&amp;#039;s online'                                                            => 'who\'s online',
+        'who&#039;s online-'                                                               => 'who\'s online-',
+        'Who&#039;s Online'                                                                => 'Who\'s Online',
+        'Who&amp;#039;s Online'                                                            => 'Who\'s Online',
+        'Who&amp;amp;#039;s Online'                                                        => 'Who\'s Online',
+    );
+
+    foreach ($testArray as $before => $after) {
+      $this->assertEquals($after, UTF8::html_entity_decode($before), 'error by ' . $before);
+    }
+  }
+
+  public function testRemoveInvisibleCharacters()
+  {
+    $testArray = array(
+        "κόσ\0με"                                                                           => 'κόσμε',
+        "Κόσμε\x20"                                                                         => 'Κόσμε ',
+        "öäü-κόσμ\x0εκόσμε-äöü"                                                             => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                              => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        "äöüäöüäöü-κόσμεκόσμεäöüäöüäöü\xe1\x9a\x80κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε"           => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'  => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                               => '  ',
+        ''                                                                                 => '',
+    );
+
+    foreach ($testArray as $before => $after) {
+      $this->assertEquals($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
+    }
+  }
+
   public function testRemoveBom()
   {
     $testBom = array(

@@ -1760,12 +1760,18 @@ class UTF8
 
         $replace = array();
         $matches = array_unique(array_map(array('voku\helper\UTF8', 'strtolower'), $matches[0]));
-        for ($i = 0, $c = count($matches); $i < $c; $i++) {
-          if (($char = array_search($matches[$i] . ';', $_entities, true)) !== false) {
-            $replace[$matches[$i]] = $char;
+
+        $c = count($matches);
+        if ($c > 0) {
+          for ($i = 0; $i < $c; $i++) {
+            $char = array_search($matches[$i] . ';', $_entities, true);
+            if ($char !== false) {
+              $replace[$matches[$i]] = $char;
+            }
           }
+
+          $string = UTF8::str_ireplace(array_keys($replace), array_values($replace), $string);
         }
-        $string = UTF8::str_ireplace(array_keys($replace), array_values($replace), $string);
       }
 
       // decode numeric & UTF16 two byte entities
@@ -1776,6 +1782,11 @@ class UTF8
       );
     }
     while ($str_compare !== $string);
+
+    if (self::is_utf8($string)) {
+      self::checkForSupport();
+      $string = mb_convert_encoding($string, "UTF-8", "HTML-ENTITIES");
+    }
 
     return $string;
   }
