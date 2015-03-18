@@ -1783,11 +1783,6 @@ class UTF8
     }
     while ($str_compare !== $string);
 
-    if (self::is_utf8($string)) {
-      self::checkForSupport();
-      $string = mb_convert_encoding($string, "UTF-8", "HTML-ENTITIES");
-    }
-
     return $string;
   }
 

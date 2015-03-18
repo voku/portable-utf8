@@ -279,6 +279,33 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                           => '<abcd>\'$1\'("&2")',
         '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
         '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'      => '<script>alert("XSS")</script>',
+        'who&#039;s online'                                                                => 'who&#039;s online',
+        'who&amp;#039;s online'                                                            => 'who&#039;s online',
+        'who&#039;s online-'                                                               => 'who&#039;s online-',
+        'Who&#039;s Online'                                                                => 'Who&#039;s Online',
+        'Who&amp;#039;s Online'                                                            => 'Who&#039;s Online',
+        'Who&amp;amp;#039;s Online'                                                        => 'Who&#039;s Online',
+    );
+
+    foreach ($testArray as $before => $after) {
+      $this->assertEquals($after, UTF8::html_entity_decode($before), 'error by ' . $before);
+    }
+  }
+
+  public function testHtmlEntityDecodeWithEntQuotes()
+  {
+    $testArray = array(
+        'κόσμε'                                                                            => 'κόσμε',
+        'Κόσμε'                                                                            => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                               => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                               => '  ',
+        ''                                                                                 => '',
+        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                           => '<abcd>\'$1\'("&2")',
+        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
+        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'      => '<script>alert("XSS")</script>',
         'who&#039;s online'                                                                => 'who\'s online',
         'who&amp;#039;s online'                                                            => 'who\'s online',
         'who&#039;s online-'                                                               => 'who\'s online-',
@@ -288,7 +315,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::html_entity_decode($before), 'error by ' . $before);
+      $this->assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
     }
   }
 
