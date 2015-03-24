@@ -4817,12 +4817,22 @@ class UTF8
       return '';
     }
 
+    // init
     $words = explode(' ', $string);
     $newwords = array();
 
+    if (count($exceptions) > 0) {
+      $useExceptions = true;
+    } else {
+      $useExceptions = false;
+    }
+
     foreach ($words as $word) {
-      if (!array_key_exists($word, $exceptions)) {
-        $word = self::strtolower($word);
+      if (
+          ($useExceptions === false)
+          ||
+          ($useExceptions === true && !in_array($word, $exceptions))
+      ) {
         $word = self::ucfirst($word);
       }
       array_push($newwords, $word);

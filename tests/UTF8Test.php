@@ -1632,18 +1632,27 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals("Ñtërnâtiônàlizætiøn", UTF8::ucfirst("ñtërnâtiônàlizætiøn"));
     $this->assertEquals(" iñtërnâtiônàlizætiøn", UTF8::ucfirst(" iñtërnâtiônàlizætiøn"));
     $this->assertEquals("Ñtërnâtiônàlizætiøn", UTF8::ucfirst("Ñtërnâtiônàlizætiøn"));
+    $this->assertEquals("ÑtërnâtiônàlizætIøN", UTF8::ucfirst("ñtërnâtiônàlizætIøN"));
+    $this->assertEquals("ÑtërnâtiônàlizætIøN test câse", UTF8::ucfirst("ñtërnâtiônàlizætIøN test câse"));
     $this->assertEquals("", UTF8::ucfirst(""));
     $this->assertEquals("Ñ", UTF8::ucfirst("ñ"));
     $this->assertEquals("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
+    $this->assertSame('Deja', UTF8::ucfirst('deja'));
+    $this->assertSame('Σσς', UTF8::ucfirst('σσς'));
+    $this->assertSame('DEJa', UTF8::ucfirst('dEJa'));
+    $this->assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
   }
 
   public function testUcWords()
   {
-    $this->assertEquals("Iñt Ërn Âti Ônà Liz Æti Øn", UTF8::ucwords("iñt ërn âti ônà liz æti øn"));
+    $this->assertEquals("Iñt Ërn ÂTi Ônà Liz Æti Øn", UTF8::ucwords("iñt ërn âTi ônà liz æti øn"));
     $this->assertEquals("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
     $this->assertEquals("", UTF8::ucwords(""));
     $this->assertEquals("Ñ", UTF8::ucwords("ñ"));
-    $this->assertEquals("Iñt Ërn Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti øn"));
+    $this->assertEquals("Iñt ËrN Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërN âti\n ônà liz æti øn"));
+    $this->assertEquals("ÑtërnâtiônàlizætIøN", UTF8::ucwords("ñtërnâtiônàlizætIøN"));
+    $this->assertEquals("ÑtërnâtiônàlizætIøN Test câse", UTF8::ucwords("ñtërnâtiônàlizætIøN test câse", array('câse')));
+    $this->assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ'));
   }
 
   public function testLcfirst()
@@ -1658,6 +1667,10 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $this->assertEquals("\t test", UTF8::lcfirst("\t test"));
     $this->assertEquals("ñ", UTF8::lcfirst("Ñ"));
     $this->assertEquals("ñTËRN\nâtiônàlizætiøn", UTF8::lcfirst("ÑTËRN\nâtiônàlizætiøn"));
+    $this->assertSame('deja', UTF8::lcfirst('Deja'));
+    $this->assertSame('σσς', UTF8::lcfirst('Σσς'));
+    $this->assertSame('dEJa', UTF8::lcfirst('dEJa'));
+    $this->assertSame('σσΣ', UTF8::lcfirst('σσΣ'));
   }
 
   public function testStrirpos()
