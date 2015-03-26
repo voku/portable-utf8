@@ -1730,49 +1730,12 @@ class UTF8
       return $string;
     }
 
-    static $_entities;
     if ($flags === null) {
       $flags = Bootup::is_php('5.4') ? ENT_COMPAT | ENT_HTML5 : ENT_COMPAT;
     }
 
     do {
       $str_compare = $string;
-      // decode standard entities, avoiding false positives
-      if (preg_match_all('/&[a-z]{2,}(?![a-z;])/i', $string, $matches)) {
-        if (!isset($_entities)) {
-
-          /** @noinspection PhpMethodParametersCountMismatchInspection */
-          $_entities = array_map(
-              'strtolower',
-              Bootup::is_php('5.3.4') ? get_html_translation_table(HTML_ENTITIES, $flags, $encoding) : get_html_translation_table(HTML_ENTITIES, $flags)
-          );
-
-          // if we're not on PHP 5.4+, add the possibly dangerous HTML 5
-          // entities to the array manually
-          if ($flags === ENT_COMPAT) {
-            $_entities[':'] = '&colon;';
-            $_entities['('] = '&lpar;';
-            $_entities[')'] = '&rpar';
-            $_entities["\n"] = '&newline;';
-            $_entities["\t"] = '&tab;';
-          }
-        }
-
-        $replace = array();
-        $matches = array_unique(array_map(array('voku\helper\UTF8', 'strtolower'), $matches[0]));
-
-        $c = count($matches);
-        if ($c > 0) {
-          for ($i = 0; $i < $c; $i++) {
-            $char = array_search($matches[$i] . ';', $_entities, true);
-            if ($char !== false) {
-              $replace[$matches[$i]] = $char;
-            }
-          }
-
-          $string = UTF8::str_ireplace(array_keys($replace), array_values($replace), $string);
-        }
-      }
 
       // decode numeric & UTF16 two byte entities
       $string = html_entity_decode(
