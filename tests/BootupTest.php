@@ -1,9 +1,14 @@
 <?php
 
+use voku\helper\Bootup;
+use voku\helper\UTF8;
+
 class BootupTest extends PHPUnit_Framework_TestCase
 {
   function testFilterRequestInputs()
   {
+    UTF8::checkForSupport();
+
     $c = "à";
     $d = Normalizer::normalize($c, Normalizer::NFD);
 
@@ -59,7 +64,7 @@ class BootupTest extends PHPUnit_Framework_TestCase
         ),
     );
 
-    \voku\helper\Bootup::filterRequestInputs();
+    Bootup::filterRequestInputs();
 
     $expect = array(
         'n' => 4,
@@ -84,16 +89,16 @@ class BootupTest extends PHPUnit_Framework_TestCase
     $uriC = '/' . utf8_decode("bàr");
     $uriD = '/' . "bàr";
 
-    $u = \voku\helper\Bootup::filterRequestUri($uriA, false);
+    $u = Bootup::filterRequestUri($uriA, false);
     $this->assertSame($uriA, $u);
 
-    $u = \voku\helper\Bootup::filterRequestUri($uriB, false);
+    $u = Bootup::filterRequestUri($uriB, false);
     $this->assertSame($uriA, $u);
 
-    $u = \voku\helper\Bootup::filterRequestUri($uriC, false);
+    $u = Bootup::filterRequestUri($uriC, false);
     $this->assertSame($uriA, $u);
 
-    $u = \voku\helper\Bootup::filterRequestUri($uriD, false);
+    $u = Bootup::filterRequestUri($uriD, false);
     $this->assertSame($uriD, $u);
   }
 }

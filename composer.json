@@ -36,7 +36,8 @@
   },
   "autoload": {
     "psr-0": {
-      "voku": "src"
+      "voku": "src",
+      "Normalizer": "src"
     }
   }
 }
