@@ -7,10 +7,10 @@ branches:
     - gh-pages
 
 install:
-  - cinst curl
-  - cinst OpenSSL.Light
+  - cinst -y curl
+  - cinst -y OpenSSL.Light
   - SET PATH=C:\Program Files\OpenSSL;%PATH%
-  - cinst php
+  - cinst -y php
   - cd c:\tools\php
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
