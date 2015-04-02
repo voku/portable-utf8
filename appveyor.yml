@@ -26,5 +26,5 @@ install:
 test_script:
   - cd C:\projects\utf8
   - mkdir -p build\logs
-  - vendor\bin\phpunit.bat -c C:\projects\utf8\phpunit.xml
-  - vendor\bin\coveralls.bat -v
+  - vendor\bin\phpunit.bat
+  - vendor\bin\coveralls.bat
