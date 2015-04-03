@@ -11,20 +11,21 @@ install:
   - cinst -y OpenSSL.Light
   - SET PATH=C:\Program Files\OpenSSL;%PATH%
   - cinst -y php
-  - cd c:\tools\php
+  - cd C:\tools\php
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
   - echo extension_dir=ext >> php.ini
   - echo extension=php_openssl.dll >> php.ini
   - echo extension=php_curl.dll >> php.ini
   - SET PATH=C:\tools\php;%PATH%
+  - php.exe --version
   - cd C:\projects\utf8
+  - mkdir build\logs
   - php -r "readfile('http://getcomposer.org/installer');" | php
   - php composer.phar install --prefer-dist --no-interaction
   - php composer.phar dump-autoload -o
 
 test_script:
   - cd C:\projects\utf8
-  - mkdir -p build\logs
   - vendor\bin\phpunit.bat
   - vendor\bin\coveralls.bat
