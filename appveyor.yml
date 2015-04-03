@@ -18,7 +18,6 @@ install:
   - echo extension=php_openssl.dll >> php.ini
   - echo extension=php_curl.dll >> php.ini
   - SET PATH=C:\tools\php;%PATH%
-  - php.exe --version
   - cd C:\projects\utf8
   - mkdir build\logs
   - php -r "readfile('http://getcomposer.org/installer');" | php
@@ -27,5 +26,7 @@ install:
 
 test_script:
   - cd C:\projects\utf8
+  - php.exe --version
+  - dir
   - vendor\bin\phpunit.bat
   - vendor\bin\coveralls.bat
