@@ -11,6 +11,8 @@ install:
   - cinst -y OpenSSL.Light
   - SET PATH=C:\Program Files\OpenSSL;%PATH%
   - cinst -y php
+  - cd C:\tools\php\ext
+  - curl -O http://xdebug.org/files/php_xdebug-2.3.2-5.6-vc11-x86_64.dll
   - cd C:\tools\php
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
@@ -18,6 +20,7 @@ install:
   - echo extension=php_openssl.dll >> php.ini
   - echo extension=php_curl.dll >> php.ini
   - echo extension=php_mbstring.dll >> php.ini
+  - echo extension=php_xdebug-2.3.2-5.6-vc11-x86_64.dll >> php.ini
   - SET PATH=C:\tools\php;%PATH%
   - cd C:\projects\utf8
   - mkdir build\logs
