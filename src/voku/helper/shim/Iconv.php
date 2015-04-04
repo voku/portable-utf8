@@ -752,6 +752,7 @@ class Iconv
   public static function strlen1($s, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
+
     if (0 !== strncasecmp($encoding, 'utf-8', 5) && false === $s = self::iconv($encoding, 'utf-8', $s)) {
       return false;
     }
@@ -759,9 +760,16 @@ class Iconv
     return strlen(utf8_decode($s));
   }
 
+  /**
+   * @param $s
+   * @param $encoding
+   *
+   * @return bool|int
+   */
   public static function strlen2($s, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
+
     if (0 !== strncasecmp($encoding, 'utf-8', 5) && false === $s = self::iconv($encoding, 'utf-8', $s)) {
       return false;
     }

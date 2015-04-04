@@ -341,6 +341,7 @@ class Mbstring
   public static function mb_strlen($s, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
+
     return iconv_strlen($s, $encoding . '//IGNORE');
   }
 
@@ -694,8 +695,10 @@ class Mbstring
   public static function mb_strrchr($haystack, $needle, $part = false, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
+
     $needle = self::mb_substr($needle, 0, 1, $encoding);
     $pos = iconv_strrpos($haystack, $needle, $encoding);
+
     return self::getSubpart($pos, $part, $haystack, $encoding);
   }
 
@@ -725,8 +728,10 @@ class Mbstring
   public static function mb_strripos($haystack, $needle, $offset = 0, $encoding = INF)
   {
     INF === $encoding && $encoding = self::$internal_encoding;
+
     $haystack = self::mb_convert_case($haystack, self::MB_CASE_FOLD, $encoding);
     $needle = self::mb_convert_case($needle, self::MB_CASE_FOLD, $encoding);
+
     return self::mb_strrpos($haystack, $needle, $offset, $encoding);
   }
 
