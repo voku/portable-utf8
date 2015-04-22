@@ -12,21 +12,21 @@
 use voku\helper\shim as s;
 
 /**
- * @param $s
+ * @param string $str
  *
  * @return string
  */
-function utf8_encode($s)
+function utf8_encode($str)
 {
-  return s\Xml::utf8_encode($s);
+  return s\Xml::utf8_encode($str);
 }
 
 /**
- * @param $s
+ * @param string $str
  *
  * @return string
  */
-function utf8_decode($s)
+function utf8_decode($str)
 {
-  return s\Xml::utf8_decode($s);
+  return s\Xml::utf8_decode($str);
 }

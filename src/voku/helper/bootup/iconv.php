@@ -17,15 +17,15 @@ const ICONV_MIME_DECODE_STRICT = 1;
 const ICONV_MIME_DECODE_CONTINUE_ON_ERROR = 2;
 
 /**
- * @param $from
- * @param $to
- * @param $s
+ * @param string $from
+ * @param string $to
+ * @param string $str
  *
  * @return bool|string
  */
-function iconv($from, $to, $s)
+function iconv($from, $to, $str)
 {
-  return Iconv::iconv($from, $to, $s);
+  return Iconv::iconv($from, $to, $str);
 }
 
 /**
@@ -39,8 +39,8 @@ function iconv_get_encoding($type = 'all')
 }
 
 /**
- * @param $type
- * @param $charset
+ * @param string $type
+ * @param string $charset
  *
  * @return bool
  */
@@ -50,9 +50,9 @@ function iconv_set_encoding($type, $charset)
 }
 
 /**
- * @param $name
- * @param $value
- * @param $pref
+ * @param string $name
+ * @param string $value
+ * @param array  $pref
  *
  * @return string
  */
@@ -62,8 +62,8 @@ function iconv_mime_encode($name, $value, $pref = INF)
 }
 
 /**
- * @param $buffer
- * @param $mode
+ * @param string $buffer
+ * @param mixed  $mode
  *
  * @return bool|string
  */
@@ -73,9 +73,9 @@ function ob_iconv_handler($buffer, $mode)
 }
 
 /**
- * @param     $encoded_headers
- * @param int $mode
- * @param     $enc
+ * @param string $encoded_headers
+ * @param int    $mode
+ * @param string $enc
  *
  * @return array|bool
  */
@@ -87,146 +87,146 @@ function iconv_mime_decode_headers($encoded_headers, $mode = 0, $enc = INF)
 if (extension_loaded('mbstring')) {
 
   /**
-   * @param $s
-   * @param $enc
+   * @param string $str
+   * @param string $encoding
    *
    * @return bool|int
    */
-  function iconv_strlen($s, $enc = INF)
+  function iconv_strlen($str, $encoding = INF)
   {
-    INF === $enc && $enc = Iconv::$internal_encoding;
-    return mb_strlen($s, $enc);
+    INF === $encoding && $encoding = Iconv::$internal_encoding;
+    return mb_strlen($str, $encoding);
   }
 
   /**
-   * @param     $s
-   * @param     $needle
-   * @param int $offset
-   * @param     $enc
+   * @param string $haystack
+   * @param string $needle
+   * @param int    $offset
+   * @param string $encoding
    *
    * @return bool|int
    */
-  function iconv_strpos($s, $needle, $offset = 0, $enc = INF)
+  function iconv_strpos($haystack, $needle, $offset = 0, $encoding = INF)
   {
-    INF === $enc && $enc = Iconv::$internal_encoding;
-    return mb_strpos($s, $needle, $offset, $enc);
+    INF === $encoding && $encoding = Iconv::$internal_encoding;
+    return mb_strpos($haystack, $needle, $offset, $encoding);
   }
 
   /**
-   * @param $s
-   * @param $needle
-   * @param $enc
+   * @param string $haystack
+   * @param string $needle
+   * @param string $encoding
    *
    * @return bool|int
    */
-  function iconv_strrpos($s, $needle, $enc = INF)
+  function iconv_strrpos($haystack, $needle, $encoding = INF)
   {
-    INF === $enc && $enc = Iconv::$internal_encoding;
-    return mb_strrpos($s, $needle, $enc);
+    INF === $encoding && $encoding = Iconv::$internal_encoding;
+    return mb_strrpos($haystack, $needle, $encoding);
   }
 
   /**
-   * @param     $s
-   * @param     $start
-   * @param int $length
-   * @param     $enc
+   * @param string   $str
+   * @param int      $start
+   * @param int|null $length
+   * @param string   $encoding
    *
    * @return string
    */
-  function iconv_substr($s, $start, $length = 2147483647, $enc = INF)
+  function iconv_substr($str, $start, $length = 2147483647, $encoding = INF)
   {
-    INF === $enc && $enc = Iconv::$internal_encoding;
-    return mb_substr($s, $start, $length, $enc);
+    INF === $encoding && $enc = Iconv::$internal_encoding;
+    return mb_substr($str, $start, $length, $encoding);
   }
 
   /**
-   * @param     $encoded_headers
-   * @param int $mode
-   * @param     $enc
+   * @param string $encoded_headers
+   * @param int    $mode
+   * @param string $encoding
    *
    * @return bool|string
    */
-  function iconv_mime_decode($encoded_headers, $mode = 0, $enc = INF)
+  function iconv_mime_decode($encoded_headers, $mode = 0, $encoding = INF)
   {
-    INF === $enc && $enc = Iconv::$internal_encoding;
-    return mb_decode_mimeheader($encoded_headers, $mode, $enc);
+    INF === $encoding && $encoding = Iconv::$internal_encoding;
+    return mb_decode_mimeheader($encoded_headers, $mode, $encoding);
   }
 
 } else {
   if (extension_loaded('xml')) {
 
     /**
-     * @param $s
-     * @param $enc
+     * @param string $str
+     * @param string $encoding
      *
      * @return bool|int
      */
-    function iconv_strlen($s, $enc = INF)
+    function iconv_strlen($str, $encoding = INF)
     {
-      return Iconv::strlen1($s, $enc);
+      return Iconv::strlen1($str, $encoding);
     }
 
   } else {
 
     /**
-     * @param $s
-     * @param $enc
+     * @param string $str
+     * @param string $encoding
      *
      * @return bool|int
      */
-    function iconv_strlen($s, $enc = INF)
+    function iconv_strlen($str, $encoding = INF)
     {
-      return Iconv::strlen2($s, $enc);
+      return Iconv::strlen2($str, $encoding);
     }
   }
 
   /**
-   * @param     $s
-   * @param     $needle
-   * @param int $offset
-   * @param     $enc
+   * @param string $str
+   * @param string $needle
+   * @param int    $offset
+   * @param string $encoding
    *
    * @return bool|int
    */
-  function iconv_strpos($s, $needle, $offset = 0, $enc = INF)
+  function iconv_strpos($str, $needle, $offset = 0, $encoding = INF)
   {
-    return Iconv::iconv_strpos($s, $needle, $offset, $enc);
+    return Iconv::iconv_strpos($str, $needle, $offset, $encoding);
   }
 
   /**
-   * @param $s
-   * @param $needle
-   * @param $enc
+   * @param string $str
+   * @param string $needle
+   * @param string $encoding
    *
    * @return bool|int
    */
-  function iconv_strrpos($s, $needle, $enc = INF)
+  function iconv_strrpos($str, $needle, $encoding = INF)
   {
-    return Iconv::iconv_strrpos($s, $needle, $enc);
+    return Iconv::iconv_strrpos($str, $needle, $encoding);
   }
 
   /**
-   * @param     $s
-   * @param     $start
-   * @param int $length
-   * @param     $enc
+   * @param string $str
+   * @param int    $start
+   * @param int    $length
+   * @param string $encoding
    *
    * @return bool|string
    */
-  function iconv_substr($s, $start, $length = 2147483647, $enc = INF)
+  function iconv_substr($str, $start, $length = 2147483647, $encoding = INF)
   {
-    return Iconv::iconv_substr($s, $start, $length, $enc);
+    return Iconv::iconv_substr($str, $start, $length, $encoding);
   }
 
   /**
-   * @param     $encoded_headers
-   * @param int $mode
-   * @param     $enc
+   * @param string $encoded_headers
+   * @param int    $mode
+   * @param string $encoding
    *
    * @return bool|string
    */
-  function iconv_mime_decode($encoded_headers, $mode = 0, $enc = INF)
+  function iconv_mime_decode($encoded_headers, $mode = 0, $encoding = INF)
   {
-    return Iconv::iconv_mime_decode($encoded_headers, $mode, $enc);
+    return Iconv::iconv_mime_decode($encoded_headers, $mode, $encoding);
   }
 }

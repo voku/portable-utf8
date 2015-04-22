@@ -126,9 +126,9 @@ class Iconv
   );
 
   /**
-   * @param     $str
-   * @param int $mode
-   * @param     $charset
+   * @param string $str
+   * @param int    $mode
+   * @param string $charset
    *
    * @return array|bool
    */
@@ -142,6 +142,7 @@ class Iconv
     $headers = array();
 
     $str = preg_split('/\n(?![ \t])/', $str[0]);
+    // $str as $str ??
     foreach ($str as $str) {
       $str = self::iconv_mime_decode($str, $mode, $charset);
 
@@ -164,9 +165,9 @@ class Iconv
   }
 
   /**
-   * @param     $str
-   * @param int $mode
-   * @param     $charset
+   * @param string $str
+   * @param int    $mode
+   * @param string $charset
    *
    * @return bool|string
    */
@@ -225,9 +226,9 @@ class Iconv
   }
 
   /**
-   * @param $in_charset
-   * @param $out_charset
-   * @param $str
+   * @param string $in_charset
+   * @param string $out_charset
+   * @param string $str
    *
    * @return bool|string
    */
@@ -318,9 +319,9 @@ class Iconv
   }
 
   /**
-   * @param $type
-   * @param $charset
-   * @param $map
+   * @param string $type
+   * @param string $charset
+   * @param array  $map
    *
    * @return bool
    */
@@ -344,7 +345,9 @@ class Iconv
   }
 
   /**
-   * @param $file
+   * get data
+   *
+   * @param string $file
    *
    * @return bool|mixed
    */
@@ -359,10 +362,12 @@ class Iconv
   }
 
   /**
-   * @param $result
-   * @param $map
-   * @param $str
-   * @param $IGNORE
+   * map to utf8
+   *
+   * @param string $result
+   * @param array  $map
+   * @param string $str
+   * @param string $IGNORE
    *
    * @return bool
    */
@@ -384,8 +389,10 @@ class Iconv
   }
 
   /**
-   * @param $str
-   * @param $IGNORE
+   * utf8 to utf8
+   *
+   * @param string $str
+   * @param string $IGNORE
    *
    * @return bool|string
    */
@@ -430,11 +437,13 @@ class Iconv
   }
 
   /**
-   * @param $result
-   * @param $map
-   * @param $str
-   * @param $IGNORE
-   * @param $TRANSLIT
+   * map from utf8
+   *
+   * @param string $result
+   * @param array  $map
+   * @param string $str
+   * @param string $IGNORE
+   * @param string $TRANSLIT
    *
    * @return bool
    */
@@ -495,6 +504,8 @@ class Iconv
   }
 
   /**
+   * iconv: get encoding
+   *
    * @param string $type
    *
    * @return array|string
@@ -518,8 +529,10 @@ class Iconv
   }
 
   /**
-   * @param $type
-   * @param $charset
+   * iconv: set encoding
+   *
+   * @param string $type
+   * @param string $charset
    *
    * @return bool
    */
@@ -544,9 +557,11 @@ class Iconv
   }
 
   /**
-   * @param $field_name
-   * @param $field_value
-   * @param $pref
+   * iconv: mime encode
+   *
+   * @param string $field_name
+   * @param string $field_value
+   * @param array  $pref
    *
    * @return bool|string
    */
@@ -627,8 +642,8 @@ class Iconv
   }
 
   /**
-   * @param $buffer
-   * @param $mode
+   * @param string $buffer
+   * @param mixed  $mode
    *
    * @return bool|string
    */
@@ -638,10 +653,12 @@ class Iconv
   }
 
   /**
-   * @param     $haystack
-   * @param     $needle
-   * @param int $offset
-   * @param     $encoding
+   * iconv: strpos
+   *
+   * @param string $haystack
+   * @param string $needle
+   * @param int    $offset
+   * @param string $encoding
    *
    * @return bool|int
    */
@@ -663,14 +680,17 @@ class Iconv
       $haystack = self::iconv_substr($haystack, $offset, 2147483647, 'utf-8');
     }
     $pos = strpos($haystack, $needle);
+
     return false === $pos ? false : ($offset + ($pos ? self::iconv_strlen(substr($haystack, 0, $pos), 'utf-8') : 0));
   }
 
   /**
-   * @param     $s
-   * @param     $start
-   * @param int $length
-   * @param     $encoding
+   * iconv: substr
+   *
+   * @param string $s
+   * @param int    $start
+   * @param int    $length
+   * @param string $encoding
    *
    * @return bool|string
    */
@@ -729,8 +749,10 @@ class Iconv
   }
 
   /**
-   * @param $s
-   * @param $encoding
+   * iconv: strlen
+   *
+   * @param string $s
+   * @param string $encoding
    *
    * @return bool|int
    */
@@ -744,8 +766,8 @@ class Iconv
   }
 
   /**
-   * @param $s
-   * @param $encoding
+   * @param string $s
+   * @param string $encoding
    *
    * @return bool|int
    */
@@ -761,8 +783,8 @@ class Iconv
   }
 
   /**
-   * @param $s
-   * @param $encoding
+   * @param string $s
+   * @param string $encoding
    *
    * @return bool|int
    */
@@ -790,7 +812,7 @@ class Iconv
   }
 
   /**
-   * @param $offset
+   * @param int $offset
    *
    * @return string
    */
@@ -808,9 +830,11 @@ class Iconv
   }
 
   /**
-   * @param $haystack
-   * @param $needle
-   * @param $encoding
+   * iconv: strrpos
+   *
+   * @param string $haystack
+   * @param string $needle
+   * @param string $encoding
    *
    * @return bool|int
    */
@@ -828,11 +852,12 @@ class Iconv
     }
 
     $pos = isset($needle[0]) ? strrpos($haystack, $needle) : false;
+
     return false === $pos ? false : self::iconv_strlen($pos ? substr($haystack, 0, $pos) : $haystack, 'utf-8');
   }
 
   /**
-   * @param $m
+   * @param array $m
    *
    * @return string
    */

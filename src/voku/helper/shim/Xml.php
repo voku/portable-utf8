@@ -20,7 +20,7 @@ namespace voku\helper\shim;
 class Xml
 {
   /**
-   * @param $s
+   * @param string $s
    *
    * @return string
    */
@@ -49,7 +49,7 @@ class Xml
   }
 
   /**
-   * @param $s
+   * @param string $s
    *
    * @return string
    */
@@ -66,6 +66,7 @@ class Xml
           $s[$j] = $c < 256 ? chr($c) : '?';
           break;
 
+        /** @noinspection PhpMissingBreakStatementInspection */
         case "\xF0":
           ++$i;
         case "\xE0":

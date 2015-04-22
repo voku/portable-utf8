@@ -16,131 +16,131 @@ const GRAPHEME_EXTR_MAXBYTES = 1;
 const GRAPHEME_EXTR_MAXCHARS = 2;
 
 /**
- * @param     $s
- * @param int $form
+ * @param string $str
+ * @param int    $form
  *
  * @return bool
  */
-function normalizer_is_normalized($s, $form = s\Normalizer::NFC)
+function normalizer_is_normalized($str, $form = s\Normalizer::NFC)
 {
-  return s\Normalizer::isNormalized($s, $form);
+  return s\Normalizer::isNormalized($str, $form);
 }
 
 /**
- * @param     $s
- * @param int $form
+ * @param string $str
+ * @param int    $form
  *
  * @return string
  */
-function normalizer_normalize($s, $form = s\Normalizer::NFC)
+function normalizer_normalize($str, $form = s\Normalizer::NFC)
 {
-  return s\Normalizer::normalize($s, $form);
+  return s\Normalizer::normalize($str, $form);
 }
 
 /**
- * @param     $s
- * @param     $size
- * @param int $type
- * @param int $start
- * @param int $next
+ * @param string $str
+ * @param int    $size
+ * @param int    $type
+ * @param int    $start
+ * @param int    $next
  *
  * @return string
  */
-function grapheme_extract($s, $size, $type = 0, $start = 0, &$next = 0)
+function grapheme_extract($str, $size, $type = 0, $start = 0, &$next = 0)
 {
-  return s\Intl::grapheme_extract($s, $size, $type, $start, $next);
+  return s\Intl::grapheme_extract($str, $size, $type, $start, $next);
 }
 
 /**
- * @param     $s
- * @param     $needle
- * @param int $offset
+ * @param string $str
+ * @param string $needle
+ * @param int    $offset
  *
  * @return bool|int|null
  */
-function grapheme_stripos($s, $needle, $offset = 0)
+function grapheme_stripos($str, $needle, $offset = 0)
 {
-  return s\Intl::grapheme_stripos($s, $needle, $offset);
+  return s\Intl::grapheme_stripos($str, $needle, $offset);
 }
 
 /**
- * @param      $s
- * @param      $needle
- * @param bool $before_needle
+ * @param string $str
+ * @param string $needle
+ * @param bool   $before_needle
  *
  * @return bool|string
  */
-function grapheme_stristr($s, $needle, $before_needle = false)
+function grapheme_stristr($str, $needle, $before_needle = false)
 {
-  return s\Intl::grapheme_stristr($s, $needle, $before_needle);
+  return s\Intl::grapheme_stristr($str, $needle, $before_needle);
 }
 
 /**
- * @param $s
+ * @param string $str
  *
  * @return null
  */
-function grapheme_strlen($s)
+function grapheme_strlen($str)
 {
-  return s\Intl::grapheme_strlen($s);
+  return s\Intl::grapheme_strlen($str);
 }
 
 /**
- * @param     $s
- * @param     $needle
- * @param int $offset
+ * @param string $str
+ * @param string $needle
+ * @param int    $offset
  *
  * @return bool|int|null
  */
-function grapheme_strpos($s, $needle, $offset = 0)
+function grapheme_strpos($str, $needle, $offset = 0)
 {
-  return s\Intl::grapheme_strpos($s, $needle, $offset);
+  return s\Intl::grapheme_strpos($str, $needle, $offset);
 }
 
 /**
- * @param     $s
- * @param     $needle
- * @param int $offset
+ * @param string $str
+ * @param string $needle
+ * @param int    $offset
  *
  * @return bool|int|null
  */
-function grapheme_strripos($s, $needle, $offset = 0)
+function grapheme_strripos($str, $needle, $offset = 0)
 {
-  return s\Intl::grapheme_strripos($s, $needle, $offset);
+  return s\Intl::grapheme_strripos($str, $needle, $offset);
 }
 
 /**
- * @param     $s
- * @param     $needle
- * @param int $offset
+ * @param string $str
+ * @param string $needle
+ * @param int    $offset
  *
  * @return bool|int|null
  */
-function grapheme_strrpos($s, $needle, $offset = 0)
+function grapheme_strrpos($str, $needle, $offset = 0)
 {
-  return s\Intl::grapheme_strrpos($s, $needle, $offset);
+  return s\Intl::grapheme_strrpos($str, $needle, $offset);
 }
 
 /**
- * @param      $s
- * @param      $needle
- * @param bool $before_needle
+ * @param string $str
+ * @param string $needle
+ * @param bool   $before_needle
  *
  * @return bool|string
  */
-function grapheme_strstr($s, $needle, $before_needle = false)
+function grapheme_strstr($str, $needle, $before_needle = false)
 {
-  return s\Intl::grapheme_strstr($s, $needle, $before_needle);
+  return s\Intl::grapheme_strstr($str, $needle, $before_needle);
 }
 
 /**
- * @param     $s
- * @param     $start
- * @param int $len
+ * @param string $str
+ * @param int    $start
+ * @param int    $len
  *
  * @return bool|string
  */
-function grapheme_substr($s, $start, $len = 2147483647)
+function grapheme_substr($str, $start, $len = 2147483647)
 {
-  return s\Intl::grapheme_substr($s, $start, $len);
+  return s\Intl::grapheme_substr($str, $start, $len);
 }

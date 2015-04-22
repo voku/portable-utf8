@@ -19,63 +19,63 @@ const MB_CASE_LOWER = 1;
 const MB_CASE_TITLE = 2;
 
 /**
- * @param $s
- * @param $to
- * @param $from
+ * @param string $str
+ * @param string $to
+ * @param string $from
  *
  * @return bool|mixed|string
  */
-function mb_convert_encoding($s, $to, $from = INF)
+function mb_convert_encoding($str, $to, $from = INF)
 {
-  return Mbstring::mb_convert_encoding($s, $to, $from);
+  return Mbstring::mb_convert_encoding($str, $to, $from);
 }
 
 /**
- * @param $s
+ * @param string $str
  *
  * @return bool|string
  */
-function mb_decode_mimeheader($s)
+function mb_decode_mimeheader($str)
 {
-  return Mbstring::mb_decode_mimeheader($s);
+  return Mbstring::mb_decode_mimeheader($str);
 }
 
 /**
- * @param $s
+ * @param $str
  * @param $charset
  * @param $transfer_enc
  * @param $lf
  * @param $indent
  */
-function mb_encode_mimeheader($s, $charset = INF, $transfer_enc = INF, $lf = INF, $indent = INF)
+function mb_encode_mimeheader($str, $charset = INF, $transfer_enc = INF, $lf = INF, $indent = INF)
 {
-  Mbstring::mb_encode_mimeheader($s, $charset, $transfer_enc, $lf, $indent);
+  Mbstring::mb_encode_mimeheader($str, $charset, $transfer_enc, $lf, $indent);
 }
 
 /**
- * @param $s
- * @param $mode
- * @param $enc
+ * @param string $str
+ * @param int    $mode
+ * @param string $encoding
  *
  * @return bool|mixed|string
  */
-function mb_convert_case($s, $mode, $enc = INF)
+function mb_convert_case($str, $mode, $encoding = INF)
 {
-  return Mbstring::mb_convert_case($s, $mode, $enc);
+  return Mbstring::mb_convert_case($str, $mode, $encoding);
 }
 
 /**
- * @param $enc
+ * @param string $encoding
  *
  * @return bool|string
  */
-function mb_internal_encoding($enc = INF)
+function mb_internal_encoding($encoding = INF)
 {
-  return Mbstring::mb_internal_encoding($enc);
+  return Mbstring::mb_internal_encoding($encoding);
 }
 
 /**
- * @param $lang
+ * @param string $lang
  *
  * @return bool|string
  */
@@ -93,7 +93,7 @@ function mb_list_encodings()
 }
 
 /**
- * @param $encoding
+ * @param string $encoding
  *
  * @return array|bool
  */
@@ -103,8 +103,8 @@ function mb_encoding_aliases($encoding)
 }
 
 /**
- * @param $var
- * @param $encoding
+ * @param string $var
+ * @param string $encoding
  *
  * @return bool
  */
@@ -114,9 +114,9 @@ function mb_check_encoding($var = INF, $encoding = INF)
 }
 
 /**
- * @param      $str
- * @param      $encoding_list
- * @param bool $strict
+ * @param string       $str
+ * @param string|array $encoding_list
+ * @param bool         $strict
  *
  * @return bool
  */
@@ -126,7 +126,7 @@ function mb_detect_encoding($str, $encoding_list = INF, $strict = false)
 }
 
 /**
- * @param $encoding_list
+ * @param string|array $encoding_list
  *
  * @return bool
  */
@@ -136,62 +136,62 @@ function mb_detect_order($encoding_list = INF)
 }
 
 /**
- * @param       $s
- * @param array $result
+ * @param string $str
+ * @param array  $result
  */
-function mb_parse_str($s, &$result = array())
+function mb_parse_str($str, &$result = array())
 {
-  parse_str($s, $result);
+  parse_str($str, $result);
 }
 
 /**
- * @param $s
- * @param $enc
+ * @param string $str
+ * @param string $encoding
  *
  * @return bool|int
  */
-function mb_strlen($s, $enc = INF)
+function mb_strlen($str, $encoding = INF)
 {
-  return Mbstring::mb_strlen($s, $enc);
+  return Mbstring::mb_strlen($str, $encoding);
 }
 
 /**
- * @param     $s
- * @param     $needle
- * @param int $offset
- * @param     $enc
+ * @param string $haystack
+ * @param string $needle
+ * @param int    $offset
+ * @param string $encoding
  *
  * @return bool|int
  */
-function mb_strpos($s, $needle, $offset = 0, $enc = INF)
+function mb_strpos($haystack, $needle, $offset = 0, $encoding = INF)
 {
-  return Mbstring::mb_strpos($s, $needle, $offset, $enc);
+  return Mbstring::mb_strpos($haystack, $needle, $offset, $encoding);
 }
 
 /**
- * @param $s
- * @param $enc
+ * @param string $str
+ * @param string $enc
  *
  * @return bool|mixed|string
  */
-function mb_strtolower($s, $enc = INF)
+function mb_strtolower($str, $enc = INF)
 {
-  return Mbstring::mb_strtolower($s, $enc);
+  return Mbstring::mb_strtolower($str, $enc);
 }
 
 /**
- * @param $s
- * @param $enc
+ * @param string $str
+ * @param string $enc
  *
  * @return bool|mixed|string
  */
-function mb_strtoupper($s, $enc = INF)
+function mb_strtoupper($str, $enc = INF)
 {
-  return Mbstring::mb_strtoupper($s, $enc);
+  return Mbstring::mb_strtoupper($str, $enc);
 }
 
 /**
- * @param $char
+ * @param string $char
  *
  * @return bool|string
  */
@@ -201,107 +201,107 @@ function mb_substitute_character($char = INF)
 }
 
 /**
- * @param     $s
- * @param     $start
- * @param int $length
- * @param     $enc
+ * @param string   $str
+ * @param int      $start
+ * @param int|null $length
+ * @param string   $enc
  *
  * @return string
  */
-function mb_substr($s, $start, $length = 2147483647, $enc = INF)
+function mb_substr($str, $start, $length = 2147483647, $enc = INF)
 {
-  return Mbstring::mb_substr($s, $start, $length, $enc);
+  return Mbstring::mb_substr($str, $start, $length, $enc);
 }
 
 /**
- * @param     $s
- * @param     $needle
- * @param int $offset
- * @param     $enc
+ * @param string $haystack
+ * @param string $needle
+ * @param int    $offset
+ * @param string $encoding
  *
  * @return bool|int
  */
-function mb_stripos($s, $needle, $offset = 0, $enc = INF)
+function mb_stripos($haystack, $needle, $offset = 0, $encoding = INF)
 {
-  return Mbstring::mb_stripos($s, $needle, $offset, $enc);
+  return Mbstring::mb_stripos($haystack, $needle, $offset, $encoding);
 }
 
 /**
- * @param      $s
- * @param      $needle
- * @param bool $part
- * @param      $enc
+ * @param string $haystack
+ * @param string $needle
+ * @param bool   $part
+ * @param string $encoding
  *
  * @return bool|string
  */
-function mb_stristr($s, $needle, $part = false, $enc = INF)
+function mb_stristr($haystack, $needle, $part = false, $encoding = INF)
 {
-  return Mbstring::mb_stristr($s, $needle, $part, $enc);
+  return Mbstring::mb_stristr($haystack, $needle, $part, $encoding);
 }
 
 /**
- * @param      $s
- * @param      $needle
- * @param bool $part
- * @param      $enc
+ * @param string $haystack
+ * @param string $needle
+ * @param bool   $part
+ * @param string $encoding
  *
  * @return bool|string
  */
-function mb_strrchr($s, $needle, $part = false, $enc = INF)
+function mb_strrchr($haystack, $needle, $part = false, $encoding = INF)
 {
-  return Mbstring::mb_strrchr($s, $needle, $part, $enc);
+  return Mbstring::mb_strrchr($haystack, $needle, $part, $encoding);
 }
 
 /**
- * @param      $s
- * @param      $needle
- * @param bool $part
- * @param      $enc
+ * @param string $haystack
+ * @param string $needle
+ * @param bool   $part
+ * @param string $encoding
  *
  * @return bool|string
  */
-function mb_strrichr($s, $needle, $part = false, $enc = INF)
+function mb_strrichr($haystack, $needle, $part = false, $encoding = INF)
 {
-  return Mbstring::mb_strrichr($s, $needle, $part, $enc);
+  return Mbstring::mb_strrichr($haystack, $needle, $part, $encoding);
 }
 
 /**
- * @param     $s
- * @param     $needle
- * @param int $offset
- * @param     $enc
+ * @param string $haystack
+ * @param string $needle
+ * @param int    $offset
+ * @param string $encoding
  *
  * @return bool|int
  */
-function mb_strripos($s, $needle, $offset = 0, $enc = INF)
+function mb_strripos($haystack, $needle, $offset = 0, $encoding = INF)
 {
-  return Mbstring::mb_strripos($s, $needle, $offset, $enc);
+  return Mbstring::mb_strripos($haystack, $needle, $offset, $encoding);
 }
 
 /**
- * @param     $s
- * @param     $needle
- * @param int $offset
- * @param     $enc
+ * @param string $haystack
+ * @param string $needle
+ * @param int    $offset
+ * @param string $encoding
  *
  * @return bool|int
  */
-function mb_strrpos($s, $needle, $offset = 0, $enc = INF)
+function mb_strrpos($haystack, $needle, $offset = 0, $encoding = INF)
 {
-  return Mbstring::mb_strrpos($s, $needle, $offset, $enc);
+  return Mbstring::mb_strrpos($haystack, $needle, $offset, $encoding);
 }
 
 /**
- * @param      $s
- * @param      $needle
- * @param bool $part
- * @param      $enc
+ * @param string $haystack
+ * @param string $needle
+ * @param bool   $part
+ * @param string $encoding
  *
  * @return bool|string
  */
-function mb_strstr($s, $needle, $part = false, $enc = INF)
+function mb_strstr($haystack, $needle, $part = false, $encoding = INF)
 {
-  return Mbstring::mb_strstr($s, $needle, $part, $enc);
+  return Mbstring::mb_strstr($haystack, $needle, $part, $encoding);
 }
 
 /**
@@ -315,7 +315,7 @@ function mb_get_info($type = 'all')
 }
 
 /**
- * @param $enc
+ * @param string $enc
  *
  * @return bool|string
  */
@@ -325,26 +325,26 @@ function mb_http_output($enc = INF)
 }
 
 /**
- * @param $s
- * @param $enc
+ * @param string $str
+ * @param string $encoding
  *
  * @return int
  */
-function mb_strwidth($s, $enc = INF)
+function mb_strwidth($str, $encoding = INF)
 {
-  return Mbstring::mb_strwidth($s, $enc);
+  return Mbstring::mb_strwidth($str, $encoding);
 }
 
 /**
- * @param $haystack
- * @param $needle
- * @param $enc
+ * @param string $haystack
+ * @param string $needle
+ * @param string $encoding
  *
  * @return int
  */
-function mb_substr_count($haystack, $needle, $enc = INF)
+function mb_substr_count($haystack, $needle, $encoding = INF)
 {
-  return Mbstring::mb_substr_count($haystack, $needle, $enc);
+  return Mbstring::mb_substr_count($haystack, $needle, $encoding);
 }
 
 /**
