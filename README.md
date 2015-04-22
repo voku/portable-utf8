@@ -4,7 +4,7 @@
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/be5bf087-366c-463e-ac9f-c184db6347ba/mini.png)](https://insight.sensiolabs.com/projects/be5bf087-366c-463e-ac9f-c184db6347ba)
 [![Dependency Status](https://www.versioneye.com/php/voku:portable-utf8/dev-master/badge.svg)](https://www.versioneye.com/php/voku:portable-utf8/dev-master)
 [![Reference Status](https://www.versioneye.com/php/voku:portable-utf8/reference_badge.svg?style=flat)](https://www.versioneye.com/php/voku:portable-utf8/references)
-[![Total Downloads](https://poser.pugx.org/voku/portable-utf8/downloads.svg)](https://packagist.org/packages/voku/portable-utf8)
+[![Total Downloads](https://poser.pugx.org/voku/portable-utf8/downloads)](https://packagist.org/packages/voku/portable-utf8)
 [![License](https://poser.pugx.org/voku/portable-utf8/license.svg)](https://packagist.org/packages/voku/portable-utf8)
 
 Portable UTF-8
