@@ -1223,7 +1223,9 @@ class UTF8
     }
 
     if ($length === null) {
-      $length = self::strlen($str);
+      $length = (int) self::strlen($str);
+    } else {
+      $length = (int) $length;
     }
 
     if (self::$support['mbstring'] === true) {
@@ -1237,9 +1239,9 @@ class UTF8
       }
 
       if ($bug62759) {
-        return Intl::grapheme_substr_workaround62759($str, $start, $length);
+        return (string) Intl::grapheme_substr_workaround62759($str, $start, $length);
       } else {
-        return grapheme_substr($str, $start, $length);
+        return (string) grapheme_substr($str, $start, $length);
       }
     }
 
@@ -1462,17 +1464,19 @@ class UTF8
    *
    * @return int|null
    */
-  public static function strcspn($s, $charlist, $start = 0, $len = 2147483647)
+  public static function strcspn($str, $charlist, $start = 0, $len = 2147483647)
   {
     if ('' === $charlist .= '') {
       return null;
     }
 
     if ($start || 2147483647 != $len) {
-      $s = self::substr($s, $start, $len);
+      $str = (string) self::substr($str, $start, $len);
+    } else {
+      $str = (string) $str;
     }
 
-    return preg_match('/^(.*?)' . self::rxClass($charlist) . '/us', $s, $len) ? self::strlen($len[1]) : self::strlen($s);
+    return preg_match('/^(.*?)' . self::rxClass($charlist) . '/us', $str, $len) ? self::strlen($len[1]) : self::strlen($str);
   }
 
   /**
@@ -1503,7 +1507,7 @@ class UTF8
 
     do {
       $str = preg_replace($non_displayables, '', $str, -1, $count);
-    } while ($count);
+    } while ($count !== 0);
 
     return $str;
   }
@@ -1973,7 +1977,7 @@ class UTF8
       );
     }
 
-    if ($maxlen) {
+    if (is_int($maxlen)) {
       $data = file_get_contents($filename, $flags, $context, $offset, $maxlen);
     } else {
       $data = file_get_contents($filename, $flags, $context, $offset);
@@ -1985,6 +1989,7 @@ class UTF8
     }
 
     self::checkForSupport();
+
     $encoding = self::str_detect_encoding($data);
     if ($encoding != 'UTF-8') {
       $data = mb_convert_encoding($data, 'UTF-8', $encoding);
@@ -1997,8 +2002,8 @@ class UTF8
   /**
    * is_binary_file
    *
-   * @param $file
-   * @return mixed
+   * @param string $file
+   * @return boolean
    */
   public static function is_binary_file($file) {
     try {
@@ -2009,32 +2014,27 @@ class UTF8
     catch(\Exception $e) {
       $block = "";
     }
+
     return self::is_binary($block);
   }
 
   /**
-   * is_binary
+   * check if the input is binary (is look like a hack)
    *
-   * @param $block
-   * @param bool $utf
+   * @param mixed $input
+   *
    * @return bool
    */
-  public static function is_binary($block, $utf = true) {
-    $testLength = strlen($block);
-    $test = (
-        0
-        or
-        ($testLength ? substr_count($block, "^ -~") / $testLength > 0.3 : 1 == 0)
-        or
-        substr_count($block, "\x00") > 0
-    );
+  public static function is_binary($input) {
+
+    $testLength = strlen($input);
 
     if (
-        $test
-        &&
-        !($utf && self::is_utf16($block))
-        &&
-        !($utf && self::is_utf32($block))
+        preg_match('~^[01]+$~', $input)
+        ||
+        substr_count($input, "\x00") > 0
+        ||
+        ($testLength ? substr_count($input, "^ -~") / $testLength > 0.3 : 1 == 0)
     ) {
       return true;
     } else {
@@ -2049,12 +2049,12 @@ class UTF8
    * @return int|false false if is't not UTF16, 1 for UTF-16LE, 2 for UTF-16BE
    */
   public static function is_utf32($string) {
-    if (self::is_binary($string, false)) {
+    if (self::is_binary($string)) {
       self::checkForSupport();
 
       $maybeUTF32LE = 0;
       $test = mb_convert_encoding($string, 'UTF-8', 'UTF-32LE');
-      if (strlen($test) > 1) {
+      if ($test !== false && strlen($test) > 1) {
         $test2 = mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
         $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
         if ($test3 == $test) {
@@ -2069,7 +2069,7 @@ class UTF8
 
       $maybeUTF32BE = 0;
       $test = mb_convert_encoding($string, 'UTF-8', 'UTF-32BE');
-      if (strlen($test) > 1) {
+      if ($test !== false && strlen($test) > 1) {
         $test2 = mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
         $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
         if ($test3 == $test) {
@@ -2102,12 +2102,12 @@ class UTF8
    * @return int|false false if is't not UTF16, 1 for UTF-16LE, 2 for UTF-16BE
    */
   public static function is_utf16($string) {
-    if (self::is_binary($string, false)) {
+    if (self::is_binary($string)) {
       self::checkForSupport();
 
       $maybeUTF16LE = 0;
       $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16LE');
-      if (strlen($test) > 1) {
+      if ($test !== false && strlen($test) > 1) {
         $test2 = mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
         $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
         if ($test3 == $test) {
@@ -2122,7 +2122,7 @@ class UTF8
 
       $maybeUTF16BE = 0;
       $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16BE');
-      if (strlen($test) > 1) {
+      if ($test !== false && strlen($test) > 1) {
         $test2 = mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
         $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
         if ($test3 == $test) {
@@ -2547,13 +2547,13 @@ class UTF8
    *
    * @param    string $str The original Unicode string
    *
-   * @return   array An array of byte lengths of each character.
+   * @return   int An array of byte lengths of each character.
    */
   public static function max_chr_width($str)
   {
     $bytes = self::chr_size_list($str);
     if (count($bytes) > 0) {
-      return max($bytes);
+      return (int) max($bytes);
     } else {
       return 0;
     }
@@ -2713,7 +2713,7 @@ class UTF8
       $encoding = mb_detect_encoding($str, $detectOrder, true);
     }
 
-    if (self::is_binary($str, false)) {
+    if (self::is_binary($str)) {
       if (self::is_utf16($str) == 1) {
         return 'UTF-16LE';
       }

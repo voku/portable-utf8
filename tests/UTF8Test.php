@@ -903,17 +903,20 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   {
     $tests = array(
         "öäü"            => false,
-        ""               => false
+        ""               => false,
+        "1"              => false,
+        decbin(324546)   => true,
+        01               => true
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::is_binary($before));
+      $this->assertEquals($after, UTF8::is_binary($before), 'value: ' . $before);
     }
   }
 
   public function testFileGetContents()
   {
-    // TODO: UTF-8 shim only works for UTF-8 :P
+    // INFO: UTF-8 shim only works for UTF-8
     if (UTF8::mbstring_loaded() === true) {
 
       $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16pe.txt');
@@ -930,6 +933,39 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
       $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Iso8859-7.txt');
       $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16pe.txt', FILE_TEXT);
+      $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16le.txt', null, null, 0);
+      $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16le.txt', null, null, 5);
+      $this->assertContains('There are better connections.', $testString);
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf8.txt', null, null, 7, 11);
+      $this->assertContains('Iñtërnât', $testString);
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Latin.txt', null, null, 7, 10, 15);
+      $this->assertContains('ñtërnâtiôn', $testString);
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Iso8859-7.txt', null, null, 7, null, 10);
+      $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Iso8859-7.txt', null, null, null, 10, 10);
+      $this->assertContains('Hírek', $testString);
+
+      $context = stream_context_create(
+          array(
+              'http' =>
+                  array(
+                      'timeout' => 10
+                  )
+          )
+      );
+
+      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Iso8859-7.txt', null, $context, null, 10, 10);
+      $this->assertContains('Hírek', $testString);
     }
   }
 
