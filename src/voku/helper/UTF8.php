@@ -4836,6 +4836,23 @@ class UTF8
   }
 
   /**
+   * str_replace
+   *
+   * INFO: this is only a wrapper for "str_replace()"  -> the original functions is already UTF-8 safe
+   *
+   * @param      $search
+   * @param      $replace
+   * @param      $subject
+   * @param null $count
+   *
+   * @return mixed
+   */
+  public static function str_replace($search, $replace, $subject, &$count = null)
+  {
+    return str_replace($search, $replace, $subject, $count);
+  }
+
+  /**
    * str_ireplace
    *
    * @param      $search
