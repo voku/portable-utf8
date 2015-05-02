@@ -2,6 +2,9 @@
 
 use voku\helper\UTF8 as u;
 
+/**
+ * Class Utf8StrSplitTest
+ */
 class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
 {
   public function test_split_one_char()
@@ -30,7 +33,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'n',
     );
 
-    $this->assertEquals($array, u::split($str));
+    self::assertEquals($array, u::split($str));
   }
 
   public function test_split_five_chars()
@@ -43,7 +46,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'ætiøn',
     );
 
-    $this->assertEquals($array, u::split($str, 5));
+    self::assertEquals($array, u::split($str, 5));
   }
 
   public function test_split_six_chars()
@@ -56,7 +59,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'øn',
     );
 
-    $this->assertEquals($array, u::split($str, 6));
+    self::assertEquals($array, u::split($str, 6));
   }
 
   public function test_split_long()
@@ -66,7 +69,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'Iñtërnâtiônàlizætiøn',
     );
 
-    $this->assertEquals($array, u::split($str, 40));
+    self::assertEquals($array, u::split($str, 40));
   }
 
   public function test_split_newline()
@@ -97,9 +100,9 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'ø',
         'n',
         "\n",
-        "\n"
+        "\n",
     );
 
-    $this->assertEquals($array, u::split($str));
+    self::assertEquals($array, u::split($str));
   }
 }

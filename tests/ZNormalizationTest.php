@@ -3,6 +3,9 @@
 //use Normalizer as n;
 use voku\helper\shim\Normalizer as n;
 
+/**
+ * Class ZNormalizationTest
+ */
 class ZNormalizationTest extends \PHPUnit_Framework_TestCase
 {
   public $unicodeVersion = 70;
@@ -24,29 +27,29 @@ class ZNormalizationTest extends \PHPUnit_Framework_TestCase
           $c[$k] = implode('', $t);
         }
 
-        $this->assertSame($c[1], n::normalize($c[0], n::NFC));
-        $this->assertSame($c[1], n::normalize($c[1], n::NFC));
-        $this->assertSame($c[1], n::normalize($c[2], n::NFC));
-        $this->assertSame($c[3], n::normalize($c[3], n::NFC));
-        $this->assertSame($c[3], n::normalize($c[4], n::NFC));
+        self::assertSame($c[1], n::normalize($c[0], n::NFC));
+        self::assertSame($c[1], n::normalize($c[1], n::NFC));
+        self::assertSame($c[1], n::normalize($c[2], n::NFC));
+        self::assertSame($c[3], n::normalize($c[3], n::NFC));
+        self::assertSame($c[3], n::normalize($c[4], n::NFC));
 
-        $this->assertSame($c[2], n::normalize($c[0], n::NFD));
-        $this->assertSame($c[2], n::normalize($c[1], n::NFD));
-        $this->assertSame($c[2], n::normalize($c[2], n::NFD));
-        $this->assertSame($c[4], n::normalize($c[3], n::NFD));
-        $this->assertSame($c[4], n::normalize($c[4], n::NFD));
+        self::assertSame($c[2], n::normalize($c[0], n::NFD));
+        self::assertSame($c[2], n::normalize($c[1], n::NFD));
+        self::assertSame($c[2], n::normalize($c[2], n::NFD));
+        self::assertSame($c[4], n::normalize($c[3], n::NFD));
+        self::assertSame($c[4], n::normalize($c[4], n::NFD));
 
-        $this->assertSame($c[3], n::normalize($c[0], n::NFKC));
-        $this->assertSame($c[3], n::normalize($c[1], n::NFKC));
-        $this->assertSame($c[3], n::normalize($c[2], n::NFKC));
-        $this->assertSame($c[3], n::normalize($c[3], n::NFKC));
-        $this->assertSame($c[3], n::normalize($c[4], n::NFKC));
+        self::assertSame($c[3], n::normalize($c[0], n::NFKC));
+        self::assertSame($c[3], n::normalize($c[1], n::NFKC));
+        self::assertSame($c[3], n::normalize($c[2], n::NFKC));
+        self::assertSame($c[3], n::normalize($c[3], n::NFKC));
+        self::assertSame($c[3], n::normalize($c[4], n::NFKC));
 
-        $this->assertSame($c[4], n::normalize($c[0], n::NFKD));
-        $this->assertSame($c[4], n::normalize($c[1], n::NFKD));
-        $this->assertSame($c[4], n::normalize($c[2], n::NFKD));
-        $this->assertSame($c[4], n::normalize($c[3], n::NFKD));
-        $this->assertSame($c[4], n::normalize($c[4], n::NFKD));
+        self::assertSame($c[4], n::normalize($c[0], n::NFKD));
+        self::assertSame($c[4], n::normalize($c[1], n::NFKD));
+        self::assertSame($c[4], n::normalize($c[2], n::NFKD));
+        self::assertSame($c[4], n::normalize($c[3], n::NFKD));
+        self::assertSame($c[4], n::normalize($c[4], n::NFKD));
       }
     }
   }

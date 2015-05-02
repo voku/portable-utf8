@@ -2,41 +2,44 @@
 
 use voku\helper\UTF8 as u;
 
+/**
+ * Class Utf8StrspnTest
+ */
 class Utf8StrspnTest extends PHPUnit_Framework_TestCase
 {
   public function test_match()
   {
     $str = 'iñtërnâtiônàlizætiøn';
-    $this->assertEquals(11, u::strspn($str, 'âëiônñrt'));
+    self::assertEquals(11, u::strspn($str, 'âëiônñrt'));
   }
 
   public function test_match_two()
   {
     $str = 'iñtërnâtiônàlizætiøn';
-    $this->assertEquals(4, u::strspn($str, 'iñtë'));
+    self::assertEquals(4, u::strspn($str, 'iñtë'));
   }
 
   public function test_compare_strspn()
   {
     $str = 'aeioustr';
-    $this->assertEquals(strspn($str, 'saeiou'), u::strspn($str, 'saeiou'));
+    self::assertEquals(strspn($str, 'saeiou'), u::strspn($str, 'saeiou'));
   }
 
   public function test_match_ascii()
   {
     $str = 'internationalization';
-    $this->assertEquals(strspn($str, 'aeionrt'), u::strspn($str, 'aeionrt'));
+    self::assertEquals(strspn($str, 'aeionrt'), u::strspn($str, 'aeionrt'));
   }
 
   public function test_linefeed()
   {
     $str = "iñtërnât\niônàlizætiøn";
-    $this->assertEquals(8, u::strspn($str, 'âëiônñrt'));
+    self::assertEquals(8, u::strspn($str, 'âëiônñrt'));
   }
 
   public function test_linefeed_mask()
   {
     $str = "iñtërnât\niônàlizætiøn";
-    $this->assertEquals(12, u::strspn($str, "âëiônñrt\n"));
+    self::assertEquals(12, u::strspn($str, "âëiônñrt\n"));
   }
 }

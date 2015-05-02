@@ -36,21 +36,21 @@ namespace voku\helper\shim;
 class Iconv
 {
   const ERROR_ILLEGAL_CHARACTER = 'iconv(): Detected an illegal character in input string';
-  const ERROR_WRONG_CHARSET = 'iconv(): Wrong charset, conversion from `%s\' to `%s\' is not allowed';
+  const ERROR_WRONG_CHARSET     = 'iconv(): Wrong charset, conversion from `%s\' to `%s\' is not allowed';
 
-  public static $input_encoding = 'utf-8';
-  public static $output_encoding = 'utf-8';
-  public static $internal_encoding = 'utf-8';
-  public static $translit_map = array();
-  public static $convert_map = array();
-  public static $error_handler, $last_error, $is_valid_utf8;
-  public static $ulen_mask = array(
+  public static    $input_encoding    = 'utf-8';
+  public static    $output_encoding   = 'utf-8';
+  public static    $internal_encoding = 'utf-8';
+  public static    $translit_map      = array();
+  public static    $convert_map       = array();
+  public static    $error_handler, $last_error, $is_valid_utf8;
+  public static    $ulen_mask         = array(
       "\xC0" => 2,
       "\xD0" => 2,
       "\xE0" => 3,
-      "\xF0" => 4
+      "\xF0" => 4,
   );
-  protected static $alias = array(
+  protected static $alias             = array(
       'utf8'        => 'utf-8',
       'ascii'       => 'us-ascii',
       'tis-620'     => 'iso-8859-11',
@@ -272,6 +272,7 @@ class Iconv
         ('utf-8' !== $out_charset && !static::loadMap('to.', $out_charset, $out_map))
     ) {
       user_error(sprintf(self::ERROR_WRONG_CHARSET, $in_charset, $out_charset));
+
       return false;
     }
 
@@ -291,6 +292,7 @@ class Iconv
 
       if (!self::$is_valid_utf8 && !$IGNORE) {
         user_error(self::ERROR_ILLEGAL_CHARACTER);
+
         return false;
       }
 
@@ -381,6 +383,7 @@ class Iconv
         $result .= $map[$str[$i]];
       } else if (!$IGNORE) {
         user_error(self::ERROR_ILLEGAL_CHARACTER);
+
         return false;
       }
     }
@@ -420,6 +423,7 @@ class Iconv
           }
 
           user_error(self::ERROR_ILLEGAL_CHARACTER);
+
           return false;
         } else {
           $i += $ulen;
@@ -524,7 +528,7 @@ class Iconv
     return array(
         'input_encoding'    => self::$input_encoding,
         'output_encoding'   => self::$output_encoding,
-        'internal_encoding' => self::$internal_encoding
+        'internal_encoding' => self::$internal_encoding,
     );
   }
 
@@ -577,7 +581,7 @@ class Iconv
             'input-charset'    => self::$internal_encoding,
             'output-charset'   => self::$internal_encoding,
             'line-length'      => 76,
-            'line-break-chars' => "\r\n"
+            'line-break-chars' => "\r\n",
         ),
         $pref
     );
@@ -616,7 +620,7 @@ class Iconv
               '/[=_\?\x00-\x1F\x80-\xFF]/',
               array(
                   __CLASS__,
-                  'qp_byte_callback'
+                  'qp_byte_callback',
               ),
               $c
           )
@@ -647,7 +651,7 @@ class Iconv
    *
    * @return bool|string
    */
-  public static function ob_iconv_handler($buffer, $mode)
+  public static function ob_iconv_handler($buffer, /** @noinspection PhpUnusedParameterInspection */ $mode)
   {
     return self::iconv(self::$internal_encoding, self::$output_encoding, $buffer);
   }
@@ -676,7 +680,9 @@ class Iconv
       }
     }
 
-    if ($offset = (int)$offset) {
+    $offset = (int)$offset;
+
+    if ($offset) {
       $haystack = self::iconv_substr($haystack, $offset, 2147483647, 'utf-8');
     }
     $pos = strpos($haystack, $needle);

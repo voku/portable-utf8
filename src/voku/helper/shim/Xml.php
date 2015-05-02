@@ -11,7 +11,6 @@
 
 namespace voku\helper\shim;
 
-
 /**
  * Class Xml for utf8_encode / utf8_decode
  *

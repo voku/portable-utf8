@@ -2,6 +2,9 @@
 
 use voku\helper\UTF8;
 
+/**
+ * Class UTF8Test
+ */
 class UTF8Test extends PHPUnit_Framework_TestCase
 {
 
@@ -9,14 +12,14 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   {
     $string = 'string <strong>with utf-8 chars åèä</strong> - doo-bee doo-bee dooh';
 
-    $this->assertEquals(70, strlen($string));
-    $this->assertEquals(67, UTF8::strlen($string));
+    self::assertEquals(70, strlen($string));
+    self::assertEquals(67, UTF8::strlen($string));
 
     $string_test1 = strip_tags($string);
     $string_test2 = UTF8::strip_tags($string);
 
-    $this->assertEquals(53, strlen($string_test1));
-    $this->assertEquals(50, UTF8::strlen($string_test2));
+    self::assertEquals(53, strlen($string_test1));
+    self::assertEquals(50, UTF8::strlen($string_test2));
   }
 
   public function testHtmlspecialchars()
@@ -26,11 +29,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "<白>"                       => "&lt;白&gt;",
         "öäü"                       => "öäü",
         " "                         => " ",
-        ""                          => ""
+        ""                          => "",
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::htmlspecialchars($actual));
+      self::assertEquals($expected, UTF8::htmlspecialchars($actual));
     }
   }
 
@@ -40,11 +43,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "<白>" => "&lt;白&gt;",
         "öäü" => "&ouml;&auml;&uuml;",
         " "   => " ",
-        ""    => ""
+        ""    => "",
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::htmlentities($actual));
+      self::assertEquals($expected, UTF8::htmlentities($actual));
     }
   }
 
@@ -55,12 +58,12 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'test'   => array(4 => true),
         ''       => array(0 => true),
         ' '      => array(0 => false),
-        'abcöäü' => array(2 => false)
+        'abcöäü' => array(2 => false),
     );
 
     foreach ($testArray as $actual => $data) {
       foreach ($data as $size => $expected) {
-        $this->assertEquals($expected, UTF8::fits_inside($actual, $size), 'error by ' . $actual);
+        self::assertEquals($expected, UTF8::fits_inside($actual, $size), 'error by ' . $actual);
       }
     }
   }
@@ -85,7 +88,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::fix_utf8($before));
+      self::assertEquals($after, UTF8::fix_utf8($before));
     }
   }
 
@@ -94,9 +97,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $str = "Iñtërnâtiôn\xE9àlizætiøn=測試&arr[]=foo+測試&arr[]=ການທົດສອບ";
     UTF8::parse_str($str, $array);
 
-    $this->assertEquals('測試', $array['Iñtërnâtiônéàlizætiøn']);
-    $this->assertEquals('foo 測試', $array['arr'][0]);
-    $this->assertEquals('ການທົດສອບ', $array['arr'][1]);
+    self::assertEquals('測試', $array['Iñtërnâtiônéàlizætiøn']);
+    self::assertEquals('foo 測試', $array['arr'][0]);
+    self::assertEquals('ການທົດສອບ', $array['arr'][1]);
 
   }
 
@@ -146,7 +149,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
+      self::assertEquals($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
   }
@@ -158,12 +161,12 @@ class UTF8Test extends PHPUnit_Framework_TestCase
             'a' => 1,
             'b' => 1,
             'c' => 1,
-            'κ' => 3
+            'κ' => 3,
         ),
         'cba'    => array(
             'a' => 1,
             'b' => 1,
-            'c' => 1
+            'c' => 1,
         ),
         'abcöäü' => array(
             'a' => 1,
@@ -171,14 +174,14 @@ class UTF8Test extends PHPUnit_Framework_TestCase
             'c' => 1,
             'ä' => 1,
             'ö' => 1,
-            'ü' => 1
+            'ü' => 1,
         ),
         '白白'     => array('白' => 2),
-        ''       => array()
+        ''       => array(),
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::count_chars($actual), 'error by ' . $actual);
+      self::assertEquals($expected, UTF8::count_chars($actual), 'error by ' . $actual);
     }
   }
 
@@ -189,11 +192,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'abc'                  => false,
         UTF8::bom() . 'abcöäü' => true,
         '白'                    => false,
-        UTF8::bom()            => true
+        UTF8::bom()            => true,
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::string_has_bom($actual), 'error by ' . $actual);
+      self::assertEquals($expected, UTF8::string_has_bom($actual), 'error by ' . $actual);
     }
   }
 
@@ -205,11 +208,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'abcöäü' => 'üäöcba',
         '-白-'    => '-白-',
         ''       => '',
-        ' '      => ' '
+        ' '      => ' ',
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::strrev($actual), 'error by ' . $actual);
+      self::assertEquals($expected, UTF8::strrev($actual), 'error by ' . $actual);
     }
   }
 
@@ -221,11 +224,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'abcöäü' => false,
         '白'      => false,
         ' '      => true,
-        ''       => true
+        ''       => true,
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
+      self::assertEquals($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
     }
   }
 
@@ -239,11 +242,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'κόσμε',
         'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
         '  '                                                                               => false,
-        ''                                                                                 => false
+        ''                                                                                 => false,
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::strrichr($actual, "κόσμε"), 'error by ' . $actual);
+      self::assertEquals($expected, UTF8::strrichr($actual, "κόσμε"), 'error by ' . $actual);
     }
   }
 
@@ -257,83 +260,83 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'κόσμε',
         'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
         '  '                                                                               => false,
-        ''                                                                                 => false
+        ''                                                                                 => false,
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::strrchr($actual, "κόσμε"), 'error by ' . $actual);
+      self::assertEquals($expected, UTF8::strrchr($actual, "κόσμε"), 'error by ' . $actual);
     }
   }
 
   public function testHtmlEntityDecode()
   {
     $testArray = array(
-        'κόσμε'                                                                            => 'κόσμε',
-        'Κόσμε'                                                                            => 'Κόσμε',
-        'öäü-κόσμεκόσμε-äöü'                                                               => 'öäü-κόσμεκόσμε-äöü',
-        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        '  '                                                                               => '  ',
-        ''                                                                                 => '',
-        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                           => '<abcd>\'$1\'("&2")',
+        'κόσμε'                                                                                     => 'κόσμε',
+        'Κόσμε'                                                                                     => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                                        => '  ',
+        ''                                                                                          => '',
+        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
         '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
-        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'      => '<script>alert("XSS")</script>',
-        'who&#039;s online'                                                                => 'who&#039;s online',
-        'who&amp;#039;s online'                                                            => 'who&#039;s online',
-        'who&#039;s online-'                                                               => 'who&#039;s online-',
-        'Who&#039;s Online'                                                                => 'Who&#039;s Online',
-        'Who&amp;#039;s Online'                                                            => 'Who&#039;s Online',
-        'Who&amp;amp;#039;s Online'                                                        => 'Who&#039;s Online',
+        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
+        'who&#039;s online'                                                                         => 'who&#039;s online',
+        'who&amp;#039;s online'                                                                     => 'who&#039;s online',
+        'who&#039;s online-'                                                                        => 'who&#039;s online-',
+        'Who&#039;s Online'                                                                         => 'Who&#039;s Online',
+        'Who&amp;#039;s Online'                                                                     => 'Who&#039;s Online',
+        'Who&amp;amp;#039;s Online'                                                                 => 'Who&#039;s Online',
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::html_entity_decode($before), 'error by ' . $before);
+      self::assertEquals($after, UTF8::html_entity_decode($before), 'error by ' . $before);
     }
   }
 
   public function testHtmlEntityDecodeWithEntQuotes()
   {
     $testArray = array(
-        'κόσμε'                                                                            => 'κόσμε',
-        'Κόσμε'                                                                            => 'Κόσμε',
-        'öäü-κόσμεκόσμε-äöü'                                                               => 'öäü-κόσμεκόσμε-äöü',
-        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        '  '                                                                               => '  ',
-        ''                                                                                 => '',
-        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                           => '<abcd>\'$1\'("&2")',
+        'κόσμε'                                                                                     => 'κόσμε',
+        'Κόσμε'                                                                                     => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                                        => '  ',
+        ''                                                                                          => '',
+        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
         '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
-        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'      => '<script>alert("XSS")</script>',
-        'who&#039;s online'                                                                => 'who\'s online',
-        'who&amp;#039;s online'                                                            => 'who\'s online',
-        'who&#039;s online-'                                                               => 'who\'s online-',
-        'Who&#039;s Online'                                                                => 'Who\'s Online',
-        'Who&amp;#039;s Online'                                                            => 'Who\'s Online',
-        'Who&amp;amp;#039;s Online'                                                        => 'Who\'s Online',
+        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
+        'who&#039;s online'                                                                         => 'who\'s online',
+        'who&amp;#039;s online'                                                                     => 'who\'s online',
+        'who&#039;s online-'                                                                        => 'who\'s online-',
+        'Who&#039;s Online'                                                                         => 'Who\'s Online',
+        'Who&amp;#039;s Online'                                                                     => 'Who\'s Online',
+        'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
+      self::assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
     }
   }
 
   public function testRemoveInvisibleCharacters()
   {
     $testArray = array(
-        "κόσ\0με"                                                                           => 'κόσμε',
-        "Κόσμε\x20"                                                                         => 'Κόσμε ',
-        "öäü-κόσμ\x0εκόσμε-äöü"                                                             => 'öäü-κόσμεκόσμε-äöü',
-        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                              => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
-        "äöüäöüäöü-κόσμεκόσμεäöüäöüäöü\xe1\x9a\x80κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε"           => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'  => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        "κόσ\0με"                                                                          => 'κόσμε',
+        "Κόσμε\x20"                                                                        => 'Κόσμε ',
+        "öäü-κόσμ\x0εκόσμε-äöü"                                                            => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        "äöüäöüäöü-κόσμεκόσμεäöüäöüäöü\xe1\x9a\x80κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε"          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
         '  '                                                                               => '  ',
         ''                                                                                 => '',
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
+      self::assertEquals($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
     }
   }
 
@@ -344,11 +347,15 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "\xFE\xFFΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
         "\xFF\xFEΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
         "\x00\x00\xFE\xFFΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
-        "\xFF\xFE\x00\x00Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα"
+        "\xFF\xFE\x00\x00Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
     );
 
     foreach ($testBom as $count => $test) {
-      $this->assertEquals("Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα", UTF8::removeBOM($test), 'error by ' . $count);
+      self::assertEquals(
+          "Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
+          UTF8::removeBOM($test),
+          'error by ' . $count
+      );
     }
   }
 
@@ -356,19 +363,19 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   {
     $testArray = array(
         "öäü-κόσμεκόσμε-äöü"   => array(
-            "öäü-κόσμε-äöü" => "κόσμε"
+            "öäü-κόσμε-äöü" => "κόσμε",
         ),
         "äöüäöüäöü-κόσμεκόσμε" => array(
             "äöü-κόσμε" => array(
                 "äöü",
-                "κόσμε"
-            )
-        )
+                "κόσμε",
+            ),
+        ),
     );
 
     foreach ($testArray as $actual => $data) {
       foreach ($data as $expected => $filter) {
-        $this->assertEquals($expected, UTF8::remove_duplicates($actual, $filter));
+        self::assertEquals($expected, UTF8::remove_duplicates($actual, $filter));
       }
     }
   }
@@ -380,11 +387,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "ι",
         "θ",
         "η",
-        "ζ"
+        "ζ",
     );
 
-    $this->assertEquals($expected, UTF8::range("κ", "ζ"));
-    $this->assertEquals(0, count(UTF8::range("κ", "")));
+    self::assertEquals($expected, UTF8::range("κ", "ζ"));
+    self::assertEquals(0, count(UTF8::range("κ", "")));
 
   }
 
@@ -395,11 +402,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         8,
         0,
         100,
-        1234
+        1234,
     );
 
     foreach ($testArray as $testValue) {
-      $this->assertEquals($testValue, UTF8::strlen(UTF8::hash($testValue)));
+      self::assertEquals($testValue, UTF8::strlen(UTF8::hash($testValue)));
     }
   }
 
@@ -408,8 +415,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $actual = UTF8::callback(
         array(
             'voku\helper\UTF8',
-            'strtolower'
-        ), "Κόσμε-ÖÄÜ"
+            'strtolower',
+        ),
+        "Κόσμε-ÖÄÜ"
     );
     $expected = array(
         "κ",
@@ -420,9 +428,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "-",
         "ö",
         "ä",
-        "ü"
+        "ü",
     );
-    $this->assertEquals($expected, $actual);
+    self::assertEquals($expected, $actual);
   }
 
   public function testAccess()
@@ -435,7 +443,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $actualString => $testDataArray) {
       foreach ($testDataArray as $stringPos => $expectedString) {
-        $this->assertEquals($expectedString, UTF8::access($actualString, $stringPos));
+        self::assertEquals($expectedString, UTF8::access($actualString, $stringPos));
       }
     }
   }
@@ -446,42 +454,42 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         ""               => "",
         "  -ABC-中文空白-  " => "    ---ABC中文白空",
         "      - ÖÄÜ- "  => "        --ÄÖÜ",
-        "öäü"            => "äöü"
+        "öäü"            => "äöü",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::str_sort($before));
+      self::assertEquals($after, UTF8::str_sort($before));
     }
 
     $tests = array(
         "  -ABC-中文空白-  " => "空白文中CBA---    ",
         "      - ÖÄÜ- "  => "ÜÖÄ--        ",
-        "öäü"            => "üöä"
+        "öäü"            => "üöä",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::str_sort($before, false, true));
+      self::assertEquals($after, UTF8::str_sort($before, false, true));
     }
 
     $tests = array(
         "    "           => " ",
         "  -ABC-中文空白-  " => " -ABC中文白空",
         "      - ÖÄÜ- "  => " -ÄÖÜ",
-        "öäü"            => "äöü"
+        "öäü"            => "äöü",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::str_sort($before, true));
+      self::assertEquals($after, UTF8::str_sort($before, true));
     }
 
     $tests = array(
         "  -ABC-中文空白-  " => "空白文中CBA- ",
         "      - ÖÄÜ- "  => "ÜÖÄ- ",
-        "öäü"            => "üöä"
+        "öäü"            => "üöä",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::str_sort($before, true, true));
+      self::assertEquals($after, UTF8::str_sort($before, true, true));
     }
   }
 
@@ -490,32 +498,32 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $tests = array(
         "ABC@中文空白.com" => array(
             'ABC',
-            '@中文空白.com'
+            '@中文空白.com',
         ),
         " @ - ÖÄÜ- "   => array(
             ' ',
-            '@ - ÖÄÜ- '
+            '@ - ÖÄÜ- ',
         ),
         "öä@ü"         => array(
             'öä',
-            '@ü'
+            '@ü',
         ),
         ""             => array(
             '',
-            ''
+            '',
         ),
         "  "           => array(
             '',
-            ''
-        )
+            '',
+        ),
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after[0], UTF8::strstr($before, '@', true), $before);
+      self::assertEquals($after[0], UTF8::strstr($before, '@', true), $before);
     }
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after[1], UTF8::strstr($before, '@'), $before);
+      self::assertEquals($after[1], UTF8::strstr($before, '@'), $before);
     }
   }
 
@@ -526,11 +534,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-????-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::utf8_encode((UTF8::utf8_decode($before))));
+      self::assertEquals($after, UTF8::utf8_encode((UTF8::utf8_decode($before))));
     }
   }
 
@@ -540,11 +548,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-中文空白-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::utf8_decode(UTF8::utf8_encode($before)));
+      self::assertEquals($after, UTF8::utf8_decode(UTF8::utf8_encode($before)));
     }
   }
 
@@ -553,185 +561,185 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     // http://www.columbia.edu/~fdc/utf8/
 
     $testArray = array(
-      "Sanskrit: ﻿काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥",
-      "Sanskrit (standard transcription): kācaṃ śaknomyattum; nopahinasti mām.",
-      "Classical Greek: ὕαλον ϕαγεῖν δύναμαι· τοῦτο οὔ με βλάπτει.",
-      "Greek (monotonic): Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα.",
-      "Greek (polytonic): Μπορῶ νὰ φάω σπασμένα γυαλιὰ χωρὶς νὰ πάθω τίποτα. ",
-      "Etruscan: (NEEDED)",
-      "Latin: Vitrum edere possum; mihi non nocet.",
-      "Old French: Je puis mangier del voirre. Ne me nuit.",
-      "French: Je peux manger du verre, ça ne me fait pas mal.",
-      "Provençal / Occitan: Pòdi manjar de veire, me nafrariá pas.",
-      "Québécois: J'peux manger d'la vitre, ça m'fa pas mal.",
-      "Walloon: Dji pou magnî do vêre, çoula m' freut nén må. ",
-      "Champenois: (NEEDED) ",
-      "Lorrain: (NEEDED)",
-      "Picard: Ch'peux mingi du verre, cha m'foé mie n'ma. ",
-      "Corsican/Corsu: (NEEDED) ",
-      "Jèrriais: (NEEDED)",
-      "Kreyòl Ayisyen (Haitï): Mwen kap manje vè, li pa blese'm.",
-      "Basque: Kristala jan dezaket, ez dit minik ematen.",
-      "Catalan / Català: Puc menjar vidre, que no em fa mal.",
-      "Spanish: Puedo comer vidrio, no me hace daño.",
-      "Aragonés: Puedo minchar beire, no me'n fa mal . ",
-      "Aranés: (NEEDED) ",
-      "Mallorquín: (NEEDED)",
-      "Galician: Eu podo xantar cristais e non cortarme.",
-      "European Portuguese: Posso comer vidro, não me faz mal.",
-      "Brazilian Portuguese (8): Posso comer vidro, não me machuca.",
-      "Caboverdiano/Kabuverdianu (Cape Verde): M' podê cumê vidru, ca ta maguâ-m'.",
-      "Papiamentu: Ami por kome glas anto e no ta hasimi daño.",
-      "Italian: Posso mangiare il vetro e non mi fa male.",
-      "Milanese: Sôn bôn de magnà el véder, el me fa minga mal.",
-      "Roman: Me posso magna' er vetro, e nun me fa male.",
-      "Napoletano: M' pozz magna' o'vetr, e nun m' fa mal.",
-      "Venetian: Mi posso magnare el vetro, no'l me fa mae.",
-      "Zeneise (Genovese): Pòsso mangiâ o veddro e o no me fà mâ.",
-      "Sicilian: Puotsu mangiari u vitru, nun mi fa mali. ",
-      "Campinadese (Sardinia): (NEEDED) ",
-      "Lugudorese (Sardinia): (NEEDED)",
-      "Romansch (Grischun): Jau sai mangiar vaider, senza che quai fa donn a mai. ",
-      "Romany / Tsigane: (NEEDED)",
-      "Romanian: Pot să mănânc sticlă și ea nu mă rănește.",
-      "Esperanto: Mi povas manĝi vitron, ĝi ne damaĝas min. ",
-      "Pictish: (NEEDED) ",
-      "Breton: (NEEDED)",
-      "Cornish: Mý a yl dybry gwéder hag éf ny wra ow ankenya.",
-      "Welsh: Dw i'n gallu bwyta gwydr, 'dyw e ddim yn gwneud dolur i mi.",
-      "Manx Gaelic: Foddym gee glonney agh cha jean eh gortaghey mee.",
-      "Old Irish (Ogham): ᚛᚛ᚉᚑᚅᚔᚉᚉᚔᚋ ᚔᚈᚔ ᚍᚂᚐᚅᚑ ᚅᚔᚋᚌᚓᚅᚐ᚜",
-      "Old Irish (Latin): Con·iccim ithi nglano. Ním·géna.",
-      "Irish: Is féidir liom gloinne a ithe. Ní dhéanann sí dochar ar bith dom.",
-      "Ulster Gaelic: Ithim-sa gloine agus ní miste damh é.",
-      "Scottish Gaelic: S urrainn dhomh gloinne ithe; cha ghoirtich i mi.",
-      "Anglo-Saxon (Runes): ᛁᚳ᛫ᛗᚨᚷ᛫ᚷᛚᚨᛋ᛫ᛖᚩᛏᚪᚾ᛫ᚩᚾᛞ᛫ᚻᛁᛏ᛫ᚾᛖ᛫ᚻᛖᚪᚱᛗᛁᚪᚧ᛫ᛗᛖ᛬",
-      "Anglo-Saxon (Latin): Ic mæg glæs eotan ond hit ne hearmiað me.",
-      "Middle English: Ich canne glas eten and hit hirtiþ me nouȝt.",
-      "English: I can eat glass and it doesn't hurt me.",
-      "English (IPA): [aɪ kæn iːt glɑːs ænd ɪt dɐz nɒt hɜːt miː] (Received Pronunciation)",
-      "English (Braille): ⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑",
-      "Jamaican: Mi kian niam glas han i neba hot mi.",
-      "Lalland Scots / Doric: Ah can eat gless, it disnae hurt us. ",
-      "Glaswegian: (NEEDED)",
-      "Gothic (4): 𐌼𐌰𐌲 𐌲𐌻𐌴𐍃 𐌹̈𐍄𐌰𐌽, 𐌽𐌹 𐌼𐌹𐍃 𐍅𐌿 𐌽𐌳𐌰𐌽 𐌱𐍂𐌹𐌲𐌲𐌹𐌸.",
-      "Old Norse (Runes): ᛖᚴ ᚷᛖᛏ ᛖᛏᛁ ᚧ ᚷᛚᛖᚱ ᛘᚾ ᚦᛖᛋᛋ ᚨᚧ ᚡᛖ ᚱᚧᚨ ᛋᚨᚱ",
-      "Old Norse (Latin): Ek get etið gler án þess að verða sár.",
-      "Norsk / Norwegian (Nynorsk): Eg kan eta glas utan å skada meg.",
-      "Norsk / Norwegian (Bokmål): Jeg kan spise glass uten å skade meg.",
-      "Føroyskt / Faroese: Eg kann eta glas, skaðaleysur.",
-      "Íslenska / Icelandic: Ég get etið gler án þess að meiða mig.",
-      "Svenska / Swedish: Jag kan äta glas utan att skada mig.",
-      "Dansk / Danish: Jeg kan spise glas, det gør ikke ondt på mig.",
-      "Sønderjysk: Æ ka æe glass uhen at det go mæ naue.",
-      "Frysk / Frisian: Ik kin glês ite, it docht me net sear.",
-      "Nederlands / Dutch: Ik kan glas eten, het doet mĳ geen kwaad.",
-      "Kirchröadsj/Bôchesserplat: Iech ken glaas èèse, mer 't deet miech jing pieng.",
-      "Afrikaans: Ek kan glas eet, maar dit doen my nie skade nie.",
-      "Lëtzebuergescht / Luxemburgish: Ech kan Glas iessen, daat deet mir nët wei.",
-      "Deutsch / German: Ich kann Glas essen, ohne mir zu schaden.",
-      "Ruhrdeutsch: Ich kann Glas verkasematuckeln, ohne dattet mich wat jucken tut.",
-      "Langenfelder Platt: Isch kann Jlaas kimmeln, uuhne datt mich datt weh dääd.",
-      "Lausitzer Mundart ('Lusatian'): Ich koann Gloos assn und doas dudd merr ni wii.",
-      "Odenwälderisch: Iech konn glaasch voschbachteln ohne dass es mir ebbs daun doun dud.",
-      "Sächsisch / Saxon: 'sch kann Glos essn, ohne dass'sch mer wehtue.",
-      "Pfälzisch: Isch konn Glass fresse ohne dasses mer ebbes ausmache dud.",
-      "Schwäbisch / Swabian: I kå Glas frässa, ond des macht mr nix!",
-      "Deutsch (Voralberg): I ka glas eassa, ohne dass mar weh tuat.",
-      "Bayrisch / Bavarian: I koh Glos esa, und es duard ma ned wei.",
-      "Allemannisch: I kaun Gloos essen, es tuat ma ned weh.",
-      "Schwyzerdütsch (Zürich): Ich chan Glaas ässe, das schadt mir nöd.",
-      "Schwyzerdütsch (Luzern): Ech cha Glâs ässe, das schadt mer ned. ",
-      "Plautdietsch: (NEEDED)",
-      "Hungarian: Meg tudom enni az üveget, nem lesz tőle bajom.",
-      "Suomi / Finnish: Voin syödä lasia, se ei vahingoita minua.",
-      "Sami (Northern): Sáhtán borrat lása, dat ii leat bávččas.",
-      "Erzian: Мон ярсан суликадо, ды зыян эйстэнзэ а ули.",
-      "Northern Karelian: Mie voin syvvä lasie ta minla ei ole kipie.",
-      "Southern Karelian: Minä voin syvvä st'oklua dai minule ei ole kibie. ",
-      "Vepsian: (NEEDED) ",
-      "Votian: (NEEDED) ",
-      "Livonian: (NEEDED)",
-      "Estonian: Ma võin klaasi süüa, see ei tee mulle midagi.",
-      "Latvian: Es varu ēst stiklu, tas man nekaitē.",
-      "Lithuanian: Aš galiu valgyti stiklą ir jis manęs nežeidžia ",
-      "Old Prussian: (NEEDED) ",
-      "Sorbian (Wendish): (NEEDED)",
-      "Czech: Mohu jíst sklo, neublíží mi.",
-      "Slovak: Môžem jesť sklo. Nezraní ma.",
-      "Polska / Polish: Mogę jeść szkło i mi nie szkodzi.",
-      "Slovenian: Lahko jem steklo, ne da bi mi škodovalo.",
-      "Croatian: Ja mogu jesti staklo i ne boli me.",
-      "Serbian (Latin): Ja mogu da jedem staklo.",
-      "Serbian (Cyrillic): Ја могу да једем стакло.",
-      "Macedonian: Можам да јадам стакло, а не ме штета.",
-      "Russian: Я могу есть стекло, оно мне не вредит.",
-      "Belarusian (Cyrillic): Я магу есці шкло, яно мне не шкодзіць.",
-      "Belarusian (Lacinka): Ja mahu jeści škło, jano mne ne škodzić.",
-      "Ukrainian: Я можу їсти скло, і воно мені не зашкодить.",
-      "Bulgarian: Мога да ям стъкло, то не ми вреди.",
-      "Georgian: მინას ვჭამ და არა მტკივა.",
-      "Armenian: Կրնամ ապակի ուտել և ինծի անհանգիստ չըներ։",
-      "Albanian: Unë mund të ha qelq dhe nuk më gjen gjë.",
-      "Turkish: Cam yiyebilirim, bana zararı dokunmaz.",
-      "Turkish (Ottoman): جام ييه بلورم بڭا ضررى طوقونمز",
-      "Bangla / Bengali: আমি কাঁচ খেতে পারি, তাতে আমার কোনো ক্ষতি হয় না।",
-      "Marathi: मी काच खाऊ शकतो, मला ते दुखत नाही.",
-      "Kannada: ನನಗೆ ಹಾನಿ ಆಗದೆ, ನಾನು ಗಜನ್ನು ತಿನಬಹುದು",
-      "Hindi: मैं काँच खा सकता हूँ और मुझे उससे कोई चोट नहीं पहुंचती.",
-      "Tamil: நான் கண்ணாடி சாப்பிடுவேன், அதனால் எனக்கு ஒரு கேடும் வராது.",
-      "Telugu: నేను గాజు తినగలను మరియు అలా చేసినా నాకు ఏమి ఇబ్బంది లేదు",
-      "Sinhalese: මට වීදුරු කෑමට හැකියි. එයින් මට කිසි හානියක් සිදු නොවේ.",
-      "Urdu(3): میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔",
-      "Pashto(3): زه شيشه خوړلې شم، هغه ما نه خوږوي",
-      "Farsi / Persian(3): .من می توانم بدونِ احساس درد شيشه بخورم",
-      "Arabic(3): أنا قادر على أكل الزجاج و هذا لا يؤلمني. ",
-      "Aramaic: (NEEDED)",
-      "Maltese: Nista' niekol il-ħġieġ u ma jagħmilli xejn.",
-      "Hebrew(3): אני יכול לאכול זכוכית וזה לא מזיק לי.",
-      "Yiddish(3): איך קען עסן גלאָז און עס טוט מיר נישט װײ. ",
-      "Judeo-Arabic: (NEEDED) ",
-      "Ladino: (NEEDED) ",
-      "Gǝʼǝz: (NEEDED) ",
-      "Amharic: (NEEDED)",
-      "Twi: Metumi awe tumpan, ɜnyɜ me hwee.",
-      "Hausa (Latin): Inā iya taunar gilāshi kuma in gamā lāfiyā.",
-      "Hausa (Ajami) (2): إِنا إِىَ تَونَر غِلَاشِ كُمَ إِن غَمَا لَافِىَا",
-      "Yoruba(4): Mo lè je̩ dígí, kò ní pa mí lára.",
-      "Lingala: Nakokí kolíya biténi bya milungi, ekosála ngáí mabé tɛ́.",
-      "(Ki)Swahili: Naweza kula bilauri na sikunyui.",
-      "Malay: Saya boleh makan kaca dan ia tidak mencederakan saya.",
-      "Tagalog: Kaya kong kumain nang bubog at hindi ako masaktan.",
-      "Chamorro: Siña yo' chumocho krestat, ti ha na'lalamen yo'.",
-      "Fijian: Au rawa ni kana iloilo, ia au sega ni vakacacani kina.",
-      "Javanese: Aku isa mangan beling tanpa lara.",
-      "Burmese: က္ယ္ဝန္‌တော္‌၊က္ယ္ဝန္‌မ မ္ယက္‌စားနုိင္‌သည္‌။ ၎က္ရောင္‌့ ထိခုိက္‌မ္ဟု မရ္ဟိပာ။ (9)",
-      "Vietnamese (quốc ngữ): Tôi có thể ăn thủy tinh mà không hại gì.",
-      "Vietnamese (nôm) (4): 些 𣎏 世 咹 水 晶 𦓡 空 𣎏 害 咦",
-      "Khmer: ខ្ញុំអាចញុំកញ្ចក់បាន ដោយគ្មានបញ្ហារ",
-      "Lao: ຂອ້ຍກິນແກ້ວໄດ້ໂດຍທີ່ມັນບໍ່ໄດ້ເຮັດໃຫ້ຂອ້ຍເຈັບ.",
-      "Thai: ฉันกินกระจกได้ แต่มันไม่ทำให้ฉันเจ็บ",
-      "Mongolian (Cyrillic): Би шил идэй чадна, надад хортой биш",
-      "Mongolian (Classic) (5): ᠪᠢ ᠰᠢᠯᠢ ᠢᠳᠡᠶᠦ ᠴᠢᠳᠠᠨᠠ ᠂ ᠨᠠᠳᠤᠷ ᠬᠣᠤᠷᠠᠳᠠᠢ ᠪᠢᠰᠢ ",
-      "Dzongkha: (NEEDED)",
-      "Nepali: ﻿म काँच खान सक्छू र मलाई केहि नी हुन्‍न् ।",
-      "Tibetan: ཤེལ་སྒོ་ཟ་ནས་ང་ན་གི་མ་རེད།",
-      "Chinese: 我能吞下玻璃而不伤身体。",
-      "Chinese (Traditional): 我能吞下玻璃而不傷身體。",
-      "Taiwanese(6): Góa ē-tàng chia̍h po-lê, mā bē tio̍h-siong.",
-      "Japanese: 私はガラスを食べられます。それは私を傷つけません。",
-      "Korean: 나는 유리를 먹을 수 있어요. 그래도 아프지 않아요",
-      "Bislama: Mi save kakae glas, hemi no save katem mi.",
-      "Hawaiian: Hiki iaʻu ke ʻai i ke aniani; ʻaʻole nō lā au e ʻeha.",
-      "Marquesan: E koʻana e kai i te karahi, mea ʻā, ʻaʻe hauhau.",
-      "Inuktitut (10): ᐊᓕᒍᖅ ᓂᕆᔭᕌᖓᒃᑯ ᓱᕋᙱᑦᑐᓐᓇᖅᑐᖓ",
-      "Chinook Jargon: Naika məkmək kakshət labutay, pi weyk ukuk munk-sik nay.",
-      "Navajo: Tsésǫʼ yishą́ągo bííníshghah dóó doo shił neezgai da. ",
-      "Cherokee (and Cree, Chickasaw, Cree, Micmac, Ojibwa, Lakota, Náhuatl, Quechua, Aymara, and other American languages): (NEEDED) ",
-      "Garifuna: (NEEDED) ",
-      "Gullah: (NEEDED)",
-      "Lojban: mi kakne le nu citka le blaci .iku'i le se go'i na xrani mi",
-      "Nórdicg: Ljœr ye caudran créneþ ý jor cẃran.",
+        "Sanskrit: ﻿काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥",
+        "Sanskrit (standard transcription): kācaṃ śaknomyattum; nopahinasti mām.",
+        "Classical Greek: ὕαλον ϕαγεῖν δύναμαι· τοῦτο οὔ με βλάπτει.",
+        "Greek (monotonic): Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα.",
+        "Greek (polytonic): Μπορῶ νὰ φάω σπασμένα γυαλιὰ χωρὶς νὰ πάθω τίποτα. ",
+        "Etruscan: (NEEDED)",
+        "Latin: Vitrum edere possum; mihi non nocet.",
+        "Old French: Je puis mangier del voirre. Ne me nuit.",
+        "French: Je peux manger du verre, ça ne me fait pas mal.",
+        "Provençal / Occitan: Pòdi manjar de veire, me nafrariá pas.",
+        "Québécois: J'peux manger d'la vitre, ça m'fa pas mal.",
+        "Walloon: Dji pou magnî do vêre, çoula m' freut nén må. ",
+        "Champenois: (NEEDED) ",
+        "Lorrain: (NEEDED)",
+        "Picard: Ch'peux mingi du verre, cha m'foé mie n'ma. ",
+        "Corsican/Corsu: (NEEDED) ",
+        "Jèrriais: (NEEDED)",
+        "Kreyòl Ayisyen (Haitï): Mwen kap manje vè, li pa blese'm.",
+        "Basque: Kristala jan dezaket, ez dit minik ematen.",
+        "Catalan / Català: Puc menjar vidre, que no em fa mal.",
+        "Spanish: Puedo comer vidrio, no me hace daño.",
+        "Aragonés: Puedo minchar beire, no me'n fa mal . ",
+        "Aranés: (NEEDED) ",
+        "Mallorquín: (NEEDED)",
+        "Galician: Eu podo xantar cristais e non cortarme.",
+        "European Portuguese: Posso comer vidro, não me faz mal.",
+        "Brazilian Portuguese (8): Posso comer vidro, não me machuca.",
+        "Caboverdiano/Kabuverdianu (Cape Verde): M' podê cumê vidru, ca ta maguâ-m'.",
+        "Papiamentu: Ami por kome glas anto e no ta hasimi daño.",
+        "Italian: Posso mangiare il vetro e non mi fa male.",
+        "Milanese: Sôn bôn de magnà el véder, el me fa minga mal.",
+        "Roman: Me posso magna' er vetro, e nun me fa male.",
+        "Napoletano: M' pozz magna' o'vetr, e nun m' fa mal.",
+        "Venetian: Mi posso magnare el vetro, no'l me fa mae.",
+        "Zeneise (Genovese): Pòsso mangiâ o veddro e o no me fà mâ.",
+        "Sicilian: Puotsu mangiari u vitru, nun mi fa mali. ",
+        "Campinadese (Sardinia): (NEEDED) ",
+        "Lugudorese (Sardinia): (NEEDED)",
+        "Romansch (Grischun): Jau sai mangiar vaider, senza che quai fa donn a mai. ",
+        "Romany / Tsigane: (NEEDED)",
+        "Romanian: Pot să mănânc sticlă și ea nu mă rănește.",
+        "Esperanto: Mi povas manĝi vitron, ĝi ne damaĝas min. ",
+        "Pictish: (NEEDED) ",
+        "Breton: (NEEDED)",
+        "Cornish: Mý a yl dybry gwéder hag éf ny wra ow ankenya.",
+        "Welsh: Dw i'n gallu bwyta gwydr, 'dyw e ddim yn gwneud dolur i mi.",
+        "Manx Gaelic: Foddym gee glonney agh cha jean eh gortaghey mee.",
+        "Old Irish (Ogham): ᚛᚛ᚉᚑᚅᚔᚉᚉᚔᚋ ᚔᚈᚔ ᚍᚂᚐᚅᚑ ᚅᚔᚋᚌᚓᚅᚐ᚜",
+        "Old Irish (Latin): Con·iccim ithi nglano. Ním·géna.",
+        "Irish: Is féidir liom gloinne a ithe. Ní dhéanann sí dochar ar bith dom.",
+        "Ulster Gaelic: Ithim-sa gloine agus ní miste damh é.",
+        "Scottish Gaelic: S urrainn dhomh gloinne ithe; cha ghoirtich i mi.",
+        "Anglo-Saxon (Runes): ᛁᚳ᛫ᛗᚨᚷ᛫ᚷᛚᚨᛋ᛫ᛖᚩᛏᚪᚾ᛫ᚩᚾᛞ᛫ᚻᛁᛏ᛫ᚾᛖ᛫ᚻᛖᚪᚱᛗᛁᚪᚧ᛫ᛗᛖ᛬",
+        "Anglo-Saxon (Latin): Ic mæg glæs eotan ond hit ne hearmiað me.",
+        "Middle English: Ich canne glas eten and hit hirtiþ me nouȝt.",
+        "English: I can eat glass and it doesn't hurt me.",
+        "English (IPA): [aɪ kæn iːt glɑːs ænd ɪt dɐz nɒt hɜːt miː] (Received Pronunciation)",
+        "English (Braille): ⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞⠀⠙⠕⠑⠎⠝⠞⠀⠓⠥⠗⠞⠀⠍⠑",
+        "Jamaican: Mi kian niam glas han i neba hot mi.",
+        "Lalland Scots / Doric: Ah can eat gless, it disnae hurt us. ",
+        "Glaswegian: (NEEDED)",
+        "Gothic (4): 𐌼𐌰𐌲 𐌲𐌻𐌴𐍃 𐌹̈𐍄𐌰𐌽, 𐌽𐌹 𐌼𐌹𐍃 𐍅𐌿 𐌽𐌳𐌰𐌽 𐌱𐍂𐌹𐌲𐌲𐌹𐌸.",
+        "Old Norse (Runes): ᛖᚴ ᚷᛖᛏ ᛖᛏᛁ ᚧ ᚷᛚᛖᚱ ᛘᚾ ᚦᛖᛋᛋ ᚨᚧ ᚡᛖ ᚱᚧᚨ ᛋᚨᚱ",
+        "Old Norse (Latin): Ek get etið gler án þess að verða sár.",
+        "Norsk / Norwegian (Nynorsk): Eg kan eta glas utan å skada meg.",
+        "Norsk / Norwegian (Bokmål): Jeg kan spise glass uten å skade meg.",
+        "Føroyskt / Faroese: Eg kann eta glas, skaðaleysur.",
+        "Íslenska / Icelandic: Ég get etið gler án þess að meiða mig.",
+        "Svenska / Swedish: Jag kan äta glas utan att skada mig.",
+        "Dansk / Danish: Jeg kan spise glas, det gør ikke ondt på mig.",
+        "Sønderjysk: Æ ka æe glass uhen at det go mæ naue.",
+        "Frysk / Frisian: Ik kin glês ite, it docht me net sear.",
+        "Nederlands / Dutch: Ik kan glas eten, het doet mĳ geen kwaad.",
+        "Kirchröadsj/Bôchesserplat: Iech ken glaas èèse, mer 't deet miech jing pieng.",
+        "Afrikaans: Ek kan glas eet, maar dit doen my nie skade nie.",
+        "Lëtzebuergescht / Luxemburgish: Ech kan Glas iessen, daat deet mir nët wei.",
+        "Deutsch / German: Ich kann Glas essen, ohne mir zu schaden.",
+        "Ruhrdeutsch: Ich kann Glas verkasematuckeln, ohne dattet mich wat jucken tut.",
+        "Langenfelder Platt: Isch kann Jlaas kimmeln, uuhne datt mich datt weh dääd.",
+        "Lausitzer Mundart ('Lusatian'): Ich koann Gloos assn und doas dudd merr ni wii.",
+        "Odenwälderisch: Iech konn glaasch voschbachteln ohne dass es mir ebbs daun doun dud.",
+        "Sächsisch / Saxon: 'sch kann Glos essn, ohne dass'sch mer wehtue.",
+        "Pfälzisch: Isch konn Glass fresse ohne dasses mer ebbes ausmache dud.",
+        "Schwäbisch / Swabian: I kå Glas frässa, ond des macht mr nix!",
+        "Deutsch (Voralberg): I ka glas eassa, ohne dass mar weh tuat.",
+        "Bayrisch / Bavarian: I koh Glos esa, und es duard ma ned wei.",
+        "Allemannisch: I kaun Gloos essen, es tuat ma ned weh.",
+        "Schwyzerdütsch (Zürich): Ich chan Glaas ässe, das schadt mir nöd.",
+        "Schwyzerdütsch (Luzern): Ech cha Glâs ässe, das schadt mer ned. ",
+        "Plautdietsch: (NEEDED)",
+        "Hungarian: Meg tudom enni az üveget, nem lesz tőle bajom.",
+        "Suomi / Finnish: Voin syödä lasia, se ei vahingoita minua.",
+        "Sami (Northern): Sáhtán borrat lása, dat ii leat bávččas.",
+        "Erzian: Мон ярсан суликадо, ды зыян эйстэнзэ а ули.",
+        "Northern Karelian: Mie voin syvvä lasie ta minla ei ole kipie.",
+        "Southern Karelian: Minä voin syvvä st'oklua dai minule ei ole kibie. ",
+        "Vepsian: (NEEDED) ",
+        "Votian: (NEEDED) ",
+        "Livonian: (NEEDED)",
+        "Estonian: Ma võin klaasi süüa, see ei tee mulle midagi.",
+        "Latvian: Es varu ēst stiklu, tas man nekaitē.",
+        "Lithuanian: Aš galiu valgyti stiklą ir jis manęs nežeidžia ",
+        "Old Prussian: (NEEDED) ",
+        "Sorbian (Wendish): (NEEDED)",
+        "Czech: Mohu jíst sklo, neublíží mi.",
+        "Slovak: Môžem jesť sklo. Nezraní ma.",
+        "Polska / Polish: Mogę jeść szkło i mi nie szkodzi.",
+        "Slovenian: Lahko jem steklo, ne da bi mi škodovalo.",
+        "Croatian: Ja mogu jesti staklo i ne boli me.",
+        "Serbian (Latin): Ja mogu da jedem staklo.",
+        "Serbian (Cyrillic): Ја могу да једем стакло.",
+        "Macedonian: Можам да јадам стакло, а не ме штета.",
+        "Russian: Я могу есть стекло, оно мне не вредит.",
+        "Belarusian (Cyrillic): Я магу есці шкло, яно мне не шкодзіць.",
+        "Belarusian (Lacinka): Ja mahu jeści škło, jano mne ne škodzić.",
+        "Ukrainian: Я можу їсти скло, і воно мені не зашкодить.",
+        "Bulgarian: Мога да ям стъкло, то не ми вреди.",
+        "Georgian: მინას ვჭამ და არა მტკივა.",
+        "Armenian: Կրնամ ապակի ուտել և ինծի անհանգիստ չըներ։",
+        "Albanian: Unë mund të ha qelq dhe nuk më gjen gjë.",
+        "Turkish: Cam yiyebilirim, bana zararı dokunmaz.",
+        "Turkish (Ottoman): جام ييه بلورم بڭا ضررى طوقونمز",
+        "Bangla / Bengali: আমি কাঁচ খেতে পারি, তাতে আমার কোনো ক্ষতি হয় না।",
+        "Marathi: मी काच खाऊ शकतो, मला ते दुखत नाही.",
+        "Kannada: ನನಗೆ ಹಾನಿ ಆಗದೆ, ನಾನು ಗಜನ್ನು ತಿನಬಹುದು",
+        "Hindi: मैं काँच खा सकता हूँ और मुझे उससे कोई चोट नहीं पहुंचती.",
+        "Tamil: நான் கண்ணாடி சாப்பிடுவேன், அதனால் எனக்கு ஒரு கேடும் வராது.",
+        "Telugu: నేను గాజు తినగలను మరియు అలా చేసినా నాకు ఏమి ఇబ్బంది లేదు",
+        "Sinhalese: මට වීදුරු කෑමට හැකියි. එයින් මට කිසි හානියක් සිදු නොවේ.",
+        "Urdu(3): میں کانچ کھا سکتا ہوں اور مجھے تکلیف نہیں ہوتی ۔",
+        "Pashto(3): زه شيشه خوړلې شم، هغه ما نه خوږوي",
+        "Farsi / Persian(3): .من می توانم بدونِ احساس درد شيشه بخورم",
+        "Arabic(3): أنا قادر على أكل الزجاج و هذا لا يؤلمني. ",
+        "Aramaic: (NEEDED)",
+        "Maltese: Nista' niekol il-ħġieġ u ma jagħmilli xejn.",
+        "Hebrew(3): אני יכול לאכול זכוכית וזה לא מזיק לי.",
+        "Yiddish(3): איך קען עסן גלאָז און עס טוט מיר נישט װײ. ",
+        "Judeo-Arabic: (NEEDED) ",
+        "Ladino: (NEEDED) ",
+        "Gǝʼǝz: (NEEDED) ",
+        "Amharic: (NEEDED)",
+        "Twi: Metumi awe tumpan, ɜnyɜ me hwee.",
+        "Hausa (Latin): Inā iya taunar gilāshi kuma in gamā lāfiyā.",
+        "Hausa (Ajami) (2): إِنا إِىَ تَونَر غِلَاشِ كُمَ إِن غَمَا لَافِىَا",
+        "Yoruba(4): Mo lè je̩ dígí, kò ní pa mí lára.",
+        "Lingala: Nakokí kolíya biténi bya milungi, ekosála ngáí mabé tɛ́.",
+        "(Ki)Swahili: Naweza kula bilauri na sikunyui.",
+        "Malay: Saya boleh makan kaca dan ia tidak mencederakan saya.",
+        "Tagalog: Kaya kong kumain nang bubog at hindi ako masaktan.",
+        "Chamorro: Siña yo' chumocho krestat, ti ha na'lalamen yo'.",
+        "Fijian: Au rawa ni kana iloilo, ia au sega ni vakacacani kina.",
+        "Javanese: Aku isa mangan beling tanpa lara.",
+        "Burmese: က္ယ္ဝန္‌တော္‌၊က္ယ္ဝန္‌မ မ္ယက္‌စားနုိင္‌သည္‌။ ၎က္ရောင္‌့ ထိခုိက္‌မ္ဟု မရ္ဟိပာ။ (9)",
+        "Vietnamese (quốc ngữ): Tôi có thể ăn thủy tinh mà không hại gì.",
+        "Vietnamese (nôm) (4): 些 𣎏 世 咹 水 晶 𦓡 空 𣎏 害 咦",
+        "Khmer: ខ្ញុំអាចញុំកញ្ចក់បាន ដោយគ្មានបញ្ហារ",
+        "Lao: ຂອ້ຍກິນແກ້ວໄດ້ໂດຍທີ່ມັນບໍ່ໄດ້ເຮັດໃຫ້ຂອ້ຍເຈັບ.",
+        "Thai: ฉันกินกระจกได้ แต่มันไม่ทำให้ฉันเจ็บ",
+        "Mongolian (Cyrillic): Би шил идэй чадна, надад хортой биш",
+        "Mongolian (Classic) (5): ᠪᠢ ᠰᠢᠯᠢ ᠢᠳᠡᠶᠦ ᠴᠢᠳᠠᠨᠠ ᠂ ᠨᠠᠳᠤᠷ ᠬᠣᠤᠷᠠᠳᠠᠢ ᠪᠢᠰᠢ ",
+        "Dzongkha: (NEEDED)",
+        "Nepali: ﻿म काँच खान सक्छू र मलाई केहि नी हुन्‍न् ।",
+        "Tibetan: ཤེལ་སྒོ་ཟ་ནས་ང་ན་གི་མ་རེད།",
+        "Chinese: 我能吞下玻璃而不伤身体。",
+        "Chinese (Traditional): 我能吞下玻璃而不傷身體。",
+        "Taiwanese(6): Góa ē-tàng chia̍h po-lê, mā bē tio̍h-siong.",
+        "Japanese: 私はガラスを食べられます。それは私を傷つけません。",
+        "Korean: 나는 유리를 먹을 수 있어요. 그래도 아프지 않아요",
+        "Bislama: Mi save kakae glas, hemi no save katem mi.",
+        "Hawaiian: Hiki iaʻu ke ʻai i ke aniani; ʻaʻole nō lā au e ʻeha.",
+        "Marquesan: E koʻana e kai i te karahi, mea ʻā, ʻaʻe hauhau.",
+        "Inuktitut (10): ᐊᓕᒍᖅ ᓂᕆᔭᕌᖓᒃᑯ ᓱᕋᙱᑦᑐᓐᓇᖅᑐᖓ",
+        "Chinook Jargon: Naika məkmək kakshət labutay, pi weyk ukuk munk-sik nay.",
+        "Navajo: Tsésǫʼ yishą́ągo bííníshghah dóó doo shił neezgai da. ",
+        "Cherokee (and Cree, Chickasaw, Cree, Micmac, Ojibwa, Lakota, Náhuatl, Quechua, Aymara, and other American languages): (NEEDED) ",
+        "Garifuna: (NEEDED) ",
+        "Gullah: (NEEDED)",
+        "Lojban: mi kakne le nu citka le blaci .iku'i le se go'i na xrani mi",
+        "Nórdicg: Ljœr ye caudran créneþ ý jor cẃran.",
     );
 
     // http://www.w3.org/2001/06/utf-8-test/UTF-8-demo.html
@@ -772,12 +780,22 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     ";
 
+    $result = array();
+    $i = 0;
     foreach ($testArray as $test) {
-      $this->assertEquals($test, UTF8::to_utf8($test));
+
+      $result[$i] = UTF8::to_utf8($test);
+
+      self::assertEquals($test, $result[$i]);
+
+      $i++;
     }
 
+    // test with array
+    self::assertEquals($result, UTF8::to_utf8($testArray));
+
     foreach ($testArray as $test) {
-      $this->assertEquals($test, UTF8::to_utf8(UTF8::to_utf8($test)));
+      self::assertEquals($test, UTF8::to_utf8(UTF8::to_utf8($test)));
     }
   }
 
@@ -787,11 +805,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-中文空白-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
+      self::assertEquals($after, UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
     }
   }
 
@@ -801,22 +819,22 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-中文空白-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::encode('UTF-8', $before));
+      self::assertEquals($after, UTF8::encode('UTF-8', $before));
     }
 
     $tests = array(
         "  -ABC-中文空白-  " => "  -ABC-????-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::filter(UTF8::encode('ISO-8859-1', $before)));
+      self::assertEquals($after, UTF8::filter(UTF8::encode('ISO-8859-1', $before)));
     }
   }
 
@@ -826,11 +844,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-????-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)));
+      self::assertEquals($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)));
     }
   }
 
@@ -840,11 +858,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-ä¸­æ–‡ç©ºç™½-  ",
         "      - ÖÄÜ- "  => "      - Ã–Ã„Ãœ- ",
         "öäü"            => "Ã¶Ã¤Ã¼",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::utf8_encode(UTF8::encode('UTF-8', $before)));
+      self::assertEquals($after, UTF8::utf8_encode(UTF8::encode('UTF-8', $before)));
     }
   }
 
@@ -854,11 +872,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-ä¸­æ–‡ç©ºç™½-  ",
         "      - ÖÄÜ- "  => "      - Ã–Ã„Ãœ- ",
         "öäü"            => "Ã¶Ã¤Ã¼",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::encode('UTF-8', UTF8::utf8_encode($before)));
+      self::assertEquals($after, UTF8::encode('UTF-8', UTF8::utf8_encode($before)));
     }
   }
 
@@ -868,11 +886,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-Ã¤Â¸Â­Ã¦â€“â€¡Ã§Â©ÂºÃ§â„¢Â½-  ",
         "      - ÖÄÜ- "  => "      - Ãƒâ€“Ãƒâ€žÃƒÅ“- ",
         "öäü"            => "ÃƒÂ¶ÃƒÂ¤ÃƒÂ¼",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::utf8_encode(UTF8::utf8_encode($before)));
+      self::assertEquals($after, UTF8::utf8_encode(UTF8::utf8_encode($before)));
     }
   }
 
@@ -882,35 +900,35 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-ä¸­æ–‡ç©ºç™½-  ",
         "      - ÖÄÜ- "  => "      - Ã–Ã„Ãœ- ",
         "öäü"            => "Ã¶Ã¤Ã¼",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::utf8_encode($before));
+      self::assertEquals($after, UTF8::utf8_encode($before));
     }
   }
 
   public function testUtf8FileWithBom()
   {
-    $bom = UTF8::file_has_bom(dirname(__FILE__) . '/test1Utf8Bom.txt');
-    $this->assertEquals(true, $bom);
+    $bom = UTF8::file_has_bom(__DIR__ . '/test1Utf8Bom.txt');
+    self::assertEquals(true, $bom);
 
-    $bom = UTF8::file_has_bom(dirname(__FILE__) . '/test1Utf8.txt');
-    $this->assertEquals(false, $bom);
+    $bom = UTF8::file_has_bom(__DIR__ . '/test1Utf8.txt');
+    self::assertEquals(false, $bom);
   }
 
   public function testIsBinary()
   {
     $tests = array(
-        "öäü"            => false,
-        ""               => false,
-        "1"              => false,
-        decbin(324546)   => true,
-        01               => true
+        "öäü"          => false,
+        ""             => false,
+        "1"            => false,
+        decbin(324546) => true,
+        01             => true,
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::is_binary($before), 'value: ' . $before);
+      self::assertEquals($after, UTF8::is_binary($before), 'value: ' . $before);
     }
   }
 
@@ -919,53 +937,65 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     // INFO: UTF-8 shim only works for UTF-8
     if (UTF8::mbstring_loaded() === true) {
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16pe.txt');
-      $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16pe.txt');
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16le.txt');
-      $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16le.txt');
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf8.txt');
-      $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf8.txt');
+      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Latin.txt');
-      $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Latin.txt');
+      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Iso8859-7.txt');
-      $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt');
+      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16pe.txt', FILE_TEXT);
-      $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16pe.txt', FILE_TEXT);
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16le.txt', null, null, 0);
-      $this->assertContains('<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16le.txt', null, null, 0);
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf16le.txt', null, null, 5);
-      $this->assertContains('There are better connections.', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16le.txt', null, null, 5);
+      self::assertContains('There are better connections.', $testString);
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Utf8.txt', null, null, 7, 11);
-      $this->assertContains('Iñtërnât', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf8.txt', null, null, 7, 11);
+      self::assertContains('Iñtërnât', $testString);
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Latin.txt', null, null, 7, 10, 15);
-      $this->assertContains('ñtërnâtiôn', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Latin.txt', null, null, 7, 10, 15);
+      self::assertContains('ñtërnâtiôn', $testString);
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Iso8859-7.txt', null, null, 7, null, 10);
-      $this->assertContains('Iñtërnâtiônàlizætiøn', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, null, 7, null, 10);
+      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Iso8859-7.txt', null, null, null, 10, 10);
-      $this->assertContains('Hírek', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, null, null, 10, 10);
+      self::assertContains('Hírek', $testString);
 
       $context = stream_context_create(
           array(
               'http' =>
                   array(
-                      'timeout' => 10
-                  )
+                      'timeout' => 10,
+                  ),
           )
       );
 
-      $testString = UTF8::file_get_contents(dirname(__FILE__) . '/test1Iso8859-7.txt', null, $context, null, 10, 10);
-      $this->assertContains('Hírek', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, $context, null, 10, 10);
+      self::assertContains('Hírek', $testString);
     }
   }
 
@@ -975,58 +1005,58 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "  -ABC-中文空白-  " => "  -ABC-????-  ",
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
-        ""               => ""
+        ""               => "",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::to_utf8(UTF8::to_latin1($before)));
+      self::assertEquals($after, UTF8::to_utf8(UTF8::to_latin1($before)));
     }
 
-    $this->assertEquals($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
+    self::assertEquals($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
   }
 
   public function testNumberFormat()
   {
-    $this->assertEquals('1.23', UTF8::number_format('1.234567', 2, '.', ''));
-    $this->assertEquals('1,3', UTF8::number_format('1.298765', 1, ',', ''));
+    self::assertEquals('1.23', UTF8::number_format('1.234567', 2, '.', ''));
+    self::assertEquals('1,3', UTF8::number_format('1.298765', 1, ',', ''));
   }
 
   public function testSubstrCompare()
   {
-    $this->assertEquals(0, substr_compare("abcde", "bc", 1, 2));
-    $this->assertEquals(0, substr_compare("abcde", "de", -2, 2));
-    $this->assertEquals(0, substr_compare("abcde", "bcg", 1, 2));
-    $this->assertEquals(0, substr_compare("abcde", "BC", 1, 2, true));
-    $this->assertEquals(1, substr_compare("abcde", "bc", 1, 3));
-    $this->assertEquals(-1, substr_compare("abcde", "cd", 1, 2));
+    self::assertEquals(0, substr_compare("abcde", "bc", 1, 2));
+    self::assertEquals(0, substr_compare("abcde", "de", -2, 2));
+    self::assertEquals(0, substr_compare("abcde", "bcg", 1, 2));
+    self::assertEquals(0, substr_compare("abcde", "BC", 1, 2, true));
+    self::assertEquals(1, substr_compare("abcde", "bc", 1, 3));
+    self::assertEquals(-1, substr_compare("abcde", "cd", 1, 2));
 
-    $this->assertEquals(0, UTF8::substr_compare("abcde", "bc", 1, 2));
-    $this->assertEquals(0, UTF8::substr_compare("abcde", "de", -2, 2));
-    $this->assertEquals(0, UTF8::substr_compare("abcde", "bcg", 1, 2));
-    $this->assertEquals(0, UTF8::substr_compare("abcde", "BC", 1, 2, true));
-    $this->assertEquals(1, UTF8::substr_compare("abcde", "bc", 1, 3));
-    $this->assertEquals(-1, UTF8::substr_compare("abcde", "cd", 1, 2));
+    self::assertEquals(0, UTF8::substr_compare("abcde", "bc", 1, 2));
+    self::assertEquals(0, UTF8::substr_compare("abcde", "de", -2, 2));
+    self::assertEquals(0, UTF8::substr_compare("abcde", "bcg", 1, 2));
+    self::assertEquals(0, UTF8::substr_compare("abcde", "BC", 1, 2, true));
+    self::assertEquals(1, UTF8::substr_compare("abcde", "bc", 1, 3));
+    self::assertEquals(-1, UTF8::substr_compare("abcde", "cd", 1, 2));
 
     // UTF-8
-    $this->assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2, false));
-    $this->assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2, true));
+    self::assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2, false));
+    self::assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2, true));
   }
 
   public function testStrtr()
   {
     $arr = array(
         "Hello" => "Hi",
-        "world" => "earth"
+        "world" => "earth",
     );
-    $this->assertEquals('Hi earth', strtr("Hello world", $arr));
-    $this->assertEquals('Hi earth', UTF8::strtr("Hello world", $arr));
+    self::assertEquals('Hi earth', strtr("Hello world", $arr));
+    self::assertEquals('Hi earth', UTF8::strtr("Hello world", $arr));
 
     // UTF-8
     $arr = array(
         "Hello" => "○●◎",
-        "中文空白"  => "earth"
+        "中文空白"  => "earth",
     );
-    $this->assertEquals('○●◎ earth', UTF8::strtr("Hello 中文空白", $arr));
+    self::assertEquals('○●◎ earth', UTF8::strtr("Hello 中文空白", $arr));
   }
 
   public function testFilterInput()
@@ -1036,88 +1066,90 @@ class UTF8Test extends PHPUnit_Framework_TestCase
             'default'   => -1,
             // value to return if the filter fails
             'min_range' => 90,
-            'max_range' => 99
-        )
+            'max_range' => 99,
+        ),
     );
 
-    $this->assertEquals('  -ABC-中文空白-  ', UTF8::filter_var("  -ABC-中文空白-  ", FILTER_DEFAULT));
-    $this->assertEquals(false, UTF8::filter_var("  -ABC-中文空白-  ", FILTER_VALIDATE_URL));
-    $this->assertEquals(false, UTF8::filter_var("  -ABC-中文空白-  ", FILTER_VALIDATE_EMAIL));
-    $this->assertEquals(-1, UTF8::filter_var("中文空白 ", FILTER_VALIDATE_INT, $options));
-    $this->assertEquals('99', UTF8::filter_var(99, FILTER_VALIDATE_INT, $options));
-    $this->assertEquals(-1, UTF8::filter_var(100, FILTER_VALIDATE_INT, $options));
+    self::assertEquals('  -ABC-中文空白-  ', UTF8::filter_var("  -ABC-中文空白-  ", FILTER_DEFAULT));
+    self::assertEquals(false, UTF8::filter_var("  -ABC-中文空白-  ", FILTER_VALIDATE_URL));
+    self::assertEquals(false, UTF8::filter_var("  -ABC-中文空白-  ", FILTER_VALIDATE_EMAIL));
+    self::assertEquals(-1, UTF8::filter_var("中文空白 ", FILTER_VALIDATE_INT, $options));
+    self::assertEquals('99', UTF8::filter_var(99, FILTER_VALIDATE_INT, $options));
+    self::assertEquals(-1, UTF8::filter_var(100, FILTER_VALIDATE_INT, $options));
   }
 
   public function testReplaceDiamondQuestionMark()
   {
     $tests = array(
-        ""                                                                        => "",
-        " "                                                                       => " ",
-        "�"                                                                      => "",
-        "中文空白 �"                                                              => "中文空白 ",
+        ""                                                                         => "",
+        " "                                                                        => " ",
+        "�"                                                                        => "",
+        "中文空白 �"                                                                   => "中文空白 ",
         "<ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>",
-        "DÃ¼�sseldorf"                                                           => "DÃ¼sseldorf",
-        "Abcdef"                                                                  => "Abcdef"
+        "DÃ¼�sseldorf"                                                             => "DÃ¼sseldorf",
+        "Abcdef"                                                                   => "Abcdef",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::replace_diamond_question_mark($before, ''));
+      self::assertEquals($after, UTF8::replace_diamond_question_mark($before, ''));
     }
   }
 
   public function testNormalizeMsword()
   {
     $tests = array(
-        ""                                                                        => "",
-        " "                                                                       => " ",
-        "«foobar»"                                                                => '"foobar"',
-        "中文空白 ‟"                                                              => '中文空白 "',
+        ""                                                                         => "",
+        " "                                                                        => " ",
+        "«foobar»"                                                                 => '"foobar"',
+        "中文空白 ‟"                                                                   => '中文空白 "',
         "<ㅡㅡ></ㅡㅡ><div>…</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div>...</div><input type='email' name='user[email]' /><a>wtf</a>",
-        "– DÃ¼sseldorf —"                                                           => "- DÃ¼sseldorf -",
-        "„Abcdef…”"                                                                  => '"Abcdef..."'
+        "– DÃ¼sseldorf —"                                                          => "- DÃ¼sseldorf -",
+        "„Abcdef…”"                                                                => '"Abcdef..."',
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::normalize_msword($before));
+      self::assertEquals($after, UTF8::normalize_msword($before));
     }
   }
 
   public function testNormalizeWhitespace()
   {
     $tests = array(
-        ""                                                                        => "",
-        " "                                                                       => " ",
-        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                        => '« foobar »',
-        "中文空白 ‟"                                                               => '中文空白 ‟',
+        ""                                                                                    => "",
+        " "                                                                                   => " ",
+        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => '« foobar »',
+        "中文空白 ‟"                                                                              => '中文空白 ‟',
         "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div> </div><input type='email' name='user[email]' /><a>wtf</a>",
-        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                   => "– DÃ¼sseldorf —",
-        "„Abcdef\xe2\x81\x9f”"                                                    => '„Abcdef ”'
+        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => "– DÃ¼sseldorf —",
+        "„Abcdef\xe2\x81\x9f”"                                                                => '„Abcdef ”',
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::normalize_whitespace($before));
+      self::assertEquals($after, UTF8::normalize_whitespace($before));
     }
   }
 
   public function testString()
   {
-    $this->assertEquals("", UTF8::string(array()));
-    $this->assertEquals(
-        "öäü", UTF8::string(
-        array(
-            246,
-            228,
-            252
+    self::assertEquals("", UTF8::string(array()));
+    self::assertEquals(
+        "öäü",
+        UTF8::string(
+            array(
+                246,
+                228,
+                252,
+            )
         )
-    )
     );
-    $this->assertEquals(
-        "ㅡㅡ", UTF8::string(
-        array(
-            12641,
-            12641
+    self::assertEquals(
+        "ㅡㅡ",
+        UTF8::string(
+            array(
+                12641,
+                12641,
+            )
         )
-    )
     );
   }
 
@@ -1130,11 +1162,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => "wtf",
         "<nav>DÃ¼sseldorf</nav>"                                                  => "DÃ¼sseldorf",
         "Abcdef"                                                                  => "Abcdef",
-        "<span>κόσμε\xa0\xa1</span>-<span>öäü</span>öäü"                          => "κόσμε-öäüöäü"
+        "<span>κόσμε\xa0\xa1</span>-<span>öäü</span>öäü"                          => "κόσμε-öäüöäü",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::strip_tags($before));
+      self::assertEquals($after, UTF8::strip_tags($before));
     }
   }
 
@@ -1143,28 +1175,32 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $firstString = "Though wise men at their end know dark is right,\nBecause their words had forked no lightning they\n";
     $secondString = "Do not go gentle into that good night.";
     $expectedString = $firstString . $secondString;
-    $actualString = UTF8::str_pad($firstString, UTF8::strlen($firstString) + UTF8::strlen($secondString), $secondString);
+    $actualString = UTF8::str_pad(
+        $firstString,
+        UTF8::strlen($firstString) + UTF8::strlen($secondString),
+        $secondString
+    );
 
-    $this->assertEquals($expectedString, $actualString);
+    self::assertEquals($expectedString, $actualString);
 
-    $this->assertEquals("中文空白______", UTF8::str_pad("中文空白", 10, "_", STR_PAD_RIGHT));
-    $this->assertEquals("______中文空白", UTF8::str_pad("中文空白", 10, "_", STR_PAD_LEFT));
-    $this->assertEquals("___中文空白___", UTF8::str_pad("中文空白", 10, "_", STR_PAD_BOTH));
+    self::assertEquals("中文空白______", UTF8::str_pad("中文空白", 10, "_", STR_PAD_RIGHT));
+    self::assertEquals("______中文空白", UTF8::str_pad("中文空白", 10, "_", STR_PAD_LEFT));
+    self::assertEquals("___中文空白___", UTF8::str_pad("中文空白", 10, "_", STR_PAD_BOTH));
 
     $toPad = '<IñtërnëT>'; // 10 characters
     $padding = 'ø__'; // 4 characters
 
-    $this->assertEquals($toPad . '          ', UTF8::str_pad($toPad, 20));
-    $this->assertEquals('          ' . $toPad, UTF8::str_pad($toPad, 20, ' ', STR_PAD_LEFT));
-    $this->assertEquals('     ' . $toPad . '     ', UTF8::str_pad($toPad, 20, ' ', STR_PAD_BOTH));
+    self::assertEquals($toPad . '          ', UTF8::str_pad($toPad, 20));
+    self::assertEquals('          ' . $toPad, UTF8::str_pad($toPad, 20, ' ', STR_PAD_LEFT));
+    self::assertEquals('     ' . $toPad . '     ', UTF8::str_pad($toPad, 20, ' ', STR_PAD_BOTH));
 
-    $this->assertEquals($toPad, UTF8::str_pad($toPad, 10));
-    $this->assertEquals('5char', str_pad('5char', 4)); // str_pos won't truncate input string
-    $this->assertEquals($toPad, UTF8::str_pad($toPad, 8));
+    self::assertEquals($toPad, UTF8::str_pad($toPad, 10));
+    self::assertEquals('5char', str_pad('5char', 4)); // str_pos won't truncate input string
+    self::assertEquals($toPad, UTF8::str_pad($toPad, 8));
 
-    $this->assertEquals($toPad . 'ø__ø__ø__ø', UTF8::str_pad($toPad, 20, $padding, STR_PAD_RIGHT));
-    $this->assertEquals('ø__ø__ø__ø' . $toPad, UTF8::str_pad($toPad, 20, $padding, STR_PAD_LEFT));
-    $this->assertEquals('ø__ø_' . $toPad . 'ø__ø_', UTF8::str_pad($toPad, 20, $padding, STR_PAD_BOTH));
+    self::assertEquals($toPad . 'ø__ø__ø__ø', UTF8::str_pad($toPad, 20, $padding, STR_PAD_RIGHT));
+    self::assertEquals('ø__ø__ø__ø' . $toPad, UTF8::str_pad($toPad, 20, $padding, STR_PAD_LEFT));
+    self::assertEquals('ø__ø_' . $toPad . 'ø__ø_', UTF8::str_pad($toPad, 20, $padding, STR_PAD_BOTH));
   }
 
   /**
@@ -1175,7 +1211,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
    */
   public function testTrim($input, $output)
   {
-    $this->assertEquals($output, UTF8::trim($input));
+    self::assertEquals($output, UTF8::trim($input));
   }
 
   /**
@@ -1207,38 +1243,38 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   {
     $examples = array(
       // Valid UTF-8
-      "κόσμε"                    => array("κόσμε" => "κόσμε"),
-      "中"                        => array("中" => "中"),
+      "κόσμε"                                       => array("κόσμε" => "κόσμε"),
+      "中"                                           => array("中" => "中"),
       // Valid UTF-8 + Invalied Chars
-      "κόσμε\xa0\xa1-öäü"        => array("κόσμε-öäü" => "κόσμε-öäü"),
+      "κόσμε\xa0\xa1-öäü"                           => array("κόσμε-öäü" => "κόσμε-öäü"),
       // Valid ASCII
-      "a"                        => array("a" => "a"),
+      "a"                                           => array("a" => "a"),
       // Valid ASCII + Invalied Chars
-      "a\xa0\xa1-öäü"            => array("a-öäü" => "a-öäü"),
+      "a\xa0\xa1-öäü"                               => array("a-öäü" => "a-öäü"),
       // Valid 2 Octet Sequence
-      "\xc3\xb1"                 => array("ñ" => "ñ"),
+      "\xc3\xb1"                                    => array("ñ" => "ñ"),
       // Invalid 2 Octet Sequence
-      "\xc3\x28"                 => array("�(" => "("),
+      "\xc3\x28"                                    => array("�(" => "("),
       // Invalid Sequence Identifier
-      "\xa0\xa1"                 => array("��" => ""),
+      "\xa0\xa1"                                    => array("��" => ""),
       // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"             => array("₡" => "₡"),
+      "\xe2\x82\xa1"                                => array("₡" => "₡"),
       // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"             => array("�(�" => "("),
+      "\xe2\x28\xa1"                                => array("�(�" => "("),
       // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"             => array("�(" => "("),
+      "\xe2\x82\x28"                                => array("�(" => "("),
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"         => array("𐌼" => ""),
+      "\xf0\x90\x8c\xbc"                            => array("𐌼" => ""),
       // Invalid 4 Octet Sequence (in 2nd Octet)
-      "\xf0\x28\x8c\xbc"         => array("�(��" => "("),
+      "\xf0\x28\x8c\xbc"                            => array("�(��" => "("),
       // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"         => array("�(�" => "("),
+      "\xf0\x90\x28\xbc"                            => array("�(�" => "("),
       // Invalid 4 Octet Sequence (in 4th Octet)
-      "\xf0\x28\x8c\x28"         => array("�(�(" => "(("),
+      "\xf0\x28\x8c\x28"                            => array("�(�(" => "(("),
       // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"     => array("�" => ""),
+      "\xf8\xa1\xa1\xa1\xa1"                        => array("�" => ""),
       // Valid 6 Octet Sequence (but not Unicode!)
-      "\xfc\xa1\xa1\xa1\xa1\xa1" => array("�" => ""),
+      "\xfc\xa1\xa1\xa1\xa1\xa1"                    => array("�" => ""),
       // Valid UTF-8 string with null characters
       "\0\0\0\0中\0 -\0\0 &#20013; - %&? - \xc2\x80" => array("中 - &#20013; - %&? - " => "中 - &#20013; - %&? - "),
     );
@@ -1246,7 +1282,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $counter = 0;
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        $this->assertEquals($after, UTF8::to_utf8(UTF8::cleanup($testString)), $counter . ' - ' . $before);
+        self::assertEquals($after, UTF8::to_utf8(UTF8::cleanup($testString)), $counter . ' - ' . $before);
       }
       $counter++;
     }
@@ -1262,11 +1298,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "\n"       => 1,
         'test'     => 4,
         "ひらがな\r"   => 9,
-        "○●◎\r"    => 4
+        "○●◎\r"    => 4,
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::strwidth($before));
+      self::assertEquals($after, UTF8::strwidth($before));
     }
   }
 
@@ -1278,11 +1314,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         ' '          => ' ',
         ''           => '',
         "\n"         => "\n",
-        'test'       => 'test'
+        'test'       => 'test',
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::to_utf8($before));
+      self::assertEquals($after, UTF8::to_utf8($before));
     }
   }
 
@@ -1296,11 +1332,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "\n"           => "\n",
         "test\xc2\x88" => 'testˆ',
         'DÃ¼sseldorf'  => 'DÃ¼sseldorf',
-        'Ã¤'           => 'Ã¤'
+        'Ã¤'           => 'Ã¤',
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::utf8_fix_win1252_chars($before));
+      self::assertEquals($after, UTF8::utf8_fix_win1252_chars($before));
     }
   }
 
@@ -1346,14 +1382,14 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::urldecode($before));
+      self::assertEquals($after, UTF8::urldecode($before));
     }
   }
 
   public function testToUtf8_v3()
   {
-    $utf8File = file_get_contents(dirname(__FILE__) . "/test1Utf8.txt");
-    $latinFile = file_get_contents(dirname(__FILE__) . "/test1Latin.txt");
+    $utf8File = file_get_contents(__DIR__ . "/test1Utf8.txt");
+    $latinFile = file_get_contents(__DIR__ . "/test1Latin.txt");
 
     $utf8File = explode("\n", $utf8File);
     $latinFile = explode("\n", $latinFile);
@@ -1361,7 +1397,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $testArray = array_combine($latinFile, $utf8File);
 
     foreach ($testArray as $before => $after) {
-      $this->assertEquals($after, UTF8::to_utf8($before));
+      self::assertEquals($after, UTF8::to_utf8($before));
     }
   }
 
@@ -1370,7 +1406,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $examples = array(
       // Valid UTF-8
       "κόσμε"                    => array("κόσμε" => "κόσμε"),
-      "中"                       => array("中" => "中"),
+      "中"                        => array("中" => "中"),
       "«foobar»"                 => array("«foobar»" => "«foobar»"),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"        => array("κόσμε-öäü" => "κόσμε-öäü"),
@@ -1407,7 +1443,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $counter = 0;
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        $this->assertEquals($after, UTF8::cleanup($testString), $counter);
+        self::assertEquals($after, UTF8::cleanup($testString), $counter);
       }
       $counter++;
     }
@@ -1420,13 +1456,13 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       "κόσμε\xc2\xa0"                        => array("κόσμε" => "κόσμε "),
       // Valid UTF-8
       "中"                                    => array("中" => "中"),
-      // Valid UTF-8 + ISO-Erros
+      // Valid UTF-8 + ISO-Error
       "DÃ¼sseldorf"                          => array("Düsseldorf" => "Düsseldorf"),
-      // Valid UTF-8 + Invalied Chars
+      // Valid UTF-8 + Invalid Chars
       "κόσμε\xa0\xa1-öäü"                    => array("κόσμε-öäü" => "κόσμε-öäü"),
       // Valid ASCII
       "a"                                    => array("a" => "a"),
-      // Valid ASCII + Invalied Chars
+      // Valid ASCII + Invalid Chars
       "a\xa0\xa1-öäü"                        => array("a-öäü" => "a-öäü"),
       // Valid 2 Octet Sequence
       "\xc3\xb1"                             => array("ñ" => "ñ"),
@@ -1456,7 +1492,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        $this->assertEquals($after, UTF8::cleanup($testString));
+        self::assertEquals($after, UTF8::cleanup($testString));
       }
     }
 
@@ -1478,11 +1514,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'déjà σσς iıii'                 => 'deja ??? iiii',
         "test\x80-\xBFöäü"              => 'test-oau',
         "Internationalizaetion"         => 'Internationalizaetion',
-        "中 - &#20013; - %&? - \xc2\x80" => "? - &#20013; - %&? - ?"
+        "中 - &#20013; - %&? - \xc2\x80" => "? - &#20013; - %&? - ?",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::to_ascii($before), $before);
+      self::assertEquals($after, UTF8::to_ascii($before), $before);
     }
   }
 
@@ -1502,11 +1538,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'déjà σσς iıii'                 => 'deja sss iiii',
         "test\x80-\xBFöäü"              => 'test-oau',
         "Internationalizaetion"         => 'Internationalizaetion',
-        "中 - &#20013; - %&? - \xc2\x80" => "Zhong  - &#20013; - %&? - "
+        "中 - &#20013; - %&? - \xc2\x80" => "Zhong  - &#20013; - %&? - ",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::str_transliterate($before), $before);
+      self::assertEquals($after, UTF8::str_transliterate($before), $before);
     }
   }
 
@@ -1514,22 +1550,22 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   {
     $dirtyTestString = "\xEF\xBB\xBF„Abcdef\xc2\xa0…”";
 
-    $this->assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString));
-    $this->assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString, false, false, false));
-    $this->assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0...\"", UTF8::clean($dirtyTestString, false, false, true));
-    $this->assertEquals("\xEF\xBB\xBF„Abcdef …”", UTF8::clean($dirtyTestString, false, true, false));
-    $this->assertEquals("\xEF\xBB\xBF\"Abcdef ...\"", UTF8::clean($dirtyTestString, false, true, true));
-    $this->assertEquals("„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString, true, false, false));
-    $this->assertEquals("\"Abcdef\xc2\xa0...\"", UTF8::clean($dirtyTestString, true, false, true));
-    $this->assertEquals("„Abcdef …”", UTF8::clean($dirtyTestString, true, true, false));
-    $this->assertEquals('"Abcdef ..."', UTF8::clean($dirtyTestString, true, true, true));
+    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString));
+    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString, false, false, false));
+    self::assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0...\"", UTF8::clean($dirtyTestString, false, false, true));
+    self::assertEquals("\xEF\xBB\xBF„Abcdef …”", UTF8::clean($dirtyTestString, false, true, false));
+    self::assertEquals("\xEF\xBB\xBF\"Abcdef ...\"", UTF8::clean($dirtyTestString, false, true, true));
+    self::assertEquals("„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString, true, false, false));
+    self::assertEquals("\"Abcdef\xc2\xa0...\"", UTF8::clean($dirtyTestString, true, false, true));
+    self::assertEquals("„Abcdef …”", UTF8::clean($dirtyTestString, true, true, false));
+    self::assertEquals('"Abcdef ..."', UTF8::clean($dirtyTestString, true, true, true));
   }
 
   public function testWhitespace()
   {
     $whitespaces = UTF8::whitespace_table();
     foreach ($whitespaces as $whitespace) {
-      $this->assertEquals(" ", UTF8::clean($whitespace, false, true));
+      self::assertEquals(" ", UTF8::clean($whitespace, false, true));
     }
   }
 
@@ -1538,38 +1574,40 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $tests = array(
         "  -ABC-中文空白-  " => "-ABC-中文空白-  ",
         "      - ÖÄÜ- "  => "- ÖÄÜ- ",
-        "öäü"            => "öäü"
+        "öäü"            => "öäü",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::ltrim($before));
+      self::assertEquals($after, UTF8::ltrim($before));
     }
 
-    $this->assertEquals("tërnâtiônàlizætiøn", UTF8::ltrim("ñtërnâtiônàlizætiøn", "ñ"));
-    $this->assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ltrim("Iñtërnâtiônàlizætiøn", "ñ"));
-    $this->assertEquals("", UTF8::ltrim(""));
-    $this->assertEquals("", UTF8::ltrim(" "));
-    $this->assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ltrim("/Iñtërnâtiônàlizætiøn", "/"));
-    $this->assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ltrim("Iñtërnâtiônàlizætiøn", "^s"));
-    $this->assertEquals("\nñtërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ"));
-    $this->assertEquals("tërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
+    self::assertEquals("tërnâtiônàlizætiøn", UTF8::ltrim("ñtërnâtiônàlizætiøn", "ñ"));
+    self::assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ltrim("Iñtërnâtiônàlizætiøn", "ñ"));
+    self::assertEquals("", UTF8::ltrim(""));
+    self::assertEquals("", UTF8::ltrim(" "));
+    self::assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ltrim("/Iñtërnâtiônàlizætiøn", "/"));
+    self::assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ltrim("Iñtërnâtiônàlizætiøn", "^s"));
+    self::assertEquals("\nñtërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ"));
+    self::assertEquals("tërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
   }
 
   function testStr_split()
   {
-    $this->assertEquals(
+    self::assertEquals(
         array(
             'd',
             'é',
             'j',
-            'à'
-        ), UTF8::str_split('déjà', 1)
+            'à',
+        ),
+        UTF8::str_split('déjà', 1)
     );
-    $this->assertEquals(
+    self::assertEquals(
         array(
             'dé',
-            'jà'
-        ), UTF8::str_split('déjà', 2)
+            'jà',
+        ),
+        UTF8::str_split('déjà', 2)
     );
   }
 
@@ -1578,18 +1616,18 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $tests = array(
         "-ABC-中文空白-  "        => "-ABC-中文空白-",
         "- ÖÄÜ-             " => "- ÖÄÜ-",
-        "öäü"                 => "öäü"
+        "öäü"                 => "öäü",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::rtrim($before));
+      self::assertEquals($after, UTF8::rtrim($before));
     }
 
-    $this->assertEquals("Iñtërnâtiônàlizæti", UTF8::rtrim("Iñtërnâtiônàlizætiø", "ø"));
-    $this->assertEquals("Iñtërnâtiônàlizætiøn ", UTF8::rtrim("Iñtërnâtiônàlizætiøn ", "ø"));
-    $this->assertEquals("", UTF8::rtrim(""));
-    $this->assertEquals("Iñtërnâtiônàlizætiø\n", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "ø"));
-    $this->assertEquals("Iñtërnâtiônàlizæti", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "\nø"));
+    self::assertEquals("Iñtërnâtiônàlizæti", UTF8::rtrim("Iñtërnâtiônàlizætiø", "ø"));
+    self::assertEquals("Iñtërnâtiônàlizætiøn ", UTF8::rtrim("Iñtërnâtiônàlizætiøn ", "ø"));
+    self::assertEquals("", UTF8::rtrim(""));
+    self::assertEquals("Iñtërnâtiônàlizætiø\n", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "ø"));
+    self::assertEquals("Iñtërnâtiônàlizæti", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "\nø"));
   }
 
   public function testStrtolower()
@@ -1608,7 +1646,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::strtolower($before));
+      self::assertEquals($after, UTF8::strtolower($before));
     }
   }
 
@@ -1624,7 +1662,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::strtoupper($before));
+      self::assertEquals($after, UTF8::strtoupper($before));
     }
   }
 
@@ -1635,11 +1673,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "öäü"          => "ä",
         "öäü test öäü" => " ",
         "ÖÄÜ"          => 'Ä',
-        "中文空白"         => "中"
+        "中文空白"         => "中",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::min($before));
+      self::assertEquals($after, UTF8::min($before));
     }
   }
 
@@ -1650,103 +1688,103 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "öäü"          => "ü",
         "öäü test öäü" => "ü",
         "ÖÄÜ"          => 'Ü',
-        "中文空白"         => "空"
+        "中文空白"         => "空",
     );
 
     foreach ($tests as $before => $after) {
-      $this->assertEquals($after, UTF8::max($before));
+      self::assertEquals($after, UTF8::max($before));
     }
   }
 
   public function testUcfirst()
   {
-    $this->assertEquals("Öäü", UTF8::ucfirst("Öäü"));
-    $this->assertEquals("Öäü", UTF8::ucfirst("öäü"));
-    $this->assertEquals("Κόσμε", UTF8::ucfirst("κόσμε"));
-    $this->assertEquals("ABC-ÖÄÜ-中文空白", UTF8::ucfirst("aBC-ÖÄÜ-中文空白"));
-    $this->assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ucfirst("iñtërnâtiônàlizætiøn"));
-    $this->assertEquals("Ñtërnâtiônàlizætiøn", UTF8::ucfirst("ñtërnâtiônàlizætiøn"));
-    $this->assertEquals(" iñtërnâtiônàlizætiøn", UTF8::ucfirst(" iñtërnâtiônàlizætiøn"));
-    $this->assertEquals("Ñtërnâtiônàlizætiøn", UTF8::ucfirst("Ñtërnâtiônàlizætiøn"));
-    $this->assertEquals("ÑtërnâtiônàlizætIøN", UTF8::ucfirst("ñtërnâtiônàlizætIøN"));
-    $this->assertEquals("ÑtërnâtiônàlizætIøN test câse", UTF8::ucfirst("ñtërnâtiônàlizætIøN test câse"));
-    $this->assertEquals("", UTF8::ucfirst(""));
-    $this->assertEquals("Ñ", UTF8::ucfirst("ñ"));
-    $this->assertEquals("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
-    $this->assertSame('Deja', UTF8::ucfirst('deja'));
-    $this->assertSame('Σσς', UTF8::ucfirst('σσς'));
-    $this->assertSame('DEJa', UTF8::ucfirst('dEJa'));
-    $this->assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
+    self::assertEquals("Öäü", UTF8::ucfirst("Öäü"));
+    self::assertEquals("Öäü", UTF8::ucfirst("öäü"));
+    self::assertEquals("Κόσμε", UTF8::ucfirst("κόσμε"));
+    self::assertEquals("ABC-ÖÄÜ-中文空白", UTF8::ucfirst("aBC-ÖÄÜ-中文空白"));
+    self::assertEquals("Iñtërnâtiônàlizætiøn", UTF8::ucfirst("iñtërnâtiônàlizætiøn"));
+    self::assertEquals("Ñtërnâtiônàlizætiøn", UTF8::ucfirst("ñtërnâtiônàlizætiøn"));
+    self::assertEquals(" iñtërnâtiônàlizætiøn", UTF8::ucfirst(" iñtërnâtiônàlizætiøn"));
+    self::assertEquals("Ñtërnâtiônàlizætiøn", UTF8::ucfirst("Ñtërnâtiônàlizætiøn"));
+    self::assertEquals("ÑtërnâtiônàlizætIøN", UTF8::ucfirst("ñtërnâtiônàlizætIøN"));
+    self::assertEquals("ÑtërnâtiônàlizætIøN test câse", UTF8::ucfirst("ñtërnâtiônàlizætIøN test câse"));
+    self::assertEquals("", UTF8::ucfirst(""));
+    self::assertEquals("Ñ", UTF8::ucfirst("ñ"));
+    self::assertEquals("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
+    self::assertSame('Deja', UTF8::ucfirst('deja'));
+    self::assertSame('Σσς', UTF8::ucfirst('σσς'));
+    self::assertSame('DEJa', UTF8::ucfirst('dEJa'));
+    self::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
   }
 
   public function testUcWords()
   {
-    $this->assertEquals("Iñt Ërn ÂTi Ônà Liz Æti Øn", UTF8::ucwords("iñt ërn âTi ônà liz æti øn"));
-    $this->assertEquals("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
-    $this->assertEquals("", UTF8::ucwords(""));
-    $this->assertEquals("Ñ", UTF8::ucwords("ñ"));
-    $this->assertEquals("Iñt ËrN Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërN âti\n ônà liz æti øn"));
-    $this->assertEquals("ÑtërnâtiônàlizætIøN", UTF8::ucwords("ñtërnâtiônàlizætIøN"));
-    $this->assertEquals("ÑtërnâtiônàlizætIøN Test câse", UTF8::ucwords("ñtërnâtiônàlizætIøN test câse", array('câse')));
-    $this->assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ'));
+    self::assertEquals("Iñt Ërn ÂTi Ônà Liz Æti Øn", UTF8::ucwords("iñt ërn âTi ônà liz æti øn"));
+    self::assertEquals("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
+    self::assertEquals("", UTF8::ucwords(""));
+    self::assertEquals("Ñ", UTF8::ucwords("ñ"));
+    self::assertEquals("Iñt ËrN Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërN âti\n ônà liz æti øn"));
+    self::assertEquals("ÑtërnâtiônàlizætIøN", UTF8::ucwords("ñtërnâtiônàlizætIøN"));
+    self::assertEquals("ÑtërnâtiônàlizætIøN Test câse", UTF8::ucwords("ñtërnâtiônàlizætIøN test câse", array('câse')));
+    self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ'));
   }
 
   public function testLcfirst()
   {
-    $this->assertEquals("öäü", UTF8::lcfirst("Öäü"));
-    $this->assertEquals("κόσμε", UTF8::lcfirst("Κόσμε"));
-    $this->assertEquals("aBC-ÖÄÜ-中文空白", UTF8::lcfirst("ABC-ÖÄÜ-中文空白"));
-    $this->assertEquals("ñTËRNÂTIÔNÀLIZÆTIØN", UTF8::lcfirst("ÑTËRNÂTIÔNÀLIZÆTIØN"));
-    $this->assertEquals("ñTËRNÂTIÔNÀLIZÆTIØN", UTF8::lcfirst("ñTËRNÂTIÔNÀLIZÆTIØN"));
-    $this->assertEquals("", UTF8::lcfirst(""));
-    $this->assertEquals(" ", UTF8::lcfirst(" "));
-    $this->assertEquals("\t test", UTF8::lcfirst("\t test"));
-    $this->assertEquals("ñ", UTF8::lcfirst("Ñ"));
-    $this->assertEquals("ñTËRN\nâtiônàlizætiøn", UTF8::lcfirst("ÑTËRN\nâtiônàlizætiøn"));
-    $this->assertSame('deja', UTF8::lcfirst('Deja'));
-    $this->assertSame('σσς', UTF8::lcfirst('Σσς'));
-    $this->assertSame('dEJa', UTF8::lcfirst('dEJa'));
-    $this->assertSame('σσΣ', UTF8::lcfirst('σσΣ'));
+    self::assertEquals("öäü", UTF8::lcfirst("Öäü"));
+    self::assertEquals("κόσμε", UTF8::lcfirst("Κόσμε"));
+    self::assertEquals("aBC-ÖÄÜ-中文空白", UTF8::lcfirst("ABC-ÖÄÜ-中文空白"));
+    self::assertEquals("ñTËRNÂTIÔNÀLIZÆTIØN", UTF8::lcfirst("ÑTËRNÂTIÔNÀLIZÆTIØN"));
+    self::assertEquals("ñTËRNÂTIÔNÀLIZÆTIØN", UTF8::lcfirst("ñTËRNÂTIÔNÀLIZÆTIØN"));
+    self::assertEquals("", UTF8::lcfirst(""));
+    self::assertEquals(" ", UTF8::lcfirst(" "));
+    self::assertEquals("\t test", UTF8::lcfirst("\t test"));
+    self::assertEquals("ñ", UTF8::lcfirst("Ñ"));
+    self::assertEquals("ñTËRN\nâtiônàlizætiøn", UTF8::lcfirst("ÑTËRN\nâtiônàlizætiøn"));
+    self::assertSame('deja', UTF8::lcfirst('Deja'));
+    self::assertSame('σσς', UTF8::lcfirst('Σσς'));
+    self::assertSame('dEJa', UTF8::lcfirst('dEJa'));
+    self::assertSame('σσΣ', UTF8::lcfirst('σσΣ'));
   }
 
   public function testStrirpos()
   {
-    $this->assertEquals(3, UTF8::strripos('DÉJÀ', 'à'));
-    $this->assertEquals(false, UTF8::strripos('aςσb', 'ΣΣ'));
-    $this->assertEquals(6, UTF8::strripos("κόσμε-κόσμε", "Κ"));
-    $this->assertEquals(11, UTF8::strripos("test κόσμε κόσμε test", "Κ"));
-    $this->assertEquals(7, UTF8::strripos("中文空白-ÖÄÜ-中文空白", "ü"));
+    self::assertEquals(3, UTF8::strripos('DÉJÀ', 'à'));
+    self::assertEquals(false, UTF8::strripos('aςσb', 'ΣΣ'));
+    self::assertEquals(6, UTF8::strripos("κόσμε-κόσμε", "Κ"));
+    self::assertEquals(11, UTF8::strripos("test κόσμε κόσμε test", "Κ"));
+    self::assertEquals(7, UTF8::strripos("中文空白-ÖÄÜ-中文空白", "ü"));
   }
 
   public function testStrrpos()
   {
-    $this->assertEquals(false, UTF8::strrpos('한국어', ''));
-    $this->assertEquals(1, UTF8::strrpos('한국어', '국'));
-    $this->assertEquals(6, UTF8::strrpos("κόσμε-κόσμε", "κ"));
-    $this->assertEquals(13, UTF8::strrpos("test κόσμε κόσμε test", "σ"));
-    $this->assertEquals(9, UTF8::strrpos("中文空白-ÖÄÜ-中文空白", "中"));
+    self::assertEquals(false, UTF8::strrpos('한국어', ''));
+    self::assertEquals(1, UTF8::strrpos('한국어', '국'));
+    self::assertEquals(6, UTF8::strrpos("κόσμε-κόσμε", "κ"));
+    self::assertEquals(13, UTF8::strrpos("test κόσμε κόσμε test", "σ"));
+    self::assertEquals(9, UTF8::strrpos("中文空白-ÖÄÜ-中文空白", "中"));
   }
 
   public function testStrpos()
   {
-    $this->assertEquals(false, UTF8::strpos('abc', ''));
-    $this->assertEquals(false, UTF8::strpos('abc', 'd'));
-    $this->assertEquals(false, UTF8::strpos('abc', 'a', 3));
-    //$this->assertEquals(0, UTF8::strpos('abc', 'a', -1));
-    $this->assertEquals(1, UTF8::strpos('한국어', '국'));
-    $this->assertEquals(0, UTF8::strpos("κόσμε-κόσμε-κόσμε", "κ"));
-    $this->assertEquals(7, UTF8::strpos("test κόσμε test κόσμε", "σ"));
-    $this->assertEquals(8, UTF8::strpos("ABC-ÖÄÜ-中文空白-中文空白", "中"));
+    self::assertEquals(false, UTF8::strpos('abc', ''));
+    self::assertEquals(false, UTF8::strpos('abc', 'd'));
+    self::assertEquals(false, UTF8::strpos('abc', 'a', 3));
+    //self::assertEquals(0, UTF8::strpos('abc', 'a', -1));
+    self::assertEquals(1, UTF8::strpos('한국어', '국'));
+    self::assertEquals(0, UTF8::strpos("κόσμε-κόσμε-κόσμε", "κ"));
+    self::assertEquals(7, UTF8::strpos("test κόσμε test κόσμε", "σ"));
+    self::assertEquals(8, UTF8::strpos("ABC-ÖÄÜ-中文空白-中文空白", "中"));
   }
 
   public function testStripos()
   {
-    $this->assertEquals(3, UTF8::stripos('DÉJÀ', 'à'));
-    $this->assertEquals(1, UTF8::stripos('aςσb', 'ΣΣ'));
-    $this->assertEquals(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
-    $this->assertEquals(4, UTF8::stripos("öäü-κόσμε-κόσμε-κόσμε", "Κ"));
-    $this->assertEquals(5, UTF8::stripos("Test κόσμε test κόσμε", "Κ"));
-    $this->assertEquals(4, UTF8::stripos("ABC-ÖÄÜ-中文空白-中文空白", "ö"));
+    self::assertEquals(3, UTF8::stripos('DÉJÀ', 'à'));
+    self::assertEquals(1, UTF8::stripos('aςσb', 'ΣΣ'));
+    self::assertEquals(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
+    self::assertEquals(4, UTF8::stripos("öäü-κόσμε-κόσμε-κόσμε", "Κ"));
+    self::assertEquals(5, UTF8::stripos("Test κόσμε test κόσμε", "Κ"));
+    self::assertEquals(4, UTF8::stripos("ABC-ÖÄÜ-中文空白-中文空白", "ö"));
   }
 
   public function testOrd()
@@ -1765,7 +1803,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::ord($actual));
+      self::assertEquals($expected, UTF8::ord($actual));
     }
   }
 
@@ -1781,7 +1819,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::html_encode($actual));
+      self::assertEquals($expected, UTF8::html_encode($actual));
     }
   }
 
@@ -1792,11 +1830,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "中" => "&#20013;",
         "κ" => "&#954;",
         "ö" => "&#246;",
-        ""  => ""
+        ""  => "",
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::single_chr_html_encode($actual));
+      self::assertEquals($expected, UTF8::single_chr_html_encode($actual));
     }
   }
 
@@ -1807,17 +1845,17 @@ class UTF8Test extends PHPUnit_Framework_TestCase
             3,
             3,
             3,
-            3
+            3,
         ),
         "öäü"       => array(
             2,
             2,
-            2
+            2,
         ),
         "abc"       => array(
             1,
             1,
-            1
+            1,
         ),
         ""          => array(),
         "中文空白-test" => array(
@@ -1829,35 +1867,35 @@ class UTF8Test extends PHPUnit_Framework_TestCase
             1,
             1,
             1,
-            1
+            1,
         ),
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::chr_size_list($actual));
+      self::assertEquals($expected, UTF8::chr_size_list($actual));
     }
   }
 
   public function testStrnatcasecmp()
   {
-    $this->assertEquals(0, UTF8::strnatcasecmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
-    $this->assertEquals(1, UTF8::strnatcasecmp("Hello world 中文空白!", "Hello WORLD 中文空白"));
-    $this->assertEquals(-1, UTF8::strnatcasecmp("Hello world 中文空白", "Hello WORLD 中文空白!"));
-    $this->assertEquals(-1, UTF8::strnatcasecmp("2Hello world 中文空白!", "10Hello WORLD 中文空白!"));
-    $this->assertEquals(1, UTF8::strnatcasecmp("10Hello world 中文空白!", "2Hello WORLD 中文空白!"));
-    $this->assertEquals(0, UTF8::strnatcasecmp("10Hello world 中文空白!", "10Hello world 中文空白!"));
-    $this->assertEquals(0, UTF8::strnatcasecmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
+    self::assertEquals(0, UTF8::strnatcasecmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
+    self::assertEquals(1, UTF8::strnatcasecmp("Hello world 中文空白!", "Hello WORLD 中文空白"));
+    self::assertEquals(-1, UTF8::strnatcasecmp("Hello world 中文空白", "Hello WORLD 中文空白!"));
+    self::assertEquals(-1, UTF8::strnatcasecmp("2Hello world 中文空白!", "10Hello WORLD 中文空白!"));
+    self::assertEquals(1, UTF8::strnatcasecmp("10Hello world 中文空白!", "2Hello WORLD 中文空白!"));
+    self::assertEquals(0, UTF8::strnatcasecmp("10Hello world 中文空白!", "10Hello world 中文空白!"));
+    self::assertEquals(0, UTF8::strnatcasecmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
   }
 
   public function testStrnatcmp()
   {
-    $this->assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
-    $this->assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白"));
-    $this->assertEquals(1, UTF8::strnatcmp("Hello world 中文空白", "Hello WORLD 中文空白!"));
-    $this->assertEquals(-1, UTF8::strnatcmp("2Hello world 中文空白!", "10Hello WORLD 中文空白!"));
-    $this->assertEquals(1, UTF8::strnatcmp("10Hello world 中文空白!", "2Hello WORLD 中文空白!"));
-    $this->assertEquals(0, UTF8::strnatcmp("10Hello world 中文空白!", "10Hello world 中文空白!"));
-    $this->assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
+    self::assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
+    self::assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白"));
+    self::assertEquals(1, UTF8::strnatcmp("Hello world 中文空白", "Hello WORLD 中文空白!"));
+    self::assertEquals(-1, UTF8::strnatcmp("2Hello world 中文空白!", "10Hello WORLD 中文空白!"));
+    self::assertEquals(1, UTF8::strnatcmp("10Hello world 中文空白!", "2Hello WORLD 中文空白!"));
+    self::assertEquals(0, UTF8::strnatcmp("10Hello world 中文空白!", "10Hello world 中文空白!"));
+    self::assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
   }
 
   public function testStrtonatfold()
@@ -1866,11 +1904,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     // valid utf-8
     $string = $this->invokeMethod($utf8, 'strtonatfold', array("Hello world 中文空白"));
-    $this->assertEquals('Hello world 中文空白', $string);
+    self::assertEquals('Hello world 中文空白', $string);
 
     // invalid utf-8
     $string = $this->invokeMethod($utf8, 'strtonatfold', array("Iñtërnâtiôn\xE9àlizætiøn"));
-    $this->assertEquals('', $string);
+    self::assertEquals('', $string);
   }
 
   /**
@@ -1898,11 +1936,11 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "öäü öäü öäü" => 3,
         "abc"         => 1,
         ""            => 0,
-        " "           => 0
+        " "           => 0,
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::str_word_count($actual));
+      self::assertEquals($expected, UTF8::str_word_count($actual));
     }
   }
 
@@ -1912,32 +1950,34 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "中文空白" => 3,
         "öäü"  => 2,
         "abc"  => 1,
-        ""     => 0
+        ""     => 0,
     );
 
     foreach ($testArray as $actual => $expected) {
-      $this->assertEquals($expected, UTF8::max_chr_width($actual));
+      self::assertEquals($expected, UTF8::max_chr_width($actual));
     }
   }
 
   public function testSplit()
   {
-    $this->assertEquals(
+    self::assertEquals(
         array(
             "中",
             "文",
             "空",
-            "白"
-        ), UTF8::split("中文空白")
+            "白",
+        ),
+        UTF8::split("中文空白")
     );
-    $this->assertEquals(
+    self::assertEquals(
         array(
             "中文",
-            "空白"
-        ), UTF8::split("中文空白", 2)
+            "空白",
+        ),
+        UTF8::split("中文空白", 2)
     );
-    $this->assertEquals(array("中文空白"), UTF8::split("中文空白", 4));
-    $this->assertEquals(array("中文空白"), UTF8::split("中文空白", 8));
+    self::assertEquals(array("中文空白"), UTF8::split("中文空白", 4));
+    self::assertEquals(array("中文空白"), UTF8::split("中文空白", 8));
   }
 
   public function testChunkSplit()
@@ -1945,6 +1985,6 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     $result = UTF8::chunk_split("ABC-ÖÄÜ-中文空白-κόσμε", 3);
     $expected = "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε";
 
-    $this->assertEquals($expected, $result);
+    self::assertEquals($expected, $result);
   }
 }

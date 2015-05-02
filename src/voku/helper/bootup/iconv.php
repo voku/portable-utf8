@@ -95,6 +95,7 @@ if (extension_loaded('mbstring')) {
   function iconv_strlen($str, $encoding = INF)
   {
     INF === $encoding && $encoding = Iconv::$internal_encoding;
+
     return mb_strlen($str, $encoding);
   }
 
@@ -109,6 +110,7 @@ if (extension_loaded('mbstring')) {
   function iconv_strpos($haystack, $needle, $offset = 0, $encoding = INF)
   {
     INF === $encoding && $encoding = Iconv::$internal_encoding;
+
     return mb_strpos($haystack, $needle, $offset, $encoding);
   }
 
@@ -122,6 +124,7 @@ if (extension_loaded('mbstring')) {
   function iconv_strrpos($haystack, $needle, $encoding = INF)
   {
     INF === $encoding && $encoding = Iconv::$internal_encoding;
+
     return mb_strrpos($haystack, $needle, $encoding);
   }
 
@@ -136,6 +139,7 @@ if (extension_loaded('mbstring')) {
   function iconv_substr($str, $start, $length = 2147483647, $encoding = INF)
   {
     INF === $encoding && $enc = Iconv::$internal_encoding;
+
     return mb_substr($str, $start, $length, $encoding);
   }
 
@@ -149,6 +153,7 @@ if (extension_loaded('mbstring')) {
   function iconv_mime_decode($encoded_headers, $mode = 0, $encoding = INF)
   {
     INF === $encoding && $encoding = Iconv::$internal_encoding;
+
     return mb_decode_mimeheader($encoded_headers, $mode, $encoding);
   }
 

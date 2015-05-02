@@ -83,7 +83,12 @@ class Intl
 
     $next = $start;
 
-    $s = preg_split('/(' . GRAPHEME_CLUSTER_RX . ')/u', "\r\n" . $s, $size + 1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    $s = preg_split(
+        '/(' . GRAPHEME_CLUSTER_RX . ')/u',
+        "\r\n" . $s,
+        $size + 1,
+        PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
+    );
 
     if (!isset($s[1])) {
       return false;
@@ -104,8 +109,7 @@ class Intl
       if ($size >= 0) {
         $ret .= $s[$i];
       }
-    }
-    while (isset($s[++$i]) && $size > 0);
+    } while (isset($s[++$i]) && $size > 0);
 
     $next += strlen($ret);
 
@@ -283,6 +287,7 @@ class Intl
   public static function grapheme_strlen($str)
   {
     preg_replace('/' . GRAPHEME_CLUSTER_RX . '/u', '', $str, -1, $len);
+
     return 0 === $len && '' !== $str ? null : $len;
   }
 

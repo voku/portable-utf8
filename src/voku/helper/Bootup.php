@@ -39,53 +39,6 @@ class Bootup
   }
 
   /**
-   * Determines if the current version of PHP is equal to or greater than the supplied value
-   *
-   * @param  string
-   *
-   * @return  bool  TRUE if the current version is $version or higher
-   */
-  public static function is_php($version)
-  {
-    static $_is_php;
-    $version = (string)$version;
-    if (!isset($_is_php[$version])) {
-      $_is_php[$version] = version_compare(PHP_VERSION, $version, '>=');
-    }
-    return $_is_php[$version];
-  }
-  /**
-   * Get random bytes
-   *
-   * @param  int $length Output length
-   *
-   * @return  string
-   */
-  public static function get_random_bytes($length)
-  {
-    if (empty($length) OR !ctype_digit((string)$length)) {
-      return false;
-    }
-    // Unfortunately, none of the following PRNGs is guaranteed to exist ...
-    if (defined('MCRYPT_DEV_URANDOM') && ($output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)) !== false) {
-      return $output;
-    }
-    if (is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
-      // Try not to waste entropy ...
-      Bootup::is_php('5.4') && stream_set_chunk_size($fp, $length);
-      $output = fread($fp, $length);
-      fclose($fp);
-      if ($output !== false) {
-        return $output;
-      }
-    }
-    if (function_exists('openssl_random_pseudo_bytes')) {
-      return openssl_random_pseudo_bytes($length);
-    }
-    return false;
-  }
-
-  /**
    * init utf8_encode
    */
   protected static function initUtf8Encode()
@@ -126,23 +79,30 @@ class Bootup
               (int)ini_get('mbstring.encoding_translation')
               ||
               in_array(
-                  strtolower(ini_get('mbstring.encoding_translation')), array(
+                  strtolower(ini_get('mbstring.encoding_translation')),
+                  array(
                       'on',
                       'yes',
-                      'true'
-                  )
+                      'true',
+                  ),
+                  true
               )
           )
           &&
           !in_array(
-              strtolower(ini_get('mbstring.http_input')), array(
+              strtolower(ini_get('mbstring.http_input')),
+              array(
                   'pass',
                   '8bit',
-                  'utf-8'
-              )
+                  'utf-8',
+              ),
+              true
           )
       ) {
-        user_error('php.ini settings: Please disable mbstring.encoding_translation or set mbstring.http_input to "pass"', E_USER_WARNING);
+        user_error(
+            'php.ini settings: Please disable mbstring.encoding_translation or set mbstring.http_input to "pass"',
+            E_USER_WARNING
+        );
       }
 
       if (MB_OVERLOAD_STRING & (int)ini_get('mbstring.func_overload')) {
@@ -163,20 +123,24 @@ class Bootup
       }
 
       if (!in_array(
-          strtolower(mb_http_output()), array(
+          strtolower(mb_http_output()),
+          array(
               'pass',
-              '8bit'
-          )
+              '8bit',
+          ),
+          true
       )
       ) {
         mb_http_output('pass');
       }
 
       if (!in_array(
-          strtolower(mb_language()), array(
+          strtolower(mb_language()),
+          array(
               'uni',
-              'neutral'
-          )
+              'neutral',
+          ),
+          true
       )
       ) {
         mb_language('uni');
@@ -234,8 +198,70 @@ class Bootup
 
     if ('' === basename('§')) {
       setlocale(LC_ALL, 'C.UTF-8', 'C');
-      setlocale(LC_CTYPE, 'en_US.UTF-8', 'fr_FR.UTF-8', 'es_ES.UTF-8', 'de_DE.UTF-8', 'ru_RU.UTF-8', 'pt_BR.UTF-8', 'it_IT.UTF-8', 'ja_JP.UTF-8', 'zh_CN.UTF-8', '0');
+      setlocale(
+          LC_CTYPE,
+          'en_US.UTF-8',
+          'fr_FR.UTF-8',
+          'es_ES.UTF-8',
+          'de_DE.UTF-8',
+          'ru_RU.UTF-8',
+          'pt_BR.UTF-8',
+          'it_IT.UTF-8',
+          'ja_JP.UTF-8',
+          'zh_CN.UTF-8',
+          '0'
+      );
     }
+  }
+
+  /**
+   * Get random bytes
+   *
+   * @param  int $length Output length
+   *
+   * @return  string
+   */
+  public static function get_random_bytes($length)
+  {
+    if (empty($length) OR !ctype_digit((string)$length)) {
+      return false;
+    }
+    // Unfortunately, none of the following PRNGs is guaranteed to exist ...
+    if (defined('MCRYPT_DEV_URANDOM') && ($output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)) !== false) {
+      return $output;
+    }
+    if (is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
+      // Try not to waste entropy ...
+      Bootup::is_php('5.4') && stream_set_chunk_size($fp, $length);
+      $output = fread($fp, $length);
+      fclose($fp);
+      if ($output !== false) {
+        return $output;
+      }
+    }
+    if (function_exists('openssl_random_pseudo_bytes')) {
+      return openssl_random_pseudo_bytes($length);
+    }
+
+    return false;
+  }
+
+  /**
+   * Determines if the current version of PHP is equal to or greater than the supplied value
+   *
+   * @param  string
+   *
+   * @return  bool  TRUE if the current version is $version or higher
+   */
+  public static function is_php($version)
+  {
+    static $_is_php;
+    $version = (string)$version;
+    if (!isset($_is_php[$version])) {
+      $_is_php[$version] = version_compare(PHP_VERSION, $version, '>=');
+    }
+
+    return $_is_php[$version];
   }
 
   /**
@@ -262,7 +288,7 @@ class Bootup
     if (!preg_match('//u', urldecode($uri))) {
       $uri = preg_replace_callback(
           '/[\x80-\xFF]+/',
-          function($m) {
+          function ($m) {
             return urlencode($m[0]);
           },
           $uri
@@ -270,7 +296,7 @@ class Bootup
 
       $uri = preg_replace_callback(
           '/(?:%[89A-F][0-9A-F])+/i',
-          function($m) {
+          function ($m) {
             return urlencode(UTF8::encode('UTF-8', urldecode($m[0])));
           },
           $uri
@@ -279,7 +305,7 @@ class Bootup
       if ($exit === true) {
         // Use ob_start() to buffer content and avoid problem of headers already sent...
         if (headers_sent() === false) {
-          $severProtocol = (isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : 'HTTP/1.1' );
+          $severProtocol = (isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : 'HTTP/1.1');
           header($severProtocol . ' 301 Moved Permanently');
           header('Location: ' . $uri);
           exit();
@@ -309,13 +335,13 @@ class Bootup
         &$_POST,
         &$_COOKIE,
         &$_SERVER,
-        &$_REQUEST
+        &$_REQUEST,
     );
 
     foreach ($a[0] as &$r) {
       $a[] = array(
           &$r['name'],
-          &$r['type']
+          &$r['type'],
       );
     }
     unset($a[0]);

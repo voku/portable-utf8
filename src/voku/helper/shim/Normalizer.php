@@ -21,15 +21,15 @@ namespace voku\helper\shim;
  */
 class Normalizer
 {
-  const NONE = 1;
-  const FORM_D = 2;
-  const NFD = 2;
+  const NONE    = 1;
+  const FORM_D  = 2;
+  const NFD     = 2;
   const FORM_KD = 3;
-  const NFKD = 3;
-  const FORM_C = 4;
-  const NFC = 4;
+  const NFKD    = 3;
+  const FORM_C  = 4;
+  const NFC     = 4;
   const FORM_KC = 5;
-  const NFKC = 5;
+  const NFKC    = 5;
 
   protected static $C, $D, $KD, $cC;
 
@@ -40,7 +40,7 @@ class Normalizer
       "\xC0" => 2,
       "\xD0" => 2,
       "\xE0" => 3,
-      "\xF0" => 4
+      "\xF0" => 4,
   );
 
   /**
@@ -123,6 +123,7 @@ class Normalizer
       if (empty(self::$C)) {
         self::$C = static::getData('canonicalComposition');
       }
+
       return self::recompose(self::decompose($str, $K));
     } else {
       return self::decompose($str, $K);
@@ -177,7 +178,9 @@ class Normalizer
           $tail = '';
         }
 
-        if ($j = strspn($s, $ASCII, $i + 1)) {
+        $j = strspn($s, $ASCII, $i + 1);
+
+        if ($j) {
           $last_uchr .= substr($s, $i, $j);
           $i += $j;
         }
@@ -334,9 +337,11 @@ class Normalizer
             $j = (($uchr[1] - 224) << 12) + (($uchr[2] - 128) << 6) + $uchr[3] - 0xAC80;
 
             $uchr = "\xE1\x84" . chr(0x80 + (int)($j / 588))
-                . "\xE1\x85" . chr(0xA1 + (int)(($j % 588) / 28));
+                    . "\xE1\x85" . chr(0xA1 + (int)(($j % 588) / 28));
 
-            if ($j %= 28) {
+            $j = $j % 28;
+
+            if ($j) {
               $uchr .= $j < 25
                   ? ("\xE1\x86" . chr(0xA7 + $j))
                   : ("\xE1\x87" . chr(0x67 + $j));

@@ -2,6 +2,9 @@
 
 use voku\helper\shim\Xml as p;
 
+/**
+ * Class ShimXmlTest
+ */
 class ShimXmlTest extends PHPUnit_Framework_TestCase
 {
   function testUtf8Encode()
@@ -10,12 +13,12 @@ class ShimXmlTest extends PHPUnit_Framework_TestCase
     $s = implode('', $s);
     $e = p::utf8_encode($s) . 'Σ어';
 
-    $this->assertSame(utf8_encode($s), p::utf8_encode($s));
-    $this->assertSame(utf8_decode($e), p::utf8_decode($e));
+    self::assertSame(utf8_encode($s), p::utf8_encode($s));
+    self::assertSame(utf8_decode($e), p::utf8_decode($e));
 
     $s = 444;
 
-    $this->assertSame(utf8_encode($s), p::utf8_encode($s));
-    $this->assertSame(utf8_decode($s), p::utf8_decode($s));
+    self::assertSame(utf8_encode($s), p::utf8_encode($s));
+    self::assertSame(utf8_decode($s), p::utf8_decode($s));
   }
 }

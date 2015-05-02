@@ -3,6 +3,9 @@
 use voku\helper\Bootup;
 use voku\helper\UTF8;
 
+/**
+ * Class BootupTest
+ */
 class BootupTest extends PHPUnit_Framework_TestCase
 {
   function testFilterRequestInputs()
@@ -18,7 +21,7 @@ class BootupTest extends PHPUnit_Framework_TestCase
         $_COOKIE,
         $_REQUEST,
         $_ENV,
-        $_FILES
+        $_FILES,
     );
 
     $_GET = array(
@@ -43,23 +46,23 @@ class BootupTest extends PHPUnit_Framework_TestCase
         'b' => array(
             'name'     => array(
                 '',
-                ''
+                '',
             ),
             'type'     => array(
                 '',
-                ''
+                '',
             ),
             'tmp_name' => array(
                 '',
-                ''
+                '',
             ),
             'error'    => array(
                 4,
-                4
+                4,
             ),
             'size'     => array(
                 0,
-                0
+                0,
             ),
         ),
     );
@@ -77,7 +80,7 @@ class BootupTest extends PHPUnit_Framework_TestCase
 
     $expect['f'] = $expect;
 
-    $this->assertSame($expect, $_GET);
+    self::assertSame($expect, $_GET);
 
     list($_GET, $_POST, $_COOKIE, $_REQUEST, $_ENV, $_FILES) = $bak;
   }
@@ -90,15 +93,15 @@ class BootupTest extends PHPUnit_Framework_TestCase
     $uriD = '/' . "bàr";
 
     $u = Bootup::filterRequestUri($uriA, false);
-    $this->assertSame($uriA, $u);
+    self::assertSame($uriA, $u);
 
     $u = Bootup::filterRequestUri($uriB, false);
-    $this->assertSame($uriA, $u);
+    self::assertSame($uriA, $u);
 
     $u = Bootup::filterRequestUri($uriC, false);
-    $this->assertSame($uriA, $u);
+    self::assertSame($uriA, $u);
 
     $u = Bootup::filterRequestUri($uriD, false);
-    $this->assertSame($uriD, $u);
+    self::assertSame($uriD, $u);
   }
 }

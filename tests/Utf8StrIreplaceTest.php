@@ -2,65 +2,71 @@
 
 use voku\helper\UTF8 as u;
 
+/**
+ * Class Utf8StrIreplaceTest
+ */
 class Utf8StrIreplaceTest extends PHPUnit_Framework_TestCase
 {
   public function test_replace()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
     $replaced = 'Iñtërnâtiônàlisetiøn';
-    $this->assertEquals($replaced, u::str_ireplace('lIzÆ', 'lise', $str));
+    self::assertEquals($replaced, u::str_ireplace('lIzÆ', 'lise', $str));
   }
 
   public function test_replace_no_match()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
     $replaced = 'Iñtërnâtiônàlizætiøn';
-    $this->assertEquals($replaced, u::str_ireplace('foo', 'bar', $str));
+    self::assertEquals($replaced, u::str_ireplace('foo', 'bar', $str));
   }
 
   public function test_empty_string()
   {
     $str = '';
     $replaced = '';
-    $this->assertEquals($replaced, u::str_ireplace('foo', 'bar', $str));
+    self::assertEquals($replaced, u::str_ireplace('foo', 'bar', $str));
   }
 
   public function test_empty_search()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
     $replaced = 'Iñtërnâtiônàlizætiøn';
-    $this->assertEquals($replaced, u::str_ireplace('', 'x', $str));
+    self::assertEquals($replaced, u::str_ireplace('', 'x', $str));
   }
 
   public function test_replace_count()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
     $replaced = 'IñtërXâtiôXàlizætiøX';
-    $this->assertEquals($replaced, u::str_ireplace('n', 'X', $str, $count));
-    $this->assertEquals(3, $count);
+    self::assertEquals($replaced, u::str_ireplace('n', 'X', $str, $count));
+    self::assertEquals(3, $count);
   }
 
   public function test_replace_different_search_replace_length()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
     $replaced = 'IñtërXXXâtiôXXXàlizætiøXXX';
-    $this->assertEquals($replaced, u::str_ireplace('n', 'XXX', $str));
+    self::assertEquals($replaced, u::str_ireplace('n', 'XXX', $str));
   }
 
   public function test_replace_array_ascii_search()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
     $replaced = 'Iñyërxâyiôxàlizæyiøx';
-    $this->assertEquals(
-        $replaced, u::str_ireplace(
-        array(
-            'n',
-            't'
-        ), array(
-        'x',
-        'y'
-    ), $str
-    )
+    self::assertEquals(
+        $replaced,
+        u::str_ireplace(
+            array(
+                'n',
+                't',
+            ),
+            array(
+                'x',
+                'y',
+            ),
+            $str
+        )
     );
   }
 
@@ -68,19 +74,19 @@ class Utf8StrIreplaceTest extends PHPUnit_Framework_TestCase
   {
     $str = 'Iñtërnâtiônàlizætiøn';
     $replaced = 'I?tërnâti??nàliz????ti???n';
-    $this->assertEquals(
+    self::assertEquals(
         u::str_ireplace(
             array(
                 'Ñ',
                 'ô',
                 'ø',
-                'Æ'
+                'Æ',
             ),
             array(
                 '?',
                 '??',
                 '???',
-                '????'
+                '????',
             ),
             $str
         ),
@@ -92,14 +98,14 @@ class Utf8StrIreplaceTest extends PHPUnit_Framework_TestCase
   {
     $str = 'Iñtërnâtiônàlizætiøn';
     $replaced = 'I?tërnâti?nàliz?ti?n';
-    $this->assertEquals(
+    self::assertEquals(
         $replaced,
         u::str_ireplace(
             array(
                 'Ñ',
                 'ô',
                 'ø',
-                'Æ'
+                'Æ',
             ),
             '?',
             $str
@@ -111,13 +117,13 @@ class Utf8StrIreplaceTest extends PHPUnit_Framework_TestCase
   {
     $str = 'Iñtërnâtiônàlizætiøn';
     $replaced = 'I?tërnâtinàliztin';
-    $this->assertEquals(
+    self::assertEquals(
         u::str_ireplace(
             array(
                 'Ñ',
                 'ô',
                 'ø',
-                'Æ'
+                'Æ',
             ),
             array('?'),
             $str
@@ -130,13 +136,13 @@ class Utf8StrIreplaceTest extends PHPUnit_Framework_TestCase
   {
     $str = "Iñtërnâti\nônàlizætiøn";
     $replaced = "Iñtërnâti\nônàlisetiøn";
-    $this->assertEquals($replaced, u::str_ireplace('lIzÆ', 'lise', $str));
+    self::assertEquals($replaced, u::str_ireplace('lIzÆ', 'lise', $str));
   }
 
   public function test_replace_linefeed_search()
   {
     $str = "Iñtërnâtiônàli\nzætiøn";
     $replaced = "Iñtërnâtiônàlisetiøn";
-    $this->assertEquals($replaced, u::str_ireplace("lI\nzÆ", 'lise', $str));
+    self::assertEquals($replaced, u::str_ireplace("lI\nzÆ", 'lise', $str));
   }
 }
