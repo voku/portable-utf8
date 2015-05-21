@@ -1,7 +1,5 @@
 <?php
 
-use voku\helper\UTF8 as u;
-
 /**
  * Class HhvmTest
  */

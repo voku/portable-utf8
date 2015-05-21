@@ -11,19 +11,18 @@ php:
   - hhvm-nightly
 
 before_script:
-  - wget https://scrutinizer-ci.com/ocular.phar;
-  - composer self-update;
-  - composer install --no-interaction --prefer-source;
-  - composer dump-autoload -o;
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - composer self-update
+  - composer install --no-interaction --prefer-source
+  - composer dump-autoload -o
 
 script:
-  - mkdir -p build/logs;
-  - if [[ "$TRAVIS_PHP_VERSION" != *"nightly" ]]; then phpenv config-rm xdebug.ini; fi;
-  - php vendor/bin/phpunit -c phpunit.xml;
+  - mkdir -p build/logs
+  - php vendor/bin/phpunit -c phpunit.xml
 
 after_script:
-  - php vendor/bin/coveralls -v;
-  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml;
+  - php vendor/bin/coveralls -v
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
 
 matrix:
   allow_failures:
