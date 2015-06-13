@@ -223,15 +223,18 @@ class Bootup
    */
   public static function get_random_bytes($length)
   {
-    if (empty($length) OR !ctype_digit((string)$length)) {
+    if (!$length || !ctype_digit((string)$length)) {
       return false;
     }
+
     // Unfortunately, none of the following PRNGs is guaranteed to exist ...
+
     if (defined('MCRYPT_DEV_URANDOM') && ($output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)) !== false) {
       return $output;
     }
+
     if (is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
-      // Try not to waste entropy ...
+      // try not to waste entropy ...
       Bootup::is_php('5.4') && stream_set_chunk_size($fp, $length);
       $output = fread($fp, $length);
       fclose($fp);
@@ -239,8 +242,12 @@ class Bootup
         return $output;
       }
     }
+
     if (function_exists('openssl_random_pseudo_bytes')) {
-      return openssl_random_pseudo_bytes($length);
+      $output = openssl_random_pseudo_bytes($length, $strong);
+      if ($strong === true) {
+        return $output;
+      }
     }
 
     return false;

@@ -104,4 +104,16 @@ class BootupTest extends PHPUnit_Framework_TestCase
     $u = Bootup::filterRequestUri($uriD, false);
     self::assertSame($uriD, $u);
   }
+
+  function testGetRandomBytes()
+  {
+    $rand_false = Bootup::get_random_bytes(0);
+    self::assertEquals(false, $rand_false);
+
+    $rand_false = Bootup::get_random_bytes('test');
+    self::assertEquals(false, $rand_false);
+
+    $rand = Bootup::get_random_bytes(32);
+    self::assertEquals(32, strlen($rand));
+  }
 }
