@@ -18,8 +18,16 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
     } else if (PHP_VERSION_ID >= 50400) {
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
       self::assertSame(false, @iconv('UTF-8', 'ISO-8859-1', 'nœud'));
-      /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      self::assertSame(false, @iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
+
+      // need testing
+      if (PHP_VERSION_ID < 70000) {
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        self::assertSame(false, @iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
+      } else {
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        self::assertSame('nud', @iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
+      }
+
     } else {
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
       self::assertSame('n', @iconv('UTF-8', 'ISO-8859-1', 'nœud'));
