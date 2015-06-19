@@ -480,15 +480,37 @@ class UTF8
   }
 
   /**
-   * normalize MS Word Special Chars
+   * Remove Invisible Characters
    *
-   * @param string $str The string to be normalized.
+   * This prevents sandwiching null characters
+   * between ascii characters, like Java\0script.
    *
-   * @return string
+   * copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
+   *
+   * @param  string $str
+   * @param  bool   $url_encoded
+   *
+   * @return  string
    */
-  public static function normalize_msword($str)
+  public static function remove_invisible_characters($str, $url_encoded = true)
   {
-    return strtr($str, self::$utf8MSWord);
+    // init
+    $non_displayables = array();
+
+    // every control character except newline (dec 10),
+    // carriage return (dec 13) and horizontal tab (dec 09)
+    if ($url_encoded) {
+      $non_displayables[] = '/%0[0-8bcef]/';  // url encoded 00-08, 11, 12, 14, 15
+      $non_displayables[] = '/%1[0-9a-f]/';  // url encoded 16-31
+    }
+
+    $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S';  // 00-08, 11, 12, 14-31, 127
+
+    do {
+      $str = preg_replace($non_displayables, '', $str, -1, $count);
+    } while ($count !== 0);
+
+    return $str;
   }
 
   /**
@@ -539,6 +561,18 @@ class UTF8
     );
 
     return $whitespace;
+  }
+
+  /**
+   * normalize MS Word Special Chars
+   *
+   * @param string $str The string to be normalized.
+   *
+   * @return string
+   */
+  public static function normalize_msword($str)
+  {
+    return strtr($str, self::$utf8MSWord);
   }
 
   /**
@@ -702,122 +736,6 @@ class UTF8
     }
 
     return implode('', $chars);
-  }
-
-  /**
-   * clean-up a UTF-8 string and show only printable chars at the end
-   *
-   * @param $text
-   *
-   * @return string
-   */
-  public static function cleanup($text)
-  {
-    if (!isset($text[0])) {
-      return '';
-    }
-
-    // init
-    self::checkForSupport();
-
-    // fixed ISO <-> UTF-8 Errors
-    $text = self::fix_simple_utf8($text);
-
-    // remove all none UTF-8 symbols
-    // && remove diamond question mark (�)
-    // && remove remove invisible characters (e.g. "\0")
-    // && remove BOM
-    // && normalize whitespace chars
-    $text = self::clean($text, true, true, false);
-
-    return (string)$text;
-  }
-
-  /**
-   * fixed a broken UTF-8 string
-   *
-   * @param string $str
-   *
-   * @return string
-   */
-  public static function fix_simple_utf8($str)
-  {
-    if (!isset($str[0])) {
-      return '';
-    }
-
-    $chars = self::get_broken_utf8_array();
-
-    return str_replace(array_keys($chars), $chars, $str);
-  }
-
-  /**
-   * get a array of broken utf-8 chars
-   *
-   * @return array
-   */
-  protected static function get_broken_utf8_array()
-  {
-    return array(
-        'Ã¼'  => 'ü',
-        'Ã¤'  => 'ä',
-        'Ã¶'  => 'ö',
-        'Ã–'  => 'Ö',
-        'ÃŸ'  => 'ß',
-        'Ã '  => 'à',
-        'Ã¡'  => 'á',
-        'Ã¢'  => 'â',
-        'Ã£'  => 'ã',
-        'Ã¹'  => 'ù',
-        'Ãº'  => 'ú',
-        'Ã»'  => 'û',
-        'Ã™'  => 'Ù',
-        'Ãš'  => 'Ú',
-        'Ã›'  => 'Û',
-        'Ãœ'  => 'Ü',
-        'Ã²'  => 'ò',
-        'Ã³'  => 'ó',
-        'Ã´'  => 'ô',
-        'Ã¨'  => 'è',
-        'Ã©'  => 'é',
-        'Ãª'  => 'ê',
-        'Ã«'  => 'ë',
-        'Ã€'  => 'À',
-        'Ã'  => 'Á',
-        'Ã‚'  => 'Â',
-        'Ãƒ'  => 'Ã',
-        'Ã„'  => 'Ä',
-        'Ã…'  => 'Å',
-        'Ã‡'  => 'Ç',
-        'Ãˆ'  => 'È',
-        'Ã‰'  => 'É',
-        'ÃŠ'  => 'Ê',
-        'Ã‹'  => 'Ë',
-        'ÃŒ'  => 'Ì',
-        'Ã'  => 'Í',
-        'ÃŽ'  => 'Î',
-        'Ã'  => 'Ï',
-        'Ã‘'  => 'Ñ',
-        'Ã’'  => 'Ò',
-        'Ã“'  => 'Ó',
-        'Ã”'  => 'Ô',
-        'Ã•'  => 'Õ',
-        'Ã˜'  => 'Ø',
-        'Ã¥'  => 'å',
-        'Ã¦'  => 'æ',
-        'Ã§'  => 'ç',
-        'Ã¬'  => 'ì',
-        'Ã­'  => 'í',
-        'Ã®'  => 'î',
-        'Ã¯'  => 'ï',
-        'Ã°'  => 'ð',
-        'Ã±'  => 'ñ',
-        'Ãµ'  => 'õ',
-        'Ã¸'  => 'ø',
-        'Ã½'  => 'ý',
-        'Ã¿'  => 'ÿ',
-        'â‚¬' => '€',
-    );
   }
 
   /**
@@ -1516,40 +1434,6 @@ class UTF8
   }
 
   /**
-   * Remove Invisible Characters
-   *
-   * This prevents sandwiching null characters
-   * between ascii characters, like Java\0script.
-   *
-   * copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
-   *
-   * @param  string $str
-   * @param  bool   $url_encoded
-   *
-   * @return  string
-   */
-  public static function remove_invisible_characters($str, $url_encoded = true)
-  {
-    // init
-    $non_displayables = array();
-
-    // every control character except newline (dec 10),
-    // carriage return (dec 13) and horizontal tab (dec 09)
-    if ($url_encoded) {
-      $non_displayables[] = '/%0[0-8bcef]/';  // url encoded 00-08, 11, 12, 14, 15
-      $non_displayables[] = '/%1[0-9a-f]/';  // url encoded 16-31
-    }
-
-    $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S';  // 00-08, 11, 12, 14-31, 127
-
-    do {
-      $str = preg_replace($non_displayables, '', $str, -1, $count);
-    } while ($count !== 0);
-
-    return $str;
-  }
-
-  /**
    * checks if the number of Unicode characters in a string are not
    * more than the specified integer.
    *
@@ -1686,13 +1570,107 @@ class UTF8
     }
 
     $string = preg_replace("/%u([0-9a-f]{3,4})/i", "&#x\\1;", urldecode($string));
-    $string = self::fix_simple_utf8(rawurldecode(self::html_entity_decode(self::toUTF8($string))));
 
-    if (strstr($string, "\\u")) {
+    $string = self::fix_simple_utf8(
+        rawurldecode(
+            self::html_entity_decode(
+                self::toUTF8($string)
+            )
+        )
+    );
+
+    if (strpos($string, "\\u") !== false && !self::isJson($string)) {
       $string = json_decode('"' . $string . '"');
     }
 
     return $string;
+  }
+
+  /**
+   * fixed a broken UTF-8 string
+   *
+   * @param string $str
+   *
+   * @return string
+   */
+  public static function fix_simple_utf8($str)
+  {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    $chars = self::get_broken_utf8_array();
+
+    return str_replace(array_keys($chars), $chars, $str);
+  }
+
+  /**
+   * get a array of broken utf-8 chars
+   *
+   * @return array
+   */
+  protected static function get_broken_utf8_array()
+  {
+    return array(
+        'Ã¼'  => 'ü',
+        'Ã¤'  => 'ä',
+        'Ã¶'  => 'ö',
+        'Ã–'  => 'Ö',
+        'ÃŸ'  => 'ß',
+        'Ã '  => 'à',
+        'Ã¡'  => 'á',
+        'Ã¢'  => 'â',
+        'Ã£'  => 'ã',
+        'Ã¹'  => 'ù',
+        'Ãº'  => 'ú',
+        'Ã»'  => 'û',
+        'Ã™'  => 'Ù',
+        'Ãš'  => 'Ú',
+        'Ã›'  => 'Û',
+        'Ãœ'  => 'Ü',
+        'Ã²'  => 'ò',
+        'Ã³'  => 'ó',
+        'Ã´'  => 'ô',
+        'Ã¨'  => 'è',
+        'Ã©'  => 'é',
+        'Ãª'  => 'ê',
+        'Ã«'  => 'ë',
+        'Ã€'  => 'À',
+        'Ã'  => 'Á',
+        'Ã‚'  => 'Â',
+        'Ãƒ'  => 'Ã',
+        'Ã„'  => 'Ä',
+        'Ã…'  => 'Å',
+        'Ã‡'  => 'Ç',
+        'Ãˆ'  => 'È',
+        'Ã‰'  => 'É',
+        'ÃŠ'  => 'Ê',
+        'Ã‹'  => 'Ë',
+        'ÃŒ'  => 'Ì',
+        'Ã'  => 'Í',
+        'ÃŽ'  => 'Î',
+        'Ã'  => 'Ï',
+        'Ã‘'  => 'Ñ',
+        'Ã’'  => 'Ò',
+        'Ã“'  => 'Ó',
+        'Ã”'  => 'Ô',
+        'Ã•'  => 'Õ',
+        'Ã˜'  => 'Ø',
+        'Ã¥'  => 'å',
+        'Ã¦'  => 'æ',
+        'Ã§'  => 'ç',
+        'Ã¬'  => 'ì',
+        'Ã­'  => 'í',
+        'Ã®'  => 'î',
+        'Ã¯'  => 'ï',
+        'Ã°'  => 'ð',
+        'Ã±'  => 'ñ',
+        'Ãµ'  => 'õ',
+        'Ã¸'  => 'ø',
+        'Ã½'  => 'ý',
+        'Ã¿'  => 'ÿ',
+        'â‚¬' => '€',
+    );
   }
 
   /**
@@ -1899,6 +1877,32 @@ class UTF8
   }
 
   /**
+   * @param $string
+   *
+   * @return bool
+   */
+  public static function isJson($string)
+  {
+    if (!$string) {
+      return false;
+    }
+
+    if (!is_string($string)) {
+      return false;
+    }
+
+    if (
+        is_object(json_decode($string))
+        &&
+        json_last_error() == JSON_ERROR_NONE
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Returns part of haystack string from the first occurrence of needle to the end of haystack.
    *
    * @link http://php.net/manual/en/function.grapheme-strstr.php
@@ -2040,24 +2044,76 @@ class UTF8
   }
 
   /**
-   * is_binary_file
+   * optimized "mb_detect_encoding()"-function -> with UTF-16 and UTF-32 support
    *
-   * @param string $file
+   * @param string $str
    *
-   * @return boolean
+   * @return bool|string false if we can't detect the string-encoding
    */
-  public static function is_binary_file($file)
+  public static function str_detect_encoding($str)
   {
-    try {
-      $fp = fopen($file, 'r');
-      $block = fread($fp, 512);
-      fclose($fp);
-    }
-    catch (\Exception $e) {
-      $block = "";
+    // init
+    $encoding = '';
+
+    // UTF-8
+    /** @noinspection PhpUsageOfSilenceOperatorInspection */
+    if (substr($str, 0, 3) == @pack('CCC', 0xef, 0xbb, 0xbf)) {
+      return 'UTF-8';
     }
 
-    return self::is_binary($block);
+    // UTF-16 (BE)
+    /** @noinspection PhpUsageOfSilenceOperatorInspection */
+    if (substr($str, 0, 2) == @pack('CC', 0xfe, 0xff)) {
+      return 'UTF-16BE';
+    }
+
+    // UTF-16 (LE)
+    /** @noinspection PhpUsageOfSilenceOperatorInspection */
+    if (substr($str, 0, 2) == @pack('CC', 0xff, 0xfe)) {
+      return 'UTF-16LE';
+    }
+
+    // UTF-32 (BE)
+    /** @noinspection PhpUsageOfSilenceOperatorInspection */
+    if (substr($str, 0, 4) == @pack('CC', 0x00, 0x00, 0xfe, 0xff)) {
+      return 'UTF-32BE';
+    }
+
+    // UTF-32 (LE)
+    /** @noinspection PhpUsageOfSilenceOperatorInspection */
+    if (substr($str, 0, 4) == @pack('CC', 0xff, 0xfe, 0x00, 0x00)) {
+      return 'UTF32LE';
+    }
+
+    if (!$encoding) {
+      self::checkForSupport();
+
+      // For UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always.
+      $detectOrder = array(
+          'UTF-8',
+          'windows-1251',
+          'ISO-8859-1',
+      );
+      $encoding = mb_detect_encoding($str, $detectOrder, true);
+    }
+
+    if (self::is_binary($str)) {
+      if (self::is_utf16($str) == 1) {
+        return 'UTF-16LE';
+      } else if (self::is_utf16($str) == 2) {
+        return 'UTF-16BE';
+      } else if (self::is_utf32($str) == 1) {
+        return 'UTF-32LE';
+      } else if (self::is_utf32($str) == 2) {
+        return 'UTF-32BE';
+      }
+    }
+
+    if (!$encoding) {
+      $encoding = false;
+    }
+
+    return $encoding;
   }
 
   /**
@@ -2083,6 +2139,78 @@ class UTF8
     } else {
       return false;
     }
+  }
+
+  /**
+   * is_utf16
+   *
+   * @param string $string
+   *
+   * @return int|false false if is't not UTF16, 1 for UTF-16LE, 2 for UTF-16BE
+   */
+  public static function is_utf16($string)
+  {
+    if (self::is_binary($string)) {
+      self::checkForSupport();
+
+      $maybeUTF16LE = 0;
+      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16LE');
+      if ($test !== false && strlen($test) > 1) {
+        $test2 = mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
+        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
+        if ($test3 == $test) {
+          $stringChars = self::count_chars($string);
+          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+            if (in_array($test3char, $stringChars, true) === true) {
+              $maybeUTF16LE++;
+            }
+          }
+        }
+      }
+
+      $maybeUTF16BE = 0;
+      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16BE');
+      if ($test !== false && strlen($test) > 1) {
+        $test2 = mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
+        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
+        if ($test3 == $test) {
+          $stringChars = self::count_chars($string);
+          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+            if (in_array($test3char, $stringChars, true) === true) {
+              $maybeUTF16BE++;
+            }
+          }
+        }
+      }
+
+      if ($maybeUTF16BE != $maybeUTF16LE) {
+        if ($maybeUTF16LE > $maybeUTF16BE) {
+          return 1;
+        } else {
+          return 2;
+        }
+      }
+
+    }
+
+    return false;
+  }
+
+  /**
+   * returns count of characters used in a string
+   *
+   * @param    string $str The input string
+   *
+   * @return   array An associative array of Character as keys and
+   *           their count as values
+   */
+  public static function count_chars($str) //there is no $mode parameters
+  {
+    $array = array_count_values(self::split($str));
+
+    ksort($array);
+
+    return $array;
   }
 
   /**
@@ -2141,58 +2269,53 @@ class UTF8
   }
 
   /**
-   * is_utf16
+   * clean-up a UTF-8 string and show only printable chars at the end
    *
-   * @param string $string
+   * @param $text
    *
-   * @return int|false false if is't not UTF16, 1 for UTF-16LE, 2 for UTF-16BE
+   * @return string
    */
-  public static function is_utf16($string)
+  public static function cleanup($text)
   {
-    if (self::is_binary($string)) {
-      self::checkForSupport();
-
-      $maybeUTF16LE = 0;
-      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16LE');
-      if ($test !== false && strlen($test) > 1) {
-        $test2 = mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
-        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
-        if ($test3 == $test) {
-          $stringChars = self::count_chars($string);
-          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
-            if (in_array($test3char, $stringChars, true) === true) {
-              $maybeUTF16LE++;
-            }
-          }
-        }
-      }
-
-      $maybeUTF16BE = 0;
-      $test = mb_convert_encoding($string, 'UTF-8', 'UTF-16BE');
-      if ($test !== false && strlen($test) > 1) {
-        $test2 = mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
-        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
-        if ($test3 == $test) {
-          $stringChars = self::count_chars($string);
-          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
-            if (in_array($test3char, $stringChars, true) === true) {
-              $maybeUTF16BE++;
-            }
-          }
-        }
-      }
-
-      if ($maybeUTF16BE != $maybeUTF16LE) {
-        if ($maybeUTF16LE > $maybeUTF16BE) {
-          return 1;
-        } else {
-          return 2;
-        }
-      }
-
+    if (!isset($text[0])) {
+      return '';
     }
 
-    return false;
+    // init
+    self::checkForSupport();
+
+    // fixed ISO <-> UTF-8 Errors
+    $text = self::fix_simple_utf8($text);
+
+    // remove all none UTF-8 symbols
+    // && remove diamond question mark (�)
+    // && remove remove invisible characters (e.g. "\0")
+    // && remove BOM
+    // && normalize whitespace chars
+    $text = self::clean($text, true, true, false);
+
+    return (string)$text;
+  }
+
+  /**
+   * is_binary_file
+   *
+   * @param string $file
+   *
+   * @return boolean
+   */
+  public static function is_binary_file($file)
+  {
+    try {
+      $fp = fopen($file, 'r');
+      $block = fread($fp, 512);
+      fclose($fp);
+    }
+    catch (\Exception $e) {
+      $block = "";
+    }
+
+    return self::is_binary($block);
   }
 
   /**
@@ -2726,79 +2849,6 @@ class UTF8
   }
 
   /**
-   * optimized "mb_detect_encoding()"-function -> with UTF-16 and UTF-32 support
-   *
-   * @param string $str
-   *
-   * @return bool|string false if we can't detect the string-encoding
-   */
-  public static function str_detect_encoding($str)
-  {
-    // init
-    $encoding = '';
-
-    // UTF-8
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    if (substr($str, 0, 3) == @pack('CCC', 0xef, 0xbb, 0xbf)) {
-      return 'UTF-8';
-    }
-
-    // UTF-16 (BE)
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    if (substr($str, 0, 2) == @pack('CC', 0xfe, 0xff)) {
-      return 'UTF-16BE';
-    }
-
-    // UTF-16 (LE)
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    if (substr($str, 0, 2) == @pack('CC', 0xff, 0xfe)) {
-      return 'UTF-16LE';
-    }
-
-    // UTF-32 (BE)
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    if (substr($str, 0, 4) == @pack('CC', 0x00, 0x00, 0xfe, 0xff)) {
-      return 'UTF-32BE';
-    }
-
-    // UTF-32 (LE)
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    if (substr($str, 0, 4) == @pack('CC', 0xff, 0xfe, 0x00, 0x00)) {
-      return 'UTF32LE';
-    }
-
-    if (!$encoding) {
-      self::checkForSupport();
-
-      // For UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always.
-      $detectOrder = array(
-          'UTF-8',
-          'windows-1251',
-          'ISO-8859-1',
-      );
-      $encoding = mb_detect_encoding($str, $detectOrder, true);
-    }
-
-    if (self::is_binary($str)) {
-      if (self::is_utf16($str) == 1) {
-        return 'UTF-16LE';
-      } else if (self::is_utf16($str) == 2) {
-        return 'UTF-16BE';
-      } else if (self::is_utf32($str) == 1) {
-        return 'UTF-32LE';
-      } else if (self::is_utf32($str) == 2) {
-        return 'UTF-32BE';
-      }
-    }
-
-    if (!$encoding) {
-      $encoding = false;
-    }
-
-    return $encoding;
-  }
-
-  /**
    * returns the Byte Order Mark Character
    *
    * @return   string Byte Order Mark
@@ -3037,23 +3087,6 @@ class UTF8
     }
 
     return 0;
-  }
-
-  /**
-   * returns count of characters used in a string
-   *
-   * @param    string $str The input string
-   *
-   * @return   array An associative array of Character as keys and
-   *           their count as values
-   */
-  public static function count_chars($str) //there is no $mode parameters
-  {
-    $array = array_count_values(self::split($str));
-
-    ksort($array);
-
-    return $array;
   }
 
   /**
