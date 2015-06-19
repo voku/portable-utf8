@@ -1579,7 +1579,7 @@ class UTF8
         )
     );
 
-    if (strpos($string, "\\u") !== false && !self::isJson($string)) {
+    if (strpos($string, "\\u") !== false && self::isJson($string) === false) {
       $string = json_decode('"' . $string . '"');
     }
 
@@ -2618,6 +2618,20 @@ class UTF8
   }
 
   /**
+   * json_encode
+   *
+   * @param string $value
+   * @param int    $options
+   * @param int    $depth
+   *
+   * @return mixed|string
+   */
+  public static function json_encode($value, $options = 0, $depth = 512)
+  {
+    return json_encode(self::filter($value), $options, $depth);
+  }
+
+  /**
    * json_decode
    *
    * @param      $json
@@ -2629,13 +2643,15 @@ class UTF8
    */
   public static function json_decode($json, $assoc = false, $depth = 512, $options = 0)
   {
+    $json = self::filter($json);
+
     if (PHP_VERSION_ID < 50400) {
       $json = json_decode($json, $assoc, $depth);
     } else {
       $json = json_decode($json, $assoc, $depth, $options);
     }
 
-    return self::filter($json);
+    return $json;
   }
 
   /**
