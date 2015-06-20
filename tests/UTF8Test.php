@@ -1415,6 +1415,20 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testChar()
+  {
+    $testArray = array(
+        '39' => '\'',
+        '40' => '(',
+        '41' => ')',
+        '42' => '*',
+    );
+
+    foreach ($testArray as $before => $after) {
+      self::assertEquals($after, UTF8::chr($before));
+    }
+  }
+
   public function testClean()
   {
     $examples = array(

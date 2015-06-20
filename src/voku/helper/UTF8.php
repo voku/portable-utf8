@@ -1745,6 +1745,10 @@ class UTF8
    */
   public static function html_entity_decode($string, $flags = null, $encoding = 'UTF-8')
   {
+    if (!isset($string[0])) {
+      return '';
+    }
+
     if (strpos($string, '&') === false) {
       return $string;
     }
@@ -1812,6 +1816,10 @@ class UTF8
         $v = self::to_utf8($v);
       }
 
+      return $text;
+    }
+
+    if (!isset($text[0])) {
       return $text;
     }
 
@@ -1883,7 +1891,7 @@ class UTF8
    */
   public static function isJson($string)
   {
-    if (!$string) {
+    if (!isset($string[0])) {
       return false;
     }
 
