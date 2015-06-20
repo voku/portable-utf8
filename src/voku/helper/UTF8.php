@@ -2630,10 +2630,10 @@ class UTF8
   {
     $value = self::filter($value);
 
-    if (PHP_VERSION_ID < 50500) {
-      $json = json_encode($value, $options);
-    } else {
+    if (Bootup::is_php('5.5')) {
       $json = json_encode($value, $options, $depth);
+    } else {
+      $json = json_encode($value, $options);
     }
 
     return $json;
@@ -2653,10 +2653,10 @@ class UTF8
   {
     $json = self::filter($json);
 
-    if (PHP_VERSION_ID < 50400) {
-      $json = json_decode($json, $assoc, $depth);
-    } else {
+    if (Bootup::is_php('5.4') === true) {
       $json = json_decode($json, $assoc, $depth, $options);
+    } else {
+      $json = json_decode($json, $assoc, $depth);
     }
 
     return $json;
@@ -4948,7 +4948,7 @@ class UTF8
    */
   public static function number_format($number, $decimals = 0, $dec_point = '.', $thousands_sep = ',')
   {
-    if (PHP_VERSION_ID < 50400) {
+    if (Bootup::is_php('5.4') === true) {
       if (isset($thousands_sep[1]) || isset($dec_point[1])) {
         return str_replace(
             array(
