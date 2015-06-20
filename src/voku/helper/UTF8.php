@@ -2628,7 +2628,15 @@ class UTF8
    */
   public static function json_encode($value, $options = 0, $depth = 512)
   {
-    return json_encode(self::filter($value), $options, $depth);
+    $value = self::filter($value);
+
+    if (PHP_VERSION_ID < 50500) {
+      $json = json_encode($value, $options);
+    } else {
+      $json = json_encode($value, $options, $depth);
+    }
+
+    return $json;
   }
 
   /**
