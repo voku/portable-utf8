@@ -366,7 +366,9 @@ class UTF8
 
       preg_match_all('/./u', $s, $s);
 
+      /** @noinspection AlterInForeachInspection */
       foreach ($s[0] as &$c) {
+
         if (!isset($c[1])) {
           continue;
         }
@@ -1936,83 +1938,86 @@ class UTF8
   }
 
   /**
-   * Reads entire file into a string
+   * Reads entire file into a string | !!! WARNING: do not use UTF-8 Option fir binary-files (e.g.: images)
    *
    * @link http://php.net/manual/en/function.file-get-contents.php
    *
-   * @param string   $filename <p>
-   *                           Name of the file to read.
-   *                           </p>
-   * @param int      $flags    [optional] <p>
-   *                           Prior to PHP 6, this parameter is called
-   *                           use_include_path and is a bool.
-   *                           As of PHP 5 the FILE_USE_INCLUDE_PATH can be used
-   *                           to trigger include path
-   *                           search.
-   *                           </p>
-   *                           <p>
-   *                           The value of flags can be any combination of
-   *                           the following flags (with some restrictions), joined with the
-   *                           binary OR (|)
-   *                           operator.
-   *                           </p>
-   *                           <p>
-   *                           <table>
-   *                           Available flags
-   *                           <tr valign="top">
-   *                           <td>Flag</td>
-   *                           <td>Description</td>
-   *                           </tr>
-   *                           <tr valign="top">
-   *                           <td>
-   *                           FILE_USE_INCLUDE_PATH
-   *                           </td>
-   *                           <td>
-   *                           Search for filename in the include directory.
-   *                           See include_path for more
-   *                           information.
-   *                           </td>
-   *                           </tr>
-   *                           <tr valign="top">
-   *                           <td>
-   *                           FILE_TEXT
-   *                           </td>
-   *                           <td>
-   *                           As of PHP 6, the default encoding of the read
-   *                           data is UTF-8. You can specify a different encoding by creating a
-   *                           custom context or by changing the default using
-   *                           stream_default_encoding. This flag cannot be
-   *                           used with FILE_BINARY.
-   *                           </td>
-   *                           </tr>
-   *                           <tr valign="top">
-   *                           <td>
-   *                           FILE_BINARY
-   *                           </td>
-   *                           <td>
-   *                           With this flag, the file is read in binary mode. This is the default
-   *                           setting and cannot be used with FILE_TEXT.
-   *                           </td>
-   *                           </tr>
-   *                           </table>
-   *                           </p>
-   * @param resource $context  [optional] <p>
-   *                           A valid context resource created with
-   *                           stream_context_create. If you don't need to use a
-   *                           custom context, you can skip this parameter by &null;.
-   *                           </p>
-   * @param int      $offset   [optional] <p>
-   *                           The offset where the reading starts.
-   *                           </p>
-   * @param int      $maxlen   [optional] <p>
-   *                           Maximum length of data read. The default is to read until end
-   *                           of file is reached.
-   *                           </p>
+   * @param string   $filename      <p>
+   *                                Name of the file to read.
+   *                                </p>
+   * @param int      $flags         [optional] <p>
+   *                                Prior to PHP 6, this parameter is called
+   *                                use_include_path and is a bool.
+   *                                As of PHP 5 the FILE_USE_INCLUDE_PATH can be used
+   *                                to trigger include path
+   *                                search.
+   *                                </p>
+   *                                <p>
+   *                                The value of flags can be any combination of
+   *                                the following flags (with some restrictions), joined with the
+   *                                binary OR (|)
+   *                                operator.
+   *                                </p>
+   *                                <p>
+   *                                <table>
+   *                                Available flags
+   *                                <tr valign="top">
+   *                                <td>Flag</td>
+   *                                <td>Description</td>
+   *                                </tr>
+   *                                <tr valign="top">
+   *                                <td>
+   *                                FILE_USE_INCLUDE_PATH
+   *                                </td>
+   *                                <td>
+   *                                Search for filename in the include directory.
+   *                                See include_path for more
+   *                                information.
+   *                                </td>
+   *                                </tr>
+   *                                <tr valign="top">
+   *                                <td>
+   *                                FILE_TEXT
+   *                                </td>
+   *                                <td>
+   *                                As of PHP 6, the default encoding of the read
+   *                                data is UTF-8. You can specify a different encoding by creating a
+   *                                custom context or by changing the default using
+   *                                stream_default_encoding. This flag cannot be
+   *                                used with FILE_BINARY.
+   *                                </td>
+   *                                </tr>
+   *                                <tr valign="top">
+   *                                <td>
+   *                                FILE_BINARY
+   *                                </td>
+   *                                <td>
+   *                                With this flag, the file is read in binary mode. This is the default
+   *                                setting and cannot be used with FILE_TEXT.
+   *                                </td>
+   *                                </tr>
+   *                                </table>
+   *                                </p>
+   * @param resource $context       [optional] <p>
+   *                                A valid context resource created with
+   *                                stream_context_create. If you don't need to use a
+   *                                custom context, you can skip this parameter by &null;.
+   *                                </p>
+   * @param int      $offset        [optional] <p>
+   *                                The offset where the reading starts.
+   *                                </p>
+   * @param int      $maxlen        [optional] <p>
+   *                                Maximum length of data read. The default is to read until end
+   *                                of file is reached.
+   *                                </p>
    * @param int      $timeout
+   *
+   * @param boolean  $convertToUtf8 WARNING: maybe you can't use this option for images or pdf, because they used non
+   *                                default utf-8 chars
    *
    * @return string The function returns the read data or false on failure.
    */
-  public static function file_get_contents($filename, $flags = null, $context = null, $offset = null, $maxlen = null, $timeout = 10)
+  public static function file_get_contents($filename, $flags = null, $context = null, $offset = null, $maxlen = null, $timeout = 10, $convertToUtf8 = true)
   {
     // init
     $timeout = (int)$timeout;
@@ -2040,15 +2045,19 @@ class UTF8
       return false;
     }
 
-    self::checkForSupport();
+    if ($convertToUtf8 === true) {
+      self::checkForSupport();
 
-    $encoding = self::str_detect_encoding($data);
-    if ($encoding != 'UTF-8') {
-      $data = mb_convert_encoding($data, 'UTF-8', $encoding);
+      $encoding = self::str_detect_encoding($data);
+      if ($encoding != 'UTF-8') {
+        $data = mb_convert_encoding($data, 'UTF-8', $encoding);
+      }
+
+      $data = self::cleanup($data);
     }
 
     // clean utf-8 string
-    return self::cleanup($data);
+    return $data;
   }
 
   /**
@@ -2429,12 +2438,14 @@ class UTF8
   {
     switch (gettype($var)) {
       case 'array':
-        foreach ($var as $k => &$v) {
-          $v = self::filter($v, $normalization_form, $leading_combining);
+        foreach ($var as $k => $v) {
+          /** @noinspection AlterInForeachInspection */
+          $var[$k] = self::filter($v, $normalization_form, $leading_combining);
         }
         break;
       case 'object':
-        foreach ($var as $k => &$v) {
+        foreach ($var as $k => $v) {
+          /** @noinspection AlterInForeachInspection */
           $var->$k = self::filter($v, $normalization_form, $leading_combining);
         }
         break;
@@ -2546,8 +2557,10 @@ class UTF8
   protected static function to_win1252($text)
   {
     if (is_array($text)) {
-      foreach ($text as $k => &$v) {
-        $v = self::to_win1252($v);
+
+      foreach ($text as $k => $v) {
+        /** @noinspection AlterInForeachInspection */
+        $text[$k] = self::to_win1252($v);
       }
 
       return $text;
@@ -3760,8 +3773,10 @@ class UTF8
   public static function fix_utf8($text)
   {
     if (is_array($text)) {
-      foreach ($text as $k => &$v) {
-        $v = self::fix_utf8($v);
+
+      foreach ($text as $k => $v) {
+        /** @noinspection AlterInForeachInspection */
+        $text[$k] = self::fix_utf8($v);
       }
 
       return $text;
@@ -5006,6 +5021,7 @@ class UTF8
   {
     $search = (array)$search;
 
+    /** @noinspection AlterInForeachInspection */
     foreach ($search as $i => &$s) {
       if ('' === $s .= '') {
         $s = '/^(?<=.)$/';

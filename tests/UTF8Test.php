@@ -970,18 +970,23 @@ class UTF8Test extends PHPUnit_Framework_TestCase
           $testString
       );
 
+      // text: with offset
       $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16le.txt', null, null, 5);
       self::assertContains('There are better connections.', $testString);
 
+      // text: with offset & max-length
       $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf8.txt', null, null, 7, 11);
       self::assertContains('Iñtërnât', $testString);
 
+      // text: with offset & max-length + timeout
       $testString = UTF8::file_get_contents(__DIR__ . '/test1Latin.txt', null, null, 7, 10, 15);
       self::assertContains('ñtërnâtiôn', $testString);
 
+      // text: with timeout
       $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, null, 7, null, 10);
       self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
+      // text: with max-length + timeout
       $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, null, null, 10, 10);
       self::assertContains('Hírek', $testString);
 
@@ -994,8 +999,27 @@ class UTF8Test extends PHPUnit_Framework_TestCase
           )
       );
 
+      // text: with max-length + timeout
       $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, $context, null, 10, 10);
       self::assertContains('Hírek', $testString);
+
+      // text: do not convert to utf-8 + timeout
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, $context, null, 10, 10, false);
+      self::assertRegExp('#H.*rek#', $testString);
+
+      // text: do not convert to utf-8 + timeout
+      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf8.txt', null, $context, null, 10, 10, false);
+      self::assertContains('Hírek', $testString);
+
+      // image: do not convert to utf-8 + timeout
+      $image = UTF8::file_get_contents(__DIR__ . '/test-image.png', null, $context, null, null, 10, false);
+      self::assertEquals(true, UTF8::is_binary($image));
+
+      // image: convert to utf-8 + timeout (ERROR)
+      $image2 = UTF8::file_get_contents(__DIR__ . '/test-image.png', null, $context, null, null, 10, true);
+      self::assertEquals(false, UTF8::is_binary($image2));
+
+      self::assertNotEquals($image2, $image);
     }
   }
 
@@ -1422,6 +1446,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         '40' => '(',
         '41' => ')',
         '42' => '*',
+        '160' => ' ',
     );
 
     foreach ($testArray as $before => $after) {
