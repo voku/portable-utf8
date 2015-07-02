@@ -3702,6 +3702,30 @@ class UTF8
   }
 
   /**
+   * Repeat a string
+   *
+   * @param string $input <p>
+   * The string to be repeated.
+   * </p>
+   * @param int $multiplier <p>
+   * Number of time the input string should be
+   * repeated.
+   * </p>
+   * <p>
+   * multiplier has to be greater than or equal to 0.
+   * If the multiplier is set to 0, the function
+   * will return an empty string.
+   * </p>
+   * @return string the repeated string.
+   */
+  public static function str_repeat($input, $multiplier)
+  {
+    $input = self::filter($input);
+
+    return str_repeat($input, $multiplier);
+  }
+
+  /**
    * removes duplicate occurrences of a string in another string
    *
    * @param    string       $str  The base string
