@@ -62,11 +62,17 @@ class Normalizer
       return true;
     }
 
-    if (self::NFC === $form && preg_match('//u', $str) && !preg_match('/[^\x00-\x{2FF}]/u', $str)) {
+    if (
+        self::NFC === $form
+        &&
+        preg_match('//u', $str)
+        &&
+        !preg_match('/[^\x00-\x{2FF}]/u', $str)
+    ) {
       return true;
     }
 
-    return false; // Pretend false as quick checks implementented in PHP won't be so quick
+    return false; // Pretend false as quick checks implemented in PHP won't be so quick
   }
 
   /**
@@ -209,7 +215,7 @@ class Normalizer
 
           if (isset($compMap[$last_uchr . $uchr]) && (!$last_ucls || $last_ucls < $ucls)) {
             $last_uchr = $compMap[$last_uchr . $uchr];
-          } else if ($last_ucls = $ucls) {
+          } else if ($last_ucls = $ucls) { // this isn't a typo
             $tail .= $uchr;
           } else {
             if ($tail) {
@@ -243,7 +249,9 @@ class Normalizer
       }
     }
 
-    return $result . $last_uchr . $tail;
+    $result = $result . $last_uchr . $tail;
+
+    return $result;
   }
 
   /**
@@ -262,10 +270,12 @@ class Normalizer
     $decompMap = self::$D;
     $combClass = self::$cC;
     $ulen_mask = self::$ulen_mask;
+
     if ($c) {
       $compatMap = self::$KD;
     }
 
+    // init
     $c = array();
     $i = 0;
     $len = strlen($s);
@@ -292,8 +302,15 @@ class Normalizer
           // Combining chars, for sorting
 
           isset($c[$combClass[$uchr]]) || $c[$combClass[$uchr]] = '';
-          $c[$combClass[$uchr]] .= isset($compatMap[$uchr]) ? $compatMap[$uchr] : (isset($decompMap[$uchr]) ? $decompMap[$uchr] : $uchr);
+
+          if (isset($compatMap[$uchr])) {
+            $c[$combClass[$uchr]] .= $compatMap[$uchr];
+          } else {
+            $c[$combClass[$uchr]] .= (isset($decompMap[$uchr]) ? $decompMap[$uchr] : $uchr);
+          }
+
         } else {
+
           if ($c) {
             ksort($c);
             $result .= implode('', $c);
@@ -303,7 +320,11 @@ class Normalizer
           if ($uchr < "\xEA\xB0\x80" || "\xED\x9E\xA3" < $uchr) {
             // Table lookup
 
-            $j = isset($compatMap[$uchr]) ? $compatMap[$uchr] : (isset($decompMap[$uchr]) ? $decompMap[$uchr] : $uchr);
+            if (isset($compatMap[$uchr])) {
+              $j = $compatMap[$uchr];
+            } else {
+              $j = (isset($decompMap[$uchr]) ? $decompMap[$uchr] : $uchr);
+            }
 
             if ($uchr != $j) {
               $uchr = $j;
@@ -330,21 +351,19 @@ class Normalizer
                 $uchr = substr($uchr, 0, $ulen);
               }
             }
+
           } else {
             // Hangul chars
 
             $uchr = unpack('C*', $uchr);
             $j = (($uchr[1] - 224) << 12) + (($uchr[2] - 128) << 6) + $uchr[3] - 0xAC80;
 
-            $uchr = "\xE1\x84" . chr(0x80 + (int)($j / 588))
-                    . "\xE1\x85" . chr(0xA1 + (int)(($j % 588) / 28));
+            $uchr = "\xE1\x84" . chr(0x80 + (int)($j / 588)) . "\xE1\x85" . chr(0xA1 + (int)(($j % 588) / 28));
 
             $j = $j % 28;
 
             if ($j) {
-              $uchr .= $j < 25
-                  ? ("\xE1\x86" . chr(0xA7 + $j))
-                  : ("\xE1\x87" . chr(0x67 + $j));
+              $uchr .= $j < 25 ? ("\xE1\x86" . chr(0xA7 + $j)) : ("\xE1\x87" . chr(0x67 + $j));
             }
           }
 
