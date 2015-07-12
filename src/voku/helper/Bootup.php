@@ -278,16 +278,11 @@ class Bootup
 
     if ($fp) {
 
-      if (self::is_php('5.4')) {
+      if (function_exists('stream_set_chunk_size')) {
         stream_set_chunk_size($fp, $length);
       }
 
-      if (self::is_php('5.3.3')) {
-        $streamset = stream_set_read_buffer($fp, 0);
-      } else {
-        $streamset = false;
-      }
-
+      $streamset = stream_set_read_buffer($fp, 0);
       if ($streamset === 0) {
         $remaining = $length;
         $buf = '';
