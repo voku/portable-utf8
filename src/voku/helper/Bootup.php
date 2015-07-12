@@ -146,7 +146,7 @@ class Bootup
         mb_language('uni');
       }
     } else if (!defined('MB_OVERLOAD_MAIL')) {
-      extension_loaded('iconv') or static::initIconv();
+      extension_loaded('iconv') or self::initIconv();
 
       require __DIR__ . '/bootup/mbstring.php';
     }
@@ -180,8 +180,8 @@ class Bootup
     define('GRAPHEME_CLUSTER_RX', PCRE_VERSION >= '8.32' ? '\X' : Intl::GRAPHEME_CLUSTER_RX);
 
     if (!extension_loaded('intl')) {
-      extension_loaded('iconv') or static::initIconv();
-      extension_loaded('mbstring') or static::initMbstring();
+      extension_loaded('iconv') or self::initIconv();
+      extension_loaded('mbstring') or self::initMbstring();
 
       require __DIR__ . '/bootup/intl.php';
     }
@@ -217,6 +217,8 @@ class Bootup
   /**
    * Get random bytes
    *
+   * @ref https://github.com/paragonie/random_compat/
+   *
    * @param  int $length Output length
    *
    * @return  string
@@ -225,28 +227,136 @@ class Bootup
   {
     if (!$length || !ctype_digit((string)$length)) {
       return false;
+    } else {
+      $length = (int)$length;
     }
 
     // Unfortunately, none of the following PRNGs is guaranteed to exist ...
 
-    if (defined('MCRYPT_DEV_URANDOM') && ($output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)) !== false) {
-      return $output;
-    }
+    if (defined(MCRYPT_DEV_URANDOM) === true) {
+      $output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
 
-    if (is_readable('/dev/urandom') && ($fp = fopen('/dev/urandom', 'rb')) !== false) {
-      // try not to waste entropy ...
-      Bootup::is_php('5.4') && stream_set_chunk_size($fp, $length);
-      $output = fread($fp, $length);
-      fclose($fp);
-      if ($output !== false) {
+      if (
+          $output !== false
+          &&
+          UTF8::strlen($output, '8bit') === $length
+      ) {
         return $output;
       }
     }
 
+    /**
+     * Use "/dev/arandom" or "/dev/urandom" for random numbers
+     *
+     * @ref http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers
+     */
+
+    $fp = false;
+    static $_urandom = null;
+
+    $_urandom = ($_urandom === null ? is_readable('/dev/urandom') : false);
+    $arandom = ($_urandom === false ? is_readable('/dev/arandom') : false);
+
+    if (
+        (
+            $_urandom
+            ||
+            $arandom
+
+        )
+        &&
+        !ini_get('open_basedir')
+    ) {
+
+      if ($_urandom) {
+        $fp = fopen('/dev/urandom', 'rb');
+      } else {
+        $fp = fopen('/dev/arandom', 'rb');
+      }
+
+    }
+
+    if ($fp) {
+
+      if (self::is_php('5.4')) {
+        stream_set_chunk_size($fp, $length);
+      }
+
+      if (self::is_php('5.3.3')) {
+        $streamset = stream_set_read_buffer($fp, 0);
+      } else {
+        $streamset = false;
+      }
+
+      if ($streamset === 0) {
+        $remaining = $length;
+        $buf = '';
+        do {
+          $read = fread($fp, $remaining);
+
+          // we can't safely read from "urandom", so break here
+          if ($read === false) {
+            $buf = false;
+            break;
+          }
+
+          // decrease the number of bytes returned from remaining
+          $remaining -= UTF8::strlen($read, '8bit');
+          $buf .= $read;
+
+        } while ($remaining > 0);
+
+        fclose($fp);
+
+        if ($buf !== false) {
+          if (UTF8::strlen($buf, '8bit') === $length) {
+            return $buf;
+          }
+        }
+
+      }
+    }
+
+    /*
+     * PHP can be used to access COM objects on Windows platforms
+     *
+     * @ref http://php.net/manual/en/ref.com.php
+     */
+    if (extension_loaded('com_dotnet') && class_exists('COM') === true) {
+      // init
+      $buf = '';
+
+      /** @noinspection PhpUndefinedClassInspection */
+      $util = new COM('CAPICOM.Utilities.1');
+
+      /**
+       * Let's not let it loop forever. If we run N times and fail to
+       * get N bytes of random data, then CAPICOM has failed us.
+       */
+      $execCount = 0;
+
+      do {
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $buf .= base64_decode($util->GetRandom($length, 0));
+        if (UTF8::strlen($buf, '8bit') >= $length) {
+          return UTF8::substr($buf, 0, $length);
+        }
+
+        ++$execCount;
+
+      } while ($execCount < $length);
+    }
+
+    /**
+     * fallback to "openssl_random_pseudo_bytes()"
+     */
     if (function_exists('openssl_random_pseudo_bytes')) {
       $output = openssl_random_pseudo_bytes($length, $strong);
-      if ($strong === true) {
-        return $output;
+      if ($output !== false && $strong === true) {
+        if (UTF8::strlen($output, '8bit') === $length) {
+          return $output;
+        }
       }
     }
 
@@ -360,7 +470,7 @@ class Bootup
         if (is_array($s)) {
           $a[$len++] =& $r;
         } else {
-          $r = static::filterString($s, $normalization_form, $leading_combining);
+          $r = self::filterString($s, $normalization_form, $leading_combining);
         }
       }
 
