@@ -14,6 +14,10 @@
   "license": "CC-BY-3.0",
   "authors": [
     {
+      "name": "Nicolas Grekas",
+      "email": "p@tchwork.com"
+    },
+    {
       "name": "Hamid Sarfraz",
       "homepage": "http://pageconfig.com/"
     },
@@ -35,9 +39,11 @@
     "ext-mbstring": "Use Mbstring for best performance"
   },
   "autoload": {
-    "psr-0": {
-      "voku": "src",
-      "Normalizer": "src"
-    }
+    "psr-4": {
+      "voku\\": "src/voku/"
+    },
+    "classmap": [
+      "src/Normalizer.php"
+    ]
   }
 }

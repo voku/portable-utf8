@@ -11,10 +11,12 @@ class ShimXmlTest extends PHPUnit_Framework_TestCase
   {
     $s = array_map('chr', range(0, 255));
     $s = implode('', $s);
-    $e = p::utf8_encode($s) . 'Σ어';
+    $e = p::utf8_encode($s);
 
     self::assertSame(utf8_encode($s), p::utf8_encode($s));
     self::assertSame(utf8_decode($e), p::utf8_decode($e));
+
+    self::assertSame('??', p::utf8_decode('Σ어'));
 
     $s = 444;
 

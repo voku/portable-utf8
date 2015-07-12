@@ -96,6 +96,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     self::assertSame(3, mb_strripos('DÉJÀ', 'à'));
     self::assertSame(1, mb_stripos('aςσb', 'ΣΣ'));
     self::assertSame(1, mb_strripos('aςσb', 'ΣΣ'));
+    self::assertSame(3, mb_strrpos('ababab', 'b', -2));
 
     /** @noinspection PhpUsageOfSilenceOperatorInspection */
     self::assertSame(false, @p::mb_strpos('abc', ''));
@@ -110,6 +111,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     self::assertSame(3, p::mb_strripos('DÉJÀ', 'à'));
     self::assertSame(1, p::mb_stripos('aςσb', 'ΣΣ'));
     self::assertSame(1, p::mb_strripos('aςσb', 'ΣΣ'));
+    self::assertSame(3, p::mb_strrpos('ababab', 'b', -2));
   }
 
   /**
