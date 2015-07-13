@@ -282,8 +282,12 @@ class Bootup
         stream_set_chunk_size($fp, $length);
       }
 
-      $streamset = stream_set_read_buffer($fp, 0);
-      if ($streamset === 0) {
+      $streamSet = 0;
+      if (function_exists('stream_set_read_buffer')) {
+        $streamSet = stream_set_read_buffer($fp, 0);
+      }
+
+      if ($streamSet === 0) {
         $remaining = $length;
         $buf = '';
         do {
