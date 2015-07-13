@@ -1575,11 +1575,13 @@ class UTF8
 
     $string = preg_replace("/%u([0-9a-f]{3,4})/i", "&#x\\1;", urldecode($string));
 
+    $flags = Bootup::is_php('5.4') ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
+
     $string = self::fix_simple_utf8(
         rawurldecode(
             self::html_entity_decode(
                 self::toUTF8($string),
-                ENT_QUOTES | ENT_HTML5
+                $flags
             )
         )
     );
