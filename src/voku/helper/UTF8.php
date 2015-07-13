@@ -1266,7 +1266,9 @@ class UTF8
       }
 
       preg_match_all('/./us', $str, $retArray);
-      $ret = $retArray[0];
+      if (isset($retArray[0])) {
+        $ret = $retArray[0];
+      }
       unset($retArray);
 
     } else {
@@ -2327,8 +2329,7 @@ class UTF8
       $fp = fopen($file, 'r');
       $block = fread($fp, 512);
       fclose($fp);
-    }
-    catch (\Exception $e) {
+    } catch (\Exception $e) {
       $block = "";
     }
 
@@ -3704,18 +3705,19 @@ class UTF8
   /**
    * Repeat a string
    *
-   * @param string $input <p>
-   * The string to be repeated.
-   * </p>
-   * @param int $multiplier <p>
-   * Number of time the input string should be
-   * repeated.
-   * </p>
-   * <p>
-   * multiplier has to be greater than or equal to 0.
-   * If the multiplier is set to 0, the function
-   * will return an empty string.
-   * </p>
+   * @param string $input      <p>
+   *                           The string to be repeated.
+   *                           </p>
+   * @param int    $multiplier <p>
+   *                           Number of time the input string should be
+   *                           repeated.
+   *                           </p>
+   *                           <p>
+   *                           multiplier has to be greater than or equal to 0.
+   *                           If the multiplier is set to 0, the function
+   *                           will return an empty string.
+   *                           </p>
+   *
    * @return string the repeated string.
    */
   public static function str_repeat($input, $multiplier)
@@ -5271,26 +5273,29 @@ class UTF8
   /**
    * Parses the string into variables
    *
+   * WARNING: This differs from parse_str() by returning the results
+   *    instead of placing them in the local scope!
+   *
    * @link http://php.net/manual/en/function.parse-str.php
    *
    * @param string $str     <p>
    *                        The input string.
    *                        </p>
-   * @param array  $arr     <p>
+   * @param array  $result  <p>
    *                        If the second parameter arr is present,
    *                        variables are stored in this variable as array elements instead.
    *                        </p>
    *
    * @return void
    */
-  public static function parse_str($str, &$arr)
+  public static function parse_str($str, &$result)
   {
     // init
     self::checkForSupport();
 
     $str = self::filter($str);
 
-    mb_parse_str($str, $arr);
+    mb_parse_str($str, $result);
   }
 
   /**
