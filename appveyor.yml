@@ -32,5 +32,5 @@ test_script:
   - cd C:\projects\utf8
   - php.exe --version
   - dir
-  - vendor\bin\phpunit.bat
-  - vendor\bin\coveralls.bat
+  - php vendor\bin\phpunit -c phpunit.xml
+  - php vendor\bin\coveralls -v
