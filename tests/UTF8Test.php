@@ -300,7 +300,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     // WARNING: HipHop error // "ENT_COMPAT" isn't working
     if (!defined('HHVM_VERSION')) {
       foreach ($testArray as $before => $after) {
-        self::assertEquals($after, UTF8::html_entity_decode($before, ENT_COMPAT | ENT_HTML5), 'error by ' . $before);
+        self::assertEquals($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
       }
     }
   }
@@ -330,7 +330,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'error by ' . $before);
+      self::assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
     }
   }
 
