@@ -1578,7 +1578,8 @@ class UTF8
     $string = self::fix_simple_utf8(
         rawurldecode(
             self::html_entity_decode(
-                self::toUTF8($string)
+                self::toUTF8($string),
+                ENT_QUOTES | ENT_HTML5
             )
         )
     );
