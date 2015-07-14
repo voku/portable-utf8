@@ -8,7 +8,7 @@ use voku\helper\UTF8;
  */
 class BootupTest extends PHPUnit_Framework_TestCase
 {
-  function testFilterRequestInputs()
+  public function testFilterRequestInputs()
   {
     UTF8::checkForSupport();
 
@@ -85,7 +85,7 @@ class BootupTest extends PHPUnit_Framework_TestCase
     list($_GET, $_POST, $_COOKIE, $_REQUEST, $_ENV, $_FILES) = $bak;
   }
 
-  function testFilterRequestUri()
+  public function testFilterRequestUri()
   {
     $uriA = '/' . urlencode("bàr");
     $uriB = '/' . urlencode(utf8_decode("bàr"));
@@ -105,7 +105,7 @@ class BootupTest extends PHPUnit_Framework_TestCase
     self::assertSame($uriD, $u);
   }
 
-  function testGetRandomBytes()
+  public function testGetRandomBytes()
   {
     $rand_false = Bootup::get_random_bytes(0);
     self::assertEquals(false, $rand_false);
@@ -115,5 +115,29 @@ class BootupTest extends PHPUnit_Framework_TestCase
 
     $rand = Bootup::get_random_bytes(32);
     self::assertEquals(32, strlen($rand));
+  }
+
+  public function testIsPhp()
+  {
+    $isPHP = Bootup::is_php('0.1');
+    self::assertEquals(true, $isPHP);
+
+    $isPHP = Bootup::is_php('999');
+    self::assertEquals(false, $isPHP);
+
+    if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION <= 5) {
+      $isPHP = Bootup::is_php('7');
+      self::assertEquals(false, $isPHP);
+    }
+
+    if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION >= 5) {
+      $isPHP = Bootup::is_php('5.0');
+      self::assertEquals(true, $isPHP);
+    }
+
+    if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION >= 7) {
+      $isPHP = Bootup::is_php('7');
+      self::assertEquals(true, $isPHP);
+    }
   }
 }

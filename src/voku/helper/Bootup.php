@@ -225,141 +225,172 @@ class Bootup
    */
   public static function get_random_bytes($length)
   {
-    if (!$length || !ctype_digit((string)$length)) {
-      return false;
-    } else {
-      $length = (int)$length;
-    }
-
-    // Unfortunately, none of the following PRNGs is guaranteed to exist ...
-
-    if (defined(MCRYPT_DEV_URANDOM) === true) {
-      $output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
-
-      if (
-          $output !== false
-          &&
-          UTF8::strlen($output, '8bit') === $length
-      ) {
-        return $output;
-      }
-    }
-
-    /**
-     * Use "/dev/arandom" or "/dev/urandom" for random numbers
-     *
-     * @ref http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers
-     */
-
-    $fp = false;
-    static $_urandom = null;
-
-    $_urandom = ($_urandom === null ? is_readable('/dev/urandom') : false);
-    $arandom = ($_urandom === false ? is_readable('/dev/arandom') : false);
-
-    if (
-        (
-            $_urandom
-            ||
-            $arandom
-
-        )
-        &&
-        !ini_get('open_basedir')
-    ) {
-
-      if ($_urandom) {
-        $fp = fopen('/dev/urandom', 'rb');
-      } else {
-        $fp = fopen('/dev/arandom', 'rb');
-      }
-
-    }
-
-    if ($fp) {
-
-      if (function_exists('stream_set_chunk_size')) {
-        stream_set_chunk_size($fp, $length);
-      }
-
-      $streamSet = 0;
-      if (function_exists('stream_set_read_buffer')) {
-        $streamSet = stream_set_read_buffer($fp, 0);
-      }
-
-      if ($streamSet === 0) {
-        $remaining = $length;
-        $buf = '';
-        do {
-          $read = fread($fp, $remaining);
-
-          // we can't safely read from "urandom", so break here
-          if ($read === false) {
-            $buf = false;
-            break;
-          }
-
-          // decrease the number of bytes returned from remaining
-          $remaining -= UTF8::strlen($read, '8bit');
-          $buf .= $read;
-
-        } while ($remaining > 0);
-
-        fclose($fp);
-
-        if ($buf !== false) {
-          if (UTF8::strlen($buf, '8bit') === $length) {
-            return $buf;
-          }
-        }
-
-      }
-    }
-
-    /*
-     * PHP can be used to access COM objects on Windows platforms
-     *
-     * @ref http://php.net/manual/en/ref.com.php
-     */
-    if (extension_loaded('com_dotnet') && class_exists('COM') === true) {
-      // init
-      $buf = '';
-
-      /** @noinspection PhpUndefinedClassInspection */
-      $util = new COM('CAPICOM.Utilities.1');
+    if (function_exists('random_bytes') && self::is_php('7.0')) {
 
       /**
-       * Let's not let it loop forever. If we run N times and fail to
-       * get N bytes of random data, then CAPICOM has failed us.
+       * PHP 7 -> http://php.net/manual/de/function.random-bytes.php
        */
-      $execCount = 0;
 
-      do {
+      return random_bytes($length);
+    } else {
 
-        /** @noinspection PhpUndefinedMethodInspection */
-        $buf .= base64_decode($util->GetRandom($length, 0));
-        if (UTF8::strlen($buf, '8bit') >= $length) {
-          return UTF8::substr($buf, 0, $length);
-        }
+      /**
+       * PHP 5.2.0 - 5.6.x way to implement random_bytes()
+       *
+       * // WARNING: Unfortunately, none of the following PRNGs is guaranteed to exist ...
+       *
+       * In order of preference:
+       *   1. PHP-Module:   "mcrypt" via mcrypt_create_iv()
+       *   2. BSD:          "/dev/arandom" via fread()
+       *   3. Linux:        "/dev/urandom" via fread()
+       *   4. Windows:      COM('CAPICOM.Utilities.1')->GetRandom()
+       *   5. PHP+OpenSSL:  openssl_random_pseudo_bytes()
+       */
 
-        ++$execCount;
+      if (!$length || !ctype_digit((string)$length)) {
+        return false;
+      } else {
+        $length = (int)$length;
+      }
 
-      } while ($execCount < $length);
-    }
+      /**
+       * 1. PHP-Module
+       */
 
-    /**
-     * fallback to "openssl_random_pseudo_bytes()"
-     */
-    if (function_exists('openssl_random_pseudo_bytes')) {
-      $output = openssl_random_pseudo_bytes($length, $strong);
-      if ($output !== false && $strong === true) {
-        if (UTF8::strlen($output, '8bit') === $length) {
+      if (extension_loaded('mcrypt') && defined(MCRYPT_DEV_URANDOM) === true) {
+        $output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+
+        if (
+            $output !== false
+            &&
+            UTF8::strlen($output, '8bit') === $length
+        ) {
           return $output;
         }
       }
-    }
 
-    return false;
+      /**
+       * 2. BSD
+       * 3. Linux
+       *
+       * @ref http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers
+       */
+
+      static $_arandom = null;
+      static $_urandom = null;
+
+      $_arandom = ($_urandom === null ? is_readable('/dev/arandom') : false);
+      $_urandom = ($_urandom === null ? is_readable('/dev/urandom') : false);
+
+      if (
+          (
+              $_urandom
+              ||
+              $_arandom
+
+          )
+          &&
+          !ini_get('open_basedir')
+      ) {
+
+        $fp = false;
+        if ($_arandom) {
+          $fp = fopen('/dev/arandom', 'rb');
+        } else if ($_urandom) {
+          $fp = fopen('/dev/urandom', 'rb');
+        }
+
+      }
+
+      if (isset($fp) && $fp !== false) {
+
+        if (function_exists('stream_set_chunk_size')) {
+          stream_set_chunk_size($fp, $length);
+        }
+
+        $streamSet = 0;
+        if (function_exists('stream_set_read_buffer')) {
+          $streamSet = stream_set_read_buffer($fp, 0);
+        }
+
+        if ($streamSet === 0) {
+          $remaining = $length;
+          $buf = '';
+          do {
+            $read = fread($fp, $remaining);
+
+            // we can't safely read from "urandom", so break here
+            if ($read === false) {
+              $buf = false;
+              break;
+            }
+
+            // decrease the number of bytes returned from remaining
+            $remaining -= UTF8::strlen($read, '8bit');
+            $buf .= $read;
+
+          } while ($remaining > 0);
+
+          fclose($fp);
+
+          if ($buf !== false) {
+            if (UTF8::strlen($buf, '8bit') === $length) {
+              return $buf;
+            }
+          }
+
+        }
+      }
+
+      /*
+       * 4. Windows
+       *
+       * PHP can be used to access COM objects on Windows platforms
+       *
+       * @ref http://php.net/manual/en/ref.com.php
+       */
+      if (extension_loaded('com_dotnet') && class_exists('COM') === true) {
+        // init
+        $buf = '';
+
+        /** @noinspection PhpUndefinedClassInspection */
+        $util = new COM('CAPICOM.Utilities.1');
+
+        /**
+         * Let's not let it loop forever. If we run N times and fail to
+         * get N bytes of random data, then CAPICOM has failed us.
+         */
+        $execCount = 0;
+
+        do {
+
+          /** @noinspection PhpUndefinedMethodInspection */
+          $buf .= base64_decode($util->GetRandom($length, 0));
+          if (UTF8::strlen($buf, '8bit') >= $length) {
+            return UTF8::substr($buf, 0, $length);
+          }
+
+          ++$execCount;
+
+        } while ($execCount < $length);
+      }
+
+      /**
+       * 5. PHP + OpenSSL
+       *
+       * fallback to "openssl_random_pseudo_bytes()"
+       */
+      if (function_exists('openssl_random_pseudo_bytes')) {
+        $output = openssl_random_pseudo_bytes($length, $strong);
+        if ($output !== false && $strong === true) {
+          if (UTF8::strlen($output, '8bit') === $length) {
+            return $output;
+          }
+        }
+      }
+
+      return false;
+    }
   }
 
   /**
