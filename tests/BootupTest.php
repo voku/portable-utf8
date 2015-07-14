@@ -115,6 +115,23 @@ class BootupTest extends PHPUnit_Framework_TestCase
 
     $rand = Bootup::get_random_bytes(32);
     self::assertEquals(32, strlen($rand));
+
+    $rand = Bootup::get_random_bytes(0);
+    self::assertEquals(0, strlen($rand));
+
+    $bytes = array(
+        Bootup::get_random_bytes(12),
+        Bootup::get_random_bytes(16),
+        Bootup::get_random_bytes(16)
+    );
+
+    self::assertTrue(
+        strlen(bin2hex($bytes[0])) === 24
+    );
+
+    self::assertFalse(
+        $bytes[1] === $bytes[2]
+    );
   }
 
   public function testIsPhp()

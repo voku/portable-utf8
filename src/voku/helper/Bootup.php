@@ -221,17 +221,30 @@ class Bootup
    *
    * @param  int $length Output length
    *
-   * @return  string
+   * @return  string|false false on error
    */
   public static function get_random_bytes($length)
   {
+    if (!$length || !ctype_digit((string)$length)) {
+      return false;
+    } else {
+      $length = (int)$length;
+    }
+
     if (function_exists('random_bytes') && self::is_php('7.0')) {
 
       /**
        * PHP 7 -> http://php.net/manual/de/function.random-bytes.php
        */
 
-      return random_bytes($length);
+      try {
+        $return = random_bytes($length);
+      } catch (\Exception $e) {
+        $return = false;
+      }
+
+      return $return;
+
     } else {
 
       /**
@@ -246,12 +259,6 @@ class Bootup
        *   4. Windows:      COM('CAPICOM.Utilities.1')->GetRandom()
        *   5. PHP+OpenSSL:  openssl_random_pseudo_bytes()
        */
-
-      if (!$length || !ctype_digit((string)$length)) {
-        return false;
-      } else {
-        $length = (int)$length;
-      }
 
       /**
        * 1. PHP-Module
