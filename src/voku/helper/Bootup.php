@@ -283,69 +283,64 @@ class Bootup
        * @ref http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers
        */
 
-      static $_arandom = null;
-      static $_urandom = null;
+      if (!ini_get('open_basedir')) {
 
-      $_arandom = ($_urandom === null ? is_readable('/dev/arandom') : false);
-      $_urandom = ($_urandom === null ? is_readable('/dev/urandom') : false);
+        static $_arandom = null;
+        static $_urandom = null;
 
-      if (
-          (
-              $_urandom
-              ||
-              $_arandom
+        $_arandom = ($_arandom === null ? is_readable('/dev/arandom') : false);
+        $_urandom = ($_urandom === null ? is_readable('/dev/urandom') : false);
 
-          )
-          &&
-          !ini_get('open_basedir')
-      ) {
 
-        $fp = false;
-        if ($_arandom) {
-          $fp = fopen('/dev/arandom', 'rb');
-        } else if ($_urandom) {
-          $fp = fopen('/dev/urandom', 'rb');
-        }
+        if ($_urandom || $_arandom) {
 
-      }
-
-      if (isset($fp) && $fp !== false) {
-
-        if (function_exists('stream_set_chunk_size')) {
-          stream_set_chunk_size($fp, $length);
-        }
-
-        $streamSet = 0;
-        if (function_exists('stream_set_read_buffer')) {
-          $streamSet = stream_set_read_buffer($fp, 0);
-        }
-
-        if ($streamSet === 0) {
-          $remaining = $length;
-          $buf = '';
-          do {
-            $read = fread($fp, $remaining);
-
-            // we can't safely read from "urandom", so break here
-            if ($read === false) {
-              $buf = false;
-              break;
-            }
-
-            // decrease the number of bytes returned from remaining
-            $remaining -= UTF8::strlen($read, '8bit');
-            $buf .= $read;
-
-          } while ($remaining > 0);
-
-          fclose($fp);
-
-          if ($buf !== false) {
-            if (UTF8::strlen($buf, '8bit') === $length) {
-              return $buf;
-            }
+          $fp = false;
+          if ($_arandom) {
+            $fp = fopen('/dev/arandom', 'rb');
+          } else if ($_urandom) {
+            $fp = fopen('/dev/urandom', 'rb');
           }
 
+        }
+
+        if (isset($fp) && $fp !== false) {
+
+          if (function_exists('stream_set_chunk_size')) {
+            stream_set_chunk_size($fp, $length);
+          }
+
+          $streamSet = 0;
+          if (function_exists('stream_set_read_buffer')) {
+            $streamSet = stream_set_read_buffer($fp, 0);
+          }
+
+          if ($streamSet === 0) {
+            $remaining = $length;
+            $buf = '';
+            do {
+              $read = fread($fp, $remaining);
+
+              // we can't safely read from "urandom", so break here
+              if ($read === false) {
+                $buf = false;
+                break;
+              }
+
+              // decrease the number of bytes returned from remaining
+              $remaining -= UTF8::strlen($read, '8bit');
+              $buf .= $read;
+
+            } while ($remaining > 0);
+
+            fclose($fp);
+
+            if ($buf !== false) {
+              if (UTF8::strlen($buf, '8bit') === $length) {
+                return $buf;
+              }
+            }
+
+          }
         }
       }
 
