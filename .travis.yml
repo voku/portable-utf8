@@ -13,7 +13,13 @@ php:
 
 before_script:
   - php --version
+  - echo "php-config -> orig"
+  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - sed -i.bkp "s/^extension\ =\ mbstring.so$/#extension = mbstring.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sed -i.bkp "s/^extension\ =\ intl.so$/#extension = intl.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sed -i.bkp "s/^extension\ =\ iconv.so$/#extension = iconv.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "php-config -> new"
+  - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - wget https://scrutinizer-ci.com/ocular.phar
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source
