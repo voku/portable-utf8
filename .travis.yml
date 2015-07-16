@@ -13,7 +13,7 @@ php:
 
 before_script:
   - php --version
-  . mkdir -p $(dirname ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini)
+  - mkdir -p $(dirname ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini)
   - touch ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "php-config -> orig"
   - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
