@@ -13,6 +13,7 @@ php:
 
 before_script:
   - php --version
+  - touch ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "php-config -> orig"
   - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - sed -i.bkp "s/^extension\ =\ mbstring.so$/#extension = mbstring.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
