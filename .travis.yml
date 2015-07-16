@@ -12,6 +12,8 @@ php:
   - hhvm-nightly
 
 before_script:
+  - php --version
+  - phpenv config-rm mbstring.ini
   - wget https://scrutinizer-ci.com/ocular.phar
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source
