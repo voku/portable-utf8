@@ -157,6 +157,12 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       self::assertEquals($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
+
+    $conter = 0;
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::isUtf8($actual), 'error by - ' . $conter . ' :' . $actual);
+      $conter++;
+    }
   }
 
   public function testCountChars()
@@ -234,6 +240,10 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $actual => $expected) {
       self::assertEquals($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
+    }
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::isAscii($actual), 'error by ' . $actual);
     }
   }
 
@@ -1265,7 +1275,97 @@ class UTF8Test extends PHPUnit_Framework_TestCase
    */
   public function testTrim($input, $output)
   {
-    self::assertEquals($output, UTF8::trim($input));
+    for ($i = 0; $i <= 100; $i++) {
+      self::assertEquals($output, UTF8::trim($input));
+    }
+  }
+
+  /**
+   * @dataProvider trimProviderAdvancedWithMoreThenTwoBytes
+   *
+   * @param $input
+   * @param $output
+   */
+  public function testTrimAdvancedWithMoreThenTwoBytes($input, $output)
+  {
+    self::assertEquals($output, UTF8::trim($input, '白'));
+  }
+
+  /**
+   * @return array
+   */
+  public function trimProviderAdvancedWithMoreThenTwoBytes()
+  {
+    return array(
+        array(
+            '  ',
+            '  ',
+        ),
+        array(
+            '',
+            '',
+        ),
+        array(
+            '白',
+            '',
+        ),
+        array(
+            '白白',
+            '',
+        ),
+        array(
+            '　中文空白',
+            '　中文空',
+        ),
+        array(
+            'do not go gentle into that good night',
+            'do not go gentle into that good night',
+        ),
+    );
+  }
+
+  /**
+   * @dataProvider trimProviderAdvanced
+   *
+   * @param $input
+   * @param $output
+   */
+  public function testTrimAdvanced($input, $output)
+  {
+    self::assertEquals($output, UTF8::trim($input, ' '));
+  }
+
+  /**
+   * @return array
+   */
+  public function trimProviderAdvanced()
+  {
+    return array(
+        array(
+            '  ',
+            '',
+        ),
+        array(
+            '',
+            '',
+        ),
+        array(
+            ' 白 ',
+            '白',
+        ),
+        array(
+            '   白白 ',
+            '白白',
+        ),
+        array(
+            '　中文空白',
+            '　中文空白',
+        ),
+        array(
+            'do not go gentle into that good night',
+            'do not go gentle into that good night',
+        ),
+    );
   }
 
   /**

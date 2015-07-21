@@ -1318,14 +1318,22 @@ class UTF8
   /**
    * rxClass
    *
-   * @param        string $s
-   * @param string        $class
+   * @param string $s
+   * @param string $class
    *
    * @return string
    */
   protected static function rxClass($s, $class = '')
   {
+    static $rxClassCache = array();
+    $cacheKey = $s . $class;
+
+    if (isset($rxClassCache[$cacheKey])) {
+      return $rxClassCache[$cacheKey];
+    }
+
     $class = array($class);
+
     foreach (self::str_split($s) as $s) {
       if ('-' === $s) {
         $class[0] = '-' . $class[0];
@@ -1337,12 +1345,17 @@ class UTF8
         $class[] = $s;
       }
     }
+
     $class[0] = '[' . $class[0] . ']';
+
     if (1 === count($class)) {
-      return $class[0];
+      $return = $class[0];
     } else {
-      return '(?:' . implode('|', $class) . ')';
+      $return = '(?:' . implode('|', $class) . ')';
     }
+
+    $rxClassCache[$cacheKey] = $return;
+    return $return;
   }
 
   /**
@@ -2796,6 +2809,11 @@ class UTF8
   /**
    * generates an array of byte length of each character of a Unicode string.
    *
+   * 1 byte => U+0000  - U+007F
+   * 2 byte => U+0080  - U+07FF
+   * 3 byte => U+0800  - U+FFFF
+   * 4 byte => U+10000 - U+10FFFF
+   *
    * @param    string $str The original Unicode string
    *
    * @return   array An array of byte lengths of each character.
@@ -3299,7 +3317,10 @@ class UTF8
   /**
    * strip whitespace or other characters from beginning or end of a UTF-8 string
    *
-   * WARNING: this is much slower then "trim()" !!!!
+   * INFO: this is slower then "trim()"
+   *
+   * But we can only use the original-function, if we use <= 7-Bit in the string / chars
+   * but the check for ACSII (7-Bit) cost more time, then we can safe here.
    *
    * @param    string $string The string to be trimmed
    * @param    string $chars  Optional characters to be stripped
@@ -3308,8 +3329,12 @@ class UTF8
    */
   public static function trim($string = '', $chars = INF)
   {
+    if (!isset($string[0])) {
+      return '';
+    }
+
+    // Info: http://nadeausoftware.com/articles/2007/9/php_tip_how_strip_punctuation_characters_web_page#Unicodecharactercategories
     if ($chars === INF || !$chars) {
-      // Info: http://nadeausoftware.com/articles/2007/9/php_tip_how_strip_punctuation_characters_web_page#Unicodecharactercategories
       return preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $string);
     }
 
@@ -3328,6 +3353,10 @@ class UTF8
    */
   public static function rtrim($string = '', $chars = INF)
   {
+    if (!isset($string[0])) {
+      return '';
+    }
+
     $chars = INF === $chars ? '\s' : self::rxClass($chars);
 
     return preg_replace("/{$chars}+$/u", '', $string);
@@ -3345,6 +3374,10 @@ class UTF8
    */
   public static function ltrim($string = '', $chars = INF)
   {
+    if (!isset($string[0])) {
+      return '';
+    }
+
     $chars = INF === $chars ? '\s' : self::rxClass($chars);
 
     return preg_replace("/^{$chars}+/u", '', $string);
@@ -3437,7 +3470,7 @@ class UTF8
    */
   public static function isAscii($str)
   {
-    return self::isAscii($str);
+    return self::is_ascii($str);
   }
 
   /**
@@ -5027,16 +5060,31 @@ class UTF8
   }
 
   /**
-   * str_replace
-   *
    * INFO: this is only a wrapper for "str_replace()"  -> the original functions is already UTF-8 safe
    *
-   * @param      $search
-   * @param      $replace
-   * @param      $subject
-   * @param null $count
-   *
-   * @return mixed
+   * (PHP 4, PHP 5)<br/>
+   * Replace all occurrences of the search string with the replacement string
+   * @link http://php.net/manual/en/function.str-replace.php
+   * @param mixed $search <p>
+   * The value being searched for, otherwise known as the needle.
+   * An array may be used to designate multiple needles.
+   * </p>
+   * @param mixed $replace <p>
+   * The replacement value that replaces found search
+   * values. An array may be used to designate multiple replacements.
+   * </p>
+   * @param mixed $subject <p>
+   * The string or array being searched and replaced on,
+   * otherwise known as the haystack.
+   * </p>
+   * <p>
+   * If subject is an array, then the search and
+   * replace is performed with every entry of
+   * subject, and the return value is an array as
+   * well.
+   * </p>
+   * @param int $count [optional] If passed, this will hold the number of matched and replaced needles.
+   * @return mixed This function returns a string or an array with the replaced values.
    */
   public static function str_replace($search, $replace, $subject, &$count = null)
   {
