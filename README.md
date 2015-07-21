@@ -48,30 +48,32 @@ Usage:
 ======
 
 Example 1:
-
-    $cleanUTF8String = UTF8::cleanup($string);
-    // ... and then save to db
+```php
+  $cleanUTF8String = UTF8::cleanup($string);
+  // ... and then save to db
+```
 
 Example 2:
+```php
+  $string = 'string <strong>with utf-8 chars åèä</strong> - doo-bee doo-bee dooh';
 
-    $string = 'string <strong>with utf-8 chars åèä</strong> - doo-bee doo-bee dooh';
+  echo strlen($string) . "\n<br />";
+  echo UTF8::strlen($string) . "\n<br />";
 
-    echo strlen($string) . "\n<br />";
-    echo UTF8::strlen($string) . "\n<br />";
+  // will output:
+  // 70
+  // 67
 
-    // will output:
-    // 70
-    // 67
+  $string_test1 = strip_tags($string);
+  $string_test2 = UTF8::strip_tags($string);
 
-    $string_test1 = strip_tags($string);
-    $string_test2 = UTF8::strip_tags($string);
+  echo strlen($string_test1) . "\n<br />";
+  echo UTF8::strlen($string_test2) . "\n<br />";
 
-    echo strlen($string_test1) . "\n<br />";
-    echo UTF8::strlen($string_test2) . "\n<br />";
-
-    // will output:
-    // 53
-    // 50
+  // will output:
+  // 53
+  // 50
+```
 
 Unit Test:
 ==========
