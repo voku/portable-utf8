@@ -2073,11 +2073,12 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testChrSizeList()
   {
     $testArray = array(
-        "中文空白"      => array(
+        "中文空白\xF0\x90\x8C\xBC"      => array(
             3,
             3,
             3,
             3,
+            4
         ),
         "öäü"       => array(
             2,
