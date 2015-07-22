@@ -20,6 +20,34 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     self::assertEquals(53, strlen($string_test1));
     self::assertEquals(50, UTF8::strlen($string_test2));
+
+    $testArray = array(
+        "<a href='κόσμε'>κόσμε</a>" => 25,
+        "<白>"                       => 3,
+        "öäü"                       => 3,
+        " "                         => 1,
+        ""                          => 0,
+        1                           => 1,
+        -1                          => 2,
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::strlen($actual), $actual);
+    }
+
+    $testArray = array(
+        "<a href='test'>tester</a>" => 25,
+        "<a>"                       => 3,
+        "abc"                       => 3,
+        " "                         => 1,
+        ""                          => 0,
+        1                           => 1,
+        -1                          => 2,
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, strlen($actual), $actual);
+    }
   }
 
   public function testHtmlspecialchars()
@@ -111,6 +139,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testIsUtf8()
   {
     $testArray = array(
+        1                                                                  => true,
+        -1                                                                 => true,
         'κ'                                                                => true,
         ''                                                                 => true,
         ' '                                                                => true,
@@ -1067,8 +1097,31 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     self::assertEquals('1,3', UTF8::number_format('1.298765', 1, ',', ''));
   }
 
+  public function testSubstr()
+  {
+    self::assertEquals(23, substr(1234, 1, 2));
+    self::assertEquals("bc", substr("abcde", 1, 2));
+    self::assertEquals("de", substr("abcde", -2, 2));
+    self::assertEquals("bc", substr("abcde", 1, 2));
+    self::assertEquals("bc", substr("abcde", 1, 2));
+    self::assertEquals("bcd", substr("abcde", 1, 3));
+    self::assertEquals("bc", substr("abcde", 1, 2));
+
+    self::assertEquals(23, UTF8::substr(1234, 1, 2));
+    self::assertEquals("bc", UTF8::substr("abcde", 1, 2));
+    self::assertEquals("de", UTF8::substr("abcde", -2, 2));
+    self::assertEquals("bc", UTF8::substr("abcde", 1, 2));
+    self::assertEquals("bc", UTF8::substr("abcde", 1, 2, true));
+    self::assertEquals("bcd", UTF8::substr("abcde", 1, 3));
+    self::assertEquals("bc", UTF8::substr("abcde", 1, 2));
+
+    // UTF-8
+    self::assertEquals("文空", UTF8::substr("中文空白", 1, 2));
+  }
+
   public function testSubstrCompare()
   {
+    self::assertEquals(0, substr_compare(12345, 23, 1, 2));
     self::assertEquals(0, substr_compare("abcde", "bc", 1, 2));
     self::assertEquals(0, substr_compare("abcde", "de", -2, 2));
     self::assertEquals(0, substr_compare("abcde", "bcg", 1, 2));
@@ -1076,6 +1129,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     self::assertEquals(1, substr_compare("abcde", "bc", 1, 3));
     self::assertEquals(-1, substr_compare("abcde", "cd", 1, 2));
 
+    self::assertEquals(0, UTF8::substr_compare(12345, 23, 1, 2));
     self::assertEquals(0, UTF8::substr_compare("abcde", "bc", 1, 2));
     self::assertEquals(0, UTF8::substr_compare("abcde", "de", -2, 2));
     self::assertEquals(0, UTF8::substr_compare("abcde", "bcg", 1, 2));
@@ -1084,8 +1138,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     self::assertEquals(-1, UTF8::substr_compare("abcde", "cd", 1, 2));
 
     // UTF-8
+    self::assertEquals(-1, UTF8::substr_compare("abcde", "cd", 1, 2));
     self::assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2, false));
-    self::assertEquals(0, UTF8::substr_compare("○●◎\r", "●◎", 1, 2, true));
+    self::assertEquals(0, UTF8::substr_compare("中文空白", "文空", 1, 2, true));
   }
 
   public function testStrtr()
@@ -1298,6 +1353,14 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   {
     return array(
         array(
+            1,
+            1,
+        ),
+        array(
+            -1,
+            -1,
+        ),
+        array(
             '  ',
             '  ',
         ),
@@ -1342,6 +1405,14 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   {
     return array(
         array(
+            1,
+            1,
+        ),
+        array(
+            -1,
+            -1,
+        ),
+        array(
             '  ',
             '',
         ),
@@ -1374,6 +1445,14 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function trimProvider()
   {
     return array(
+        array(
+            1,
+            1,
+        ),
+        array(
+            -1,
+            -1,
+        ),
         array(
             '  ',
             '',
@@ -1729,6 +1808,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testToASCII()
   {
     $tests = array(
+        1                               => 1,
+        -1                              => -1,
         ' '                             => ' ',
         ''                              => '',
         "أبز"                           => '???',
@@ -1753,6 +1834,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testStrTransliterate()
   {
     $tests = array(
+        1                               => 1,
+        -1                              => -1,
         ' '                             => ' ',
         ''                              => '',
         "أبز"                           => '\'bz',
@@ -1861,6 +1944,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testStrtolower()
   {
     $tests = array(
+        1               => 1,
+        -1              => -1,
         "ABC-中文空白"      => "abc-中文空白",
         "ÖÄÜ"           => "öäü",
         "öäü"           => "öäü",
@@ -1881,6 +1966,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testStrtoupper()
   {
     $tests = array(
+        1               => 1,
+        -1              => -1,
         "abc-中文空白"      => "ABC-中文空白",
         "öäü"           => "ÖÄÜ",
         "öäü test öäü"  => "ÖÄÜ TEST ÖÄÜ",
@@ -2081,25 +2168,25 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testChrSizeList()
   {
     $testArray = array(
-        "中文空白\xF0\x90\x8C\xBC"      => array(
+        "中文空白\xF0\x90\x8C\xBC" => array(
             3,
             3,
             3,
             3,
-            4
+            4,
         ),
-        "öäü"       => array(
+        "öäü"                  => array(
             2,
             2,
             2,
         ),
-        "abc"       => array(
+        "abc"                  => array(
             1,
             1,
             1,
         ),
-        ""          => array(),
-        "中文空白-test" => array(
+        ""                     => array(),
+        "中文空白-test"            => array(
             3,
             3,
             3,
@@ -2219,6 +2306,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
     self::assertEquals(array("中文空白"), UTF8::split("中文空白", 4));
     self::assertEquals(array("中文空白"), UTF8::split("中文空白", 8));
+
+    self::assertEquals(array(1234), UTF8::split(1234, 8));
   }
 
   public function testChunkSplit()

@@ -353,6 +353,8 @@ class UTF8
    */
   public static function to_ascii($s, $subst_chr = '?')
   {
+    $s = (string)$s;
+
     if (!isset($s[0])) {
       return '';
     }
@@ -652,6 +654,8 @@ class UTF8
   public static function str_transliterate($str, $unknown = '?')
   {
     static $UTF8_TO_ASCII;
+
+    $str = (string)$str;
 
     if (!isset($str[0])) {
       return '';
@@ -1000,6 +1004,8 @@ class UTF8
    */
   public static function is_utf8($str)
   {
+    $str = (string)$str;
+
     if (!isset($str[0])) {
       return true;
     }
@@ -1161,6 +1167,8 @@ class UTF8
   {
     static $bug62759;
 
+    $str = (string)$str;
+
     if (!isset($str[0])) {
       return '';
     }
@@ -1223,6 +1231,8 @@ class UTF8
    */
   public static function strlen($string, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
+    $string = (string)$string;
+
     if (!isset($string[0])) {
       return 0;
     }
@@ -1250,6 +1260,8 @@ class UTF8
    */
   public static function split($str, $split_length = 1, $cleanUtf8 = false)
   {
+    $str = (string)$str;
+
     if (!isset($str[0])) {
       return array();
     }
@@ -1561,6 +1573,8 @@ class UTF8
    */
   public static function strtolower($str)
   {
+    $str = (string)$str;
+
     if (!isset($str[0])) {
       return '';
     }
@@ -1622,6 +1636,8 @@ class UTF8
    */
   public static function fix_simple_utf8($str)
   {
+    $str = (string)$str;
+
     if (!isset($str[0])) {
       return '';
     }
@@ -1772,6 +1788,8 @@ class UTF8
    */
   public static function html_entity_decode($string, $flags = null, $encoding = 'UTF-8')
   {
+    $string = (string)$string;
+
     if (!isset($string[0])) {
       return '';
     }
@@ -1846,11 +1864,9 @@ class UTF8
       return $text;
     }
 
-    if (!isset($text[0])) {
-      return $text;
-    }
+    $text = (string)$text;
 
-    if (!is_string($text)) {
+    if (!isset($text[0])) {
       return $text;
     }
 
@@ -1918,11 +1934,9 @@ class UTF8
    */
   public static function isJson($string)
   {
-    if (!isset($string[0])) {
-      return false;
-    }
+    $string = (string)$string;
 
-    if (!is_string($string)) {
+    if (!isset($string[0])) {
       return false;
     }
 
@@ -2319,6 +2333,8 @@ class UTF8
    */
   public static function cleanup($text)
   {
+    $text = (string)$text;
+
     if (!isset($text[0])) {
       return '';
     }
@@ -2604,6 +2620,8 @@ class UTF8
    */
   public static function utf8_decode($text)
   {
+    $text = (string)$text;
+
     if (!isset($text[0])) {
       return '';
     }
@@ -3079,6 +3097,9 @@ class UTF8
    */
   public static function strpos($haystack, $needle, $offset = 0, $cleanUtf8 = false)
   {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
     if (!isset($haystack[0]) || !isset($needle[0])) {
       return false;
     }
@@ -3329,6 +3350,8 @@ class UTF8
    */
   public static function trim($string = '', $chars = INF)
   {
+    $string = (string)$string;
+
     if (!isset($string[0])) {
       return '';
     }
@@ -3353,6 +3376,8 @@ class UTF8
    */
   public static function rtrim($string = '', $chars = INF)
   {
+    $string = (string)$string;
+
     if (!isset($string[0])) {
       return '';
     }
@@ -3374,6 +3399,8 @@ class UTF8
    */
   public static function ltrim($string = '', $chars = INF)
   {
+    $string = (string)$string;
+
     if (!isset($string[0])) {
       return '';
     }
@@ -3817,6 +3844,9 @@ class UTF8
    */
   public static function stripos($haystack, $needle, $offset = null, $cleanUtf8 = false)
   {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
     if (!isset($haystack[0]) || !isset($needle[0])) {
       return false;
     }
@@ -3897,6 +3927,8 @@ class UTF8
    */
   public static function strtoupper($str)
   {
+    $str = (string)$str;
+
     if (!isset($str[0])) {
       return '';
     }
@@ -5170,6 +5202,9 @@ class UTF8
    */
   public static function strrpos($haystack, $needle, $offset = null, $cleanUtf8 = false)
   {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
     if (!isset($haystack[0]) || !isset($needle[0])) {
       return false;
     }
