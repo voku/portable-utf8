@@ -1995,24 +1995,32 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testStrpos()
   {
-    self::assertEquals(false, UTF8::strpos('abc', ''));
-    self::assertEquals(false, UTF8::strpos('abc', 'd'));
-    self::assertEquals(false, UTF8::strpos('abc', 'a', 3));
-    //self::assertEquals(0, UTF8::strpos('abc', 'a', -1));
-    self::assertEquals(1, UTF8::strpos('한국어', '국'));
-    self::assertEquals(0, UTF8::strpos("κόσμε-κόσμε-κόσμε", "κ"));
-    self::assertEquals(7, UTF8::strpos("test κόσμε test κόσμε", "σ"));
-    self::assertEquals(8, UTF8::strpos("ABC-ÖÄÜ-中文空白-中文空白", "中"));
+    for ($i = 0; $i <= 5; $i++) {
+      self::assertEquals(false, UTF8::strpos('abc', ''));
+      self::assertEquals(false, UTF8::strpos('abc', 'd'));
+      self::assertEquals(false, UTF8::strpos('abc', 'a', 3));
+      self::assertEquals(16, UTF8::strpos('der Straße nach Paris', 'Paris'));
+      self::assertEquals(0, UTF8::strpos('abc', 'a', 1));
+      self::assertEquals(1, UTF8::strpos('abc', 'b', 1));
+      self::assertEquals(1, UTF8::strpos('abc', 'b', 0));
+      //self::assertEquals(1, UTF8::strpos('abc', 'c', -1));
+      self::assertEquals(1, UTF8::strpos('한국어', '국'));
+      self::assertEquals(0, UTF8::strpos("κόσμε-κόσμε-κόσμε", "κ"));
+      self::assertEquals(7, UTF8::strpos("test κόσμε test κόσμε", "σ"));
+      self::assertEquals(8, UTF8::strpos("ABC-ÖÄÜ-中文空白-中文空白", "中"));
+    }
   }
 
   public function testStripos()
   {
-    self::assertEquals(3, UTF8::stripos('DÉJÀ', 'à'));
-    self::assertEquals(1, UTF8::stripos('aςσb', 'ΣΣ'));
-    self::assertEquals(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
-    self::assertEquals(4, UTF8::stripos("öäü-κόσμε-κόσμε-κόσμε", "Κ"));
-    self::assertEquals(5, UTF8::stripos("Test κόσμε test κόσμε", "Κ"));
-    self::assertEquals(4, UTF8::stripos("ABC-ÖÄÜ-中文空白-中文空白", "ö"));
+    for ($i = 0; $i <= 5; $i++) {
+      self::assertEquals(3, UTF8::stripos('DÉJÀ', 'à'));
+      self::assertEquals(1, UTF8::stripos('aςσb', 'ΣΣ'));
+      self::assertEquals(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
+      self::assertEquals(4, UTF8::stripos("öäü-κόσμε-κόσμε-κόσμε", "Κ"));
+      self::assertEquals(5, UTF8::stripos("Test κόσμε test κόσμε", "Κ"));
+      self::assertEquals(4, UTF8::stripos("ABC-ÖÄÜ-中文空白-中文空白", "ö"));
+    }
   }
 
   public function testOrd()

@@ -3077,7 +3077,7 @@ class UTF8
    * haystack string. If
    * needle is not found, it returns false.
    */
-  public static function strpos($haystack, $needle, $offset = null, $cleanUtf8 = false)
+  public static function strpos($haystack, $needle, $offset = 0, $cleanUtf8 = false)
   {
     if (!isset($haystack[0]) || !isset($needle[0])) {
       return false;
