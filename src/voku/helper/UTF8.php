@@ -1590,7 +1590,7 @@ class UTF8
    *
    * @since 1.0.4
    *
-   * @param string $string
+   * @param string    $string
    * @param bool|true $useJsonDecode WARNING: use this only if there is not real-JSON in the string
    *
    * @return string
@@ -1608,7 +1608,7 @@ class UTF8
     $string = self::fix_simple_utf8(
         rawurldecode(
             self::html_entity_decode(
-                self::toUTF8($string),
+                self::to_utf8($string),
                 $flags
             )
         )
@@ -1849,7 +1849,7 @@ class UTF8
    *
    * @name               to_utf8
    *
-   * @param string       $text Any string.
+   * @param string|array $text Any string or array.
    *
    * @return string The same string, UTF8 encoded
    *
