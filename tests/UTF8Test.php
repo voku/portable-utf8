@@ -2073,6 +2073,10 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testStrrpos()
   {
+    self::assertSame(1, UTF8::strrpos('11--', '1-', 0, 'UTF-8'));
+    self::assertSame(2, UTF8::strrpos('-11--', '1-', 0, 'UTF-8'));
+    self::assertSame(false, UTF8::strrpos('한국어', '', 'UTF-8'));
+    self::assertSame(1, UTF8::strrpos('한국어', '국', 'UTF-8'));
     self::assertEquals(false, UTF8::strrpos('한국어', ''));
     self::assertEquals(1, UTF8::strrpos('한국어', '국'));
     self::assertEquals(6, UTF8::strrpos("κόσμε-κόσμε", "κ"));

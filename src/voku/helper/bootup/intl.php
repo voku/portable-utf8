@@ -15,6 +15,9 @@ const GRAPHEME_EXTR_COUNT = 0;
 const GRAPHEME_EXTR_MAXBYTES = 1;
 const GRAPHEME_EXTR_MAXCHARS = 2;
 
+/** @noinspection PhpUsageOfSilenceOperatorInspection */
+@trigger_error('You are using a fallback implementation of the intl extension. Installing the native one is highly recommended instead. | http://php.net/manual/en/intl.installation.php', E_USER_DEPRECATED);
+
 /**
  * @param string $str
  * @param int    $form

@@ -64,6 +64,11 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
     self::assertSame(2, p::iconv_strpos('-11--', '1-', 0, 'UTF-8'));
     self::assertSame(false, p::iconv_strrpos('한국어', '', 'UTF-8'));
     self::assertSame(1, p::iconv_strrpos('한국어', '국', 'UTF-8'));
+    self::assertEquals(false, p::iconv_strrpos('한국어', ''));
+    self::assertEquals(1, p::iconv_strrpos('한국어', '국'));
+    self::assertEquals(6, p::iconv_strrpos("κόσμε-κόσμε", "κ"));
+    self::assertEquals(13, p::iconv_strrpos("test κόσμε κόσμε test", "σ"));
+    self::assertEquals(9, p::iconv_strrpos("中文空白-ÖÄÜ-中文空白", "中"));
   }
 
   function testIconvSubstr()

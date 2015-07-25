@@ -16,6 +16,9 @@ const ICONV_VERSION = '1.0';
 const ICONV_MIME_DECODE_STRICT = 1;
 const ICONV_MIME_DECODE_CONTINUE_ON_ERROR = 2;
 
+/** @noinspection PhpUsageOfSilenceOperatorInspection */
+@trigger_error('You are using a fallback implementation of the iconv extension. Installing the native one is highly recommended instead. | http://php.net/manual/en/iconv.installation.php', E_USER_DEPRECATED);
+
 /**
  * @param string $from
  * @param string $to
@@ -125,7 +128,7 @@ if (extension_loaded('mbstring')) {
   {
     INF === $encoding && $encoding = Iconv::$internal_encoding;
 
-    return mb_strrpos($haystack, $needle, $encoding);
+    return mb_strrpos($haystack, $needle, 0, $encoding);
   }
 
   /**

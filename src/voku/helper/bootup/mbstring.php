@@ -18,6 +18,9 @@ const MB_CASE_UPPER = 0;
 const MB_CASE_LOWER = 1;
 const MB_CASE_TITLE = 2;
 
+/** @noinspection PhpUsageOfSilenceOperatorInspection */
+@trigger_error('You are using a fallback implementation of the mbstring extension. Installing the native one is highly recommended instead. | http://php.net/manual/en/mbstring.installation.php', E_USER_DEPRECATED);
+
 /**
  * @param string $str
  * @param string $to
