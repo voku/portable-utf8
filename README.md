@@ -78,8 +78,8 @@ Example 2: UTF8::strlen()
 Example 3: UTF8::fix_utf8()
 ```php
 
-  echo UTF8::fix_utf8('DÃ¼sseldorf') // 'Düsseldorf'
-  echo UTF8::fix_utf8('Ã¤')
+  echo UTF8::fix_utf8('DÃ¼sseldorf');
+  echo UTF8::fix_utf8('Ã¤');
   
   // will output:
   // Düsseldorf
