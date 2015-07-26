@@ -926,7 +926,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         ' '            => ' ',
         ''             => '',
         "\n"           => "\n",
-        "test\xc2\x88" => 'test',
+        "test\xc2\x88" => 'testˆ',
         'DÃ¼sseldorf'  => 'Düsseldorf',
         'Ã¤'           => 'ä',
     );
@@ -1527,7 +1527,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
       // Valid 6 Octet Sequence (but not Unicode!)
       "\xfc\xa1\xa1\xa1\xa1\xa1"                    => array("�" => ""),
       // Valid UTF-8 string with null characters
-      "\0\0\0\0中\0 -\0\0 &#20013; - %&? - \xc2\x80" => array("中 - &#20013; - %&? - " => "中 - &#20013; - %&? - "),
+      "\0\0\0\0中\0 -\0\0 &#20013; - %&? - \xc2\x80" => array("中 - &#20013; - %&? - " => "中 - &#20013; - %&? - €"),
     );
 
     $counter = 0;
@@ -1582,8 +1582,8 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         ''             => '',
         "\n"           => "\n",
         "test\xc2\x88" => 'testˆ',
-        'DÃ¼sseldorf'  => 'DÃ¼sseldorf',
-        'Ã¤'           => 'Ã¤',
+        'DÃ¼sseldorf'  => 'Düsseldorf',
+        'Ã¤'           => 'ä',
     );
 
     foreach ($testArray as $before => $after) {
