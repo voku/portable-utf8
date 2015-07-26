@@ -47,13 +47,13 @@ The problem with "mbstring" and others is that most of the time you cannot ensur
 Usage:
 ======
 
-Example 1:
+Example 1: UTF8::cleanup()
 ```php
   $cleanUTF8String = UTF8::cleanup($string);
   // ... and then save to db
 ```
 
-Example 2:
+Example 2: UTF8::strlen()
 ```php
   $string = 'string <strong>with utf-8 chars åèä</strong> - doo-bee doo-bee dooh';
 
@@ -73,6 +73,17 @@ Example 2:
   // will output:
   // 53
   // 50
+```
+
+Example 3: UTF8::fix_utf8()
+```php
+
+  echo UTF8::fix_utf8('DÃ¼sseldorf');
+  echo UTF8::fix_utf8('Ã¤');
+  
+  // will output:
+  // Düsseldorf
+  // ä
 ```
 
 Unit Test:
