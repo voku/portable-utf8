@@ -918,6 +918,24 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testFixSimpleUtf8()
+  {
+    $testArray = array(
+        'Düsseldorf'   => 'Düsseldorf',
+        'Ã'            => 'Ã',
+        ' '            => ' ',
+        ''             => '',
+        "\n"           => "\n",
+        "test\xc2\x88" => 'test',
+        'DÃ¼sseldorf'  => 'Düsseldorf',
+        'Ã¤'           => 'ä',
+    );
+
+    foreach ($testArray as $before => $after) {
+      self::assertEquals($after, UTF8::fix_simple_utf8($before));
+    }
+  }
+
   public function testUtf8EncodeEncodeUtf8()
   {
     $tests = array(
@@ -2228,6 +2246,19 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     self::assertEquals(1, UTF8::strnatcmp("10Hello world 中文空白!", "2Hello WORLD 中文空白!"));
     self::assertEquals(0, UTF8::strnatcmp("10Hello world 中文空白!", "10Hello world 中文空白!"));
     self::assertEquals(1, UTF8::strnatcmp("Hello world 中文空白!", "Hello WORLD 中文空白!"));
+  }
+
+  public function testStrtocasefold()
+  {
+    self::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱'));    // Original (NFC)
+    self::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌'));   // Uppercased
+    self::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC
+
+    // valid utf-8
+    self::assertEquals('hello world 中文空白', UTF8::strtocasefold("Hello world 中文空白"));
+
+    // invalid utf-8
+    self::assertEquals('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
   }
 
   public function testStrtonatfold()
