@@ -256,7 +256,7 @@ class Bootup
        *   1. PHP-Module:   "mcrypt" via mcrypt_create_iv()
        *   2. BSD:          "/dev/arandom" via fread()
        *   3. Linux:        "/dev/urandom" via fread()
-       *   4. Windows:      COM('CAPICOM.Utilities.1')->GetRandom()
+       *   4. Windows:      \COM('CAPICOM.Utilities.1')->GetRandom()
        *   5. PHP+OpenSSL:  openssl_random_pseudo_bytes()
        */
 
@@ -355,8 +355,14 @@ class Bootup
         // init
         $buf = '';
 
+
         /** @noinspection PhpUndefinedClassInspection */
-        $util = new COM('CAPICOM.Utilities.1');
+        /*
+         * IF ERROR-MESSAGE ON WINDOWS:  com_exception thrown with message "Failed to create COM object `CAPICOM.Utilities.1': Ungültige Syntax
+         * REGISTER THE DLL:             regsvr32 c:\windows\capicom.dll
+         *
+         */
+        $util = new \COM('CAPICOM.Utilities.1');
 
         /**
          * Let's not let it loop forever. If we run N times and fail to
