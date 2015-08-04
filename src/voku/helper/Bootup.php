@@ -254,10 +254,9 @@ class Bootup
        *
        * In order of preference:
        *   1. PHP-Module:   "mcrypt" via mcrypt_create_iv()
-       *   2. BSD:          "/dev/arandom" via fread()
-       *   3. Linux:        "/dev/urandom" via fread()
-       *   4. Windows:      \COM('CAPICOM.Utilities.1')->GetRandom()
-       *   5. PHP+OpenSSL:  openssl_random_pseudo_bytes()
+       *   2. Linux / BSD:  "/dev/urandom" via fread()
+       *   3. Windows:      \COM('CAPICOM.Utilities.1')->GetRandom()
+       *   4. PHP+OpenSSL:  openssl_random_pseudo_bytes()
        */
 
       /**
@@ -277,77 +276,87 @@ class Bootup
       }
 
       /**
-       * 2. BSD
-       * 3. Linux
-       *
-       * @ref http://sockpuppet.org/blog/2014/02/25/safely-generate-random-numbers
+       * 2. Linux / BSD
        */
 
-      if (!ini_get('open_basedir')) {
+      if (!ini_get('open_basedir') && is_readable('/dev/urandom')) {
 
-        static $_arandom = null;
-        static $_urandom = null;
+        $fp = fopen('/dev/urandom', 'rb');
 
-        $_arandom = ($_arandom === null ? is_readable('/dev/arandom') : false);
-        $_urandom = ($_urandom === null ? is_readable('/dev/urandom') : false);
+        if (!empty($fp)) {
+          $st = fstat($fp);
 
-
-        if ($_urandom || $_arandom) {
-
-          $fp = false;
-          if ($_arandom) {
-            $fp = fopen('/dev/arandom', 'rb');
-          } else if ($_urandom) {
-            $fp = fopen('/dev/urandom', 'rb');
-          }
-
-        }
-
-        if (isset($fp) && $fp !== false) {
-
-          if (function_exists('stream_set_chunk_size')) {
-            stream_set_chunk_size($fp, $length);
-          }
-
-          $streamSet = 0;
-          if (function_exists('stream_set_read_buffer')) {
-            $streamSet = stream_set_read_buffer($fp, 0);
-          }
-
-          if ($streamSet === 0) {
-            $remaining = $length;
-            $buf = '';
-            do {
-              $read = fread($fp, $remaining);
-
-              // we can't safely read from "urandom", so break here
-              if ($read === false) {
-                $buf = false;
-                break;
-              }
-
-              // decrease the number of bytes returned from remaining
-              $remaining -= UTF8::strlen($read, '8bit');
-              $buf .= $read;
-
-            } while ($remaining > 0);
-
+          if (($st['mode'] & 020000) === 0) {
             fclose($fp);
-
-            if ($buf !== false) {
-              if (UTF8::strlen($buf, '8bit') === $length) {
-                return $buf;
-              }
-            }
-
+            $fp = false;
           }
+
+          unset($st);
         }
       }
 
+      if (isset($fp) && $fp !== false) {
+
+        /**
+         * stream_set_read_buffer() / stream_set_chunk_size does not exist in HHVM
+         *
+         * If we don't set the stream's read buffer to 0, PHP will
+         * internally buffer 8192 bytes, which can waste entropy
+         *
+         * stream_set_read_buffer returns 0 on success
+         */
+
+        if (function_exists('stream_set_chunk_size')) {
+          stream_set_chunk_size($fp, $length);
+        }
+
+        if (function_exists('stream_set_read_buffer')) {
+          stream_set_read_buffer($fp, $length);
+        }
+
+        $remaining = $length;
+        $buf = '';
+
+        do {
+          $read = fread($fp, $remaining);
+
+          // We cannot safely read from the file, so exit the do-while loop.
+          if ($read === false) {
+            $buf = false;
+            break;
+          }
+
+          // Decrease the number of bytes returned from remaining.
+          $remaining -= UTF8::strlen($read, '8bit');
+          $buf .= $read;
+
+        } while ($remaining > 0);
+
+        fclose($fp);
+
+        if ($buf !== false) {
+          if (UTF8::strlen($buf, '8bit') === $length) {
+            return $buf;
+          }
+        }
+
+      }
+
       /*
-       * 4. Windows
+       * 3. Windows
        *
        * PHP can be used to access COM objects on Windows platforms
+       *
+       * ---
+       *
+       * PROBLEM: you see this error-message:
+       *    com_exception thrown with message
+       *      "Failed to create COM object `CAPICOM.Utilities.1': Ungültige Syntax
+       *
+       * SOLUTION: register the dll:
+       *    regsvr32 c:\windows\capicom.dll
+       *
+       * ---
        *
        * @ref http://php.net/manual/en/ref.com.php
        */
@@ -355,13 +364,7 @@ class Bootup
         // init
         $buf = '';
 
-
         /** @noinspection PhpUndefinedClassInspection */
-        /*
-         * IF ERROR-MESSAGE ON WINDOWS:  com_exception thrown with message "Failed to create COM object `CAPICOM.Utilities.1': Ungültige Syntax
-         * REGISTER THE DLL:             regsvr32 c:\windows\capicom.dll
-         *
-         */
         $util = new \COM('CAPICOM.Utilities.1');
 
         /**
@@ -384,7 +387,7 @@ class Bootup
       }
 
       /**
-       * 5. PHP + OpenSSL
+       * 4. PHP + OpenSSL
        *
        * fallback to "openssl_random_pseudo_bytes()"
        */
