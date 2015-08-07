@@ -286,7 +286,8 @@ class Bootup
         if (!empty($fp)) {
           $st = fstat($fp);
 
-          if (($st['mode'] & 020000) === 0) {
+          // In C, this would be: (stat_mode & S_IFMT) !== S_IFCHR
+          if (($st['mode'] & 0170000) !== 020000) {
             fclose($fp);
             $fp = false;
           }
