@@ -1,5 +1,6 @@
 <?php
 
+use voku\helper\Bootup;
 use voku\helper\UTF8;
 
 /**
@@ -333,8 +334,9 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'Who&#039;s Online'                                                                         => 'Who&#039;s Online',
         'Who&amp;#039;s Online'                                                                     => 'Who&#039;s Online',
         'Who&amp;amp;#039;s Online'                                                                 => 'Who&#039;s Online',
-        'who\'s online'                                                                             => 'who\'s online',
-        'Who\'s Online'                                                                             => 'Who\'s Online',
+        'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
+        "&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;"                                       => "<© W3Sçh°°¦§>",
     );
 
     // WARNING: HipHop error // "ENT_COMPAT" isn't working
@@ -365,12 +367,45 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'Who&#039;s Online'                                                                         => 'Who\'s Online',
         'Who&amp;#039;s Online'                                                                     => 'Who\'s Online',
         'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
-        'who\'s online'                                                                             => 'who\'s online',
-        'Who\'s Online'                                                                             => 'Who\'s Online',
+        'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
+        "&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;"                                       => "<© W3Sçh°°¦§>",
     );
 
     foreach ($testArray as $before => $after) {
       self::assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
+    }
+  }
+
+  public function testHtmlEntityDecodeWithHtml5()
+  {
+    $testArray = array(
+        'κόσμε'                                                                                     => 'κόσμε',
+        'Κόσμε'                                                                                     => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                                        => '  ',
+        ''                                                                                          => '',
+        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
+        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
+        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
+        'who&#039;s online'                                                                         => 'who\'s online',
+        'who&amp;#039;s online'                                                                     => 'who\'s online',
+        'who&#039;s online-'                                                                        => 'who\'s online-',
+        'Who&#039;s Online'                                                                         => 'Who\'s Online',
+        'Who&amp;#039;s Online'                                                                     => 'Who\'s Online',
+        'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
+        'who\'s online&colon;'                                                                      => 'who\'s online:',
+        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
+        "&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;"                                       => "<© W3Sçh°°¦§>",
+    );
+
+    if (Bootup::is_php('5.4') === true) {
+      foreach ($testArray as $before => $after) {
+        self::assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'error by ' . $before);
+      }
     }
   }
 
@@ -587,6 +622,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
         ""               => "",
+        "foobar"         => "foobar",
     );
 
     foreach ($tests as $before => $after) {
@@ -601,6 +637,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "      - ÖÄÜ- "  => "      - ÖÄÜ- ",
         "öäü"            => "öäü",
         ""               => "",
+        "foobar"         => "foobar",
     );
 
     foreach ($tests as $before => $after) {

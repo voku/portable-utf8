@@ -1450,9 +1450,7 @@ class UTF8
       $str = (string)$str;
     }
 
-    return preg_match('/^(.*?)' . self::rxClass($charlist) . '/us', $str, $len) ? self::strlen($len[1]) : self::strlen(
-        $str
-    );
+    return preg_match('/^(.*?)' . self::rxClass($charlist) . '/us', $str, $len) ? self::strlen($len[1]) : self::strlen($str);
   }
 
   /**
@@ -1721,7 +1719,11 @@ class UTF8
     }
 
     if ($flags === null) {
-      $flags = Bootup::is_php('5.4') ? ENT_COMPAT | ENT_HTML5 : ENT_COMPAT;
+      if (Bootup::is_php('5.4') === true) {
+        $flags = ENT_COMPAT | ENT_HTML5;
+      } else {
+        $flags = ENT_COMPAT;
+      }
     }
 
     do {
