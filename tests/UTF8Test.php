@@ -614,6 +614,14 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testValidCharsViaUtf8Encode()
+  {
+    $tests = UTF8::json_decode(UTF8::file_get_contents(__DIR__ . '/test-valid-chars.json'), true);
+
+    foreach ($tests as $test) {
+      self::assertEquals($test, UTF8::encode('UTF-8', $test));
+    }
+  }
 
   public function testUtf8DecodeUtf8Encode()
   {
