@@ -1905,6 +1905,13 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "test\x80-\xBFöäü"              => 'test-oau',
         "Internationalizaetion"         => 'Internationalizaetion',
         "中 - &#20013; - %&? - \xc2\x80" => "Zhong  - &#20013; - %&? - ",
+        'BonJour'                       => 'BonJour',
+        'BonJour & au revoir'           => 'BonJour & au revoir',
+        'Déjà'                          => 'Deja',
+        'trąnslįteration tėst ųsąge ūž' => 'transliteration test usage uz',
+        'това е тестово заглавие'       => 'tova ie tiestovo zaghlaviie',
+        'это тестовый заголовок'        => 'eto tiestovyi zagholovok',
+        'führen Aktivitäten Haglöfs'    => 'fuhren Aktivitaten Haglofs',
     );
 
     foreach ($tests as $before => $after) {
