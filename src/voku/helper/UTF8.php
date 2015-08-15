@@ -345,6 +345,8 @@ class UTF8
    */
   public static function to_ascii($s, $subst_chr = '?')
   {
+    static $translitExtra = null;
+
     $s = (string)$s;
 
     if (!isset($s[0])) {
@@ -380,8 +382,10 @@ class UTF8
         }
 
         if ('?' === $t) {
-          static $translitExtra = array();
-          $translitExtra or $translitExtra = static::getData('translit_extra');
+
+          if ($translitExtra === null) {
+            $translitExtra = self::getData('translit_extra');
+          }
 
           if (isset($translitExtra[$c])) {
             $t = $translitExtra[$c];
@@ -1450,7 +1454,12 @@ class UTF8
       $str = (string)$str;
     }
 
-    return preg_match('/^(.*?)' . self::rxClass($charlist) . '/us', $str, $len) ? self::strlen($len[1]) : self::strlen($str);
+    /* @var $len array */
+    if (preg_match('/^(.*?)' . self::rxClass($charlist) . '/us', $str, $len)) {
+      return self::strlen($len[1]);
+    } else {
+      return self::strlen($str);
+    }
   }
 
   /**
@@ -1531,7 +1540,8 @@ class UTF8
 
   /**
    * Unicode transformation for caseless matching
-   * see http://unicode.org/reports/tr21/tr21-5.html
+   *
+   * @link http://unicode.org/reports/tr21/tr21-5.html
    *
    * @param string $string
    * @param bool   $full
@@ -1540,10 +1550,16 @@ class UTF8
    */
   public static function strtocasefold($string, $full = true)
   {
+    static $fullCaseFold = null;
+
     $string = strtr($string, self::$commonCaseFold);
+
     if ($full) {
-      static $fullCaseFold = false;
-      $fullCaseFold || $fullCaseFold = self::getData('caseFolding_full');
+
+      if ($fullCaseFold === null) {
+        $fullCaseFold = self::getData('caseFolding_full');
+      }
+
       $string = str_replace($fullCaseFold[0], $fullCaseFold[1], $string);
     }
 
