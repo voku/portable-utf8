@@ -374,10 +374,12 @@ class UTF8
         } else {
           $t = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', $c);
 
-          if (!isset($t[0])) {
-            $t = '?';
-          } else if (isset($t[1])) {
-            $t = ltrim($t, '\'`"^~');
+          if ($t !== false && is_string($t)) {
+            if (!isset($t[0])) {
+              $t = '?';
+            } else if (isset($t[1])) {
+              $t = ltrim($t, '\'`"^~');
+            }
           }
         }
 
@@ -618,7 +620,7 @@ class UTF8
    *
    * @param string $file
    *
-   * @return bool|mixed
+   * @return bool|mixed false on error
    */
   protected static function getData($file)
   {
@@ -1802,12 +1804,12 @@ class UTF8
 
     $buf = '';
     for ($i = 0; $i < $max; $i++) {
-      $c1 = $text{$i};
+      $c1 = $text[$i];
 
       if ($c1 >= "\xc0") { // should be converted to UTF8, if it's not UTF8 already
-        $c2 = $i + 1 >= $max ? "\x00" : $text{$i + 1};
-        $c3 = $i + 2 >= $max ? "\x00" : $text{$i + 2};
-        $c4 = $i + 3 >= $max ? "\x00" : $text{$i + 3};
+        $c2 = $i + 1 >= $max ? "\x00" : $text[$i + 1];
+        $c3 = $i + 2 >= $max ? "\x00" : $text[$i + 2];
+        $c4 = $i + 3 >= $max ? "\x00" : $text[$i + 3];
 
         if ($c1 >= "\xc0" & $c1 <= "\xdf") { // looks like 2 bytes UTF8
 
