@@ -104,6 +104,11 @@ composer install
 License and Copyright
 =====================
 
-Unless otherwise stated to the contrary, all my work that I publish on this website is licensed under Creative Commons Attribution 3.0 Unported License (CC BY 3.0) and free for all commercial or non-profit projects under certain conditions.
+"Portable UTF8" is free software; you can redistribute it and/or modify it under
+the terms of the (at your option):
+- [Apache License v2.0](http://apache.org/licenses/LICENSE-2.0.txt), or
+- [GNU General Public License v2.0](http://gnu.org/licenses/gpl-2.0.txt).
 
-Read the full legal license. [http://creativecommons.org/licenses/by/3.0/legalcode](http://creativecommons.org/licenses/by/3.0/legalcode)
+Unicode handling requires tedious work to be implemented and maintained on the
+long run. As such, contributions such as unit tests, bug reports, comments or
+patches licensed under both licenses are really welcomed.
