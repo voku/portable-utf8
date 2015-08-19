@@ -10,4 +10,3 @@
 /.travis.yml export-ignore
 /appveyor.yml export-ignore
 /phpunit.xml export-ignore
-/README.md export-ignore
