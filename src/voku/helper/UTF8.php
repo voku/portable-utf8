@@ -9,9 +9,7 @@ use voku\helper\shim\Xml;
 /**
  * UTF8-Helper-Class
  *
- * @author      Lars Moelleken
- *
- * @package     voku\helper
+ * @package voku\helper
  */
 class UTF8
 {
