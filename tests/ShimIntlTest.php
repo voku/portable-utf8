@@ -8,7 +8,7 @@ use voku\helper\shim\Intl as p;
  */
 class ShimIntlTest extends PHPUnit_Framework_TestCase
 {
-  function testGrapheme_extract_arrayError()
+  public function testGrapheme_extract_arrayError()
   {
     try {
       p::grapheme_extract(array(), 0);
@@ -22,7 +22,7 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  function testGrapheme_extract()
+  public function testGrapheme_extract()
   {
     self::assertFalse(p::grapheme_extract('abc', 1, -1));
 
@@ -52,7 +52,7 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
     self::assertFalse(@grapheme_extract(array(), 0));
   }
 
-  function testGrapheme_strlen()
+  public function testGrapheme_strlen()
   {
     self::assertSame(3, grapheme_strlen('한국어'));
     self::assertSame(3, grapheme_strlen(n::normalize('한국어', n::NFD)));
@@ -63,43 +63,43 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
     self::assertNull(p::grapheme_strlen("\xE9"));
   }
 
-  function testGrapheme_substr()
+  public function testGrapheme_substr()
   {
-    $c = "déjà";
+    $c = 'déjà';
 
-    self::assertSame("jà", grapheme_substr($c, 2));
-    self::assertSame("jà", grapheme_substr($c, -2));
+    self::assertSame('jà', grapheme_substr($c, 2));
+    self::assertSame('jà', grapheme_substr($c, -2));
     // The next 3 tests are disabled due to http://bugs.php.net/62759 and 55562
     //self::assertSame( "jà", grapheme_substr($c, -2,  3) );
     //self::assertSame( "", grapheme_substr($c, -1,  0) );
     //self::assertSame( false, grapheme_substr($c,  1, -4) );
-    self::assertSame("j", grapheme_substr($c, -2, -1));
-    self::assertSame("", grapheme_substr($c, -2, -2));
+    self::assertSame('j', grapheme_substr($c, -2, -1));
+    self::assertSame('', grapheme_substr($c, -2, -2));
     self::assertSame(false, grapheme_substr($c, 5, 0));
     self::assertSame(false, grapheme_substr($c, -5, 0));
 
-    self::assertSame("jà", p::grapheme_substr($c, 2));
-    self::assertSame("jà", p::grapheme_substr($c, -2));
-    self::assertSame("jà", p::grapheme_substr($c, -2, 3));
-    self::assertSame("", p::grapheme_substr($c, -1, 0));
+    self::assertSame('jà', p::grapheme_substr($c, 2));
+    self::assertSame('jà', p::grapheme_substr($c, -2));
+    self::assertSame('jà', p::grapheme_substr($c, -2, 3));
+    self::assertSame('', p::grapheme_substr($c, -1, 0));
     self::assertSame(false, p::grapheme_substr($c, 1, -4));
-    self::assertSame("j", p::grapheme_substr($c, -2, -1));
-    self::assertSame("", p::grapheme_substr($c, -2, -2));
+    self::assertSame('j', p::grapheme_substr($c, -2, -1));
+    self::assertSame('', p::grapheme_substr($c, -2, -2));
     self::assertSame(false, p::grapheme_substr($c, 5, 0));
     self::assertSame(false, p::grapheme_substr($c, -5, 0));
 
-    self::assertSame("jà", p::grapheme_substr_workaround62759($c, 2, 2147483647));
-    self::assertSame("jà", p::grapheme_substr_workaround62759($c, -2, 2147483647));
-    self::assertSame("jà", p::grapheme_substr_workaround62759($c, -2, 3));
-    self::assertSame("", p::grapheme_substr_workaround62759($c, -1, 0));
+    self::assertSame('jà', p::grapheme_substr_workaround62759($c, 2, 2147483647));
+    self::assertSame('jà', p::grapheme_substr_workaround62759($c, -2, 2147483647));
+    self::assertSame('jà', p::grapheme_substr_workaround62759($c, -2, 3));
+    self::assertSame('', p::grapheme_substr_workaround62759($c, -1, 0));
     self::assertSame(false, p::grapheme_substr_workaround62759($c, 1, -4));
-    self::assertSame("j", p::grapheme_substr_workaround62759($c, -2, -1));
-    self::assertSame("", p::grapheme_substr_workaround62759($c, -2, -2));
+    self::assertSame('j', p::grapheme_substr_workaround62759($c, -2, -1));
+    self::assertSame('', p::grapheme_substr_workaround62759($c, -2, -2));
     self::assertSame(false, p::grapheme_substr_workaround62759($c, 5, 0));
     self::assertSame(false, p::grapheme_substr_workaround62759($c, -5, 0));
   }
 
-  function testGrapheme_strpos()
+  public function testGrapheme_strpos()
   {
     self::assertSame(false, grapheme_strpos('abc', ''));
     self::assertSame(false, grapheme_strpos('abc', 'd'));
@@ -123,7 +123,7 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
     self::assertSame(16, p::grapheme_stripos('der Straße nach Paris', 'Paris'));
   }
 
-  function testGrapheme_strstr()
+  public function testGrapheme_strstr()
   {
     self::assertSame('국어', grapheme_strstr('한국어', '국'));
     self::assertSame('ÉJÀ', grapheme_stristr('DÉJÀ', 'é'));
@@ -133,7 +133,7 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
     self::assertSame('Paris', p::grapheme_stristr('der Straße nach Paris', 'Paris'));
   }
 
-  function testGrapheme_bugs()
+  public function testGrapheme_bugs()
   {
     if (extension_loaded('intl') && (50418 > PHP_VERSION_ID || 50500 == PHP_VERSION_ID)) {
       // Buggy behavior see https://bugs.php.net/61860

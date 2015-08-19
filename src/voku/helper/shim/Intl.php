@@ -100,7 +100,7 @@ class Intl
     do {
       if (GRAPHEME_EXTR_COUNT === $type) {
         --$size;
-      } else if (GRAPHEME_EXTR_MAXBYTES === $type) {
+      } elseif (GRAPHEME_EXTR_MAXBYTES === $type) {
         $size -= strlen($s[$i]);
       } else {
         $size -= iconv_strlen($s[$i], 'UTF-8//IGNORE');
@@ -206,7 +206,7 @@ class Intl
 
     if ($offset > 0) {
       $s = self::grapheme_substr($s, $offset);
-    } else if ($offset < 0) {
+    } elseif ($offset < 0) {
       $offset = 0;
     }
 

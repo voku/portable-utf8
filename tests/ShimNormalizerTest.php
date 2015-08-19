@@ -8,7 +8,7 @@ use voku\helper\shim\Normalizer as pn;
  */
 class ShimNormalizerTest extends PHPUnit_Framework_TestCase
 {
-  function testConstants()
+  public function testConstants()
   {
     $rpn = new \ReflectionClass('voku\helper\shim\Normalizer');
     $rin = new \ReflectionClass('Normalizer');
@@ -22,9 +22,9 @@ class ShimNormalizerTest extends PHPUnit_Framework_TestCase
     self::assertSame($rin, $rpn);
   }
 
-  function testIsNormalized()
+  public function testIsNormalized()
   {
-    $c = "déjà";
+    $c = 'déjà';
     $d = in::normalize($c, pn::NFD);
 
     self::assertTrue(pn::isNormalized(''));
@@ -37,13 +37,13 @@ class ShimNormalizerTest extends PHPUnit_Framework_TestCase
     self::assertFalse(pn::isNormalized("\xFF"));
   }
 
-  function testNormalize()
+  public function testNormalize()
   {
-    $c = in::normalize("déjà", pn::NFC) . in::normalize("훈쇼™", pn::NFD);
+    $c = in::normalize('déjà', pn::NFC) . in::normalize('훈쇼™', pn::NFD);
     self::assertSame($c, pn::normalize($c, pn::NONE));
     self::assertSame($c, in::normalize($c, pn::NONE));
 
-    $c = "déjà 훈쇼™";
+    $c = 'déjà 훈쇼™';
     $d = in::normalize($c, pn::NFD);
     $kc = in::normalize($c, pn::NFKC);
     $kd = in::normalize($c, pn::NFKD);

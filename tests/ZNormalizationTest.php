@@ -10,7 +10,7 @@ class ZNormalizationTest extends \PHPUnit_Framework_TestCase
 {
   public $unicodeVersion = 70;
 
-  function testNormalize()
+  public function testNormalize()
   {
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
       $isWindows = true;
@@ -27,7 +27,7 @@ class ZNormalizationTest extends \PHPUnit_Framework_TestCase
     $c = array();
 
     foreach ($t as $s) {
-      $t = explode("#", $s);
+      $t = explode('#', $s);
       $t = explode(';', $t[0]);
 
       if (6 === count($t)) {
