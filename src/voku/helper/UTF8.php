@@ -1612,7 +1612,11 @@ class UTF8
 
     $string = preg_replace('/%u([0-9a-f]{3,4})/i', '&#x\\1;', urldecode($string));
 
-    $flags = Bootup::is_php('5.4') ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
+    if (Bootup::is_php('5.4') === true || defined('HHVM_VERSION') === true) {
+      $flags = ENT_COMPAT | ENT_HTML5;
+    } else {
+      $flags = ENT_COMPAT;
+    }
 
     $string = self::fix_simple_utf8(
         rawurldecode(
@@ -1737,7 +1741,7 @@ class UTF8
     }
 
     if ($flags === null) {
-      if (Bootup::is_php('5.4') === true) {
+      if (Bootup::is_php('5.4') === true || defined('HHVM_VERSION') === true) {
         $flags = ENT_COMPAT | ENT_HTML5;
       } else {
         $flags = ENT_COMPAT;
@@ -5072,7 +5076,7 @@ class UTF8
    */
   public static function number_format($number, $decimals = 0, $dec_point = '.', $thousands_sep = ',')
   {
-    if (Bootup::is_php('5.4') === true) {
+    if (Bootup::is_php('5.4') === true || defined('HHVM_VERSION') === true) {
       if (isset($thousands_sep[1]) || isset($dec_point[1])) {
         return str_replace(
             array(
