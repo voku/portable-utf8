@@ -12,7 +12,7 @@ class BootupTest extends PHPUnit_Framework_TestCase
   {
     UTF8::checkForSupport();
 
-    $c = "à";
+    $c = 'à';
     $d = Normalizer::normalize($c, Normalizer::NFD);
 
     $bak = array(
@@ -87,10 +87,10 @@ class BootupTest extends PHPUnit_Framework_TestCase
 
   public function testFilterRequestUri()
   {
-    $uriA = '/' . urlencode("bàr");
-    $uriB = '/' . urlencode(utf8_decode("bàr"));
-    $uriC = '/' . utf8_decode("bàr");
-    $uriD = '/' . "bàr";
+    $uriA = '/' . urlencode('bàr');
+    $uriB = '/' . urlencode(utf8_decode('bàr'));
+    $uriC = '/' . utf8_decode('bàr');
+    $uriD = '/' . 'bàr';
 
     $u = Bootup::filterRequestUri($uriA, false);
     self::assertSame($uriA, $u);

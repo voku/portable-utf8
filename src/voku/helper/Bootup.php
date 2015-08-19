@@ -63,7 +63,7 @@ class Bootup
       if ('UTF-8' !== strtoupper(iconv_get_encoding('output_encoding'))) {
         iconv_set_encoding('output_encoding', 'UTF-8');
       }
-    } else if (!defined('ICONV_IMPL')) {
+    } elseif (!defined('ICONV_IMPL')) {
       require __DIR__ . '/bootup/iconv.php';
     }
   }
@@ -145,7 +145,7 @@ class Bootup
       ) {
         mb_language('uni');
       }
-    } else if (!defined('MB_OVERLOAD_MAIL')) {
+    } elseif (!defined('MB_OVERLOAD_MAIL')) {
       extension_loaded('iconv') or self::initIconv();
 
       require __DIR__ . '/bootup/mbstring.php';
@@ -464,7 +464,7 @@ class Bootup
       if ($exit === true) {
         // Use ob_start() to buffer content and avoid problem of headers already sent...
         if (headers_sent() === false) {
-          $severProtocol = (isset($_SERVER["SERVER_PROTOCOL"]) ? $_SERVER["SERVER_PROTOCOL"] : 'HTTP/1.1');
+          $severProtocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
           header($severProtocol . ' 301 Moved Permanently');
           header('Location: ' . $uri);
           exit();

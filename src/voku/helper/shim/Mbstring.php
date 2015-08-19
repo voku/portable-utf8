@@ -62,12 +62,7 @@ class Mbstring
 {
   const MB_CASE_FOLD = PHP_INT_MAX;
 
-  protected static
-
-    /**
-     * @var array
-     */
-      $encoding_list = array(
+  protected static $encoding_list = array(
       'ASCII',
       'UTF-8',
   ),
@@ -613,7 +608,7 @@ class Mbstring
 
     if (null === $length) {
       $length = 2147483647;
-    } else if ($length < 0) {
+    } elseif ($length < 0) {
       $length = iconv_strlen($str, $encoding . '//IGNORE') + $length - $start;
       if ($length < 0) {
         return '';
@@ -791,7 +786,7 @@ class Mbstring
 
     if ($offset != $intOffset) {
       $offset = 0;
-    } else if ($intOffset) {
+    } elseif ($intOffset) {
       if ($offset < 0) {
         $haystack = self::mb_substr($haystack, 0, $offset, $encoding);
         $offset = 0;

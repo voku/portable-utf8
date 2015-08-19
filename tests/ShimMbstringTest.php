@@ -11,7 +11,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
   /**
    * @expectedException PHPUnit_Framework_Error_Warning
    */
-  function testmb_stubs()
+  public function testmb_stubs()
   {
     self::assertFalse(p::mb_substitute_character('?'));
     self::assertSame('none', p::mb_substitute_character());
@@ -26,7 +26,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     self::assertFalse(true, 'mb_encode_mimeheader() is bugged. Please use iconv_mime_encode() instead');
   }
 
-  function testmb_convert_encoding()
+  public function testmb_convert_encoding()
   {
     self::assertSame(utf8_decode('déjà'), p::mb_convert_encoding('déjà', 'Windows-1252'));
     self::assertSame(base64_encode('déjà'), p::mb_convert_encoding('déjà', 'Base64'));
@@ -35,14 +35,14 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     self::assertSame('déjà', p::mb_convert_encoding('d&eacute;j&#224;', 'Utf-8', 'Html-entities'));
   }
 
-  function testStrCase()
+  public function testStrCase()
   {
     self::assertSame('déjà σσς iiıi', p::mb_strtolower('DÉJÀ Σσς İIıi'));
     self::assertSame('DÉJÀ ΣΣΣ İIII', p::mb_strtoupper('Déjà Σσς İIıi'));
     self::assertSame('Déjà Σσσ Iı Ii İi', p::mb_convert_case('DÉJÀ ΣΣΣ ıı iI İİ', MB_CASE_TITLE));
   }
 
-  function testmb_strlen()
+  public function testmb_strlen()
   {
     self::assertSame(3, mb_strlen('한국어'));
     self::assertSame(8, mb_strlen(n::normalize('한국어', n::NFD)));
@@ -51,37 +51,37 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     self::assertSame(8, p::mb_strlen(n::normalize('한국어', n::NFD)));
   }
 
-  function testmb_substr()
+  public function testmb_substr()
   {
-    $c = "déjà";
+    $c = 'déjà';
 
     if (PHP_VERSION_ID >= 50408) {
-      self::assertSame("jà", mb_substr($c, 2, null));
+      self::assertSame('jà', mb_substr($c, 2, null));
     }
 
-    self::assertSame("jà", mb_substr($c, 2));
-    self::assertSame("jà", mb_substr($c, -2));
-    self::assertSame("jà", mb_substr($c, -2, 3));
-    self::assertSame("", mb_substr($c, -1, 0));
-    self::assertSame("", mb_substr($c, 1, -4));
-    self::assertSame("j", mb_substr($c, -2, -1));
-    self::assertSame("", mb_substr($c, -2, -2));
-    self::assertSame("", mb_substr($c, 5, 0));
-    self::assertSame("", mb_substr($c, -5, 0));
+    self::assertSame('jà', mb_substr($c, 2));
+    self::assertSame('jà', mb_substr($c, -2));
+    self::assertSame('jà', mb_substr($c, -2, 3));
+    self::assertSame('', mb_substr($c, -1, 0));
+    self::assertSame('', mb_substr($c, 1, -4));
+    self::assertSame('j', mb_substr($c, -2, -1));
+    self::assertSame('', mb_substr($c, -2, -2));
+    self::assertSame('', mb_substr($c, 5, 0));
+    self::assertSame('', mb_substr($c, -5, 0));
 
-    self::assertSame("jà", p::mb_substr($c, 2, null));
-    self::assertSame("jà", p::mb_substr($c, 2));
-    self::assertSame("jà", p::mb_substr($c, -2));
-    self::assertSame("jà", p::mb_substr($c, -2, 3));
-    self::assertSame("", p::mb_substr($c, -1, 0));
-    self::assertSame("", p::mb_substr($c, 1, -4));
-    self::assertSame("j", p::mb_substr($c, -2, -1));
-    self::assertSame("", p::mb_substr($c, -2, -2));
-    self::assertSame("", p::mb_substr($c, 5, 0));
-    self::assertSame("", p::mb_substr($c, -5, 0));
+    self::assertSame('jà', p::mb_substr($c, 2, null));
+    self::assertSame('jà', p::mb_substr($c, 2));
+    self::assertSame('jà', p::mb_substr($c, -2));
+    self::assertSame('jà', p::mb_substr($c, -2, 3));
+    self::assertSame('', p::mb_substr($c, -1, 0));
+    self::assertSame('', p::mb_substr($c, 1, -4));
+    self::assertSame('j', p::mb_substr($c, -2, -1));
+    self::assertSame('', p::mb_substr($c, -2, -2));
+    self::assertSame('', p::mb_substr($c, 5, 0));
+    self::assertSame('', p::mb_substr($c, -5, 0));
   }
 
-  function testmb_strpos()
+  public function testmb_strpos()
   {
     /** @noinspection PhpUsageOfSilenceOperatorInspection */
     self::assertSame(false, @mb_strpos('abc', ''));
@@ -117,34 +117,34 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
   /**
    * @expectedException PHPUnit_Framework_Error_Warning
    */
-  function testmb_strpos_empty_delimiter()
+  public function testmb_strpos_empty_delimiter()
   {
     try {
       mb_strpos('abc', '');
-      self::assertFalse(true, "The previous line should trigger a warning (Empty delimiter)");
+      self::assertFalse(true, 'The previous line should trigger a warning (Empty delimiter)');
     }
     catch (\PHPUnit_Framework_Error_Warning $e) {
       p::mb_strpos('abc', '');
-      self::assertFalse(true, "The previous line should trigger a warning (Empty delimiter)");
+      self::assertFalse(true, 'The previous line should trigger a warning (Empty delimiter)');
     }
   }
 
   /**
    * @expectedException PHPUnit_Framework_Error_Warning
    */
-  function testmb_strpos_negative_offset()
+  public function testmb_strpos_negative_offset()
   {
     try {
       mb_strpos('abc', 'a', -1);
-      self::assertFalse(true, "The previous line should trigger a warning (Offset not contained in string)");
+      self::assertFalse(true, 'The previous line should trigger a warning (Offset not contained in string)');
     }
     catch (\PHPUnit_Framework_Error_Warning $e) {
       p::mb_strpos('abc', 'a', -1);
-      self::assertFalse(true, "The previous line should trigger a warning (Offset not contained in string)");
+      self::assertFalse(true, 'The previous line should trigger a warning (Offset not contained in string)');
     }
   }
 
-  function testmb_strstr()
+  public function testmb_strstr()
   {
     self::assertSame('국어', mb_strstr('한국어', '국'));
     self::assertSame('ÉJÀ', mb_stristr('DÉJÀ', 'é'));
@@ -166,14 +166,14 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     self::assertSame('Paris', p::mb_stristr('der Straße nach Paris', 'Paris'));
   }
 
-  function testmb_check_encoding()
+  public function testmb_check_encoding()
   {
     self::assertFalse(p::mb_check_encoding());
     self::assertTrue(p::mb_check_encoding('aςσb', 'UTF8'));
     self::assertTrue(p::mb_check_encoding('abc', 'ASCII'));
   }
 
-  function testmb_detect_encoding()
+  public function testmb_detect_encoding()
   {
     self::assertSame('ASCII', p::mb_detect_encoding('abc'));
     self::assertSame('UTF8', p::mb_detect_encoding('abc', 'UTF8, ASCII'));
@@ -190,7 +190,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     );
   }
 
-  function testmb_detect_order()
+  public function testmb_detect_order()
   {
     self::assertSame(
         array(
@@ -209,7 +209,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     );
   }
 
-  function testmb_language()
+  public function testmb_language()
   {
     self::assertSame('neutral', p::mb_language());
     self::assertTrue(p::mb_language('UNI'));
@@ -217,13 +217,13 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     self::assertSame('uni', p::mb_language());
   }
 
-  function testmb_encoding_aliases()
+  public function testmb_encoding_aliases()
   {
     self::assertSame(array('utf8'), p::mb_encoding_aliases('UTF-8'));
     self::assertFalse(p::mb_encoding_aliases('ASCII'));
   }
 
-  function testmb_strwidth()
+  public function testmb_strwidth()
   {
     self::assertSame(2, p::mb_strwidth("\0実"));
     self::assertSame(4, p::mb_strwidth('déjà'));

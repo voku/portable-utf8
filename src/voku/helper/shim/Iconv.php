@@ -38,13 +38,13 @@ class Iconv
   const ERROR_ILLEGAL_CHARACTER = 'iconv(): Detected an illegal character in input string';
   const ERROR_WRONG_CHARSET     = 'iconv(): Wrong charset, conversion from `%s\' to `%s\' is not allowed';
 
-  public static    $input_encoding    = 'utf-8';
-  public static    $output_encoding   = 'utf-8';
-  public static    $internal_encoding = 'utf-8';
-  public static    $translit_map      = array();
-  public static    $convert_map       = array();
-  public static    $error_handler, $last_error, $is_valid_utf8;
-  public static    $ulen_mask         = array(
+  public static $input_encoding    = 'utf-8';
+  public static $output_encoding   = 'utf-8';
+  public static $internal_encoding = 'utf-8';
+  public static $translit_map      = array();
+  public static $convert_map       = array();
+  public static $error_handler, $last_error, $is_valid_utf8;
+  public static $ulen_mask         = array(
       "\xC0" => 2,
       "\xD0" => 2,
       "\xE0" => 3,
@@ -200,7 +200,7 @@ class Iconv
           && !static::loadMap('from.', $c, $d)
       ) {
         $d = false;
-      } else if ('B' === strtoupper($str[$i + 1])) {
+      } elseif ('B' === strtoupper($str[$i + 1])) {
         $d = base64_decode($str[$i + 2]);
       } else {
         $d = rawurldecode(strtr(str_replace('%', '%25', $str[$i + 2]), '=_', '% '));
@@ -212,7 +212,7 @@ class Iconv
         if ('' !== trim($d)) {
           $result .= $d;
         }
-      } else if (ICONV_MIME_DECODE_CONTINUE_ON_ERROR & $mode) {
+      } elseif (ICONV_MIME_DECODE_CONTINUE_ON_ERROR & $mode) {
         $result .= "=?{$str[$i]}?{$str[$i + 1]}?{$str[$i + 2]}?={$str[$i + 3]}";
       } else {
         $result = false;
@@ -379,9 +379,9 @@ class Iconv
     for ($i = 0; $i < $len; ++$i) {
       if (isset($str[$i + 1], $map[$str[$i] . $str[$i + 1]])) {
         $result .= $map[$str[$i] . $str[++$i]];
-      } else if (isset($map[$str[$i]])) {
+      } elseif (isset($map[$str[$i]])) {
         $result .= $map[$str[$i]];
-      } else if (!$IGNORE) {
+      } elseif (!$IGNORE) {
         user_error(self::ERROR_ILLEGAL_CHARACTER);
 
         return false;
@@ -481,15 +481,15 @@ class Iconv
 
       if (isset($map[$uchr])) {
         $result .= $map[$uchr];
-      } else if ($TRANSLIT) {
+      } elseif ($TRANSLIT) {
         if (isset(self::$translit_map[$uchr])) {
           $uchr = self::$translit_map[$uchr];
-        } else if ($uchr >= "\xC3\x80") {
+        } elseif ($uchr >= "\xC3\x80") {
           $uchr = \Normalizer::normalize($uchr, \Normalizer::NFD);
 
           if ($uchr[0] < "\x80") {
             $uchr = $uchr[0];
-          } else if ($IGNORE) {
+          } elseif ($IGNORE) {
             continue;
           } else {
             return false;
@@ -499,7 +499,7 @@ class Iconv
         $str = $uchr . substr($str, $i);
         $len = strlen($str);
         $i = 0;
-      } else if (!$IGNORE) {
+      } elseif (!$IGNORE) {
         return false;
       }
     }
@@ -705,7 +705,7 @@ class Iconv
     INF === $encoding && $encoding = self::$internal_encoding;
     if (0 === strncasecmp($encoding, 'utf-8', 5)) {
       $encoding = INF;
-    } else if (false === $s = self::iconv($encoding, 'utf-8', $s)) {
+    } elseif (false === $s = self::iconv($encoding, 'utf-8', $s)) {
       return false;
     }
 
