@@ -402,7 +402,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
     );
 
-    if (Bootup::is_php('5.4') === true) {
+    if (Bootup::is_php('5.4') === true && defined('HHVM_VERSION') !== true) {
       foreach ($testArray as $before => $after) {
         self::assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'error by ' . $before);
       }
