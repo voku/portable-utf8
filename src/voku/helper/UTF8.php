@@ -5147,12 +5147,8 @@ class UTF8
       }
     }
 
-    if ($search && $replace && $subject) {
-      $subject = preg_replace($search, $replace, $subject, -1, $replace);
-      $count = $replace;
-    } else {
-      $count = 0;
-    }
+    $subject = preg_replace($search, $replace, $subject, -1, $replace);
+    $count = $replace;
 
     return $subject;
   }
