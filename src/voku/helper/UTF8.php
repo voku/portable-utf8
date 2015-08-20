@@ -5127,10 +5127,10 @@ class UTF8
   /**
    * str_ireplace
    *
-   * @param      $search
-   * @param      $replace
-   * @param      $subject
-   * @param null $count
+   * @param string $search
+   * @param string $replace
+   * @param string $subject
+   * @param null   $count
    *
    * @return mixed
    */
