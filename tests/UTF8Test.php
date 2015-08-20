@@ -1241,6 +1241,50 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testCombineSomeUtf8Functions()
+  {
+    $testArray = array(
+        "<h1>test\n</h1>"               => 'test',
+        "test\n\nöfuckäü"               => "test\n\nö*****äü",
+        "<b>FUCK\n</b>"                 => '*****',
+        "öäüfoo<strong>lall\n</strong>" => 'öäü*****lall',
+        " <b>lall</b>"                  => 'lall',
+        "\n"                            => "",
+        "<ul><li>test\n\n</li></ul>"    => "test",
+        "<blockquote>\n</blockquote>"   => "",
+        "</br>"                         => "",
+        ""                              => "",
+        ' '                             => "",
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      self::assertEquals($testResult, $this->cleanString($testString));
+    }
+  }
+
+  /**
+   * helper-function for test -> "testCombineSomeUtf8Functions()"
+   *
+   * @param $comment
+   *
+   * @return string
+   */
+  public function cleanString($comment)
+  {
+    foreach (array('fuck', 'foo', 'bar') as $value) {
+      $value = UTF8::trim($value);
+
+      if (UTF8::stripos($comment, $value) !== false) {
+
+        $comment = UTF8::str_ireplace($value, '*****', $comment);
+      }
+    }
+
+    $comment = UTF8::trim(strip_tags($comment));
+
+    return (string)$comment;
+  }
+
   public function testFilterInput()
   {
     $options = array(
