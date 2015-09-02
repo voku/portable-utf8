@@ -18,6 +18,7 @@ This library is a Unicode aware alternative to PHP's native string handling API.
 - Based on Nicolas Grekas's work: https://github.com/tchwork/utf8
 - Based on Behat's work: https://github.com/Behat/Transliterator
 - Based on Sebastián Grignoli's work: https://github.com/neitanod/forceutf8
+- Based on Ivan Enderlin's work: https://github.com/hoaproject/Ustring
 - Based on Paragon Initiative Enterprises's work: https://github.com/paragonie/random_compat
 
 Description

@@ -80,6 +80,88 @@ class UTF8
   );
 
   /**
+   * Numeric Code Point => UTF-8 Character
+   *
+   * @var array
+   */
+  protected static $whitespace = array(
+      0     => "\x0",
+      //NUL Byte
+      9     => "\x9",
+      //Tab
+      10    => "\xa",
+      //New Line
+      11    => "\xb",
+      //Vertical Tab
+      13    => "\xd",
+      //Carriage Return
+      32    => "\x20",
+      //Ordinary Space
+      160   => "\xc2\xa0",
+      //NO-BREAK SPACE
+      5760  => "\xe1\x9a\x80",
+      //OGHAM SPACE MARK
+      6158  => "\xe1\xa0\x8e",
+      //MONGOLIAN VOWEL SEPARATOR
+      8192  => "\xe2\x80\x80",
+      //EN QUAD
+      8193  => "\xe2\x80\x81",
+      //EM QUAD
+      8194  => "\xe2\x80\x82",
+      //EN SPACE
+      8195  => "\xe2\x80\x83",
+      //EM SPACE
+      8196  => "\xe2\x80\x84",
+      //THREE-PER-EM SPACE
+      8197  => "\xe2\x80\x85",
+      //FOUR-PER-EM SPACE
+      8198  => "\xe2\x80\x86",
+      //SIX-PER-EM SPACE
+      8199  => "\xe2\x80\x87",
+      //FIGURE SPACE
+      8200  => "\xe2\x80\x88",
+      //PUNCTUATION SPACE
+      8201  => "\xe2\x80\x89",
+      //THIN SPACE
+      8202  => "\xe2\x80\x8a",
+      //HAIR SPACE
+      8232  => "\xe2\x80\xa8",
+      //LINE SEPARATOR
+      8233  => "\xe2\x80\xa9",
+      //PARAGRAPH SEPARATOR
+      8239  => "\xe2\x80\xaf",
+      //NARROW NO-BREAK SPACE
+      8287  => "\xe2\x81\x9f",
+      //MEDIUM MATHEMATICAL SPACE
+      12288 => "\xe3\x80\x80"
+      //IDEOGRAPHIC SPACE
+  );
+
+  /**
+   * @var array
+   */
+  protected static $whitespaceTable = array(
+      'SPACE'                     => "\x20",
+      'NO-BREAK SPACE'            => "\xc2\xa0",
+      'OGHAM SPACE MARK'          => "\xe1\x9a\x80",
+      'EN QUAD'                   => "\xe2\x80\x80",
+      'EM QUAD'                   => "\xe2\x80\x81",
+      'EN SPACE'                  => "\xe2\x80\x82",
+      'EM SPACE'                  => "\xe2\x80\x83",
+      'THREE-PER-EM SPACE'        => "\xe2\x80\x84",
+      'FOUR-PER-EM SPACE'         => "\xe2\x80\x85",
+      'SIX-PER-EM SPACE'          => "\xe2\x80\x86",
+      'FIGURE SPACE'              => "\xe2\x80\x87",
+      'PUNCTUATION SPACE'         => "\xe2\x80\x88",
+      'THIN SPACE'                => "\xe2\x80\x89",
+      'HAIR SPACE'                => "\xe2\x80\x8a",
+      'ZERO WIDTH SPACE'          => "\xe2\x80\x8b",
+      'NARROW NO-BREAK SPACE'     => "\xe2\x80\xaf",
+      'MEDIUM MATHEMATICAL SPACE' => "\xe2\x81\x9f",
+      'IDEOGRAPHIC SPACE'         => "\xe3\x80\x80",
+  );
+
+  /**
    * @var array
    */
   protected static $commonCaseFold = array(
@@ -384,7 +466,7 @@ class UTF8
         if ('?' === $t) {
 
           if ($translitExtra === null) {
-            $translitExtra = self::getData('translit_extra');
+            $translitExtra = (array)self::getData('translit_extra');
           }
 
           if (isset($translitExtra[$c])) {
@@ -398,6 +480,10 @@ class UTF8
               $t = $subst_chr;
             }
           }
+        }
+
+        if ('?' === $t) {
+          $t = self::str_transliterate($c, $subst_chr);
         }
 
         $c = $t;
@@ -522,10 +608,14 @@ class UTF8
    */
   public static function normalize_whitespace($str)
   {
-    $whitespaces = implode('|', self::whitespace_table());
-    $regx = '/(' . $whitespaces . ')/s';
+    static $whitespacesRegex = null;
 
-    return preg_replace($regx, ' ', $str);
+    if ($whitespacesRegex === null) {
+      $whitespaces = implode('|', self::$whitespaceTable);
+      $whitespacesRegex = '/(' . $whitespaces . ')/s';
+    }
+
+    return preg_replace($whitespacesRegex, ' ', $str);
   }
 
   /**
@@ -539,28 +629,7 @@ class UTF8
    */
   public static function whitespace_table()
   {
-    $whitespace = array(
-        'SPACE'                     => "\x20",
-        'NO-BREAK SPACE'            => "\xc2\xa0",
-        'OGHAM SPACE MARK'          => "\xe1\x9a\x80",
-        'EN QUAD'                   => "\xe2\x80\x80",
-        'EM QUAD'                   => "\xe2\x80\x81",
-        'EN SPACE'                  => "\xe2\x80\x82",
-        'EM SPACE'                  => "\xe2\x80\x83",
-        'THREE-PER-EM SPACE'        => "\xe2\x80\x84",
-        'FOUR-PER-EM SPACE'         => "\xe2\x80\x85",
-        'SIX-PER-EM SPACE'          => "\xe2\x80\x86",
-        'FIGURE SPACE'              => "\xe2\x80\x87",
-        'PUNCTUATION SPACE'         => "\xe2\x80\x88",
-        'THIN SPACE'                => "\xe2\x80\x89",
-        'HAIR SPACE'                => "\xe2\x80\x8a",
-        'ZERO WIDTH SPACE'          => "\xe2\x80\x8b",
-        'NARROW NO-BREAK SPACE'     => "\xe2\x80\xaf",
-        'MEDIUM MATHEMATICAL SPACE' => "\xe2\x81\x9f",
-        'IDEOGRAPHIC SPACE'         => "\xe3\x80\x80",
-    );
-
-    return $whitespace;
+    return self::$whitespaceTable;
   }
 
   /**
@@ -618,7 +687,7 @@ class UTF8
    *
    * @param string $file
    *
-   * @return bool|mixed false on error
+   * @return bool|string|array|int false on error
    */
   protected static function getData($file)
   {
@@ -1019,7 +1088,7 @@ class UTF8
       $mBytes = 1; // cached expected number of octets in the current sequence
       $len = strlen($str);
       for ($i = 0; $i < $len; $i++) {
-        $in = ord($str{$i});
+        $in = ord($str[$i]);
         if ($mState == 0) {
           // When mState is zero we expect either a US-ASCII character or a
           // multi-octet sequence.
@@ -1560,6 +1629,7 @@ class UTF8
         $fullCaseFold = self::getData('caseFolding_full');
       }
 
+      /** @noinspection OffsetOperationsInspection */
       $string = str_replace($fullCaseFold[0], $fullCaseFold[1], $string);
     }
 
@@ -2873,17 +2943,18 @@ class UTF8
       return 0;
     }
 
-    $a = ($s = unpack('C*', substr($s, 0, 4))) ? $s[1] : 0;
+    $s = unpack('C*', substr($s, 0, 4));
+    $a = $s ? $s[1] : 0;
 
-    if (0xF0 <= $a) {
+    if (0xF0 <= $a && isset($s[4])) {
       return (($a - 0xF0) << 18) + (($s[2] - 0x80) << 12) + (($s[3] - 0x80) << 6) + $s[4] - 0x80;
     }
 
-    if (0xE0 <= $a) {
+    if (0xE0 <= $a && isset($s[3])) {
       return (($a - 0xE0) << 12) + (($s[2] - 0x80) << 6) + $s[3] - 0x80;
     }
 
-    if (0xC0 <= $a) {
+    if (0xC0 <= $a && isset($s[2])) {
       return (($a - 0xC0) << 6) + $s[2] - 0x80;
     }
 
@@ -3265,7 +3336,7 @@ class UTF8
   }
 
   /**
-   * get hexadecimal code point (U+xxxx) of a UTF-8 encoded character
+   * Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.
    *
    * @param    string $chr The input character
    * @param    string $pfix
@@ -3278,7 +3349,7 @@ class UTF8
   }
 
   /**
-   * converts Integer to hexadecimal U+xxxx code point representation
+   * Converts Integer to hexadecimal U+xxxx code point representation.
    *
    * @param    int    $int The integer to be converted to hexadecimal code point
    * @param    string $pfix
@@ -3296,6 +3367,32 @@ class UTF8
     }
 
     return '';
+  }
+
+  /**
+   * Get a binary representation of a specific character.
+   *
+   * @param   string $string The input character.
+   *
+   * @return  string
+   */
+  public static function str_to_binary($string)
+  {
+    $string = (string)$string;
+
+    if (!isset($string[0])) {
+      return '';
+    }
+
+    // init
+    $out = null;
+    $max = strlen($string);
+
+    for ($i = 0; $i < $max; ++$i) {
+      $out .= vsprintf('%08b', (array)self::ord($string[$i]));
+    }
+
+    return $out;
   }
 
   /**
@@ -5307,63 +5404,7 @@ class UTF8
    */
   public static function ws()
   {
-    static $white = array(
-
-      //    Numeric Code Point    => UTF-8 Character
-
-      0     => "\x0",
-      //NUL Byte
-      9     => "\x9",
-      //Tab
-      10    => "\xa",
-      //New Line
-      11    => "\xb",
-      //Vertical Tab
-      13    => "\xd",
-      //Carriage Return
-      32    => "\x20",
-      //Ordinary Space
-      160   => "\xc2\xa0",
-      //NO-BREAK SPACE
-      5760  => "\xe1\x9a\x80",
-      //OGHAM SPACE MARK
-      6158  => "\xe1\xa0\x8e",
-      //MONGOLIAN VOWEL SEPARATOR
-      8192  => "\xe2\x80\x80",
-      //EN QUAD
-      8193  => "\xe2\x80\x81",
-      //EM QUAD
-      8194  => "\xe2\x80\x82",
-      //EN SPACE
-      8195  => "\xe2\x80\x83",
-      //EM SPACE
-      8196  => "\xe2\x80\x84",
-      //THREE-PER-EM SPACE
-      8197  => "\xe2\x80\x85",
-      //FOUR-PER-EM SPACE
-      8198  => "\xe2\x80\x86",
-      //SIX-PER-EM SPACE
-      8199  => "\xe2\x80\x87",
-      //FIGURE SPACE
-      8200  => "\xe2\x80\x88",
-      //PUNCTUATION SPACE
-      8201  => "\xe2\x80\x89",
-      //THIN SPACE
-      8202  => "\xe2\x80\x8a",
-      //HAIR SPACE
-      8232  => "\xe2\x80\xa8",
-      //LINE SEPARATOR
-      8233  => "\xe2\x80\xa9",
-      //PARAGRAPH SEPARATOR
-      8239  => "\xe2\x80\xaf",
-      //NARROW NO-BREAK SPACE
-      8287  => "\xe2\x81\x9f",
-      //MEDIUM MATHEMATICAL SPACE
-      12288 => "\xe3\x80\x80"
-      //IDEOGRAPHIC SPACE
-    );
-
-    return $white;
+    return self::$whitespace;
   }
 
   /**
@@ -5392,6 +5433,164 @@ class UTF8
     $str = self::filter($str);
 
     mb_parse_str($str, $result);
+  }
+
+  /**
+   * Get character of a specific character.
+   *
+   * @param   string $chr Character.
+   *
+   * @return  string 'RTL' or 'LTR'
+   */
+  public static function getCharDirection($chr)
+  {
+    $c = static::chr_to_decimal($chr);
+
+    if (!(0x5be <= $c && 0x10b7f >= $c)) {
+      return 'LTR';
+    }
+
+    if (0x85e >= $c) {
+
+      if (0x5be === $c ||
+          0x5c0 === $c ||
+          0x5c3 === $c ||
+          0x5c6 === $c ||
+          (0x5d0 <= $c && 0x5ea >= $c) ||
+          (0x5f0 <= $c && 0x5f4 >= $c) ||
+          0x608 === $c ||
+          0x60b === $c ||
+          0x60d === $c ||
+          0x61b === $c ||
+          (0x61e <= $c && 0x64a >= $c) ||
+          (0x66d <= $c && 0x66f >= $c) ||
+          (0x671 <= $c && 0x6d5 >= $c) ||
+          (0x6e5 <= $c && 0x6e6 >= $c) ||
+          (0x6ee <= $c && 0x6ef >= $c) ||
+          (0x6fa <= $c && 0x70d >= $c) ||
+          0x710 === $c ||
+          (0x712 <= $c && 0x72f >= $c) ||
+          (0x74d <= $c && 0x7a5 >= $c) ||
+          0x7b1 === $c ||
+          (0x7c0 <= $c && 0x7ea >= $c) ||
+          (0x7f4 <= $c && 0x7f5 >= $c) ||
+          0x7fa === $c ||
+          (0x800 <= $c && 0x815 >= $c) ||
+          0x81a === $c ||
+          0x824 === $c ||
+          0x828 === $c ||
+          (0x830 <= $c && 0x83e >= $c) ||
+          (0x840 <= $c && 0x858 >= $c) ||
+          0x85e === $c
+      ) {
+        return 'RTL';
+      }
+
+    } elseif (0x200f === $c) {
+
+      return 'RTL';
+
+    } elseif (0xfb1d <= $c) {
+
+      if (0xfb1d === $c ||
+          (0xfb1f <= $c && 0xfb28 >= $c) ||
+          (0xfb2a <= $c && 0xfb36 >= $c) ||
+          (0xfb38 <= $c && 0xfb3c >= $c) ||
+          0xfb3e === $c ||
+          (0xfb40 <= $c && 0xfb41 >= $c) ||
+          (0xfb43 <= $c && 0xfb44 >= $c) ||
+          (0xfb46 <= $c && 0xfbc1 >= $c) ||
+          (0xfbd3 <= $c && 0xfd3d >= $c) ||
+          (0xfd50 <= $c && 0xfd8f >= $c) ||
+          (0xfd92 <= $c && 0xfdc7 >= $c) ||
+          (0xfdf0 <= $c && 0xfdfc >= $c) ||
+          (0xfe70 <= $c && 0xfe74 >= $c) ||
+          (0xfe76 <= $c && 0xfefc >= $c) ||
+          (0x10800 <= $c && 0x10805 >= $c) ||
+          0x10808 === $c ||
+          (0x1080a <= $c && 0x10835 >= $c) ||
+          (0x10837 <= $c && 0x10838 >= $c) ||
+          0x1083c === $c ||
+          (0x1083f <= $c && 0x10855 >= $c) ||
+          (0x10857 <= $c && 0x1085f >= $c) ||
+          (0x10900 <= $c && 0x1091b >= $c) ||
+          (0x10920 <= $c && 0x10939 >= $c) ||
+          0x1093f === $c ||
+          0x10a00 === $c ||
+          (0x10a10 <= $c && 0x10a13 >= $c) ||
+          (0x10a15 <= $c && 0x10a17 >= $c) ||
+          (0x10a19 <= $c && 0x10a33 >= $c) ||
+          (0x10a40 <= $c && 0x10a47 >= $c) ||
+          (0x10a50 <= $c && 0x10a58 >= $c) ||
+          (0x10a60 <= $c && 0x10a7f >= $c) ||
+          (0x10b00 <= $c && 0x10b35 >= $c) ||
+          (0x10b40 <= $c && 0x10b55 >= $c) ||
+          (0x10b58 <= $c && 0x10b72 >= $c) ||
+          (0x10b78 <= $c && 0x10b7f >= $c)
+      ) {
+        return 'RTL';
+      }
+    }
+
+    return 'LTR';
+  }
+
+  /**
+   * Get a decimal code representation of a specific character.
+   *
+   * @param   string $chr The input character
+   *
+   * @return  int
+   */
+  public static function chr_to_decimal($chr)
+  {
+    $chr = (string)$chr;
+    $code = self::ord($chr[0]);
+    $bytes = 1;
+
+    if (!($code & 0x80)) {
+      // 0xxxxxxx
+      return $code;
+    }
+
+    if (($code & 0xe0) === 0xc0) {
+      // 110xxxxx
+      $bytes = 2;
+      $code &= ~0xc0;
+    } elseif (($code & 0xf0) == 0xe0) {
+      // 1110xxxx
+      $bytes = 3;
+      $code &= ~0xe0;
+    } elseif (($code & 0xf8) === 0xf0) {
+      // 11110xxx
+      $bytes = 4;
+      $code &= ~0xf0;
+    }
+
+    for ($i = 2; $i <= $bytes; $i++) {
+      // 10xxxxxx
+      $code = ($code << 6) + (self::ord($chr[$i - 1]) & ~0x80);
+    }
+
+    return $code;
+  }
+
+  /**
+   * Get a UTF-8 character from its decimal code representation.
+   *
+   * @param   int $code Code.
+   *
+   * @return  string
+   */
+  public static function decimal_to_chr($code)
+  {
+    self::checkForSupport();
+
+    return mb_convert_encoding(
+        '&#x' . dechex($code) . ';',
+        'UTF-8',
+        'HTML-ENTITIES'
+    );
   }
 
   /**

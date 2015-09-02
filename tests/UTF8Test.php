@@ -314,6 +314,19 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testGetCharDirection()
+  {
+    $testArray = array(
+        'ا'   => 'RTL',
+        'abc' => 'LTR',
+        '?'   => 'LTR',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::getCharDirection($actual), 'error by ' . $actual);
+    }
+  }
+
   public function testHtmlEntityDecode()
   {
     $testArray = array(
@@ -1919,18 +1932,30 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         -1                              => -1,
         ' '                             => ' ',
         ''                              => '',
-        'أبز'                           => '???',
+        'أبز'                           => '\'bz',
         "\xe2\x80\x99"                  => '\'',
         'Ɓtest'                         => 'Btest',
-        '  -ABC-中文空白-  '                => '  -ABC-????-  ',
-        "      - abc- \xc2\x87"         => '      - abc- ?',
+        '  -ABC-中文空白-  '                => '  -ABC-Zhong Wen Kong Bai -  ',
+        "      - abc- \xc2\x87"         => '      - abc- ',
         'abc'                           => 'abc',
         'deja vu'                       => 'deja vu',
         'déjà vu'                       => 'deja vu',
-        'déjà σσς iıii'                 => 'deja ??? iiii',
+        'déjà σσς iıii'                 => 'deja sss iiii',
         "test\x80-\xBFöäü"              => 'test-oau',
         'Internationalizaetion'         => 'Internationalizaetion',
-        "中 - &#20013; - %&? - \xc2\x80" => '? - &#20013; - %&? - ?',
+        "中 - &#20013; - %&? - \xc2\x80" => 'Zhong  - &#20013; - %&? - ',
+        'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
+        'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
+        'أحبك'                          => '\'Hbk',
+        'キャンパス'                         => 'kiyanpasu',
+        'биологическом'                 => 'biologhichieskom',
+        '정, 병호'                         => 'jeong, byeongho',
+        'ますだ, よしひこ'                     => 'masuda, yosihiko',
+        'मोनिच'                         => 'monic',
+        'क्षȸ'                          => 'kssdb',
+        'أحبك 😀'                       => '\'Hbk ',
+        '∀ i ∈ ℕ'                       => '[?] i [?] N',
+        '👍 💩 😄 ❤️ 👍 💩 😄 ❤أحبك'    => '   [?]    \'Hbk',
     );
 
     foreach ($tests as $before => $after) {
@@ -1968,6 +1993,47 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     foreach ($tests as $before => $after) {
       self::assertEquals($after, UTF8::str_transliterate($before), $before);
+    }
+  }
+
+  public function testDecimalToChr()
+  {
+    $tests = array(
+        0x7e   => '~',
+        0xa7   => '§',
+        0x1207 => 'ሇ',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::decimal_to_chr($before));
+    }
+  }
+
+  public function testChrToDecimal()
+  {
+    $tests = array(
+        '~' => 0x7e,
+        '§' => 0xa7,
+        'ሇ' => 0x1207,
+
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::chr_to_decimal($before));
+    }
+  }
+
+  public function testChrToBinary()
+  {
+    $tests = array(
+        '~' => '01111110',
+        '§' => '1100001010100111',
+        'ሇ' => '111000011000100010000111',
+
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::str_to_binary($before));
     }
   }
 
