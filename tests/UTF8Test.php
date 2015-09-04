@@ -1261,13 +1261,13 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "test\n\nöfuckäü"               => "test\n\nö*****äü",
         "<b>FUCK\n</b>"                 => '*****',
         "öäüfoo<strong>lall\n</strong>" => 'öäü*****lall',
-        " <b>lall</b>"                  => 'lall',
-        "\n"                            => "",
-        "<ul><li>test\n\n</li></ul>"    => "test",
-        "<blockquote>\n</blockquote>"   => "",
-        "</br>"                         => "",
-        ""                              => "",
-        ' '                             => "",
+        ' <b>lall</b>'                  => 'lall',
+        "\n"                            => '',
+        "<ul><li>test\n\n</li></ul>"    => 'test',
+        "<blockquote>\n</blockquote>"   => '',
+        '</br>'                         => '',
+        ''                              => '',
+        ' '                             => '',
     );
 
     foreach ($testArray as $testString => $testResult) {
