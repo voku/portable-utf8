@@ -1955,7 +1955,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'क्षȸ'                          => 'kssdb',
         'أحبك 😀'                       => '\'Hbk ',
         '∀ i ∈ ℕ'                       => '[?] i [?] N',
-        '👍 💩 😄 ❤️ 👍 💩 😄 ❤أحبك'    => '   [?]    \'Hbk',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'    => '       \'Hbk',
     );
 
     foreach ($tests as $before => $after) {
