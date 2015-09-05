@@ -1668,11 +1668,10 @@ class UTF8
    * @since 1.0.4
    *
    * @param string    $string
-   * @param bool|true $useJsonDecode WARNING: use this only if there is not real-JSON in the string
    *
    * @return string
    */
-  public static function urldecode($string, $useJsonDecode = true)
+  public static function urldecode($string)
   {
     if (!$string) {
       return $string;
@@ -1690,16 +1689,6 @@ class UTF8
             )
         )
     );
-
-    if (
-        $useJsonDecode === true
-        &&
-        $string
-        &&
-        strpos($string, '\\u') !== false
-    ) {
-      $string = json_decode('"' . $string . '"');
-    }
 
     return (string)$string;
   }
@@ -1934,6 +1923,17 @@ class UTF8
       }
     }
 
+    self::checkForSupport();
+
+    $buf = preg_replace_callback(
+        '/\\\\u([0-9a-f]{4})/i',
+        function ($match)
+        {
+          return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+        },
+        $buf
+    );
+
     return $buf;
   }
 
@@ -1950,6 +1950,8 @@ class UTF8
   }
 
   /**
+   * try to check if a string is a json-string
+   *
    * @param $string
    *
    * @return bool
