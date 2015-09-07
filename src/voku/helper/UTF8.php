@@ -1925,11 +1925,22 @@ class UTF8
 
     self::checkForSupport();
 
+    // decode unicode escape sequences
     $buf = preg_replace_callback(
         '/\\\\u([0-9a-f]{4})/i',
         function ($match)
         {
           return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+        },
+        $buf
+    );
+
+    // decode UTF-8 codepoints
+    $buf = preg_replace_callback(
+        '/&#\d{2,4};/',
+        function ($match)
+        {
+          return mb_convert_encoding($match[0], 'UTF-8', 'HTML-ENTITIES');
         },
         $buf
     );

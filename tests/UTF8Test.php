@@ -1662,12 +1662,16 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testToUtf8_v2()
   {
     $testArray = array(
-        'Düsseldorf' => 'Düsseldorf',
-        'Ã'          => 'Ã',
-        ' '          => ' ',
-        ''           => '',
-        "\n"         => "\n",
-        'test'       => 'test',
+        'Düsseldorf'                   => 'Düsseldorf',
+        'Ã'                            => 'Ã',
+        ' '                            => ' ',
+        ''                             => '',
+        "\n"                           => "\n",
+        'test'                         => 'test',
+        'Here&#39;s some quoted text.' => 'Here\'s some quoted text.',
+        '&#39;'                        => '\'',
+        "\u0063\u0061\u0074"           => 'cat',
+        "\u0039&#39;\u0039"            => '9\'9',
     );
 
     foreach ($testArray as $before => $after) {
@@ -1909,7 +1913,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         'क्षȸ'                          => 'kssdb',
         'أحبك 😀'                       => '\'Hbk ',
         '∀ i ∈ ℕ'                       => '[?] i [?] N',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'    => '       \'Hbk',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '       \'Hbk',
     );
 
     foreach ($tests as $before => $after) {
