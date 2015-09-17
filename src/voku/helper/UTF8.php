@@ -641,7 +641,15 @@ class UTF8
    */
   public static function normalize_msword($str)
   {
-    return strtr($str, self::$utf8MSWord);
+    static $utf8MSWordKeys = null;
+    static $utf8MSWordValues = null;
+
+    if ($utf8MSWordKeys === null) {
+      $utf8MSWordKeys = array_keys(self::$utf8MSWord);
+      $utf8MSWordValues = array_values(self::$utf8MSWord);
+    }
+
+    return str_replace($utf8MSWordKeys, $utf8MSWordValues, $str);
   }
 
   /**
@@ -732,13 +740,13 @@ class UTF8
     $chars = $ar[0];
     foreach ($chars as $i => &$c) {
 
-      $ordC0 = ord($c{0});
+      $ordC0 = ord($c[0]);
 
       if ($ordC0 >= 0 && $ordC0 <= 127) {
         continue;
       }
 
-      $ordC1 = ord($c{1});
+      $ordC1 = ord($c[1]);
 
       // ASCII - next please
       if ($ordC0 >= 192 && $ordC0 <= 223) {
@@ -746,28 +754,28 @@ class UTF8
       }
 
       if ($ordC0 >= 224) {
-        $ordC2 = ord($c{2});
+        $ordC2 = ord($c[2]);
 
         if ($ordC0 <= 239) {
           $ord = ($ordC0 - 224) * 4096 + ($ordC1 - 128) * 64 + ($ordC2 - 128);
         }
 
         if ($ordC0 >= 240) {
-          $ordC3 = ord($c{3});
+          $ordC3 = ord($c[3]);
 
           if ($ordC0 <= 247) {
             $ord = ($ordC0 - 240) * 262144 + ($ordC1 - 128) * 4096 + ($ordC2 - 128) * 64 + ($ordC3 - 128);
           }
 
           if ($ordC0 >= 248) {
-            $ordC4 = ord($c{4});
+            $ordC4 = ord($c[4]);
 
             if ($ordC0 <= 251) {
               $ord = ($ordC0 - 248) * 16777216 + ($ordC1 - 128) * 262144 + ($ordC2 - 128) * 4096 + ($ordC3 - 128) * 64 + ($ordC4 - 128);
             }
 
             if ($ordC0 >= 252) {
-              $ordC5 = ord($c{5});
+              $ordC5 = ord($c[5]);
 
               if ($ordC0 <= 253) {
                 $ord = ($ordC0 - 252) * 1073741824 + ($ordC1 - 128) * 16777216 + ($ordC2 - 128) * 262144 + ($ordC3 - 128) * 4096 + ($ordC4 - 128) * 64 + ($ordC5 - 128);
@@ -1403,6 +1411,7 @@ class UTF8
   protected static function rxClass($s, $class = '')
   {
     static $rxClassCache = array();
+    
     $cacheKey = $s . $class;
 
     if (isset($rxClassCache[$cacheKey])) {
@@ -1620,8 +1629,15 @@ class UTF8
   public static function strtocasefold($string, $full = true)
   {
     static $fullCaseFold = null;
+    static $commonCaseFoldKeys = null;
+    static $commonCaseFoldValues = null;
 
-    $string = strtr($string, self::$commonCaseFold);
+    if ($commonCaseFoldKeys === null) {
+      $commonCaseFoldKeys = array_keys(self::$commonCaseFold);
+      $commonCaseFoldValues = array_values(self::$commonCaseFold);
+    }
+
+    $string = str_replace($commonCaseFoldKeys, $commonCaseFoldValues, $string);
 
     if ($full) {
 
@@ -1704,13 +1720,21 @@ class UTF8
    */
   public static function fix_simple_utf8($str)
   {
+    static $brokenUtf8ToUtf8Keys = null;
+    static $brokenUtf8ToUtf8Values = null;
+    
     $str = (string)$str;
 
     if (!isset($str[0])) {
       return '';
     }
 
-    return strtr($str, self::$brokenUtf8ToUtf8);
+    if ($brokenUtf8ToUtf8Keys === null) {
+      $brokenUtf8ToUtf8Keys = array_keys(self::$brokenUtf8ToUtf8);
+      $brokenUtf8ToUtf8Values = array_values(self::$brokenUtf8ToUtf8);
+    }
+
+    return str_replace($brokenUtf8ToUtf8Keys, $brokenUtf8ToUtf8Values, $str);
   }
 
   /**
@@ -2655,6 +2679,9 @@ class UTF8
    */
   public static function utf8_decode($string)
   {
+    static $utf8ToWin1252Keys = null;
+    static $utf8ToWin1252Values = null;
+
     $string = (string)$string;
 
     if (!isset($string[0])) {
@@ -2663,9 +2690,15 @@ class UTF8
 
     // init
     self::checkForSupport();
+
     $string = self::to_utf8($string);
 
-    return Xml::utf8_decode(strtr($string, self::$utf8ToWin1252));
+    if ($utf8ToWin1252Keys === null) {
+      $utf8ToWin1252Keys = array_keys(self::$utf8ToWin1252);
+      $utf8ToWin1252Values = array_values(self::$utf8ToWin1252);
+    }
+
+    return Xml::utf8_decode(str_replace($utf8ToWin1252Keys, $utf8ToWin1252Values, $string));
   }
 
   /**
@@ -2703,7 +2736,16 @@ class UTF8
     if (false === strpos($string, "\xC2")) {
       return $string;
     } else {
-      return strtr($string, self::$cp1252ToUtf8);
+
+      static $cp1252ToUtf8Keys = null;
+      static $cp1252ToUtf8Values = null;
+
+      if ($cp1252ToUtf8Keys === null) {
+        $cp1252ToUtf8Keys = array_keys(self::$cp1252ToUtf8);
+        $cp1252ToUtf8Values = array_values(self::$cp1252ToUtf8);
+      }
+
+      return str_replace($cp1252ToUtf8Keys, $cp1252ToUtf8Values, $string);
     }
   }
 
@@ -4049,13 +4091,18 @@ class UTF8
 
       // fallback
 
-      if (empty($case_table)) {
-        $case_table = self::case_table();
+      static $caseTableKeys = null;
+      static $caseTableValues = null;
+
+      if ($caseTableKeys === null) {
+        $caseTable = self::case_table();
+        $caseTableKeys = array_keys($caseTable);
+        $caseTableValues = array_values($caseTable);
       }
 
       $str = self::clean($str);
 
-      return strtr($str, $case_table);
+      return str_replace($caseTableKeys, $caseTableValues, $str);
     }
   }
 
