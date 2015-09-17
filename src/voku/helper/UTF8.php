@@ -1667,30 +1667,32 @@ class UTF8
    *
    * @since 1.0.4
    *
-   * @param string    $string
+   * @param string $str
    *
    * @return string
    */
-  public static function urldecode($string)
+  public static function urldecode($str)
   {
-    if (!$string) {
-      return $string;
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
     }
 
-    $string = preg_replace('/%u([0-9a-f]{3,4})/i', '&#x\\1;', urldecode($string));
+    $str = preg_replace('/%u([0-9a-f]{3,4})/i', '&#x\\1;', urldecode($str));
 
     $flags = Bootup::is_php('5.4') ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
 
-    $string = self::fix_simple_utf8(
+    $str = self::fix_simple_utf8(
         rawurldecode(
             self::html_entity_decode(
-                self::to_utf8($string),
+                self::to_utf8($str),
                 $flags
             )
         )
     );
 
-    return (string)$string;
+    return (string)$str;
   }
 
   /**
