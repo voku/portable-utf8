@@ -7,7 +7,7 @@ use voku\helper\shim\Iconv as p;
  */
 class ShimIconvTest extends PHPUnit_Framework_TestCase
 {
-  function testIconv()
+  public function testIconv()
   {
     // Native iconv() behavior varies between versions and OS for these two tests
     // See e.g. https://bugs.php.net/52211
@@ -15,7 +15,7 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
       self::assertSame(PHP_VERSION_ID >= 50400 ? false : 'n', @iconv('UTF-8', 'ISO-8859-1', 'nœud'));
       self::assertSame('nud', iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
-    } else if (PHP_VERSION_ID >= 50400) {
+    } elseif (PHP_VERSION_ID >= 50400) {
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
       self::assertSame(false, @iconv('UTF-8', 'ISO-8859-1', 'nœud'));
 
@@ -46,7 +46,7 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
     self::assertSame('4', p::iconv('UTF-8', 'UTF-8', 4));
   }
 
-  function testIconvStrlen()
+  public function testIconvStrlen()
   {
     self::assertSame(4, p::iconv_strlen('déjà'));
     self::assertSame(3, p::iconv_strlen('한국어'));
@@ -58,20 +58,25 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
     self::assertSame(3, p::strlen2('한국어'));
   }
 
-  function testIconvStrPos()
+  public function testIconvStrPos()
   {
     self::assertSame(1, p::iconv_strpos('11--', '1-', 0, 'UTF-8'));
     self::assertSame(2, p::iconv_strpos('-11--', '1-', 0, 'UTF-8'));
     self::assertSame(false, p::iconv_strrpos('한국어', '', 'UTF-8'));
     self::assertSame(1, p::iconv_strrpos('한국어', '국', 'UTF-8'));
+    self::assertEquals(false, p::iconv_strrpos('한국어', ''));
+    self::assertEquals(1, p::iconv_strrpos('한국어', '국'));
+    self::assertEquals(6, p::iconv_strrpos('κόσμε-κόσμε', 'κ'));
+    self::assertEquals(13, p::iconv_strrpos('test κόσμε κόσμε test', 'σ'));
+    self::assertEquals(9, p::iconv_strrpos('中文空白-ÖÄÜ-中文空白', '中'));
   }
 
-  function testIconvSubstr()
+  public function testIconvSubstr()
   {
     self::assertSame('x', p::iconv_substr('x', 0, 1, 'UTF-8'));
   }
 
-  function testIconvMimeEncode()
+  public function testIconvMimeEncode()
   {
     $text = "\xE3\x83\x86\xE3\x82\xB9\xE3\x83\x88\xE3\x83\x86\xE3\x82\xB9\xE3\x83\x88";
     $options = array(
@@ -90,23 +95,23 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
   /**
    * @expectedException PHPUnit_Framework_Error_Notice
    */
-  function testIconvMimeDecode()
+  public function testIconvMimeDecode()
   {
-    self::assertSame('Legal encoded-word: * .', p::iconv_mime_decode("Legal encoded-word: =?utf-8?B?Kg==?= ."));
-    self::assertSame('Legal encoded-word: * .', p::iconv_mime_decode("Legal encoded-word: =?utf-8?Q?*?= ."));
+    self::assertSame('Legal encoded-word: * .', p::iconv_mime_decode('Legal encoded-word: =?utf-8?B?Kg==?= .'));
+    self::assertSame('Legal encoded-word: * .', p::iconv_mime_decode('Legal encoded-word: =?utf-8?Q?*?= .'));
     self::assertSame(
         'Illegal encoded-word:  .',
         p::iconv_mime_decode(
-            "Illegal encoded-word: =?utf-8?Q?" . chr(0xA1) . "?= .",
+            'Illegal encoded-word: =?utf-8?Q?' . chr(0xA1) . '?= .',
             ICONV_MIME_DECODE_CONTINUE_ON_ERROR
         )
     );
 
-    p::iconv_mime_decode("Illegal encoded-word: =?utf-8?Q?" . chr(0xA1) . "?= .");
-    self::assertFalse(true, "An illegal encoded-word should trigger a notice");
+    p::iconv_mime_decode('Illegal encoded-word: =?utf-8?Q?' . chr(0xA1) . '?= .');
+    self::assertFalse(true, 'An illegal encoded-word should trigger a notice');
   }
 
-  function testIconvMimeDecodeHeaders()
+  public function testIconvMimeDecodeHeaders()
   {
     $headers = <<<HEADERS
 From: =?UTF-8?B?PGZvb0BleGFtcGxlLmNvbT4=?=
@@ -129,7 +134,7 @@ HEADERS;
     self::assertSame($result, p::iconv_mime_decode_headers($headers, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8'));
   }
 
-  function testIconvGetEncoding()
+  public function testIconvGetEncoding()
   {
     $a = array(
         'input_encoding'    => 'UTF-8',

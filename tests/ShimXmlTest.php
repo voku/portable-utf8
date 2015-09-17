@@ -7,7 +7,7 @@ use voku\helper\shim\Xml as p;
  */
 class ShimXmlTest extends PHPUnit_Framework_TestCase
 {
-  function testUtf8Encode()
+  public function testUtf8Encode()
   {
     $s = array_map('chr', range(0, 255));
     $s = implode('', $s);

@@ -11,7 +11,7 @@
   ],
   "type": "library",
   "homepage": "https://github.com/voku/portable-utf8",
-  "license": "CC-BY-3.0",
+  "license": "(Apache-2.0 or GPL-2.0)",
   "authors": [
     {
       "name": "Nicolas Grekas",

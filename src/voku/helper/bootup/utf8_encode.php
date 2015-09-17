@@ -11,6 +11,9 @@
 
 use voku\helper\shim as s;
 
+/** @noinspection PhpUsageOfSilenceOperatorInspection */
+@trigger_error('You are using a fallback implementation of the xml extension. Installing the native one is highly recommended instead. | http://php.net/manual/en/xml.installation.php', E_USER_DEPRECATED);
+
 /**
  * @param string $str
  *

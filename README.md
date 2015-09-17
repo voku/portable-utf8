@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/voku/portable-utf8.png?label=ready&title=Ready)](https://waffle.io/voku/portable-utf8)
 [![Build Status](https://travis-ci.org/voku/portable-utf8.svg?branch=master)](https://travis-ci.org/voku/portable-utf8)
 [![Build status](https://ci.appveyor.com/api/projects/status/gnejjnk7qplr7f5t/branch/master?svg=true)](https://ci.appveyor.com/project/voku/portable-utf8/branch/master)
 [![Coverage Status](https://coveralls.io/repos/voku/portable-utf8/badge.svg?branch=master&service=github)](https://coveralls.io/github/voku/portable-utf8?branch=master)
@@ -18,7 +19,8 @@ This library is a Unicode aware alternative to PHP's native string handling API.
 - Based on Nicolas Grekas's work: https://github.com/tchwork/utf8
 - Based on Behat's work: https://github.com/Behat/Transliterator
 - Based on Sebastián Grignoli's work: https://github.com/neitanod/forceutf8
-- Based on Paragon Initiative Enterprises's work: https://github.com/paragonie/random_compat/
+- Based on Ivan Enderlin's work: https://github.com/hoaproject/Ustring
+- Based on Paragon Initiative Enterprises's work: https://github.com/paragonie/random_compat
 
 Description
 ===========
@@ -47,13 +49,13 @@ The problem with "mbstring" and others is that most of the time you cannot ensur
 Usage:
 ======
 
-Example 1:
+Example 1: UTF8::cleanup()
 ```php
   $cleanUTF8String = UTF8::cleanup($string);
   // ... and then save to db
 ```
 
-Example 2:
+Example 2: UTF8::strlen()
 ```php
   $string = 'string <strong>with utf-8 chars åèä</strong> - doo-bee doo-bee dooh';
 
@@ -75,6 +77,17 @@ Example 2:
   // 50
 ```
 
+Example 3: UTF8::fix_utf8()
+```php
+
+  echo UTF8::fix_utf8('DÃ¼sseldorf');
+  echo UTF8::fix_utf8('Ã¤');
+  
+  // will output:
+  // Düsseldorf
+  // ä
+```
+
 Unit Test:
 ==========
 
@@ -93,6 +106,11 @@ composer install
 License and Copyright
 =====================
 
-Unless otherwise stated to the contrary, all my work that I publish on this website is licensed under Creative Commons Attribution 3.0 Unported License (CC BY 3.0) and free for all commercial or non-profit projects under certain conditions.
+"Portable UTF8" is free software; you can redistribute it and/or modify it under
+the terms of the (at your option):
+- [Apache License v2.0](http://apache.org/licenses/LICENSE-2.0.txt), or
+- [GNU General Public License v2.0](http://gnu.org/licenses/gpl-2.0.txt).
 
-Read the full legal license. [http://creativecommons.org/licenses/by/3.0/legalcode](http://creativecommons.org/licenses/by/3.0/legalcode)
+Unicode handling requires tedious work to be implemented and maintained on the
+long run. As such, contributions such as unit tests, bug reports, comments or
+patches licensed under both licenses are really welcomed.
