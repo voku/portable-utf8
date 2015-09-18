@@ -608,14 +608,13 @@ class UTF8
    */
   public static function normalize_whitespace($str)
   {
-    static $whitespacesRegex = null;
+    static $whitespaces = null;
 
-    if ($whitespacesRegex === null) {
-      $whitespaces = implode('|', self::$whitespaceTable);
-      $whitespacesRegex = '/(' . $whitespaces . ')/s';
+    if ($whitespaces === null) {
+      $whitespaces = array_values(self::$whitespaceTable);
     }
 
-    return preg_replace($whitespacesRegex, ' ', $str);
+    return str_replace($whitespaces, ' ', $str);
   }
 
   /**
