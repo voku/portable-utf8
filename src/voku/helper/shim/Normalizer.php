@@ -215,7 +215,7 @@ class Normalizer
 
           if (isset($compMap[$last_uchr . $uchr]) && (!$last_ucls || $last_ucls < $ucls)) {
             $last_uchr = $compMap[$last_uchr . $uchr];
-          } elseif ($last_ucls = $ucls) { // this isn't a typo
+          } elseif ($last_ucls = $ucls) { // this "=" isn't a typo
             $tail .= $uchr;
           } else {
             if ($tail) {

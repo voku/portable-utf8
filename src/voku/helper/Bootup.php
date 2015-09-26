@@ -503,6 +503,7 @@ class Bootup
           &$r['type'],
       );
     }
+    unset($r);
     unset($a[0]);
 
     $len = count($a) + 1;
@@ -515,7 +516,7 @@ class Bootup
           $r = self::filterString($s, $normalization_form, $leading_combining);
         }
       }
-
+      unset($r);
       unset($a[$i]);
     }
   }
@@ -531,8 +532,7 @@ class Bootup
   {
     if (false !== strpos($s, "\r")) {
       // Workaround https://bugs.php.net/65732
-      $s = str_replace("\r\n", "\n", $s);
-      $s = strtr($s, "\r", "\n");
+      $s = str_replace(array("\r\n", "\r"), "\n", $s);
     }
 
     if (preg_match('/[\x80-\xFF]/', $s)) {

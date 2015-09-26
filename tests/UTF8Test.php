@@ -6,7 +6,7 @@ use voku\helper\UTF8;
 /**
  * Class UTF8Test
  */
-class UTF8Test extends PHPUnit_Framework_TestCase
+class Utf8Test extends PHPUnit_Framework_TestCase
 {
 
   public function testStrlen()
@@ -1361,10 +1361,13 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div> </div><input type='email' name='user[email]' /><a>wtf</a>",
         "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => '– DÃ¼sseldorf —',
         "„Abcdef\xe2\x81\x9f”"                                                                => '„Abcdef ”',
+        " foo\t foo "                                                                                => ' foo	 foo '
     );
 
-    foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::normalize_whitespace($before));
+    for ($i = 0; $i < 10; $i++) {
+      foreach ($tests as $before => $after) {
+        self::assertEquals($after, UTF8::normalize_whitespace($before));
+      }
     }
   }
 
