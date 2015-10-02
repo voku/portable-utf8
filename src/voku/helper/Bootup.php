@@ -30,12 +30,21 @@ class Bootup
   {
     ini_set('default_charset', 'UTF-8');
 
+    self::initNormalizer();
     self::initUtf8Encode();
     self::initIconv();
     self::initMbstring();
     self::initExif();
     self::initIntl();
     self::initLocale();
+  }
+
+  /**
+   * init Normalizer
+   */
+  protected static function initNormalizer()
+  {
+    require_once 'shim/Normalizer.php';
   }
 
   /**
