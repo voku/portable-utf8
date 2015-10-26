@@ -12,6 +12,10 @@ class Utf8LtrimTest extends PHPUnit_Framework_TestCase
     $str = 'ñtërnâtiônàlizætiøn';
     $trimmed = 'tërnâtiônàlizætiøn';
     self::assertEquals($trimmed, u::ltrim($str, 'ñ'));
+
+    $str = '//ñtërnâtiônàlizætiøn//';
+    $trimmed = 'ñtërnâtiônàlizætiøn//';
+    self::assertEquals($trimmed, u::ltrim($str, '/'));
   }
 
   public function test_no_trim()

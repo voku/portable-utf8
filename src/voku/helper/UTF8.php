@@ -586,11 +586,11 @@ class UTF8
     // every control character except newline (dec 10),
     // carriage return (dec 13) and horizontal tab (dec 09)
     if ($url_encoded) {
-      $non_displayables[] = '/%0[0-8bcef]/';  // url encoded 00-08, 11, 12, 14, 15
+      $non_displayables[] = '/%0[0-8bcef]/'; // url encoded 00-08, 11, 12, 14, 15
       $non_displayables[] = '/%1[0-9a-f]/';  // url encoded 16-31
     }
 
-    $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S';  // 00-08, 11, 12, 14-31, 127
+    $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S'; // 00-08, 11, 12, 14-31, 127
 
     do {
       $str = preg_replace($non_displayables, '', $str, -1, $count);
@@ -737,7 +737,7 @@ class UTF8
 
     preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
     $chars = $ar[0];
-    foreach ($chars as $i => &$c) {
+    foreach ($chars as &$c) {
 
       $ordC0 = ord($c[0]);
 
@@ -1869,8 +1869,9 @@ class UTF8
   public static function to_utf8($text)
   {
     if (is_array($text)) {
-      foreach ($text as $k => &$v) {
-        $v = self::to_utf8($v);
+      foreach ($text as $k => $v) {
+        /** @noinspection AlterInForeachInspection */
+        $text[$k] = self::to_utf8($v);
       }
 
       return $text;
@@ -2547,7 +2548,6 @@ class UTF8
         break;
       case 'object':
         foreach ($var as $k => $v) {
-          /** @noinspection AlterInForeachInspection */
           $var->$k = self::filter($v, $normalization_form, $leading_combining);
         }
         break;
@@ -5206,7 +5206,11 @@ class UTF8
       if (
           ($useExceptions === false)
           ||
-          ($useExceptions === true && !in_array($word, $exceptions, true))
+          (
+              $useExceptions === true
+              &&
+              !in_array($word, $exceptions, true)
+          )
       ) {
         $word = self::ucfirst($word);
       }
@@ -5297,7 +5301,7 @@ class UTF8
     $search = (array)$search;
 
     /** @noinspection AlterInForeachInspection */
-    foreach ($search as $i => &$s) {
+    foreach ($search as &$s) {
       if ('' === $s .= '') {
         $s = '/^(?<=.)$/';
       } else {
