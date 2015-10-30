@@ -27,10 +27,10 @@ Description
 
 It is written in PHP and can work without "mbstring", "iconv" or any other extra encoding-library. The benefit of Portable UTF-8 is that it is easy to use, easy to bundle.
 
-phpDocumentor
-=============
-
-[http://htmlpreview.github.io/?https://github.com/voku/portable-utf8/master/doc/classes/voku.helper.UTF8.html](http://htmlpreview.github.io/?https://github.com/voku/portable-utf8/master/doc/classes/voku.helper.UTF8.html)
+## Install via "composer require"
+```shell
+composer require voku/portable-utf8
+```
 
 
 ##  Why Portable UTF-8?[]()
