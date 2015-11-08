@@ -215,7 +215,12 @@ class Mbstring
         ||
         false !== @iconv($encoding, $encoding, ' ')
     ) {
-      self::$internal_encoding = 'UTF8' === $encoding ? 'UTF-8' : $encoding;
+
+      if ('UTF8' === $encoding) {
+        self::$internal_encoding = 'UTF-8';
+      } else {
+        self::$internal_encoding = $encoding;
+      }
 
       return true;
     }
@@ -456,7 +461,13 @@ class Mbstring
       $len = strlen($str);
 
       while ($i < $len) {
-        $ulen = $str[$i] < "\x80" ? 1 : $ulen_mask[$str[$i] & "\xF0"];
+
+        if ($str[$i] < "\x80") {
+          $ulen = 1;
+        } else {
+          $ulen = $ulen_mask[$str[$i] & "\xF0"];
+        }
+
         $uchr = substr($str, $i, $ulen);
         $i += $ulen;
 
@@ -520,7 +531,11 @@ class Mbstring
    */
   public static function mb_substitute_character($char = INF)
   {
-    return INF !== $char ? false : 'none';
+    if (INF !== $char) {
+      return false;
+    } else {
+      return 'none';
+    }
   }
 
   /**
@@ -679,7 +694,11 @@ class Mbstring
    */
   public static function mb_http_output($encoding = INF)
   {
-    return INF !== $encoding ? 'pass' === $encoding : 'pass';
+    if (INF !== $encoding) {
+      return 'pass' === $encoding;
+    } else {
+      return 'pass';
+    }
   }
 
   /**
@@ -690,7 +709,11 @@ class Mbstring
    */
   public static function mb_strwidth($str, $encoding = INF)
   {
-    $encoding = INF === $encoding ? self::$internal_encoding : strtoupper($encoding);
+    if (INF === $encoding) {
+      $encoding = self::$internal_encoding;
+    } else {
+      $encoding = strtoupper($encoding);
+    }
 
     if ('UTF-8' !== $encoding && 'UTF8' !== $encoding) {
       $str = iconv($encoding, 'UTF-8//IGNORE', $str);
@@ -807,7 +830,11 @@ class Mbstring
 
     $pos = iconv_strrpos($haystack, $needle, $encoding . '//IGNORE');
 
-    return false !== $pos ? $offset + $pos : false;
+    if (false !== $pos) {
+      return $offset + $pos;
+    } else {
+      return false;
+    }
   }
 
   /**

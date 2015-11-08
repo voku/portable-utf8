@@ -1660,10 +1660,11 @@ class UTF8
    * @param string $str <p>
    *                    The string being lowercased.
    *                    </p>
+   * @param string $encoding
    *
    * @return string str with all alphabetic characters converted to lowercase.
    */
-  public static function strtolower($str)
+  public static function strtolower($str, $encoding = 'UTF-8')
   {
     $str = (string)$str;
 
@@ -1674,7 +1675,7 @@ class UTF8
     // init
     self::checkForSupport();
 
-    return mb_strtolower($str, 'UTF-8');
+    return mb_strtolower($str, $encoding);
   }
 
   /**
@@ -3303,7 +3304,7 @@ class UTF8
   public static function hex_to_int($str)
   {
     if (preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $str, $match)) {
-      return (int)hexdec($match[1]);
+      return intval($match[1], 16);
     }
 
     return 0;
@@ -4073,10 +4074,11 @@ class UTF8
    * @param string $str <p>
    *                    The string being uppercased.
    *                    </p>
+   * @param string $encoding
    *
    * @return string str with all alphabetic characters converted to uppercase.
    */
-  public static function strtoupper($str)
+  public static function strtoupper($str, $encoding = 'UTF-8')
   {
     $str = (string)$str;
 
@@ -4088,7 +4090,7 @@ class UTF8
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
-      return mb_strtoupper($str, 'UTF-8');
+      return mb_strtoupper($str, $encoding);
     } else {
 
       // fallback
@@ -5193,6 +5195,12 @@ class UTF8
     }
 
     // init
+    self::checkForSupport();
+
+    if (self::$support['mbstring'] === true) {
+      return $str = mb_convert_case($string, MB_CASE_TITLE);
+    }
+
     $words = explode(' ', $string);
     $newwords = array();
 
