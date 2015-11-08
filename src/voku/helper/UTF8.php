@@ -1228,14 +1228,13 @@ class UTF8
    * @param int     $length    [optional] <p>
    *                           The maximum length of the returned string.
    *                           </p>
+   * @param string  $encoding
    * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
    *
    * @return string mb_substr returns the portion of
-   * str specified by the
-   * start and
-   * length parameters.
+   * str specified by the start and length parameters.
    */
-  public static function substr($str, $start = 0, $length = null, $cleanUtf8 = false)
+  public static function substr($str, $start = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     static $bug62759;
 
@@ -1262,7 +1261,13 @@ class UTF8
     }
 
     if (self::$support['mbstring'] === true) {
-      return mb_substr($str, $start, $length, 'UTF-8');
+
+      // INFO: this is only a fallback for old versions
+      if ($encoding === true || $encoding === false) {
+        $encoding = 'UTF-8';
+      }
+
+      return mb_substr($str, $start, $length, $encoding);
     }
 
     if (self::$support['iconv'] === true) {
@@ -1312,6 +1317,11 @@ class UTF8
     // init
     self::checkForSupport();
 
+    // INFO: this is only a fallback for old versions
+    if ($encoding === true || $encoding === false) {
+      $encoding = 'UTF-8';
+    }
+
     if ($encoding === 'UTF-8' && $cleanUtf8 === true) {
       $str = self::clean($string);
     } else {
@@ -1325,12 +1335,12 @@ class UTF8
    * convert a string to an array of Unicode characters.
    *
    * @param    string  $str          The string to split into array.
-   * @param    int     $split_length Max character length of each array element
+   * @param    int     $length Max character length of each array element
    * @param    boolean $cleanUtf8    Clean non UTF-8 chars from the string
    *
    * @return   array An array containing chunks of the string
    */
-  public static function split($str, $split_length = 1, $cleanUtf8 = false)
+  public static function split($str, $length = 1, $cleanUtf8 = false)
   {
     $str = (string)$str;
 
@@ -1386,8 +1396,8 @@ class UTF8
       }
     }
 
-    if ($split_length > 1) {
-      $ret = array_chunk($ret, $split_length);
+    if ($length > 1) {
+      $ret = array_chunk($ret, $length);
 
       $ret = array_map('implode', $ret);
     }
@@ -1410,7 +1420,7 @@ class UTF8
   protected static function rxClass($s, $class = '')
   {
     static $rxClassCache = array();
-    
+
     $cacheKey = $s . $class;
 
     if (isset($rxClassCache[$cacheKey])) {
@@ -1722,7 +1732,7 @@ class UTF8
   {
     static $brokenUtf8ToUtf8Keys = null;
     static $brokenUtf8ToUtf8Values = null;
-    
+
     $str = (string)$str;
 
     if (!isset($str[0])) {
@@ -3214,6 +3224,7 @@ class UTF8
    * @param int     $offset       [optional] <p>
    *                              The search offset. If it is not specified, 0 is used.
    *                              </p>
+   * @param string  $encoding
    * @param boolean $cleanUtf8    Clean non UTF-8 chars from the string
    *
    * @return int the numeric position of
@@ -3221,7 +3232,7 @@ class UTF8
    * haystack string. If
    * needle is not found, it returns false.
    */
-  public static function strpos($haystack, $needle, $offset = 0, $cleanUtf8 = false)
+  public static function strpos($haystack, $needle, $offset = 0, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     $haystack = (string)$haystack;
     $needle = (string)$needle;
@@ -3249,7 +3260,13 @@ class UTF8
     }
 
     if (self::$support['mbstring'] === true) {
-      return mb_strpos($haystack, $needle, $offset, 'UTF-8');
+
+      // INFO: this is only a fallback for old versions
+      if ($encoding === true || $encoding === false) {
+        $encoding = 'UTF-8';
+      }
+
+      return mb_strpos($haystack, $needle, $offset, $encoding);
     }
 
     if (self::$support['iconv'] === true) {
@@ -3569,10 +3586,11 @@ class UTF8
    * @param string $replace
    * @param int    $start
    * @param int    $len
+   * @param string $encoding
    *
    * @return string
    */
-  public static function substr_replace($string, $replace, $start = 0, $len = 0)
+  public static function substr_replace($string, $replace, $start = 0, $len = 0, $encoding = 'UTF-8')
   {
     $issetString = isset($string[0]);
     $issetReplace = isset($replace[0]);
@@ -3593,7 +3611,7 @@ class UTF8
     self::checkForSupport();
 
     if ($start >= 0 && $len >= 0) {
-      return mb_substr($string, 0, $start, 'UTF-8') . $replace . mb_substr($string, 0, $len, 'UTF-8');
+      return self::substr($string, 0, $start, $encoding) . $replace . self::substr($string, 0, $len, $encoding);
     }
 
     $string = self::str_split($string);
@@ -3628,16 +3646,19 @@ class UTF8
    */
   public static function substr_count($haystack, $needle, $offset = 0, $length = null)
   {
+    $offset = (int)$offset;
+
     if ($offset || $length) {
+      $length = (int)$length;
+
       $haystack = self::substr($haystack, $offset, $length);
     }
 
-    return ($length === null ? substr_count($haystack, $needle, $offset) : substr_count(
-        $haystack,
-        $needle,
-        $offset,
-        $length
-    ));
+    if ($length === null) {
+      return substr_count($haystack, $needle, $offset);
+    } else {
+      return substr_count($haystack, $needle, $offset, $length);
+    }
   }
 
   /**
@@ -3988,13 +4009,14 @@ class UTF8
    *                           The position in haystack
    *                           to start searching
    *                           </p>
+   * @param string  $encoding
    * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
    *
    * @return int Return the numeric position of the first occurrence of
    * needle in the haystack
    * string, or false if needle is not found.
    */
-  public static function stripos($haystack, $needle, $offset = null, $cleanUtf8 = false)
+  public static function stripos($haystack, $needle, $offset = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     $haystack = (string)$haystack;
     $needle = (string)$needle;
@@ -4011,7 +4033,12 @@ class UTF8
       $needle = self::clean($needle);
     }
 
-    return mb_stripos($haystack, $needle, $offset, 'UTF-8');
+    // INFO: this is only a fallback for old versions
+    if ($encoding === true || $encoding === false) {
+      $encoding = 'UTF-8';
+    }
+
+    return mb_stripos($haystack, $needle, $offset, $encoding);
   }
 
   /**
@@ -5195,12 +5222,6 @@ class UTF8
     }
 
     // init
-    self::checkForSupport();
-
-    if (self::$support['mbstring'] === true) {
-      return $str = mb_convert_case($string, MB_CASE_TITLE);
-    }
-
     $words = explode(' ', $string);
     $newwords = array();
 

@@ -1187,7 +1187,7 @@ class Utf8Test extends PHPUnit_Framework_TestCase
     self::assertEquals('bc', UTF8::substr('abcde', 1, 2));
     self::assertEquals('de', UTF8::substr('abcde', -2, 2));
     self::assertEquals('bc', UTF8::substr('abcde', 1, 2));
-    self::assertEquals('bc', UTF8::substr('abcde', 1, 2, true));
+    self::assertEquals('bc', UTF8::substr('abcde', 1, 2, 'UTF-8', true));
     self::assertEquals('bcd', UTF8::substr('abcde', 1, 3));
     self::assertEquals('bc', UTF8::substr('abcde', 1, 2));
 
