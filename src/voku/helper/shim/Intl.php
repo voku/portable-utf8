@@ -43,7 +43,7 @@ class Intl
    * @param int    $start
    * @param int    $next
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function grapheme_extract($s, $size, $type = GRAPHEME_EXTR_COUNT, $start = 0, &$next = 0)
   {
@@ -51,7 +51,7 @@ class Intl
       $hasError = false;
 
       set_error_handler(
-          function () use (&$hasError) {
+          function() use (&$hasError) {
             $hasError = true;
           }
       );
@@ -123,7 +123,7 @@ class Intl
    * @param int    $start
    * @param int    $len
    *
-   * @return bool|int|string
+   * @return false|string
    */
   public static function grapheme_substr_workaround62759($s, $start, $len)
   {
@@ -235,7 +235,7 @@ class Intl
    * @param int    $start
    * @param int    $len
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function grapheme_substr($s, $start, $len = 2147483647)
   {
@@ -282,7 +282,7 @@ class Intl
    *
    * @param string $str
    *
-   * @return null
+   * @return integer|null
    */
   public static function grapheme_strlen($str)
   {
@@ -340,7 +340,7 @@ class Intl
    * @param string $needle
    * @param bool   $before_needle
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function grapheme_stristr($str, $needle, $before_needle = false)
   {
@@ -354,7 +354,7 @@ class Intl
    * @param string $needle
    * @param bool   $before_needle
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function grapheme_strstr($str, $needle, $before_needle = false)
   {
