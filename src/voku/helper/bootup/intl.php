@@ -71,7 +71,7 @@ function grapheme_stripos($str, $needle, $offset = 0)
  * @param string $needle
  * @param bool   $before_needle
  *
- * @return bool|string
+ * @return false|string
  */
 function grapheme_stristr($str, $needle, $before_needle = false)
 {
@@ -81,7 +81,7 @@ function grapheme_stristr($str, $needle, $before_needle = false)
 /**
  * @param string $str
  *
- * @return null
+ * @return integer|null
  */
 function grapheme_strlen($str)
 {
@@ -129,7 +129,7 @@ function grapheme_strrpos($str, $needle, $offset = 0)
  * @param string $needle
  * @param bool   $before_needle
  *
- * @return bool|string
+ * @return false|string
  */
 function grapheme_strstr($str, $needle, $before_needle = false)
 {
@@ -141,7 +141,7 @@ function grapheme_strstr($str, $needle, $before_needle = false)
  * @param int    $start
  * @param int    $len
  *
- * @return bool|string
+ * @return false|string
  */
 function grapheme_substr($str, $start, $len = 2147483647)
 {
