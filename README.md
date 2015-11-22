@@ -9,8 +9,7 @@
 [![Reference Status](https://www.versioneye.com/php/voku:portable-utf8/reference_badge.svg?style=flat)](https://www.versioneye.com/php/voku:portable-utf8/references)
 [![Latest Stable Version](https://poser.pugx.org/voku/portable-utf8/v/stable)](https://packagist.org/packages/voku/portable-utf8) [![Total Downloads](https://poser.pugx.org/voku/portable-utf8/downloads)](https://packagist.org/packages/voku/portable-utf8) [![Latest Unstable Version](https://poser.pugx.org/voku/portable-utf8/v/unstable)](https://packagist.org/packages/voku/portable-utf8) [![License](https://poser.pugx.org/voku/portable-utf8/license)](https://packagist.org/packages/voku/portable-utf8)
 
-Portable UTF-8
-=============
+# Portable UTF-8
 
 This library is a Unicode aware alternative to PHP's native string handling API.
 
@@ -22,14 +21,13 @@ This library is a Unicode aware alternative to PHP's native string handling API.
 - Based on Paragon Initiative Enterprises's work: https://github.com/paragonie/random_compat
 
 
-Description
-===========
+## Description
+
 
 It is written in PHP and can work without "mbstring", "iconv" or any other extra encoding-library. The benefit of Portable UTF-8 is that it is easy to use, easy to bundle.
 
 
-Alternative
-===========
+## Alternative
 
 If you like a more Object Oriented Way to edit strings, then you can take a look at [voku/Stringy](https://github.com/voku/Stringy), it's a fork of "danielstjules/Stringy" but it used the "Portable UTF-8"-Class and some extra methodes. 
 
@@ -75,8 +73,7 @@ The problem with "mbstring" and others is that most of the time you cannot ensur
 *   Although Portable UTF-8 is easy to use; moving from native API to Portable UTF-8 may not be straight-forward for everyone. It is highly recommended that you do not update your scripts to include Portable UTF-8 or replace or change anything before you first know the reason and consequences. Most of the time, some native function may be all what you need.
 *   There is also a shim for "mbstring", "iconv" and "intl", so you can use it also on shared webspace. 
 
-Usage:
-======
+## Usage
 
 Example 1: UTF8::cleanup()
 ```php
@@ -117,8 +114,7 @@ Example 3: UTF8::fix_utf8()
   // ä
 ```
 
-Unit Test:
-==========
+## Unit Test
 
 1) [Composer](https://getcomposer.org) is a prerequisite for running the tests.
 
@@ -132,8 +128,7 @@ composer install
 ./vendor/bin/phpunit
 ```
 
-License and Copyright
-=====================
+### License and Copyright
 
 "Portable UTF8" is free software; you can redistribute it and/or modify it under
 the terms of the (at your option):
