@@ -21,6 +21,26 @@ This library is a Unicode aware alternative to PHP's native string handling API.
 - Based on Ivan Enderlin's work: https://github.com/hoaproject/Ustring
 - Based on Paragon Initiative Enterprises's work: https://github.com/paragonie/random_compat
 
+Alternative
+===========
+
+If you like a more Object Oriented Way to edit strings, then you can take a look at [voku/Stringy](https://github.com/voku/Stringy), it's a fork of "danielstjules/Stringy" but it used the "Portable UTF-8"-Class and some extra methodes. 
+
+```php
+// Standard library
+strtoupper('fòôbàř');       // 'FòôBàř'
+strlen('fòôbàř');           // 10
+
+// Portable UTF-8
+mb_strtoupper('fòôbàř');    // 'FÒÔBÀŘ'
+mb_strlen('fòôbàř');        // '6'
+
+// voku/Stringy
+$stringy = Stringy\Stringy::create('fòôbàř');
+$stringy->toUpperCase();    // 'FÒÔBÀŘ'
+$stringy->length();         // '6'
+
+
 Description
 ===========
 
