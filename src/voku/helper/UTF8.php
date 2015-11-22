@@ -19,17 +19,17 @@ class UTF8
   protected static $win1252ToUtf8 = array(
       128 => "\xe2\x82\xac", // EURO SIGN
       130 => "\xe2\x80\x9a", // SINGLE LOW-9 QUOTATION MARK
-      131 => "\xc6\x92",     // LATIN SMALL LETTER F WITH HOOK
+      131 => "\xc6\x92", // LATIN SMALL LETTER F WITH HOOK
       132 => "\xe2\x80\x9e", // DOUBLE LOW-9 QUOTATION MARK
       133 => "\xe2\x80\xa6", // HORIZONTAL ELLIPSIS
       134 => "\xe2\x80\xa0", // DAGGER
       135 => "\xe2\x80\xa1", // DOUBLE DAGGER
-      136 => "\xcb\x86",     // MODIFIER LETTER CIRCUMFLEX ACCENT
+      136 => "\xcb\x86", // MODIFIER LETTER CIRCUMFLEX ACCENT
       137 => "\xe2\x80\xb0", // PER MILLE SIGN
-      138 => "\xc5\xa0",     // LATIN CAPITAL LETTER S WITH CARON
+      138 => "\xc5\xa0", // LATIN CAPITAL LETTER S WITH CARON
       139 => "\xe2\x80\xb9", // SINGLE LEFT-POINTING ANGLE QUOTE
-      140 => "\xc5\x92",     // LATIN CAPITAL LIGATURE OE
-      142 => "\xc5\xbd",     // LATIN CAPITAL LETTER Z WITH CARON
+      140 => "\xc5\x92", // LATIN CAPITAL LIGATURE OE
+      142 => "\xc5\xbd", // LATIN CAPITAL LETTER Z WITH CARON
       145 => "\xe2\x80\x98", // LEFT SINGLE QUOTATION MARK
       146 => "\xe2\x80\x99", // RIGHT SINGLE QUOTATION MARK
       147 => "\xe2\x80\x9c", // LEFT DOUBLE QUOTATION MARK
@@ -37,13 +37,13 @@ class UTF8
       149 => "\xe2\x80\xa2", // BULLET
       150 => "\xe2\x80\x93", // EN DASH
       151 => "\xe2\x80\x94", // EM DASH
-      152 => "\xcb\x9c",     // SMALL TILDE
+      152 => "\xcb\x9c", // SMALL TILDE
       153 => "\xe2\x84\xa2", // TRADE MARK SIGN
-      154 => "\xc5\xa1",     // LATIN SMALL LETTER S WITH CARON
+      154 => "\xc5\xa1", // LATIN SMALL LETTER S WITH CARON
       155 => "\xe2\x80\xba", // SINGLE RIGHT-POINTING ANGLE QUOTE
-      156 => "\xc5\x93",     // LATIN SMALL LIGATURE OE
-      158 => "\xc5\xbe",     // LATIN SMALL LETTER Z WITH CARON
-      159 => "\xc5\xb8",     // LATIN CAPITAL LETTER Y WITH DIAERESIS
+      156 => "\xc5\x93", // LATIN SMALL LIGATURE OE
+      158 => "\xc5\xbe", // LATIN SMALL LETTER Z WITH CARON
+      159 => "\xc5\xb8", // LATIN CAPITAL LETTER Y WITH DIAERESIS
   );
 
   /**
@@ -185,17 +185,17 @@ class UTF8
   protected static $brokenUtf8ToUtf8 = array(
       "\xc2\x80" => "\xe2\x82\xac", // EURO SIGN
       "\xc2\x82" => "\xe2\x80\x9a", // SINGLE LOW-9 QUOTATION MARK
-      "\xc2\x83" => "\xc6\x92",     // LATIN SMALL LETTER F WITH HOOK
+      "\xc2\x83" => "\xc6\x92", // LATIN SMALL LETTER F WITH HOOK
       "\xc2\x84" => "\xe2\x80\x9e", // DOUBLE LOW-9 QUOTATION MARK
       "\xc2\x85" => "\xe2\x80\xa6", // HORIZONTAL ELLIPSIS
       "\xc2\x86" => "\xe2\x80\xa0", // DAGGER
       "\xc2\x87" => "\xe2\x80\xa1", // DOUBLE DAGGER
-      "\xc2\x88" => "\xcb\x86",     // MODIFIER LETTER CIRCUMFLEX ACCENT
+      "\xc2\x88" => "\xcb\x86", // MODIFIER LETTER CIRCUMFLEX ACCENT
       "\xc2\x89" => "\xe2\x80\xb0", // PER MILLE SIGN
-      "\xc2\x8a" => "\xc5\xa0",     // LATIN CAPITAL LETTER S WITH CARON
+      "\xc2\x8a" => "\xc5\xa0", // LATIN CAPITAL LETTER S WITH CARON
       "\xc2\x8b" => "\xe2\x80\xb9", // SINGLE LEFT-POINTING ANGLE QUOTE
-      "\xc2\x8c" => "\xc5\x92",     // LATIN CAPITAL LIGATURE OE
-      "\xc2\x8e" => "\xc5\xbd",     // LATIN CAPITAL LETTER Z WITH CARON
+      "\xc2\x8c" => "\xc5\x92", // LATIN CAPITAL LIGATURE OE
+      "\xc2\x8e" => "\xc5\xbd", // LATIN CAPITAL LETTER Z WITH CARON
       "\xc2\x91" => "\xe2\x80\x98", // LEFT SINGLE QUOTATION MARK
       "\xc2\x92" => "\xe2\x80\x99", // RIGHT SINGLE QUOTATION MARK
       "\xc2\x93" => "\xe2\x80\x9c", // LEFT DOUBLE QUOTATION MARK
@@ -203,13 +203,13 @@ class UTF8
       "\xc2\x95" => "\xe2\x80\xa2", // BULLET
       "\xc2\x96" => "\xe2\x80\x93", // EN DASH
       "\xc2\x97" => "\xe2\x80\x94", // EM DASH
-      "\xc2\x98" => "\xcb\x9c",     // SMALL TILDE
+      "\xc2\x98" => "\xcb\x9c", // SMALL TILDE
       "\xc2\x99" => "\xe2\x84\xa2", // TRADE MARK SIGN
-      "\xc2\x9a" => "\xc5\xa1",     // LATIN SMALL LETTER S WITH CARON
+      "\xc2\x9a" => "\xc5\xa1", // LATIN SMALL LETTER S WITH CARON
       "\xc2\x9b" => "\xe2\x80\xba", // SINGLE RIGHT-POINTING ANGLE QUOTE
-      "\xc2\x9c" => "\xc5\x93",     // LATIN SMALL LIGATURE OE
-      "\xc2\x9e" => "\xc5\xbe",     // LATIN SMALL LETTER Z WITH CARON
-      "\xc2\x9f" => "\xc5\xb8",     // LATIN CAPITAL LETTER Y WITH DIAERESIS
+      "\xc2\x9c" => "\xc5\x93", // LATIN SMALL LIGATURE OE
+      "\xc2\x9e" => "\xc5\xbe", // LATIN SMALL LETTER Z WITH CARON
+      "\xc2\x9f" => "\xc5\xb8", // LATIN CAPITAL LETTER Y WITH DIAERESIS
       'Ã¼'       => 'ü',
       'Ã¤'       => 'ä',
       'Ã¶'       => 'ö',
@@ -307,20 +307,20 @@ class UTF8
    * @var array
    */
   protected static $utf8MSWord = array(
-      "\xc2\xab"     => '"',  // « (U+00AB) in UTF-8
-      "\xc2\xbb"     => '"',  // » (U+00BB) in UTF-8
-      "\xe2\x80\x98" => "'",  // ‘ (U+2018) in UTF-8
-      "\xe2\x80\x99" => "'",  // ’ (U+2019) in UTF-8
-      "\xe2\x80\x9a" => "'",  // ‚ (U+201A) in UTF-8
-      "\xe2\x80\x9b" => "'",  // ‛ (U+201B) in UTF-8
-      "\xe2\x80\x9c" => '"',  // “ (U+201C) in UTF-8
-      "\xe2\x80\x9d" => '"',  // ” (U+201D) in UTF-8
-      "\xe2\x80\x9e" => '"',  // „ (U+201E) in UTF-8
-      "\xe2\x80\x9f" => '"',  // ‟ (U+201F) in UTF-8
-      "\xe2\x80\xb9" => "'",  // ‹ (U+2039) in UTF-8
-      "\xe2\x80\xba" => "'",  // › (U+203A) in UTF-8
-      "\xe2\x80\x93" => '-',  // – (U+2013) in UTF-8
-      "\xe2\x80\x94" => '-',  // — (U+2014) in UTF-8
+      "\xc2\xab"     => '"', // « (U+00AB) in UTF-8
+      "\xc2\xbb"     => '"', // » (U+00BB) in UTF-8
+      "\xe2\x80\x98" => "'", // ‘ (U+2018) in UTF-8
+      "\xe2\x80\x99" => "'", // ’ (U+2019) in UTF-8
+      "\xe2\x80\x9a" => "'", // ‚ (U+201A) in UTF-8
+      "\xe2\x80\x9b" => "'", // ‛ (U+201B) in UTF-8
+      "\xe2\x80\x9c" => '"', // “ (U+201C) in UTF-8
+      "\xe2\x80\x9d" => '"', // ” (U+201D) in UTF-8
+      "\xe2\x80\x9e" => '"', // „ (U+201E) in UTF-8
+      "\xe2\x80\x9f" => '"', // ‟ (U+201F) in UTF-8
+      "\xe2\x80\xb9" => "'", // ‹ (U+2039) in UTF-8
+      "\xe2\x80\xba" => "'", // › (U+203A) in UTF-8
+      "\xe2\x80\x93" => '-', // – (U+2013) in UTF-8
+      "\xe2\x80\x94" => '-', // — (U+2014) in UTF-8
       "\xe2\x80\xa6" => '...' // … (U+2026) in UTF-8
   );
 
@@ -587,7 +587,7 @@ class UTF8
     // carriage return (dec 13) and horizontal tab (dec 09)
     if ($url_encoded) {
       $non_displayables[] = '/%0[0-8bcef]/'; // url encoded 00-08, 11, 12, 14, 15
-      $non_displayables[] = '/%1[0-9a-f]/';  // url encoded 16-31
+      $non_displayables[] = '/%1[0-9a-f]/'; // url encoded 16-31
     }
 
     $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S'; // 00-08, 11, 12, 14-31, 127
@@ -1872,7 +1872,7 @@ class UTF8
    *
    * @name               to_utf8
    *
-   * @param string|array $text Any string or array.
+   * @param string $text Any string or array.
    *
    * @return string The same string, UTF8 encoded
    *
@@ -1965,7 +1965,7 @@ class UTF8
     // decode unicode escape sequences
     $buf = preg_replace_callback(
         '/\\\\u([0-9a-f]{4})/i',
-        function ($match)
+        function($match)
         {
           return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
         },
@@ -1975,7 +1975,7 @@ class UTF8
     // decode UTF-8 codepoints
     $buf = preg_replace_callback(
         '/&#\d{2,4};/',
-        function ($match)
+        function($match)
         {
           return mb_convert_encoding($match[0], 'UTF-8', 'HTML-ENTITIES');
         },
@@ -2249,7 +2249,7 @@ class UTF8
   /**
    * check if the input is binary (is look like a hack)
    *
-   * @param mixed $input
+   * @param string $input
    *
    * @return bool
    */
@@ -2401,7 +2401,7 @@ class UTF8
   /**
    * clean-up a UTF-8 string and show only printable chars at the end
    *
-   * @param $text
+   * @param string|false $text
    *
    * @return string
    */
@@ -3666,7 +3666,7 @@ class UTF8
    *
    * @param string $str
    *
-   * @return mixed
+   * @return boolean
    */
   public static function isAscii($str)
   {
@@ -3682,7 +3682,7 @@ class UTF8
    */
   public static function is_ascii($str)
   {
-    return ( bool )!preg_match('/[\x80-\xFF]/', $str);
+    return (bool)!preg_match('/[\x80-\xFF]/', $str);
   }
 
   /**
@@ -5323,7 +5323,7 @@ class UTF8
    * @param string $subject
    * @param null   $count
    *
-   * @return mixed
+   * @return string
    */
   public static function str_ireplace($search, $replace, $subject, &$count = null)
   {

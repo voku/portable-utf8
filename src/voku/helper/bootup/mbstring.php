@@ -26,7 +26,7 @@ const MB_CASE_TITLE = 2;
  * @param string $to
  * @param string $from
  *
- * @return bool|mixed|string
+ * @return string|false
  */
 function mb_convert_encoding($str, $to, $from = INF)
 {
@@ -88,7 +88,7 @@ function mb_language($lang = INF)
 }
 
 /**
- * @return array
+ * @return string[]
  */
 function mb_list_encodings()
 {
@@ -118,7 +118,7 @@ function mb_check_encoding($var = INF, $encoding = INF)
 
 /**
  * @param string       $str
- * @param string|array $encoding_list
+ * @param string[] $encoding_list
  * @param bool         $strict
  *
  * @return bool
@@ -196,7 +196,7 @@ function mb_strtoupper($str, $enc = INF)
 /**
  * @param string $char
  *
- * @return bool|string
+ * @return false|string
  */
 function mb_substitute_character($char = INF)
 {
@@ -206,7 +206,7 @@ function mb_substitute_character($char = INF)
 /**
  * @param string   $str
  * @param int      $start
- * @param int|null $length
+ * @param integer $length
  * @param string   $enc
  *
  * @return string
@@ -222,7 +222,7 @@ function mb_substr($str, $start, $length = 2147483647, $enc = INF)
  * @param int    $offset
  * @param string $encoding
  *
- * @return bool|int
+ * @return string
  */
 function mb_stripos($haystack, $needle, $offset = 0, $encoding = INF)
 {
@@ -235,7 +235,7 @@ function mb_stripos($haystack, $needle, $offset = 0, $encoding = INF)
  * @param bool   $part
  * @param string $encoding
  *
- * @return bool|string
+ * @return false|string
  */
 function mb_stristr($haystack, $needle, $part = false, $encoding = INF)
 {
@@ -248,7 +248,7 @@ function mb_stristr($haystack, $needle, $part = false, $encoding = INF)
  * @param bool   $part
  * @param string $encoding
  *
- * @return bool|string
+ * @return false|string
  */
 function mb_strrchr($haystack, $needle, $part = false, $encoding = INF)
 {
@@ -261,7 +261,7 @@ function mb_strrchr($haystack, $needle, $part = false, $encoding = INF)
  * @param bool   $part
  * @param string $encoding
  *
- * @return bool|string
+ * @return false|string
  */
 function mb_strrichr($haystack, $needle, $part = false, $encoding = INF)
 {
@@ -274,7 +274,7 @@ function mb_strrichr($haystack, $needle, $part = false, $encoding = INF)
  * @param int    $offset
  * @param string $encoding
  *
- * @return bool|int
+ * @return string
  */
 function mb_strripos($haystack, $needle, $offset = 0, $encoding = INF)
 {
@@ -300,7 +300,7 @@ function mb_strrpos($haystack, $needle, $offset = 0, $encoding = INF)
  * @param bool   $part
  * @param string $encoding
  *
- * @return bool|string
+ * @return false|string
  */
 function mb_strstr($haystack, $needle, $part = false, $encoding = INF)
 {

@@ -24,7 +24,7 @@ const ICONV_MIME_DECODE_CONTINUE_ON_ERROR = 2;
  * @param string $to
  * @param string $str
  *
- * @return bool|string
+ * @return string|false
  */
 function iconv($from, $to, $str)
 {
@@ -34,7 +34,7 @@ function iconv($from, $to, $str)
 /**
  * @param string $type
  *
- * @return array|string
+ * @return string
  */
 function iconv_get_encoding($type = 'all')
 {
@@ -68,7 +68,7 @@ function iconv_mime_encode($name, $value, $pref = INF)
  * @param string $buffer
  * @param mixed  $mode
  *
- * @return bool|string
+ * @return string|false
  */
 function ob_iconv_handler($buffer, $mode)
 {
@@ -108,7 +108,7 @@ if (extension_loaded('mbstring')) {
    * @param int    $offset
    * @param string $encoding
    *
-   * @return bool|int
+   * @return string
    */
   function iconv_strpos($haystack, $needle, $offset = 0, $encoding = INF)
   {
@@ -134,7 +134,7 @@ if (extension_loaded('mbstring')) {
   /**
    * @param string   $str
    * @param int      $start
-   * @param int|null $length
+   * @param integer $length
    * @param string   $encoding
    *
    * @return string
@@ -194,7 +194,7 @@ if (extension_loaded('mbstring')) {
    * @param int    $offset
    * @param string $encoding
    *
-   * @return bool|int
+   * @return string
    */
   function iconv_strpos($str, $needle, $offset = 0, $encoding = INF)
   {
@@ -219,7 +219,7 @@ if (extension_loaded('mbstring')) {
    * @param int    $length
    * @param string $encoding
    *
-   * @return bool|string
+   * @return string
    */
   function iconv_substr($str, $start, $length = 2147483647, $encoding = INF)
   {

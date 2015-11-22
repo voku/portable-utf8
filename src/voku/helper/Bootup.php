@@ -415,6 +415,7 @@ class Bootup
    * Determines if the current version of PHP is equal to or greater than the supplied value
    *
    * @param  string
+   * @param string $version
    *
    * @return  bool  TRUE if the current version is $version or higher
    */
@@ -453,7 +454,7 @@ class Bootup
     if (!preg_match('//u', urldecode($uri))) {
       $uri = preg_replace_callback(
           '/[\x80-\xFF]+/',
-          function ($m) {
+          function($m) {
             return urlencode($m[0]);
           },
           $uri
@@ -461,7 +462,7 @@ class Bootup
 
       $uri = preg_replace_callback(
           '/(?:%[89A-F][0-9A-F])+/i',
-          function ($m) {
+          function($m) {
             return urlencode(UTF8::encode('UTF-8', urldecode($m[0])));
           },
           $uri
@@ -517,7 +518,7 @@ class Bootup
       foreach ($a[$i] as &$r) {
         $s = $r; // $r is a ref, $s a copy
         if (is_array($s)) {
-          $a[$len++] =& $r;
+          $a[$len++] = & $r;
         } else {
           $r = self::filterString($s, $normalization_form, $leading_combining);
         }

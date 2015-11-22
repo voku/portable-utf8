@@ -118,7 +118,7 @@ class Mbstring
    * @param string $to_encoding
    * @param string $from_encoding
    *
-   * @return bool|mixed|string
+   * @return string|false
    */
   public static function mb_convert_encoding($str, $to_encoding, $from_encoding = INF)
   {
@@ -172,7 +172,7 @@ class Mbstring
   }
 
   /**
-   * @param $str
+   * @param string $str
    *
    * @return bool|string
    */
@@ -251,7 +251,7 @@ class Mbstring
   }
 
   /**
-   * @return array
+   * @return string[]
    */
   public static function mb_list_encodings()
   {
@@ -527,7 +527,7 @@ class Mbstring
   /**
    * @param string $char
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function mb_substitute_character($char = INF)
   {
@@ -544,7 +544,7 @@ class Mbstring
    * @param bool   $part
    * @param string $encoding
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function mb_stristr($haystack, $needle, $part = false, $encoding = INF)
   {
@@ -596,7 +596,7 @@ class Mbstring
    * @param string    $haystack
    * @param string    $encoding
    *
-   * @return bool|string
+   * @return false|string
    */
   protected static function getSubpart($pos, $part, $haystack, $encoding)
   {
@@ -734,7 +734,7 @@ class Mbstring
    * @return int
    */
   public static function mb_substr_count($haystack, $needle, /** @noinspection PhpUnusedParameterInspection */
-                                         $encoding = INF)
+                                          $encoding = INF)
   {
     return substr_count($haystack, $needle);
   }
@@ -746,7 +746,7 @@ class Mbstring
    * @return mixed
    */
   public static function mb_output_handler($contents, /** @noinspection PhpUnusedParameterInspection */
-                                           $status)
+                                            $status)
   {
     return $contents;
   }
@@ -757,7 +757,7 @@ class Mbstring
    * @param bool   $part
    * @param string $encoding
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function mb_strrchr($haystack, $needle, $part = false, $encoding = INF)
   {
@@ -775,7 +775,7 @@ class Mbstring
    * @param bool   $part
    * @param string $encoding
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function mb_strrichr($haystack, $needle, $part = false, $encoding = INF)
   {
@@ -843,10 +843,10 @@ class Mbstring
    * @param bool   $part
    * @param string $encoding
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function mb_strstr($haystack, $needle, $part = false, /** @noinspection PhpUnusedParameterInspection */
-                                   $encoding = INF)
+                                    $encoding = INF)
   {
     $pos = strpos($haystack, $needle);
     if (false === $pos) {

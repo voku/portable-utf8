@@ -50,7 +50,7 @@ class Iconv
       "\xE0" => 3,
       "\xF0" => 4,
   );
-  protected static $alias             = array(
+  protected static $alias = array(
       'utf8'        => 'utf-8',
       'ascii'       => 'us-ascii',
       'tis-620'     => 'iso-8859-11',
@@ -169,7 +169,7 @@ class Iconv
    * @param int    $mode
    * @param string $charset
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function iconv_mime_decode($str, $mode = 0, $charset = INF)
   {
@@ -230,7 +230,7 @@ class Iconv
    * @param string $out_charset
    * @param string $str
    *
-   * @return bool|string
+   * @return string|false
    */
   public static function iconv($in_charset, $out_charset, $str)
   {
@@ -397,7 +397,7 @@ class Iconv
    * @param string $str
    * @param string $IGNORE
    *
-   * @return bool|string
+   * @return false|string
    */
   protected static function utf8_to_utf8($str, $IGNORE)
   {
@@ -567,7 +567,7 @@ class Iconv
    * @param string $field_value
    * @param array  $pref
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function iconv_mime_encode($field_name, $field_value, $pref = INF)
   {
@@ -649,7 +649,7 @@ class Iconv
    * @param string $buffer
    * @param mixed  $mode
    *
-   * @return bool|string
+   * @return string|false
    */
   public static function ob_iconv_handler($buffer, /** @noinspection PhpUnusedParameterInspection */ $mode)
   {
@@ -698,7 +698,7 @@ class Iconv
    * @param int    $length
    * @param string $encoding
    *
-   * @return bool|string
+   * @return false|string
    */
   public static function iconv_substr($s, $start, $length = 2147483647, $encoding = INF)
   {
