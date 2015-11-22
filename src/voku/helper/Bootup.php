@@ -273,13 +273,10 @@ class Bootup
        */
 
       if (extension_loaded('mcrypt') && defined(MCRYPT_DEV_URANDOM) === true) {
-        $output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        $output = @mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
 
-        if (
-            $output !== false
-            &&
-            UTF8::strlen($output, '8bit') === $length
-        ) {
+        if ($output !== false) {
           return $output;
         }
       }
