@@ -39,7 +39,7 @@ mb_strlen('fòôbàř');        // '6'
 $stringy = Stringy\Stringy::create('fòôbàř');
 $stringy->toUpperCase();    // 'FÒÔBÀŘ'
 $stringy->length();         // '6'
-´´´
+```
 
 Description
 ===========
