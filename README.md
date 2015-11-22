@@ -21,6 +21,13 @@ This library is a Unicode aware alternative to PHP's native string handling API.
 - Based on Ivan Enderlin's work: https://github.com/hoaproject/Ustring
 - Based on Paragon Initiative Enterprises's work: https://github.com/paragonie/random_compat
 
+
+Description
+===========
+
+It is written in PHP and can work without "mbstring", "iconv" or any other extra encoding-library. The benefit of Portable UTF-8 is that it is easy to use, easy to bundle.
+
+
 Alternative
 ===========
 
@@ -48,12 +55,8 @@ $stringy->toUpperCase();    // 'FÒÔBÀŘ'
 $stringy->length();         // '6'
 ```
 
-Description
-===========
 
-It is written in PHP and can work without "mbstring", "iconv" or any other extra encoding-library. The benefit of Portable UTF-8 is that it is easy to use, easy to bundle.
-
-## Install via "composer require"
+## Install "Portable UTF-8" via "composer require"
 ```shell
 composer require voku/portable-utf8
 ```
