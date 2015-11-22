@@ -31,12 +31,19 @@ If you like a more Object Oriented Way to edit strings, then you can take a look
 strtoupper('fòôbàř');       // 'FòôBàř'
 strlen('fòôbàř');           // 10
 
-// Portable UTF-8
+// mbstring 
+// WARNING: if you don't use a polyfill like "Portable UTF-8", you need to install the php-extension "mbstring" on your server
 mb_strtoupper('fòôbàř');    // 'FÒÔBÀŘ'
 mb_strlen('fòôbàř');        // '6'
 
+// Portable UTF-8
+use voku\helper\UTF8;
+UTF8::strtoupper('fòôbàř');    // 'FÒÔBÀŘ'
+UTF8::strlen('fòôbàř');        // '6'
+
 // voku/Stringy
-$stringy = Stringy\Stringy::create('fòôbàř');
+use Stringy\Stringy as S;
+$stringy = S::create('fòôbàř');
 $stringy->toUpperCase();    // 'FÒÔBÀŘ'
 $stringy->length();         // '6'
 ```
