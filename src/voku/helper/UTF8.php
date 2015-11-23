@@ -1334,9 +1334,9 @@ class UTF8
   /**
    * convert a string to an array of Unicode characters.
    *
-   * @param    string  $str          The string to split into array.
-   * @param    int     $length Max character length of each array element
-   * @param    boolean $cleanUtf8    Clean non UTF-8 chars from the string
+   * @param    string  $str       The string to split into array.
+   * @param    int     $length    Max character length of each array element
+   * @param    boolean $cleanUtf8 Clean non UTF-8 chars from the string
    *
    * @return   array An array containing chunks of the string
    */
@@ -1872,7 +1872,7 @@ class UTF8
    *
    * @name               to_utf8
    *
-   * @param string $text Any string or array.
+   * @param string       $text Any string or array.
    *
    * @return string The same string, UTF8 encoded
    *
@@ -1965,8 +1965,7 @@ class UTF8
     // decode unicode escape sequences
     $buf = preg_replace_callback(
         '/\\\\u([0-9a-f]{4})/i',
-        function($match)
-        {
+        function ($match) {
           return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
         },
         $buf
@@ -1975,8 +1974,7 @@ class UTF8
     // decode UTF-8 codepoints
     $buf = preg_replace_callback(
         '/&#\d{2,4};/',
-        function($match)
-        {
+        function ($match) {
           return mb_convert_encoding($match[0], 'UTF-8', 'HTML-ENTITIES');
         },
         $buf
@@ -3584,14 +3582,15 @@ class UTF8
    *
    * source: https://gist.github.com/stemar/8287074
    *
-   * @param string|array     $string
-   * @param string|array     $replacement
-   * @param int     $start
-   * @param null|int $length
+   * @param string|array $string
+   * @param string|array $replacement
+   * @param int          $start
+   * @param null|int     $length
    *
    * @return array|string
    */
-  public static function substr_replace($string, $replacement, $start, $length = null) {
+  public static function substr_replace($string, $replacement, $start, $length = null)
+  {
 
     if (is_array($string)) {
       $num = count($string);
@@ -3606,8 +3605,9 @@ class UTF8
       // $start
       if (is_array($start)) {
         $start = array_slice($start, 0, $num);
-        foreach ($start as $key => $value)
+        foreach ($start as $key => $value) {
           $start[$key] = is_int($value) ? $value : 0;
+        }
       } else {
         $start = array_pad(array($start), $num, $start);
       }
@@ -3615,15 +3615,15 @@ class UTF8
       // $length
       if (!isset($length)) {
         $length = array_fill(0, $num, 0);
-      }
-      elseif (is_array($length)) {
+      } elseif (is_array($length)) {
         $length = array_slice($length, 0, $num);
-        foreach ($length as $key => $value)
+        foreach ($length as $key => $value) {
           if (isset($value)) {
             $length[$key] = (is_int($value) ? $value : $num);
           } else {
             $length[$key] = 0;
           }
+        }
       } else {
         $length = array_pad(array($length), $num, $length);
       }
