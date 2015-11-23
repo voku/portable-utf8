@@ -3582,44 +3582,76 @@ class UTF8
   /**
    * Replace text within a portion of a string
    *
-   * @param string $string
-   * @param string $replace
-   * @param int    $start
-   * @param int    $len
-   * @param string $encoding
+   * source: https://gist.github.com/stemar/8287074
    *
-   * @return string
+   * @param string|array     $string
+   * @param string|array     $replacement
+   * @param int     $start
+   * @param null|int $length
+   *
+   * @return array|string
    */
-  public static function substr_replace($string, $replace, $start = 0, $len = 0, $encoding = 'UTF-8')
-  {
-    $issetString = isset($string[0]);
-    $issetReplace = isset($replace[0]);
+  public static function substr_replace($string, $replacement, $start, $length = null) {
 
-    if (!$issetString && !$issetReplace) {
-      return '';
+    if (is_array($string)) {
+      $num = count($string);
+
+      // $replacement
+      if (is_array($replacement)) {
+        $replacement = array_slice($replacement, 0, $num);
+      } else {
+        $replacement = array_pad(array($replacement), $num, $replacement);
+      }
+
+      // $start
+      if (is_array($start)) {
+        $start = array_slice($start, 0, $num);
+        foreach ($start as $key => $value)
+          $start[$key] = is_int($value) ? $value : 0;
+      } else {
+        $start = array_pad(array($start), $num, $start);
+      }
+
+      // $length
+      if (!isset($length)) {
+        $length = array_fill(0, $num, 0);
+      }
+      elseif (is_array($length)) {
+        $length = array_slice($length, 0, $num);
+        foreach ($length as $key => $value)
+          if (isset($value)) {
+            $length[$key] = (is_int($value) ? $value : $num);
+          } else {
+            $length[$key] = 0;
+          }
+      } else {
+        $length = array_pad(array($length), $num, $length);
+      }
+
+      // Recursive call
+      return array_map(array(__CLASS__, 'substr_replace'), $string, $replacement, $start, $length);
+    } else {
+      if (is_array($replacement)) {
+        if (count($replacement) > 0) {
+          $replacement = $replacement[0];
+        } else {
+          $replacement = '';
+        }
+      }
     }
 
-    if (!$issetString && $issetReplace) {
-      return $replace;
+    preg_match_all('/./us', (string)$string, $smatches);
+    preg_match_all('/./us', (string)$replacement, $rmatches);
+
+    if ($length === null) {
+      self::checkForSupport();
+
+      $length = mb_strlen($string);
     }
 
-    if ($start == 0 && $len == 0) {
-      return $replace . $string;
-    }
+    array_splice($smatches[0], $start, $length, $rmatches[0]);
 
-    // init
-    self::checkForSupport();
-
-    if ($start >= 0 && $len >= 0) {
-      return self::substr($string, 0, $start, $encoding) . $replace . self::substr($string, 0, $len, $encoding);
-    }
-
-    $string = self::str_split($string);
-    $replace = self::str_split($replace);
-
-    array_splice($string, $start, $len, $replace);
-
-    return implode('', $string);
+    return join($smatches[0], null);
   }
 
   /**

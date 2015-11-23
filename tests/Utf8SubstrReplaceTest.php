@@ -34,6 +34,31 @@ class Utf8SubstrReplaceTest extends PHPUnit_Framework_TestCase
     $str = 'testing';
     $replaced = substr_replace($str, 'foo', -2, -2);
     self::assertEquals($replaced, u::substr_replace($str, 'foo', -2, -2));
+
+    $str = array('testing');
+    $replaced = substr_replace($str, 'foo', -2, -2);
+    self::assertEquals($replaced, u::substr_replace($str, 'foo', -2, -2));
+
+    $str = 'testing';
+    $replaced = substr_replace($str, array('foo'), -2, -2);
+    self::assertEquals($replaced, u::substr_replace($str, array('foo'), -2, -2));
+
+    $str = 'testing';
+    $replaced = substr_replace($str, array(), -2, -2);
+    self::assertEquals($replaced, u::substr_replace($str, array(), -2, -2));
+
+    $str = array('testing', 'lall');
+    $replaced = substr_replace($str, 'foo', -2, -2);
+    self::assertEquals($replaced, u::substr_replace($str, 'foo', -2, -2));
+
+    $str = array('Iñtërnâtiônàlizætiøn', 'foo');
+    //$replaced = substr_replace($str, 'foo', -2, -2); // INFO: this isn't multibyte ready
+    self::assertEquals(array('Iñtërnâtiônàlizætifooøn', 'ffoooo'), u::substr_replace($str, 'foo', -2, -2));
+
+
+    $str = array('Iñtërnâtiônàlizætiøn', 'foo');
+    //$replaced = substr_replace($str, 'æ', 1); // INFO: this isn't multibyte ready
+    self::assertEquals(array('Iæñtërnâtiônàlizætiøn', 'fæoo'), u::substr_replace($str, 'æ', 1));
   }
 
   public function test_zero()
