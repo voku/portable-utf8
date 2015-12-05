@@ -25,6 +25,7 @@ install:
   - cd C:\projects\utf8
   - mkdir build\logs
   - php -r "readfile('http://getcomposer.org/installer');" | php
+  - php composer.phar config -g github-oauth.github.com %GITHUB_TOKEN%
   - php composer.phar self-update
   - php composer.phar require satooshi/php-coveralls:dev-master
   - php composer.phar install --prefer-dist --no-interaction
