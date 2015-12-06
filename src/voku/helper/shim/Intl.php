@@ -28,7 +28,7 @@ namespace voku\helper\shim;
  *
  * @package voku\helper\shim
  */
-class Intl
+final class Intl
 {
   // (CRLF|([ZWNJ-ZWJ]|T+|L*(LV?V+|LV|LVT)T*|L+|[^Control])[Extend]*|[Control])
   // This regular expression is a work around for http://bugs.exim.org/1279

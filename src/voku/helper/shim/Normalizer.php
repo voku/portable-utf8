@@ -19,7 +19,7 @@ namespace voku\helper\shim;
  *
  * @package voku\helper\shim
  */
-class Normalizer
+final class Normalizer
 {
   const NONE    = 1;
   const FORM_D  = 2;

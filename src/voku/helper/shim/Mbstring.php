@@ -58,7 +58,7 @@ namespace voku\helper\shim;
  *
  * @package voku\helper\shim
  */
-class Mbstring
+final class Mbstring
 {
   const MB_CASE_FOLD = PHP_INT_MAX;
 

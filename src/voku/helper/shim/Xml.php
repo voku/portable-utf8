@@ -16,7 +16,7 @@ namespace voku\helper\shim;
  *
  * @package voku\helper\shim
  */
-class Xml
+final class Xml
 {
   /**
    * @param string $s
