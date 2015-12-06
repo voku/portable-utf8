@@ -2476,4 +2476,9 @@ class Utf8Test extends PHPUnit_Framework_TestCase
 
     self::assertEquals($expected, $result);
   }
+
+  public function setUp()
+  {
+    error_reporting(E_STRICT);
+  }
 }
