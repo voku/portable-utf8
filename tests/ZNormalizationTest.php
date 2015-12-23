@@ -1,7 +1,7 @@
 <?php
 
 //use Normalizer as n;
-use voku\helper\shim\Normalizer as n;
+use Patchwork\PHP\Shim\Normalizer as n;
 
 /**
  * Class ZNormalizationTest
