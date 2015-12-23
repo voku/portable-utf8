@@ -43,9 +43,6 @@
     "psr-4": {
       "voku\\": "src/voku/"
     },
-    "classmap": [
-      "src/Normalizer.php"
-    ]
   },
   "extra": {
     "branch-alias": {
