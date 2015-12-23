@@ -1,6 +1,6 @@
 <?php
 
-use voku\helper\shim\Iconv as p;
+use Patchwork\PHP\Shim\Iconv as p;
 
 /**
  * Class ShimIconvTest
@@ -93,7 +93,7 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException PHPUnit_Framework_Error_Notice
+   * @expectedException PHPUnit_Framework_ExpectationFailedException
    */
   public function testIconvMimeDecode()
   {

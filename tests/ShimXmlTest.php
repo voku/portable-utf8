@@ -1,6 +1,6 @@
 <?php
 
-use voku\helper\shim\Xml as p;
+use Patchwork\PHP\Shim\Xml as p;
 
 /**
  * Class ShimXmlTest

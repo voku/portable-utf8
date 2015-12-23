@@ -2,9 +2,9 @@
 
 namespace voku\helper;
 
-use voku\helper\shim\Intl;
-use voku\helper\shim\Normalizer;
-use voku\helper\shim\Xml;
+use Patchwork\PHP\Shim\Intl;
+use Patchwork\PHP\Shim\Normalizer;
+use Patchwork\PHP\Shim\Xml;
 
 /**
  * UTF8-Helper-Class

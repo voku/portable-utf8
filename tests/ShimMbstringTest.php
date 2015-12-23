@@ -1,7 +1,7 @@
 <?php
 
 use Normalizer as n;
-use voku\helper\shim\Mbstring as p;
+use Patchwork\PHP\Shim\Mbstring as p;
 
 /**
  * Class ShimMbstringTest
@@ -178,7 +178,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
   public function testmb_detect_encoding()
   {
     self::assertSame('ASCII', p::mb_detect_encoding('abc'));
-    self::assertSame('UTF8', p::mb_detect_encoding('abc', 'UTF8, ASCII'));
+    self::assertSame('UTF-8', p::mb_detect_encoding('abc', 'UTF8, ASCII'));
     self::assertSame(
         'ISO-8859-1',
         p::mb_detect_encoding(
@@ -227,7 +227,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
 
   public function testmb_strwidth()
   {
-    self::assertSame(2, p::mb_strwidth("\0実"));
+    self::assertSame(3, p::mb_strwidth("\0実"));
     self::assertSame(4, p::mb_strwidth('déjà'));
     self::assertSame(4, p::mb_strwidth(utf8_decode('déjà'), 'CP1252'));
   }

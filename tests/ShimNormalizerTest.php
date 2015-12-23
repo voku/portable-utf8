@@ -1,7 +1,7 @@
 <?php
 
 use Normalizer as in;
-use voku\helper\shim\Normalizer as pn;
+use Patchwork\PHP\Shim\Normalizer as pn;
 
 /**
  * Class ShimNormalizerTest
@@ -10,7 +10,7 @@ class ShimNormalizerTest extends PHPUnit_Framework_TestCase
 {
   public function testConstants()
   {
-    $rpn = new \ReflectionClass('voku\helper\shim\Normalizer');
+    $rpn = new \ReflectionClass('Patchwork\PHP\Shim\Normalizer');
     $rin = new \ReflectionClass('Normalizer');
 
     $rpn = $rpn->getConstants();
