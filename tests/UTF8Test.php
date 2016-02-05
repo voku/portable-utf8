@@ -1643,6 +1643,11 @@ class Utf8Test extends PHPUnit_Framework_TestCase
       }
       $counter++;
     }
+
+    $testString = 'test' . html_entity_decode('&nbsp;') . 'test';
+    self::assertEquals('test' . "\xc2\xa0" . 'test', $testString);
+    self::assertEquals('test&nbsp;test', htmlentities($testString));
+    self::assertEquals('test' . "\xc2\xa0" . 'test', UTF8::cleanup($testString));
   }
 
   public function testStrwidth()
@@ -1842,7 +1847,7 @@ class Utf8Test extends PHPUnit_Framework_TestCase
   {
     $examples = array(
       // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-      "κόσμε\xc2\xa0"                        => array('κόσμε' => 'κόσμε '),
+      "κόσμε\xc2\xa0"                        => array('κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"),
       // Valid UTF-8
       '中'                                    => array('中' => '中'),
       // Valid UTF-8 + ISO-Error
