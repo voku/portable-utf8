@@ -502,10 +502,11 @@ class UTF8
    * @param bool   $remove_bom
    * @param bool   $normalize_whitespace
    * @param bool   $normalize_msword e.g.: "…" => "..."
+   * @param bool   $keep_non_breaking_space set true, to keep non-breaking-spaces
    *
    * @return string Clean UTF-8 encoded string
    */
-  public static function clean($str, $remove_bom = false, $normalize_whitespace = false, $normalize_msword = false)
+  public static function clean($str, $remove_bom = false, $normalize_whitespace = false, $normalize_msword = false, $keep_non_breaking_space = false)
   {
     // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
     // caused connection reset problem on larger strings
@@ -528,7 +529,7 @@ class UTF8
     $str = self::remove_invisible_characters($str);
 
     if ($normalize_whitespace === true) {
-      $str = self::normalize_whitespace($str);
+      $str = self::normalize_whitespace($str, $keep_non_breaking_space);
     }
 
     if ($normalize_msword === true) {
@@ -603,18 +604,27 @@ class UTF8
    * normalize whitespace
    *
    * @param string $str The string to be normalized.
+   * @param bool   $keepNonBreakingSpace set true, to keep non-breaking-spaces
    *
    * @return string
    */
-  public static function normalize_whitespace($str)
+  public static function normalize_whitespace($str, $keepNonBreakingSpace = false)
   {
-    static $whitespaces = null;
+    static $whitespaces = array();
 
-    if ($whitespaces === null) {
-      $whitespaces = array_values(self::$whitespaceTable);
+    if (!isset($whitespaces[$keepNonBreakingSpace])) {
+
+      $whitespaces[$keepNonBreakingSpace] = self::$whitespaceTable;
+
+      if ($keepNonBreakingSpace === true) {
+        /** @noinspection OffsetOperationsInspection */
+        unset($whitespaces[$keepNonBreakingSpace]['NO-BREAK SPACE']);
+      }
+
+      $whitespaces[$keepNonBreakingSpace] = array_values($whitespaces[$keepNonBreakingSpace]);
     }
 
-    return str_replace($whitespaces, ' ', $str);
+    return str_replace($whitespaces[$keepNonBreakingSpace], ' ', $str);
   }
 
   /**
@@ -2422,7 +2432,7 @@ class UTF8
     // && remove remove invisible characters (e.g. "\0")
     // && remove BOM
     // && normalize whitespace chars
-    $text = self::clean($text, true, true, false);
+    $text = self::clean($text, true, true, false, true);
 
     return (string)$text;
   }
