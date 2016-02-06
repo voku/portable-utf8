@@ -89,7 +89,7 @@ class Bootup
     if (!preg_match('//u', urldecode($uri))) {
       $uri = preg_replace_callback(
           '/[\x80-\xFF]+/',
-          function($m) {
+          function ($m) {
             return urlencode($m[0]);
           },
           $uri
@@ -97,7 +97,7 @@ class Bootup
 
       $uri = preg_replace_callback(
           '/(?:%[89A-F][0-9A-F])+/i',
-          function($m) {
+          function ($m) {
             return urlencode(UTF8::encode('UTF-8', urldecode($m[0])));
           },
           $uri
