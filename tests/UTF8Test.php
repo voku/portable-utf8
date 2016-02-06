@@ -1644,9 +1644,9 @@ class Utf8Test extends PHPUnit_Framework_TestCase
       $counter++;
     }
 
-    $testString = 'test' . html_entity_decode('&nbsp;') . 'test';
+    $testString = 'test' . UTF8::html_entity_decode('&nbsp;') . 'test';
     self::assertEquals('test' . "\xc2\xa0" . 'test', $testString);
-    self::assertEquals('test&nbsp;test', htmlentities($testString));
+    self::assertEquals('test&nbsp;test', UTF8::htmlentities($testString));
     self::assertEquals('test' . "\xc2\xa0" . 'test', UTF8::cleanup($testString));
   }
 
