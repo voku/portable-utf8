@@ -2,12 +2,31 @@ language: php
 sudo: false
 
 php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
   - hhvm
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.3
+      env: extension='true'
+    - php: 5.3
+      env: extension='false'
+    - php: 5.4
+      env: extension='true'
+    - php: 5.4
+      env: extension='false'
+    - php: 5.5
+      env: extension='true'
+    - php: 5.5
+      env: extension='false'
+    - php: 5.6
+      env: extension='true'
+    - php: 5.6
+      env: extension='false'
+    - php: 7.0
+      env: extension='true'
+    - php: 7.0
+      env: extension='false'
 
 before_script:
   - php --version
@@ -15,9 +34,9 @@ before_script:
   - touch ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "php-config -> orig"
   - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - sed -i.bkp "s/^extension\ =\ mbstring.so$/#extension = mbstring.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - sed -i.bkp "s/^extension\ =\ intl.so$/#extension = intl.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - sed -i.bkp "s/^extension\ =\ iconv.so$/#extension = iconv.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - if [[ $extension = 'false' ]]; then sed -i.bkp "s/^extension\ =\ mbstring.so$/#extension = mbstring.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [[ $extension = 'false' ]]; then sed -i.bkp "s/^extension\ =\ intl.so$/#extension = intl.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [[ $extension = 'false' ]]; then sed -i.bkp "s/^extension\ =\ iconv.so$/#extension = iconv.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
   - echo "php-config -> new"
   - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - wget https://scrutinizer-ci.com/ocular.phar
