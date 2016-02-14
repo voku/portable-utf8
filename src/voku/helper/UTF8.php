@@ -2876,20 +2876,40 @@ class UTF8
   }
 
   /**
-   * filter input array
+   * filter var array
    *
-   * @param      $type
-   * @param null $def
-   * @param bool $add_empty
+   * @param array $data
+   * @param mixed $definition
+   * @param bool  $add_empty
    *
    * @return mixed|string
    */
-  public static function filter_input_array($type, $def = null, $add_empty = true)
+  public static function filter_var_array($data, $definition = null, $add_empty = true)
+  {
+    if (2 > func_num_args()) {
+      $a = filter_var_array($data);
+    } else {
+      $a = filter_var_array($data, $definition, $add_empty);
+    }
+
+    return self::filter($a);
+  }
+
+  /**
+   * filter input array
+   *
+   * @param       $type
+   * @param mixed $definition
+   * @param bool  $add_empty
+   *
+   * @return mixed|string
+   */
+  public static function filter_input_array($type, $definition = null, $add_empty = true)
   {
     if (2 > func_num_args()) {
       $a = filter_input_array($type);
     } else {
-      $a = filter_input_array($type, $def, $add_empty);
+      $a = filter_input_array($type, $definition, $add_empty);
     }
 
     return self::filter($a);

@@ -1318,6 +1318,51 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     self::assertEquals(-1, UTF8::filter_var(100, FILTER_VALIDATE_INT, $options));
   }
 
+  public function testFilterVarArray()
+  {
+    $filters = array
+    (
+        "name"  => array
+        (
+            "filter"  => FILTER_CALLBACK,
+            "flags"   => FILTER_FORCE_ARRAY,
+            "options" => array('voku\helper\UTF8', 'ucwords'),
+        ),
+        "age"   => array
+        (
+            "filter"  => FILTER_VALIDATE_INT,
+            "options" => array
+            (
+                "min_range" => 1,
+                "max_range" => 120,
+            ),
+        ),
+        "email" => FILTER_VALIDATE_EMAIL,
+    );
+
+    $data['name'] = 'κόσμε';
+    $data['age'] = '18';
+    $data['email'] = 'foo@bar.de';
+
+    self::assertEquals(
+        array(
+            'name'  => 'Κόσμε',
+            'age'   => 18,
+            'email' => 'foo@bar.de',
+        ),
+        UTF8::filter_var_array($data, $filters, true)
+    );
+
+    self::assertEquals(
+        array(
+            'name'  => 'κόσμε',
+            'age'   => '18',
+            'email' => 'foo@bar.de',
+        ),
+        UTF8::filter_var_array($data)
+    );
+  }
+
   public function testReplaceDiamondQuestionMark()
   {
     $tests = array(
@@ -1362,7 +1407,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div> </div><input type='email' name='user[email]' /><a>wtf</a>",
         "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => '– DÃ¼sseldorf —',
         "„Abcdef\xe2\x81\x9f”"                                                                => '„Abcdef ”',
-        " foo\t foo "                                                                                => ' foo	 foo '
+        " foo\t foo "                                                                         => ' foo	 foo ',
     );
 
     for ($i = 0; $i < 10; $i++) {
@@ -1846,42 +1891,43 @@ class UTF8Test extends PHPUnit_Framework_TestCase
   public function testCleanup()
   {
     $examples = array(
-      // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-      "κόσμε\xc2\xa0"                        => array('κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"),
-      // Valid UTF-8
-      '中'                                    => array('中' => '中'),
-      // Valid UTF-8 + ISO-Error
-      'DÃ¼sseldorf'                          => array('Düsseldorf' => 'Düsseldorf'),
-      // Valid UTF-8 + Invalid Chars
-      "κόσμε\xa0\xa1-öäü"                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
-      // Valid ASCII
-      'a'                                    => array('a' => 'a'),
-      // Valid ASCII + Invalid Chars
-      "a\xa0\xa1-öäü"                        => array('a-öäü' => 'a-öäü'),
-      // Valid 2 Octet Sequence
-      "\xc3\xb1"                             => array('ñ' => 'ñ'),
-      // Invalid 2 Octet Sequence
-      "\xc3\x28"                             => array('�(' => '('),
-      // Invalid Sequence Identifier
-      "\xa0\xa1"                             => array('��' => ''),
-      // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"                         => array('₡' => '₡'),
-      // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"                         => array('�(�' => '('),
-      // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"                         => array('�(' => '('),
-      // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"                     => array('𐌼' => ''),
-      // Invalid 4 Octet Sequence (in 2nd Octet)
-      "\xf0\x28\x8c\xbc"                     => array('�(��' => '('),
-      // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"                     => array('�(�' => '('),
-      // Invalid 4 Octet Sequence (in 4th Octet)
-      " \xf0\x28\x8c\x28"                    => array('�(�(' => ' (('),
-      // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"                 => array('�' => ''),
-      // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
-      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array('�' => ' '),
+        ''                                     => array(''),
+        // Valid UTF-8 + UTF-8 NO-BREAK SPACE
+        "κόσμε\xc2\xa0"                        => array('κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"),
+        // Valid UTF-8
+        '中'                                    => array('中' => '中'),
+        // Valid UTF-8 + ISO-Error
+        'DÃ¼sseldorf'                          => array('Düsseldorf' => 'Düsseldorf'),
+        // Valid UTF-8 + Invalid Chars
+        "κόσμε\xa0\xa1-öäü"                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
+        // Valid ASCII
+        'a'                                    => array('a' => 'a'),
+        // Valid ASCII + Invalid Chars
+        "a\xa0\xa1-öäü"                        => array('a-öäü' => 'a-öäü'),
+        // Valid 2 Octet Sequence
+        "\xc3\xb1"                             => array('ñ' => 'ñ'),
+        // Invalid 2 Octet Sequence
+        "\xc3\x28"                             => array('�(' => '('),
+        // Invalid Sequence Identifier
+        "\xa0\xa1"                             => array('��' => ''),
+        // Valid 3 Octet Sequence
+        "\xe2\x82\xa1"                         => array('₡' => '₡'),
+        // Invalid 3 Octet Sequence (in 2nd Octet)
+        "\xe2\x28\xa1"                         => array('�(�' => '('),
+        // Invalid 3 Octet Sequence (in 3rd Octet)
+        "\xe2\x82\x28"                         => array('�(' => '('),
+        // Valid 4 Octet Sequence
+        "\xf0\x90\x8c\xbc"                     => array('𐌼' => ''),
+        // Invalid 4 Octet Sequence (in 2nd Octet)
+        "\xf0\x28\x8c\xbc"                     => array('�(��' => '('),
+        // Invalid 4 Octet Sequence (in 3rd Octet)
+        "\xf0\x90\x28\xbc"                     => array('�(�' => '('),
+        // Invalid 4 Octet Sequence (in 4th Octet)
+        " \xf0\x28\x8c\x28"                    => array('�(�(' => ' (('),
+        // Valid 5 Octet Sequence (but not Unicode!)
+        "\xf8\xa1\xa1\xa1\xa1"                 => array('�' => ''),
+        // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
+        "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array('�' => ' '),
     );
 
     foreach ($examples as $testString => $testResults) {
