@@ -1325,7 +1325,6 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "name"  => array
         (
             "filter"  => FILTER_CALLBACK,
-            "flags"   => FILTER_FORCE_ARRAY,
             "options" => array('voku\helper\UTF8', 'ucwords'),
         ),
         "age"   => array
