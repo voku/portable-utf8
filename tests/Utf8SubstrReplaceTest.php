@@ -43,6 +43,22 @@ class Utf8SubstrReplaceTest extends PHPUnit_Framework_TestCase
     $replaced = substr_replace($str, array('foo'), -2, -2);
     self::assertEquals($replaced, u::substr_replace($str, array('foo'), -2, -2));
 
+    $str = array('testing', 'testingV2');
+    $replaced = substr_replace($str, array('foo', 'fooV2'), -2, -2);
+    self::assertEquals($replaced, u::substr_replace($str, array('foo', 'fooV2'), -2, -2));
+
+    $str = array('testing', 'testingV2');
+    $replaced = substr_replace($str, array('foo', 'fooV2'), array(1, 2), array(-1, 1));
+    self::assertEquals($replaced, u::substr_replace($str, array('foo', 'fooV2'), array(1, 2), array(-1, 1)));
+
+    $str = array('testing', 'testingV2');
+    $replaced = substr_replace($str, array('foo', 'fooV2'), -2, array(-1, 1));
+    self::assertEquals($replaced, u::substr_replace($str, array('foo', 'fooV2'), -2, array(-1, 1)));
+
+    $str = array('testing', 'testingV2');
+    $replaced = substr_replace($str, array('foo', 'fooV2'), array(1, 2), -1);
+    self::assertEquals($replaced, u::substr_replace($str, array('foo', 'fooV2'), array(1, 2), -1));
+
     $str = 'testing';
     $replaced = substr_replace($str, array(), -2, -2);
     self::assertEquals($replaced, u::substr_replace($str, array(), -2, -2));

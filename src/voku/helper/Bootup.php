@@ -139,6 +139,7 @@ class Bootup
         &$_REQUEST,
     );
 
+    /** @noinspection ReferenceMismatchInspection */
     foreach ($a[0] as &$r) {
       $a[] = array(
           &$r['name'],
@@ -150,7 +151,9 @@ class Bootup
 
     $len = count($a) + 1;
     for ($i = 1; $i < $len; ++$i) {
+      /** @noinspection ReferenceMismatchInspection */
       foreach ($a[$i] as &$r) {
+        /** @noinspection ReferenceMismatchInspection */
         $s = $r; // $r is a ref, $s a copy
         if (is_array($s)) {
           $a[$len++] = & $r;

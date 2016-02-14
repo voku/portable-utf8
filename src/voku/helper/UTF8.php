@@ -1093,44 +1093,49 @@ class UTF8
     }
 
     if (self::pcre_utf8_support() !== true) {
+
       // If even just the first character can be matched, when the /u
       // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
       // invalid, nothing at all will match, even if the string contains
       // some valid sequences
       return (preg_match('/^.{1}/us', $str, $ar) == 1);
+
     } else {
+
       $mState = 0; // cached expected number of octets after the current octet
       // until the beginning of the next UTF8 character sequence
       $mUcs4 = 0; // cached Unicode character
       $mBytes = 1; // cached expected number of octets in the current sequence
       $len = strlen($str);
+
+      /** @noinspection ForeachInvariantsInspection */
       for ($i = 0; $i < $len; $i++) {
         $in = ord($str[$i]);
         if ($mState == 0) {
           // When mState is zero we expect either a US-ASCII character or a
           // multi-octet sequence.
-          if (0 == (0x80 & ($in))) {
+          if (0 == (0x80 & $in)) {
             // US-ASCII, pass straight through.
             $mBytes = 1;
-          } elseif (0xC0 == (0xE0 & ($in))) {
+          } elseif (0xC0 == (0xE0 & $in)) {
             // First octet of 2 octet sequence
-            $mUcs4 = ($in);
+            $mUcs4 = $in;
             $mUcs4 = ($mUcs4 & 0x1F) << 6;
             $mState = 1;
             $mBytes = 2;
-          } elseif (0xE0 == (0xF0 & ($in))) {
+          } elseif (0xE0 == (0xF0 & $in)) {
             // First octet of 3 octet sequence
-            $mUcs4 = ($in);
+            $mUcs4 = $in;
             $mUcs4 = ($mUcs4 & 0x0F) << 12;
             $mState = 2;
             $mBytes = 3;
-          } elseif (0xF0 == (0xF8 & ($in))) {
+          } elseif (0xF0 == (0xF8 & $in)) {
             // First octet of 4 octet sequence
-            $mUcs4 = ($in);
+            $mUcs4 = $in;
             $mUcs4 = ($mUcs4 & 0x07) << 18;
             $mState = 3;
             $mBytes = 4;
-          } elseif (0xF8 == (0xFC & ($in))) {
+          } elseif (0xF8 == (0xFC & $in)) {
             /* First octet of 5 octet sequence.
             *
             * This is illegal because the encoded codepoint must be either
@@ -1139,13 +1144,13 @@ class UTF8
             * Rather than trying to resynchronize, we will carry on until the end
             * of the sequence and let the later error handling code catch it.
             */
-            $mUcs4 = ($in);
+            $mUcs4 = $in;
             $mUcs4 = ($mUcs4 & 0x03) << 24;
             $mState = 4;
             $mBytes = 5;
-          } elseif (0xFC == (0xFE & ($in))) {
+          } elseif (0xFC == (0xFE & $in)) {
             // First octet of 6 octet sequence, see comments for 5 octet sequence.
-            $mUcs4 = ($in);
+            $mUcs4 = $in;
             $mUcs4 = ($mUcs4 & 1) << 30;
             $mState = 5;
             $mBytes = 6;
@@ -1158,7 +1163,7 @@ class UTF8
         } else {
           // When mState is non-zero, we expect a continuation of the multi-octet
           // sequence
-          if (0x80 == (0xC0 & ($in))) {
+          if (0x80 == (0xC0 & $in)) {
             // Legal continuation.
             $shift = ($mState - 1) * 6;
             $tmp = $in;
@@ -1381,22 +1386,23 @@ class UTF8
 
       $len = strlen($str);
 
+      /** @noinspection ForeachInvariantsInspection */
       for ($i = 0; $i < $len; $i++) {
         if (($str[$i] & "\x80") === "\x00") {
           $ret[] = $str[$i];
-        } elseif ((($str[$i] & "\xE0") === "\xC0") && (isset($str[$i + 1]))) {
+        } elseif ((($str[$i] & "\xE0") === "\xC0") && isset($str[$i + 1])) {
           if (($str[$i + 1] & "\xC0") === "\x80") {
             $ret[] = $str[$i] . $str[$i + 1];
 
             $i++;
           }
-        } elseif ((($str[$i] & "\xF0") === "\xE0") && (isset($str[$i + 2]))) {
+        } elseif ((($str[$i] & "\xF0") === "\xE0") && isset($str[$i + 2])) {
           if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80")) {
             $ret[] = $str[$i] . $str[$i + 1] . $str[$i + 2];
 
             $i += 2;
           }
-        } elseif ((($str[$i] & "\xF8") === "\xF0") && (isset($str[$i + 3]))) {
+        } elseif ((($str[$i] & "\xF8") === "\xF0") && isset($str[$i + 3])) {
           if ((($str[$i + 1] & "\xC0") === "\x80") && (($str[$i + 2] & "\xC0") === "\x80") && (($str[$i + 3] & "\xC0") === "\x80")) {
             $ret[] = $str[$i] . $str[$i + 1] . $str[$i + 2] . $str[$i + 3];
 
@@ -1907,6 +1913,7 @@ class UTF8
     $max = self::strlen($text, '8bit');
 
     $buf = '';
+    /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $max; $i++) {
       $c1 = $text[$i];
 
@@ -3181,6 +3188,7 @@ class UTF8
       return '';
     }
 
+    /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $iLen; ++$i) {
 
       if ($i) {
@@ -3470,6 +3478,7 @@ class UTF8
     $out = null;
     $max = strlen($string);
 
+    /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $max; ++$i) {
       $out .= vsprintf('%08b', (array)self::ord($string[$i]));
     }
@@ -3615,9 +3624,10 @@ class UTF8
       // $start
       if (is_array($start)) {
         $start = array_slice($start, 0, $num);
-        foreach ($start as $key => $value) {
-          $start[$key] = is_int($value) ? $value : 0;
+        foreach ($start as &$valueTmp) {
+          $valueTmp = (int)$valueTmp === $valueTmp ? $valueTmp : 0;
         }
+        unset($value);
       } else {
         $start = array_pad(array($start), $num, $start);
       }
@@ -3627,13 +3637,14 @@ class UTF8
         $length = array_fill(0, $num, 0);
       } elseif (is_array($length)) {
         $length = array_slice($length, 0, $num);
-        foreach ($length as $key => $value) {
-          if (isset($value)) {
-            $length[$key] = (is_int($value) ? $value : $num);
+        foreach ($length as &$valueTmpV2) {
+          if (isset($valueTmpV2)) {
+            $valueTmpV2 = (int)$valueTmpV2 === $valueTmpV2 ? $valueTmpV2 : $num;
           } else {
-            $length[$key] = 0;
+            $valueTmpV2 = 0;
           }
         }
+        unset($valueTmpV2);
       } else {
         $length = array_pad(array($length), $num, $length);
       }
