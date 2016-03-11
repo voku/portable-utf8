@@ -1320,23 +1320,19 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
   public function testFilterVarArray()
   {
-    $filters = array
-    (
-        "name"  => array
-        (
-            "filter"  => FILTER_CALLBACK,
-            "options" => array('voku\helper\UTF8', 'ucwords'),
+    $filters = array(
+        'name'  => array(
+            'filter'  => FILTER_CALLBACK,
+            'options' => array('voku\helper\UTF8', 'ucwords'),
         ),
-        "age"   => array
-        (
-            "filter"  => FILTER_VALIDATE_INT,
-            "options" => array
-            (
-                "min_range" => 1,
-                "max_range" => 120,
+        'age'   => array(
+            'filter'  => FILTER_VALIDATE_INT,
+            'options' => array(
+                'min_range' => 1,
+                'max_range' => 120,
             ),
         ),
-        "email" => FILTER_VALIDATE_EMAIL,
+        'email' => FILTER_VALIDATE_EMAIL,
     );
 
     $data['name'] = 'κόσμε';
