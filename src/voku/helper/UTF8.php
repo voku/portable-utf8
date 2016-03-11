@@ -1885,12 +1885,9 @@ class UTF8
    * 2) when any of these: àáâãäåæçèéêëìíîï  are followed by TWO chars from group B,
    * 3) when any of these: ðñòó  are followed by THREE chars from group B.
    *
-   * @name               to_utf8
-   *
    * @param string       $string Any string or array.
    *
    * @return string The same string, but UTF8 encoded.
-   *
    */
   public static function to_utf8($string)
   {
