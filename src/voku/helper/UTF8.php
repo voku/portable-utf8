@@ -2442,7 +2442,7 @@ class UTF8
     // && remove diamond question mark (�)
     // && remove remove invisible characters (e.g. "\0")
     // && remove BOM
-    // && normalize whitespace chars
+    // && normalize whitespace chars (but keep non-breaking-spaces)
     $string = self::clean($string, true, true, false, true);
 
     return (string)$string;

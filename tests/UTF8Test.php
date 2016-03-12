@@ -1923,10 +1923,25 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         "\xf8\xa1\xa1\xa1\xa1"                 => array('�' => ''),
         // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
         "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array('�' => ' '),
+        // test for database-insert
+        "
+        <h1>«DÃ¼sseldorf» &ndash; &lt;Köln&gt;</h1>
+        <br /><br />
+        <p>
+          &nbsp;�&foo;❤&nbsp;
+        </p>
+        " => array('' => '
+        <h1>«Düsseldorf» &ndash; &lt;Köln&gt;</h1>
+        <br /><br />
+        <p>
+          &nbsp;&foo;❤&nbsp;
+        </p>
+        '),
     );
 
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
+        echo $before . "\n\n";
         self::assertEquals($after, UTF8::cleanup($testString));
       }
     }
