@@ -1941,7 +1941,6 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        echo $before . "\n\n";
         self::assertEquals($after, UTF8::cleanup($testString));
       }
     }
