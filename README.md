@@ -81,8 +81,10 @@ The problem with "mbstring" and others is that most of the time you cannot ensur
 
 Example 1: UTF8::cleanup()
 ```php
-  $cleanUTF8String = UTF8::cleanup($string);
-  // ... and then save to db
+  echo UTF8::cleanup('�DÃ¼sseldorf�');
+  
+  // will output
+  // Düsseldorf
 ```
 
 Example 2: UTF8::strlen()
