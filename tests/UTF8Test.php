@@ -1835,6 +1835,20 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testStrLimit()
+  {
+    $testArray = array(
+        array('this...', 'this is a test', 5, '...'),
+        array('this is...', 'this is öäü-foo test', 8, '...'),
+        array('fòô', 'fòô bàř fòô', 6, ''),
+        array('fòô bàř', 'fòô bàř fòô', 8, ''),
+    );
+
+    foreach ($testArray as $test) {
+      self::assertEquals($test[0], UTF8::str_limit($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
+    }
+  }
+
   public function testClean()
   {
     $examples = array(

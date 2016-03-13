@@ -711,7 +711,7 @@ class UTF8
   }
 
   /**
-   * get data ...
+   * get data from "/data/*.ser"
    *
    * @param string $file
    *
@@ -839,7 +839,7 @@ class UTF8
   }
 
   /**
-   * Echo native UTF8-Support libs ... e.g. for debugging
+   * Echo native UTF8-Support libs, e.g. for debugging.
    */
   public static function showSupport()
   {
@@ -1541,6 +1541,45 @@ class UTF8
   }
 
   /**
+   * Limit the number of characters in a string.
+   *
+   * @param  string  $str
+   * @param  int     $length
+   * @param  string  $strAddOn
+   *
+   * @return string
+   */
+  public static function str_limit($str, $length = 100, $strAddOn = '...')
+  {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    $length = (int) $length;
+
+    if (self::strlen($str) <= $length) {
+      return $str;
+    }
+    
+    if (self::substr($str, $length - 1, 1) === ' ') {
+      return self::substr($str, 0, $length - 1) . $strAddOn;
+    }
+    
+    $str = self::substr($str, 0, $length);
+    $array = explode(' ', $str);
+    array_pop($array);
+    $new_str = implode(' ', $array);
+
+    if ($new_str == '') {
+      $str = self::substr($str, 0, $length - 1) . $strAddOn;
+    } else {
+      $str = $new_str . $strAddOn;
+    }
+    
+    return $str;
+  }
+
+  /**
    * Find length of initial segment not matching mask.
    *
    * @param string $str
@@ -1709,7 +1748,17 @@ class UTF8
   }
 
   /**
-   * urldecode & fixing urlencoded-win1252-chars ...
+   * Multi decode html entity & fix urlencoded-win1252-chars.
+   *
+   * e.g:
+   * 'D&#252;sseldorf'               => 'Düsseldorf'
+   * 'D%FCsseldorf'                  => 'Düsseldorf'
+   * 'D&#xFC;sseldorf'               => 'Düsseldorf'
+   * 'D%26%23xFC%3Bsseldorf'         => 'Düsseldorf'
+   * 'DÃ¼sseldorf'                   => 'Düsseldorf'
+   * 'D%C3%BCsseldorf'               => 'Düsseldorf'
+   * 'D%C3%83%C2%BCsseldorf'         => 'Düsseldorf'
+   * 'D%25C3%2583%25C2%25BCsseldorf' => 'Düsseldorf'
    *
    * @param string $str
    *
@@ -2418,7 +2467,7 @@ class UTF8
   }
 
   /**
-   * Clean-up a and show only printable UTF-8 chars at the end...
+   * Clean-up a and show only printable UTF-8 chars at the end.
    *
    * @param string|false $string
    *
@@ -2640,7 +2689,7 @@ class UTF8
   /**
    * Normalize the encoding-name input.
    *
-   * @param string $encodingLabel e.g.: ISO, UTF8, ISO88591, WIN1252 ...
+   * @param string $encodingLabel e.g.: ISO, UTF8, ISO88591, WIN1252, etc.
    *
    * @return string
    */
@@ -2970,7 +3019,7 @@ class UTF8
   }
 
   /**
-   * String comparison ...
+   * String comparison.
    *
    * @param string $str1
    * @param string $str2
@@ -3075,13 +3124,13 @@ class UTF8
   }
 
   /**
-   * Converts a UTF-8 string to a series of ...
+   * Converts a UTF-8 string to a series of HTML numbered entities.
    *
-   * INFO: HTML Numbered Entities like &#123;&#39;&#1740;...
+   * e.g.: &#123;&#39;&#1740;
    *
-   * @param    string $str The Unicode string to be encoded as numbered entities.
+   * @param  string $str The Unicode string to be encoded as numbered entities.
    *
-   * @return   string HTML numbered entities.
+   * @return string HTML numbered entities.
    */
   public static function html_encode($str)
   {
@@ -4024,7 +4073,7 @@ class UTF8
   }
 
   /**
-   * Repeat a string...
+   * Repeat a string.
    *
    * @param string $input      <p>
    *                           The string to be repeated.
