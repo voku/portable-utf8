@@ -1541,11 +1541,41 @@ class UTF8
   }
 
   /**
+   * Limit the number of words in a string.
+   *
+   * @param  string $str
+   * @param  int    $words
+   * @param  string $strAddOn
+   *
+   * @return string
+   */
+  public static function words_limit($str, $words = 100, $strAddOn = '...')
+  {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    $words = (int)$words;
+
+    preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $str, $matches);
+
+    if (
+        !isset($matches[0])
+        ||
+        self::strlen($str) === self::strlen($matches[0])
+    ) {
+      return $str;
+    }
+
+    return self::rtrim($matches[0]) . $strAddOn;
+  }
+
+  /**
    * Limit the number of characters in a string.
    *
-   * @param  string  $str
-   * @param  int     $length
-   * @param  string  $strAddOn
+   * @param  string $str
+   * @param  int    $length
+   * @param  string $strAddOn
    *
    * @return string
    */
@@ -1555,16 +1585,16 @@ class UTF8
       return '';
     }
 
-    $length = (int) $length;
+    $length = (int)$length;
 
     if (self::strlen($str) <= $length) {
       return $str;
     }
-    
+
     if (self::substr($str, $length - 1, 1) === ' ') {
       return self::substr($str, 0, $length - 1) . $strAddOn;
     }
-    
+
     $str = self::substr($str, 0, $length);
     $array = explode(' ', $str);
     array_pop($array);
@@ -1575,7 +1605,7 @@ class UTF8
     } else {
       $str = $new_str . $strAddOn;
     }
-    
+
     return $str;
   }
 
@@ -1934,7 +1964,7 @@ class UTF8
    * 2) when any of these: àáâãäåæçèéêëìíîï  are followed by TWO chars from group B,
    * 3) when any of these: ðñòó  are followed by THREE chars from group B.
    *
-   * @param string       $string Any string or array.
+   * @param string $string Any string or array.
    *
    * @return string The same string, but UTF8 encoded.
    */
