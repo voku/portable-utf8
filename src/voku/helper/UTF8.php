@@ -1092,7 +1092,7 @@ class UTF8
     $str = (string)$str;
 
     if (!isset($str[0])) {
-      return true;
+      return false;
     }
 
     if (base64_encode(base64_decode($str, true)) === $str) {

@@ -2024,7 +2024,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         1                                          => false,
         -1                                         => false,
         ' '                                        => false,
-        ''                                         => true,
+        ''                                         => false,
         'أبز'                                      => false,
         "\xe2\x80\x99"                             => false,
         'Ɓtest'                                    => false,
