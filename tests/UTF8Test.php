@@ -1860,7 +1860,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $test) {
-      self::assertEquals($test[0], UTF8::str_limit($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
+      self::assertEquals($test[0], UTF8::str_limit_after_word($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
     }
   }
 

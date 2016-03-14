@@ -1603,7 +1603,7 @@ class UTF8
   }
 
   /**
-   * Limit the number of characters in a string.
+   * Limit the number of characters in a string, but also after the next word.
    *
    * @param  string $str
    * @param  int    $length
@@ -1611,7 +1611,7 @@ class UTF8
    *
    * @return string
    */
-  public static function str_limit($str, $length = 100, $strAddOn = '...')
+  public static function str_limit_after_word($str, $length = 100, $strAddOn = '...')
   {
     if (!isset($str[0])) {
       return '';
