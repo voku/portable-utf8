@@ -1830,10 +1830,10 @@ class UTF8
     $strSwappedCase = preg_replace_callback(
         '/[\S]/u',
         function ($match) use ($encoding) {
-          $marchToUpper = self::strtoupper($match[0], $encoding);
+          $marchToUpper = UTF8::strtoupper($match[0], $encoding);
 
           if ($match[0] == $marchToUpper) {
-            return self::strtolower($match[0], $encoding);
+            return UTF8::strtolower($match[0], $encoding);
           } else {
             return $marchToUpper;
           }
