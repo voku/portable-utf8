@@ -1959,13 +1959,15 @@ class UTF8Test extends PHPUnit_Framework_TestCase
         <p>
           &nbsp;�&foo;❤&nbsp;
         </p>
-        ' => array('' => '
+        '                              => array(
+            '' => '
         <h1>«Düsseldorf» &ndash; &lt;Köln&gt;</h1>
         <br /><br />
         <p>
           &nbsp;&foo;❤&nbsp;
         </p>
-        '),
+        ',
+        ),
     );
 
     foreach ($examples as $testString => $testResults) {
@@ -2011,6 +2013,68 @@ class UTF8Test extends PHPUnit_Framework_TestCase
 
     foreach ($tests as $before => $after) {
       self::assertEquals($after, UTF8::to_ascii($before), $before);
+    }
+  }
+
+
+  public function testIsBase64()
+  {
+    $tests = array(
+        0                                          => false,
+        1                                          => false,
+        -1                                         => false,
+        ' '                                        => false,
+        ''                                         => true,
+        'أبز'                                      => false,
+        "\xe2\x80\x99"                             => false,
+        'Ɓtest'                                    => false,
+        base64_encode('true')                      => true,
+        base64_encode('  -ABC-中文空白-  ')            => true,
+        'キャンパス'                                    => false,
+        'биологическом'                            => false,
+        '정, 병호'                                    => false,
+        'on'                                       => false,
+        'ますだ, よしひこ'                                => false,
+        'मोनिच'                                    => false,
+        'क्षȸ'                                     => false,
+        base64_encode('👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك') => true,
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'                => false,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::isBase64($before), $before);
+    }
+  }
+
+  public function testSwapCase()
+  {
+    $tests = array(
+        1                               => 1,
+        -1                              => -1,
+        ' '                             => ' ',
+        ''                              => '',
+        'أبز'                           => 'أبز',
+        "\xe2\x80\x99"                  => '’',
+        'Ɓtest'                         => 'ɓTEST',
+        '  -ABC-中文空白-  '                => '  -abc-中文空白-  ',
+        "      - abc- \xc2\x87"         => '      - ABC- ',
+        'abc'                           => 'ABC',
+        'deja vu'                       => 'DEJA VU',
+        'déjà vu'                       => 'DÉJÀ VU',
+        'déjà σσς iıii'                 => 'DÉJÀ ΣΣΣ IIII',
+        "test\x80-\xBFöäü"              => 'TEST-ÖÄÜ',
+        'Internationalizaetion'         => 'iNTERNATIONALIZAETION',
+        "中 - &#20013; - %&? - \xc2\x80" => '中 - &#20013; - %&? - ',
+        'BonJour'                       => 'bONjOUR',
+        'BonJour & au revoir'           => 'bONjOUR & AU REVOIR',
+        'Déjà'                          => 'dÉJÀ',
+        'това е тестово заглавие'       => 'ТОВА Е ТЕСТОВО ЗАГЛАВИЕ',
+        'это тестовый заголовок'        => 'ЭТО ТЕСТОВЫЙ ЗАГОЛОВОК',
+        'führen Aktivitäten Haglöfs'    => 'FÜHREN aKTIVITÄTEN hAGLÖFS',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::swapCase($before), $before);
     }
   }
 
