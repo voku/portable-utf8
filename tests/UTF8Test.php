@@ -948,6 +948,24 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testNormalizeEncoding()
+  {
+    $tests = array(
+        'ISO' => 'ISO-8859-1',
+        'UTF8' => 'UTF-8',
+        'WINDOWS-1251' => 'ISO-8859-5',
+        '' => '',
+        'Utf-8' => 'UTF-8',
+        'UTF-8' => 'UTF-8',
+        'ISO-8859-5' => 'ISO-8859-5',
+        false => false,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::normalizeEncoding($before));
+    }
+  }
+
   public function testUtf8DecodeEncodeUtf8()
   {
     $tests = array(
@@ -2535,7 +2553,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     self::assertEquals('hello world 中文空白', UTF8::strtocasefold('Hello world 中文空白'));
 
     // invalid utf-8
-    self::assertEquals('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertEquals('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
   }
 
   public function testStrtonatfold()

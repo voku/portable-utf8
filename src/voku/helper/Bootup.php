@@ -2,7 +2,7 @@
 
 namespace voku\helper;
 
-use Patchwork\PHP\Shim\Normalizer;
+use Symfony\Polyfill\Intl\Normalizer\Normalizer;
 
 /**
  * Class Bootup
@@ -18,7 +18,9 @@ class Bootup
    */
   public static function initAll()
   {
-    \Patchwork\Utf8\Bootup::initAll();
+    ini_set('default_charset', 'UTF-8');
+
+    // everything is init via composer, so we are done here ...
   }
 
   /**

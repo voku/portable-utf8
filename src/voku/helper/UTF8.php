@@ -2,9 +2,9 @@
 
 namespace voku\helper;
 
-use Patchwork\PHP\Shim\Intl;
-use Patchwork\PHP\Shim\Normalizer;
-use Patchwork\PHP\Shim\Xml;
+use Symfony\Polyfill\Intl\Grapheme\Grapheme;
+use Symfony\Polyfill\Intl\Normalizer\Normalizer;
+use Symfony\Polyfill\Xml\Xml;
 
 /**
  * UTF8-Helper-Class
@@ -1411,10 +1411,6 @@ class UTF8
       self::$support['iconv'] = self::iconv_loaded();
       self::$support['intl'] = self::intl_loaded();
       self::$support['pcre_utf8'] = self::pcre_utf8_support();
-
-      Bootup::initAll(); // Enables the portablity layer and configures PHP for UTF-8
-      Bootup::filterRequestUri(); // Redirects to an UTF-8 encoded URL if it's not already the case
-      Bootup::filterRequestInputs(); // Normalizes HTTP inputs to UTF-8 NFC
     }
   }
 
@@ -1834,8 +1830,13 @@ class UTF8
       self::checkForSupport();
 
       $encoding = self::str_detect_encoding($data);
-      if ($encoding != 'UTF-8') {
-        $data = mb_convert_encoding($data, 'UTF-8', $encoding);
+      if ($encoding && $encoding != 'UTF-8') {
+
+        $data = mb_convert_encoding(
+            $data,
+            'UTF-8',
+            self::normalizeEncoding($encoding)
+        );
       }
 
       $data = self::cleanup($data);
@@ -3244,11 +3245,11 @@ class UTF8
   /**
    * Normalize the encoding-name input.
    *
-   * @param string $encodingLabel e.g.: ISO, UTF8, ISO88591, WIN1252, etc.
+   * @param string $encodingLabel e.g.: ISO, UTF8, WINDOWS-1251 etc.
    *
-   * @return string
+   * @return string e.g.: ISO-8859-1, UTF-8, ISO-8859-5 etc.
    */
-  protected static function normalizeEncoding($encodingLabel)
+  public static function normalizeEncoding($encodingLabel)
   {
     $encoding = strtoupper($encodingLabel);
 
@@ -3260,14 +3261,18 @@ class UTF8
         'ISO'         => 'ISO-8859-1',
         'LATIN1'      => 'ISO-8859-1',
         'LATIN'       => 'ISO-8859-1',
+        'UTF16'      => 'UTF-16',
+        'UTF32'      => 'UTF-32',
         'UTF8'        => 'UTF-8',
         'UTF'         => 'UTF-8',
+        'UTF7'        => 'UTF-7',
         'WIN1252'     => 'ISO-8859-1',
         'WINDOWS1252' => 'ISO-8859-1',
+        'WINDOWS1251' => 'ISO-8859-5',
     );
 
     if (empty($equivalences[$encoding])) {
-      return 'UTF-8';
+      return $encodingLabel;
     }
 
     return $equivalences[$encoding];
@@ -3305,19 +3310,19 @@ class UTF8
   {
     static $whitespaces = array();
 
-    if (!isset($whitespaces[$keepNonBreakingSpace])) {
+    if (!isset($whitespaces[(int)$keepNonBreakingSpace])) {
 
-      $whitespaces[$keepNonBreakingSpace] = self::$whitespaceTable;
+      $whitespaces[(int)$keepNonBreakingSpace] = self::$whitespaceTable;
 
       if ($keepNonBreakingSpace === true) {
         /** @noinspection OffsetOperationsInspection */
-        unset($whitespaces[$keepNonBreakingSpace]['NO-BREAK SPACE']);
+        unset($whitespaces[(int)$keepNonBreakingSpace]['NO-BREAK SPACE']);
       }
 
-      $whitespaces[$keepNonBreakingSpace] = array_values($whitespaces[$keepNonBreakingSpace]);
+      $whitespaces[(int)$keepNonBreakingSpace] = array_values($whitespaces[(int)$keepNonBreakingSpace]);
     }
 
-    return str_replace($whitespaces[$keepNonBreakingSpace], ' ', $str);
+    return str_replace($whitespaces[(int)$keepNonBreakingSpace], ' ', $str);
   }
 
   /**
@@ -3825,6 +3830,7 @@ class UTF8
       $detectOrder = array(
           'UTF-8',
           'windows-1251',
+          'windows-1252',
           'ISO-8859-1',
       );
       $encoding = mb_detect_encoding($str, $detectOrder, true);
@@ -4092,7 +4098,7 @@ class UTF8
         $a[] = grapheme_extract($str, 1, GRAPHEME_EXTR_COUNT, $p, $p);
       }
     } else {
-      preg_match_all('/' . GRAPHEME_CLUSTER_RX . '/u', $str, $a);
+      preg_match_all('/' . Grapheme::GRAPHEME_CLUSTER_RX . '/u', $str, $a);
       $a = $a[0];
     }
 
@@ -5064,8 +5070,6 @@ class UTF8
    */
   public static function substr($str, $start = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    static $bug62759;
-
     $str = (string)$str;
 
     if (!isset($str[0])) {
@@ -5099,16 +5103,7 @@ class UTF8
     }
 
     if (self::$support['iconv'] === true) {
-
-      if (!isset($bug62759)) {
-        $bug62759 = ('à' === grapheme_substr('éà', 1, -2));
-      }
-
-      if ($bug62759) {
-        return (string)Intl::grapheme_substr_workaround62759($str, $start, $length);
-      } else {
-        return (string)grapheme_substr($str, $start, $length);
-      }
+      return (string)grapheme_substr($str, $start, $length);
     }
 
     // fallback
