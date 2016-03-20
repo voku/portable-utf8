@@ -4918,6 +4918,8 @@ class UTF8
       $str = str_replace($fullCaseFold[0], $fullCaseFold[1], $str);
     }
 
+    $str = self::clean($str);
+
     return self::strtolower($str);
   }
 

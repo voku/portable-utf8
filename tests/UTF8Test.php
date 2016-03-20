@@ -2553,7 +2553,7 @@ class UTF8Test extends PHPUnit_Framework_TestCase
     self::assertEquals('hello world 中文空白', UTF8::strtocasefold('Hello world 中文空白'));
 
     // invalid utf-8
-    self::assertEquals('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertEquals('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
   }
 
   public function testStrtonatfold()
