@@ -1,7 +1,7 @@
 <?php
 
 //use Normalizer as n;
-use Patchwork\PHP\Shim\Normalizer as n;
+use Symfony\Polyfill\Intl\Normalizer\Normalizer as n;
 
 /**
  * Class ZNormalizationTest
