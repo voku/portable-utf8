@@ -4,9 +4,9 @@ use voku\helper\Bootup;
 use voku\helper\UTF8;
 
 /**
- * Class Utf8Test
+ * Class Utf8GlobalTest
  */
-class UTF8Test extends PHPUnit_Framework_TestCase
+class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 {
 
   public function testStrlen()
