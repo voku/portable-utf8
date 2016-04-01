@@ -2357,15 +2357,38 @@ class UTF8
     do {
       $str_compare = $str;
 
+      $str = preg_replace_callback("/&#\d{2,5};/", array('\voku\helper\UTF8', 'entityCallback'), $str);
+
       // decode numeric & UTF16 two byte entities
       $str = html_entity_decode(
           preg_replace('/(&#(?:x0*[0-9a-f]{2,5}(?![0-9a-f;])|(?:0*\d{2,4}(?![0-9;]))))/iS', '$1;', $str),
           $flags,
           $encoding
       );
+
     } while ($str_compare !== $str);
 
     return $str;
+  }
+
+  /**
+   * Callback function for preg_replace_callback use.
+   *
+   * @param  array $matches PREG matches
+   *
+   * @return string
+   */
+  protected static function entityCallback(&$matches)
+  {
+    self::checkForSupport();
+
+    $return = mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
+
+    if ($return === "'") {
+      return '&#x27;';
+    }
+
+    return $return;
   }
 
   /**
