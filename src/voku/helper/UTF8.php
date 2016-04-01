@@ -2378,7 +2378,7 @@ class UTF8
    *
    * @return string
    */
-  protected static function entityCallback(&$matches)
+  protected static function entityCallback($matches)
   {
     self::checkForSupport();
 
