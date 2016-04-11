@@ -70,6 +70,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     $testArray = array(
         '<白>' => '&lt;白&gt;',
+        'dies ist ein test „Goldenen Regeln und Checklisten“.<br /><br /><br />' . UTF8::html_entity_decode('&nbsp;') => 'dies ist ein test &bdquo;Goldenen Regeln und Checklisten&ldquo;.&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&nbsp;',
         'öäü' => '&ouml;&auml;&uuml;',
         ' '   => ' ',
         ''    => '',
