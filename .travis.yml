@@ -1,8 +1,13 @@
 language: php
+
 sudo: false
 
 php:
   - hhvm
+
+os:
+  - linux
+  - osx
 
 matrix:
   fast_finish: true
