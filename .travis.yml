@@ -33,9 +33,21 @@ matrix:
     - php: 7.0
       env: extension='false'
 
-before_script:
+before_install:
+  # OS X
+  #
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+
+  # Linux
+  #
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update > /dev/null; fi
+
+install:
+  # OS X
+  #
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install phpenv; export PATH=$PATH:~/.phpenv/bin; fi
+
+before_script:
   - php --version
   - mkdir -p $(dirname ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini)
   - touch ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
