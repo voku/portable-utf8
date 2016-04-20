@@ -82,59 +82,61 @@ class UTF8
   /**
    * Numeric code point => UTF-8 Character
    *
+   * url: http://www.w3schools.com/charsets/ref_utf_punctuation.asp
+   *
    * @var array
    */
   protected static $whitespace = array(
+      // NUL Byte
       0     => "\x0",
-      //NUL Byte
+      // Tab
       9     => "\x9",
-      //Tab
+      // New Line
       10    => "\xa",
-      //New Line
+      // Vertical Tab
       11    => "\xb",
-      //Vertical Tab
+      // Carriage Return
       13    => "\xd",
-      //Carriage Return
+      // Ordinary Space
       32    => "\x20",
-      //Ordinary Space
+      // NO-BREAK SPACE
       160   => "\xc2\xa0",
-      //NO-BREAK SPACE
+      // OGHAM SPACE MARK
       5760  => "\xe1\x9a\x80",
-      //OGHAM SPACE MARK
+      // MONGOLIAN VOWEL SEPARATOR
       6158  => "\xe1\xa0\x8e",
-      //MONGOLIAN VOWEL SEPARATOR
+      // EN QUAD
       8192  => "\xe2\x80\x80",
-      //EN QUAD
+      // EM QUAD
       8193  => "\xe2\x80\x81",
-      //EM QUAD
+      // EN SPACE
       8194  => "\xe2\x80\x82",
-      //EN SPACE
+      // EM SPACE
       8195  => "\xe2\x80\x83",
-      //EM SPACE
+      // THREE-PER-EM SPACE
       8196  => "\xe2\x80\x84",
-      //THREE-PER-EM SPACE
+      // FOUR-PER-EM SPACE
       8197  => "\xe2\x80\x85",
-      //FOUR-PER-EM SPACE
+      // SIX-PER-EM SPACE
       8198  => "\xe2\x80\x86",
-      //SIX-PER-EM SPACE
+      // FIGURE SPACE
       8199  => "\xe2\x80\x87",
-      //FIGURE SPACE
+      // PUNCTUATION SPACE
       8200  => "\xe2\x80\x88",
-      //PUNCTUATION SPACE
+      // THIN SPACE
       8201  => "\xe2\x80\x89",
-      //THIN SPACE
-      8202  => "\xe2\x80\x8a",
       //HAIR SPACE
+      8202  => "\xe2\x80\x8a",
+      // LINE SEPARATOR
       8232  => "\xe2\x80\xa8",
-      //LINE SEPARATOR
+      // PARAGRAPH SEPARATOR
       8233  => "\xe2\x80\xa9",
-      //PARAGRAPH SEPARATOR
+      // NARROW NO-BREAK SPACE
       8239  => "\xe2\x80\xaf",
-      //NARROW NO-BREAK SPACE
+      // MEDIUM MATHEMATICAL SPACE
       8287  => "\xe2\x81\x9f",
-      //MEDIUM MATHEMATICAL SPACE
-      12288 => "\xe3\x80\x80"
-      //IDEOGRAPHIC SPACE
+      // IDEOGRAPHIC SPACE
+      12288 => "\xe3\x80\x80",
   );
 
   /**
@@ -155,10 +157,40 @@ class UTF8
       'PUNCTUATION SPACE'         => "\xe2\x80\x88",
       'THIN SPACE'                => "\xe2\x80\x89",
       'HAIR SPACE'                => "\xe2\x80\x8a",
+      'LINE SEPARATOR'            => "\xe2\x80\xa8",
+      'PARAGRAPH SEPARATOR'       => "\xe2\x80\xa9",
       'ZERO WIDTH SPACE'          => "\xe2\x80\x8b",
       'NARROW NO-BREAK SPACE'     => "\xe2\x80\xaf",
       'MEDIUM MATHEMATICAL SPACE' => "\xe2\x81\x9f",
       'IDEOGRAPHIC SPACE'         => "\xe3\x80\x80",
+  );
+
+  /**
+   * bidirectional text chars
+   *
+   * url: https://www.w3.org/International/questions/qa-bidi-unicode-controls
+   *
+   * @var array
+   */
+  protected static $bidiUniCodeControlsTable = array(
+    // LEFT-TO-RIGHT EMBEDDING (use -> dir = "ltr")
+    8234 => "\xE2\x80\xAA",
+    // RIGHT-TO-LEFT EMBEDDING (use -> dir = "rtl")
+    8235 => "\xE2\x80\xAB",
+    // POP DIRECTIONAL FORMATTING // (use -> </bdo>)
+    8236 => "\xE2\x80\xAC",
+    // LEFT-TO-RIGHT OVERRIDE // (use -> <bdo dir = "ltr">)
+    8237 => "\xE2\x80\xAD",
+    // RIGHT-TO-LEFT OVERRIDE // (use -> <bdo dir = "rtl">)
+    8238 => "\xE2\x80\xAE",
+    // LEFT-TO-RIGHT ISOLATE // (use -> dir = "ltr")
+    8294 => "\xE2\x81\xA6",
+    // RIGHT-TO-LEFT ISOLATE // (use -> dir = "rtl")
+    8295 => "\xE2\x81\xA7",
+    // FIRST STRONG ISOLATE // (use -> dir = "auto")
+    8296 => "\xE2\x81\xA8",
+    // POP DIRECTIONAL ISOLATE
+    8297 => "\xE2\x81\xA9",
   );
 
   /**
@@ -3284,8 +3316,8 @@ class UTF8
         'ISO'         => 'ISO-8859-1',
         'LATIN1'      => 'ISO-8859-1',
         'LATIN'       => 'ISO-8859-1',
-        'UTF16'      => 'UTF-16',
-        'UTF32'      => 'UTF-32',
+        'UTF16'       => 'UTF-16',
+        'UTF32'       => 'UTF-32',
         'UTF8'        => 'UTF-8',
         'UTF'         => 'UTF-8',
         'UTF7'        => 'UTF-7',
@@ -3324,28 +3356,40 @@ class UTF8
   /**
    * Normalize the whitespace.
    *
-   * @param string $str                  The string to be normalized.
-   * @param bool   $keepNonBreakingSpace Set to true, to keep non-breaking-spaces.
+   * @param string $str                       The string to be normalized.
+   * @param bool   $keepNonBreakingSpace      Set to true, to keep non-breaking-spaces.
+   * @param bool   $keepBidiUnicodeControls   Set to true, to keep non-printable (for the web) bidirectional text chars.
    *
    * @return string
    */
-  public static function normalize_whitespace($str, $keepNonBreakingSpace = false)
+  public static function normalize_whitespace($str, $keepNonBreakingSpace = false, $keepBidiUnicodeControls = false)
   {
     static $whitespaces = array();
+    static $bidiUniCodeControls = null;
 
-    if (!isset($whitespaces[(int)$keepNonBreakingSpace])) {
+    $cacheKey = (int)$keepNonBreakingSpace;
 
-      $whitespaces[(int)$keepNonBreakingSpace] = self::$whitespaceTable;
+    if (!isset($whitespaces[$cacheKey])) {
+
+      $whitespaces[$cacheKey] = self::$whitespaceTable;
 
       if ($keepNonBreakingSpace === true) {
         /** @noinspection OffsetOperationsInspection */
-        unset($whitespaces[(int)$keepNonBreakingSpace]['NO-BREAK SPACE']);
+        unset($whitespaces[$cacheKey]['NO-BREAK SPACE']);
       }
 
-      $whitespaces[(int)$keepNonBreakingSpace] = array_values($whitespaces[(int)$keepNonBreakingSpace]);
+      $whitespaces[$cacheKey] = array_values($whitespaces[$cacheKey]);
     }
 
-    return str_replace($whitespaces[(int)$keepNonBreakingSpace], ' ', $str);
+    if ($keepBidiUnicodeControls === false) {
+      if ($bidiUniCodeControls === null) {
+        $bidiUniCodeControls = array_values(self::$bidiUniCodeControlsTable);
+      }
+
+      $str = str_replace($bidiUniCodeControls, '', $str);
+    }
+
+    return str_replace($whitespaces[$cacheKey], ' ', $str);
   }
 
   /**

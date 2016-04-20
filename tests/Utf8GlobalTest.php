@@ -69,11 +69,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testHtmlentities()
   {
     $testArray = array(
-        '<白>' => '&lt;白&gt;',
+        '<白>'                                                                                                         => '&lt;白&gt;',
         'dies ist ein test „Goldenen Regeln und Checklisten“.<br /><br /><br />' . UTF8::html_entity_decode('&nbsp;') => 'dies ist ein test &bdquo;Goldenen Regeln und Checklisten&ldquo;.&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&nbsp;',
-        'öäü' => '&ouml;&auml;&uuml;',
-        ' '   => ' ',
-        ''    => '',
+        'öäü'                                                                                                         => '&ouml;&auml;&uuml;',
+        ' '                                                                                                           => ' ',
+        ''                                                                                                            => '',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -1416,6 +1416,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $tests = array(
         ''                                                                                    => '',
         ' '                                                                                   => ' ',
+        ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => ' foo   öäü ',
         "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => '« foobar »',
         '中文空白 ‟'                                                                              => '中文空白 ‟',
         "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div> </div><input type='email' name='user[email]' /><a>wtf</a>",
@@ -1429,6 +1430,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         self::assertEquals($after, UTF8::normalize_whitespace($before));
       }
     }
+
+    // replace "non breaking space"
+    self::assertEquals('abc- -öäü- -', UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC"));
+    // keep "non breaking space"
+    self::assertEquals("abc-\xc2\xa0-öäü- -", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true));
+    // ... and keep "bidirectional text chars"
+    self::assertEquals("abc-\xc2\xa0-öäü- -\xE2\x80\xAC", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true, true));
   }
 
   public function testString()
