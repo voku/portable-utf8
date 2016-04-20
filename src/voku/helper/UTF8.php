@@ -1614,7 +1614,7 @@ class UTF8
     }
 
     if ($remove_bom === true) {
-      $str = self::removeBOM($str);
+      $str = self::removeBOM($str, true, false, false);
     }
 
     return $str;
@@ -3545,45 +3545,48 @@ class UTF8
    * Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.
    *
    * @param string $str
+   * @param bool   $utf8
+   * @param bool   $utf16
+   * @param bool   $utf32
    *
    * @return string
    */
-  public static function removeBOM($str = '')
+  public static function removeBOM($str = '', $utf8 = true, $utf16 = true, $utf32 = true)
   {
-    // UTF-32 (BE)
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    /** @noinspection SubStrUsedAsStrPosInspection */
-    if (substr($str, 0, 4) == @pack('CCCC', 0x00, 0x00, 0xfe, 0xff)) {
-      $str = substr($str, 4);
+    if ($utf8 === true) {
+      // UTF-8
+      /** @noinspection PhpUsageOfSilenceOperatorInspection */
+      if (0 === strpos($str, @pack('CCC', 0xef, 0xbb, 0xbf))) {
+        $str = substr($str, 3);
+      }
     }
 
-    // UTF-32 (LE)
+    if ($utf32 === true) {
+      // UTF-32 (BE)
+      /** @noinspection PhpUsageOfSilenceOperatorInspection */
+      if (0 === strpos($str, @pack('CCCC', 0x00, 0x00, 0xfe, 0xff))) {
+        $str = substr($str, 4);
+      }
 
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    /** @noinspection SubStrUsedAsStrPosInspection */
-    if (substr($str, 0, 4) == @pack('CCCC', 0xff, 0xfe, 0x00, 0x00)) {
-      $str = substr($str, 4);
+      // UTF-32 (LE)
+      /** @noinspection PhpUsageOfSilenceOperatorInspection */
+      if (0 === strpos($str, @pack('CCCC', 0xff, 0xfe, 0x00, 0x00))) {
+        $str = substr($str, 4);
+      }
     }
 
-    // UTF-8
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    /** @noinspection SubStrUsedAsStrPosInspection */
-    if (substr($str, 0, 3) == @pack('CCC', 0xef, 0xbb, 0xbf)) {
-      $str = substr($str, 3);
-    }
+    if ($utf16 === true) {
+      // UTF-16 (BE)
+      /** @noinspection PhpUsageOfSilenceOperatorInspection */
+      if (0 === strpos($str, @pack('CC', 0xfe, 0xff))) {
+        $str = substr($str, 2);
+      }
 
-    // UTF-16 (BE)
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    /** @noinspection SubStrUsedAsStrPosInspection */
-    if (substr($str, 0, 2) == @pack('CC', 0xfe, 0xff)) {
-      $str = substr($str, 2);
-    }
-
-    // UTF-16 (LE)
-    /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    /** @noinspection SubStrUsedAsStrPosInspection */
-    if (substr($str, 0, 2) == @pack('CC', 0xff, 0xfe)) {
-      $str = substr($str, 2);
+      // UTF-16 (LE)
+      /** @noinspection PhpUsageOfSilenceOperatorInspection */
+      if (0 === strpos($str, @pack('CC', 0xff, 0xfe))) {
+        $str = substr($str, 2);
+      }
     }
 
     return $str;
