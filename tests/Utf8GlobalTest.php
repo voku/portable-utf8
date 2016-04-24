@@ -1079,6 +1079,29 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testStrDetectEncoding()
+  {
+    $tests = array(
+        'に対するパッチです' => 'UTF-8', // ISO-2022-JP, but PHP can't detect it ...
+        'ASCII'    => 'ASCII', // ASCII
+        'Iñtërnâtiônàlizætiøn' => 'UTF-8', // UTF-8
+        '亜 唖 娃 阿 哀 愛 挨 姶 逢 葵 茜 穐 悪 握 渥' => 'UTF-8', // EUC-JP
+        'áéóú' => 'UTF-8', // ISO-8859-1
+        '☺' => 'UTF-8',
+        '☃' => 'UTF-8',
+        '○●◎' => 'UTF-8',
+        'öäü'          => 'UTF-8', // ISO-8859-1
+        ''             => 'ASCII', // ASCII
+        '1'            => 'ASCII', // ASCII
+        decbin(324546) => 'ASCII', // ASCII
+        01             => 'ASCII', // ASCII
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
+    }
+  }
+
   public function testFileGetContents()
   {
     // INFO: UTF-8 shim only works for UTF-8
