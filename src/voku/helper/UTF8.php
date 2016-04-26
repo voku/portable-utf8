@@ -2012,17 +2012,16 @@ class UTF8
     // caused connection reset problem on larger strings
 
     $regx = '/
-       (
-        (?: [\x00-\x7F]                  # single-byte sequences   0xxxxxxx
-        |   [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
-        |   \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
-        |   [\xE1-\xEC][\x80-\xBF]{2}
-        |   \xED[\x80-\x9F][\x80-\xBF]
-        |   [\xEE-\xEF][\x80-\xBF]{2}
-        ){1,50}                          # ...one or more times
-       )
-       | .                               # anything else
-       /x';
+      (
+        (?: [\x00-\x7F]               # single-byte sequences   0xxxxxxx
+        |   [\xC0-\xDF][\x80-\xBF]    # double-byte sequences   110xxxxx 10xxxxxx
+        |   [\xE0-\xEF][\x80-\xBF]{2} # triple-byte sequences   1110xxxx 10xxxxxx * 2
+        |   [\xF0-\xF7][\x80-\xBF]{3} # quadruple-byte sequence 11110xxx 10xxxxxx * 3
+        ){1,100}                      # ...one or more times
+      )
+    | ( [\x80-\xBF] )                 # invalid byte in range 10000000 - 10111111
+    | ( [\xC0-\xFF] )                 # invalid byte in range 11000000 - 11111111
+    /x';
     $str = preg_replace($regx, '$1', $str);
 
     $str = self::replace_diamond_question_mark($str, '');
@@ -2057,9 +2056,6 @@ class UTF8
     if (!isset($str[0])) {
       return '';
     }
-
-    // init
-    self::checkForSupport();
 
     // fixed ISO <-> UTF-8 Errors
     $str = self::fix_simple_utf8($str);

@@ -1694,6 +1694,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       '中'                                           => array('中' => '中'),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"                           => array('κόσμε-öäü' => 'κόσμε-öäü'),
+      // Valid emoji (non-UTF-8)
+      '👍 💩 😄 ❤ 👍 💩 😄 ❤'                        => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
       // Valid ASCII
       'a'                                           => array('a' => 'a'),
       // Valid ASCII + Invalied Chars
@@ -1711,7 +1713,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Invalid 3 Octet Sequence (in 3rd Octet)
       "\xe2\x82\x28"                                => array('�(' => '('),
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"                            => array('𐌼' => ''),
+      "\xf0\x90\x8c\xbc"                            => array('𐌼' => '𐌼'),
       // Invalid 4 Octet Sequence (in 2nd Octet)
       "\xf0\x28\x8c\xbc"                            => array('�(��' => '('),
       // Invalid 4 Octet Sequence (in 3rd Octet)
@@ -1925,6 +1927,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       "κόσμε\xa0\xa1-öäü"        => array('κόσμε-öäü' => 'κόσμε-öäü'),
       // Valid ASCII
       'a'                        => array('a' => 'a'),
+      // Valid emoji (non-UTF-8)
+      '😃' => array('😃' => '😃'),
       // Valid ASCII + Invalied Chars
       "a\xa0\xa1-öäü"            => array('a-öäü' => 'a-öäü'),
       // Valid 2 Octet Sequence
@@ -1940,7 +1944,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Invalid 3 Octet Sequence (in 3rd Octet)
       "\xe2\x82\x28"             => array('�(' => '('),
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"         => array('𐌼' => ''),
+      "\xf0\x90\x8c\xbc"         => array('𐌼' => '𐌼'),
       // Invalid 4 Octet Sequence (in 2nd Octet)
       "\xf0\x28\x8c\xbc"         => array('�(��' => '('),
       // Invalid 4 Octet Sequence (in 3rd Octet)
@@ -1991,7 +1995,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         // Invalid 3 Octet Sequence (in 3rd Octet)
         "\xe2\x82\x28"                         => array('�(' => '('),
         // Valid 4 Octet Sequence
-        "\xf0\x90\x8c\xbc"                     => array('𐌼' => ''),
+        "\xf0\x90\x8c\xbc"                     => array('𐌼' => '𐌼'),
         // Invalid 4 Octet Sequence (in 2nd Octet)
         "\xf0\x28\x8c\xbc"                     => array('�(��' => '('),
         // Invalid 4 Octet Sequence (in 3rd Octet)
@@ -2056,9 +2060,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ますだ, よしひこ'                     => 'masuda, yosihiko',
         'मोनिच'                         => 'monic',
         'क्षȸ'                          => 'kssdb',
-        'أحبك 😀'                       => '\'Hbk ',
+        'أحبك 😀'                       => '\'Hbk ?',
         '∀ i ∈ ℕ'                       => '[?] i [?] N',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '       \'Hbk',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? \'Hbk',
     );
 
     foreach ($tests as $before => $after) {
@@ -2204,17 +2208,24 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testcleanParameter()
   {
-    $dirtyTestString = "\xEF\xBB\xBF„Abcdef\xc2\xa0…”";
+    $dirtyTestString = "\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃";
 
-    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString));
-    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString, false, false, false));
-    self::assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0...\"", UTF8::clean($dirtyTestString, false, false, true));
-    self::assertEquals("\xEF\xBB\xBF„Abcdef …”", UTF8::clean($dirtyTestString, false, true, false));
-    self::assertEquals("\xEF\xBB\xBF\"Abcdef ...\"", UTF8::clean($dirtyTestString, false, true, true));
-    self::assertEquals("„Abcdef\xc2\xa0…”", UTF8::clean($dirtyTestString, true, false, false));
-    self::assertEquals("\"Abcdef\xc2\xa0...\"", UTF8::clean($dirtyTestString, true, false, true));
-    self::assertEquals('„Abcdef …”', UTF8::clean($dirtyTestString, true, true, false));
-    self::assertEquals('"Abcdef ..."', UTF8::clean($dirtyTestString, true, true, true));
+    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString));
+    self::assertEquals("\xEF\xBB\xBF„Abcdef \x20…” — 😃", UTF8::clean($dirtyTestString, false, true, false, false));
+    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, true));
+    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, false));
+    self::assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, true));
+    self::assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, false));
+    self::assertEquals("\xEF\xBB\xBF\"Abcdef  ...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, false));
+    self::assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, true));
+    self::assertEquals("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, false));
+    self::assertEquals("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, true));
+    self::assertEquals("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, false));
+    self::assertEquals("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, true));
+    self::assertEquals('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, false));
+    self::assertEquals('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, true));
+    self::assertEquals('"Abcdef  ..." - 😃', UTF8::clean($dirtyTestString, true, true, true, false));
+    self::assertEquals("\"Abcdef\xc2\xa0 ...\" - 😃", UTF8::clean($dirtyTestString, true, true, true, true));
   }
 
   public function testWhitespace()
