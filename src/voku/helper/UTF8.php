@@ -2290,7 +2290,9 @@ class UTF8
         );
       }
 
-      $data = self::cleanup($data);
+      $data = self::fix_simple_utf8($data);
+      $data = self::clean($data, false, true, false, true);
+      $data = self::removeBOM($data);
     }
 
     // clean utf-8 string
@@ -3975,7 +3977,7 @@ class UTF8
     if ($utf8 === true) {
       // UTF-8
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (0 === strpos($str, @pack('CCC', 0xef, 0xbb, 0xbf))) {
+      if (0 === strpos($str, @pack('CCC', 0xef, 0xbb, 0xbf)) || 0 === strpos($str, 'ï»¿')) {
         $str = substr($str, 3);
       }
     }
@@ -3997,13 +3999,13 @@ class UTF8
     if ($utf16 === true) {
       // UTF-16 (BE)
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (0 === strpos($str, @pack('CC', 0xfe, 0xff))) {
+      if (0 === strpos($str, @pack('CC', 0xfe, 0xff)) || 0 === strpos($str, 'þÿ')) {
         $str = substr($str, 2);
       }
 
       // UTF-16 (LE)
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (0 === strpos($str, @pack('CC', 0xff, 0xfe))) {
+      if (0 === strpos($str, @pack('CC', 0xff, 0xfe)) || 0 === strpos($str, 'ÿþ')) {
         $str = substr($str, 2);
       }
     }
