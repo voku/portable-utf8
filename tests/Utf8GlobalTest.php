@@ -1765,6 +1765,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $testArray = array(
         'Düsseldorf'                   => 'Düsseldorf',
         'Ã'                            => 'Ã',
+        'foobar  || 😃'                => 'foobar  || 😃',
         ' '                            => ' ',
         ''                             => '',
         "\n"                           => "\n",
