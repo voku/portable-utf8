@@ -3973,19 +3973,19 @@ class UTF8
 
     if (0 === strpos($str, "\xef\xbb\xbf")) { // UTF-8 BOM
       $str = substr($str, 3);
-    } else if (0 === strpos($str, 'ï»¿')) { // UTF-8 BOM as "Windows-1252"
+    } elseif (0 === strpos($str, 'ï»¿')) { // UTF-8 BOM as "Windows-1252"
       $str = substr($str, 6); // INFO: one char has (maybe) more then one byte ...
-    } else if (0 === strpos($str, "\x00\x00\xfe\xff")) { // UTF-32 (BE) BOM
+    } elseif (0 === strpos($str, "\x00\x00\xfe\xff")) { // UTF-32 (BE) BOM
       $str = substr($str, 4);
-    } else if (0 === strpos($str, "\xff\xfe\x00\x00")) { // UTF-32 (LE) BOM
+    } elseif (0 === strpos($str, "\xff\xfe\x00\x00")) { // UTF-32 (LE) BOM
       $str = substr($str, 4);
-    } else if (0 === strpos($str, "\xfe\xff")) { // UTF-16 (BE) BOM
+    } elseif (0 === strpos($str, "\xfe\xff")) { // UTF-16 (BE) BOM
       $str = substr($str, 2);
-    } else if (0 === strpos($str, 'þÿ')) { // UTF-16 (BE) BOM as "Windows-1252"
+    } elseif (0 === strpos($str, 'þÿ')) { // UTF-16 (BE) BOM as "Windows-1252"
       $str = substr($str, 4);
-    } else if (0 === strpos($str, "\xff\xfe")) { // UTF-16 (LE)
+    } elseif (0 === strpos($str, "\xff\xfe")) { // UTF-16 (LE)
       $str = substr($str, 2);
-    } else if (0 === strpos($str, 'ÿþ')) { // UTF-16 (LE) as "Windows-1252"
+    } elseif (0 === strpos($str, 'ÿþ')) { // UTF-16 (LE) as "Windows-1252"
       $str = substr($str, 4);
     }
 
