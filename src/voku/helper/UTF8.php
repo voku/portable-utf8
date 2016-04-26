@@ -2036,7 +2036,7 @@ class UTF8
     }
 
     if ($remove_bom === true) {
-      $str = self::removeBOM($str, true, false, false);
+      $str = self::removeBOM($str);
     }
 
     return $str;
@@ -2290,9 +2290,7 @@ class UTF8
         );
       }
 
-      $data = self::fix_simple_utf8($data);
-      $data = self::clean($data, false, true, false, true);
-      $data = self::removeBOM($data);
+      $data = self::cleanup($data);
     }
 
     // clean utf-8 string
@@ -3966,48 +3964,29 @@ class UTF8
    * Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.
    *
    * @param string $str
-   * @param bool   $utf8
-   * @param bool   $utf16
-   * @param bool   $utf32
    *
    * @return string
    */
-  public static function removeBOM($str = '', $utf8 = true, $utf16 = true, $utf32 = true)
+  public static function removeBOM($str = '')
   {
-    if ($utf8 === true) {
-      // UTF-8
-      /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (0 === strpos($str, @pack('CCC', 0xef, 0xbb, 0xbf)) || 0 === strpos($str, 'ï»¿')) {
-        $str = substr($str, 3);
-      }
-    }
+    // INFO: https://en.wikipedia.org/wiki/Byte_order_mark
 
-    if ($utf32 === true) {
-      // UTF-32 (BE)
-      /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (0 === strpos($str, @pack('CCCC', 0x00, 0x00, 0xfe, 0xff))) {
-        $str = substr($str, 4);
-      }
-
-      // UTF-32 (LE)
-      /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (0 === strpos($str, @pack('CCCC', 0xff, 0xfe, 0x00, 0x00))) {
-        $str = substr($str, 4);
-      }
-    }
-
-    if ($utf16 === true) {
-      // UTF-16 (BE)
-      /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (0 === strpos($str, @pack('CC', 0xfe, 0xff)) || 0 === strpos($str, 'þÿ')) {
-        $str = substr($str, 2);
-      }
-
-      // UTF-16 (LE)
-      /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (0 === strpos($str, @pack('CC', 0xff, 0xfe)) || 0 === strpos($str, 'ÿþ')) {
-        $str = substr($str, 2);
-      }
+    if (0 === strpos($str, "\xef\xbb\xbf")) { // UTF-8 BOM
+      $str = substr($str, 3);
+    } else if (0 === strpos($str, 'ï»¿')) { // UTF-8 BOM as "Windows-1252"
+      $str = substr($str, 6); // INFO: one char has (maybe) more then one byte ...
+    } else if (0 === strpos($str, "\x00\x00\xfe\xff")) { // UTF-32 (BE) BOM
+      $str = substr($str, 4);
+    } else if (0 === strpos($str, "\xff\xfe\x00\x00")) { // UTF-32 (LE) BOM
+      $str = substr($str, 4);
+    } else if (0 === strpos($str, "\xfe\xff")) { // UTF-16 (BE) BOM
+      $str = substr($str, 2);
+    } else if (0 === strpos($str, 'þÿ')) { // UTF-16 (BE) BOM as "Windows-1252"
+      $str = substr($str, 4);
+    } else if (0 === strpos($str, "\xff\xfe")) { // UTF-16 (LE)
+      $str = substr($str, 2);
+    } else if (0 === strpos($str, 'ÿþ')) { // UTF-16 (LE) as "Windows-1252"
+      $str = substr($str, 4);
     }
 
     return $str;
