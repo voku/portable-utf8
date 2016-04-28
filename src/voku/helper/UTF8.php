@@ -2620,9 +2620,10 @@ class UTF8
    */
   protected static function getData($file)
   {
-    $file = __DIR__ . '/data/' . $file . '.ser';
+    $file = __DIR__ . '/data/' . $file . '.php';
     if (file_exists($file)) {
-      return unserialize(file_get_contents($file));
+      /** @noinspection PhpIncludeInspection */
+      return require $file;
     } else {
       return false;
     }
@@ -4706,7 +4707,7 @@ class UTF8
         $bankfile = __DIR__ . '/data/' . sprintf('x%02x', $bank) . '.php';
         if (file_exists($bankfile)) {
           /** @noinspection PhpIncludeInspection */
-          include $bankfile;
+          require $bankfile;
         } else {
           $UTF8_TO_ASCII[$bank] = array();
         }
