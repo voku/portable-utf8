@@ -5118,7 +5118,9 @@ class UTF8
     }
 
     if (self::$support['iconv'] === true) {
-      return grapheme_strpos($haystack, $needle, $offset);
+      // ignore invalid negative offset to keep compatility
+      // with php < 5.5.35, < 5.6.21, < 7.0.6
+      return grapheme_strpos($haystack, $needle, $offset > 0 ? $offset : 0);
     }
 
     if ($offset > 0) {
