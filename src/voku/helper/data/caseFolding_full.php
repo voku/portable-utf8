@@ -1,8 +1,8 @@
 <?php
 
-static $data = array (
+static $data = array(
     0 =>
-        array (
+        array(
             0 => 'ß',
             1 => 'İ',
             2 => 'ŉ',
@@ -109,7 +109,7 @@ static $data = array (
             103 => 'ﬗ',
         ),
     1 =>
-        array (
+        array(
             0 => 'ss',
             1 => 'i̇',
             2 => 'ʼn',
