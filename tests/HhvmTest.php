@@ -14,7 +14,12 @@ class HhvmTest extends \PHPUnit_Framework_TestCase
   public function test2()
   {
     // Negative offset are not allowed but native PHP silently casts them to zero
-    self::assertSame(0, grapheme_strpos('abc', 'a', -1));
+    
+    if (defined('HHVM_VERSION_ID') || PHP_VERSION_ID < 50535 || (50600 <= PHP_VERSION_ID && PHP_VERSION_ID < 50621) || (70000 <= PHP_VERSION_ID && PHP_VERSION_ID < 70006)) {
+      self::assertSame(0, grapheme_strpos('abc', 'a', -1));
+    } else {
+      self::assertFalse(grapheme_strpos('abc', 'a', -1));
+    }
   }
 
   public function test3()

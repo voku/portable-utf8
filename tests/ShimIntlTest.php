@@ -105,9 +105,9 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
     self::assertSame(false, grapheme_strpos('abc', 'd'));
     self::assertSame(false, grapheme_strpos('abc', 'a', 3));
     if (defined('HHVM_VERSION_ID') || PHP_VERSION_ID < 50535 || (50600 <= PHP_VERSION_ID && PHP_VERSION_ID < 50621) || (70000 <= PHP_VERSION_ID && PHP_VERSION_ID < 70006)) {
-      $this->assertSame(0, grapheme_strpos('abc', 'a', -1));
+      self::assertSame(0, grapheme_strpos('abc', 'a', -1));
     } else {
-      $this->assertFalse(grapheme_strpos('abc', 'a', -1));
+      self::assertFalse(grapheme_strpos('abc', 'a', -1));
     }
     self::assertSame(1, grapheme_strpos('한국어', '국'));
     self::assertSame(3, grapheme_stripos('DÉJÀ', 'à'));
@@ -119,9 +119,9 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
     self::assertSame(false, p::grapheme_strpos('abc', 'd'));
     self::assertSame(false, p::grapheme_strpos('abc', 'a', 3));
     if (defined('HHVM_VERSION_ID') || PHP_VERSION_ID < 50535 || (50600 <= PHP_VERSION_ID && PHP_VERSION_ID < 50621) || (70000 <= PHP_VERSION_ID && PHP_VERSION_ID < 70006)) {
-      $this->assertSame(0, p::grapheme_strpos('abc', 'a', -1));
+      self::assertSame(0, p::grapheme_strpos('abc', 'a', -1));
     } else {
-      $this->assertFalse(p::grapheme_strpos('abc', 'a', -1));
+      self::assertFalse(p::grapheme_strpos('abc', 'a', -1));
     }
     self::assertSame(1, p::grapheme_strpos('한국어', '국'));
     self::assertSame(3, p::grapheme_stripos('DÉJÀ', 'à'));
