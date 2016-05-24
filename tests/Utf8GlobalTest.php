@@ -1057,10 +1057,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testUtf8FileWithBom()
   {
-    $bom = UTF8::file_has_bom(__DIR__ . '/test1Utf8Bom.txt');
+    $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/test1Utf8Bom.txt');
     self::assertEquals(true, $bom);
 
-    $bom = UTF8::file_has_bom(__DIR__ . '/test1Utf8.txt');
+    $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/test1Utf8.txt');
     self::assertEquals(false, $bom);
   }
 
@@ -1107,57 +1107,57 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // INFO: UTF-8 shim only works for UTF-8
     if (UTF8::mbstring_loaded() === true) {
 
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16pe.txt');
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf16pe.txt');
       self::assertContains(
           '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
           $testString
       );
 
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16le.txt');
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf16le.txt');
       self::assertContains(
           '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
           $testString
       );
 
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf8.txt');
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf8.txt');
       self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Latin.txt');
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Latin.txt');
       self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt');
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Iso8859-7.txt');
       self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16pe.txt', FILE_TEXT);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf16pe.txt', FILE_TEXT);
       self::assertContains(
           '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
           $testString
       );
 
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16le.txt', null, null, 0);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf16le.txt', null, null, 0);
       self::assertContains(
           '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
           $testString
       );
 
       // text: with offset
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf16le.txt', null, null, 5);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf16le.txt', null, null, 5);
       self::assertContains('There are better connections.', $testString);
 
       // text: with offset & max-length
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf8.txt', null, null, 7, 11);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf8.txt', null, null, 7, 11);
       self::assertContains('Iñtërnât', $testString);
 
       // text: with offset & max-length + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Latin.txt', null, null, 7, 10, 15);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Latin.txt', null, null, 7, 10, 15);
       self::assertContains('ñtërnâtiôn', $testString);
 
       // text: with timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, null, 7, null, 10);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Iso8859-7.txt', null, null, 7, null, 10);
       self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
       // text: with max-length + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, null, null, 10, 10);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Iso8859-7.txt', null, null, null, 10, 10);
       self::assertContains('Hírek', $testString);
 
       $context = stream_context_create(
@@ -1170,23 +1170,23 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       );
 
       // text: with max-length + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, $context, null, 10, 10);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Iso8859-7.txt', null, $context, null, 10, 10);
       self::assertContains('Hírek', $testString);
 
       // text: do not convert to utf-8 + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Iso8859-7.txt', null, $context, null, 10, 10, false);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Iso8859-7.txt', null, $context, null, 10, 10, false);
       self::assertRegExp('#H.*rek#', $testString);
 
       // text: do not convert to utf-8 + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/test1Utf8.txt', null, $context, null, 10, 10, false);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf8.txt', null, $context, null, 10, 10, false);
       self::assertContains('Hírek', $testString);
 
       // image: do not convert to utf-8 + timeout
-      $image = UTF8::file_get_contents(__DIR__ . '/test-image.png', null, $context, null, null, 10, false);
+      $image = UTF8::file_get_contents(__DIR__ . '/fixtures/test-image.png', null, $context, null, null, 10, false);
       self::assertEquals(true, UTF8::is_binary($image));
 
       // image: convert to utf-8 + timeout (ERROR)
-      $image2 = UTF8::file_get_contents(__DIR__ . '/test-image.png', null, $context, null, null, 10, true);
+      $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test-image.png', null, $context, null, null, 10, true);
       self::assertEquals(false, UTF8::is_binary($image2));
 
       self::assertNotEquals($image2, $image);

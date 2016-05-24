@@ -23,7 +23,7 @@ class ZNormalizationTest extends \PHPUnit_Framework_TestCase
       return;
     }
 
-    $t = file(__DIR__ . '/ZNormalizationTest.' . $this->unicodeVersion . '.txt');
+    $t = file(__DIR__ . '/fixtures/ZNormalizationTest.' . $this->unicodeVersion . '.txt');
     $c = array();
 
     foreach ($t as $s) {
