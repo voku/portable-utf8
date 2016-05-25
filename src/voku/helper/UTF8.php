@@ -2168,6 +2168,26 @@ class UTF8
   }
 
   /**
+   * Callback function for preg_replace_callback use.
+   *
+   * @param  array $matches PREG matches
+   *
+   * @return string
+   */
+  protected static function entityCallback($matches)
+  {
+    self::checkForSupport();
+
+    $return = mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
+
+    if ($return === "'") {
+      return '&#x27;';
+    }
+
+    return $return;
+  }
+
+  /**
    * Reads entire file into a string.
    *
    * WARNING: do not use UTF-8 Option fir binary-files (e.g.: images) !!!
@@ -2282,7 +2302,7 @@ class UTF8
 
       $encoding = self::str_detect_encoding($data);
 
-      if ($encoding && $encoding != 'UTF-8') {
+      if ($encoding && $encoding !== 'UTF-8') {
         $data = mb_convert_encoding(
             $data,
             'UTF-8',
@@ -2821,26 +2841,6 @@ class UTF8
     } while ($str_compare !== $str);
 
     return $str;
-  }
-
-  /**
-   * Callback function for preg_replace_callback use.
-   *
-   * @param  array $matches PREG matches
-   *
-   * @return string
-   */
-  protected static function entityCallback($matches)
-  {
-    self::checkForSupport();
-
-    $return = mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
-
-    if ($return === "'") {
-      return '&#x27;';
-    }
-
-    return $return;
   }
 
   /**
@@ -4116,6 +4116,7 @@ class UTF8
 
     $class = array($class);
 
+    /** @noinspection SuspiciousLoopInspection */
     foreach (self::str_split($s) as $s) {
       if ('-' === $s) {
         $class[0] = '-' . $class[0];
@@ -4292,16 +4293,20 @@ class UTF8
         'ISO-8859-1',
         'ASCII',
     );
+
     self::checkForSupport();
+
     $encoding = mb_detect_encoding($str, $detectOrder, true);
-    if ($encoding) {
-      if (
-          $encoding != 'UTF-8'
-          ||
-          ($encoding == 'UTF-8' && self::is_utf8($str) === true)
-      ) {
-        return $encoding;
-      }
+    if (
+        $encoding
+        &&
+        (
+            $encoding !== 'UTF-8'
+            ||
+            ($encoding === 'UTF-8' && self::is_utf8($str) === true)
+        )
+    ) {
+      return $encoding;
     }
 
     //
@@ -4321,14 +4326,30 @@ class UTF8
   }
 
   /**
-   * str_ireplace
+   * Case-insensitive and UTF-8 safe version of <function>str_replace</function>.
    *
-   * @param string $search
-   * @param string $replace
-   * @param string $subject
-   * @param null   $count
+   * @link  http://php.net/manual/en/function.str-ireplace.php
    *
-   * @return string
+   * @param mixed $search  <p>
+   *                       Every replacement with search array is
+   *                       performed on the result of previous replacement.
+   *                       </p>
+   * @param mixed $replace <p>
+   *                       </p>
+   * @param mixed $subject <p>
+   *                       If subject is an array, then the search and
+   *                       replace is performed with every entry of
+   *                       subject, and the return value is an array as
+   *                       well.
+   *                       </p>
+   * @param int   $count   [optional] <p>
+   *                       The number of matched and replaced needles will
+   *                       be returned in count which is passed by
+   *                       reference.
+   *                       </p>
+   *
+   * @return mixed a string or an array of replacements.
+   * @since 5.0
    */
   public static function str_ireplace($search, $replace, $subject, &$count = null)
   {
@@ -4379,7 +4400,7 @@ class UTF8
     array_pop($array);
     $new_str = implode(' ', $array);
 
-    if ($new_str == '') {
+    if ($new_str === '') {
       $str = self::substr($str, 0, $length - 1) . $strAddOn;
     } else {
       $str = $new_str . $strAddOn;
@@ -4548,8 +4569,9 @@ class UTF8
   {
     // init
     self::checkForSupport();
+    $len = (int)$len;
 
-    if (1 > $len = (int)$len) {
+    if (1 > $len) {
       $len = func_get_arg(1);
 
       return str_split($str, $len);
@@ -4567,7 +4589,7 @@ class UTF8
       $a = $a[0];
     }
 
-    if (1 == $len) {
+    if (1 === $len) {
       return $a;
     }
 
@@ -4727,36 +4749,44 @@ class UTF8
   /**
    * Counts number of words in the UTF-8 string.
    *
-   * @param string $s The input string.
+   * @param string $str The input string.
    * @param int    $format
    * @param string $charlist
    *
-   * @return array|float|string The number of words in the string
+   * @return array|float The number of words in the string
    */
-  public static function str_word_count($s, $format = 0, $charlist = '')
+  public static function str_word_count($str, $format = 0, $charlist = '')
   {
     $charlist = self::rxClass($charlist, '\pL');
-    $s = preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $s, -1, PREG_SPLIT_DELIM_CAPTURE);
-    $charlist = array();
-    $len = count($s);
+    $strParts = preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-    if (1 == $format) {
+    $len = count($strParts);
+
+    if ($format == 1) {
+
+      $numberOfWords = array();
       for ($i = 1; $i < $len; $i += 2) {
-        $charlist[] = $s[$i];
+        $numberOfWords[] = $strParts[$i];
       }
-    } elseif (2 == $format) {
+
+    } else if ($format == 2) {
+
       self::checkForSupport();
 
-      $offset = self::strlen($s[0]);
+      $numberOfWords = array();
+      $offset = self::strlen($strParts[0]);
       for ($i = 1; $i < $len; $i += 2) {
-        $charlist[$offset] = $s[$i];
-        $offset += self::strlen($s[$i]) + self::strlen($s[$i + 1]);
+        $numberOfWords[$offset] = $strParts[$i];
+        $offset += self::strlen($strParts[$i]) + self::strlen($strParts[$i + 1]);
       }
+
     } else {
-      $charlist = ($len - 1) / 2;
+
+      $numberOfWords = ($len - 1) / 2;
+
     }
 
-    return $charlist;
+    return $numberOfWords;
   }
 
   /**
@@ -4806,7 +4836,7 @@ class UTF8
       return null;
     }
 
-    if ($start || 2147483647 != $len) {
+    if ($start || 2147483647 !== $len) {
       $str = (string)self::substr($str, $start, $len);
     } else {
       $str = (string)$str;
@@ -4907,7 +4937,7 @@ class UTF8
     $haystack = (string)$haystack;
     $needle = (string)$needle;
 
-    if (!isset($haystack[0]) || !isset($needle[0])) {
+    if (!isset($haystack[0], $needle[0])) {
       return false;
     }
 
@@ -5085,7 +5115,7 @@ class UTF8
     $haystack = (string)$haystack;
     $needle = (string)$needle;
 
-    if (!isset($haystack[0]) || !isset($needle[0])) {
+    if (!isset($haystack[0], $needle[0])) {
       return false;
     }
 
@@ -5260,7 +5290,7 @@ class UTF8
     $haystack = (string)$haystack;
     $needle = (string)$needle;
 
-    if (!isset($haystack[0]) || !isset($needle[0])) {
+    if (!isset($haystack[0], $needle[0])) {
       return false;
     }
 
@@ -5320,7 +5350,7 @@ class UTF8
    */
   public static function strspn($s, $mask, $start = 0, $len = 2147483647)
   {
-    if ($start || 2147483647 != $len) {
+    if ($start || 2147483647 !== $len) {
       $s = self::substr($s, $start, $len);
     }
 
@@ -5663,7 +5693,7 @@ class UTF8
         foreach ($start as &$valueTmp) {
           $valueTmp = (int)$valueTmp === $valueTmp ? $valueTmp : 0;
         }
-        unset($value);
+        unset($valueTmp);
       } else {
         $start = array_pad(array($start), $num, $start);
       }
@@ -5708,7 +5738,7 @@ class UTF8
 
     array_splice($smatches[0], $start, $length, $rmatches[0]);
 
-    return join($smatches[0], null);
+    return implode($smatches[0], null);
   }
 
   /**
@@ -5976,7 +6006,7 @@ class UTF8
           $buf .= $cc1 . $cc2;
         }
 
-      } elseif (($c1 & "\xc0") == "\x80") { // needs conversion
+      } elseif (($c1 & "\xc0") === "\x80") { // needs conversion
 
         $ordC1 = ord($c1);
         if (isset(self::$win1252ToUtf8[$ordC1])) { // found in Windows-1252 special cases
