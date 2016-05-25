@@ -4769,7 +4769,7 @@ class UTF8
         $numberOfWords[] = $strParts[$i];
       }
 
-    } else if ($format == 2) {
+    } elseif ($format == 2) {
 
       self::checkForSupport();
 
