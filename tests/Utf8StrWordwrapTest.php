@@ -7,6 +7,13 @@ use voku\helper\UTF8 as u;
  */
 class Utf8StrWordwrapTest extends PHPUnit_Framework_TestCase
 {
+  public function test_no_args_empty_string()
+  {
+    $str = '';
+    $wrapped = '';
+    self::assertEquals($wrapped, u::wordwrap($str));
+  }
+
   public function test_no_args()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
@@ -19,6 +26,20 @@ class Utf8StrWordwrapTest extends PHPUnit_Framework_TestCase
     $str = 'Iñtërnâtiônàlizætiøn';
     $wrapped = "Iñtërnâtiô\nnàlizætiøn";
     self::assertEquals($wrapped, u::wordwrap($str, 10, "\n", true));
+  }
+
+  public function test_break_at_one()
+  {
+    $str = 'ñ';
+    $wrapped = 'ñ';
+    self::assertEquals($wrapped, u::wordwrap($str, 1, "\n", true));
+  }
+
+  public function test_break_at_one_with_empty_string()
+  {
+    $str = 'ñ ñ';
+    $wrapped = 'ñ' . "\n" . 'ñ';
+    self::assertEquals($wrapped, u::wordwrap($str, 1, "\n", true));
   }
 
   public function test_break_at_ten_br()

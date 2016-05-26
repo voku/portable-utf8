@@ -1238,6 +1238,41 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertEquals('文空', UTF8::substr('中文空白', 1, 2));
   }
 
+  public function testSubstrCount()
+  {
+    self::assertEquals(false, substr_count('', ''));
+    self::assertEquals(false, substr_count('', '', 1));
+    self::assertEquals(false, substr_count('', '', 1, 1));
+    self::assertEquals(false, substr_count('', 'test', 1, 1));
+    self::assertEquals(false, substr_count('test', '', 1, 1));
+    self::assertEquals(0, substr_count('test', 'test', 1, 1));
+    self::assertEquals(1, substr_count(12345, 23, 1, 2));
+    self::assertEquals(2, substr_count('abcdebc', 'bc'));
+    self::assertEquals(0, substr_count('abcde', 'de', -2, 2));
+    self::assertEquals(0, substr_count('abcde', 'bcg', 1, 2));
+    self::assertEquals(0, substr_count('abcde', 'BC', 1, 2));
+    self::assertEquals(1, substr_count('abcde', 'bc', 1, 3));
+    self::assertEquals(0, substr_count('abcde', 'cd', 1, 2));
+
+    self::assertEquals(false, UTF8::substr_count('', ''));
+    self::assertEquals(false, UTF8::substr_count('', '', 1));
+    self::assertEquals(false, UTF8::substr_count('', '', 1, 1));
+    self::assertEquals(false, UTF8::substr_count('', 'test', 1, 1));
+    self::assertEquals(false, UTF8::substr_count('test', '', 1, 1));
+    self::assertEquals(1, UTF8::substr_count(12345, 23, 1, 2));
+    self::assertEquals(2, UTF8::substr_count('abcdebc', 'bc'));
+    self::assertEquals(1, UTF8::substr_count('abcde', 'de', -2, 2));
+    self::assertEquals(0, UTF8::substr_count('abcde', 'bcg', 1, 2));
+    self::assertEquals(0, UTF8::substr_count('abcde', 'BC', 1, 2));
+    self::assertEquals(1, UTF8::substr_count('abcde', 'bc', 1, 3));
+    self::assertEquals(0, UTF8::substr_count('abcde', 'cd', 1, 2));
+
+    // UTF-8
+    self::assertEquals(2, UTF8::substr_count("○●◎\r◎", '◎'));
+    self::assertEquals(1, UTF8::substr_count("○●◎\r", '●◎', 1, 2));
+    self::assertEquals(1, UTF8::substr_count('中文空白', '文空', 1, 2));
+  }
+
   public function testSubstrCompare()
   {
     self::assertEquals(0, substr_compare(12345, 23, 1, 2));
@@ -1257,7 +1292,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertEquals(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
 
     // UTF-8
-    self::assertEquals(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
     self::assertEquals(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2, false));
     self::assertEquals(0, UTF8::substr_compare('中文空白', '文空', 1, 2, true));
   }
@@ -1277,6 +1311,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '中文空白'  => 'earth',
     );
     self::assertEquals('○●◎ earth', UTF8::strtr('Hello 中文空白', $arr));
+
+    // extra
+    self::assertEquals('○●◎◎o wor◎d', UTF8::strtr('Hello world', 'Hello', '○●◎'));
   }
 
   public function testStrRepeat()
@@ -1896,6 +1933,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         array('fòô...öäü', 'fòô bàř fòô', 1, '...öäü'),
         array('fòô', 'fòô bàř fòô', 1, ''),
         array('fòô bàř', 'fòô bàř fòô', 2, ''),
+        array('fòô', 'fòô', 1, ''),
+        array('', '', 1, '...'),
+        array('', '', 0, '...'),
     );
 
     foreach ($testArray as $test) {

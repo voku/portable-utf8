@@ -4263,13 +4263,13 @@ class UTF8
     //
 
     if (self::is_binary($str)) {
-      if (self::is_utf16($str) == 1) {
+      if (self::is_utf16($str) === 1) {
         return 'UTF-16LE';
-      } elseif (self::is_utf16($str) == 2) {
+      } elseif (self::is_utf16($str) === 2) {
         return 'UTF-16BE';
-      } elseif (self::is_utf32($str) == 1) {
+      } elseif (self::is_utf32($str) === 1) {
         return 'UTF-32LE';
-      } elseif (self::is_utf32($str) == 2) {
+      } elseif (self::is_utf32($str) === 2) {
         return 'UTF-32BE';
       }
     }
@@ -4571,9 +4571,7 @@ class UTF8
     self::checkForSupport();
     $len = (int)$len;
 
-    if (1 > $len) {
-      $len = func_get_arg(1);
-
+    if ($len < 1) {
       return str_split($str, $len);
     }
 
@@ -4589,7 +4587,7 @@ class UTF8
       $a = $a[0];
     }
 
-    if (1 === $len) {
+    if ($len === 1) {
       return $a;
     }
 
@@ -5506,30 +5504,43 @@ class UTF8
   /**
    * Translate characters or replace sub-strings.
    *
-   * @param string $s
-   * @param string $from
-   * @param string $to
+   * @link  http://php.net/manual/en/function.strtr.php
    *
-   * @return string
+   * @param string       $str  <p>
+   *                           The string being translated.
+   *                           </p>
+   * @param string|array $from <p>
+   *                           The string replacing from.
+   *                           </p>
+   * @param string|array $to   <p>
+   *                           The string being translated to to.
+   *                           </p>
+   *
+   * @return string This function returns a copy of str,
+   * translating all occurrences of each character in
+   * from to the corresponding character in
+   * to.
+   * @since 4.0
+   * @since 5.0
    */
-  public static function strtr($s, $from, $to = INF)
+  public static function strtr($str, $from, $to = INF)
   {
     if (INF !== $to) {
       $from = self::str_split($from);
       $to = self::str_split($to);
-      $a = count($from);
-      $b = count($to);
+      $countFrom = count($from);
+      $countTo = count($to);
 
-      if ($a > $b) {
-        $from = array_slice($from, 0, $b);
-      } elseif ($a < $b) {
-        $to = array_slice($to, 0, $a);
+      if ($countFrom > $countTo) {
+        $from = array_slice($from, 0, $countTo);
+      } elseif ($countFrom < $countTo) {
+        $to = array_slice($to, 0, $countFrom);
       }
 
       $from = array_combine($from, $to);
     }
 
-    return strtr($s, $from);
+    return strtr($str, $from);
   }
 
   /**
@@ -5636,30 +5647,48 @@ class UTF8
   }
 
   /**
-   * Count the number of sub-string occurrences.
+   * Count the number of substring occurrences
    *
-   * @param    string $haystack The string to search in.
-   * @param    string $needle   The string to search for.
-   * @param    int    $offset   The offset where to start counting.
-   * @param    int    $length   The maximum length after the specified offset to search for the substring.
+   * @link  http://php.net/manual/en/function.substr-count.php
    *
-   * @return   int number of occurrences of $needle
+   * @param string $haystack <p>
+   *                         The string to search in
+   *                         </p>
+   * @param string $needle   <p>
+   *                         The substring to search for
+   *                         </p>
+   * @param int    $offset   [optional] <p>
+   *                         The offset where to start counting
+   *                         </p>
+   * @param int    $length   [optional] <p>
+   *                         The maximum length after the specified offset to search for the
+   *                         substring. It outputs a warning if the offset plus the length is
+   *                         greater than the haystack length.
+   *                         </p>
+   *
+   * @return int This functions returns an integer.
+   * @since 4.0
+   * @since 5.0
    */
   public static function substr_count($haystack, $needle, $offset = 0, $length = null)
   {
-    $offset = (int)$offset;
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0], $needle[0])) {
+      return 0;
+    }
 
     if ($offset || $length) {
+      $offset = (int)$offset;
       $length = (int)$length;
 
       $haystack = self::substr($haystack, $offset, $length);
     }
 
-    if ($length === null) {
-      return substr_count($haystack, $needle, $offset);
-    } else {
-      return substr_count($haystack, $needle, $offset, $length);
-    }
+    self::checkForSupport();
+
+    return mb_substr_count($haystack, $needle);
   }
 
   /**
@@ -5676,7 +5705,6 @@ class UTF8
    */
   public static function substr_replace($str, $replacement, $start, $length = null)
   {
-
     if (is_array($str)) {
       $num = count($str);
 
@@ -6550,6 +6578,10 @@ class UTF8
 
     $words = (int)$words;
 
+    if ($words < 1) {
+      return '';
+    }
+
     preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $str, $matches);
 
     if (
@@ -6584,24 +6616,24 @@ class UTF8
     }
 
     $w = '';
-    $str = explode($break, $str);
-    $iLen = count($str);
-    $chars = array();
+    $strSplit = explode($break, $str);
+    $count = count($strSplit);
 
-    if (1 === $iLen && '' === $str[0]) {
+    if (1 === $count && '' === $strSplit[0]) {
       return '';
     }
 
+    $chars = array();
     /** @noinspection ForeachInvariantsInspection */
-    for ($i = 0; $i < $iLen; ++$i) {
+    for ($i = 0; $i < $count; ++$i) {
 
       if ($i) {
         $chars[] = $break;
         $w .= '#';
       }
 
-      $c = $str[$i];
-      unset($str[$i]);
+      $c = $strSplit[$i];
+      unset($strSplit[$i]);
 
       foreach (self::split($c) as $c) {
         $chars[] = $c;
@@ -6609,14 +6641,14 @@ class UTF8
       }
     }
 
-    $str = '';
+    $strReturn = '';
     $j = 0;
     $b = $i = -1;
     $w = wordwrap($w, $width, '#', $cut);
 
     while (false !== $b = self::strpos($w, '#', $b + 1)) {
       for (++$i; $i < $b; ++$i) {
-        $str .= $chars[$j];
+        $strReturn .= $chars[$j];
         unset($chars[$j++]);
       }
 
@@ -6624,10 +6656,10 @@ class UTF8
         unset($chars[$j++]);
       }
 
-      $str .= $break;
+      $strReturn .= $break;
     }
 
-    return $str . implode('', $chars);
+    return $strReturn . implode('', $chars);
   }
 
   /**
