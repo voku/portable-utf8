@@ -25,6 +25,12 @@ class Utf8StrrposTest extends PHPUnit_Framework_TestCase
     self::assertEquals(15, u::strrpos($str, 'æ', 0, true));
   }
 
+  public function test_utf8_with_code_point()
+  {
+    $str = "I*ñtërnâtiôn\xE9àlizætiøn";
+    self::assertEquals(1, u::strrpos($str, 42, 0, true));
+  }
+
   public function test_ascii()
   {
     $str = 'ABC ABC';
@@ -35,6 +41,11 @@ class Utf8StrrposTest extends PHPUnit_Framework_TestCase
   {
     $str = 'ABC 123 ABC';
     self::assertEquals(strrpos($str, 'B'), u::strrpos($str, 'B'));
+    self::assertEquals(strrpos($str, 1), u::strrpos($str, 1));
+
+    $str = 'ABC * ABC';
+    self::assertEquals(strrpos($str, 'B'), u::strrpos($str, 'B'));
+    self::assertEquals(strrpos($str, 42), u::strrpos($str, 42));
   }
 
   public function test_empty_str()

@@ -4840,9 +4840,9 @@ class UTF8
       $str = (string)$str;
     }
 
-    /* @var $len array */
     if (preg_match('/^(.*?)' . self::rxClass($charList) . '/us', $str, $length)) {
-      return self::strlen($len[1]);
+      /** @noinspection OffsetOperationsInspection */
+      return self::strlen($length[1]);
     } else {
       return self::strlen($str);
     }
@@ -5266,17 +5266,18 @@ class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strrpos.php
    *
-   * @param string  $haystack     <p>
+   * @param string     $haystack  <p>
    *                              The string being checked, for the last occurrence
    *                              of needle
    *                              </p>
-   * @param string  $needle       <p>
+   * @param string|int $needle    <p>
    *                              The string to find in haystack.
+   *                              Or a code point as int.
    *                              </p>
-   * @param int     $offset       [optional] May be specified to begin searching an arbitrary number of characters into
+   * @param int        $offset    [optional] May be specified to begin searching an arbitrary number of characters into
    *                              the string. Negative values will stop searching at an arbitrary point
    *                              prior to the end of the string.
-   * @param boolean $cleanUtf8    Clean non UTF-8 chars from the string
+   * @param boolean    $cleanUtf8 Clean non UTF-8 chars from the string
    *
    * @return int the numeric position of
    * the last occurrence of needle in the
@@ -5286,6 +5287,11 @@ class UTF8
   public static function strrpos($haystack, $needle, $offset = null, $cleanUtf8 = false)
   {
     $haystack = (string)$haystack;
+
+    if (((int)$needle) === $needle && ($needle >= 0)) {
+      $needle = self::chr($needle);
+    }
+
     $needle = (string)$needle;
 
     if (!isset($haystack[0], $needle[0])) {
@@ -5294,10 +5300,6 @@ class UTF8
 
     // init
     self::checkForSupport();
-
-    if (((int)$needle) === $needle && ($needle >= 0)) {
-      $needle = self::chr($needle);
-    }
 
     $needle = (string)$needle;
     $offset = (int)$offset;
