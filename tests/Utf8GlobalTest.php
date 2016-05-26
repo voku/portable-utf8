@@ -1370,11 +1370,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       self::assertEquals($after, UTF8::strncmp($before, 'ü', 10), 'tested: ' . $before);
     }
-
-    // compare to native
-    self::assertEquals(strncmp('ü', 'ü', 1), UTF8::strncmp('ü', 'ü', 1));
-    self::assertEquals(strncmp('a', 'ü', 1), UTF8::strncmp('a', 'ü', 1));
-    self::assertEquals(strncmp('ü', 'a', 1), UTF8::strncmp('ü', 'a', 1));
   }
 
   public function testStrncasecmp()
