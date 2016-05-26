@@ -31,6 +31,18 @@ class Utf8StrspnTest extends PHPUnit_Framework_TestCase
     self::assertEquals(strspn($str, 'aeionrt'), u::strspn($str, 'aeionrt'));
   }
 
+  public function test_max_length()
+  {
+    $str = "iñtërnât\niônàlizætiøn";
+    self::assertEquals(5, u::strspn($str, 'âëiônñrt', 0, 5));
+  }
+
+  public function test_offset()
+  {
+    $str = "iñtërnât\niônàlizætiøn";
+    self::assertEquals(5, u::strspn($str, 'âëiônñrt', 1, 5));
+  }
+
   public function test_linefeed()
   {
     $str = "iñtërnât\niônàlizætiøn";

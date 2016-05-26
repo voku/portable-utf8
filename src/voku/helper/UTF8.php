@@ -4822,26 +4822,26 @@ class UTF8
    * Find length of initial segment not matching mask.
    *
    * @param string $str
-   * @param string $charlist
-   * @param int    $start
-   * @param int    $len
+   * @param string $charList
+   * @param int    $offset
+   * @param int    $length
    *
    * @return int|null
    */
-  public static function strcspn($str, $charlist, $start = 0, $len = 2147483647)
+  public static function strcspn($str, $charList, $offset = 0, $length = 2147483647)
   {
-    if ('' === $charlist .= '') {
+    if ('' === $charList .= '') {
       return null;
     }
 
-    if ($start || 2147483647 !== $len) {
-      $str = (string)self::substr($str, $start, $len);
+    if ($offset || 2147483647 !== $length) {
+      $str = (string)self::substr($str, $offset, $length);
     } else {
       $str = (string)$str;
     }
 
     /* @var $len array */
-    if (preg_match('/^(.*?)' . self::rxClass($charlist) . '/us', $str, $len)) {
+    if (preg_match('/^(.*?)' . self::rxClass($charList) . '/us', $str, $length)) {
       return self::strlen($len[1]);
     } else {
       return self::strlen($str);
@@ -5339,20 +5339,20 @@ class UTF8
    * Finds the length of the initial segment of a string consisting entirely of characters contained within a given
    * mask.
    *
-   * @param string $s
+   * @param string $str
    * @param string $mask
-   * @param int    $start
-   * @param int    $len
+   * @param int    $offset
+   * @param int    $length
    *
    * @return int|null
    */
-  public static function strspn($s, $mask, $start = 0, $len = 2147483647)
+  public static function strspn($str, $mask, $offset = 0, $length = 2147483647)
   {
-    if ($start || 2147483647 !== $len) {
-      $s = self::substr($s, $start, $len);
+    if ($offset || 2147483647 !== $length) {
+      $str = self::substr($str, $offset, $length);
     }
 
-    return preg_match('/^' . self::rxClass($mask) . '+/u', $s, $s) ? self::strlen($s[0]) : 0;
+    return preg_match('/^' . self::rxClass($mask) . '+/u', $str, $str) ? self::strlen($str[0]) : 0;
   }
 
   /**
