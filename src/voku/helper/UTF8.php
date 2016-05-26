@@ -5019,8 +5019,9 @@ class UTF8
    * @param string $str1
    * @param string $str2
    *
-   * @return int Similar to other string comparison functions, this one returns < 0 if str1 is less than str2 > 0 if
-   *             str1 is greater than str2, and 0 if they are equal.
+   * @return int <strong>< 0</strong> if str1 is less than str2<br />
+   *             <strong>> 0</strong> if str1 is greater than str2<br />
+   *             <strong>0</strong> if they are equal
    */
   public static function strnatcasecmp($str1, $str2)
   {
@@ -5033,8 +5034,9 @@ class UTF8
    * @param string $str1
    * @param string $str2
    *
-   * @return int Similar to other string comparison functions, this one returns < 0 if str1 is less than str2; > 0 if
-   *             str1 is greater than str2, and 0 if they are equal.
+   * @return int <strong>< 0</strong> if str1 is less than str2<br />
+   *             <strong>> 0</strong> if str1 is greater than str2<br />
+   *             <strong>0</strong> if they are equal
    */
   public static function strnatcmp($str1, $str2)
   {
@@ -5048,7 +5050,9 @@ class UTF8
    * @param string $str2
    * @param int    $len
    *
-   * @return int Returns < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+   * @return int Returns <strong>< 0</strong> if str1 is less than str2<br />
+   *                     <strong>> 0</strong> if str1 is greater than str2<br />
+   *                     <strong>0</strong> if they are equal
    */
   public static function strncasecmp($str1, $str2, $len)
   {
