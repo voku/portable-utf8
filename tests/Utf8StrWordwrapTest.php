@@ -7,6 +7,15 @@ use voku\helper\UTF8 as u;
  */
 class Utf8StrWordwrapTest extends PHPUnit_Framework_TestCase
 {
+  public function test_orig()
+  {
+    $str = '';
+    self::assertEquals(wordwrap($str), u::wordwrap($str));
+
+    $str = 'test foo';
+    self::assertEquals(wordwrap($str, 1, '<br>', true), u::wordwrap($str, 1, '<br>', true));
+  }
+
   public function test_no_args_empty_string()
   {
     $str = '';

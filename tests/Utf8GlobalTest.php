@@ -11,15 +11,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrlen()
   {
-    $string = 'string <strong>with utf-8 chars åèä</strong> - doo-bee doo-bee dooh';
+    // string with UTF-16 (LE) BOM + valid UTF-8 && invalid UTF-8
+    $string = "\xFF\xFE" . 'string <strong>with utf-8 chars åèä</strong>' . "\xa0\xa1" . ' - doo-bee doo-bee dooh';
 
-    self::assertEquals(70, strlen($string));
-    self::assertEquals(67, UTF8::strlen($string));
+    self::assertEquals(74, strlen($string));
+    self::assertEquals(71, UTF8::strlen($string));
+    self::assertEquals(71, UTF8::strlen($string, 'UTF-8', false));
+    self::assertEquals(67, UTF8::strlen($string, 'UTF-8', true));
 
     $string_test1 = strip_tags($string);
     $string_test2 = UTF8::strip_tags($string);
 
-    self::assertEquals(53, strlen($string_test1));
+    self::assertEquals(57, strlen($string_test1));
     self::assertEquals(50, UTF8::strlen($string_test2));
 
     $testArray = array(
@@ -1084,19 +1087,19 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testStrDetectEncoding()
   {
     $tests = array(
-        'に対するパッチです' => 'UTF-8', // ISO-2022-JP, but PHP can't detect it ...
-        'ASCII'    => 'ASCII', // ASCII
-        'Iñtërnâtiônàlizætiøn' => 'UTF-8', // UTF-8
+        'に対するパッチです'                     => 'UTF-8', // ISO-2022-JP, but PHP can't detect it ...
+        'ASCII'                         => 'ASCII', // ASCII
+        'Iñtërnâtiônàlizætiøn'          => 'UTF-8', // UTF-8
         '亜 唖 娃 阿 哀 愛 挨 姶 逢 葵 茜 穐 悪 握 渥' => 'UTF-8', // EUC-JP
-        'áéóú' => 'UTF-8', // ISO-8859-1
-        '☺' => 'UTF-8',
-        '☃' => 'UTF-8',
-        '○●◎' => 'UTF-8',
-        'öäü'          => 'UTF-8', // ISO-8859-1
-        ''             => 'ASCII', // ASCII
-        '1'            => 'ASCII', // ASCII
-        decbin(324546) => 'ASCII', // ASCII
-        01             => 'ASCII', // ASCII
+        'áéóú'                          => 'UTF-8', // ISO-8859-1
+        '☺'                             => 'UTF-8',
+        '☃'                             => 'UTF-8',
+        '○●◎'                           => 'UTF-8',
+        'öäü'                           => 'UTF-8', // ISO-8859-1
+        ''                              => 'ASCII', // ASCII
+        '1'                             => 'ASCII', // ASCII
+        decbin(324546)                  => 'ASCII', // ASCII
+        01                              => 'ASCII', // ASCII
     );
 
     foreach ($tests as $before => $after) {
@@ -1209,6 +1212,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
 
     self::assertEquals($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
+
+    // alias
+    self::assertEquals($tests, UTF8::to_utf8(UTF8::to_iso8859($tests)));
+    self::assertEquals($tests, UTF8::toUTF8(UTF8::toLatin1($tests)));
   }
 
   public function testNumberFormat()
@@ -1316,6 +1323,80 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // extra
     self::assertEquals('○●◎◎o wor◎d', UTF8::strtr('Hello world', 'Hello', '○●◎'));
+    self::assertEquals('Hello world H●◎', UTF8::strtr('Hello world ○●◎', '○', 'Hello'));
+  }
+
+  public function testStrpbrk()
+  {
+    $text = 'This is a Simple text.';
+
+    self::assertEquals(false, strpbrk($text, ''));
+    self::assertEquals(strpbrk($text, ''), UTF8::strpbrk($text, ''));
+
+    self::assertEquals(false, strpbrk('', 'mi'));
+    self::assertEquals(strpbrk('', 'mi'), UTF8::strpbrk('', 'mi'));
+
+    // this echoes "is is a Simple text." because 'i' is matched first
+    self::assertEquals('is is a Simple text.', strpbrk($text, 'mi'));
+    self::assertEquals(strpbrk($text, 'mi'), UTF8::strpbrk($text, 'mi'));
+
+    // this echoes "Simple text." because chars are case sensitive
+    self::assertEquals('Simple text.', strpbrk($text, 'S'));
+    self::assertEquals('Simple text.', UTF8::strpbrk($text, 'S'));
+
+    // UTF-8
+
+    $text = 'Hello -中文空白-';
+    self::assertEquals('白-', UTF8::strpbrk($text, '白'));
+  }
+
+  public function testStrncmp()
+  {
+    $tests = array(
+        ''                                                                                    => -3,
+        ' '                                                                                   => -1,
+        'a'                                                                                   => -1,
+        'ü'                                                                                   => 0,
+        'Ü'                                                                                   => -1,
+        ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => -1,
+        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => 1,
+        '中文空白 ‟'                                                                              => 1,
+        "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => -1,
+        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => 1,
+        "„Abcdef\xe2\x81\x9f”"                                                                => 1,
+        " foo\t foo "                                                                         => -1,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::strncmp($before, 'ü', 10), 'tested: ' . $before);
+    }
+
+    // compare to native
+    self::assertEquals(strncmp('ü', 'ü', 1), UTF8::strncmp('ü', 'ü', 1));
+    self::assertEquals(strncmp('a', 'ü', 1), UTF8::strncmp('a', 'ü', 1));
+    self::assertEquals(strncmp('ü', 'a', 1), UTF8::strncmp('ü', 'a', 1));
+  }
+
+  public function testStrncasecmp()
+  {
+    $tests = array(
+        ''                                                                                    => -3,
+        ' '                                                                                   => -1,
+        'a'                                                                                   => -1,
+        'ü'                                                                                   => 0,
+        'Ü'                                                                                   => 0,
+        ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => -1,
+        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => 1,
+        '中文空白 ‟'                                                                              => 1,
+        "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => -1,
+        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => 1,
+        "„Abcdef\xe2\x81\x9f”"                                                                => 1,
+        " foo\t foo "                                                                         => -1,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::strncasecmp($before, 'ü', 10), 'tested: ' . $before);
+    }
   }
 
   public function testStrRepeat()
@@ -1487,7 +1568,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         " foo\t foo "                                                                         => ' foo	 foo ',
     );
 
-    for ($i = 0; $i < 10; $i++) {
+    for ($i = 0; $i < 2; $i++) {
       foreach ($tests as $before => $after) {
         self::assertEquals($after, UTF8::normalize_whitespace($before));
       }
@@ -1731,10 +1812,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid UTF-8
       'κόσμε'                                       => array('κόσμε' => 'κόσμε'),
       '中'                                           => array('中' => '中'),
+      // Valid UTF-8 + "win1252"-encoding
+      'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac" => array('Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'),
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"                           => array('κόσμε-öäü' => 'κόσμε-öäü'),
       // Valid emoji (non-UTF-8)
-      '👍 💩 😄 ❤ 👍 💩 😄 ❤'                        => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
+      '👍 💩 😄 ❤ 👍 💩 😄 ❤'                       => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
       // Valid ASCII
       'a'                                           => array('a' => 'a'),
       // Valid ASCII + Invalied Chars
@@ -1936,6 +2019,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         array('fòô', 'fòô bàř fòô', 1, ''),
         array('fòô bàř', 'fòô bàř fòô', 2, ''),
         array('fòô', 'fòô', 1, ''),
+        array('', 'fòô', 0, ''),
         array('', '', 1, '...'),
         array('', '', 0, '...'),
     );
@@ -1971,7 +2055,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid ASCII
       'a'                        => array('a' => 'a'),
       // Valid emoji (non-UTF-8)
-      '😃' => array('😃' => '😃'),
+      '😃'                       => array('😃' => '😃'),
       // Valid ASCII + Invalied Chars
       "a\xa0\xa1-öäü"            => array('a-öäü' => 'a-öäü'),
       // Valid 2 Octet Sequence
@@ -2238,6 +2322,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testChrToBinary()
   {
     $tests = array(
+        '' => '',
+        0 => 0,
+        '1' => '00110001',
         '~' => '01111110',
         '§' => '1100001010100111',
         'ሇ' => '111000011000100010000111',
@@ -2429,6 +2516,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('Σσς', UTF8::ucfirst('σσς'));
     self::assertSame('DEJa', UTF8::ucfirst('dEJa'));
     self::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
+
+    // alias
+    self::assertEquals('Öäü', UTF8::ucword('öäü'));
   }
 
   public function testUcWords()
@@ -2686,6 +2776,25 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $actual => $expected) {
       self::assertEquals($expected, UTF8::str_word_count($actual));
     }
+
+    self::assertEquals(3, UTF8::str_word_count('中文空白 foo öäü'));
+    self::assertEquals(3, UTF8::str_word_count('中文空白 foo öäü', 0));
+    self::assertEquals(
+        array(
+            0 => '中文空白',
+            1 => 'foo',
+            2 => 'öäü',
+        ),
+        UTF8::str_word_count('中文空白 foo öäü', 1)
+    );
+    self::assertEquals(
+        array(
+            0 => '中文空白',
+            5 => 'foo',
+            9 => 'öäü',
+        ),
+        UTF8::str_word_count('中文空白 foo öäü', 2)
+    );
   }
 
   public function testMaxChrWidth()
@@ -2732,6 +2841,22 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $expected = "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε";
 
     self::assertEquals($expected, $result);
+  }
+
+  public function testWs()
+  {
+    $whitespace = UTF8::ws();
+
+    self::assertEquals(true, is_array($whitespace));
+    self::assertEquals(true, count($whitespace) > 0);
+  }
+
+  public function testUrldecodeFixWin1252Chars()
+  {
+    $urldecode_fix_win1252_chars = UTF8::urldecode_fix_win1252_chars();
+
+    self::assertEquals(true, is_array($urldecode_fix_win1252_chars));
+    self::assertEquals(true, count($urldecode_fix_win1252_chars) > 0);
   }
 
   public function setUp()

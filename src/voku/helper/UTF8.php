@@ -3984,9 +3984,9 @@ class UTF8
       $str = substr($str, 2);
     } elseif (0 === strpos($str, 'þÿ')) { // UTF-16 (BE) BOM as "Windows-1252"
       $str = substr($str, 4);
-    } elseif (0 === strpos($str, "\xff\xfe")) { // UTF-16 (LE)
+    } elseif (0 === strpos($str, "\xff\xfe")) { // UTF-16 (LE) BOM
       $str = substr($str, 2);
-    } elseif (0 === strpos($str, 'ÿþ')) { // UTF-16 (LE) as "Windows-1252"
+    } elseif (0 === strpos($str, 'ÿþ')) { // UTF-16 (LE) BOM as "Windows-1252"
       $str = substr($str, 4);
     }
 
@@ -4381,6 +4381,8 @@ class UTF8
    */
   public static function str_limit_after_word($str, $length = 100, $strAddOn = '...')
   {
+    $str = (string)$str;
+
     if (!isset($str[0])) {
       return '';
     }
@@ -4748,7 +4750,9 @@ class UTF8
    * Counts number of words in the UTF-8 string.
    *
    * @param string $str The input string.
-   * @param int    $format
+   * @param int $format <strong>0</strong> => return a number of words<br />
+   *                    <strong>1</strong> => return an array of words
+   *                    <strong>2</strong> => return an array of words with word-offset as key
    * @param string $charlist
    *
    * @return array|float The number of words in the string
@@ -5029,14 +5033,23 @@ class UTF8
   }
 
   /**
-   * String comparisons using a "natural order" algorithm.
+   * String comparisons using a "natural order" algorithm
    *
-   * @param string $str1
-   * @param string $str2
+   * @link  http://php.net/manual/en/function.strnatcmp.php
    *
-   * @return int <strong>< 0</strong> if str1 is less than str2<br />
-   *             <strong>> 0</strong> if str1 is greater than str2<br />
-   *             <strong>0</strong> if they are equal
+   * @param string $str1 <p>
+   *                     The first string.
+   *                     </p>
+   * @param string $str2 <p>
+   *                     The second string.
+   *                     </p>
+   *
+   * @return int Similar to other string comparison functions, this one returns &lt; 0 if
+   * str1 is less than str2; &gt;
+   * 0 if str1 is greater than
+   * str2, and 0 if they are equal.
+   * @since 4.0
+   * @since 5.0
    */
   public static function strnatcmp($str1, $str2)
   {
@@ -5044,15 +5057,25 @@ class UTF8
   }
 
   /**
-   * Case-insensitive string comparison of the first n characters.
+   * Binary safe case-insensitive string comparison of the first n characters
    *
-   * @param string $str1
-   * @param string $str2
-   * @param int    $len
+   * @link  http://php.net/manual/en/function.strncasecmp.php
    *
-   * @return int Returns <strong>< 0</strong> if str1 is less than str2<br />
-   *                     <strong>> 0</strong> if str1 is greater than str2<br />
-   *                     <strong>0</strong> if they are equal
+   * @param string $str1 <p>
+   *                     The first string.
+   *                     </p>
+   * @param string $str2 <p>
+   *                     The second string.
+   *                     </p>
+   * @param int    $len  <p>
+   *                     The length of strings to be used in the comparison.
+   *                     </p>
+   *
+   * @return int &lt; 0 if <i>str1</i> is less than
+   * <i>str2</i>; &gt; 0 if <i>str1</i> is
+   * greater than <i>str2</i>, and 0 if they are equal.
+   * @since 4.0.4
+   * @since 5.0
    */
   public static function strncasecmp($str1, $str2, $len)
   {
@@ -5060,15 +5083,26 @@ class UTF8
   }
 
   /**
-   * Comparison of the first n characters.
+   * Binary safe string comparison of the first n characters
    *
-   * @param string $str1
-   * @param string $str2
-   * @param int    $len
+   * @link  http://php.net/manual/en/function.strncmp.php
    *
-   * @return int  <strong>< 0</strong> if str1 is less than str2<br />
-   *              <strong>> 0</strong> if str1 is greater than str2<br />
-   *              <strong>0</strong> if they are equal
+   * @param string $str1 <p>
+   *                     The first string.
+   *                     </p>
+   * @param string $str2 <p>
+   *                     The second string.
+   *                     </p>
+   * @param int    $len  <p>
+   *                     Number of characters to use in the comparison.
+   *                     </p>
+   *
+   * @return int &lt; 0 if <i>str1</i> is less than
+   * <i>str2</i>; &gt; 0 if <i>str1</i>
+   * is greater than <i>str2</i>, and 0 if they are
+   * equal.
+   * @since 4.0
+   * @since 5.0
    */
   public static function strncmp($str1, $str2, $len)
   {
@@ -5076,17 +5110,32 @@ class UTF8
   }
 
   /**
-   * Search a string for any of a set of characters.
+   * Search a string for any of a set of characters
    *
-   * @param string $s
-   * @param string $charList
+   * @link  http://php.net/manual/en/function.strpbrk.php
    *
-   * @return string|false
+   * @param string $haystack  <p>
+   *                          The string where char_list is looked for.
+   *                          </p>
+   * @param string $char_list <p>
+   *                          This parameter is case sensitive.
+   *                          </p>
+   *
+   * @return string a string starting from the character found, or false if it is
+   * not found.
+   * @since 5.0
    */
-  public static function strpbrk($s, $charList)
+  public static function strpbrk($haystack, $char_list)
   {
-    if (preg_match('/' . self::rxClass($charList) . '/us', $s, $m)) {
-      return substr($s, strpos($s, $m[0]));
+    $haystack = (string)$haystack;
+    $char_list = (string)$char_list;
+
+    if (!isset($haystack[0], $char_list[0])) {
+      return false;
+    }
+
+    if (preg_match('/' . self::rxClass($char_list) . '/us', $haystack, $m)) {
+      return substr($haystack, strpos($haystack, $m[0]));
     } else {
       return false;
     }
@@ -5968,7 +6017,7 @@ class UTF8
    * 2) when any of these: àáâãäåæçèéêëìíîï  are followed by TWO chars from group B,
    * 3) when any of these: ðñòó  are followed by THREE chars from group B.
    *
-   * @param string $str Any string or array.
+   * @param string|array $str Any string or array.
    *
    * @return string The same string, but UTF8 encoded.
    */
@@ -6080,7 +6129,7 @@ class UTF8
   }
 
   /**
-   * Convert a string into win1252.
+   * Convert a string into "win1252"-encoding.
    *
    * @param  string|array $str
    *
@@ -6096,11 +6145,15 @@ class UTF8
       }
 
       return $str;
-    } elseif (is_string($str)) {
-      return self::utf8_decode($str);
-    } else {
-      return $str;
     }
+
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    return self::utf8_decode($str);
   }
 
   /**
@@ -6244,7 +6297,7 @@ class UTF8
    *
    * @return mixed
    */
-  protected static function urldecode_fix_win1252_chars()
+  public static function urldecode_fix_win1252_chars()
   {
     static $array = array(
         '%20' => ' ',
@@ -6578,6 +6631,8 @@ class UTF8
    */
   public static function words_limit($str, $words = 100, $strAddOn = '...')
   {
+    $str = (string)$str;
+
     if (!isset($str[0])) {
       return '';
     }
@@ -6602,23 +6657,38 @@ class UTF8
   }
 
   /**
-   * Wraps a string to a given number of characters.
+   * Wraps a string to a given number of characters
    *
-   * @param string $str
-   * @param int    $width
-   * @param string $break
-   * @param bool   $cut
+   * @link  http://php.net/manual/en/function.wordwrap.php
    *
-   * @return false|string Returns the given string wrapped at the specified length.
+   * @param string $str   <p>
+   *                      The input string.
+   *                      </p>
+   * @param int    $width [optional] <p>
+   *                      The column width.
+   *                      </p>
+   * @param string $break [optional] <p>
+   *                      The line is broken using the optional
+   *                      break parameter.
+   *                      </p>
+   * @param bool   $cut   [optional] <p>
+   *                      If the cut is set to true, the string is
+   *                      always wrapped at or before the specified width. So if you have
+   *                      a word that is larger than the given width, it is broken apart.
+   *                      (See second example).
+   *                      </p>
+   *
+   * @return string the given string wrapped at the specified column.
+   * @since 4.0.2
+   * @since 5.0
    */
   public static function wordwrap($str, $width = 75, $break = "\n", $cut = false)
   {
-    if (false === wordwrap('-', $width, $break, $cut)) {
-      return false;
-    }
+    $str = (string)$str;
+    $break = (string)$break;
 
-    if (is_string($break)) {
-      $break = (string)$break;
+    if (!isset($str[0], $break[0])) {
+      return '';
     }
 
     $w = '';
