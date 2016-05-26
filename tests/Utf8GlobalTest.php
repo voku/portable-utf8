@@ -120,6 +120,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $before => $after) {
       self::assertEquals($after, UTF8::fix_utf8($before));
     }
+
+    self::assertEquals(array('Düsseldorf', 'Fédération'), UTF8::fix_utf8(array('DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration')));
   }
 
   public function testParseStr()

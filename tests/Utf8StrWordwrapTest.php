@@ -35,6 +35,13 @@ class Utf8StrWordwrapTest extends PHPUnit_Framework_TestCase
     self::assertEquals($wrapped, u::wordwrap($str, 1, "\n", true));
   }
 
+  public function test_break_special()
+  {
+    $str = 'ñ-ñ';
+    $wrapped = 'ñ-ñ';
+    self::assertEquals($wrapped, u::wordwrap($str, 1, '-', true));
+  }
+
   public function test_break_at_one_with_empty_string()
   {
     $str = 'ñ ñ';
