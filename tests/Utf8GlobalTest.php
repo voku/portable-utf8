@@ -1222,6 +1222,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     self::assertEquals('1.23', UTF8::number_format('1.234567', 2, '.', ''));
     self::assertEquals('1,3', UTF8::number_format('1.298765', 1, ',', ''));
+    self::assertEquals('1,0', UTF8::number_format('1', 1, ',', ''));
+    self::assertEquals(null, UTF8::number_format('foo', 1, ',', ''));
+    self::assertEquals(null, UTF8::number_format(''));
   }
 
   public function testSubstr()
@@ -2002,10 +2005,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '41'  => ')',
         '42'  => '*',
         '160' => ' ',
+        165   => '¥',
+        ''    => '',
+        'foo' => '',
+        'fòô' => '',
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::chr($before));
+      self::assertEquals($after, UTF8::chr($before), 'tested: ' . $before);
     }
   }
 
@@ -2321,8 +2328,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testChrToBinary()
   {
     $tests = array(
-        '' => '',
-        0 => 0,
+        ''  => '',
+        0   => 0,
         '1' => '00110001',
         '~' => '01111110',
         '§' => '1100001010100111',

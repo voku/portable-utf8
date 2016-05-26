@@ -1879,11 +1879,14 @@ class UTF8
   {
     self::checkForSupport();
 
-    if (($i = (int)$code_point) !== $code_point) {
-      // $code_point is a string, lets extract int code point from it
-      if (!($i = (int)self::hex_to_int($code_point))) {
-        return '';
-      }
+    $i = (int)$code_point;
+
+    if ($i !== $code_point) {
+      $i = (int)self::hex_to_int($code_point);
+    }
+
+    if (!$i) {
+      return '';
     }
 
     return self::html_entity_decode("&#{$i};", ENT_QUOTES);
@@ -1948,7 +1951,7 @@ class UTF8
       // 110xxxxx
       $bytes = 2;
       $code &= ~0xc0;
-    } elseif (($code & 0xf0) == 0xe0) {
+    } elseif (($code & 0xf0) === 0xe0) {
       // 1110xxxx
       $bytes = 3;
       $code &= ~0xe0;
@@ -2522,7 +2525,7 @@ class UTF8
     }
 
     $last = '';
-    while ($last <> $str) {
+    while ($last !== $str) {
       $last = $str;
       $str = self::to_utf8(self::utf8_decode($str));
     }
@@ -3159,7 +3162,7 @@ class UTF8
     if (
         is_object(json_decode($str))
         &&
-        json_last_error() == JSON_ERROR_NONE
+        json_last_error() === JSON_ERROR_NONE
     ) {
       return true;
     } else {
@@ -3231,7 +3234,7 @@ class UTF8
         ||
         substr_count($input, "\x00") > 0
         ||
-        ($testLength ? substr_count($input, '^ -~') / $testLength > 0.3 : 1 == 0)
+        ($testLength ? substr_count($input, '^ -~') / $testLength > 0.3 : 1 === 0)
     ) {
       return true;
     } else {
@@ -3290,7 +3293,7 @@ class UTF8
       if ($test !== false && strlen($test) > 1) {
         $test2 = \mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
         $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
-        if ($test3 == $test) {
+        if ($test3 === $test) {
           $strChars = self::count_chars($str);
           foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
             if (in_array($test3char, $strChars, true) === true) {
@@ -3305,7 +3308,7 @@ class UTF8
       if ($test !== false && strlen($test) > 1) {
         $test2 = \mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
         $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
-        if ($test3 == $test) {
+        if ($test3 === $test) {
           $strChars = self::count_chars($str);
           foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
             if (in_array($test3char, $strChars, true) === true) {
@@ -3315,7 +3318,7 @@ class UTF8
         }
       }
 
-      if ($maybeUTF16BE != $maybeUTF16LE) {
+      if ($maybeUTF16BE !== $maybeUTF16LE) {
         if ($maybeUTF16LE > $maybeUTF16BE) {
           return 1;
         } else {
@@ -3345,7 +3348,7 @@ class UTF8
       if ($test !== false && strlen($test) > 1) {
         $test2 = \mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
         $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
-        if ($test3 == $test) {
+        if ($test3 === $test) {
           $strChars = self::count_chars($str);
           foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
             if (in_array($test3char, $strChars, true) === true) {
@@ -3360,7 +3363,7 @@ class UTF8
       if ($test !== false && strlen($test) > 1) {
         $test2 = \mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
         $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
-        if ($test3 == $test) {
+        if ($test3 === $test) {
           $strChars = self::count_chars($str);
           foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
             if (in_array($test3char, $strChars, true) === true) {
@@ -3370,7 +3373,7 @@ class UTF8
         }
       }
 
-      if ($maybeUTF32BE != $maybeUTF32LE) {
+      if ($maybeUTF32BE !== $maybeUTF32LE) {
         if ($maybeUTF32LE > $maybeUTF32BE) {
           return 1;
         } else {
@@ -3406,7 +3409,7 @@ class UTF8
       // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
       // invalid, nothing at all will match, even if the string contains
       // some valid sequences
-      return (preg_match('/^.{1}/us', $str, $ar) == 1);
+      return (preg_match('/^.{1}/us', $str, $ar) === 1);
 
     } else {
 
@@ -3419,31 +3422,31 @@ class UTF8
       /** @noinspection ForeachInvariantsInspection */
       for ($i = 0; $i < $len; $i++) {
         $in = ord($str[$i]);
-        if ($mState == 0) {
+        if ($mState === 0) {
           // When mState is zero we expect either a US-ASCII character or a
           // multi-octet sequence.
-          if (0 == (0x80 & $in)) {
+          if (0 === (0x80 & $in)) {
             // US-ASCII, pass straight through.
             $mBytes = 1;
-          } elseif (0xC0 == (0xE0 & $in)) {
+          } elseif (0xC0 === (0xE0 & $in)) {
             // First octet of 2 octet sequence.
             $mUcs4 = $in;
             $mUcs4 = ($mUcs4 & 0x1F) << 6;
             $mState = 1;
             $mBytes = 2;
-          } elseif (0xE0 == (0xF0 & $in)) {
+          } elseif (0xE0 === (0xF0 & $in)) {
             // First octet of 3 octet sequence.
             $mUcs4 = $in;
             $mUcs4 = ($mUcs4 & 0x0F) << 12;
             $mState = 2;
             $mBytes = 3;
-          } elseif (0xF0 == (0xF8 & $in)) {
+          } elseif (0xF0 === (0xF8 & $in)) {
             // First octet of 4 octet sequence.
             $mUcs4 = $in;
             $mUcs4 = ($mUcs4 & 0x07) << 18;
             $mState = 3;
             $mBytes = 4;
-          } elseif (0xF8 == (0xFC & $in)) {
+          } elseif (0xF8 === (0xFC & $in)) {
             /* First octet of 5 octet sequence.
             *
             * This is illegal because the encoded codepoint must be either
@@ -3456,7 +3459,7 @@ class UTF8
             $mUcs4 = ($mUcs4 & 0x03) << 24;
             $mState = 4;
             $mBytes = 5;
-          } elseif (0xFC == (0xFE & $in)) {
+          } elseif (0xFC === (0xFE & $in)) {
             // First octet of 6 octet sequence, see comments for 5 octet sequence.
             $mUcs4 = $in;
             $mUcs4 = ($mUcs4 & 1) << 30;
@@ -3471,7 +3474,7 @@ class UTF8
         } else {
           // When mState is non-zero, we expect a continuation of the multi-octet
           // sequence
-          if (0x80 == (0xC0 & $in)) {
+          if (0x80 === (0xC0 & $in)) {
             // Legal continuation.
             $shift = ($mState - 1) * 6;
             $tmp = $in;
@@ -3481,18 +3484,18 @@ class UTF8
              * End of the multi-octet sequence. mUcs4 now contains the final
              * Unicode code point to be output
              */
-            if (0 == --$mState) {
+            if (0 === --$mState) {
               /*
               * Check for illegal sequences and code points.
               */
               // From Unicode 3.1, non-shortest form is illegal
               if (
-                  ((2 == $mBytes) && ($mUcs4 < 0x0080)) ||
-                  ((3 == $mBytes) && ($mUcs4 < 0x0800)) ||
-                  ((4 == $mBytes) && ($mUcs4 < 0x10000)) ||
+                  (2 === $mBytes && $mUcs4 < 0x0080) ||
+                  (3 === $mBytes && $mUcs4 < 0x0800) ||
+                  (4 === $mBytes && $mUcs4 < 0x10000) ||
                   (4 < $mBytes) ||
                   // From Unicode 3.2, surrogate characters are illegal.
-                  (($mUcs4 & 0xFFFFF800) == 0xD800) ||
+                  (($mUcs4 & 0xFFFFF800) === 0xD800) ||
                   // Code points outside the Unicode range are illegal.
                   ($mUcs4 > 0x10FFFF)
               ) {
@@ -3823,8 +3826,14 @@ class UTF8
    */
   public static function number_format($number, $decimals = 0, $dec_point = '.', $thousands_sep = ',')
   {
-    if (Bootup::is_php('5.4') === true) {
-      if (isset($thousands_sep[1]) || isset($dec_point[1])) {
+    $thousands_sep = (string)$thousands_sep;
+    $dec_point = (string)$dec_point;
+
+    if (
+      isset($thousands_sep[1], $dec_point[1])
+      &&
+      Bootup::is_php('5.4') === true
+    ) {
         return str_replace(
             array(
                 '.',
@@ -3836,7 +3845,6 @@ class UTF8
             ),
             number_format($number, $decimals, '.', ',')
         );
-      }
     }
 
     return number_format($number, $decimals, $dec_point, $thousands_sep);
@@ -4763,14 +4771,14 @@ class UTF8
 
     $len = count($strParts);
 
-    if ($format == 1) {
+    if ($format === 1) {
 
       $numberOfWords = array();
       for ($i = 1; $i < $len; $i += 2) {
         $numberOfWords[] = $strParts[$i];
       }
 
-    } elseif ($format == 2) {
+    } elseif ($format === 2) {
 
       self::checkForSupport();
 
@@ -5750,10 +5758,10 @@ class UTF8
    *
    * source: https://gist.github.com/stemar/8287074
    *
-   * @param string|array $str
-   * @param string|array $replacement
-   * @param int          $start
-   * @param null|int     $length
+   * @param string|array   $str
+   * @param string|array   $replacement
+   * @param int|array      $start
+   * @param null|int|array $length
    *
    * @return array|string
    */
@@ -5846,7 +5854,7 @@ class UTF8
         function ($match) use ($encoding) {
           $marchToUpper = UTF8::strtoupper($match[0], $encoding);
 
-          if ($match[0] == $marchToUpper) {
+          if ($match[0] === $marchToUpper) {
             return UTF8::strtolower($match[0], $encoding);
           } else {
             return $marchToUpper;
