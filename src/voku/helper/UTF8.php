@@ -3,7 +3,6 @@
 namespace voku\helper;
 
 use Symfony\Polyfill\Intl\Grapheme\Grapheme;
-use Symfony\Polyfill\Intl\Normalizer\Normalizer;
 use Symfony\Polyfill\Xml\Xml;
 
 /**
@@ -2134,7 +2133,7 @@ class UTF8
   {
     self::checkForSupport();
 
-    return mb_convert_encoding(
+    return \mb_convert_encoding(
         '&#x' . dechex($code) . ';',
         'UTF-8',
         'HTML-ENTITIES'
@@ -2178,7 +2177,7 @@ class UTF8
   {
     self::checkForSupport();
 
-    $return = mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
+    $return = \mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
 
     if ($return === "'") {
       return '&#x27;';
@@ -2303,7 +2302,7 @@ class UTF8
       $encoding = self::str_detect_encoding($data);
 
       if ($encoding && $encoding !== 'UTF-8') {
-        $data = mb_convert_encoding(
+        $data = \mb_convert_encoding(
             $data,
             'UTF-8',
             self::normalizeEncoding($encoding)
@@ -2358,10 +2357,10 @@ class UTF8
           $var = str_replace(array("\r\n", "\r"), "\n", $var);
         }
         if (preg_match('/[\x80-\xFF]/', $var)) {
-          if (Normalizer::isNormalized($var, $normalization_form)) {
+          if (\Normalizer::isNormalized($var, $normalization_form)) {
             $n = '-';
           } else {
-            $n = Normalizer::normalize($var, $normalization_form);
+            $n = \Normalizer::normalize($var, $normalization_form);
 
             if (isset($n[0])) {
               $var = $n;
@@ -3287,10 +3286,10 @@ class UTF8
       self::checkForSupport();
 
       $maybeUTF16LE = 0;
-      $test = mb_convert_encoding($str, 'UTF-8', 'UTF-16LE');
+      $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16LE');
       if ($test !== false && strlen($test) > 1) {
-        $test2 = mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
-        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
+        $test2 = \mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
+        $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
         if ($test3 == $test) {
           $strChars = self::count_chars($str);
           foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
@@ -3302,10 +3301,10 @@ class UTF8
       }
 
       $maybeUTF16BE = 0;
-      $test = mb_convert_encoding($str, 'UTF-8', 'UTF-16BE');
+      $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16BE');
       if ($test !== false && strlen($test) > 1) {
-        $test2 = mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
-        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
+        $test2 = \mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
+        $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
         if ($test3 == $test) {
           $strChars = self::count_chars($str);
           foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
@@ -3342,10 +3341,10 @@ class UTF8
       self::checkForSupport();
 
       $maybeUTF32LE = 0;
-      $test = mb_convert_encoding($str, 'UTF-8', 'UTF-32LE');
+      $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32LE');
       if ($test !== false && strlen($test) > 1) {
-        $test2 = mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
-        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
+        $test2 = \mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
+        $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
         if ($test3 == $test) {
           $strChars = self::count_chars($str);
           foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
@@ -3357,10 +3356,10 @@ class UTF8
       }
 
       $maybeUTF32BE = 0;
-      $test = mb_convert_encoding($str, 'UTF-8', 'UTF-32BE');
+      $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32BE');
       if ($test !== false && strlen($test) > 1) {
-        $test2 = mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
-        $test3 = mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
+        $test2 = \mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
+        $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
         if ($test3 == $test) {
           $strChars = self::count_chars($str);
           foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
@@ -3695,7 +3694,7 @@ class UTF8
     $return = extension_loaded('mbstring');
 
     if ($return === true) {
-      mb_internal_encoding('UTF-8');
+      \mb_internal_encoding('UTF-8');
     }
 
     return $return;
@@ -3900,7 +3899,7 @@ class UTF8
 
     $str = self::filter($str);
 
-    mb_parse_str($str, $result);
+    \mb_parse_str($str, $result);
   }
 
   /**
@@ -4248,7 +4247,7 @@ class UTF8
   }
 
   /**
-   * Optimized "mb_detect_encoding()"-function -> with support for UTF-16 and UTF-32.
+   * Optimized "\mb_detect_encoding()"-function -> with support for UTF-16 and UTF-32.
    *
    * @param string $str
    *
@@ -4283,9 +4282,9 @@ class UTF8
     }
 
     //
-    // 3.) check via "mb_detect_encoding()"
+    // 3.) check via "\mb_detect_encoding()"
     //
-    // INFO: UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always with "mb_detect_encoding()"
+    // INFO: UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always with "\mb_detect_encoding()"
 
     $detectOrder = array(
         'UTF-8',
@@ -4296,7 +4295,7 @@ class UTF8
 
     self::checkForSupport();
 
-    $encoding = mb_detect_encoding($str, $detectOrder, true);
+    $encoding = \mb_detect_encoding($str, $detectOrder, true);
     if (
         $encoding
         &&
@@ -4582,7 +4581,7 @@ class UTF8
       $p = 0;
       $l = strlen($str);
       while ($p < $l) {
-        $a[] = grapheme_extract($str, 1, GRAPHEME_EXTR_COUNT, $p, $p);
+        $a[] = \grapheme_extract($str, 1, GRAPHEME_EXTR_COUNT, $p, $p);
       }
     } else {
       preg_match_all('/' . Grapheme::GRAPHEME_CLUSTER_RX . '/u', $str, $a);
@@ -4760,7 +4759,7 @@ class UTF8
   public static function str_word_count($str, $format = 0, $charlist = '')
   {
     $charlist = self::rxClass($charlist, '\pL');
-    $strParts = preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $strParts = \preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 
     $len = count($strParts);
 
@@ -4817,8 +4816,8 @@ class UTF8
   public static function strcmp($str1, $str2)
   {
     return $str1 . '' === $str2 . '' ? 0 : strcmp(
-        Normalizer::normalize($str1, Normalizer::NFD),
-        Normalizer::normalize($str2, Normalizer::NFD)
+        \Normalizer::normalize($str1, \Normalizer::NFD),
+        \Normalizer::normalize($str2, \Normalizer::NFD)
     );
   }
 
@@ -4956,7 +4955,7 @@ class UTF8
       $encoding = 'UTF-8';
     }
 
-    return mb_stripos($haystack, $needle, $offset, $encoding);
+    return \mb_stripos($haystack, $needle, $offset, $encoding);
   }
 
   /**
@@ -4977,7 +4976,7 @@ class UTF8
     // init
     self::checkForSupport();
 
-    return mb_stristr($str, $needle, $before_needle, 'UTF-8');
+    return \mb_stristr($str, $needle, $before_needle, 'UTF-8');
   }
 
   /**
@@ -4986,7 +4985,7 @@ class UTF8
    * @link     http://php.net/manual/en/function.mb-strlen.php
    *
    * @param string  $str       The string being checked for length.
-   * @param string  $encoding  Set the charset for e.g. "mb_" function
+   * @param string  $encoding  Set the charset for e.g. "\mb_" function
    * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
    *
    * @return int the number of characters in
@@ -5014,7 +5013,7 @@ class UTF8
       $str = self::clean($str);
     }
 
-    return mb_strlen($str, $encoding);
+    return \mb_strlen($str, $encoding);
   }
 
   /**
@@ -5181,7 +5180,7 @@ class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // mb_strpos returns wrong position if invalid characters are found in $haystack before $needle
+      // \mb_strpos returns wrong position if invalid characters are found in $haystack before $needle
       // iconv_strpos is not tolerant to invalid characters
 
       $needle = self::clean((string)$needle);
@@ -5195,13 +5194,13 @@ class UTF8
         $encoding = 'UTF-8';
       }
 
-      return mb_strpos($haystack, $needle, $offset, $encoding);
+      return \mb_strpos($haystack, $needle, $offset, $encoding);
     }
 
     if (self::$support['iconv'] === true) {
       // ignore invalid negative offset to keep compatility
       // with php < 5.5.35, < 5.6.21, < 7.0.6
-      return grapheme_strpos($haystack, $needle, $offset > 0 ? $offset : 0);
+      return \grapheme_strpos($haystack, $needle, $offset > 0 ? $offset : 0);
     }
 
     if ($offset > 0) {
@@ -5250,7 +5249,7 @@ class UTF8
   {
     self::checkForSupport();
 
-    return mb_strrchr($haystack, $needle, $part, $encoding);
+    return \mb_strrchr($haystack, $needle, $part, $encoding);
   }
 
   /**
@@ -5297,7 +5296,7 @@ class UTF8
   {
     self::checkForSupport();
 
-    return mb_strrichr($haystack, $needle, $part, $encoding);
+    return \mb_strrichr($haystack, $needle, $part, $encoding);
   }
 
   /**
@@ -5358,18 +5357,18 @@ class UTF8
     $offset = (int)$offset;
 
     if ($cleanUtf8 === true) {
-      // mb_strrpos && iconv_strrpos is not tolerant to invalid characters
+      // \mb_strrpos && iconv_strrpos is not tolerant to invalid characters
 
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
     }
 
     if (self::$support['mbstring'] === true) {
-      return mb_strrpos($haystack, $needle, $offset, 'UTF-8');
+      return \mb_strrpos($haystack, $needle, $offset, 'UTF-8');
     }
 
     if (self::$support['iconv'] === true) {
-      return grapheme_strrpos($haystack, $needle, $offset);
+      return \grapheme_strrpos($haystack, $needle, $offset);
     }
 
     // fallback
@@ -5432,7 +5431,7 @@ class UTF8
   {
     self::checkForSupport();
 
-    return grapheme_strstr($haystack, $needle, $before_needle);
+    return \grapheme_strstr($haystack, $needle, $before_needle);
   }
 
   /**
@@ -5497,7 +5496,7 @@ class UTF8
     // init
     self::checkForSupport();
 
-    return mb_strtolower($str, $encoding);
+    return \mb_strtolower($str, $encoding);
   }
 
   /**
@@ -5509,7 +5508,7 @@ class UTF8
    */
   protected static function strtonatfold($s)
   {
-    return preg_replace('/\p{Mn}+/u', '', Normalizer::normalize($s, Normalizer::NFD));
+    return preg_replace('/\p{Mn}+/u', '', \Normalizer::normalize($s, \Normalizer::NFD));
   }
 
   /**
@@ -5536,7 +5535,7 @@ class UTF8
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
-      return mb_strtoupper($str, $encoding);
+      return \mb_strtoupper($str, $encoding);
     } else {
 
       // fallback
@@ -5610,7 +5609,7 @@ class UTF8
     // init
     self::checkForSupport();
 
-    return mb_strwidth($s, 'UTF-8');
+    return \mb_strwidth($s, 'UTF-8');
   }
 
   /**
@@ -5664,11 +5663,11 @@ class UTF8
         $encoding = 'UTF-8';
       }
 
-      return mb_substr($str, $start, $length, $encoding);
+      return \mb_substr($str, $start, $length, $encoding);
     }
 
     if (self::$support['iconv'] === true) {
-      return (string)grapheme_substr($str, $start, $length);
+      return (string)\grapheme_substr($str, $start, $length);
     }
 
     // fallback
@@ -5743,7 +5742,7 @@ class UTF8
 
     self::checkForSupport();
 
-    return mb_substr_count($haystack, $needle);
+    return \mb_substr_count($haystack, $needle);
   }
 
   /**
@@ -5816,7 +5815,7 @@ class UTF8
     if ($length === null) {
       self::checkForSupport();
 
-      $length = mb_strlen($str);
+      $length = \mb_strlen($str);
     }
 
     array_splice($smatches[0], $start, $length, $rmatches[0]);
@@ -5917,7 +5916,7 @@ class UTF8
     $s = self::clean($s);
 
     if (preg_match("/[\x80-\xFF]/", $s)) {
-      $s = Normalizer::normalize($s, Normalizer::NFKC);
+      $s = \Normalizer::normalize($s, \Normalizer::NFKC);
 
       $glibc = 'glibc' === ICONV_IMPL;
 
@@ -5953,7 +5952,7 @@ class UTF8
           if (isset($translitExtra[$c])) {
             $t = $translitExtra[$c];
           } else {
-            $t = Normalizer::normalize($c, Normalizer::NFD);
+            $t = \Normalizer::normalize($c, \Normalizer::NFD);
 
             if ($t[0] < "\x80") {
               $t = $t[0];
@@ -6111,7 +6110,7 @@ class UTF8
     $buf = preg_replace_callback(
         '/\\\\u([0-9a-f]{4})/i',
         function ($match) {
-          return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+          return \mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
         },
         $buf
     );
@@ -6120,7 +6119,7 @@ class UTF8
     $buf = preg_replace_callback(
         '/&#\d{2,4};/',
         function ($match) {
-          return mb_convert_encoding($match[0], 'UTF-8', 'HTML-ENTITIES');
+          return \mb_convert_encoding($match[0], 'UTF-8', 'HTML-ENTITIES');
         },
         $buf
     );
@@ -6569,7 +6568,7 @@ class UTF8
    */
   public static function utf8_encode($str)
   {
-    $str = utf8_encode($str);
+    $str = \utf8_encode($str);
 
     if (false === strpos($str, "\xC2")) {
       return $str;
