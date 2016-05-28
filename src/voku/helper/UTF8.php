@@ -3768,8 +3768,16 @@ class UTF8
    */
   public static function normalizeEncoding($encoding)
   {
+    static $staticNormalizeEncodingCache = array();
+
+    if (isset($staticNormalizeEncodingCache[$encoding])) {
+      return $staticNormalizeEncodingCache[$encoding];
+    }
+
     if (!$encoding) {
       return $encoding;
+    } else {
+      $encodingOrig = $encoding;
     }
 
     $encoding = (string)$encoding;
@@ -3777,9 +3785,9 @@ class UTF8
       return '';
     }
 
-    $encodingUpper = strtoupper($encoding);
+    $encoding = strtoupper($encoding);
 
-    $encodingUpperHelper = preg_replace('/[^a-zA-Z0-9\s]/', '', $encodingUpper);
+    $encodingUpperHelper = preg_replace('/[^a-zA-Z0-9\s]/', '', $encoding);
 
     $equivalences = array(
         'ISO88591'    => 'ISO-8859-1',
@@ -3798,10 +3806,12 @@ class UTF8
     );
 
     if (!empty($equivalences[$encodingUpperHelper])) {
-      return $equivalences[$encodingUpperHelper];
+      $encoding = $equivalences[$encodingUpperHelper];
     }
 
-    return $encodingUpper;
+    $staticNormalizeEncodingCache[$encodingOrig] = $encoding;
+
+    return $encoding;
   }
 
   /**
