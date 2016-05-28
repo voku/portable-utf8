@@ -2144,29 +2144,78 @@ class UTF8
   }
 
   /**
-   * Encode to UTF8 or LATIN1.
+   * encode a string
    *
    * INFO:  The different to "UTF8::utf8_encode()" is that this function, try to fix also broken / double encoding,
    *        so you can call this function also on a UTF-8 String and you don't mess the string.
    *
-   * @param string $encodingLabel ISO-8859-1 || UTF-8
-   * @param string $str
+   * @param string $encoding e.g. 'UTF-8', 'ISO-8859-1', etc.
+   * @param string $str      the string
+   * @param bool   $force    force the new encoding (we try to fix broken / double encoding for UTF-8)<br />
+   *                         otherwise we auto-detect the current string-encoding
    *
-   * @return false|string Will return false on error.
+   * @return string
    */
-  public static function encode($encodingLabel, $str)
+  public static function encode($encoding, $str, $force = true)
   {
-    $encodingLabel = self::normalizeEncoding($encodingLabel);
+    $str = (string)$str;
+    $encoding = (string)$encoding;
 
-    if ($encodingLabel === 'UTF-8') {
-      return self::to_utf8($str);
+    if (!isset($str[0], $encoding[0])) {
+      return $str;
     }
 
-    if ($encodingLabel === 'ISO-8859-1') {
-      return self::to_latin1($str);
+    $encoding = self::normalizeEncoding($encoding);
+    $encodingDetected = self::str_detect_encoding($str);
+
+    if (
+        $encodingDetected
+        &&
+        (
+            $force === true
+            ||
+            $encodingDetected !== $encoding
+        )
+    ) {
+      self::checkForSupport();
+
+      if (
+          $encoding === 'UTF-8'
+          &&
+          (
+              $force === true
+              || $encodingDetected === 'UTF-8'
+              || $encodingDetected === 'WINDOWS-1252'
+              || $encodingDetected === 'ISO-8859-1'
+          )
+      ) {
+        return self::to_utf8($str);
+      }
+
+      if (
+          $encoding === 'ISO-8859-1'
+          &&
+          (
+              $force === true
+              || $encodingDetected === 'ISO-8859-1'
+              || $encodingDetected === 'UTF-8'
+          )
+      ) {
+        return self::to_win1252($str);
+      }
+
+      $strEncoded = \mb_convert_encoding(
+          $str,
+          $encoding,
+          $encodingDetected
+      );
+
+      if ($strEncoded) {
+        return $strEncoded;
+      }
     }
 
-    return false;
+    return $str;
   }
 
   /**
@@ -2302,16 +2351,7 @@ class UTF8
     if ($convertToUtf8 === true) {
       self::checkForSupport();
 
-      $encoding = self::str_detect_encoding($data);
-
-      if ($encoding && $encoding !== 'UTF-8') {
-        $data = \mb_convert_encoding(
-            $data,
-            'UTF-8',
-            self::normalizeEncoding($encoding)
-        );
-      }
-
+      $data = self::encode('UTF-8', $data, false);
       $data = self::cleanup($data);
     }
 
@@ -2332,7 +2372,7 @@ class UTF8
   }
 
   /**
-   * Normalizes to UTF-8 NFC, converting from CP-1252 when needed.
+   * Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
    *
    * @param mixed  $var
    * @param int    $normalization_form
@@ -2385,7 +2425,7 @@ class UTF8
   }
 
   /**
-   * "filter_input()"-wrapper with normalizes to UTF-8 NFC, converting from CP-1252 when needed.
+   * "filter_input()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
    *
    * @param int    $type
    * @param string $var
@@ -2406,7 +2446,7 @@ class UTF8
   }
 
   /**
-   * "filter_input_array()"-wrapper with normalizes to UTF-8 NFC, converting from CP-1252 when needed.
+   * "filter_input_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
    *
    * @param int   $type
    * @param mixed $definition
@@ -2426,7 +2466,7 @@ class UTF8
   }
 
   /**
-   * "filter_var()"-wrapper with normalizes to UTF-8 NFC, converting from CP-1252 when needed.
+   * "filter_var()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
    *
    * @param mixed $var
    * @param int   $filter
@@ -2446,7 +2486,7 @@ class UTF8
   }
 
   /**
-   * "filter_var_array()"-wrapper with normalizes to UTF-8 NFC, converting from CP-1252 when needed.
+   * "filter_var_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
    *
    * @param array $data
    * @param mixed $definition
@@ -3722,15 +3762,24 @@ class UTF8
   /**
    * Normalize the encoding-name input.
    *
-   * @param string $encodingLabel e.g.: ISO, UTF8, WINDOWS-1251 etc.
+   * @param string $encoding e.g.: ISO, UTF8, WINDOWS-1251 etc.
    *
    * @return string e.g.: ISO-8859-1, UTF-8, ISO-8859-5 etc.
    */
-  public static function normalizeEncoding($encodingLabel)
+  public static function normalizeEncoding($encoding)
   {
-    $encoding = strtoupper($encodingLabel);
+    if (!$encoding) {
+      return $encoding;
+    }
 
-    $encoding = preg_replace('/[^a-zA-Z0-9\s]/', '', $encoding);
+    $encoding = (string)$encoding;
+    if (!isset($encoding[0])) {
+      return '';
+    }
+
+    $encodingUpper = strtoupper($encoding);
+
+    $encodingUpperHelper = preg_replace('/[^a-zA-Z0-9\s]/', '', $encodingUpper);
 
     $equivalences = array(
         'ISO88591'    => 'ISO-8859-1',
@@ -3748,11 +3797,11 @@ class UTF8
         'WINDOWS1251' => 'ISO-8859-5',
     );
 
-    if (empty($equivalences[$encoding])) {
-      return $encodingLabel;
+    if (!empty($equivalences[$encodingUpperHelper])) {
+      return $equivalences[$encodingUpperHelper];
     }
 
-    return $equivalences[$encoding];
+    return $encodingUpper;
   }
 
   /**
@@ -3981,7 +4030,7 @@ class UTF8
 
     if (0 === strpos($str, "\xef\xbb\xbf")) { // UTF-8 BOM
       $str = substr($str, 3);
-    } elseif (0 === strpos($str, 'ï»¿')) { // UTF-8 BOM as "Windows-1252"
+    } elseif (0 === strpos($str, 'ï»¿')) { // UTF-8 BOM as "WINDOWS-1252"
       $str = substr($str, 6); // INFO: one char has (maybe) more then one byte ...
     } elseif (0 === strpos($str, "\x00\x00\xfe\xff")) { // UTF-32 (BE) BOM
       $str = substr($str, 4);
@@ -3989,11 +4038,11 @@ class UTF8
       $str = substr($str, 4);
     } elseif (0 === strpos($str, "\xfe\xff")) { // UTF-16 (BE) BOM
       $str = substr($str, 2);
-    } elseif (0 === strpos($str, 'þÿ')) { // UTF-16 (BE) BOM as "Windows-1252"
+    } elseif (0 === strpos($str, 'þÿ')) { // UTF-16 (BE) BOM as "WINDOWS-1252"
       $str = substr($str, 4);
     } elseif (0 === strpos($str, "\xff\xfe")) { // UTF-16 (LE) BOM
       $str = substr($str, 2);
-    } elseif (0 === strpos($str, 'ÿþ')) { // UTF-16 (LE) BOM as "Windows-1252"
+    } elseif (0 === strpos($str, 'ÿþ')) { // UTF-16 (LE) BOM as "WINDOWS-1252"
       $str = substr($str, 4);
     }
 
@@ -4290,34 +4339,34 @@ class UTF8
     }
 
     //
-    // 3.) check via "\mb_detect_encoding()"
+    // 3.) simple check for UTF-8 chars
+    //
+
+    if (self::is_utf8($str) === true) {
+      return 'UTF-8';
+    }
+
+    //
+    // 4.) check via "\mb_detect_encoding()"
     //
     // INFO: UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always with "\mb_detect_encoding()"
 
     $detectOrder = array(
-        'UTF-8',
         'windows-1251',
         'ISO-8859-1',
         'ASCII',
+        'UTF-8',
     );
 
     self::checkForSupport();
 
     $encoding = \mb_detect_encoding($str, $detectOrder, true);
-    if (
-        $encoding
-        &&
-        (
-            $encoding !== 'UTF-8'
-            ||
-            ($encoding === 'UTF-8' && self::is_utf8($str) === true)
-        )
-    ) {
+    if ($encoding) {
       return $encoding;
     }
 
     //
-    // 4.) check via "iconv()"
+    // 5.) check via "iconv()"
     //
 
     $md5 = md5($str);
@@ -6010,7 +6059,7 @@ class UTF8
   /**
    * This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.
    *
-   * - It assumes that the encoding of the original string is either Windows-1252 or ISO 8859-1.
+   * - It assumes that the encoding of the original string is either WINDOWS-1252 or ISO-8859-1.
    *
    * - It may fail to convert characters to UTF-8 if they fall into one of these scenarios:
    *
@@ -6597,7 +6646,7 @@ class UTF8
   /**
    * fix -> utf8-win1252 chars
    *
-   * If you received an UTF-8 string that was converted from Windows-1252 as it was ISO8859-1
+   * If you received an UTF-8 string that was converted from Windows-1252 as it was ISO-8859-1
    * (ignoring Windows-1252 chars from 80 to 9F) use this function to fix it.
    * See: http://en.wikipedia.org/wiki/Windows-1252
    *

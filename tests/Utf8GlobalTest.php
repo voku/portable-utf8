@@ -929,17 +929,32 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testEncodeUtf8()
+  public function testEncode()
   {
     $tests = array(
         '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::encode('UTF-8', $before));
+      self::assertEquals($after, UTF8::encode('', $before)); // do nothing
+    }
+
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::encode('UTF8', $before)); // UTF-8
     }
 
     $tests = array(
@@ -947,10 +962,25 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::filter(UTF8::encode('ISO-8859-1', $before)));
+      self::assertEquals($after, UTF8::filter(UTF8::encode('ISo88591', $before))); // ISO-8859-1
+    }
+
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => '???',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before)))); // ISO-8859-15
     }
   }
 
@@ -1112,7 +1142,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // INFO: UTF-8 shim only works for UTF-8
     if (UTF8::mbstring_loaded() === true) {
 
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf16pe.txt');
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf16be.txt');
       self::assertContains(
           '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
           $testString
@@ -1133,7 +1163,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Iso8859-7.txt');
       self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf16pe.txt', FILE_TEXT);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/test1Utf16be.txt', FILE_TEXT);
       self::assertContains(
           '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
           $testString
