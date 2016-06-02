@@ -2359,7 +2359,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     $tests = array(
         ''  => '',
-        0   => 0,
+        0   => '00110000',
         '1' => '00110001',
         '~' => '01111110',
         '§' => '1100001010100111',
