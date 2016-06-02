@@ -3919,7 +3919,7 @@ class UTF8
    */
   public static function ord($s)
   {
-    if (!$s  && $s !== "0") {
+    if (!$s  && $s !== '0') {
       return 0;
     }
 
