@@ -2047,7 +2047,7 @@ class UTF8
   /**
    * Clean-up a and show only printable UTF-8 chars at the end.
    *
-   * @param string|false $str
+   * @param string $str
    *
    * @return string
    */
