@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>phpDox - voku\helper\UTF8</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  </head>
+  <body>
+    <nav class="topnav">
+      <ul>
+        <li>
+          <div class="logo"><span>/**</span>phpDox</div>
+        </li>
+        <li class="separator">
+          <a href="../index.xhtml">Overview</a>
+        </li>
+        <li class="separator">
+          <a href="../namespaces.xhtml">Namespaces</a>
+        </li>
+        <li>
+          <a href="../classes.xhtml">Classes</a>
+        </li>
+        <li class="separator">
+          <a href="../source/index.xhtml">Source</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mainstage">
+      <div class="box">
+        <ul class="breadcrumb">
+          <li>
+            <a href="../index.xhtml">Overview</a>
+          </li>
+          <li class="separator">
+            <a href="../classes.xhtml">Classes</a>
+          </li>
+          <li class="separator">
+            <a href="../classes.xhtml#voku_helper">voku\helper</a>
+          </li>
+          <li class="separator">UTF8</li>
+        </ul>
+      </div>
+      <nav class="box">
+        <ul>
+          <li>
+            <a href="#introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#synopsis">Synopsis</a>
+          </li>
+          <li>
+            <a href="#members">Members</a>
+          </li>
+          <li>
+            <a href="#methods">Methods</a>
+          </li>
+          <li>
+            <a href="../source/voku/helper/UTF8.php.xhtml#line13">Source</a>
+          </li>
+        </ul>
+      </nav>
+      <section>
+        <h1 id="introduction"><small>voku\helper\</small>UTF8</h1>
+        <h4>UTF8-Helper-Class</h4>
+        <p/>
+        <ul/>
+        <h2 id="synopsis">Synopsis</h2>
+        <div class="synopsis">class UTF8
+            {<br/><ul class="none"><li>// members</li><li>protected static array <a href="#members">$win1252ToUtf8</a> =
+                        ;
+                    </li><li>protected static array <a href="#members">$cp1252ToUtf8</a> =
+                        ;
+                    </li><li>protected static array <a href="#members">$whitespace</a> =
+                        ;
+                    </li><li>protected static array <a href="#members">$whitespaceTable</a> =
+                        ;
+                    </li><li>protected static array <a href="#members">$bidiUniCodeControlsTable</a> =
+                        ;
+                    </li><li>protected static array <a href="#members">$commonCaseFold</a> =
+                        ;
+                    </li><li>protected static array <a href="#members">$brokenUtf8ToUtf8</a> =
+                        ;
+                    </li><li>protected static array <a href="#members">$utf8ToWin1252</a> =
+                        ;
+                    </li><li>protected static array <a href="#members">$utf8MSWord</a> =
+                        ;
+                    </li><li>protected static array <a href="#members">$iconvEncoding</a> =
+                        ;
+                    </li><li>private static array <a href="#members">$support</a> =
+                        ;
+                    </li></ul><ul class="none"><li>// methods</li><li>public void <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/__construct.xhtml">__construct</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/access.xhtml">access</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/add_bom_to_string.xhtml">add_bom_to_string</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/bom.xhtml">bom</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/callback.xhtml">callback</a>()
+                    </li><li>protected static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/case_table.xhtml">case_table</a>()
+                    </li><li>public static void <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/checkForSupport.xhtml">checkForSupport</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr.xhtml">chr</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr_map.xhtml">chr_map</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr_size_list.xhtml">chr_size_list</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr_to_decimal.xhtml">chr_to_decimal</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr_to_hex.xhtml">chr_to_hex</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chunk_split.xhtml">chunk_split</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/clean.xhtml">clean</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/cleanup.xhtml">cleanup</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/codepoints.xhtml">codepoints</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/count_chars.xhtml">count_chars</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/decimal_to_chr.xhtml">decimal_to_chr</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/encode.xhtml">encode</a>()
+                    </li><li>protected static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/entityCallback.xhtml">entityCallback</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/file_get_contents.xhtml">file_get_contents</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/file_has_bom.xhtml">file_has_bom</a>()
+                    </li><li>public static mixed <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter.xhtml">filter</a>()
+                    </li><li>public static mixed <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter_input.xhtml">filter_input</a>()
+                    </li><li>public static mixed <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter_input_array.xhtml">filter_input_array</a>()
+                    </li><li>public static mixed <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter_var.xhtml">filter_var</a>()
+                    </li><li>public static mixed <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter_var_array.xhtml">filter_var_array</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/fits_inside.xhtml">fits_inside</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/fix_simple_utf8.xhtml">fix_simple_utf8</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/fix_utf8.xhtml">fix_utf8</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/getCharDirection.xhtml">getCharDirection</a>()
+                    </li><li>protected static bool|string|array|int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/getData.xhtml">getData</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/hash.xhtml">hash</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/hex_to_int.xhtml">hex_to_int</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/html_encode.xhtml">html_encode</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/html_entity_decode.xhtml">html_entity_decode</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/htmlentities.xhtml">htmlentities</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/htmlspecialchars.xhtml">htmlspecialchars</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/iconv_loaded.xhtml">iconv_loaded</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/int_to_hex.xhtml">int_to_hex</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/intl_loaded.xhtml">intl_loaded</a>()
+                    </li><li>public static boolean <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isAscii.xhtml">isAscii</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isBase64.xhtml">isBase64</a>()
+                    </li><li>public static boolean <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isBom.xhtml">isBom</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isJson.xhtml">isJson</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isUtf8.xhtml">isUtf8</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_ascii.xhtml">is_ascii</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_base64.xhtml">is_base64</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_binary.xhtml">is_binary</a>()
+                    </li><li>public static boolean <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_binary_file.xhtml">is_binary_file</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_bom.xhtml">is_bom</a>()
+                    </li><li>public static int|false <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_utf16.xhtml">is_utf16</a>()
+                    </li><li>public static int|false <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_utf32.xhtml">is_utf32</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_utf8.xhtml">is_utf8</a>()
+                    </li><li>public static mixed <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/json_decode.xhtml">json_decode</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/json_encode.xhtml">json_encode</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/lcfirst.xhtml">lcfirst</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ltrim.xhtml">ltrim</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/max.xhtml">max</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/max_chr_width.xhtml">max_chr_width</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/mbstring_loaded.xhtml">mbstring_loaded</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/min.xhtml">min</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/normalizeEncoding.xhtml">normalizeEncoding</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/normalize_msword.xhtml">normalize_msword</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/normalize_whitespace.xhtml">normalize_whitespace</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/number_format.xhtml">number_format</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ord.xhtml">ord</a>()
+                    </li><li>public static void <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/parse_str.xhtml">parse_str</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/pcre_utf8_support.xhtml">pcre_utf8_support</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/range.xhtml">range</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/removeBOM.xhtml">removeBOM</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/remove_duplicates.xhtml">remove_duplicates</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/remove_invisible_characters.xhtml">remove_invisible_characters</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/replace_diamond_question_mark.xhtml">replace_diamond_question_mark</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/rtrim.xhtml">rtrim</a>()
+                    </li><li>protected static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/rxClass.xhtml">rxClass</a>()
+                    </li><li>public static void <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/showSupport.xhtml">showSupport</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/single_chr_html_encode.xhtml">single_chr_html_encode</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/split.xhtml">split</a>()
+                    </li><li>public static false|string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_detect_encoding.xhtml">str_detect_encoding</a>()
+                    </li><li>public static mixed <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_ireplace.xhtml">str_ireplace</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_limit_after_word.xhtml">str_limit_after_word</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_pad.xhtml">str_pad</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_repeat.xhtml">str_repeat</a>()
+                    </li><li>public static mixed <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_replace.xhtml">str_replace</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_shuffle.xhtml">str_shuffle</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_sort.xhtml">str_sort</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_split.xhtml">str_split</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_to_binary.xhtml">str_to_binary</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_transliterate.xhtml">str_transliterate</a>()
+                    </li><li>public static array|float <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_word_count.xhtml">str_word_count</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strcasecmp.xhtml">strcasecmp</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strcmp.xhtml">strcmp</a>()
+                    </li><li>public static int|null <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strcspn.xhtml">strcspn</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/string.xhtml">string</a>()
+                    </li><li>public static bool <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/string_has_bom.xhtml">string_has_bom</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strip_tags.xhtml">strip_tags</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/stripos.xhtml">stripos</a>()
+                    </li><li>public static false|string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/stristr.xhtml">stristr</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strlen.xhtml">strlen</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strnatcasecmp.xhtml">strnatcasecmp</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strnatcmp.xhtml">strnatcmp</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strncasecmp.xhtml">strncasecmp</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strncmp.xhtml">strncmp</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strpbrk.xhtml">strpbrk</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strpos.xhtml">strpos</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strrchr.xhtml">strrchr</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strrev.xhtml">strrev</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strrichr.xhtml">strrichr</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strripos.xhtml">strripos</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strrpos.xhtml">strrpos</a>()
+                    </li><li>public static int|null <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strspn.xhtml">strspn</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strstr.xhtml">strstr</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtocasefold.xhtml">strtocasefold</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtolower.xhtml">strtolower</a>()
+                    </li><li>protected static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtonatfold.xhtml">strtonatfold</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtoupper.xhtml">strtoupper</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtr.xhtml">strtr</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strwidth.xhtml">strwidth</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/substr.xhtml">substr</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/substr_compare.xhtml">substr_compare</a>()
+                    </li><li>public static int <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/substr_count.xhtml">substr_count</a>()
+                    </li><li>public static array|string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/substr_replace.xhtml">substr_replace</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/swapCase.xhtml">swapCase</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/toAscii.xhtml">toAscii</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/toLatin1.xhtml">toLatin1</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/toUTF8.xhtml">toUTF8</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_ascii.xhtml">to_ascii</a>()
+                    </li><li>public static array|string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_iso8859.xhtml">to_iso8859</a>()
+                    </li><li>public static string|array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_latin1.xhtml">to_latin1</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_utf8.xhtml">to_utf8</a>()
+                    </li><li>protected static string|array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_win1252.xhtml">to_win1252</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/trim.xhtml">trim</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ucfirst.xhtml">ucfirst</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ucword.xhtml">ucword</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ucwords.xhtml">ucwords</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/urldecode.xhtml">urldecode</a>()
+                    </li><li>public static mixed <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/urldecode_fix_win1252_chars.xhtml">urldecode_fix_win1252_chars</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/utf8_decode.xhtml">utf8_decode</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/utf8_encode.xhtml">utf8_encode</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/utf8_fix_win1252_chars.xhtml">utf8_fix_win1252_chars</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/whitespace_table.xhtml">whitespace_table</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/words_limit.xhtml">words_limit</a>()
+                    </li><li>public static string <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/wordwrap.xhtml">wordwrap</a>()
+                    </li><li>public static array <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ws.xhtml">ws</a>()
+                    </li></ul>
+
+            }<br/></div>
+        <h2 id="members">Members</h2>
+        <div class="styled members">
+          <h4>private</h4>
+          <ul class="members">
+            <li id="support"><strong>$support</strong>
+                —
+                array</li>
+          </ul>
+          <h4>protected</h4>
+          <ul class="members">
+            <li id="bidiUniCodeControlsTable"><strong>$bidiUniCodeControlsTable</strong>
+                —
+                array<br/><span class="indent">bidirectional text chars</span></li>
+            <li id="brokenUtf8ToUtf8"><strong>$brokenUtf8ToUtf8</strong>
+                —
+                array</li>
+            <li id="commonCaseFold"><strong>$commonCaseFold</strong>
+                —
+                array</li>
+            <li id="cp1252ToUtf8"><strong>$cp1252ToUtf8</strong>
+                —
+                array</li>
+            <li id="iconvEncoding">
+              <strong>$iconvEncoding</strong>
+            </li>
+            <li id="utf8MSWord"><strong>$utf8MSWord</strong>
+                —
+                array</li>
+            <li id="utf8ToWin1252"><strong>$utf8ToWin1252</strong>
+                —
+                array</li>
+            <li id="whitespace"><strong>$whitespace</strong>
+                —
+                array<br/><span class="indent">Numeric code point =&gt; UTF-8 Character</span></li>
+            <li id="whitespaceTable"><strong>$whitespaceTable</strong>
+                —
+                array</li>
+            <li id="win1252ToUtf8"><strong>$win1252ToUtf8</strong>
+                —
+                array</li>
+          </ul>
+        </div>
+        <h2 id="methods">Methods</h2>
+        <div class="styled">
+          <h4>protected</h4>
+          <ul>
+            <li id="case_table"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/case_table.xhtml">case_table()</a>
+                — Returns an array of all lower and upper case UTF-8 encoded characters.</li>
+            <li id="entityCallback"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/entityCallback.xhtml">entityCallback()</a>
+                — Callback function for preg_replace_callback use.</li>
+            <li id="getData"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/getData.xhtml">getData()</a>
+                — get data from "/data/*.ser"</li>
+            <li id="rxClass"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/rxClass.xhtml">rxClass()</a>
+                — rxClass</li>
+            <li id="strtonatfold"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtonatfold.xhtml">strtonatfold()</a>
+                — Generic case sensitive transformation for collation matching.</li>
+            <li id="to_win1252"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_win1252.xhtml">to_win1252()</a>
+                — Convert a string into "win1252"-encoding.</li>
+          </ul>
+          <h4>public</h4>
+          <ul>
+            <li id="__construct"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/__construct.xhtml">__construct()</a>
+                — __construct()</li>
+            <li id="access"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/access.xhtml">access()</a>
+                — Returns a single UTF-8 character from string.</li>
+            <li id="add_bom_to_string"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/add_bom_to_string.xhtml">add_bom_to_string()</a>
+                — Prepends BOM character to the string and returns the whole string.</li>
+            <li id="bom"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/bom.xhtml">bom()</a>
+                — Returns the Byte Order Mark Character.</li>
+            <li id="callback">
+              <a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/callback.xhtml">callback()</a>
+            </li>
+            <li id="checkForSupport"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/checkForSupport.xhtml">checkForSupport()</a>
+                — check for UTF8-Support</li>
+            <li id="chr"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr.xhtml">chr()</a>
+                — Generates a UTF-8 encoded character from the given code point.</li>
+            <li id="chr_map"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr_map.xhtml">chr_map()</a>
+                — Applies callback to all characters of a string.</li>
+            <li id="chr_size_list"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr_size_list.xhtml">chr_size_list()</a>
+                — Generates an array of byte length of each character of a Unicode string.</li>
+            <li id="chr_to_decimal"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr_to_decimal.xhtml">chr_to_decimal()</a>
+                — Get a decimal code representation of a specific character.</li>
+            <li id="chr_to_hex"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chr_to_hex.xhtml">chr_to_hex()</a>
+                — Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.</li>
+            <li id="chunk_split"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/chunk_split.xhtml">chunk_split()</a>
+                — Splits a string into smaller chunks and multiple lines, using the specified line ending character.</li>
+            <li id="clean"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/clean.xhtml">clean()</a>
+                — accepts a string and removes all non-UTF-8 characters from it.</li>
+            <li id="cleanup"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/cleanup.xhtml">cleanup()</a>
+                — Clean-up a and show only printable UTF-8 chars at the end.</li>
+            <li id="codepoints"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/codepoints.xhtml">codepoints()</a>
+                — Accepts a string and returns an array of Unicode code points.</li>
+            <li id="count_chars"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/count_chars.xhtml">count_chars()</a>
+                — Returns count of characters used in a string.</li>
+            <li id="decimal_to_chr"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/decimal_to_chr.xhtml">decimal_to_chr()</a>
+                — Get a UTF-8 character from its decimal code representation.</li>
+            <li id="encode"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/encode.xhtml">encode()</a>
+                — encode a string</li>
+            <li id="file_get_contents"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/file_get_contents.xhtml">file_get_contents()</a>
+                — Reads entire file into a string.</li>
+            <li id="file_has_bom"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/file_has_bom.xhtml">file_has_bom()</a>
+                — Checks if a file starts with BOM character.</li>
+            <li id="filter"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter.xhtml">filter()</a>
+                — Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</li>
+            <li id="filter_input"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter_input.xhtml">filter_input()</a>
+                — "filter_input()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</li>
+            <li id="filter_input_array"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter_input_array.xhtml">filter_input_array()</a>
+                — "filter_input_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</li>
+            <li id="filter_var"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter_var.xhtml">filter_var()</a>
+                — "filter_var()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</li>
+            <li id="filter_var_array"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/filter_var_array.xhtml">filter_var_array()</a>
+                — "filter_var_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</li>
+            <li id="fits_inside"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/fits_inside.xhtml">fits_inside()</a>
+                — Checks if the number of Unicode characters in a string are not more than the specified integer.</li>
+            <li id="fix_simple_utf8"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/fix_simple_utf8.xhtml">fix_simple_utf8()</a>
+                — Fixing a broken UTF-8 string.</li>
+            <li id="fix_utf8"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/fix_utf8.xhtml">fix_utf8()</a>
+                — Fix a double (or multiple) encoded UTF8 string.</li>
+            <li id="getCharDirection"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/getCharDirection.xhtml">getCharDirection()</a>
+                — Get character of a specific character.</li>
+            <li id="hash"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/hash.xhtml">hash()</a>
+                — Creates a random string of UTF-8 characters.</li>
+            <li id="hex_to_int"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/hex_to_int.xhtml">hex_to_int()</a>
+                — Converts hexadecimal U+xxxx code point representation to Integer.</li>
+            <li id="html_encode"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/html_encode.xhtml">html_encode()</a>
+                — Converts a UTF-8 string to a series of HTML numbered entities.</li>
+            <li id="html_entity_decode"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/html_entity_decode.xhtml">html_entity_decode()</a>
+                — UTF-8 version of html_entity_decode()</li>
+            <li id="htmlentities"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/htmlentities.xhtml">htmlentities()</a>
+                — Convert all applicable characters to HTML entities: UTF-8 version of htmlentities()</li>
+            <li id="htmlspecialchars"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/htmlspecialchars.xhtml">htmlspecialchars()</a>
+                — Convert special characters to HTML entities: UTF-8 version of htmlspecialchars()</li>
+            <li id="iconv_loaded"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/iconv_loaded.xhtml">iconv_loaded()</a>
+                — checks whether iconv is available on the server</li>
+            <li id="int_to_hex"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/int_to_hex.xhtml">int_to_hex()</a>
+                — Converts Integer to hexadecimal U+xxxx code point representation.</li>
+            <li id="intl_loaded"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/intl_loaded.xhtml">intl_loaded()</a>
+                — checks whether intl is available on the server</li>
+            <li id="isAscii"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isAscii.xhtml">isAscii()</a>
+                — alias for "UTF8::is_ascii()"</li>
+            <li id="isBase64"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isBase64.xhtml">isBase64()</a>
+                — alias for "UTF8::is_base64"</li>
+            <li id="isBom"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isBom.xhtml">isBom()</a>
+                — alias for "UTF8::is_bom"</li>
+            <li id="isJson"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isJson.xhtml">isJson()</a>
+                — Try to check if a string is a json-string...</li>
+            <li id="isUtf8"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/isUtf8.xhtml">isUtf8()</a>
+                — alias for "UTF8::is_utf8"</li>
+            <li id="is_ascii"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_ascii.xhtml">is_ascii()</a>
+                — Checks if a string is 7 bit ASCII.</li>
+            <li id="is_base64"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_base64.xhtml">is_base64()</a>
+                — Returns true if the string is base64 encoded, false otherwise.</li>
+            <li id="is_binary"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_binary.xhtml">is_binary()</a>
+                — Check if the input is binary... (is look like a hack)</li>
+            <li id="is_binary_file"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_binary_file.xhtml">is_binary_file()</a>
+                — Check if the file is binary.</li>
+            <li id="is_bom"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_bom.xhtml">is_bom()</a>
+                — Checks if the given string is exactly "UTF8 - Byte Order Mark".</li>
+            <li id="is_utf16"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_utf16.xhtml">is_utf16()</a>
+                — Check if the string is UTF-16.</li>
+            <li id="is_utf32"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_utf32.xhtml">is_utf32()</a>
+                — Check if the string is UTF-32.</li>
+            <li id="is_utf8"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/is_utf8.xhtml">is_utf8()</a>
+                — Checks whether the passed string contains only byte sequences that appear valid UTF-8 characters.</li>
+            <li id="json_decode"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/json_decode.xhtml">json_decode()</a>
+                — (PHP 5 &amp;gt;= 5.2.0, PECL json &amp;gt;= 1.2.0)&lt;br/&gt; Decodes a JSON string</li>
+            <li id="json_encode"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/json_encode.xhtml">json_encode()</a>
+                — (PHP 5 &amp;gt;= 5.2.0, PECL json &amp;gt;= 1.2.0)&lt;br/&gt; Returns the JSON representation of a value</li>
+            <li id="lcfirst"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/lcfirst.xhtml">lcfirst()</a>
+                — Makes string's first char lowercase.</li>
+            <li id="ltrim"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ltrim.xhtml">ltrim()</a>
+                — Strip whitespace or other characters from beginning of a UTF-8 string.</li>
+            <li id="max"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/max.xhtml">max()</a>
+                — Returns the UTF-8 character with the maximum code point in the given data.</li>
+            <li id="max_chr_width"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/max_chr_width.xhtml">max_chr_width()</a>
+                — Calculates and returns the maximum number of bytes taken by any UTF-8 encoded character in the given string.</li>
+            <li id="mbstring_loaded"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/mbstring_loaded.xhtml">mbstring_loaded()</a>
+                — checks whether mbstring is available on the server</li>
+            <li id="min"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/min.xhtml">min()</a>
+                — Returns the UTF-8 character with the minimum code point in the given data.</li>
+            <li id="normalizeEncoding"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/normalizeEncoding.xhtml">normalizeEncoding()</a>
+                — Normalize the encoding-name input.</li>
+            <li id="normalize_msword"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/normalize_msword.xhtml">normalize_msword()</a>
+                — Normalize MS Word special characters.</li>
+            <li id="normalize_whitespace"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/normalize_whitespace.xhtml">normalize_whitespace()</a>
+                — Normalize the whitespace.</li>
+            <li id="number_format"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/number_format.xhtml">number_format()</a>
+                — Format a number with grouped thousands.</li>
+            <li id="ord"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ord.xhtml">ord()</a>
+                — Calculates Unicode code point of the given UTF-8 encoded character.</li>
+            <li id="parse_str"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/parse_str.xhtml">parse_str()</a>
+                — Parses the string into variables.</li>
+            <li id="pcre_utf8_support"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/pcre_utf8_support.xhtml">pcre_utf8_support()</a>
+                — checks if \u modifier is available that enables Unicode support in PCRE.</li>
+            <li id="range"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/range.xhtml">range()</a>
+                — Create an array containing a range of UTF-8 characters.</li>
+            <li id="removeBOM"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/removeBOM.xhtml">removeBOM()</a>
+                — Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.</li>
+            <li id="remove_duplicates"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/remove_duplicates.xhtml">remove_duplicates()</a>
+                — Removes duplicate occurrences of a string in another string.</li>
+            <li id="remove_invisible_characters"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/remove_invisible_characters.xhtml">remove_invisible_characters()</a>
+                — Remove Invisible Characters</li>
+            <li id="replace_diamond_question_mark"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/replace_diamond_question_mark.xhtml">replace_diamond_question_mark()</a>
+                — replace diamond question mark (�)</li>
+            <li id="rtrim"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/rtrim.xhtml">rtrim()</a>
+                — Strip whitespace or other characters from end of a UTF-8 string.</li>
+            <li id="showSupport"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/showSupport.xhtml">showSupport()</a>
+                — Echo native UTF8-Support libs, e.g. for debugging.</li>
+            <li id="single_chr_html_encode"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/single_chr_html_encode.xhtml">single_chr_html_encode()</a>
+                — Converts a UTF-8 character to HTML Numbered Entity like "&amp;#123;".</li>
+            <li id="split"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/split.xhtml">split()</a>
+                — Convert a string to an array of Unicode characters.</li>
+            <li id="str_detect_encoding"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_detect_encoding.xhtml">str_detect_encoding()</a>
+                — Optimized "\mb_detect_encoding()"-function -&gt; with support for UTF-16 and UTF-32.</li>
+            <li id="str_ireplace"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_ireplace.xhtml">str_ireplace()</a>
+                — Case-insensitive and UTF-8 safe version of &lt;function&gt;str_replace&lt;/function&gt;.</li>
+            <li id="str_limit_after_word"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_limit_after_word.xhtml">str_limit_after_word()</a>
+                — Limit the number of characters in a string, but also after the next word.</li>
+            <li id="str_pad"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_pad.xhtml">str_pad()</a>
+                — Pad a UTF-8 string to given length with another string.</li>
+            <li id="str_repeat"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_repeat.xhtml">str_repeat()</a>
+                — Repeat a string.</li>
+            <li id="str_replace"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_replace.xhtml">str_replace()</a>
+                — INFO: this is only a wrapper for "str_replace()"  -&gt; the original functions is already UTF-8 safe</li>
+            <li id="str_shuffle"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_shuffle.xhtml">str_shuffle()</a>
+                — Shuffles all the characters in the string.</li>
+            <li id="str_sort"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_sort.xhtml">str_sort()</a>
+                — Sort all characters according to code points.</li>
+            <li id="str_split"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_split.xhtml">str_split()</a>
+                — Convert a string to an array.</li>
+            <li id="str_to_binary"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_to_binary.xhtml">str_to_binary()</a>
+                — Get a binary representation of a specific character.</li>
+            <li id="str_transliterate"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_transliterate.xhtml">str_transliterate()</a>
+                — US-ASCII transliterations of Unicode text.</li>
+            <li id="str_word_count"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/str_word_count.xhtml">str_word_count()</a>
+                — Counts number of words in the UTF-8 string.</li>
+            <li id="strcasecmp"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strcasecmp.xhtml">strcasecmp()</a>
+                — Case-insensitive string comparison.</li>
+            <li id="strcmp"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strcmp.xhtml">strcmp()</a>
+                — String comparison.</li>
+            <li id="strcspn"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strcspn.xhtml">strcspn()</a>
+                — Find length of initial segment not matching mask.</li>
+            <li id="string"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/string.xhtml">string()</a>
+                — Makes a UTF-8 string from code points.</li>
+            <li id="string_has_bom"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/string_has_bom.xhtml">string_has_bom()</a>
+                — Checks if string starts with "UTF-8 BOM" character.</li>
+            <li id="strip_tags"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strip_tags.xhtml">strip_tags()</a>
+                — Strip HTML and PHP tags from a string.</li>
+            <li id="stripos"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/stripos.xhtml">stripos()</a>
+                — Finds position of first occurrence of a string within another, case insensitive.</li>
+            <li id="stristr"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/stristr.xhtml">stristr()</a>
+                — Returns all of haystack starting from and including the first occurrence of needle to the end.</li>
+            <li id="strlen"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strlen.xhtml">strlen()</a>
+                — Get the string length, not the byte-length!</li>
+            <li id="strnatcasecmp"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strnatcasecmp.xhtml">strnatcasecmp()</a>
+                — Case insensitive string comparisons using a "natural order" algorithm.</li>
+            <li id="strnatcmp"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strnatcmp.xhtml">strnatcmp()</a>
+                — String comparisons using a "natural order" algorithm</li>
+            <li id="strncasecmp"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strncasecmp.xhtml">strncasecmp()</a>
+                — Binary safe case-insensitive string comparison of the first n characters</li>
+            <li id="strncmp"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strncmp.xhtml">strncmp()</a>
+                — Binary safe string comparison of the first n characters</li>
+            <li id="strpbrk"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strpbrk.xhtml">strpbrk()</a>
+                — Search a string for any of a set of characters</li>
+            <li id="strpos"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strpos.xhtml">strpos()</a>
+                — Find position of first occurrence of string in a string.</li>
+            <li id="strrchr"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strrchr.xhtml">strrchr()</a>
+                — Finds the last occurrence of a character in a string within another.</li>
+            <li id="strrev"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strrev.xhtml">strrev()</a>
+                — Reverses characters order in the string.</li>
+            <li id="strrichr"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strrichr.xhtml">strrichr()</a>
+                — Finds the last occurrence of a character in a string within another, case insensitive.</li>
+            <li id="strripos"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strripos.xhtml">strripos()</a>
+                — Find position of last occurrence of a case-insensitive string.</li>
+            <li id="strrpos"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strrpos.xhtml">strrpos()</a>
+                — Find position of last occurrence of a string in a string.</li>
+            <li id="strspn"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strspn.xhtml">strspn()</a>
+                — Finds the length of the initial segment of a string consisting entirely of characters contained within a given mask.</li>
+            <li id="strstr"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strstr.xhtml">strstr()</a>
+                — Returns part of haystack string from the first occurrence of needle to the end of haystack.</li>
+            <li id="strtocasefold"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtocasefold.xhtml">strtocasefold()</a>
+                — Unicode transformation for case-less matching.</li>
+            <li id="strtolower"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtolower.xhtml">strtolower()</a>
+                — (PHP 4 &amp;gt;= 4.3.0, PHP 5)&lt;br/&gt; Make a string lowercase.</li>
+            <li id="strtoupper"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtoupper.xhtml">strtoupper()</a>
+                — Make a string uppercase.</li>
+            <li id="strtr"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strtr.xhtml">strtr()</a>
+                — Translate characters or replace sub-strings.</li>
+            <li id="strwidth"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/strwidth.xhtml">strwidth()</a>
+                — Return the width of a string.</li>
+            <li id="substr"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/substr.xhtml">substr()</a>
+                — Get part of a string.</li>
+            <li id="substr_compare"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/substr_compare.xhtml">substr_compare()</a>
+                — Binary safe comparison of two strings from an offset, up to length characters.</li>
+            <li id="substr_count"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/substr_count.xhtml">substr_count()</a>
+                — Count the number of substring occurrences</li>
+            <li id="substr_replace"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/substr_replace.xhtml">substr_replace()</a>
+                — Replace text within a portion of a string.</li>
+            <li id="swapCase"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/swapCase.xhtml">swapCase()</a>
+                — Returns a case swapped version of the string.</li>
+            <li id="toAscii"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/toAscii.xhtml">toAscii()</a>
+                — alias for "UTF8::to_ascii()"</li>
+            <li id="toLatin1"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/toLatin1.xhtml">toLatin1()</a>
+                — alias for "UTF8::to_latin1()"</li>
+            <li id="toUTF8"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/toUTF8.xhtml">toUTF8()</a>
+                — alias for "UTF8::to_utf8"</li>
+            <li id="to_ascii"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_ascii.xhtml">to_ascii()</a>
+                — convert to ASCII</li>
+            <li id="to_iso8859"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_iso8859.xhtml">to_iso8859()</a>
+                — alias for "UTF8::to_win1252()"</li>
+            <li id="to_latin1"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_latin1.xhtml">to_latin1()</a>
+                — alias for "UTF8::to_win1252()"</li>
+            <li id="to_utf8"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/to_utf8.xhtml">to_utf8()</a>
+                — This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.</li>
+            <li id="trim"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/trim.xhtml">trim()</a>
+                — Strip whitespace or other characters from beginning or end of a UTF-8 string.</li>
+            <li id="ucfirst"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ucfirst.xhtml">ucfirst()</a>
+                — Makes string's first char uppercase.</li>
+            <li id="ucword"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ucword.xhtml">ucword()</a>
+                — alias for "UTF8::ucfirst"</li>
+            <li id="ucwords"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ucwords.xhtml">ucwords()</a>
+                — Uppercase for all words in the string.</li>
+            <li id="urldecode"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/urldecode.xhtml">urldecode()</a>
+                — Multi decode html entity &amp; fix urlencoded-win1252-chars.</li>
+            <li id="urldecode_fix_win1252_chars"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/urldecode_fix_win1252_chars.xhtml">urldecode_fix_win1252_chars()</a>
+                — Return a array with "urlencoded"-win1252 -&gt; UTF-8</li>
+            <li id="utf8_decode"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/utf8_decode.xhtml">utf8_decode()</a>
+                — Decodes an UTF-8 string to ISO-8859-1.</li>
+            <li id="utf8_encode"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/utf8_encode.xhtml">utf8_encode()</a>
+                — Encodes an ISO-8859-1 string to UTF-8.</li>
+            <li id="utf8_fix_win1252_chars"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/utf8_fix_win1252_chars.xhtml">utf8_fix_win1252_chars()</a>
+                — fix -&gt; utf8-win1252 chars</li>
+            <li id="whitespace_table"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/whitespace_table.xhtml">whitespace_table()</a>
+                — Returns an array with all utf8 whitespace characters.</li>
+            <li id="words_limit"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/words_limit.xhtml">words_limit()</a>
+                — Limit the number of words in a string.</li>
+            <li id="wordwrap"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/wordwrap.xhtml">wordwrap()</a>
+                — Wraps a string to a given number of characters</li>
+            <li id="ws"><a title="voku\helper\UTF8" href="../classes/voku_helper_UTF8/ws.xhtml">ws()</a>
+                — Returns an array of Unicode White Space characters.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+    <footer>
+      <span>Generated using phpDox 0.8.1.1 - Copyright (C) 2010 - 2016 by Arne Blankerts</span>
+    </footer>
+  </body>
+</html>

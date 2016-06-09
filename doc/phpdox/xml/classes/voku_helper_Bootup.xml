@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class xmlns="http://xml.phpdox.net/src" full="voku\helper\Bootup" namespace="voku\helper" name="Bootup" abstract="false" final="false" start="14" end="206">
+  <file path="/home/lars/PhpstormProjects/portable-utf8/src/voku/helper" file="Bootup.php" realpath="/home/lars/PhpstormProjects/portable-utf8/src/voku/helper/Bootup.php" size="4831" time="2016-06-09T15:26:09+00:00" unixtime="1465485969" sha1="47a4fa3bbefb0408b35ed6205734f7930e687d99" relative="voku/helper/Bootup.php"/>
+  <docblock>
+    <description compact="Class Bootup">this is a bootstrap for the polyfills (iconv / intl / mbstring / normalizer / xml)</description>
+    <package value="voku\helper"/>
+  </docblock>
+  <method name="initAll" start="19" end="24" abstract="false" final="false" static="true" visibility="public">
+    <docblock>
+      <description compact="bootstrap"/>
+    </docblock>
+  </method>
+  <method name="get_random_bytes" start="35" end="48" abstract="false" final="false" static="true" visibility="public">
+    <docblock>
+      <description compact="Get random bytes"/>
+      <ref value="https://github.com/paragonie/random_compat/"/>
+      <param description="Output length" type="int" variable="$length"/>
+      <return description="false on error" type="object">
+        <type full="voku\helper\string|false" namespace="voku\helper" name="string|false"/>
+      </return>
+    </docblock>
+    <parameter name="length" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="is_php" start="58" end="68" abstract="false" final="false" static="true" visibility="public">
+    <docblock>
+      <description compact="Determines if the current version of PHP is equal to or greater than the supplied value"/>
+      <param type="string"/>
+      <param type="string" variable="$version"/>
+      <return description="TRUE if the current version is $version or higher" type="object">
+        <type full="voku\helper\bool" namespace="voku\helper" name="bool"/>
+      </return>
+    </docblock>
+    <parameter name="version" byreference="false" type="{unknown}"/>
+  </method>
+  <method name="filterRequestUri" start="78" end="120" abstract="false" final="false" static="true" visibility="public">
+    <docblock>
+      <description compact="filter request-uri"/>
+      <param type="null" variable="$uri"/>
+      <param type="object" variable="$exit">
+        <type full="voku\helper\bool" namespace="voku\helper" name="bool"/>
+      </param>
+      <return type="object">
+        <type full="voku\helper\bool|mixed|null" namespace="voku\helper" name="bool|mixed|null"/>
+      </return>
+    </docblock>
+    <parameter name="uri" byreference="false" type="{unknown}" default="" constant="null"/>
+    <parameter name="exit" byreference="false" type="boolean" default="true"/>
+    <inline>
+      <comment value="Ensures the URL is well formed UTF-8" line="88"/>
+      <comment value="When not, assumes Windows-1252 and redirects to the corresponding UTF-8 encoded URL" line="89"/>
+    </inline>
+  </method>
+  <method name="filterRequestInputs" start="132" end="169" abstract="false" final="false" static="true" visibility="public">
+    <docblock>
+      <description compact="filter request inputs">Ensures inputs are well formed UTF-8
+When not, assumes Windows-1252 and converts to UTF-8
+Tests only values, not keys</description>
+      <param type="int" variable="$normalization_form"/>
+      <param type="string" variable="$leading_combining"/>
+    </docblock>
+    <parameter name="normalization_form" byreference="false" type="integer" default="4"/>
+    <parameter name="leading_combining" byreference="false" type="string" default="'◌'"/>
+    <inline>
+      <comment value="@noinspection ReferenceMismatchInspection" line="144"/>
+    </inline>
+  </method>
+  <method name="filterString" start="178" end="205" abstract="false" final="false" static="true" visibility="public">
+    <docblock>
+      <description/>
+      <param variable="$s"/>
+      <param type="int" variable="$normalization_form"/>
+      <param type="string" variable="$leading_combining"/>
+      <return type="object">
+        <type full="voku\helper\array|bool|mixed|string" namespace="voku\helper" name="array|bool|mixed|string"/>
+      </return>
+    </docblock>
+    <parameter name="s" byreference="false" type="{unknown}"/>
+    <parameter name="normalization_form" byreference="false" type="integer" default="4"/>
+    <parameter name="leading_combining" byreference="false" type="string" default="'◌'"/>
+  </method>
+</class>

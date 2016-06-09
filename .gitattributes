@@ -10,4 +10,5 @@
 /.travis.yml export-ignore
 /appveyor.yml export-ignore
 /circle.yml export-ignore
+/phpdox.xml export-ignore
 /phpunit.xml export-ignore

@@ -1,0 +1,2062 @@
+<?xml version="1.0"?>
+<source xmlns="http://xml.phpdox.net/token">
+  <file xmlns="http://xml.phpdox.net/src" path="/home/lars/PhpstormProjects/portable-utf8/src/voku/helper/data" file="translit_extra.php" realpath="/home/lars/PhpstormProjects/portable-utf8/src/voku/helper/data/translit_extra.php" size="4027" time="2016-06-09T15:26:09+00:00" unixtime="1465485969" sha1="6f385c527062f200d6f877370288950cae6562a2" relative="voku/helper/data/translit_extra.php"/>
+  <line no="1">
+    <token name="T_OPEN_TAG">&lt;?php</token>
+  </line>
+  <line no="2"/>
+  <line no="3">
+    <token name="T_STATIC">static</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$data</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_ARRAY">array</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+  </line>
+  <line no="4">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xD0;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'D'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="5">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xD8;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'O'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="6">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xDE;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'TH'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="7">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xF0;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'d'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="8">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xF8;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'o'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="9">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xFE;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'th'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="10">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x110;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'D'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="11">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x111;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'d'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="12">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x126;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'H'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="13">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x127;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'h'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="14">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x131;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'i'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="15">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x138;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'q'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="16">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x14A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'N'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="17">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x14B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'n'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="18">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x166;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'T'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="19">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x167;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'t'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="20">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x180;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'b'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="21">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x181;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'B'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="22">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x182;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'B'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="23">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x183;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'b'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="24">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x187;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'C'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="25">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x188;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'c'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="26">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x189;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'D'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="27">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x18A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'D'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="28">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x18B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'D'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="29">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x18C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'d'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="30">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x190;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'E'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="31">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x191;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'F'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="32">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x192;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'f'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="33">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x193;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'G'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="34">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x195;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'hv'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="35">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x196;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'I'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="36">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x197;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'I'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="37">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x198;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'K'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="38">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x199;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'k'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="39">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x19A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'l'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="40">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x19D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'N'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="41">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x19E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'n'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="42">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1A2;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'OI'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="43">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1A3;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'oi'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="44">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1A4;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'P'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="45">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1A5;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'p'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="46">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1AB;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'t'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="47">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1AC;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'T'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="48">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1AD;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'t'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="49">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1AE;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'T'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="50">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1B2;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'V'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="51">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1B3;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Y'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="52">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1B4;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'y'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="53">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1B5;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="54">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1B6;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="55">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1E4;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'G'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="56">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1E5;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'g'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="57">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x221;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'d'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="58">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x224;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="59">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x225;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="60">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x234;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'l'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="61">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x235;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'n'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="62">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x236;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'t'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="63">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x237;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'j'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="64">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x238;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'db'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="65">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x239;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'qp'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="66">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x23A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'A'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="67">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x23B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'C'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="68">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x23C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'c'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="69">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x23D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'L'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="70">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x23E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'T'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="71">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x23F;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'s'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="72">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x240;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="73">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x243;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'B'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="74">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x244;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'U'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="75">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x246;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'E'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="76">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x247;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'e'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="77">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x248;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'J'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="78">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x249;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'j'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="79">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x24C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'R'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="80">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x24D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'r'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="81">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x24E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Y'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="82">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x24F;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'y'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="83">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x253;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'b'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="84">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x255;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'c'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="85">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x256;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'d'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="86">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x257;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'d'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="87">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x25B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'e'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="88">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x25F;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'j'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="89">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x260;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'g'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="90">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x261;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'g'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="91">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x262;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'G'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="92">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x266;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'h'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="93">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x267;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'h'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="94">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x268;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'i'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="95">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x26A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'I'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="96">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x26B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'l'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="97">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x26C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'l'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="98">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x26D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'l'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="99">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x271;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'m'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="100">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x272;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'n'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="101">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x273;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'n'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="102">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x274;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'N'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="103">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x276;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'OE'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="104">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x27C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'r'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="105">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x27D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'r'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="106">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x27E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'r'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="107">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x280;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'R'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="108">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x282;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'s'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="109">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x288;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'t'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="110">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x289;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'u'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="111">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x28B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'v'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="112">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x28F;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Y'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="113">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x290;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="114">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x291;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="115">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x299;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'B'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="116">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x29B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'G'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="117">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x29C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'H'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="118">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x29D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'j'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="119">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x29F;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'L'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="120">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2A0;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'q'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="121">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2A3;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'dz'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="122">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2A5;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'dz'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="123">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2A6;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'ts'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="124">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2AA;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'ls'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="125">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2AB;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'lz'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="126">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D00;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'A'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="127">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D01;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'AE'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="128">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D03;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'B'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="129">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D04;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'C'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="130">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D05;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'D'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="131">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D06;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'D'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="132">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D07;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'E'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="133">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D0A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'J'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="134">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D0B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'K'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="135">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D0C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'L'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="136">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D0D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'M'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="137">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D0F;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'O'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="138">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D18;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'P'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="139">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D1B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'T'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="140">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D1C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'U'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="141">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D20;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'V'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="142">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D21;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'W'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="143">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D22;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="144">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D6B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'ue'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="145">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D6C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'b'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="146">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D6D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'d'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="147">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D6E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'f'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="148">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D6F;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'m'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="149">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D70;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'n'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="150">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D71;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'p'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="151">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D72;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'r'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="152">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D73;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'r'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="153">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D74;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'s'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="154">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D75;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'t'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="155">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D76;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="156">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D7A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'th'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="157">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D7B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'I'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="158">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D7D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'p'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="159">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D7E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'U'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="160">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D80;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'b'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="161">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D81;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'d'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="162">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D82;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'f'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="163">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D83;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'g'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="164">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D84;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'k'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="165">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D85;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'l'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="166">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D86;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'m'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="167">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D87;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'n'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="168">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D88;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'p'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="169">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D89;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'r'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="170">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D8A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'s'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="171">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D8C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'v'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="172">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D8D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'x'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="173">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D8E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'z'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="174">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D8F;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'a'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="175">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D91;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'d'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="176">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D92;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'e'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="177">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D93;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'e'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="178">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D96;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'i'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="179">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1D99;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'u'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="180">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1E9C;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'s'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="181">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1E9D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'s'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="182">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1E9E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'SS'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="183">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1EFA;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'LL'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="184">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1EFB;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'ll'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="185">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1EFC;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'V'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="186">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1EFD;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'v'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="187">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1EFE;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Y'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="188">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x1EFF;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'y'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="189">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x20A0;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'CE'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="190">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x20A2;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Cr'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="191">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x20A3;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Fr.'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="192">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x20A4;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'L.'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="193">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x20A7;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Pts'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="194">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x20B9;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Rs'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="195">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x211E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'Rx'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="196">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x3007;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'0'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="197">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2032;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'\''</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="198">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x301D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'"'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="199">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x301E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'"'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="200">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2016;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'||'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="201">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2045;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'['</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="202">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2046;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">']'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="203">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x204E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'*'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="204">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x3001;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">','</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="205">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x3002;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'.'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="206">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x3008;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&lt;'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="207">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x3009;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&gt;'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="208">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x300A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&lt;&lt;'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="209">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x300B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&gt;&gt;'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="210">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x3014;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'['</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="211">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x3015;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">']'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="212">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x3018;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'['</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="213">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x3019;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">']'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="214">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x301A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'['</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="215">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x301B;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">']'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="216">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xFE11;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">','</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="217">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xFE12;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'.'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="218">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xFE39;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'['</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="219">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xFE3A;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">']'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="220">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xFE3D;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&lt;&lt;'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="221">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xFE3E;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&gt;&gt;'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="222">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xFE3F;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&lt;'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="223">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xFE40;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&gt;'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="224">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#xF7;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'/'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="225">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2225;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'||'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="226">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2985;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'(('</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="227">
+    <token name="T_WHITESPACE">    </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'&#x2986;'</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_DOUBLE_ARROW">=&gt;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_CONSTANT_ENCAPSED_STRING">'))'</token>
+    <token name="T_PHPDOX_COMMA">,</token>
+  </line>
+  <line no="228">
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="229"/>
+  <line no="230">
+    <token name="T_VARIABLE">$result</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_PHPDOX_EQUAL">=</token>
+    <token name="T_PHPDOX_AMPERSAND">&amp;</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$data</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="231">
+    <token name="T_UNSET">unset</token>
+    <token name="T_PHPDOX_OPEN_BRACKET">(</token>
+    <token name="T_VARIABLE">$data</token>
+    <token name="T_PHPDOX_CLOSE_BRACKET">)</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="232">
+    <token name="T_RETURN">return</token>
+    <token name="T_WHITESPACE"> </token>
+    <token name="T_VARIABLE">$result</token>
+    <token name="T_PHPDOX_SEMICOLON">;</token>
+  </line>
+  <line no="233"/>
+</source>
