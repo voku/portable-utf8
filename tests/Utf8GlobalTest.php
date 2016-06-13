@@ -2109,7 +2109,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid UTF-8 + Invalied Chars
       "κόσμε\xa0\xa1-öäü"        => array('κόσμε-öäü' => 'κόσμε-öäü'),
       // Valid UTF-8 + ISO-Erros
-      "DÃ¼sseldorf"              => array("Düsseldorf" => "Düsseldorf"),
+      'DÃ¼sseldorf'              => array('Düsseldorf' => 'Düsseldorf'),
       // Valid ASCII
       'a'                        => array('a' => 'a'),
       // Valid emoji (non-UTF-8)
@@ -2130,9 +2130,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Invalid 3 Octet Sequence (in 3rd Octet)
       "\xe2\x82\x28"             => array('�(' => '('),
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"         => array("𐌼" => "𐌼"),
+      "\xf0\x90\x8c\xbc"         => array('𐌼' => '𐌼'),
       // Invalid 4 Octet Sequence (in 2nd Invalid 4 Octet Sequence (in 2ndOctet)
-      "\xf0\x28\x8c\xbc"         => array("�(��" => "("),
+      "\xf0\x28\x8c\xbc"         => array('�(��' => '('),
       // Valid 4 Octet Sequence
       "\xf0\x90\x8c\xbc"         => array('𐌼' => '𐌼'),
       // Invalid 4 Octet Sequence (in 2nd Octet)
@@ -2146,7 +2146,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid 6 Octet Sequence (but not Unicode!)
       "\xfc\xa1\xa1\xa1\xa1\xa1" => array('�' => ''),
       // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
-      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array("�" => " "),
+      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array('�' => ' '),
     );
     
     // <<<<--- \"this comment is only a helper for PHPStorm and non UTF-8 chars
