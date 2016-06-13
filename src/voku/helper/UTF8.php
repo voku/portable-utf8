@@ -3188,8 +3188,6 @@ class UTF8
    * @param $str
    *
    * @return bool
-   *
-   * @deprecated
    */
   public static function isJson($str)
   {
@@ -3207,6 +3205,33 @@ class UTF8
       return true;
     } else {
       return false;
+    }
+  }
+
+  /**
+   * check if string contains any html-tags <lall>
+   *
+   * @param string $str
+   *
+   * @return boolean
+   */
+  public static function isHtml($str)
+  {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return false;
+    }
+
+    // init
+    $matches = array();
+
+    preg_match("/<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/", $str, $matches);
+
+    if (count($matches) == 0) {
+      return false;
+    } else {
+      return true;
     }
   }
 

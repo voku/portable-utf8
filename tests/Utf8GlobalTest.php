@@ -143,6 +143,24 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertEquals('測試', $array['Iñtërnâtiônéàlizætiøn']);
   }
 
+  public function testIsHtml()
+  {
+    $testArray = array(
+        '<h1>test</h1>'            => true,
+        'test'                     => false,
+        '<b>lall</b>'              => true,
+        'öäü<strong>lall</strong>' => true,
+        ' <b>lall</b>'             => true,
+        '<b><b>lall</b>'           => true,
+        '</b>lall</b>'             => true,
+        '[b]lall[b]'               => false,
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      self::assertEquals($testResult, UTF8::isHtml($testString), 'tested: ' . $testString);
+    }
+  }
+
   public function testIsUtf8()
   {
     $testArray = array(
