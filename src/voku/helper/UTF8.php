@@ -1864,6 +1864,7 @@ class UTF8
       self::$support['mbstring'] = self::mbstring_loaded();
       self::$support['iconv'] = self::iconv_loaded();
       self::$support['intl'] = self::intl_loaded();
+      self::$support['intlChar'] = self::intlChar_loaded();
       self::$support['pcre_utf8'] = self::pcre_utf8_support();
     }
   }
@@ -3147,6 +3148,16 @@ class UTF8
   }
 
   /**
+   * checks whether intl-char is available on the server
+   *
+   * @return   bool True if available, False otherwise
+   */
+  public static function intlChar_loaded()
+  {
+    return Bootup::is_php('7.0') === true and class_exists('IntlChar');
+  }
+
+  /**
    * alias for "UTF8::is_ascii()"
    *
    * @param string $str
@@ -3946,6 +3957,16 @@ class UTF8
   {
     if (!$s  && $s !== '0') {
       return 0;
+    }
+
+    // init
+    self::checkForSupport();
+
+    if (self::$support['intlChar'] === true) {
+      $tmpReturn = \IntlChar::ord($s);
+      if ($tmpReturn) {
+        return $tmpReturn;
+      }
     }
 
     $s = unpack('C*', substr($s, 0, 4));
