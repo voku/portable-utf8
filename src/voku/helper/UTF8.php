@@ -3823,29 +3823,26 @@ class UTF8
    *
    * @param string $encoding e.g.: ISO, UTF8, WINDOWS-1251 etc.
    *
-   * @return string e.g.: ISO-8859-1, UTF-8, ISO-8859-5 etc.
+   * @return string e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.
    */
   public static function normalizeEncoding($encoding)
   {
     static $staticNormalizeEncodingCache = array();
 
+    if (!$encoding) {
+      return $encoding;
+    }
+
+    if (in_array($encoding, self::$iconvEncoding, true)) {
+      return $encoding;
+    }
+
     if (isset($staticNormalizeEncodingCache[$encoding])) {
       return $staticNormalizeEncodingCache[$encoding];
     }
 
-    if (!$encoding) {
-      return $encoding;
-    } else {
-      $encodingOrig = $encoding;
-    }
-
-    $encoding = (string)$encoding;
-    if (!isset($encoding[0])) {
-      return '';
-    }
-
+    $encodingOrig = $encoding;
     $encoding = strtoupper($encoding);
-
     $encodingUpperHelper = preg_replace('/[^a-zA-Z0-9\s]/', '', $encoding);
 
     $equivalences = array(
@@ -3861,7 +3858,8 @@ class UTF8
         'UTF7'        => 'UTF-7',
         'WIN1252'     => 'ISO-8859-1',
         'WINDOWS1252' => 'ISO-8859-1',
-        'WINDOWS1251' => 'ISO-8859-5',
+        '8BIT'        => 'CP850',
+        'BINARY'      => 'CP850',
     );
 
     if (!empty($equivalences[$encodingUpperHelper])) {
@@ -5137,13 +5135,20 @@ class UTF8
       return 0;
     }
 
-    // init
-    self::checkForSupport();
-
     // INFO: this is only a fallback for old versions
     if ($encoding === true || $encoding === false) {
       $encoding = 'UTF-8';
     }
+
+    $encoding = self::normalizeEncoding($encoding);
+
+    switch ($encoding) {
+      case 'ASCII':
+      case 'CP850':
+        return strlen($str);
+    }
+
+    self::checkForSupport();
 
     if ($encoding === 'UTF-8' && $cleanUtf8 === true) {
       $str = self::clean($str);
@@ -6173,9 +6178,9 @@ class UTF8
       return $str;
     }
 
-    $max = self::strlen($str, '8bit');
-
+    $max = strlen($str);
     $buf = '';
+
     /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $max; $i++) {
       $c1 = $str[$i];

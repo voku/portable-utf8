@@ -1007,7 +1007,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $tests = array(
         'ISO'          => 'ISO-8859-1',
         'UTF8'         => 'UTF-8',
-        'WINDOWS-1251' => 'ISO-8859-5',
+        'WINDOWS-1251' => 'WINDOWS-1251',
         ''             => '',
         'Utf-8'        => 'UTF-8',
         'UTF-8'        => 'UTF-8',
@@ -1016,7 +1016,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::normalizeEncoding($before));
+      self::assertEquals($after, UTF8::normalizeEncoding($before), 'tested: ' . $before);
     }
   }
 
