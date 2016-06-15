@@ -1882,6 +1882,10 @@ class UTF8
 
     $i = (int)$code_point;
 
+    if (self::$support['intlChar'] === true) {
+      return \IntlChar::chr($code_point);
+    }
+
     if ($i !== $code_point) {
       $i = (int)self::hex_to_int($code_point);
     }
@@ -2577,13 +2581,32 @@ class UTF8
   /**
    * Get character of a specific character.
    *
-   * @param   string $chr Character.
+   * @param   string $char Character.
    *
    * @return  string 'RTL' or 'LTR'
    */
-  public static function getCharDirection($chr)
+  public static function getCharDirection($char)
   {
-    $c = static::chr_to_decimal($chr);
+    // init
+    self::checkForSupport();
+
+    if (self::$support['intlChar'] === true) {
+      $tmpReturn = \IntlChar::charDirection($char);
+
+      // from "IntlChar"-Class
+      $charDirection = array(
+          'RTL' => array(1, 13, 14, 15, 21),
+          'LTR' => array(0, 11, 12, 20),
+      );
+
+      if (in_array($tmpReturn, $charDirection['LTR'], true)) {
+        return 'LTR';
+      } elseif (in_array($tmpReturn, $charDirection['RTL'], true)) {
+        return 'RTL';
+      }
+    }
+
+    $c = static::chr_to_decimal($char);
 
     if (!(0x5be <= $c && 0x10b7f >= $c)) {
       return 'LTR';
@@ -3925,21 +3948,21 @@ class UTF8
     $dec_point = (string)$dec_point;
 
     if (
-      isset($thousands_sep[1], $dec_point[1])
-      &&
-      Bootup::is_php('5.4') === true
+        isset($thousands_sep[1], $dec_point[1])
+        &&
+        Bootup::is_php('5.4') === true
     ) {
-        return str_replace(
-            array(
-                '.',
-                ',',
-            ),
-            array(
-                $dec_point,
-                $thousands_sep,
-            ),
-            number_format($number, $decimals, '.', ',')
-        );
+      return str_replace(
+          array(
+              '.',
+              ',',
+          ),
+          array(
+              $dec_point,
+              $thousands_sep,
+          ),
+          number_format($number, $decimals, '.', ',')
+      );
     }
 
     return number_format($number, $decimals, $dec_point, $thousands_sep);
@@ -3955,7 +3978,7 @@ class UTF8
    */
   public static function ord($s)
   {
-    if (!$s  && $s !== '0') {
+    if (!$s && $s !== '0') {
       return 0;
     }
 
@@ -4861,10 +4884,10 @@ class UTF8
   /**
    * Counts number of words in the UTF-8 string.
    *
-   * @param string $str The input string.
-   * @param int $format <strong>0</strong> => return a number of words<br />
-   *                    <strong>1</strong> => return an array of words
-   *                    <strong>2</strong> => return an array of words with word-offset as key
+   * @param string $str    The input string.
+   * @param int    $format <strong>0</strong> => return a number of words<br />
+   *                       <strong>1</strong> => return an array of words
+   *                       <strong>2</strong> => return an array of words with word-offset as key
    * @param string $charlist
    *
    * @return array|float The number of words in the string
