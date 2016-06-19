@@ -2787,17 +2787,30 @@ class UTF8
    * e.g.: &#123;&#39;&#1740;
    *
    * @param  string $str The Unicode string to be encoded as numbered entities.
+   * @param    bool   $keepAsciiChars Keep ASCII chars.
    *
    * @return string HTML numbered entities.
    */
-  public static function html_encode($str)
+  public static function html_encode($str, $keepAsciiChars = false)
   {
+    # INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
+    if (function_exists('mb_encode_numericentity')) {
+
+      $startCode = 0x00;
+      if ($keepAsciiChars === true) {
+        $startCode = 0x80;
+      }
+
+      return mb_encode_numericentity(
+          $str,
+          array($startCode, 0xffff, 0, 0xffff,),
+          self::str_detect_encoding($str)
+      );
+    }
+
     return implode(
         array_map(
-            array(
-                '\\voku\\helper\\UTF8',
-                'single_chr_html_encode',
-            ),
+            function($data) use ($keepAsciiChars) { return self::single_chr_html_encode($data, $keepAsciiChars); },
             self::split($str)
         )
     );
@@ -4289,13 +4302,20 @@ class UTF8
    * Converts a UTF-8 character to HTML Numbered Entity like "&#123;".
    *
    * @param    string $chr The Unicode character to be encoded as numbered entity.
+   * @param    bool   $keepAsciiChars Keep ASCII chars.
    *
    * @return   string The HTML numbered entity.
    */
-  public static function single_chr_html_encode($chr)
+  public static function single_chr_html_encode($chr, $keepAsciiChars = false)
   {
     if (!$chr) {
       return '';
+    }
+
+    if ($keepAsciiChars === true) {
+      if (self::isAscii($chr) === true) {
+        return $chr;
+      }
     }
 
     return '&#' . self::ord($chr) . ';';

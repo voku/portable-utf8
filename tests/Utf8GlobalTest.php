@@ -2706,7 +2706,22 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::html_encode($actual));
+      self::assertEquals($expected, UTF8::html_encode($actual), 'tested:' . $actual);
+    }
+
+    // ---
+
+    $testArray = array(
+        '{-test' => '{-test',
+        '中文空白'   => '&#20013;&#25991;&#31354;&#30333;',
+        'κόσμε'  => '&#954;&#8057;&#963;&#956;&#949;',
+        'öäü'    => '&#246;&#228;&#252;',
+        ' '      => ' ',
+        ''       => '',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
     }
   }
 
