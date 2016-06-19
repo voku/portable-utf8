@@ -2103,54 +2103,50 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     $examples = array(
       // Valid UTF-8
-      'κόσμε'                    => array('κόσμε' => 'κόσμε'),
-      '中'                       => array('中' => '中'),
-      '«foobar»'                 => array('«foobar»' => '«foobar»'),
+      'κόσμε'                                                                                => array('κόσμε' => 'κόσμε'),
+      '中'                                                                                    => array('中' => '中'),
+      '«foobar»'                                                                             => array('«foobar»' => '«foobar»'),
       // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-      "κόσμε\xc2\xa0"            => array("κόσμε\xc2\xa0" => "κόσμε\xc2\xa0"),
+      "κόσμε\xc2\xa0"                                                                        => array("κόσμε\xc2\xa0" => "κόσμε\xc2\xa0"),
       // Valid UTF-8 + Invalied Chars
-      "κόσμε\xa0\xa1-öäü"        => array('κόσμε-öäü' => 'κόσμε-öäü'),
+      "κόσμε\xa0\xa1-öäü"                                                                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
       // Valid UTF-8 + ISO-Erros
-      'DÃ¼sseldorf'              => array('Düsseldorf' => 'Düsseldorf'),
+      'DÃ¼sseldorf'                                                                          => array('Düsseldorf' => 'Düsseldorf'),
       // Valid ASCII
-      'a'                        => array('a' => 'a'),
+      'a'                                                                                    => array('a' => 'a'),
       // Valid emoji (non-UTF-8)
-      '😃'                       => array('😃' => '😃'),
+      '😃'                                                                                   => array('😃' => '😃'),
       '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => array('🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧'),
       // Valid ASCII + Invalied Chars
-      "a\xa0\xa1-öäü"            => array('a-öäü' => 'a-öäü'),
+      "a\xa0\xa1-öäü"                                                                        => array('a-öäü' => 'a-öäü'),
       // Valid 2 Octet Sequence
-      "\xc3\xb1"                 => array('ñ' => 'ñ'),
+      "\xc3\xb1"                                                                             => array('ñ' => 'ñ'),
       // Invalid 2 Octet Sequence
-      "\xc3\x28"                 => array('�(' => '('),
+      "\xc3\x28"                                                                             => array('�(' => '('),
       // Invalid Sequence Identifier
-      "\xa0\xa1"                 => array('��' => ''),
+      "\xa0\xa1"                                                                             => array('��' => ''),
       // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"             => array('₡' => '₡'),
+      "\xe2\x82\xa1"                                                                         => array('₡' => '₡'),
       // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"             => array('�(�' => '('),
+      "\xe2\x28\xa1"                                                                         => array('�(�' => '('),
       // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"             => array('�(' => '('),
+      "\xe2\x82\x28"                                                                         => array('�(' => '('),
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"         => array('𐌼' => '𐌼'),
+      "\xf0\x90\x8c\xbc"                                                                     => array('𐌼' => '𐌼'),
       // Invalid 4 Octet Sequence (in 2nd Invalid 4 Octet Sequence (in 2ndOctet)
-      "\xf0\x28\x8c\xbc"         => array('�(��' => '('),
-      // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"         => array('𐌼' => '𐌼'),
-      // Invalid 4 Octet Sequence (in 2nd Octet)
-      "\xf0\x28\x8c\xbc"         => array('�(��' => '('),
+      "\xf0\x28\x8c\xbc"                                                                     => array('�(��' => '('),
       // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"         => array('�(�' => '('),
+      "\xf0\x90\x28\xbc"                                                                     => array('�(�' => '('),
       // Invalid 4 Octet Sequence (in 4th Octet)
-      "\xf0\x28\x8c\x28"         => array('�(�(' => '(('),
+      "\xf0\x28\x8c\x28"                                                                     => array('�(�(' => '(('),
       // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"     => array('�' => ''),
+      "\xf8\xa1\xa1\xa1\xa1"                                                                 => array('�' => ''),
       // Valid 6 Octet Sequence (but not Unicode!)
-      "\xfc\xa1\xa1\xa1\xa1\xa1" => array('�' => ''),
+      "\xfc\xa1\xa1\xa1\xa1\xa1"                                                             => array('�' => ''),
       // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
-      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array('�' => ' '),
+      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82"                                                 => array('�' => ' '),
     );
-    
+
     // <<<<--- \"this comment is only a helper for PHPStorm and non UTF-8 chars
 
     $counter = 0;
@@ -2701,6 +2697,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $testArray = array(
         '{-test' => '&#123;&#45;&#116;&#101;&#115;&#116;',
         '中文空白'   => '&#20013;&#25991;&#31354;&#30333;',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)' => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍&#32;💩&#32;😄&#32;&#10084;&#32;👍&#32;💩&#32;😄&#32;&#10084;', // TODO?
         'κόσμε'  => '&#954;&#8057;&#963;&#956;&#949;',
         'öäü'    => '&#246;&#228;&#252;',
         ' '      => '&#32;',
@@ -2716,6 +2714,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $testArray = array(
         '{-test' => '{-test',
         '中文空白'   => '&#20013;&#25991;&#31354;&#30333;',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'D&#228;nisch (&#197;/&#229;, &#198;/&#230;, &#216;/&#248;)',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 &#10084; 👍 💩 😄 &#10084;',
         'κόσμε'  => '&#954;&#8057;&#963;&#956;&#949;',
         'öäü'    => '&#246;&#228;&#252;',
         ' '      => ' ',
@@ -2729,12 +2729,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // --
 
     $testArray = array(
-        '{-test' => '{-test',
-        '中文空白'   => '中文空白',
-        'κόσμε'  => 'κόσμε',
-        'öäü'    => 'öäü',
-        ' '      => ' ',
-        ''       => '',
+        '{-test'                  => '{-test',
+        '中文空白'                    => '中文空白',
+        'κόσμε'                   => 'κόσμε',
+        'öäü'                     => 'öäü',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'Dänisch (Å/å, Æ/æ, Ø/ø)',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
+        ' '                       => ' ',
+        ''                        => '',
     );
 
     foreach ($testArray as $actual => $expected) {
