@@ -2801,11 +2801,12 @@ class UTF8
    * e.g.: &#123;&#39;&#1740;
    *
    * @param  string $str            The Unicode string to be encoded as numbered entities.
-   * @param    bool $keepAsciiChars Keep ASCII chars.
+   * @param  bool   $keepAsciiChars Keep ASCII chars.
+   * @param  string $encoding
    *
    * @return string HTML numbered entities.
    */
-  public static function html_encode($str, $keepAsciiChars = false)
+  public static function html_encode($str, $keepAsciiChars = false, $encoding = 'UTF-8')
   {
     # INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
     if (function_exists('mb_encode_numericentity')) {
@@ -2818,7 +2819,7 @@ class UTF8
       return mb_encode_numericentity(
           $str,
           array($startCode, 0xffff, 0, 0xffff,),
-          self::str_detect_encoding($str)
+          $encoding
       );
     }
 
