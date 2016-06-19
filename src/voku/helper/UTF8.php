@@ -2782,14 +2782,17 @@ class UTF8
   }
 
   /**
-   * alias for "UTF8::html_entity_decode($str)"
+   * alias for "UTF8::html_entity_decode()"
    *
    * @param string $str
+   * @param int    $flags
+   * @param string $encoding
    *
    * @return string
    */
-  public static function html_decode($str) {
-    return self::html_entity_decode($str);
+  public static function html_decode($str, $flags = null, $encoding = 'UTF-8')
+  {
+    return self::html_entity_decode($str, $flags, $encoding);
   }
 
   /**
