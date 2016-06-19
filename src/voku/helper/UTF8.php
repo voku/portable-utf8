@@ -2782,12 +2782,23 @@ class UTF8
   }
 
   /**
+   * alias for "UTF8::html_entity_decode($str)"
+   *
+   * @param string $str
+   *
+   * @return string
+   */
+  public static function html_decode($str) {
+    return self::html_entity_decode($str);
+  }
+
+  /**
    * Converts a UTF-8 string to a series of HTML numbered entities.
    *
    * e.g.: &#123;&#39;&#1740;
    *
-   * @param  string $str The Unicode string to be encoded as numbered entities.
-   * @param    bool   $keepAsciiChars Keep ASCII chars.
+   * @param  string $str            The Unicode string to be encoded as numbered entities.
+   * @param    bool $keepAsciiChars Keep ASCII chars.
    *
    * @return string HTML numbered entities.
    */
@@ -2810,7 +2821,9 @@ class UTF8
 
     return implode(
         array_map(
-            function ($data) use ($keepAsciiChars) { return self::single_chr_html_encode($data, $keepAsciiChars); },
+            function ($data) use ($keepAsciiChars) {
+              return self::single_chr_html_encode($data, $keepAsciiChars);
+            },
             self::split($str)
         )
     );
@@ -4172,10 +4185,11 @@ class UTF8
    *
    * @param  string $str
    * @param  bool   $url_encoded
+   * @param  string $replacement
    *
    * @return  string
    */
-  public static function remove_invisible_characters($str, $url_encoded = true)
+  public static function remove_invisible_characters($str, $url_encoded = true, $replacement = '')
   {
     // init
     $non_displayables = array();
@@ -4190,7 +4204,7 @@ class UTF8
     $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S'; // 00-08, 11, 12, 14-31, 127
 
     do {
-      $str = preg_replace($non_displayables, '', $str, -1, $count);
+      $str = preg_replace($non_displayables, $replacement, $str, -1, $count);
     } while ($count !== 0);
 
     return $str;
@@ -4301,7 +4315,7 @@ class UTF8
   /**
    * Converts a UTF-8 character to HTML Numbered Entity like "&#123;".
    *
-   * @param    string $chr The Unicode character to be encoded as numbered entity.
+   * @param    string $chr            The Unicode character to be encoded as numbered entity.
    * @param    bool   $keepAsciiChars Keep ASCII chars.
    *
    * @return   string The HTML numbered entity.

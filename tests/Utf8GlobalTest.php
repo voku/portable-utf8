@@ -462,6 +462,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $before => $after) {
       self::assertEquals($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
     }
+
+    self::assertEquals('κόσ?με', UTF8::remove_invisible_characters("κόσ\0με", false, '?'));
   }
 
   public function testRemoveBom()
@@ -2723,6 +2725,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $actual => $expected) {
       self::assertEquals($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
     }
+
+    // --
+
+    $testArray = array(
+        '{-test' => '{-test',
+        '中文空白'   => '中文空白',
+        'κόσμε'  => 'κόσμε',
+        'öäü'    => 'öäü',
+        ' '      => ' ',
+        ''       => '',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
+    }
   }
 
   public function testSingleChrHtmlEncode()
@@ -2738,6 +2755,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $actual => $expected) {
       self::assertEquals($expected, UTF8::single_chr_html_encode($actual));
     }
+
+    self::assertEquals('a', UTF8::single_chr_html_encode('a', true));
   }
 
   public function testChrSizeList()
