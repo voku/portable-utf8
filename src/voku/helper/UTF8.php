@@ -2810,7 +2810,7 @@ class UTF8
 
     return implode(
         array_map(
-            function($data) use ($keepAsciiChars) { return self::single_chr_html_encode($data, $keepAsciiChars); },
+            function ($data) use ($keepAsciiChars) { return self::single_chr_html_encode($data, $keepAsciiChars); },
             self::split($str)
         )
     );
