@@ -6339,7 +6339,7 @@ class UTF8
    *
    * INFO: This is slower then "trim()"
    *
-   * But we can only use the original-function, if we use <= 7-Bit in the string / chars
+   * We can only use the original-function, if we use <= 7-Bit in the string / chars
    * but the check for ACSII (7-Bit) cost more time, then we can safe here.
    *
    * @param    string $str   The string to be trimmed
