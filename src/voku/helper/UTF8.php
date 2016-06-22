@@ -835,8 +835,8 @@ class UTF8
   /**
    * @alias of UTF8::chr_map()
    *
-   * @param $callback
-   * @param $str
+   * @param string|array $callback
+   * @param string       $str
    *
    * @return array
    */
@@ -1900,12 +1900,11 @@ class UTF8
   /**
    * Applies callback to all characters of a string.
    *
-   * @param    string $callback The callback function.
-   * @param    string $str      UTF-8 string to run callback on.
+   * @param  string|array $callback The callback function.
+   * @param  string       $str      UTF-8 string to run callback on.
    *
-   * @return   array The outcome of callback.
+   * @return array The outcome of callback.
    */
-
   public static function chr_map($callback, $str)
   {
     $chars = self::split($str);
@@ -1988,8 +1987,7 @@ class UTF8
   }
 
   /**
-   * Splits a string into smaller chunks and multiple lines, using the specified
-   * line ending character.
+   * Splits a string into smaller chunks and multiple lines, using the specified line ending character.
    *
    * @param    string $body     The original string to be split.
    * @param    int    $chunklen The maximum character length of a chunk.
@@ -2003,7 +2001,7 @@ class UTF8
   }
 
   /**
-   * accepts a string and removes all non-UTF-8 characters from it.
+   * Accepts a string and removes all non-UTF-8 characters from it + extras if needed.
    *
    * @param string $str                     The string to be sanitized.
    * @param bool   $remove_bom
@@ -2050,7 +2048,7 @@ class UTF8
   }
 
   /**
-   * Clean-up a and show only printable UTF-8 chars at the end.
+   * Clean-up a and show only printable UTF-8 chars at the end  + fix UTF-8 encoding.
    *
    * @param string $str
    *
@@ -2078,11 +2076,11 @@ class UTF8
   }
 
   /**
-   * Accepts a string and returns an array of Unicode code points.
+   * Accepts a string or a array of strings and returns an array of Unicode code points.
    *
-   * @param    mixed $arg     A UTF-8 encoded string or an array of such strings.
-   * @param    bool  $u_style If True, will return code points in U+xxxx format,
-   *                          default, code points will be returned as integers.
+   * @param    string|string[] $arg     A UTF-8 encoded string or an array of such strings.
+   * @param    bool            $u_style If True, will return code points in U+xxxx format,
+   *                                    default, code points will be returned as integers.
    *
    * @return   array The array of code points
    */
@@ -2121,13 +2119,9 @@ class UTF8
    * @return   array An associative array of Character as keys and
    *           their count as values.
    */
-  public static function count_chars($str) // there is no $mode parameters
+  public static function count_chars($str)
   {
-    $array = array_count_values(self::split($str));
-
-    ksort($array);
-
-    return $array;
+    return array_count_values(self::split($str));
   }
 
   /**

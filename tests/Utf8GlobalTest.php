@@ -224,22 +224,22 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     $testArray = array(
         'κaκbκc' => array(
+            'κ' => 3,
             'a' => 1,
             'b' => 1,
             'c' => 1,
-            'κ' => 3,
         ),
         'cba'    => array(
-            'a' => 1,
-            'b' => 1,
             'c' => 1,
+            'b' => 1,
+            'a' => 1,
         ),
         'abcöäü' => array(
             'a' => 1,
             'b' => 1,
             'c' => 1,
-            'ä' => 1,
             'ö' => 1,
+            'ä' => 1,
             'ü' => 1,
         ),
         '白白'     => array('白' => 2),
@@ -247,7 +247,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::count_chars($actual), 'error by ' . $actual);
+      self::assertEquals(true, $expected === UTF8::count_chars($actual), 'error by ' . $actual);
     }
   }
 
@@ -2669,6 +2669,47 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testCodepoints()
+  {
+    $testArray = array(
+        "\xF0\x90\x8C\xBC---" => array(
+            0 => 66364,
+            1 => 45,
+            2 => 45,
+            3 => 45,
+        ),
+        '中-abc'               => array(
+            0 => 20013,
+            1 => 45,
+            2 => 97,
+            3 => 98,
+            4 => 99,
+        ),
+        '₧{abc}'              => array(
+            0 => 8359,
+            1 => 123,
+            2 => 97,
+            3 => 98,
+            4 => 99,
+            5 => 125,
+        ),
+        'κöñ'                 => array(
+            0 => 954,
+            1 => 246,
+            2 => 241,
+        ),
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::codepoints($actual));
+    }
+
+    // --- U+xxxx format
+
+    self::assertEquals(array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints('κöñ', true));
+    self::assertEquals(array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints(array('κ', 'ö', 'ñ'), true));
+  }
+
   public function testOrd()
   {
     $nbsp = UTF8::html_entity_decode('&nbsp;');
@@ -2696,14 +2737,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testHtmlEncode()
   {
     $testArray = array(
-        '{-test' => '&#123;&#45;&#116;&#101;&#115;&#116;',
-        '中文空白'   => '&#20013;&#25991;&#31354;&#30333;',
+        '{-test'                  => '&#123;&#45;&#116;&#101;&#115;&#116;',
+        '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
         'Dänisch (Å/å, Æ/æ, Ø/ø)' => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍&#32;💩&#32;😄&#32;&#10084;&#32;👍&#32;💩&#32;😄&#32;&#10084;', // TODO?
-        'κόσμε'  => '&#954;&#8057;&#963;&#956;&#949;',
-        'öäü'    => '&#246;&#228;&#252;',
-        ' '      => '&#32;',
-        ''       => '',
+        'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
+        'öäü'                     => '&#246;&#228;&#252;',
+        ' '                       => '&#32;',
+        ''                        => '',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -2713,14 +2754,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     $testArray = array(
-        '{-test' => '{-test',
-        '中文空白'   => '&#20013;&#25991;&#31354;&#30333;',
+        '{-test'                  => '{-test',
+        '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
         'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'D&#228;nisch (&#197;/&#229;, &#198;/&#230;, &#216;/&#248;)',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 &#10084; 👍 💩 😄 &#10084;',
-        'κόσμε'  => '&#954;&#8057;&#963;&#956;&#949;',
-        'öäü'    => '&#246;&#228;&#252;',
-        ' '      => ' ',
-        ''       => '',
+        'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
+        'öäü'                     => '&#246;&#228;&#252;',
+        ' '                       => ' ',
+        ''                        => '',
     );
 
     foreach ($testArray as $actual => $expected) {
