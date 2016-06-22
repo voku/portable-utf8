@@ -127,7 +127,34 @@ INFO:  The different to "UTF8::utf8_encode()" is that this function, try to fix 
 
 ```php
 UTF8::encode('ISO-8859-1', '-ABC-中文空白-'); // '-ABC-????-'
+//
+UTF8::encode('UTF-8', '-ABC-中文空白-'); // '-ABC-中文空白-'
 ```
 
+##### file_get_contents(string $filename, int|null $flags = null, resource|null $context = null, int|null $offset = null, int|null $maxlen = null, int $timeout = 10, bool $convertToUtf8 = true) : string
+
+Reads entire file into a string.
+
+WARNING: do not use UTF-8 Option ($convertToUtf8) for binary-files (e.g.: images) !!!
+
+```php
+UTF8::file_get_contents('utf16le.txt'); // ...
+```
+
+##### file_has_bom(string $file_path) : bool
+
+Checks if a file starts with BOM (Byte Order Mark) character.
+
+```php
+UTF8::file_has_bom('utf8_with_bom.txt'); // true
+```
+
+##### filter(mixed $var, int $normalization_form = 4, string $leading_combining = '◌') : mixed
+
+Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
+
+```php
+UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a')
+```
 
 ... TODO

@@ -79,6 +79,24 @@ class UTF8
   );
 
   /**
+   * Bom => Byte-Length
+   *
+   * INFO: https://en.wikipedia.org/wiki/Byte_order_mark
+   *
+   * @var array
+   */
+  protected static $bom = array(
+      "\xef\xbb\xbf"     => 3, // UTF-8 BOM
+      'ï»¿'              => 6, // UTF-8 BOM as "WINDOWS-1252" (one char has [maybe] more then one byte ...)
+      "\x00\x00\xfe\xff" => 4, // UTF-32 (BE) BOM
+      "\xff\xfe\x00\x00" => 4, // UTF-32 (LE) BOM
+      "\xfe\xff"         => 2, // UTF-16 (BE) BOM
+      'þÿ'               => 4, // UTF-16 (BE) BOM as "WINDOWS-1252"
+      "\xff\xfe"         => 2, // UTF-16 (LE) BOM
+      'ÿþ'               => 4, // UTF-16 (LE) BOM as "WINDOWS-1252"
+  );
+
+  /**
    * Numeric code point => UTF-8 Character
    *
    * url: http://www.w3schools.com/charsets/ref_utf_punctuation.asp
@@ -807,7 +825,7 @@ class UTF8
   /**
    * Prepends UTF-8 BOM character to the string and returns the whole string.
    *
-   * If BOM already existed there, the Input string is returned.
+   * INFO: If BOM already existed there, the Input string is returned.
    *
    * @param    string $str The input string
    *
@@ -815,7 +833,7 @@ class UTF8
    */
   public static function add_bom_to_string($str)
   {
-    if (!self::is_bom(substr($str, 0, 3))) {
+    if (self::string_has_bom($str) === false) {
       $str = self::bom() . $str;
     }
 
@@ -825,7 +843,7 @@ class UTF8
   /**
    * Returns the UTF-8 Byte Order Mark Character.
    *
-   * @return   string Byte Order Mark
+   * @return string UTF-8 Byte Order Mark
    */
   public static function bom()
   {
@@ -2242,82 +2260,82 @@ class UTF8
   /**
    * Reads entire file into a string.
    *
-   * WARNING: do not use UTF-8 Option fir binary-files (e.g.: images) !!!
+   * WARNING: do not use UTF-8 Option ($convertToUtf8) for binary-files (e.g.: images) !!!
    *
    * @link http://php.net/manual/en/function.file-get-contents.php
    *
-   * @param string   $filename      <p>
-   *                                Name of the file to read.
-   *                                </p>
-   * @param int      $flags         [optional] <p>
-   *                                Prior to PHP 6, this parameter is called
-   *                                use_include_path and is a bool.
-   *                                As of PHP 5 the FILE_USE_INCLUDE_PATH can be used
-   *                                to trigger include path
-   *                                search.
-   *                                </p>
-   *                                <p>
-   *                                The value of flags can be any combination of
-   *                                the following flags (with some restrictions), joined with the
-   *                                binary OR (|)
-   *                                operator.
-   *                                </p>
-   *                                <p>
-   *                                <table>
-   *                                Available flags
-   *                                <tr valign="top">
-   *                                <td>Flag</td>
-   *                                <td>Description</td>
-   *                                </tr>
-   *                                <tr valign="top">
-   *                                <td>
-   *                                FILE_USE_INCLUDE_PATH
-   *                                </td>
-   *                                <td>
-   *                                Search for filename in the include directory.
-   *                                See include_path for more
-   *                                information.
-   *                                </td>
-   *                                </tr>
-   *                                <tr valign="top">
-   *                                <td>
-   *                                FILE_TEXT
-   *                                </td>
-   *                                <td>
-   *                                As of PHP 6, the default encoding of the read
-   *                                data is UTF-8. You can specify a different encoding by creating a
-   *                                custom context or by changing the default using
-   *                                stream_default_encoding. This flag cannot be
-   *                                used with FILE_BINARY.
-   *                                </td>
-   *                                </tr>
-   *                                <tr valign="top">
-   *                                <td>
-   *                                FILE_BINARY
-   *                                </td>
-   *                                <td>
-   *                                With this flag, the file is read in binary mode. This is the default
-   *                                setting and cannot be used with FILE_TEXT.
-   *                                </td>
-   *                                </tr>
-   *                                </table>
-   *                                </p>
-   * @param resource $context       [optional] <p>
-   *                                A valid context resource created with
-   *                                stream_context_create. If you don't need to use a
-   *                                custom context, you can skip this parameter by &null;.
-   *                                </p>
-   * @param int      $offset        [optional] <p>
-   *                                The offset where the reading starts.
-   *                                </p>
-   * @param int      $maxlen        [optional] <p>
-   *                                Maximum length of data read. The default is to read until end
-   *                                of file is reached.
-   *                                </p>
-   * @param int      $timeout
+   * @param string        $filename      <p>
+   *                                     Name of the file to read.
+   *                                     </p>
+   * @param int|null      $flags         [optional] <p>
+   *                                     Prior to PHP 6, this parameter is called
+   *                                     use_include_path and is a bool.
+   *                                     As of PHP 5 the FILE_USE_INCLUDE_PATH can be used
+   *                                     to trigger include path
+   *                                     search.
+   *                                     </p>
+   *                                     <p>
+   *                                     The value of flags can be any combination of
+   *                                     the following flags (with some restrictions), joined with the
+   *                                     binary OR (|)
+   *                                     operator.
+   *                                     </p>
+   *                                     <p>
+   *                                     <table>
+   *                                     Available flags
+   *                                     <tr valign="top">
+   *                                     <td>Flag</td>
+   *                                     <td>Description</td>
+   *                                     </tr>
+   *                                     <tr valign="top">
+   *                                     <td>
+   *                                     FILE_USE_INCLUDE_PATH
+   *                                     </td>
+   *                                     <td>
+   *                                     Search for filename in the include directory.
+   *                                     See include_path for more
+   *                                     information.
+   *                                     </td>
+   *                                     </tr>
+   *                                     <tr valign="top">
+   *                                     <td>
+   *                                     FILE_TEXT
+   *                                     </td>
+   *                                     <td>
+   *                                     As of PHP 6, the default encoding of the read
+   *                                     data is UTF-8. You can specify a different encoding by creating a
+   *                                     custom context or by changing the default using
+   *                                     stream_default_encoding. This flag cannot be
+   *                                     used with FILE_BINARY.
+   *                                     </td>
+   *                                     </tr>
+   *                                     <tr valign="top">
+   *                                     <td>
+   *                                     FILE_BINARY
+   *                                     </td>
+   *                                     <td>
+   *                                     With this flag, the file is read in binary mode. This is the default
+   *                                     setting and cannot be used with FILE_TEXT.
+   *                                     </td>
+   *                                     </tr>
+   *                                     </table>
+   *                                     </p>
+   * @param resource|null $context       [optional] <p>
+   *                                     A valid context resource created with
+   *                                     stream_context_create. If you don't need to use a
+   *                                     custom context, you can skip this parameter by &null;.
+   *                                     </p>
+   * @param int|null      $offset        [optional] <p>
+   *                                     The offset where the reading starts.
+   *                                     </p>
+   * @param int|null      $maxlen        [optional] <p>
+   *                                     Maximum length of data read. The default is to read until end
+   *                                     of file is reached.
+   *                                     </p>
+   * @param int           $timeout
    *
-   * @param boolean  $convertToUtf8 WARNING: maybe you can't use this option for images or pdf, because they used non
-   *                                default utf-8 chars
+   * @param boolean       $convertToUtf8 WARNING: maybe you can't use this option for images or pdf, because they used
+   *                                     non default utf-8 chars
    *
    * @return string The function returns the read data or false on failure.
    */
@@ -2361,7 +2379,7 @@ class UTF8
   }
 
   /**
-   * Checks if a file starts with BOM character.
+   * Checks if a file starts with BOM (Byte Order Mark) character.
    *
    * @param    string $file_path Path to a valid file.
    *
@@ -2369,7 +2387,7 @@ class UTF8
    */
   public static function file_has_bom($file_path)
   {
-    return self::is_bom(file_get_contents($file_path, null, null, -1, 3));
+    return self::string_has_bom(file_get_contents($file_path));
   }
 
   /**
@@ -3394,17 +3412,23 @@ class UTF8
   }
 
   /**
-   * Checks if the given string is exactly "UTF8 - Byte Order Mark".
+   * Checks if the given string is an "Byte Order Mark".
    *
    * WARNING: Use "UTF8::string_has_bom()" if you will check BOM in a string.
    *
-   * @param    string $utf8_chr The input string.
+   * @param    string $str The input string.
    *
    * @return   bool True if the $utf8_chr is Byte Order Mark, False otherwise.
    */
-  public static function is_bom($utf8_chr)
+  public static function is_bom($str)
   {
-    return ($utf8_chr === self::bom());
+    foreach (self::$bom as $bomString => $bomByteLength) {
+      if ($str === $bomString) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -4139,24 +4163,10 @@ class UTF8
    */
   public static function removeBOM($str = '')
   {
-    // INFO: https://en.wikipedia.org/wiki/Byte_order_mark
-
-    if (0 === strpos($str, "\xef\xbb\xbf")) { // UTF-8 BOM
-      $str = substr($str, 3);
-    } elseif (0 === strpos($str, 'ï»¿')) { // UTF-8 BOM as "WINDOWS-1252"
-      $str = substr($str, 6); // INFO: one char has (maybe) more then one byte ...
-    } elseif (0 === strpos($str, "\x00\x00\xfe\xff")) { // UTF-32 (BE) BOM
-      $str = substr($str, 4);
-    } elseif (0 === strpos($str, "\xff\xfe\x00\x00")) { // UTF-32 (LE) BOM
-      $str = substr($str, 4);
-    } elseif (0 === strpos($str, "\xfe\xff")) { // UTF-16 (BE) BOM
-      $str = substr($str, 2);
-    } elseif (0 === strpos($str, 'þÿ')) { // UTF-16 (BE) BOM as "WINDOWS-1252"
-      $str = substr($str, 4);
-    } elseif (0 === strpos($str, "\xff\xfe")) { // UTF-16 (LE) BOM
-      $str = substr($str, 2);
-    } elseif (0 === strpos($str, 'ÿþ')) { // UTF-16 (LE) BOM as "WINDOWS-1252"
-      $str = substr($str, 4);
+    foreach (self::$bom as $bomString => $bomByteLength) {
+      if (0 === strpos($str, $bomString)) {
+        $str = substr($str, $bomByteLength);
+      }
     }
 
     return $str;
@@ -5050,7 +5060,7 @@ class UTF8
   }
 
   /**
-   * Checks if string starts with "UTF-8 BOM" character.
+   * Checks if string starts with "BOM" (Byte Order Mark Character) character.
    *
    * @param    string $str The input string.
    *
@@ -5058,7 +5068,13 @@ class UTF8
    */
   public static function string_has_bom($str)
   {
-    return self::is_bom(substr($str, 0, 3));
+    foreach (self::$bom as $bomString => $bomByteLength) {
+      if (0 === strpos($str, $bomString)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /**

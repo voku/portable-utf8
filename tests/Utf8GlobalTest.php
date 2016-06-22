@@ -961,7 +961,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::encode('', $before)); // do nothing
+      self::assertEquals($after, UTF8::encode('', $before), 'tested: ' . $before); // do nothing
     }
 
     $tests = array(
@@ -974,7 +974,20 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::encode('UTF8', $before)); // UTF-8
+      self::assertEquals($after, UTF8::encode('UTF8', $before), 'tested: ' . $before); // UTF-8
+    }
+
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ???- ',
+        'öäü'            => '???',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berb?e',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::encode('CP367', $before), 'tested: ' . $before); // CP367
     }
 
     $tests = array(
@@ -987,7 +1000,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::filter(UTF8::encode('ISo88591', $before))); // ISO-8859-1
+      self::assertEquals($after, UTF8::filter(UTF8::encode('ISo88591', $before)), 'tested: ' . $before); // ISO-8859-1
     }
 
     $tests = array(
@@ -1002,6 +1015,41 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       self::assertEquals($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before)))); // ISO-8859-15
     }
+  }
+
+  public function testFilter()
+  {
+    $c = 'à';
+    $d = \Normalizer::normalize($c, \Normalizer::NFD);
+    $a = array(
+        'n' => 4,
+        'a' => "\xE9",
+        'b' => substr($d, 1),
+        'c' => $c,
+        'd' => $d,
+        'e' => "\n\r\n\r",
+    );
+    $a['f'] = (object)$a;
+    $b = UTF8::filter($a);
+    $b['f'] = (array)$a['f'];
+
+    $expect = array(
+        'n' => 4,
+        'a' => 'é',
+        'b' => '◌' . substr($d, 1),
+        'c' => $c,
+        'd' => $c,
+        'e' => "\n\n\n",
+    );
+    $expect['f'] = $expect;
+
+    self::assertSame($expect, $b);
+
+    // -----
+
+    $result = UTF8::filter(array("\xE9", 'à', 'a', "\xe2\x80\xa8"), \Normalizer::FORM_D);
+
+    self::assertEquals(array(0 => 'é', 1 => 'à', 2 => 'a', 3 => "\xe2\x80\xa8"), $result);
   }
 
   public function testNormalizeEncoding()
@@ -2707,7 +2755,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // --- U+xxxx format
 
     self::assertEquals(array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints('κöñ', true));
-    self::assertEquals(array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints(array('κ', 'ö', 'ñ'), true));
+    self::assertEquals(
+        array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints(
+        array(
+            'κ',
+            'ö',
+            'ñ',
+        ), true
+    )
+    );
   }
 
   public function testOrd()
