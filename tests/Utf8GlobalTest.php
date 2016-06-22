@@ -2055,6 +2055,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '41'  => ')',
         '42'  => '*',
         '160' => ' ',
+        666   => 'ʚ',
         165   => '¥',
         ''    => '',
         'foo' => '',

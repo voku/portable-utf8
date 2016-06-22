@@ -13,6 +13,7 @@
 [![PHP 7 ready](http://php7ready.timesplinter.ch/voku/portable-utf8/badge.svg)](https://travis-ci.org/voku/portable-utf8)
 [![License](https://poser.pugx.org/voku/portable-utf8/license)](https://packagist.org/packages/voku/portable-utf8)
 
+
 # Portable UTF-8
 
 This library is a Unicode aware alternative to PHP's native string handling API.
@@ -22,13 +23,12 @@ This library is a Unicode aware alternative to PHP's native string handling API.
 - Based on Behat's work: https://github.com/Behat/Transliterator
 - Based on Sebastián Grignoli's work: https://github.com/neitanod/forceutf8
 - Based on Ivan Enderlin's work: https://github.com/hoaproject/Ustring
-- Based on Paragon Initiative Enterprises's work: https://github.com/paragonie/random_compat
-
+- Used Symfony Polyfills (Iconv, Intl, Mbstring, Xml, ...): https://github.com/symfony/polyfill
 
 ## Description
 
 
-It is written in PHP and can work without "mbstring", "iconv" or any other extra encoding-library. The benefit of Portable UTF-8 is that it is easy to use, easy to bundle.
+It is written in PHP (>= 5.3) and can work without "mbstring", "iconv" or any other extra encoding php-extension on your server. The benefit of Portable UTF-8 is that it is easy to use, easy to bundle. This library will also auto-detect your server environment and will use the installed php-extensions if they are available, so you will have the best possible performance.
 
 
 ## Alternative
@@ -65,7 +65,7 @@ composer require voku/portable-utf8
 
 
 ##  Why Portable UTF-8?[]()
-PHP 5 and earlier versions have no native Unicode support. PHP 6 or 7 [[1]](http://schlueters.de/blog/archives/128-Future-of-PHP-6.html), where the Unicode support has been promised, may take years. To bridge the gap, there exist several extensions like "mbstring", "iconv" and "intl".
+PHP 5 and earlier versions have no native Unicode support. To bridge the gap, there exist several extensions like "mbstring", "iconv" and "intl".
 
 The problem with "mbstring" and others is that most of the time you cannot ensure presence of a specific one on a server. If you rely on one of these, your application is no more portable. This problem gets even severe for open source applications that have to run on different servers with different configurations. Considering these, I decided to write a library:
 
@@ -76,6 +76,15 @@ The problem with "mbstring" and others is that most of the time you cannot ensur
 *   To speed up string handling, it is recommended that you have "mbstring" or "iconv" available on your server, as well as the latest version of PCRE library
 *   Although Portable UTF-8 is easy to use; moving from native API to Portable UTF-8 may not be straight-forward for everyone. It is highly recommended that you do not update your scripts to include Portable UTF-8 or replace or change anything before you first know the reason and consequences. Most of the time, some native function may be all what you need.
 *   There is also a shim for "mbstring", "iconv" and "intl", so you can use it also on shared webspace. 
+
+## Warning
+
+By default this library requires that you using "UTF-8"-encoding on your server and it will force "UTF-8" by "bootstrap.php".
+If you need to disable this behavior you can define "PORTABLE_UTF8__DISABLE_AUTO_FILTER".
+
+```php
+define('PORTABLE_UTF8__DISABLE_AUTO_FILTER', 1);
+```
 
 ## Usage
 

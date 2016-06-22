@@ -792,7 +792,7 @@ class UTF8
   }
 
   /**
-   * Returns a single UTF-8 character from string.
+   * Return the character at the specified position: $str[1] like functionality.
    *
    * @param    string $str A UTF-8 string.
    * @param    int    $pos The position of character to return.
@@ -801,15 +801,13 @@ class UTF8
    */
   public static function access($str, $pos)
   {
-    // Return the character at the specified position: $str[1] like functionality.
-
     return self::substr($str, $pos, 1);
   }
 
   /**
-   * Prepends BOM character to the string and returns the whole string.
+   * Prepends UTF-8 BOM character to the string and returns the whole string.
    *
-   * INFO: If BOM already existed there, the Input string is returned.
+   * If BOM already existed there, the Input string is returned.
    *
    * @param    string $str The input string
    *
@@ -825,7 +823,7 @@ class UTF8
   }
 
   /**
-   * Returns the Byte Order Mark Character.
+   * Returns the UTF-8 Byte Order Mark Character.
    *
    * @return   string Byte Order Mark
    */
@@ -1855,7 +1853,9 @@ class UTF8
   }
 
   /**
-   * check for UTF8-Support
+   * This method will auto-detect your server environment for UTF-8 support.
+   *
+   * INFO: You don't need to run it manually, it will be triggered if it's needed.
    */
   public static function checkForSupport()
   {
@@ -2914,6 +2914,8 @@ class UTF8
       return $str;
     }
 
+    $encoding = self::normalizeEncoding($encoding);
+
     if ($flags === null) {
       if (Bootup::is_php('5.4') === true) {
         $flags = ENT_COMPAT | ENT_HTML5;
@@ -3044,6 +3046,8 @@ class UTF8
    */
   public static function htmlentities($str, $flags = ENT_COMPAT, $encoding = 'UTF-8', $double_encode = true)
   {
+    $encoding = self::normalizeEncoding($encoding);
+
     return htmlentities($str, $flags, $encoding, $double_encode);
   }
 
@@ -3156,6 +3160,8 @@ class UTF8
    */
   public static function htmlspecialchars($str, $flags = ENT_COMPAT, $encoding = 'UTF-8', $double_encode = true)
   {
+    $encoding = self::normalizeEncoding($encoding);
+
     return htmlspecialchars($str, $flags, $encoding, $double_encode);
   }
 
@@ -3860,6 +3866,10 @@ class UTF8
     static $staticNormalizeEncodingCache = array();
 
     if (!$encoding) {
+      return $encoding;
+    }
+
+    if ('UTF-8' === $encoding) {
       return $encoding;
     }
 
@@ -5125,6 +5135,8 @@ class UTF8
     // INFO: this is only a fallback for old versions
     if ($encoding === true || $encoding === false) {
       $encoding = 'UTF-8';
+    } else {
+      $encoding = self::normalizeEncoding($encoding);
     }
 
     return \mb_stripos($haystack, $needle, $offset, $encoding);
@@ -5176,9 +5188,9 @@ class UTF8
     // INFO: this is only a fallback for old versions
     if ($encoding === true || $encoding === false) {
       $encoding = 'UTF-8';
+    } else {
+      $encoding = self::normalizeEncoding($encoding);
     }
-
-    $encoding = self::normalizeEncoding($encoding);
 
     switch ($encoding) {
       case 'ASCII':
@@ -5371,6 +5383,8 @@ class UTF8
       // INFO: this is only a fallback for old versions
       if ($encoding === true || $encoding === false) {
         $encoding = 'UTF-8';
+      } else {
+        $encoding = self::normalizeEncoding($encoding);
       }
 
       return \mb_strpos($haystack, $needle, $offset, $encoding);
@@ -5427,6 +5441,7 @@ class UTF8
   public static function strrchr($haystack, $needle, $part = false, $encoding = 'UTF-8')
   {
     self::checkForSupport();
+    $encoding = self::normalizeEncoding($encoding);
 
     return \mb_strrchr($haystack, $needle, $part, $encoding);
   }
@@ -5474,6 +5489,7 @@ class UTF8
   public static function strrichr($haystack, $needle, $part = false, $encoding = 'UTF-8')
   {
     self::checkForSupport();
+    $encoding = self::normalizeEncoding($encoding);
 
     return \mb_strrichr($haystack, $needle, $part, $encoding);
   }
@@ -5674,6 +5690,7 @@ class UTF8
 
     // init
     self::checkForSupport();
+    $encoding = self::normalizeEncoding($encoding);
 
     return \mb_strtolower($str, $encoding);
   }
@@ -5714,6 +5731,8 @@ class UTF8
     self::checkForSupport();
 
     if (self::$support['mbstring'] === true) {
+      $encoding = self::normalizeEncoding($encoding);
+
       return \mb_strtoupper($str, $encoding);
     } else {
 
@@ -5840,6 +5859,8 @@ class UTF8
       // INFO: this is only a fallback for old versions
       if ($encoding === true || $encoding === false) {
         $encoding = 'UTF-8';
+      } else {
+        $encoding = self::normalizeEncoding($encoding);
       }
 
       return \mb_substr($str, $start, $length, $encoding);
@@ -6018,6 +6039,7 @@ class UTF8
       return '';
     }
 
+    $encoding = self::normalizeEncoding($encoding);
     $str = self::clean($str);
 
     $strSwappedCase = preg_replace_callback(
