@@ -2,8 +2,6 @@
 
 namespace voku\helper;
 
-use Symfony\Polyfill\Intl\Normalizer\Normalizer;
-
 /**
  * Class Bootup
  *
@@ -158,7 +156,7 @@ class Bootup
         /** @noinspection ReferenceMismatchInspection */
         $s = $r; // $r is a ref, $s a copy
         if (is_array($s)) {
-          $a[$len++] = & $r;
+          $a[$len++] = &$r;
         } else {
           $r = self::filterString($s, $normalization_form, $leading_combining);
         }
@@ -169,38 +167,14 @@ class Bootup
   }
 
   /**
-   * @param        $s
+   * @param string $s
    * @param int    $normalization_form
    * @param string $leading_combining
    *
-   * @return array|bool|mixed|string
+   * @return string
    */
   public static function filterString($s, $normalization_form = 4 /* n::NFC */, $leading_combining = '◌')
   {
-    if (false !== strpos($s, "\r")) {
-      // Workaround https://bugs.php.net/65732
-      $s = str_replace(array("\r\n", "\r"), "\n", $s);
-    }
-
-    if (preg_match('/[\x80-\xFF]/', $s)) {
-      if (Normalizer::isNormalized($s, $normalization_form)) {
-        $n = '-';
-      } else {
-        $n = Normalizer::normalize($s, $normalization_form);
-        if (isset($n[0])) {
-          $s = $n;
-        } else {
-          $s = UTF8::encode('UTF-8', $s);
-        }
-      }
-
-      if ($s[0] >= "\x80" && isset($n[0], $leading_combining[0]) && preg_match('/^\p{Mn}/u', $s)) {
-        // Prevent leading combining chars
-        // for NFC-safe concatenations.
-        $s = $leading_combining . $s;
-      }
-    }
-
-    return $s;
+    return UTF8::filter($s, $normalization_form, $leading_combining);
   }
 }

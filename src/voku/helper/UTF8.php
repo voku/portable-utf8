@@ -2399,7 +2399,7 @@ class UTF8
    *
    * @return mixed
    */
-  public static function filter($var, $normalization_form = 4, $leading_combining = '◌')
+  public static function filter($var, $normalization_form = 4 /* n::NFC */, $leading_combining = '◌')
   {
     switch (gettype($var)) {
       case 'array':
