@@ -118,4 +118,16 @@ Returns count of characters used in a string.
 UTF8::count_chars('κaκbκc'); // array('κ' => 3, 'a' => 1, 'b' => 1, 'c' => 1)
 ```
 
+##### encode(string $encoding, string $str, bool $force = true) : string
+
+Encode a string with a new charset-encoding.
+
+INFO:  The different to "UTF8::utf8_encode()" is that this function, try to fix also broken / double encoding,
+       so you can call this function also on a UTF-8 String and you don't mess the string.
+
+```php
+UTF8::encode('ISO-8859-1', '-ABC-中文空白-'); // '-ABC-????-'
+```
+
+
 ... TODO

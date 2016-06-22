@@ -2143,7 +2143,7 @@ class UTF8
   }
 
   /**
-   * encode a string
+   * Encode a string with a new charset-encoding.
    *
    * INFO:  The different to "UTF8::utf8_encode()" is that this function, try to fix also broken / double encoding,
    *        so you can call this function also on a UTF-8 String and you don't mess the string.
@@ -2219,6 +2219,8 @@ class UTF8
 
   /**
    * Callback function for preg_replace_callback use.
+   *
+   * @internal used for "UTF8::html_entity_decode()"
    *
    * @param  array $matches PREG matches
    *
