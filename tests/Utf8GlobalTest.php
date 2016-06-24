@@ -101,32 +101,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testFixBrokenUtf8()
-  {
-    $testArray = array(
-        'DÃ¼sseldorf'                                     => 'Düsseldorf',
-        'Ã¤'                                              => 'ä',
-        ' '                                               => ' ',
-        ''                                                => '',
-        "\n"                                              => "\n",
-        'test'                                            => 'test',
-        'FÃÂ©dération Camerounaise de Football'           => 'Fédération Camerounaise de Football',
-        "FÃÂ©dération Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
-        'FÃ©dÃ©ration Camerounaise de Football'           => 'Fédération Camerounaise de Football',
-        "FÃ©dÃ©ration Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
-        'FÃÂ©dÃÂ©ration Camerounaise de Football'         => 'Fédération Camerounaise de Football',
-        "FÃÂ©dÃÂ©ration Camerounaise de Football\n"       => "Fédération Camerounaise de Football\n",
-        'FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football'   => 'Fédération Camerounaise de Football',
-        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football\n" => "Fédération Camerounaise de Football\n",
-    );
-
-    foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::fix_utf8($before));
-    }
-
-    self::assertEquals(array('Düsseldorf', 'Fédération'), UTF8::fix_utf8(array('DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration')));
-  }
-
   public function testParseStr()
   {
     // test-string
@@ -374,6 +348,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
         "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
+        '&#20013;&#25991;&#31354;&#30333;'                                                          => '中文空白',
     );
 
     // WARNING: HipHop error // "ENT_COMPAT" isn't working
@@ -533,6 +508,24 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $testValue) {
       self::assertEquals($testValue, UTF8::strlen(UTF8::hash($testValue)));
+    }
+  }
+
+  public function testHexToIntAndIntToHex()
+  {
+    $tests = array(
+        'U+2026' => 8230,
+        'U+03ba' => 954,
+        'U+00f6' => 246,
+        'U+00f1' => 241,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertEquals($after, UTF8::hex_to_int($before), 'tested: ' . $before);
+    }
+
+    foreach ($tests as $after => $before) {
+      self::assertEquals($after, UTF8::int_to_hex($before), 'tested: ' . $before);
     }
   }
 
@@ -1109,11 +1102,41 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "test\xc2\x88" => 'testˆ',
         'DÃ¼sseldorf'  => 'Düsseldorf',
         'Ã¤'           => 'ä',
+        'test'         => 'test',
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::fix_simple_utf8($before));
+      self::assertEquals($after, UTF8::fix_simple_utf8($before), 'tested: ' . $before);
     }
+  }
+
+  public function testFixBrokenUtf8()
+  {
+    $testArray = array(
+        'Düsseldorf'                                      => 'Düsseldorf',
+        'Ã'                                               => 'Ã',
+        ' '                                               => ' ',
+        ''                                                => '',
+        "\n"                                              => "\n",
+        "test\xc2\x88"                                    => 'testˆ',
+        'DÃ¼sseldorf'                                     => 'Düsseldorf',
+        'Ã¤'                                              => 'ä',
+        'test'                                            => 'test',
+        'FÃÂ©dération Camerounaise de Football'           => 'Fédération Camerounaise de Football',
+        "FÃÂ©dération Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
+        'FÃ©dÃ©ration Camerounaise de Football'           => 'Fédération Camerounaise de Football',
+        "FÃ©dÃ©ration Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
+        'FÃÂ©dÃÂ©ration Camerounaise de Football'         => 'Fédération Camerounaise de Football',
+        "FÃÂ©dÃÂ©ration Camerounaise de Football\n"       => "Fédération Camerounaise de Football\n",
+        'FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football'   => 'Fédération Camerounaise de Football',
+        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football\n" => "Fédération Camerounaise de Football\n",
+    );
+
+    foreach ($testArray as $before => $after) {
+      self::assertEquals($after, UTF8::fix_utf8($before));
+    }
+
+    self::assertEquals(array('Düsseldorf', 'Fédération'), UTF8::fix_utf8(array('DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration')));
   }
 
   public function testUtf8EncodeEncodeUtf8()
@@ -2805,6 +2828,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $actual => $expected) {
       self::assertEquals($expected, UTF8::html_encode($actual), 'tested:' . $actual);
+    }
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($actual, UTF8::html_decode(UTF8::html_encode($actual)), 'tested:' . $actual);
     }
 
     // ---

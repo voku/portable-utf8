@@ -1954,14 +1954,14 @@ class UTF8
   /**
    * Get a decimal code representation of a specific character.
    *
-   * @param   string $chr The input character
+   * @param   string $char The input character
    *
    * @return  int
    */
-  public static function chr_to_decimal($chr)
+  public static function chr_to_decimal($char)
   {
-    $chr = (string)$chr;
-    $code = self::ord($chr[0]);
+    $char = (string)$char;
+    $code = self::ord($char[0]);
     $bytes = 1;
 
     if (!($code & 0x80)) {
@@ -1985,7 +1985,7 @@ class UTF8
 
     for ($i = 2; $i <= $bytes; $i++) {
       // 10xxxxxx
-      $code = ($code << 6) + (self::ord($chr[$i - 1]) & ~0x80);
+      $code = ($code << 6) + (self::ord($char[$i - 1]) & ~0x80);
     }
 
     return $code;
@@ -1994,14 +1994,14 @@ class UTF8
   /**
    * Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.
    *
-   * @param    string $chr The input character
+   * @param    string $char The input character
    * @param    string $pfix
    *
    * @return   string The code point encoded as U+xxxx
    */
-  public static function chr_to_hex($chr, $pfix = 'U+')
+  public static function chr_to_hex($char, $pfix = 'U+')
   {
-    return self::int_to_hex(self::ord($chr), $pfix);
+    return self::int_to_hex(self::ord($char), $pfix);
   }
 
   /**
@@ -2525,8 +2525,7 @@ class UTF8
   }
 
   /**
-   * Checks if the number of Unicode characters in a string are not
-   * more than the specified integer.
+   * Check if the number of unicode characters are not more than the specified integer.
    *
    * @param    string $str      The original string to be checked.
    * @param    int    $box_size The size in number of chars to be checked against string.
@@ -2539,7 +2538,9 @@ class UTF8
   }
 
   /**
-   * Fixing a broken UTF-8 string.
+   * Try to fix simple broken UTF-8 strings.
+   *
+   * INFO: Take a look at "UTF8::fix_utf8()" if you need a more advanced fix for broken UTF-8 strings.
    *
    * @param string $str
    *
@@ -2567,9 +2568,9 @@ class UTF8
   /**
    * Fix a double (or multiple) encoded UTF8 string.
    *
-   * @param array|string $str
+   * @param string|string[] $str You can use a string or an array of strings.
    *
-   * @return string
+   * @return mixed
    */
   public static function fix_utf8($str)
   {
@@ -2732,9 +2733,13 @@ class UTF8
   /**
    * Creates a random string of UTF-8 characters.
    *
+   * WARNING: This method does not create a hash of something, maybe it will be renamed in future.
+   *
    * @param    int $len The length of string in characters.
    *
    * @return   string String consisting of random characters.
+   *
+   * @deprecated
    */
   public static function hash($len = 8)
   {
@@ -2778,9 +2783,9 @@ class UTF8
   }
 
   /**
-   * Converts hexadecimal U+xxxx code point representation to Integer.
+   * Converts hexadecimal U+xxxx code point representation to integer.
    *
-   * INFO: opposite to UTF8::int_to_hex( )
+   * INFO: opposite to UTF8::int_to_hex()
    *
    * @param    string $str The hexadecimal code point representation.
    *
@@ -2812,7 +2817,7 @@ class UTF8
   /**
    * Converts a UTF-8 string to a series of HTML numbered entities.
    *
-   * e.g.: &#123;&#39;&#1740;
+   * INFO: opposite to UTF8::html_decode()
    *
    * @param  string $str            The Unicode string to be encoded as numbered entities.
    * @param  bool   $keepAsciiChars Keep ASCII chars.
@@ -2829,6 +2834,8 @@ class UTF8
       if ($keepAsciiChars === true) {
         $startCode = 0x80;
       }
+
+      $encoding = self::normalizeEncoding($encoding);
 
       return mb_encode_numericentity(
           $str,
@@ -2857,6 +2864,8 @@ class UTF8
    * semicolons, so we are left with our own little solution here. Bummer.
    *
    * Convert all HTML entities to their applicable characters
+   *
+   * INFO: opposite to UTF8::html_encode()
    *
    * @link http://php.net/manual/en/function.html-entity-decode.php
    *
@@ -3191,6 +3200,8 @@ class UTF8
 
   /**
    * Converts Integer to hexadecimal U+xxxx code point representation.
+   *
+   * INFO: opposite to UTF8::hex_to_int()
    *
    * @param    int    $int The integer to be converted to hexadecimal code point.
    * @param    string $pfix
@@ -4335,24 +4346,26 @@ class UTF8
   /**
    * Converts a UTF-8 character to HTML Numbered Entity like "&#123;".
    *
-   * @param    string $chr            The Unicode character to be encoded as numbered entity.
+   * @param    string $char            The Unicode character to be encoded as numbered entity.
    * @param    bool   $keepAsciiChars Keep ASCII chars.
    *
    * @return   string The HTML numbered entity.
    */
-  public static function single_chr_html_encode($chr, $keepAsciiChars = false)
+  public static function single_chr_html_encode($char, $keepAsciiChars = false)
   {
-    if (!$chr) {
+    if (!$char) {
       return '';
     }
 
-    if ($keepAsciiChars === true) {
-      if (self::isAscii($chr) === true) {
-        return $chr;
-      }
+    if (
+        $keepAsciiChars === true
+        &&
+        self::isAscii($char) === true
+    ) {
+      return $char;
     }
 
-    return '&#' . self::ord($chr) . ';';
+    return '&#' . self::ord($char) . ';';
   }
 
   /**

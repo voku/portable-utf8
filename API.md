@@ -157,4 +157,138 @@ Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a')
 ```
 
+##### filter_input(int $type, string $var, int $filter = FILTER_DEFAULT, null|array $option = null) : string
+
+"filter_input()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
+
+```php
+// _GET['foo'] = 'bar';
+UTF8::filter_input(INPUT_GET, 'foo', FILTER_SANITIZE_STRING)); // 'bar'
+```
+
+##### filter_input_array(int $type, mixed $definition = null, bool $add_empty = true) : mixed
+
+"filter_input_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
+
+```php
+// _GET['foo'] = 'bar';
+UTF8::filter_input_array(INPUT_GET, array('foo' => 'FILTER_SANITIZE_STRING')); // array('bar')
+```
+
+##### filter_var(string $var, int $filter = FILTER_DEFAULT, array $option = null) : string
+
+"filter_var()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
+
+```php
+UTF8::filter_var('-ABC-中文空白-', FILTER_VALIDATE_URL); // false
+```
+
+##### filter_var_array(array $data, mixed $definition = null, bool $add_empty = true) : mixed
+
+"filter_var_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
+
+```php
+$filters = [ 
+  'name'  => ['filter'  => FILTER_CALLBACK, 'options' => ['voku\helper\UTF8', 'ucwords']],
+  'age'   => ['filter'  => FILTER_VALIDATE_INT, 'options' => ['min_range' => 1, 'max_range' => 120]],
+  'email' => FILTER_VALIDATE_EMAIL,
+];
+
+$data = [
+  'name' => 'κόσμε', 
+  'age' => '18', 
+  'email' => 'foo@bar.de'
+];
+
+UTF8::filter_var_array($data, $filters, true); // ['name' => 'Κόσμε', 'age' => 18, 'email' => 'foo@bar.de']
+```
+
+##### fits_inside(string $str, int $box_size) : bool
+
+Check if the number of unicode characters are not more than the specified integer.
+
+```php
+UTF8::fits_inside('κόσμε', 6); // false
+```
+
+##### fix_simple_utf8(string $str) : string
+
+Try to fix simple broken UTF-8 strings.
+
+INFO: Take a look at "UTF8::fix_utf8()" if you need a more advanced fix for broken UTF-8 strings.
+
+```php
+UTF8::fix_simple_utf8('DÃ¼sseldorf'); // 'Düsseldorf'
+```
+
+##### fix_utf8(string|string[] $str) : mixed
+
+Fix a double (or multiple) encoded UTF8 string.
+
+```php
+UTF8::fix_utf8('FÃÂÂÂÂ©dÃÂÂÂÂ©ration'); // 'Fédération'
+```
+
+##### getCharDirection(string $char) : string ('RTL' or 'LTR')
+
+Get character of a specific character.
+
+```php
+UTF8::getCharDirection('ا'); // 'RTL'
+```
+
+##### getCharDirection(string $char) : string ('RTL' or 'LTR')
+
+Get character of a specific character.
+
+```php
+UTF8::getCharDirection('ا'); // 'RTL'
+```
+
+##### hex_to_int(string $str) : int
+
+Converts hexadecimal U+xxxx code point representation to integer.
+
+INFO: opposite to UTF8::int_to_hex()
+
+```php
+UTF8::hex_to_int('U+00f1'); // 241
+```
+
+##### html_encode(string $str, bool $keepAsciiChars = false, string $encoding = 'UTF-8') : string
+
+Converts a UTF-8 string to a series of HTML numbered entities.
+
+INFO: opposite to UTF8::html_decode()
+
+```php
+UTF8::html_encode('中文空白'); // '&#20013;&#25991;&#31354;&#30333;'
+```
+
+##### html_entity_decode(string $str, int $flags = null, string $encoding = 'UTF-8') : string
+
+UTF-8 version of html_entity_decode()
+
+The reason we are not using html_entity_decode() by itself is because
+while it is not technically correct to leave out the semicolon
+at the end of an entity most browsers will still interpret the entity
+correctly. html_entity_decode() does not convert entities without
+semicolons, so we are left with our own little solution here. Bummer.
+
+Convert all HTML entities to their applicable characters
+
+INFO: opposite to UTF8::html_encode()
+
+```php
+UTF8::html_encode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白' 
+```
+
+##### htmlentities(string $str, int $flags = ENT_COMPAT, string $encoding = 'UTF-8', bool $double_encode = true) : string
+
+Convert all applicable characters to HTML entities: UTF-8 version of htmlentities()
+
+```php
+UTF8::htmlentities('中文空白'); // '&#20013;&#25991;&#31354;&#30333;'
+```
+
 ... TODO
