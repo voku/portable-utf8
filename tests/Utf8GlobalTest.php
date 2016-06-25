@@ -73,7 +73,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     $testArray = array(
         '<白>'                                                                                                         => '&lt;&#30333;&gt;',
-        '<白-öäü>' => '&lt;&#30333;-&ouml;&auml;&uuml;&gt;',
+        '<白-öäü>'                                                                                                     => '&lt;&#30333;-&ouml;&auml;&uuml;&gt;',
         'dies ist ein test „Goldenen Regeln und Checklisten“.<br /><br /><br />' . UTF8::html_entity_decode('&nbsp;') => 'dies ist ein test &bdquo;Goldenen Regeln und Checklisten&ldquo;.&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&nbsp;',
         'öäü'                                                                                                         => '&ouml;&auml;&uuml;',
         ' '                                                                                                           => ' ',
@@ -559,7 +559,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ''          => array(1 => ''),
         '中文空白'      => array(2 => '空'),
         '中文空白-test' => array(3 => '白'),
-        'fòô'  => array(1 => 'ò'),
+        'fòô'       => array(1 => 'ò'),
     );
 
     foreach ($testArray as $actualString => $testDataArray) {

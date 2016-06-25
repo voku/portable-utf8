@@ -3071,7 +3071,7 @@ class UTF8
   {
     $encoding = self::normalizeEncoding($encoding);
 
-    $str =  htmlentities($str, $flags, $encoding, $double_encode);
+    $str = htmlentities($str, $flags, $encoding, $double_encode);
 
     if ($encoding !== 'UTF-8') {
       return $str;
@@ -4366,7 +4366,7 @@ class UTF8
   /**
    * Converts a UTF-8 character to HTML Numbered Entity like "&#123;".
    *
-   * @param    string $char            The Unicode character to be encoded as numbered entity.
+   * @param    string $char           The Unicode character to be encoded as numbered entity.
    * @param    bool   $keepAsciiChars Keep ASCII chars.
    *
    * @return   string The HTML numbered entity.
