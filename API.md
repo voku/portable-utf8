@@ -10,7 +10,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 Return the character at the specified position: $str[1] like functionality.
 
 ```php
-UTF8::access('fòô', 3); // 'ô'
+UTF8::access('fòô', 1); // 'ô'
 ```
 
 ##### add_bom_to_string(string $str)
@@ -288,7 +288,15 @@ UTF8::html_encode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白'
 Convert all applicable characters to HTML entities: UTF-8 version of htmlentities()
 
 ```php
-UTF8::htmlentities('中文空白'); // '&#20013;&#25991;&#31354;&#30333;'
+UTF8::htmlentities('<白-öäü>'); // '&lt;白-öäü&gt;'
+```
+
+##### htmlspecialchars(string $str, int $flags = ENT_COMPAT, string $encoding = 'UTF-8', bool $double_encode = true) : string
+
+Convert special characters to HTML entities: UTF-8 version of htmlspecialchars()
+
+```php
+UTF8::htmlspecialchars('<白-öäü>'); // '&lt;&#30333;-&ouml;&auml;&uuml;&gt;'
 ```
 
 ... TODO

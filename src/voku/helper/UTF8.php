@@ -2244,7 +2244,7 @@ class UTF8
    *
    * @return string
    */
-  protected static function entityCallback($matches)
+  protected static function html_entity_decode_callback($matches)
   {
     self::checkForSupport();
 
@@ -2950,7 +2950,7 @@ class UTF8
     do {
       $str_compare = $str;
 
-      $str = preg_replace_callback("/&#\d{2,5};/", array('\voku\helper\UTF8', 'entityCallback'), $str);
+      $str = preg_replace_callback("/&#\d{2,5};/", array('\voku\helper\UTF8', 'html_entity_decode_callback'), $str);
 
       // decode numeric & UTF16 two byte entities
       $str = html_entity_decode(
@@ -3071,7 +3071,27 @@ class UTF8
   {
     $encoding = self::normalizeEncoding($encoding);
 
-    return htmlentities($str, $flags, $encoding, $double_encode);
+    $str =  htmlentities($str, $flags, $encoding, $double_encode);
+
+    if ($encoding !== 'UTF-8') {
+      return $str;
+    }
+
+    $byteLengths = UTF8::chr_size_list($str);
+    $search = array();
+    $replacements = array();
+    foreach ($byteLengths as $counter => $byteLength) {
+      if ($byteLength >= 3) {
+        $char = UTF8::access($str, $counter);
+
+        if (!isset($replacements[$char])) {
+          $search[$char] = $char;
+          $replacements[$char] = UTF8::html_encode($char);
+        }
+      }
+    }
+
+    return str_replace($search, $replacements, $str);
   }
 
   /**
