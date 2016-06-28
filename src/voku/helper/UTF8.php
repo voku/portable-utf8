@@ -3095,7 +3095,9 @@ class UTF8
   }
 
   /**
-   * Convert special characters to HTML entities: UTF-8 version of htmlspecialchars()
+   * Convert only special characters to HTML entities: UTF-8 version of htmlspecialchars()
+   *
+   * INFO: Take a look at "UTF8::htmlentities()"
    *
    * @link http://php.net/manual/en/function.htmlspecialchars.php
    *
@@ -3274,7 +3276,7 @@ class UTF8
   }
 
   /**
-   * alias for "UTF8::is_base64"
+   * alias for "UTF8::is_base64()"
    *
    * @param string $str
    *
@@ -3286,7 +3288,19 @@ class UTF8
   }
 
   /**
-   * alias for "UTF8::is_bom"
+   * alias for "UTF8::is_binary()"
+   *
+   * @param string $str
+   *
+   * @return bool
+   */
+  public static function isBinary($str)
+  {
+    return self::is_binary($str);
+  }
+
+  /**
+   * alias for "UTF8::is_bom()"
    *
    * @param string $utf8_chr
    *
@@ -3298,33 +3312,19 @@ class UTF8
   }
 
   /**
-   * Try to check if a string is a json-string...
+   * alias for "UTF8::is_json()"
    *
-   * @param $str
+   * @param string $str
    *
    * @return bool
    */
   public static function isJson($str)
   {
-    $str = (string)$str;
-
-    if (!isset($str[0])) {
-      return false;
-    }
-
-    if (
-        is_object(json_decode($str))
-        &&
-        json_last_error() === JSON_ERROR_NONE
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    return self::is_json($str);
   }
 
   /**
-   * check if string contains any html-tags <lall>
+   * alias for "UTF8::is_html()"
    *
    * @param string $str
    *
@@ -3332,26 +3332,11 @@ class UTF8
    */
   public static function isHtml($str)
   {
-    $str = (string)$str;
-
-    if (!isset($str[0])) {
-      return false;
-    }
-
-    // init
-    $matches = array();
-
-    preg_match("/<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/", $str, $matches);
-
-    if (count($matches) == 0) {
-      return false;
-    } else {
-      return true;
-    }
+    return self::is_html($str);
   }
 
   /**
-   * alias for "UTF8::is_utf8"
+   * alias for "UTF8::is_utf8()"
    *
    * @param string $str
    *
@@ -3360,6 +3345,30 @@ class UTF8
   public static function isUtf8($str)
   {
     return self::is_utf8($str);
+  }
+
+  /**
+   * alias for "UTF8::is_utf16()"
+   *
+   * @param string $str
+   *
+   * @return bool
+   */
+  public static function isUtf16($str)
+  {
+    return self::is_utf16($str);
+  }
+
+  /**
+   * alias for "UTF8::is_utf32()"
+   *
+   * @param string $str
+   *
+   * @return bool
+   */
+  public static function isUtf32($str)
+  {
+    return self::is_utf32($str);
   }
 
   /**
@@ -3398,7 +3407,7 @@ class UTF8
   }
 
   /**
-   * Check if the input is binary... (is look like a hack)
+   * Check if the input is binary... (is look like a hack).
    *
    * @param string $input
    *
@@ -3460,6 +3469,59 @@ class UTF8
     }
 
     return false;
+  }
+
+  /**
+   * Try to check if "$str" is an json-string.
+   *
+   * @param string $str
+   *
+   * @return bool
+   */
+  public static function is_json($str)
+  {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return false;
+    }
+
+    if (
+        is_object(json_decode($str))
+        &&
+        json_last_error() === JSON_ERROR_NONE
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Check if string contains any html-tags <lall>.
+   *
+   * @param string $str
+   *
+   * @return boolean
+   */
+  public static function is_html($str)
+  {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return false;
+    }
+
+    // init
+    $matches = array();
+
+    preg_match("/<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/", $str, $matches);
+
+    if (count($matches) == 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   /**

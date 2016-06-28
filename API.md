@@ -288,15 +288,28 @@ UTF8::html_encode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白'
 Convert all applicable characters to HTML entities: UTF-8 version of htmlentities()
 
 ```php
-UTF8::htmlentities('<白-öäü>'); // '&lt;白-öäü&gt;'
+UTF8::htmlentities('<白-öäü>'); // '&lt;&#30333;-&ouml;&auml;&uuml;&gt;'
 ```
 
 ##### htmlspecialchars(string $str, int $flags = ENT_COMPAT, string $encoding = 'UTF-8', bool $double_encode = true) : string
 
-Convert special characters to HTML entities: UTF-8 version of htmlspecialchars()
+Convert only special characters to HTML entities: UTF-8 version of htmlspecialchars()
+
+INFO: Take a look at "UTF8::htmlentities()"
 
 ```php
-UTF8::htmlspecialchars('<白-öäü>'); // '&lt;&#30333;-&ouml;&auml;&uuml;&gt;'
+UTF8::htmlspecialchars('<白-öäü>'); // '&lt;白-öäü&gt;'
 ```
+
+##### int_to_hex(int $int, string $pfix = 'U+') : str
+
+onverts Integer to hexadecimal U+xxxx code point representation.
+
+INFO: opposite to UTF8::hex_to_int()
+
+```php
+UTF8::int_to_hex(241); // 'U+00f1'
+```
+
 
 ... TODO
