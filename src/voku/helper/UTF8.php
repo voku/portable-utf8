@@ -2410,7 +2410,7 @@ class UTF8
         break;
       case 'object':
         foreach ($var as $k => $v) {
-          $var->$k = self::filter($v, $normalization_form, $leading_combining);
+          $var->{$k} = self::filter($v, $normalization_form, $leading_combining);
         }
         break;
       case 'string':
