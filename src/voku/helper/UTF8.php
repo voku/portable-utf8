@@ -2847,9 +2847,9 @@ class UTF8
     return implode(
         array_map(
             function ($data) use ($keepAsciiChars) {
-              return self::single_chr_html_encode($data, $keepAsciiChars);
+              return UTF8::single_chr_html_encode($data, $keepAsciiChars);
             },
-            self::split($str)
+            UTF8::split($str)
         )
     );
   }
