@@ -439,7 +439,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertEquals($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
     }
 
-    self::assertEquals('κόσ?με', UTF8::remove_invisible_characters("κόσ\0με", false, '?'));
+    self::assertEquals('κόσ?με 	%00 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", false, '?'));
+    self::assertEquals('κόσμε 	 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", true, ''));
   }
 
   public function testRemoveBom()
