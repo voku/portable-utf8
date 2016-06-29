@@ -2849,7 +2849,7 @@ class UTF8
             function ($data) use ($keepAsciiChars) {
               return UTF8::single_chr_html_encode($data, $keepAsciiChars);
             },
-            UTF8::split($str)
+            self::split($str)
         )
     );
   }
@@ -3077,16 +3077,16 @@ class UTF8
       return $str;
     }
 
-    $byteLengths = UTF8::chr_size_list($str);
+    $byteLengths = self::chr_size_list($str);
     $search = array();
     $replacements = array();
     foreach ($byteLengths as $counter => $byteLength) {
       if ($byteLength >= 3) {
-        $char = UTF8::access($str, $counter);
+        $char = self::access($str, $counter);
 
         if (!isset($replacements[$char])) {
           $search[$char] = $char;
-          $replacements[$char] = UTF8::html_encode($char);
+          $replacements[$char] = self::html_encode($char);
         }
       }
     }
