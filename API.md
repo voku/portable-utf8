@@ -303,13 +303,12 @@ UTF8::htmlspecialchars('<白-öäü>'); // '&lt;白-öäü&gt;'
 
 ##### int_to_hex(int $int, string $pfix = 'U+') : str
 
-onverts Integer to hexadecimal U+xxxx code point representation.
+Converts Integer to hexadecimal U+xxxx code point representation.
 
 INFO: opposite to UTF8::hex_to_int()
 
 ```php
 UTF8::int_to_hex(241); // 'U+00f1'
 ```
-
 
 ... TODO
