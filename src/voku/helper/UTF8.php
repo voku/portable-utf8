@@ -3409,7 +3409,7 @@ class UTF8
   /**
    * Check if the input is binary... (is look like a hack).
    *
-   * @param string $input
+   * @param mixed $input
    *
    * @return bool
    */
@@ -4696,21 +4696,21 @@ class UTF8
   /**
    * Pad a UTF-8 string to given length with another string.
    *
-   * @param    string $input      The input string
+   * @param    string $str      The input string
    * @param    int    $pad_length The length of return string
    * @param    string $pad_string String to use for padding the input string
    * @param    int    $pad_type   can be STR_PAD_RIGHT, STR_PAD_LEFT or STR_PAD_BOTH
    *
    * @return   string Returns the padded string
    */
-  public static function str_pad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+  public static function str_pad($str, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
   {
-    $input_length = self::strlen($input);
+    $str_length = self::strlen($str);
 
-    if (is_int($pad_length) && ($pad_length > 0) && ($pad_length >= $input_length)) {
+    if (is_int($pad_length) && ($pad_length > 0) && ($pad_length >= $str_length)) {
       $ps_length = self::strlen($pad_string);
 
-      $diff = $pad_length - $input_length;
+      $diff = $pad_length - $str_length;
 
       switch ($pad_type) {
         case STR_PAD_LEFT:
@@ -4733,16 +4733,16 @@ class UTF8
           $pre = '';
       }
 
-      return $pre . $input . $post;
+      return $pre . $str . $post;
     }
 
-    return $input;
+    return $str;
   }
 
   /**
    * Repeat a string.
    *
-   * @param string $input      <p>
+   * @param string $str      <p>
    *                           The string to be repeated.
    *                           </p>
    * @param int    $multiplier <p>
@@ -4757,11 +4757,11 @@ class UTF8
    *
    * @return string the repeated string.
    */
-  public static function str_repeat($input, $multiplier)
+  public static function str_repeat($str, $multiplier)
   {
-    $input = self::filter($input);
+    $str = self::filter($str);
 
-    return str_repeat($input, $multiplier);
+    return str_repeat($str, $multiplier);
   }
 
   /**

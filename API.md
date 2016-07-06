@@ -311,4 +311,34 @@ INFO: opposite to UTF8::hex_to_int()
 UTF8::int_to_hex(241); // 'U+00f1'
 ```
 
+##### is_ascii(string $str) : bool
+
+Checks if a string is 7 bit ASCII.
+
+alias: UTF8::isAscii()
+
+```php
+UTF8::is_ascii('白'); // false
+```
+
+##### is_base64(string $str) : bool
+
+Returns true if the string is base64 encoded, false otherwise.
+
+alias: UTF8::isBase64()
+
+```php
+UTF8::is_base64('4KSu4KWL4KSo4KS/4KSa'); // true
+```
+
+##### is_binary(mixed $input) : bool
+
+Check if the input is binary... (is look like a hack).
+
+alias: UTF8::isBinary()
+
+```php
+UTF8::is_binary(01); // true
+```
+
 ... TODO
