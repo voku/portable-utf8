@@ -341,4 +341,44 @@ alias: UTF8::isBinary()
 UTF8::is_binary(01); // true
 ```
 
+##### is_binary_file(string $file) : bool
+
+Check if the file is binary.
+
+```php
+UTF8::is_binary('./utf32.txt'); // true
+```
+
+##### is_bom(string $str) : bool
+
+Checks if the given string is equal to any "Byte Order Mark".
+
+WARNING: Use "UTF8::string_has_bom()" if you will check BOM in a string.
+
+alias: UTF8::isBom()
+
+```php
+UTF8::is_bom("\xef\xbb\xbf"); // true
+```
+
+##### is_json(string $str) : bool
+
+Try to check if "$str" is an json-string.
+
+alias: UTF8::isJson()
+
+```php
+UTF8::is_json('{"array":[1,"¥","ä"]}'); // true
+```
+
+##### is_html(string $str) : bool
+
+Check if the string contains any html-tags <lall>.
+
+alias: UTF8::isHtml()
+
+```php
+UTF8::is_html('<b>lall</b>'); // true
+```
+
 ... TODO

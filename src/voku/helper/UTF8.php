@@ -3452,7 +3452,7 @@ class UTF8
   }
 
   /**
-   * Checks if the given string is an "Byte Order Mark".
+   * Checks if the given string is equal to any "Byte Order Mark".
    *
    * WARNING: Use "UTF8::string_has_bom()" if you will check BOM in a string.
    *
@@ -3487,7 +3487,7 @@ class UTF8
     }
 
     if (
-        is_object(json_decode($str))
+        is_object(self::json_decode($str))
         &&
         json_last_error() === JSON_ERROR_NONE
     ) {
@@ -3498,7 +3498,7 @@ class UTF8
   }
 
   /**
-   * Check if string contains any html-tags <lall>.
+   * Check if the string contains any html-tags <lall>.
    *
    * @param string $str
    *
