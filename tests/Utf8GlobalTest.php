@@ -354,6 +354,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $actual => $expected) {
       self::assertEquals(true, $expected === UTF8::count_chars($actual), 'error by ' . $actual);
     }
+
+    // added invalid UTF-8
+    $testArray['白' . "\xa0\xa1" . '白'] = array('白' => 2);
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals(true, $expected === UTF8::count_chars($actual, true), 'error by ' . $actual);
+    }
   }
 
   public function testStringHasBom()

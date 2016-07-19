@@ -110,7 +110,7 @@ UTF8::codepoints('κöñ'); // array(954, 246, 241)
 UTF8::codepoints('κöñ', true); // array('U+03ba', 'U+00f6', 'U+00f1')
 ```
 
-##### count_chars(string $str) : array
+##### count_chars(string $str, bool $cleanUtf8 = false) : array
 
 Returns count of characters used in a string.
 
