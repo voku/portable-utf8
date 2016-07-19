@@ -2132,14 +2132,15 @@ class UTF8
   /**
    * Returns count of characters used in a string.
    *
-   * @param    string $str The input string.
+   * @param    string $str       The input string.
+   * @param    bool   $cleanUtf8 Clean non UTF-8 chars from the string.
    *
    * @return   array An associative array of Character as keys and
    *           their count as values.
    */
-  public static function count_chars($str)
+  public static function count_chars($str, $cleanUtf8 = false)
   {
-    return array_count_values(self::split($str));
+    return array_count_values(self::split($str, 1, $cleanUtf8));
   }
 
   /**
@@ -2578,6 +2579,7 @@ class UTF8
 
       foreach ($str as $k => $v) {
         /** @noinspection AlterInForeachInspection */
+        /** @noinspection OffsetOperationsInspection */
         $str[$k] = self::fix_utf8($v);
       }
 
@@ -3540,12 +3542,12 @@ class UTF8
 
       $maybeUTF16LE = 0;
       $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16LE');
-      if ($test !== false && strlen($test) > 1) {
+      if ($test) {
         $test2 = \mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
         $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
         if ($test3 === $test) {
-          $strChars = self::count_chars($str);
-          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+          $strChars = self::count_chars($str, true);
+          foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
             if (in_array($test3char, $strChars, true) === true) {
               $maybeUTF16LE++;
             }
@@ -3555,12 +3557,12 @@ class UTF8
 
       $maybeUTF16BE = 0;
       $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16BE');
-      if ($test !== false && strlen($test) > 1) {
+      if ($test) {
         $test2 = \mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
         $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
         if ($test3 === $test) {
-          $strChars = self::count_chars($str);
-          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+          $strChars = self::count_chars($str, true);
+          foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
             if (in_array($test3char, $strChars, true) === true) {
               $maybeUTF16BE++;
             }
@@ -3597,12 +3599,12 @@ class UTF8
 
       $maybeUTF32LE = 0;
       $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32LE');
-      if ($test !== false && strlen($test) > 1) {
+      if ($test) {
         $test2 = \mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
         $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
         if ($test3 === $test) {
-          $strChars = self::count_chars($str);
-          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+          $strChars = self::count_chars($str, true);
+          foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
             if (in_array($test3char, $strChars, true) === true) {
               $maybeUTF32LE++;
             }
@@ -3612,12 +3614,12 @@ class UTF8
 
       $maybeUTF32BE = 0;
       $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32BE');
-      if ($test !== false && strlen($test) > 1) {
+      if ($test) {
         $test2 = \mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
         $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
         if ($test3 === $test) {
-          $strChars = self::count_chars($str);
-          foreach (self::count_chars($test3) as $test3char => $test3charEmpty) {
+          $strChars = self::count_chars($str, true);
+          foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
             if (in_array($test3char, $strChars, true) === true) {
               $maybeUTF32BE++;
             }
@@ -4538,6 +4540,7 @@ class UTF8
       $ret = array_map('implode', $ret);
     }
 
+    /** @noinspection OffsetOperationsInspection */
     if (isset($ret[0]) && $ret[0] === '') {
       return array();
     }
@@ -4907,9 +4910,21 @@ class UTF8
   }
 
   /**
-   * Get a binary representation of a specific character.
+   * Convert binary into an string.
    *
-   * @param   string $str The input character.
+   * @param $bin 1|0
+   *
+   * @return string
+   */
+  public static function binary_to_str($bin)
+  {
+    return pack('H*', base_convert($bin, 2, 16));
+  }
+
+  /**
+   * Get a binary representation of a specific string.
+   *
+   * @param   string $str The input string.
    *
    * @return  string
    */
@@ -4917,20 +4932,8 @@ class UTF8
   {
     $str = (string)$str;
 
-    if (!isset($str[0])) {
-      return '';
-    }
-
-    // init
-    $out = null;
-    $max = strlen($str);
-
-    /** @noinspection ForeachInvariantsInspection */
-    for ($i = 0; $i < $max; ++$i) {
-      $out .= vsprintf('%08b', (array)self::ord($str[$i]));
-    }
-
-    return $out;
+    $value = unpack('H*', $str);
+    return base_convert($value[1], 16, 2);
   }
 
   /**
