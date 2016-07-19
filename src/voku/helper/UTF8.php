@@ -3352,7 +3352,7 @@ class UTF8
    *
    * @param string $str
    *
-   * @return bool
+   * @return int|false false if is't not UTF16, 1 for UTF-16LE, 2 for UTF-16BE.
    */
   public static function isUtf16($str)
   {
@@ -3364,7 +3364,7 @@ class UTF8
    *
    * @param string $str
    *
-   * @return bool
+   * @return int|false false if is't not UTF16, 1 for UTF-32LE, 2 for UTF-32BE.
    */
   public static function isUtf32($str)
   {
@@ -3533,6 +3533,8 @@ class UTF8
    */
   public static function is_utf16($str)
   {
+    $str = self::remove_bom($str);
+
     if (self::is_binary($str)) {
       self::checkForSupport();
 
@@ -3588,6 +3590,8 @@ class UTF8
    */
   public static function is_utf32($str)
   {
+    $str = self::remove_bom($str);
+
     if (self::is_binary($str)) {
       self::checkForSupport();
 
@@ -4248,13 +4252,25 @@ class UTF8
   }
 
   /**
+   * alias for "UTF8::removeBOM()"
+   *
+   * @param string $str
+   *
+   * @return string
+   */
+  public static function remove_bom($str)
+  {
+    return self::removeBOM($str);
+  }
+
+  /**
    * Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.
    *
    * @param string $str
    *
    * @return string
    */
-  public static function removeBOM($str = '')
+  public static function removeBOM($str)
   {
     foreach (self::$bom as $bomString => $bomByteLength) {
       if (0 === strpos($str, $bomString)) {

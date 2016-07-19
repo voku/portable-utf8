@@ -195,6 +195,138 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testIsUtf16()
+  {
+    $testArray = array(
+        1                                                                  => false,
+        -1                                                                 => false,
+        'κ'                                                                => false,
+        ''                                                                 => false,
+        ' '                                                                => false,
+        "\n"                                                               => false,
+        'abc'                                                              => false,
+        'abcöäü'                                                           => false,
+        '白'                                                                => false,
+        'សាកល្បង!'                                                         => false,
+        'דיעס איז אַ פּרובירן!'                                            => false,
+        'Штампи іст Ейн тест!'                                             => false,
+        'Штампы гіст Эйн тэст!'                                            => false,
+        '測試！'                                                              => false,
+        'ການທົດສອບ!'                                                       => false,
+        'Iñtërnâtiônàlizætiøn'                                             => false,
+        'ABC 123'                                                          => false,
+        "Iñtërnâtiôn\xE9àlizætiøn"                                         => false,
+        "\xf0\x28\x8c\x28"                                                 => false,
+        "this is an invalid char '\xE9' here"                              => false,
+        "\xC3\xB1"                                                         => false,
+        "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn"               => false,
+        "Iñtërnâtiônàlizætiøn\xA0\xA1Iñtërnâtiônàlizætiøn"                 => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x28\xA1Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\x28Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiøn"         => false,
+        "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiøn"         => false,
+        "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn"     => false,
+        "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => false,
+        "\xC3\x28"                                                         => false,
+        "\xA0\xA1"                                                         => false,
+        "\xE2\x82\xA1"                                                     => false,
+        "\xE2\x28\xA1"                                                     => false,
+        "\xE2\x82\x28"                                                     => false,
+        "\xF0\x90\x8C\xBC"                                                 => false,
+        "\xF0\x28\x8C\xBC"                                                 => false,
+        "\xF0\x90\x28\xBC"                                                 => false,
+        "\xF0\x28\x8C\x28"                                                 => false,
+        "\xF8\xA1\xA1\xA1\xA1"                                             => false,
+        "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
+    );
+
+    $conter = 0;
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::is_utf16($actual), 'error by - ' . $conter . ' :' . $actual);
+      $conter++;
+    }
+
+    $conter = 0;
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::isUtf16($actual), 'error by - ' . $conter . ' :' . $actual);
+      $conter++;
+    }
+
+    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/test1Utf16be.txt')));
+    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/test1Utf16be-bom.txt')));
+
+    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/test1Utf16le.txt')));
+    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/test1Utf16le-bom.txt')));
+  }
+
+  public function testIsUtf32()
+  {
+    $testArray = array(
+        1                                                                  => false,
+        -1                                                                 => false,
+        'κ'                                                                => false,
+        ''                                                                 => false,
+        ' '                                                                => false,
+        "\n"                                                               => false,
+        'abc'                                                              => false,
+        'abcöäü'                                                           => false,
+        '白'                                                                => false,
+        'សាកល្បង!'                                                         => false,
+        'דיעס איז אַ פּרובירן!'                                            => false,
+        'Штампи іст Ейн тест!'                                             => false,
+        'Штампы гіст Эйн тэст!'                                            => false,
+        '測試！'                                                              => false,
+        'ການທົດສອບ!'                                                       => false,
+        'Iñtërnâtiônàlizætiøn'                                             => false,
+        'ABC 123'                                                          => false,
+        "Iñtërnâtiôn\xE9àlizætiøn"                                         => false,
+        "\xf0\x28\x8c\x28"                                                 => false,
+        "this is an invalid char '\xE9' here"                              => false,
+        "\xC3\xB1"                                                         => false,
+        "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn"               => false,
+        "Iñtërnâtiônàlizætiøn\xA0\xA1Iñtërnâtiônàlizætiøn"                 => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x28\xA1Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\x28Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiøn"         => false,
+        "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiøn"         => false,
+        "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn"     => false,
+        "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => false,
+        "\xC3\x28"                                                         => false,
+        "\xA0\xA1"                                                         => false,
+        "\xE2\x82\xA1"                                                     => false,
+        "\xE2\x28\xA1"                                                     => false,
+        "\xE2\x82\x28"                                                     => false,
+        "\xF0\x90\x8C\xBC"                                                 => false,
+        "\xF0\x28\x8C\xBC"                                                 => false,
+        "\xF0\x90\x28\xBC"                                                 => false,
+        "\xF0\x28\x8C\x28"                                                 => false,
+        "\xF8\xA1\xA1\xA1\xA1"                                             => false,
+        "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
+    );
+
+    $conter = 0;
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::is_utf32($actual), 'error by - ' . $conter . ' :' . $actual);
+      $conter++;
+    }
+
+    $conter = 0;
+    foreach ($testArray as $actual => $expected) {
+      self::assertEquals($expected, UTF8::isUtf32($actual), 'error by - ' . $conter . ' :' . $actual);
+      $conter++;
+    }
+
+    // TODO: add UTF-32 tests !!!
+
+    //self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/test1Utf32be.txt')));
+    //self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/test1Utf32be-bom.txt')));
+
+    //self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/test1Utf32le.txt')));
+    //self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/test1Utf32le-bom.txt')));
+  }
+
   public function testCountChars()
   {
     $testArray = array(
