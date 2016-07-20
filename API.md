@@ -388,7 +388,21 @@ Check if the string is UTF-16: This function will return  false if is't not UTF-
 alias: UTF8::isUtf16()
 
 ```php
-UTF8::is_utf16(); // 1
+UTF8::is_utf16(file_get_contents('utf-16-le.txt')); // 1
+UTF8::is_utf16(file_get_contents('utf-16-be.txt')); // 2
+UTF8::is_utf16(file_get_contents('utf-8.txt')); // false
+```
+
+##### is_utf32(string $str) : int|false
+
+Check if the string is UTF-32: This function will return  false if is't not UTF-32, 1 for UTF-32LE, 2 for UTF-32BE.
+
+alias: UTF8::isUtf16()
+
+```php
+UTF8::is_utf32(file_get_contents('utf-32-le.txt')); // 1
+UTF8::is_utf32(file_get_contents('utf-32-be.txt')); // 2
+UTF8::is_utf32(file_get_contents('utf-8.txt')); // false
 ```
 
 ... TODO

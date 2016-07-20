@@ -3341,12 +3341,13 @@ class UTF8
    * alias for "UTF8::is_utf8()"
    *
    * @param string $str
+   * @param  bool  $strict
    *
    * @return bool
    */
-  public static function isUtf8($str)
+  public static function isUtf8($str, $strict = false)
   {
-    return self::is_utf8($str);
+    return self::is_utf8($str, $strict);
   }
 
   /**
@@ -3645,16 +3646,27 @@ class UTF8
    *
    * @see    http://hsivonen.iki.fi/php-utf8/
    *
-   * @param    string $str The string to be checked.
+   * @param  string $str    The string to be checked.
+   * @param  bool   $strict Check also if the string is not UTF-16 or UTF-32.
    *
-   * @return   bool
+   * @return bool
    */
-  public static function is_utf8($str)
+  public static function is_utf8($str, $strict = false)
   {
     $str = (string)$str;
 
     if (!isset($str[0])) {
       return true;
+    }
+
+    if ($strict === true) {
+      if (self::is_utf16($str) !== false) {
+        return false;
+      }
+
+      if (self::is_utf32($str) !== false) {
+        return false;
+      }
     }
 
     if (self::pcre_utf8_support() !== true) {

@@ -193,6 +193,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($expected, UTF8::isUtf8($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
+
+    self::assertSame(false, UTF8::is_utf8(file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt'), true));
+    self::assertSame(false, UTF8::is_utf8(file_get_contents(__DIR__ . '/fixtures/utf-16-be-bom.txt'), true));
   }
 
   public function testIsUtf16()
@@ -252,6 +255,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($expected, UTF8::isUtf16($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
+
+    self::assertSame(false, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
+    self::assertSame(false, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-8-bom.txt')));
 
     self::assertSame(2, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt')));
     self::assertSame(2, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-be-bom.txt')));
@@ -320,6 +326,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($expected, UTF8::isUtf32($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
+
+    self::assertSame(false, UTF8::isUtf32(file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
+    self::assertSame(false, UTF8::isUtf32(file_get_contents(__DIR__ . '/fixtures/utf-8-bom.txt')));
 
     self::assertSame(1, UTF8::isUtf32(file_get_contents(__DIR__ . '/fixtures/sample-utf-32-le-bom.txt')));
     self::assertSame(2, UTF8::isUtf32(file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt')));
