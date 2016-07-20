@@ -681,6 +681,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'U+03ba' => 954,
         'U+00f6' => 246,
         'U+00f1' => 241,
+        'U+0000' => 0,
     );
 
     foreach ($tests as $before => $after) {

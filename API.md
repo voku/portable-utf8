@@ -245,7 +245,7 @@ Get character of a specific character.
 UTF8::getCharDirection('ا'); // 'RTL'
 ```
 
-##### hex_to_int(string $str) : int
+##### hex_to_int(string $str) : int|false
 
 Converts hexadecimal U+xxxx code point representation to integer.
 

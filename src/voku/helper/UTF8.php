@@ -1905,19 +1905,14 @@ class UTF8
     }
 
     if ($i !== $code_point) {
-      $i = (int)self::hex_to_int($code_point);
+      $i = self::hex_to_int($code_point);
     }
 
     if (!$i) {
       return null;
     }
 
-    $return = self::html_entity_decode("&#{$i};", ENT_QUOTES);
-    if ($return) {
-      return $return;
-    }
-
-    return null;
+    return self::html_entity_decode("&#{$i};", ENT_QUOTES);
   }
 
   /**
@@ -2796,7 +2791,7 @@ class UTF8
    *
    * @param    string $str The hexadecimal code point representation.
    *
-   * @return   int The code point, or 0 on failure.
+   * @return   int|false The code point, or false on failure.
    */
   public static function hex_to_int($str)
   {
@@ -2804,7 +2799,7 @@ class UTF8
       return intval($match[1], 16);
     }
 
-    return 0;
+    return false;
   }
 
   /**
