@@ -1892,7 +1892,7 @@ class UTF8
    *
    * @param    int $code_point The code point for which to generate a character.
    *
-   * @return   string Multi-Byte character, returns empty string on failure to encode.
+   * @return   string|null Multi-Byte character, returns null on failure to encode.
    */
   public static function chr($code_point)
   {
@@ -1901,12 +1901,7 @@ class UTF8
     $i = (int)$code_point;
 
     if (self::$support['intlChar'] === true) {
-      $return = \IntlChar::chr($code_point);
-      if ($return) {
-        return $return;
-      } else {
-        return '';
-      }
+      return \IntlChar::chr($code_point);
     }
 
     if ($i !== $code_point) {
@@ -1914,7 +1909,7 @@ class UTF8
     }
 
     if (!$i) {
-      return '';
+      return null;
     }
 
     $return = self::html_entity_decode("&#{$i};", ENT_QUOTES);
@@ -1922,7 +1917,7 @@ class UTF8
       return $return;
     }
 
-    return '';
+    return null;
   }
 
   /**

@@ -12,17 +12,6 @@ class ZNormalizationTest extends \PHPUnit_Framework_TestCase
 
   public function testNormalize()
   {
-    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-      $isWindows = true;
-    } else {
-      $isWindows = false;
-    }
-
-    // TODO: this test is runing veryyyyy long on Windows OS
-    if ($isWindows === true) {
-      return;
-    }
-
     $t = file(__DIR__ . '/fixtures/ZNormalizationTest.' . $this->unicodeVersion . '.txt');
     $c = array();
 

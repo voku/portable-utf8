@@ -2327,9 +2327,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '160' => ' ',
         666   => 'ʚ',
         165   => '¥',
-        ''    => '',
-        'foo' => '',
-        'fòô' => '',
+        ''    => null,
+        'foo' => null,
+        'fòô' => null,
     );
 
     foreach ($testArray as $before => $after) {
