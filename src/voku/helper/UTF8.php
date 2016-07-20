@@ -5985,16 +5985,19 @@ class UTF8
       $str = self::clean($str);
     }
 
-    $str_length = (int)self::strlen($str);
+    $str_length = 0;
+    if ($start || $length === null) {
+      $str_length = (int)self::strlen($str);
+    }
+
+    if ($start && $start > $str_length) {
+      return false;
+    }
 
     if ($length === null) {
       $length = $str_length;
     } else {
       $length = (int)$length;
-    }
-
-    if ($start > $str_length) {
-      return false;
     }
 
     if (self::$support['mbstring'] === true) {
