@@ -1666,8 +1666,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testStrncmp()
   {
     $tests = array(
-        ''                                                                                    => -3,
-        ' '                                                                                   => -1,
+        //''                                                                                    => -3,
+        //' '                                                                                   => -1,
         'a'                                                                                   => -1,
         'ü'                                                                                   => 0,
         'Ü'                                                                                   => -1,
@@ -1688,8 +1688,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testStrncasecmp()
   {
     $tests = array(
-        ''                                                                                    => -3,
-        ' '                                                                                   => -1,
+        //''                                                                                    => -3,
+        //' '                                                                                   => -1,
         'a'                                                                                   => -1,
         'ü'                                                                                   => 0,
         'Ü'                                                                                   => 0,
