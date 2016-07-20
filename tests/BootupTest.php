@@ -108,16 +108,16 @@ class BootupTest extends PHPUnit_Framework_TestCase
   public function testGetRandomBytes()
   {
     $rand_false = Bootup::get_random_bytes(0);
-    self::assertEquals(false, $rand_false);
+    self::assertSame(false, $rand_false);
 
     $rand_false = Bootup::get_random_bytes('test');
-    self::assertEquals(false, $rand_false);
+    self::assertSame(false, $rand_false);
 
     $rand = Bootup::get_random_bytes(32);
-    self::assertEquals(32, strlen($rand));
+    self::assertSame(32, strlen($rand));
 
     $rand = Bootup::get_random_bytes(0);
-    self::assertEquals(0, strlen($rand));
+    self::assertSame(0, strlen($rand));
 
     $bytes = array(
         Bootup::get_random_bytes(12),
@@ -137,24 +137,24 @@ class BootupTest extends PHPUnit_Framework_TestCase
   public function testIsPhp()
   {
     $isPHP = Bootup::is_php('0.1');
-    self::assertEquals(true, $isPHP);
+    self::assertSame(true, $isPHP);
 
     $isPHP = Bootup::is_php('999');
-    self::assertEquals(false, $isPHP);
+    self::assertSame(false, $isPHP);
 
     if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION <= 5) {
       $isPHP = Bootup::is_php('7');
-      self::assertEquals(false, $isPHP);
+      self::assertSame(false, $isPHP);
     }
 
     if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION >= 5) {
       $isPHP = Bootup::is_php('5.0');
-      self::assertEquals(true, $isPHP);
+      self::assertSame(true, $isPHP);
     }
 
     if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION >= 7) {
       $isPHP = Bootup::is_php('7');
-      self::assertEquals(true, $isPHP);
+      self::assertSame(true, $isPHP);
     }
   }
 }

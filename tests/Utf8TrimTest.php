@@ -11,20 +11,20 @@ class Utf8TrimTest extends PHPUnit_Framework_TestCase
   {
     $str = 'ñtërnâtiônàlizætiø';
     $trimmed = 'tërnâtiônàlizæti';
-    self::assertEquals($trimmed, u::trim($str, 'ñø'));
+    self::assertSame($trimmed, u::trim($str, 'ñø'));
   }
 
   public function test_no_trim()
   {
     $str = ' Iñtërnâtiônàlizætiøn ';
     $trimmed = ' Iñtërnâtiônàlizætiøn ';
-    self::assertEquals($trimmed, u::trim($str, 'ñø'));
+    self::assertSame($trimmed, u::trim($str, 'ñø'));
   }
 
   public function test_empty_string()
   {
     $str = '';
     $trimmed = '';
-    self::assertEquals($trimmed, u::trim($str));
+    self::assertSame($trimmed, u::trim($str));
   }
 }

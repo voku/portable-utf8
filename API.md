@@ -381,4 +381,14 @@ alias: UTF8::isHtml()
 UTF8::is_html('<b>lall</b>'); // true
 ```
 
+##### is_utf16(string $str) : int|false
+
+Check if the string is UTF-16: This function will return  false if is't not UTF-16, 1 for UTF-16LE, 2 for UTF-16BE.
+
+alias: UTF8::isUtf16()
+
+```php
+UTF8::is_utf16(); // 1
+```
+
 ... TODO

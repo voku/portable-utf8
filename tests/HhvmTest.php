@@ -36,7 +36,7 @@ class HhvmTest extends \PHPUnit_Framework_TestCase
 
   public function test5()
   {
-    self::assertEquals('nàlizæti', grapheme_substr('Iñtërnâtiônàlizætiøn', 10, -2));
+    self::assertSame('nàlizæti', grapheme_substr('Iñtërnâtiônàlizætiøn', 10, -2));
   }
 
   public function test6()

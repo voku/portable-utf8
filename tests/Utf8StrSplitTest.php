@@ -33,7 +33,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'n',
     );
 
-    self::assertEquals($array, u::split($str));
+    self::assertSame($array, u::split($str));
   }
 
   public function test_split_five_chars()
@@ -46,7 +46,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'ætiøn',
     );
 
-    self::assertEquals($array, u::split($str, 5));
+    self::assertSame($array, u::split($str, 5));
   }
 
   public function test_split_six_chars()
@@ -59,7 +59,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'øn',
     );
 
-    self::assertEquals($array, u::split($str, 6));
+    self::assertSame($array, u::split($str, 6));
   }
 
   public function test_split_long()
@@ -69,7 +69,7 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         'Iñtërnâtiônàlizætiøn',
     );
 
-    self::assertEquals($array, u::split($str, 40));
+    self::assertSame($array, u::split($str, 40));
   }
 
   public function test_split_newline()
@@ -103,6 +103,6 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
         "\n",
     );
 
-    self::assertEquals($array, u::split($str));
+    self::assertSame($array, u::split($str));
   }
 }

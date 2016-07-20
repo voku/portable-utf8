@@ -11,7 +11,7 @@ class Utf8StristrTest extends PHPUnit_Framework_TestCase
   {
     $str = 'iñtërnâtiônàlizætiøn';
     $search = 'NÂT';
-    self::assertEquals('nâtiônàlizætiøn', u::stristr($str, $search));
+    self::assertSame('nâtiônàlizætiøn', u::stristr($str, $search));
   }
 
   public function test_substr_no_match()
@@ -46,13 +46,13 @@ class Utf8StristrTest extends PHPUnit_Framework_TestCase
   {
     $str = "iñt\nërnâtiônàlizætiøn";
     $search = 'NÂT';
-    self::assertEquals('nâtiônàlizætiøn', u::stristr($str, $search));
+    self::assertSame('nâtiônàlizætiøn', u::stristr($str, $search));
   }
 
   public function test_linefeed_both()
   {
     $str = "iñtërn\nâtiônàlizætiøn";
     $search = "N\nÂT";
-    self::assertEquals("n\nâtiônàlizætiøn", u::stristr($str, $search));
+    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search));
   }
 }

@@ -11,7 +11,7 @@ class Utf8StrcasecmpTest extends PHPUnit_Framework_TestCase
   {
     $str_x = 'iñtërnâtiônàlizætiøn';
     $str_y = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
-    self::assertEquals(0, u::strcasecmp($str_x, $str_y));
+    self::assertSame(0, u::strcasecmp($str_x, $str_y));
   }
 
   public function test_less()

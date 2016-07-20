@@ -14,16 +14,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // string with UTF-16 (LE) BOM + valid UTF-8 && invalid UTF-8
     $string = "\xFF\xFE" . 'string <strong>with utf-8 chars åèä</strong>' . "\xa0\xa1" . ' - doo-bee doo-bee dooh';
 
-    self::assertEquals(74, strlen($string));
-    self::assertEquals(71, UTF8::strlen($string));
-    self::assertEquals(71, UTF8::strlen($string, 'UTF-8', false));
-    self::assertEquals(67, UTF8::strlen($string, 'UTF-8', true));
+    self::assertSame(74, strlen($string));
+    self::assertSame(71, UTF8::strlen($string));
+    self::assertSame(71, UTF8::strlen($string, 'UTF-8', false));
+    self::assertSame(67, UTF8::strlen($string, 'UTF-8', true));
 
     $string_test1 = strip_tags($string);
     $string_test2 = UTF8::strip_tags($string);
 
-    self::assertEquals(57, strlen($string_test1));
-    self::assertEquals(50, UTF8::strlen($string_test2));
+    self::assertSame(57, strlen($string_test1));
+    self::assertSame(50, UTF8::strlen($string_test2));
 
     $testArray = array(
         "<a href='κόσμε'>κόσμε</a>" => 25,
@@ -36,7 +36,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::strlen($actual), $actual);
+      self::assertSame($expected, UTF8::strlen($actual), $actual);
     }
 
     $testArray = array(
@@ -50,7 +50,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, strlen($actual), $actual);
+      self::assertSame($expected, strlen($actual), $actual);
     }
   }
 
@@ -65,7 +65,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::htmlspecialchars($actual));
+      self::assertSame($expected, UTF8::htmlspecialchars($actual));
     }
   }
 
@@ -81,7 +81,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::htmlentities($actual));
+      self::assertSame($expected, UTF8::htmlentities($actual));
     }
   }
 
@@ -97,7 +97,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $actual => $data) {
       foreach ($data as $size => $expected) {
-        self::assertEquals($expected, UTF8::fits_inside($actual, $size), 'error by ' . $actual);
+        self::assertSame($expected, UTF8::fits_inside($actual, $size), 'error by ' . $actual);
       }
     }
   }
@@ -111,11 +111,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // WARNING: HipHop VM 3.5.0 error via travis-ci // "Undefined index: arr"
     if (!defined('HHVM_VERSION')) {
-      self::assertEquals('foo 測試', $array['arr'][0]);
-      self::assertEquals('ການທົດສອບ', $array['arr'][1]);
+      self::assertSame('foo 測試', $array['arr'][0]);
+      self::assertSame('ການທົດສອບ', $array['arr'][1]);
     }
 
-    self::assertEquals('測試', $array['Iñtërnâtiônéàlizætiøn']);
+    self::assertSame('測試', $array['Iñtërnâtiônéàlizætiøn']);
   }
 
   public function testIsHtml()
@@ -132,7 +132,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $testString => $testResult) {
-      self::assertEquals($testResult, UTF8::isHtml($testString), 'tested: ' . $testString);
+      self::assertSame($testResult, UTF8::isHtml($testString), 'tested: ' . $testString);
     }
   }
 
@@ -184,13 +184,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
+      self::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
 
     $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::isUtf8($actual), 'error by - ' . $conter . ' :' . $actual);
+      self::assertSame($expected, UTF8::isUtf8($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
   }
@@ -243,24 +243,24 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::is_utf16($actual), 'error by - ' . $conter . ' :' . $actual);
+      self::assertSame($expected, UTF8::is_utf16($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
 
     $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::isUtf16($actual), 'error by - ' . $conter . ' :' . $actual);
+      self::assertSame($expected, UTF8::isUtf16($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
 
-    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt')));
-    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-be-bom.txt')));
+    self::assertSame(2, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt')));
+    self::assertSame(2, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-be-bom.txt')));
 
-    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt')));
-    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-le-bom.txt')));
+    self::assertSame(1, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt')));
+    self::assertSame(1, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/utf-16-le-bom.txt')));
 
-    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom.txt')));
-    self::assertEquals(true, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/sample-utf-16-be-bom.txt')));
+    self::assertSame(1, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom.txt')));
+    self::assertSame(2, UTF8::isUtf16(file_get_contents(__DIR__ . '/fixtures/sample-utf-16-be-bom.txt')));
   }
 
   public function testIsUtf32()
@@ -311,18 +311,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::is_utf32($actual), 'error by - ' . $conter . ' :' . $actual);
+      self::assertSame($expected, UTF8::is_utf32($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
 
     $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::isUtf32($actual), 'error by - ' . $conter . ' :' . $actual);
+      self::assertSame($expected, UTF8::isUtf32($actual), 'error by - ' . $conter . ' :' . $actual);
       $conter++;
     }
 
-    self::assertEquals(true, UTF8::isUtf32(file_get_contents(__DIR__ . '/fixtures/sample-utf-32-le-bom.txt')));
-    self::assertEquals(true, UTF8::isUtf32(file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt')));
+    self::assertSame(1, UTF8::isUtf32(file_get_contents(__DIR__ . '/fixtures/sample-utf-32-le-bom.txt')));
+    self::assertSame(2, UTF8::isUtf32(file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt')));
   }
 
   public function testCountChars()
@@ -352,14 +352,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals(true, $expected === UTF8::count_chars($actual), 'error by ' . $actual);
+      self::assertSame(true, $expected === UTF8::count_chars($actual), 'error by ' . $actual);
     }
 
     // added invalid UTF-8
     $testArray['白' . "\xa0\xa1" . '白'] = array('白' => 2);
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals(true, $expected === UTF8::count_chars($actual, true), 'error by ' . $actual);
+      self::assertSame(true, $expected === UTF8::count_chars($actual, true), 'error by ' . $actual);
     }
   }
 
@@ -398,7 +398,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $testArray[$utf32_le_bom_only] = true;
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::string_has_bom($actual), 'error by ' . $actual);
+      self::assertSame($expected, UTF8::string_has_bom($actual), 'error by ' . $actual);
     }
   }
 
@@ -414,7 +414,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::strrev($actual), 'error by ' . $actual);
+      self::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
     }
   }
 
@@ -430,11 +430,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
+      self::assertSame($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
     }
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::isAscii($actual), 'error by ' . $actual);
+      self::assertSame($expected, UTF8::isAscii($actual), 'error by ' . $actual);
     }
   }
 
@@ -452,7 +452,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::strrichr($actual, 'κόσμε'), 'error by ' . $actual);
+      self::assertSame($expected, UTF8::strrichr($actual, 'κόσμε'), 'error by ' . $actual);
     }
   }
 
@@ -470,7 +470,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::strrchr($actual, 'κόσμε'), 'error by ' . $actual);
+      self::assertSame($expected, UTF8::strrchr($actual, 'κόσμε'), 'error by ' . $actual);
     }
   }
 
@@ -483,7 +483,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::getCharDirection($actual), 'error by ' . $actual);
+      self::assertSame($expected, UTF8::getCharDirection($actual), 'error by ' . $actual);
     }
   }
 
@@ -516,7 +516,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // WARNING: HipHop error // "ENT_COMPAT" isn't working
     if (defined('HHVM_VERSION') === false) {
       foreach ($testArray as $before => $after) {
-        self::assertEquals($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
+        self::assertSame($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
       }
     }
   }
@@ -547,7 +547,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
+      self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
     }
   }
 
@@ -578,7 +578,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     if (Bootup::is_php('5.4') === true && defined('HHVM_VERSION') !== true) {
       foreach ($testArray as $before => $after) {
-        self::assertEquals($after, UTF8::html_entity_decode($before, ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'error by ' . $before);
+        self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'error by ' . $before);
       }
     }
   }
@@ -597,11 +597,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
+      self::assertSame($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
     }
 
-    self::assertEquals('κόσ?με 	%00 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", false, '?'));
-    self::assertEquals('κόσμε 	 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", true, ''));
+    self::assertSame('κόσ?με 	%00 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", false, '?'));
+    self::assertSame('κόσμε 	 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", true, ''));
   }
 
   public function testRemoveBom()
@@ -615,7 +615,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testBom as $count => $test) {
-      self::assertEquals(
+      self::assertSame(
           'Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα',
           UTF8::removeBOM($test),
           'error by ' . $count
@@ -639,7 +639,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $actual => $data) {
       foreach ($data as $expected => $filter) {
-        self::assertEquals($expected, UTF8::remove_duplicates($actual, $filter));
+        self::assertSame($expected, UTF8::remove_duplicates($actual, $filter));
       }
     }
   }
@@ -654,8 +654,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ζ',
     );
 
-    self::assertEquals($expected, UTF8::range('κ', 'ζ'));
-    self::assertEquals(0, count(UTF8::range('κ', '')));
+    self::assertSame($expected, UTF8::range('κ', 'ζ'));
+    self::assertSame(0, count(UTF8::range('κ', '')));
 
   }
 
@@ -670,7 +670,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $testValue) {
-      self::assertEquals($testValue, UTF8::strlen(UTF8::hash($testValue)));
+      self::assertSame($testValue, UTF8::strlen(UTF8::hash($testValue)));
     }
   }
 
@@ -684,11 +684,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::hex_to_int($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::hex_to_int($before), 'tested: ' . $before);
     }
 
     foreach ($tests as $after => $before) {
-      self::assertEquals($after, UTF8::int_to_hex($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::int_to_hex($before), 'tested: ' . $before);
     }
   }
 
@@ -712,7 +712,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ä',
         'ü',
     );
-    self::assertEquals($expected, $actual);
+    self::assertSame($expected, $actual);
   }
 
   public function testAccess()
@@ -726,7 +726,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $actualString => $testDataArray) {
       foreach ($testDataArray as $stringPos => $expectedString) {
-        self::assertEquals($expectedString, UTF8::access($actualString, $stringPos));
+        self::assertSame($expectedString, UTF8::access($actualString, $stringPos));
       }
     }
   }
@@ -741,7 +741,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::str_sort($before));
+      self::assertSame($after, UTF8::str_sort($before));
     }
 
     $tests = array(
@@ -751,7 +751,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::str_sort($before, false, true));
+      self::assertSame($after, UTF8::str_sort($before, false, true));
     }
 
     $tests = array(
@@ -762,7 +762,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::str_sort($before, true));
+      self::assertSame($after, UTF8::str_sort($before, true));
     }
 
     $tests = array(
@@ -772,7 +772,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::str_sort($before, true, true));
+      self::assertSame($after, UTF8::str_sort($before, true, true));
     }
   }
 
@@ -792,21 +792,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
             '@ü',
         ),
         ''             => array(
-            '',
-            '',
+            false,
+            false,
         ),
         '  '           => array(
-            '',
-            '',
+            false,
+            false,
         ),
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after[0], UTF8::strstr($before, '@', true), $before);
+      self::assertSame($after[0], UTF8::strstr($before, '@', true), 'tested: ' . $before);
     }
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after[1], UTF8::strstr($before, '@'), $before);
+      self::assertSame($after[1], UTF8::strstr($before, '@'), 'tested: ' . $before);
     }
   }
 
@@ -815,7 +815,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $tests = UTF8::json_decode(UTF8::file_get_contents(__DIR__ . '/valid.json'), true);
 
     foreach ($tests as $test) {
-      self::assertEquals($test, UTF8::encode('UTF-8', $test));
+      self::assertSame($test, UTF8::encode('UTF-8', $test));
     }
   }
 
@@ -830,7 +830,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::utf8_encode((UTF8::utf8_decode($before))));
+      self::assertSame($after, UTF8::utf8_encode((UTF8::utf8_decode($before))));
     }
   }
 
@@ -845,7 +845,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::utf8_decode(UTF8::utf8_encode($before)));
+      self::assertSame($after, UTF8::utf8_decode(UTF8::utf8_encode($before)));
     }
   }
 
@@ -1079,16 +1079,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
       $result[$i] = UTF8::to_utf8($test);
 
-      self::assertEquals($test, $result[$i]);
+      self::assertSame($test, $result[$i]);
 
       $i++;
     }
 
     // test with array
-    self::assertEquals($result, UTF8::to_utf8($testArray));
+    self::assertSame($result, UTF8::to_utf8($testArray));
 
     foreach ($testArray as $test) {
-      self::assertEquals($test, UTF8::to_utf8(UTF8::to_utf8($test)));
+      self::assertSame($test, UTF8::to_utf8(UTF8::to_utf8($test)));
     }
   }
 
@@ -1102,7 +1102,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
+      self::assertSame($after, UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
     }
   }
 
@@ -1118,7 +1118,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::encode('', $before), 'tested: ' . $before); // do nothing
+      self::assertSame($after, UTF8::encode('', $before), 'tested: ' . $before); // do nothing
     }
 
     $tests = array(
@@ -1131,7 +1131,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::encode('UTF8', $before), 'tested: ' . $before); // UTF-8
+      self::assertSame($after, UTF8::encode('UTF8', $before), 'tested: ' . $before); // UTF-8
     }
 
     $tests = array(
@@ -1144,7 +1144,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::encode('CP367', $before), 'tested: ' . $before); // CP367
+      self::assertSame($after, UTF8::encode('CP367', $before), 'tested: ' . $before); // CP367
     }
 
     $tests = array(
@@ -1157,7 +1157,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::filter(UTF8::encode('ISo88591', $before)), 'tested: ' . $before); // ISO-8859-1
+      self::assertSame($after, UTF8::filter(UTF8::encode('ISo88591', $before)), 'tested: ' . $before); // ISO-8859-1
     }
 
     $tests = array(
@@ -1170,7 +1170,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before)))); // ISO-8859-15
+      self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before)))); // ISO-8859-15
     }
   }
 
@@ -1206,7 +1206,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     $result = UTF8::filter(array("\xE9", 'à', 'a', "\xe2\x80\xa8"), \Normalizer::FORM_D);
 
-    self::assertEquals(array(0 => 'é', 1 => 'à', 2 => 'a', 3 => "\xe2\x80\xa8"), $result);
+    self::assertSame(array(0 => 'é', 1 => 'à', 2 => 'a', 3 => "\xe2\x80\xa8"), $result);
   }
 
   public function testNormalizeEncoding()
@@ -1215,7 +1215,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ISO'          => 'ISO-8859-1',
         'UTF8'         => 'UTF-8',
         'WINDOWS-1251' => 'WINDOWS-1251',
-        ''             => '',
+        ''             => false,
         'Utf-8'        => 'UTF-8',
         'UTF-8'        => 'UTF-8',
         'ISO-8859-5'   => 'ISO-8859-5',
@@ -1223,7 +1223,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::normalizeEncoding($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::normalizeEncoding($before), 'tested: ' . $before);
     }
   }
 
@@ -1237,7 +1237,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)));
+      self::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)));
     }
   }
 
@@ -1251,7 +1251,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::utf8_encode(UTF8::encode('UTF-8', $before)));
+      self::assertSame($after, UTF8::utf8_encode(UTF8::encode('UTF-8', $before)));
     }
   }
 
@@ -1270,7 +1270,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::fix_simple_utf8($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::fix_simple_utf8($before), 'tested: ' . $before);
     }
   }
 
@@ -1297,10 +1297,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::fix_utf8($before));
+      self::assertSame($after, UTF8::fix_utf8($before));
     }
 
-    self::assertEquals(array('Düsseldorf', 'Fédération'), UTF8::fix_utf8(array('DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration')));
+    self::assertSame(array('Düsseldorf', 'Fédération'), UTF8::fix_utf8(array('DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration')));
   }
 
   public function testUtf8EncodeEncodeUtf8()
@@ -1313,7 +1313,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::encode('UTF-8', UTF8::utf8_encode($before)));
+      self::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_encode($before)));
     }
   }
 
@@ -1327,7 +1327,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::utf8_encode(UTF8::utf8_encode($before)));
+      self::assertSame($after, UTF8::utf8_encode(UTF8::utf8_encode($before)));
     }
   }
 
@@ -1341,17 +1341,17 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::utf8_encode($before));
+      self::assertSame($after, UTF8::utf8_encode($before));
     }
   }
 
   public function testUtf8FileWithBom()
   {
     $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8-bom.txt');
-    self::assertEquals(true, $bom);
+    self::assertSame(true, $bom);
 
     $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8.txt');
-    self::assertEquals(false, $bom);
+    self::assertSame(false, $bom);
   }
 
   public function testIsBinary()
@@ -1365,7 +1365,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::is_binary($before), 'value: ' . $before);
+      self::assertSame($after, UTF8::is_binary($before), 'value: ' . $before);
     }
   }
 
@@ -1388,7 +1388,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
+      self::assertSame($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
     }
   }
 
@@ -1473,11 +1473,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
       // image: do not convert to utf-8 + timeout
       $image = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', null, $context, null, null, 10, false);
-      self::assertEquals(true, UTF8::is_binary($image));
+      self::assertSame(true, UTF8::is_binary($image));
 
       // image: convert to utf-8 + timeout (ERROR)
       $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', null, $context, null, null, 10, true);
-      self::assertEquals(false, UTF8::is_binary($image2));
+      self::assertSame(false, UTF8::is_binary($image2));
 
       self::assertNotEquals($image2, $image);
     }
@@ -1493,152 +1493,176 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::to_utf8(UTF8::to_latin1($before)));
+      self::assertSame($after, UTF8::to_utf8(UTF8::to_latin1($before)));
     }
 
-    self::assertEquals($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
+    self::assertSame($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
 
     // alias
-    self::assertEquals($tests, UTF8::to_utf8(UTF8::to_iso8859($tests)));
-    self::assertEquals($tests, UTF8::toUTF8(UTF8::toLatin1($tests)));
+    self::assertSame($tests, UTF8::to_utf8(UTF8::to_iso8859($tests)));
+    self::assertSame($tests, UTF8::toUTF8(UTF8::toLatin1($tests)));
   }
 
   public function testNumberFormat()
   {
-    self::assertEquals('1.23', UTF8::number_format('1.234567', 2, '.', ''));
-    self::assertEquals('1,3', UTF8::number_format('1.298765', 1, ',', ''));
-    self::assertEquals('1,0', UTF8::number_format('1', 1, ',', ''));
-    self::assertEquals(null, UTF8::number_format('foo', 1, ',', ''));
-    self::assertEquals(null, UTF8::number_format(''));
+    self::assertSame('1.23', UTF8::number_format('1.234567', 2, '.', ''));
+    self::assertSame('1,3', UTF8::number_format('1.298765', 1, ',', ''));
+    self::assertSame('1,0', UTF8::number_format('1', 1, ',', ''));
+    self::assertSame(null, UTF8::number_format('foo', 1, ',', ''));
+    self::assertSame(null, UTF8::number_format(''));
   }
 
   public function testSubstr()
   {
-    self::assertEquals(23, substr(1234, 1, 2));
-    self::assertEquals('bc', substr('abcde', 1, 2));
-    self::assertEquals('de', substr('abcde', -2, 2));
-    self::assertEquals('bc', substr('abcde', 1, 2));
-    self::assertEquals('bc', substr('abcde', 1, 2));
-    self::assertEquals('bcd', substr('abcde', 1, 3));
-    self::assertEquals('bc', substr('abcde', 1, 2));
+    self::assertSame('23', substr(1234, 1, 2));
+    self::assertSame('bc', substr('abcde', 1, 2));
+    self::assertSame('de', substr('abcde', -2, 2));
+    self::assertSame('bc', substr('abcde', 1, 2));
+    self::assertSame('bc', substr('abcde', 1, 2));
+    self::assertSame('bcd', substr('abcde', 1, 3));
+    self::assertSame('bc', substr('abcde', 1, 2));
 
-    self::assertEquals(23, UTF8::substr(1234, 1, 2));
-    self::assertEquals('bc', UTF8::substr('abcde', 1, 2));
-    self::assertEquals('de', UTF8::substr('abcde', -2, 2));
-    self::assertEquals('bc', UTF8::substr('abcde', 1, 2));
-    self::assertEquals('bc', UTF8::substr('abcde', 1, 2, true));
-    self::assertEquals('bc', UTF8::substr('abcde', 1, 2, 'UTF-8', true));
-    self::assertEquals('bcd', UTF8::substr('abcde', 1, 3));
-    self::assertEquals('bc', UTF8::substr('abcde', 1, 2));
+    self::assertSame('23', UTF8::substr(1234, 1, 2));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2));
+    self::assertSame('de', UTF8::substr('abcde', -2, 2));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2, true));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2, 'UTF-8', true));
+    self::assertSame('bcd', UTF8::substr('abcde', 1, 3));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2));
 
     // UTF-8
-    self::assertEquals('文空', UTF8::substr('中文空白', 1, 2));
+    self::assertSame('文空', UTF8::substr('中文空白', 1, 2));
   }
 
   public function testSubstrCount()
   {
-    self::assertEquals(false, substr_count('', ''));
-    self::assertEquals(false, substr_count('', '', 1));
-    self::assertEquals(false, substr_count('', '', 1, 1));
-    self::assertEquals(false, substr_count('', 'test', 1, 1));
-    self::assertEquals(false, substr_count('test', '', 1, 1));
-    self::assertEquals(0, substr_count('test', 'test', 1, 1));
-    self::assertEquals(1, substr_count(12345, 23, 1, 2));
-    self::assertEquals(2, substr_count('abcdebc', 'bc'));
-    self::assertEquals(0, substr_count('abcde', 'de', -2, 2));
-    self::assertEquals(0, substr_count('abcde', 'bcg', 1, 2));
-    self::assertEquals(0, substr_count('abcde', 'BC', 1, 2));
-    self::assertEquals(1, substr_count('abcde', 'bc', 1, 3));
-    self::assertEquals(0, substr_count('abcde', 'cd', 1, 2));
+    // php compatible tests
 
-    self::assertEquals(false, UTF8::substr_count('', ''));
-    self::assertEquals(false, UTF8::substr_count('', '', 1));
-    self::assertEquals(false, UTF8::substr_count('', '', 1, 1));
-    self::assertEquals(false, UTF8::substr_count('', 'test', 1, 1));
-    self::assertEquals(false, UTF8::substr_count('test', '', 1, 1));
-    self::assertEquals(1, UTF8::substr_count(12345, 23, 1, 2));
-    self::assertEquals(2, UTF8::substr_count('abcdebc', 'bc'));
-    self::assertEquals(1, UTF8::substr_count('abcde', 'de', -2, 2));
-    self::assertEquals(0, UTF8::substr_count('abcde', 'bcg', 1, 2));
-    self::assertEquals(0, UTF8::substr_count('abcde', 'BC', 1, 2));
-    self::assertEquals(1, UTF8::substr_count('abcde', 'bc', 1, 3));
-    self::assertEquals(0, UTF8::substr_count('abcde', 'cd', 1, 2));
+    self::assertSame(false, substr_count('', ''));
+    self::assertSame(false, UTF8::substr_count('', ''));
 
-    // UTF-8
-    self::assertEquals(2, UTF8::substr_count("○●◎\r◎", '◎'));
-    self::assertEquals(1, UTF8::substr_count("○●◎\r", '●◎', 1, 2));
-    self::assertEquals(1, UTF8::substr_count('中文空白', '文空', 1, 2));
+    self::assertSame(false, substr_count('', '', 1));
+    self::assertSame(false, UTF8::substr_count('', '', 1));
+
+    self::assertSame(false, substr_count('', '', 1, 1));
+    self::assertSame(false, UTF8::substr_count('', '', 1, 1));
+
+    self::assertSame(false, substr_count('', 'test', 1, 1));
+    self::assertSame(false, UTF8::substr_count('', 'test', 1, 1));
+
+    self::assertSame(false, substr_count('test', '', 1, 1));
+    self::assertSame(false, UTF8::substr_count('test', '', 1, 1));
+
+    self::assertSame(0, substr_count('test', 'test', 1, 1));
+    self::assertSame(0, UTF8::substr_count('test', 'test', 1, 1));
+
+    self::assertSame(1, substr_count(12345, 23, 1, 2));
+    self::assertSame(1, UTF8::substr_count(12345, 23, 1, 2));
+
+    self::assertSame(2, substr_count('abcdebc', 'bc'));
+    self::assertSame(2, UTF8::substr_count('abcdebc', 'bc'));
+
+    self::assertSame(false, substr_count('abcde', 'de', -2, 2));
+    self::assertSame(false, UTF8::substr_count('abcde', 'de', -2, 2));
+
+    self::assertSame(0, substr_count('abcde', 'bcg', 1, 2));
+    self::assertSame(0, UTF8::substr_count('abcde', 'bcg', 1, 2));
+
+    self::assertSame(0, substr_count('abcde', 'BC', 1, 2));
+    self::assertSame(0, UTF8::substr_count('abcde', 'BC', 1, 2));
+
+    self::assertSame(1, substr_count('abcde', 'bc', 1, 3));
+    self::assertSame(1, UTF8::substr_count('abcde', 'bc', 1, 3));
+
+    self::assertSame(0, substr_count('abcde', 'cd', 1, 2));
+    self::assertSame(0, UTF8::substr_count('abcde', 'cd', 1, 2));
+
+    // UTF-8 tests
+
+    self::assertSame(2, UTF8::substr_count("○●◎\r◎", '◎'));
+    self::assertSame(1, UTF8::substr_count("○●◎\r", '●◎', 1, 2));
+    self::assertSame(1, UTF8::substr_count('中文空白', '文空', 1, 2));
   }
 
   public function testSubstrCompare()
   {
-    self::assertEquals(0, substr_compare(12345, 23, 1, 2));
-    self::assertEquals(0, substr_compare('abcde', 'bc', 1, 2));
-    self::assertEquals(0, substr_compare('abcde', 'de', -2, 2));
-    self::assertEquals(0, substr_compare('abcde', 'bcg', 1, 2));
-    self::assertEquals(0, substr_compare('abcde', 'BC', 1, 2, true));
-    self::assertEquals(1, substr_compare('abcde', 'bc', 1, 3));
-    self::assertEquals(-1, substr_compare('abcde', 'cd', 1, 2));
+    // php compatible tests
 
-    self::assertEquals(0, UTF8::substr_compare(12345, 23, 1, 2));
-    self::assertEquals(0, UTF8::substr_compare('abcde', 'bc', 1, 2));
-    self::assertEquals(0, UTF8::substr_compare('abcde', 'de', -2, 2));
-    self::assertEquals(0, UTF8::substr_compare('abcde', 'bcg', 1, 2));
-    self::assertEquals(0, UTF8::substr_compare('abcde', 'BC', 1, 2, true));
-    self::assertEquals(1, UTF8::substr_compare('abcde', 'bc', 1, 3));
-    self::assertEquals(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
+    self::assertSame(0, substr_compare(12345, 23, 1, 2));
+    self::assertSame(0, UTF8::substr_compare(12345, 23, 1, 2));
 
-    // UTF-8
-    self::assertEquals(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2, false));
-    self::assertEquals(0, UTF8::substr_compare('中文空白', '文空', 1, 2, true));
+    self::assertSame(0, substr_compare('abcde', 'bc', 1, 2));
+    self::assertSame(0, UTF8::substr_compare('abcde', 'bc', 1, 2));
+
+    self::assertSame(0, substr_compare('abcde', 'de', -2, 2));
+    self::assertSame(0, UTF8::substr_compare('abcde', 'de', -2, 2));
+
+    self::assertSame(0, substr_compare('abcde', 'bcg', 1, 2));
+    self::assertSame(0, UTF8::substr_compare('abcde', 'bcg', 1, 2));
+
+    self::assertSame(0, substr_compare('abcde', 'BC', 1, 2, true));
+    self::assertSame(0, UTF8::substr_compare('abcde', 'BC', 1, 2, true));
+
+    self::assertSame(1, substr_compare('abcde', 'bc', 1, 3));
+    self::assertSame(1, UTF8::substr_compare('abcde', 'bc', 1, 3));
+
+    self::assertSame(-1, substr_compare('abcde', 'cd', 1, 2));
+    self::assertSame(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
+
+    // UTF-8 tests
+
+    self::assertSame(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2, false));
+    self::assertSame(0, UTF8::substr_compare('中文空白', '文空', 1, 2, true));
   }
 
   public function testStrtr()
   {
+    // php compatible tests
+
     $arr = array(
         'Hello' => 'Hi',
         'world' => 'earth',
     );
-    self::assertEquals('Hi earth', strtr('Hello world', $arr));
-    self::assertEquals('Hi earth', UTF8::strtr('Hello world', $arr));
+    self::assertSame('Hi earth', strtr('Hello world', $arr));
+    self::assertSame('Hi earth', UTF8::strtr('Hello world', $arr));
 
-    // UTF-8
+    // UTF-8 tests
+
     $arr = array(
         'Hello' => '○●◎',
         '中文空白'  => 'earth',
     );
-    self::assertEquals('○●◎ earth', UTF8::strtr('Hello 中文空白', $arr));
+    self::assertSame('○●◎ earth', UTF8::strtr('Hello 中文空白', $arr));
 
-    // extra
-    self::assertEquals('○●◎◎o wor◎d', UTF8::strtr('Hello world', 'Hello', '○●◎'));
-    self::assertEquals('Hello world H●◎', UTF8::strtr('Hello world ○●◎', '○', 'Hello'));
+    self::assertSame('○●◎◎o wor◎d', UTF8::strtr('Hello world', 'Hello', '○●◎'));
+    self::assertSame('Hello world H●◎', UTF8::strtr('Hello world ○●◎', '○', 'Hello'));
   }
 
   public function testStrpbrk()
   {
     $text = 'This is a Simple text.';
 
-    self::assertEquals(false, strpbrk($text, ''));
-    self::assertEquals(strpbrk($text, ''), UTF8::strpbrk($text, ''));
+    self::assertSame(false, strpbrk($text, ''));
+    self::assertSame(strpbrk($text, ''), UTF8::strpbrk($text, ''));
 
-    self::assertEquals(false, strpbrk('', 'mi'));
-    self::assertEquals(strpbrk('', 'mi'), UTF8::strpbrk('', 'mi'));
+    self::assertSame(false, strpbrk('', 'mi'));
+    self::assertSame(strpbrk('', 'mi'), UTF8::strpbrk('', 'mi'));
 
     // this echoes "is is a Simple text." because 'i' is matched first
-    self::assertEquals('is is a Simple text.', strpbrk($text, 'mi'));
-    self::assertEquals(strpbrk($text, 'mi'), UTF8::strpbrk($text, 'mi'));
+    self::assertSame('is is a Simple text.', strpbrk($text, 'mi'));
+    self::assertSame(strpbrk($text, 'mi'), UTF8::strpbrk($text, 'mi'));
 
     // this echoes "Simple text." because chars are case sensitive
-    self::assertEquals('Simple text.', strpbrk($text, 'S'));
-    self::assertEquals('Simple text.', UTF8::strpbrk($text, 'S'));
+    self::assertSame('Simple text.', strpbrk($text, 'S'));
+    self::assertSame('Simple text.', UTF8::strpbrk($text, 'S'));
 
     // UTF-8
 
     $text = 'Hello -中文空白-';
-    self::assertEquals('白-', UTF8::strpbrk($text, '白'));
+    self::assertSame('白-', UTF8::strpbrk($text, '白'));
   }
 
-  /* TODO: different php version with different results :/
   public function testStrncmp()
   {
     $tests = array(
@@ -1657,12 +1681,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::strncmp($before, 'ü', 10), 'tested: ' . $before);
+      self::assertSame($after, UTF8::strncmp($before, 'ü', 10), 'tested: ' . $before);
     }
   }
-  */
 
-  /* TODO: different php version with different results :/
   public function testStrncasecmp()
   {
     $tests = array(
@@ -1681,10 +1703,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::strncasecmp($before, 'ü', 10), 'tested: ' . $before);
+      self::assertSame($after, UTF8::strncasecmp($before, 'ü', 10), 'tested: ' . $before);
     }
   }
-  */
 
   public function testStrRepeat()
   {
@@ -1700,7 +1721,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::str_repeat($before, 17));
+      self::assertSame($after, UTF8::str_repeat($before, 17));
     }
   }
 
@@ -1721,7 +1742,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $testString => $testResult) {
-      self::assertEquals($testResult, $this->cleanString($testString));
+      self::assertSame($testResult, $this->cleanString($testString));
     }
   }
 
@@ -1759,12 +1780,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ),
     );
 
-    self::assertEquals('  -ABC-中文空白-  ', UTF8::filter_var('  -ABC-中文空白-  ', FILTER_DEFAULT));
-    self::assertEquals(false, UTF8::filter_var('  -ABC-中文空白-  ', FILTER_VALIDATE_URL));
-    self::assertEquals(false, UTF8::filter_var('  -ABC-中文空白-  ', FILTER_VALIDATE_EMAIL));
-    self::assertEquals(-1, UTF8::filter_var('中文空白 ', FILTER_VALIDATE_INT, $options));
-    self::assertEquals('99', UTF8::filter_var(99, FILTER_VALIDATE_INT, $options));
-    self::assertEquals(-1, UTF8::filter_var(100, FILTER_VALIDATE_INT, $options));
+    self::assertSame('  -ABC-中文空白-  ', UTF8::filter_var('  -ABC-中文空白-  ', FILTER_DEFAULT));
+    self::assertSame(false, UTF8::filter_var('  -ABC-中文空白-  ', FILTER_VALIDATE_URL));
+    self::assertSame(false, UTF8::filter_var('  -ABC-中文空白-  ', FILTER_VALIDATE_EMAIL));
+    self::assertSame(-1, UTF8::filter_var('中文空白 ', FILTER_VALIDATE_INT, $options));
+    self::assertSame(99, UTF8::filter_var(99, FILTER_VALIDATE_INT, $options));
+    self::assertSame(-1, UTF8::filter_var(100, FILTER_VALIDATE_INT, $options));
   }
 
   public function testFilterVarArray()
@@ -1788,7 +1809,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $data['age'] = '18';
     $data['email'] = 'foo@bar.de';
 
-    self::assertEquals(
+    self::assertSame(
         array(
             'name'  => 'Κόσμε',
             'age'   => 18,
@@ -1797,7 +1818,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         UTF8::filter_var_array($data, $filters, true)
     );
 
-    self::assertEquals(
+    self::assertSame(
         array(
             'name'  => 'κόσμε',
             'age'   => '18',
@@ -1820,7 +1841,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::replace_diamond_question_mark($before, ''));
+      self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''));
     }
   }
 
@@ -1837,7 +1858,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::normalize_msword($before));
+      self::assertSame($after, UTF8::normalize_msword($before));
     }
   }
 
@@ -1857,22 +1878,22 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     for ($i = 0; $i < 2; $i++) {
       foreach ($tests as $before => $after) {
-        self::assertEquals($after, UTF8::normalize_whitespace($before));
+        self::assertSame($after, UTF8::normalize_whitespace($before));
       }
     }
 
     // replace "non breaking space"
-    self::assertEquals('abc- -öäü- -', UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC"));
+    self::assertSame('abc- -öäü- -', UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC"));
     // keep "non breaking space"
-    self::assertEquals("abc-\xc2\xa0-öäü- -", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true));
+    self::assertSame("abc-\xc2\xa0-öäü- -", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true));
     // ... and keep "bidirectional text chars"
-    self::assertEquals("abc-\xc2\xa0-öäü- -\xE2\x80\xAC", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true, true));
+    self::assertSame("abc-\xc2\xa0-öäü- -\xE2\x80\xAC", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true, true));
   }
 
   public function testString()
   {
-    self::assertEquals('', UTF8::string(array()));
-    self::assertEquals(
+    self::assertSame('', UTF8::string(array()));
+    self::assertSame(
         'öäü',
         UTF8::string(
             array(
@@ -1882,7 +1903,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
             )
         )
     );
-    self::assertEquals(
+    self::assertSame(
         'ㅡㅡ',
         UTF8::string(
             array(
@@ -1906,7 +1927,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::strip_tags($before));
+      self::assertSame($after, UTF8::strip_tags($before));
     }
   }
 
@@ -1921,26 +1942,26 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         $secondString
     );
 
-    self::assertEquals($expectedString, $actualString);
+    self::assertSame($expectedString, $actualString);
 
-    self::assertEquals('中文空白______', UTF8::str_pad('中文空白', 10, '_', STR_PAD_RIGHT));
-    self::assertEquals('______中文空白', UTF8::str_pad('中文空白', 10, '_', STR_PAD_LEFT));
-    self::assertEquals('___中文空白___', UTF8::str_pad('中文空白', 10, '_', STR_PAD_BOTH));
+    self::assertSame('中文空白______', UTF8::str_pad('中文空白', 10, '_', STR_PAD_RIGHT));
+    self::assertSame('______中文空白', UTF8::str_pad('中文空白', 10, '_', STR_PAD_LEFT));
+    self::assertSame('___中文空白___', UTF8::str_pad('中文空白', 10, '_', STR_PAD_BOTH));
 
     $toPad = '<IñtërnëT>'; // 10 characters
     $padding = 'ø__'; // 4 characters
 
-    self::assertEquals($toPad . '          ', UTF8::str_pad($toPad, 20));
-    self::assertEquals('          ' . $toPad, UTF8::str_pad($toPad, 20, ' ', STR_PAD_LEFT));
-    self::assertEquals('     ' . $toPad . '     ', UTF8::str_pad($toPad, 20, ' ', STR_PAD_BOTH));
+    self::assertSame($toPad . '          ', UTF8::str_pad($toPad, 20));
+    self::assertSame('          ' . $toPad, UTF8::str_pad($toPad, 20, ' ', STR_PAD_LEFT));
+    self::assertSame('     ' . $toPad . '     ', UTF8::str_pad($toPad, 20, ' ', STR_PAD_BOTH));
 
-    self::assertEquals($toPad, UTF8::str_pad($toPad, 10));
-    self::assertEquals('5char', str_pad('5char', 4)); // str_pos won't truncate input string
-    self::assertEquals($toPad, UTF8::str_pad($toPad, 8));
+    self::assertSame($toPad, UTF8::str_pad($toPad, 10));
+    self::assertSame('5char', str_pad('5char', 4)); // str_pos won't truncate input string
+    self::assertSame($toPad, UTF8::str_pad($toPad, 8));
 
-    self::assertEquals($toPad . 'ø__ø__ø__ø', UTF8::str_pad($toPad, 20, $padding, STR_PAD_RIGHT));
-    self::assertEquals('ø__ø__ø__ø' . $toPad, UTF8::str_pad($toPad, 20, $padding, STR_PAD_LEFT));
-    self::assertEquals('ø__ø_' . $toPad . 'ø__ø_', UTF8::str_pad($toPad, 20, $padding, STR_PAD_BOTH));
+    self::assertSame($toPad . 'ø__ø__ø__ø', UTF8::str_pad($toPad, 20, $padding, STR_PAD_RIGHT));
+    self::assertSame('ø__ø__ø__ø' . $toPad, UTF8::str_pad($toPad, 20, $padding, STR_PAD_LEFT));
+    self::assertSame('ø__ø_' . $toPad . 'ø__ø_', UTF8::str_pad($toPad, 20, $padding, STR_PAD_BOTH));
   }
 
   /**
@@ -1952,7 +1973,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testTrim($input, $output)
   {
     for ($i = 0; $i <= 100; $i++) {
-      self::assertEquals($output, UTF8::trim($input));
+      self::assertSame($output, UTF8::trim($input));
     }
   }
 
@@ -1964,7 +1985,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
    */
   public function testTrimAdvancedWithMoreThenTwoBytes($input, $output)
   {
-    self::assertEquals($output, UTF8::trim($input, '白'));
+    self::assertSame($output, UTF8::trim($input, '白'));
   }
 
   /**
@@ -1975,11 +1996,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     return array(
         array(
             1,
-            1,
+            '1',
         ),
         array(
             -1,
-            -1,
+            '-1',
         ),
         array(
             '  ',
@@ -2016,7 +2037,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
    */
   public function testTrimAdvanced($input, $output)
   {
-    self::assertEquals($output, UTF8::trim($input, ' '));
+    self::assertSame($output, UTF8::trim($input, ' '));
   }
 
   /**
@@ -2027,11 +2048,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     return array(
         array(
             1,
-            1,
+            '1',
         ),
         array(
             -1,
-            -1,
+            '-1',
         ),
         array(
             '  ',
@@ -2068,11 +2089,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     return array(
         array(
             1,
-            1,
+            '1',
         ),
         array(
             -1,
-            -1,
+            '-1',
         ),
         array(
             '  ',
@@ -2140,15 +2161,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $counter = 0;
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        self::assertEquals($after, UTF8::to_utf8(UTF8::cleanup($testString)), $counter . ' - ' . $before);
+        self::assertSame($after, UTF8::to_utf8(UTF8::cleanup($testString)), $counter . ' - ' . $before);
       }
       $counter++;
     }
 
     $testString = 'test' . UTF8::html_entity_decode('&nbsp;') . 'test';
-    self::assertEquals('test' . "\xc2\xa0" . 'test', $testString);
-    self::assertEquals('test&nbsp;test', UTF8::htmlentities($testString));
-    self::assertEquals('test' . "\xc2\xa0" . 'test', UTF8::cleanup($testString));
+    self::assertSame('test' . "\xc2\xa0" . 'test', $testString);
+    self::assertSame('test&nbsp;test', UTF8::htmlentities($testString));
+    self::assertSame('test' . "\xc2\xa0" . 'test', UTF8::cleanup($testString));
   }
 
   public function testStrwidth()
@@ -2165,7 +2186,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::strwidth($before));
+      self::assertSame($after, UTF8::strwidth($before));
     }
   }
 
@@ -2186,7 +2207,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::to_utf8($before));
+      self::assertSame($after, UTF8::to_utf8($before));
     }
   }
 
@@ -2204,7 +2225,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::utf8_fix_win1252_chars($before));
+      self::assertSame($after, UTF8::utf8_fix_win1252_chars($before));
     }
   }
 
@@ -2251,7 +2272,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::urldecode($before), 'testing: ' . $before);
+      self::assertSame($after, UTF8::urldecode($before), 'testing: ' . $before);
     }
   }
 
@@ -2265,12 +2286,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::json_decode(UTF8::json_encode($before)));
+      self::assertSame($after, UTF8::json_decode(UTF8::json_encode($before)));
     }
 
     $testArray['{"array":[1,2,3],,...}}'] = false;
     foreach ($testArray as $before => $after) {
-      self::assertEquals(
+      self::assertSame(
           ($after === false ? false : true),
           UTF8::is_json($before),
           'tested: ' . $before
@@ -2289,7 +2310,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $testArray = array_combine($latinFile, $utf8File);
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::to_utf8($before));
+      self::assertSame($after, UTF8::to_utf8($before));
     }
   }
 
@@ -2309,7 +2330,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertEquals($after, UTF8::chr($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
     }
   }
 
@@ -2328,7 +2349,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $test) {
-      self::assertEquals($test[0], UTF8::words_limit($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
+      self::assertSame($test[0], UTF8::words_limit($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
     }
   }
 
@@ -2342,7 +2363,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $test) {
-      self::assertEquals($test[0], UTF8::str_limit_after_word($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
+      self::assertSame($test[0], UTF8::str_limit_after_word($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
     }
   }
 
@@ -2399,7 +2420,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $counter = 0;
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        self::assertEquals($after, UTF8::cleanup($testString), $counter);
+        self::assertSame($after, UTF8::cleanup($testString), $counter);
       }
       $counter++;
     }
@@ -2465,7 +2486,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        self::assertEquals($after, UTF8::cleanup($testString));
+        self::assertSame($after, UTF8::cleanup($testString));
       }
     }
 
@@ -2474,8 +2495,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testToASCII()
   {
     $tests = array(
-        1                               => 1,
-        -1                              => -1,
+        1                               => '1',
+        -1                              => '-1',
         ' '                             => ' ',
         ''                              => '',
         'أبز'                           => '\'bz',
@@ -2505,7 +2526,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::to_ascii($before), $before);
+      self::assertSame($after, UTF8::to_ascii($before), $before);
     }
   }
 
@@ -2535,15 +2556,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::isBase64($before), $before);
+      self::assertSame($after, UTF8::isBase64($before), $before);
     }
   }
 
   public function testSwapCase()
   {
     $tests = array(
-        1                               => 1,
-        -1                              => -1,
+        1                               => '1',
+        -1                              => '-1',
         ' '                             => ' ',
         ''                              => '',
         'أبز'                           => 'أبز',
@@ -2567,15 +2588,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::swapCase($before), $before);
+      self::assertSame($after, UTF8::swapCase($before), $before);
     }
   }
 
   public function testStrTransliterate()
   {
     $tests = array(
-        1                               => 1,
-        -1                              => -1,
+        1                               => '1',
+        -1                              => '-1',
         ' '                             => ' ',
         ''                              => '',
         'أبز'                           => '\'bz',
@@ -2600,7 +2621,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::str_transliterate($before), $before);
+      self::assertSame($after, UTF8::str_transliterate($before), $before);
     }
   }
 
@@ -2613,7 +2634,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::decimal_to_chr($before));
+      self::assertSame($after, UTF8::decimal_to_chr($before));
     }
   }
 
@@ -2627,16 +2648,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::chr_to_decimal($before));
+      self::assertSame($after, UTF8::chr_to_decimal($before));
     }
   }
 
   public function testStrToBinary()
   {
     $tests = array(
-        0   => '00110000',
+        0   => '110000',
         '1' => '110001',
-        '~' => '01111110',
+        '~' => '1111110',
         '§' => '1100001010100111',
         'ሇ' => '111000011000100010000111',
         '😃' => '11110000100111111001100010000011',
@@ -2644,10 +2665,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::str_to_binary($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::str_to_binary($before), 'tested: ' . $before);
     }
 
     foreach ($tests as $before => $after) {
+      // TODO: use "self::assertSame()"
       self::assertEquals($before, UTF8::binary_to_str(UTF8::str_to_binary($before)), 'tested: ' . $before);
     }
   }
@@ -2656,29 +2678,29 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     $dirtyTestString = "\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃";
 
-    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString));
-    self::assertEquals("\xEF\xBB\xBF„Abcdef \x20…” — 😃", UTF8::clean($dirtyTestString, false, true, false, false));
-    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, true));
-    self::assertEquals("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, false));
-    self::assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, true));
-    self::assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, false));
-    self::assertEquals("\xEF\xBB\xBF\"Abcdef  ...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, false));
-    self::assertEquals("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, true));
-    self::assertEquals("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, false));
-    self::assertEquals("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, true));
-    self::assertEquals("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, false));
-    self::assertEquals("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, true));
-    self::assertEquals('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, false));
-    self::assertEquals('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, true));
-    self::assertEquals('"Abcdef  ..." - 😃', UTF8::clean($dirtyTestString, true, true, true, false));
-    self::assertEquals("\"Abcdef\xc2\xa0 ...\" - 😃", UTF8::clean($dirtyTestString, true, true, true, true));
+    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString));
+    self::assertSame("\xEF\xBB\xBF„Abcdef \x20…” — 😃", UTF8::clean($dirtyTestString, false, true, false, false));
+    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, true));
+    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, false));
+    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, true));
+    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, false));
+    self::assertSame("\xEF\xBB\xBF\"Abcdef  ...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, false));
+    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, true));
+    self::assertSame("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, false));
+    self::assertSame("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, true));
+    self::assertSame("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, false));
+    self::assertSame("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, true));
+    self::assertSame('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, false));
+    self::assertSame('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, true));
+    self::assertSame('"Abcdef  ..." - 😃', UTF8::clean($dirtyTestString, true, true, true, false));
+    self::assertSame("\"Abcdef\xc2\xa0 ...\" - 😃", UTF8::clean($dirtyTestString, true, true, true, true));
   }
 
   public function testWhitespace()
   {
     $whitespaces = UTF8::whitespace_table();
     foreach ($whitespaces as $whitespace) {
-      self::assertEquals(' ', UTF8::clean($whitespace, false, true));
+      self::assertSame(' ', UTF8::clean($whitespace, false, true));
     }
   }
 
@@ -2691,22 +2713,22 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::ltrim($before));
+      self::assertSame($after, UTF8::ltrim($before));
     }
 
-    self::assertEquals('tërnâtiônàlizætiøn', UTF8::ltrim('ñtërnâtiônàlizætiøn', 'ñ'));
-    self::assertEquals('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', 'ñ'));
-    self::assertEquals('', UTF8::ltrim(''));
-    self::assertEquals('', UTF8::ltrim(' '));
-    self::assertEquals('Iñtërnâtiônàlizætiøn', UTF8::ltrim('/Iñtërnâtiônàlizætiøn', '/'));
-    self::assertEquals('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', '^s'));
-    self::assertEquals("\nñtërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", 'ñ'));
-    self::assertEquals('tërnâtiônàlizætiøn', UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
+    self::assertSame('tërnâtiônàlizætiøn', UTF8::ltrim('ñtërnâtiônàlizætiøn', 'ñ'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', 'ñ'));
+    self::assertSame('', UTF8::ltrim(''));
+    self::assertSame('', UTF8::ltrim(' '));
+    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('/Iñtërnâtiônàlizætiøn', '/'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', '^s'));
+    self::assertSame("\nñtërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", 'ñ'));
+    self::assertSame('tërnâtiônàlizætiøn', UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
   }
 
   public function testStr_split()
   {
-    self::assertEquals(
+    self::assertSame(
         array(
             'd',
             'é',
@@ -2715,7 +2737,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ),
         UTF8::str_split('déjà', 1)
     );
-    self::assertEquals(
+    self::assertSame(
         array(
             'dé',
             'jà',
@@ -2733,21 +2755,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::rtrim($before));
+      self::assertSame($after, UTF8::rtrim($before));
     }
 
-    self::assertEquals('Iñtërnâtiônàlizæti', UTF8::rtrim('Iñtërnâtiônàlizætiø', 'ø'));
-    self::assertEquals('Iñtërnâtiônàlizætiøn ', UTF8::rtrim('Iñtërnâtiônàlizætiøn ', 'ø'));
-    self::assertEquals('', UTF8::rtrim(''));
-    self::assertEquals("Iñtërnâtiônàlizætiø\n", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", 'ø'));
-    self::assertEquals('Iñtërnâtiônàlizæti', UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "\nø"));
+    self::assertSame('Iñtërnâtiônàlizæti', UTF8::rtrim('Iñtërnâtiônàlizætiø', 'ø'));
+    self::assertSame('Iñtërnâtiônàlizætiøn ', UTF8::rtrim('Iñtërnâtiônàlizætiøn ', 'ø'));
+    self::assertSame('', UTF8::rtrim(''));
+    self::assertSame("Iñtërnâtiônàlizætiø\n", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", 'ø'));
+    self::assertSame('Iñtërnâtiônàlizæti', UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "\nø"));
   }
 
   public function testStrtolower()
   {
     $tests = array(
-        1               => 1,
-        -1              => -1,
+        1               => '1',
+        -1              => '-1',
         'ABC-中文空白'      => 'abc-中文空白',
         'ÖÄÜ'           => 'öäü',
         'öäü'           => 'öäü',
@@ -2761,15 +2783,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::strtolower($before));
+      self::assertSame($after, UTF8::strtolower($before));
     }
   }
 
   public function testStrtoupper()
   {
     $tests = array(
-        1               => 1,
-        -1              => -1,
+        1               => '1',
+        -1              => '-1',
         'abc-中文空白'      => 'ABC-中文空白',
         'öäü'           => 'ÖÄÜ',
         'öäü test öäü'  => 'ÖÄÜ TEST ÖÄÜ',
@@ -2779,7 +2801,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::strtoupper($before));
+      self::assertSame($after, UTF8::strtoupper($before));
     }
   }
 
@@ -2794,7 +2816,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::min($before));
+      self::assertSame($after, UTF8::min($before));
     }
   }
 
@@ -2809,58 +2831,58 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertEquals($after, UTF8::max($before));
+      self::assertSame($after, UTF8::max($before));
     }
   }
 
   public function testUcfirst()
   {
-    self::assertEquals('Öäü', UTF8::ucfirst('Öäü'));
-    self::assertEquals('Öäü', UTF8::ucfirst('öäü'));
-    self::assertEquals('Κόσμε', UTF8::ucfirst('κόσμε'));
-    self::assertEquals('ABC-ÖÄÜ-中文空白', UTF8::ucfirst('aBC-ÖÄÜ-中文空白'));
-    self::assertEquals('Iñtërnâtiônàlizætiøn', UTF8::ucfirst('iñtërnâtiônàlizætiøn'));
-    self::assertEquals('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('ñtërnâtiônàlizætiøn'));
-    self::assertEquals(' iñtërnâtiônàlizætiøn', UTF8::ucfirst(' iñtërnâtiônàlizætiøn'));
-    self::assertEquals('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('Ñtërnâtiônàlizætiøn'));
-    self::assertEquals('ÑtërnâtiônàlizætIøN', UTF8::ucfirst('ñtërnâtiônàlizætIøN'));
-    self::assertEquals('ÑtërnâtiônàlizætIøN test câse', UTF8::ucfirst('ñtërnâtiônàlizætIøN test câse'));
-    self::assertEquals('', UTF8::ucfirst(''));
-    self::assertEquals('Ñ', UTF8::ucfirst('ñ'));
-    self::assertEquals("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
+    self::assertSame('Öäü', UTF8::ucfirst('Öäü'));
+    self::assertSame('Öäü', UTF8::ucfirst('öäü'));
+    self::assertSame('Κόσμε', UTF8::ucfirst('κόσμε'));
+    self::assertSame('ABC-ÖÄÜ-中文空白', UTF8::ucfirst('aBC-ÖÄÜ-中文空白'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ucfirst('iñtërnâtiônàlizætiøn'));
+    self::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('ñtërnâtiônàlizætiøn'));
+    self::assertSame(' iñtërnâtiônàlizætiøn', UTF8::ucfirst(' iñtërnâtiônàlizætiøn'));
+    self::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('Ñtërnâtiônàlizætiøn'));
+    self::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucfirst('ñtërnâtiônàlizætIøN'));
+    self::assertSame('ÑtërnâtiônàlizætIøN test câse', UTF8::ucfirst('ñtërnâtiônàlizætIøN test câse'));
+    self::assertSame('', UTF8::ucfirst(''));
+    self::assertSame('Ñ', UTF8::ucfirst('ñ'));
+    self::assertSame("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
     self::assertSame('Deja', UTF8::ucfirst('deja'));
     self::assertSame('Σσς', UTF8::ucfirst('σσς'));
     self::assertSame('DEJa', UTF8::ucfirst('dEJa'));
     self::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
 
     // alias
-    self::assertEquals('Öäü', UTF8::ucword('öäü'));
+    self::assertSame('Öäü', UTF8::ucword('öäü'));
   }
 
   public function testUcWords()
   {
-    self::assertEquals('Iñt Ërn ÂTi Ônà Liz Æti Øn', UTF8::ucwords('iñt ërn âTi ônà liz æti øn'));
-    self::assertEquals("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
-    self::assertEquals('', UTF8::ucwords(''));
-    self::assertEquals('Ñ', UTF8::ucwords('ñ'));
-    self::assertEquals("Iñt ËrN Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërN âti\n ônà liz æti øn"));
-    self::assertEquals('ÑtërnâtiônàlizætIøN', UTF8::ucwords('ñtërnâtiônàlizætIøN'));
-    self::assertEquals('ÑtërnâtiônàlizætIøN Test câse', UTF8::ucwords('ñtërnâtiônàlizætIøN test câse', array('câse')));
+    self::assertSame('Iñt Ërn ÂTi Ônà Liz Æti Øn', UTF8::ucwords('iñt ërn âTi ônà liz æti øn'));
+    self::assertSame("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
+    self::assertSame('', UTF8::ucwords(''));
+    self::assertSame('Ñ', UTF8::ucwords('ñ'));
+    self::assertSame("Iñt ËrN Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërN âti\n ônà liz æti øn"));
+    self::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucwords('ñtërnâtiônàlizætIøN'));
+    self::assertSame('ÑtërnâtiônàlizætIøN Test câse', UTF8::ucwords('ñtërnâtiônàlizætIøN test câse', array('câse')));
     self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ'));
   }
 
   public function testLcfirst()
   {
-    self::assertEquals('öäü', UTF8::lcfirst('Öäü'));
-    self::assertEquals('κόσμε', UTF8::lcfirst('Κόσμε'));
-    self::assertEquals('aBC-ÖÄÜ-中文空白', UTF8::lcfirst('ABC-ÖÄÜ-中文空白'));
-    self::assertEquals('ñTËRNÂTIÔNÀLIZÆTIØN', UTF8::lcfirst('ÑTËRNÂTIÔNÀLIZÆTIØN'));
-    self::assertEquals('ñTËRNÂTIÔNÀLIZÆTIØN', UTF8::lcfirst('ñTËRNÂTIÔNÀLIZÆTIØN'));
-    self::assertEquals('', UTF8::lcfirst(''));
-    self::assertEquals(' ', UTF8::lcfirst(' '));
-    self::assertEquals("\t test", UTF8::lcfirst("\t test"));
-    self::assertEquals('ñ', UTF8::lcfirst('Ñ'));
-    self::assertEquals("ñTËRN\nâtiônàlizætiøn", UTF8::lcfirst("ÑTËRN\nâtiônàlizætiøn"));
+    self::assertSame('öäü', UTF8::lcfirst('Öäü'));
+    self::assertSame('κόσμε', UTF8::lcfirst('Κόσμε'));
+    self::assertSame('aBC-ÖÄÜ-中文空白', UTF8::lcfirst('ABC-ÖÄÜ-中文空白'));
+    self::assertSame('ñTËRNÂTIÔNÀLIZÆTIØN', UTF8::lcfirst('ÑTËRNÂTIÔNÀLIZÆTIØN'));
+    self::assertSame('ñTËRNÂTIÔNÀLIZÆTIØN', UTF8::lcfirst('ñTËRNÂTIÔNÀLIZÆTIØN'));
+    self::assertSame('', UTF8::lcfirst(''));
+    self::assertSame(' ', UTF8::lcfirst(' '));
+    self::assertSame("\t test", UTF8::lcfirst("\t test"));
+    self::assertSame('ñ', UTF8::lcfirst('Ñ'));
+    self::assertSame("ñTËRN\nâtiônàlizætiøn", UTF8::lcfirst("ÑTËRN\nâtiônàlizætiøn"));
     self::assertSame('deja', UTF8::lcfirst('Deja'));
     self::assertSame('σσς', UTF8::lcfirst('Σσς'));
     self::assertSame('dEJa', UTF8::lcfirst('dEJa'));
@@ -2869,11 +2891,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrirpos()
   {
-    self::assertEquals(3, UTF8::strripos('DÉJÀ', 'à'));
-    self::assertEquals(false, UTF8::strripos('aςσb', 'ΣΣ'));
-    self::assertEquals(6, UTF8::strripos('κόσμε-κόσμε', 'Κ'));
-    self::assertEquals(11, UTF8::strripos('test κόσμε κόσμε test', 'Κ'));
-    self::assertEquals(7, UTF8::strripos('中文空白-ÖÄÜ-中文空白', 'ü'));
+    self::assertSame(1, strripos('DJ', 'J'));
+    self::assertSame(1, UTF8::strripos('DJ', 'J'));
+
+    self::assertSame(3, UTF8::strripos('DÉJÀ', 'à'));
+    self::assertSame(false, UTF8::strripos('aςσb', 'ΣΣ'));
+    self::assertSame(6, UTF8::strripos('κόσμε-κόσμε', 'Κ'));
+    self::assertSame(11, UTF8::strripos('test κόσμε κόσμε test', 'Κ'));
+    self::assertSame(7, UTF8::strripos('中文空白-ÖÄÜ-中文空白', 'ü'));
   }
 
   public function testStrrpos()
@@ -2882,40 +2907,60 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(2, UTF8::strrpos('-11--', '1-', 0, 'UTF-8'));
     self::assertSame(false, UTF8::strrpos('한국어', '', 'UTF-8'));
     self::assertSame(1, UTF8::strrpos('한국어', '국', 'UTF-8'));
-    self::assertEquals(false, UTF8::strrpos('한국어', ''));
-    self::assertEquals(1, UTF8::strrpos('한국어', '국'));
-    self::assertEquals(6, UTF8::strrpos('κόσμε-κόσμε', 'κ'));
-    self::assertEquals(13, UTF8::strrpos('test κόσμε κόσμε test', 'σ'));
-    self::assertEquals(9, UTF8::strrpos('中文空白-ÖÄÜ-中文空白', '中'));
+    self::assertSame(false, UTF8::strrpos('한국어', ''));
+    self::assertSame(1, UTF8::strrpos('한국어', '국'));
+    self::assertSame(6, UTF8::strrpos('κόσμε-κόσμε', 'κ'));
+    self::assertSame(13, UTF8::strrpos('test κόσμε κόσμε test', 'σ'));
+    self::assertSame(9, UTF8::strrpos('中文空白-ÖÄÜ-中文空白', '中'));
   }
 
   public function testStrpos()
   {
-    for ($i = 0; $i <= 5; $i++) {
-      self::assertEquals(false, UTF8::strpos('abc', ''));
-      self::assertEquals(false, UTF8::strpos('abc', 'd'));
-      self::assertEquals(false, UTF8::strpos('abc', 'a', 3));
-      self::assertEquals(16, UTF8::strpos('der Straße nach Paris', 'Paris'));
-      self::assertEquals(0, UTF8::strpos('abc', 'a', 1));
-      self::assertEquals(1, UTF8::strpos('abc', 'b', 1));
-      self::assertEquals(1, UTF8::strpos('abc', 'b', 0));
-      //self::assertEquals(1, UTF8::strpos('abc', 'c', -1));
-      self::assertEquals(1, UTF8::strpos('한국어', '국'));
-      self::assertEquals(0, UTF8::strpos('κόσμε-κόσμε-κόσμε', 'κ'));
-      self::assertEquals(7, UTF8::strpos('test κόσμε test κόσμε', 'σ'));
-      self::assertEquals(8, UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'));
+    for ($i = 0; $i <= 3; $i++) { // keep this loop for simple performance tests
+
+      // php compatible tests
+
+      self::assertSame(false, strpos('abc', ''));
+      self::assertSame(false, UTF8::strpos('abc', ''));
+
+      self::assertSame(false, strpos('abc', 'd'));
+      self::assertSame(false, UTF8::strpos('abc', 'd'));
+
+      self::assertSame(false, strpos('abc', 'a', 3));
+      self::assertSame(false, UTF8::strpos('abc', 'a', 3));
+
+      self::assertSame(false, strpos('abc', 'a', 1));
+      self::assertSame(false, UTF8::strpos('abc', 'a', 1));
+
+      self::assertSame(1, strpos('abc', 'b', 1));
+      self::assertSame(1, UTF8::strpos('abc', 'b', 1));
+
+      self::assertSame(1, strpos('abc', 'b', 0));
+      self::assertSame(1, UTF8::strpos('abc', 'b', 0));
+
+      // UTF-8 tests
+
+      self::assertSame(17, strpos('der Straße nach Paris', 'Paris')); // not correct
+      self::assertSame(16, UTF8::strpos('der Straße nach Paris', 'Paris'));
+
+      self::assertSame(3, strpos('한국어', '국')); // not correct
+      self::assertSame(1, UTF8::strpos('한국어', '국'));
+
+      self::assertSame(0, UTF8::strpos('κόσμε-κόσμε-κόσμε', 'κ'));
+      self::assertSame(7, UTF8::strpos('test κόσμε test κόσμε', 'σ'));
+      self::assertSame(8, UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'));
     }
   }
 
   public function testStripos()
   {
     for ($i = 0; $i <= 5; $i++) {
-      self::assertEquals(3, UTF8::stripos('DÉJÀ', 'à'));
-      self::assertEquals(1, UTF8::stripos('aςσb', 'ΣΣ'));
-      self::assertEquals(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
-      self::assertEquals(4, UTF8::stripos('öäü-κόσμε-κόσμε-κόσμε', 'Κ'));
-      self::assertEquals(5, UTF8::stripos('Test κόσμε test κόσμε', 'Κ'));
-      self::assertEquals(4, UTF8::stripos('ABC-ÖÄÜ-中文空白-中文空白', 'ö'));
+      self::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
+      self::assertSame(1, UTF8::stripos('aςσb', 'ΣΣ'));
+      self::assertSame(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
+      self::assertSame(4, UTF8::stripos('öäü-κόσμε-κόσμε-κόσμε', 'Κ'));
+      self::assertSame(5, UTF8::stripos('Test κόσμε test κόσμε', 'Κ'));
+      self::assertSame(4, UTF8::stripos('ABC-ÖÄÜ-中文空白-中文空白', 'ö'));
     }
   }
 
@@ -2951,13 +2996,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::codepoints($actual));
+      self::assertSame($expected, UTF8::codepoints($actual));
     }
 
     // --- U+xxxx format
 
-    self::assertEquals(array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints('κöñ', true));
-    self::assertEquals(
+    self::assertSame(array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints('κöñ', true));
+    self::assertSame(
         array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints(
         array(
             'κ',
@@ -2988,7 +3033,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::ord($actual));
+      self::assertSame($expected, UTF8::ord($actual));
     }
   }
 
@@ -3006,11 +3051,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::html_encode($actual), 'tested:' . $actual);
+      self::assertSame($expected, UTF8::html_encode($actual), 'tested:' . $actual);
     }
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($actual, UTF8::html_decode(UTF8::html_encode($actual)), 'tested:' . $actual);
+      self::assertSame($actual, UTF8::html_decode(UTF8::html_encode($actual)), 'tested:' . $actual);
     }
 
     // ---
@@ -3027,7 +3072,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
+      self::assertSame($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
     }
 
     // --
@@ -3044,7 +3089,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
+      self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
     }
   }
 
@@ -3059,10 +3104,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::single_chr_html_encode($actual));
+      self::assertSame($expected, UTF8::single_chr_html_encode($actual));
     }
 
-    self::assertEquals('a', UTF8::single_chr_html_encode('a', true));
+    self::assertSame('a', UTF8::single_chr_html_encode('a', true));
   }
 
   public function testChrSizeList()
@@ -3100,30 +3145,30 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::chr_size_list($actual));
+      self::assertSame($expected, UTF8::chr_size_list($actual));
     }
   }
 
   public function testStrnatcasecmp()
   {
-    self::assertEquals(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
-    self::assertEquals(1, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
-    self::assertEquals(-1, UTF8::strnatcasecmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
-    self::assertEquals(-1, UTF8::strnatcasecmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
-    self::assertEquals(1, UTF8::strnatcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
-    self::assertEquals(0, UTF8::strnatcasecmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
-    self::assertEquals(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
+    self::assertSame(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
+    self::assertSame(-1, UTF8::strnatcasecmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
+    self::assertSame(-1, UTF8::strnatcasecmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strnatcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
+    self::assertSame(0, UTF8::strnatcasecmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
+    self::assertSame(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
   }
 
   public function testStrnatcmp()
   {
-    self::assertEquals(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
-    self::assertEquals(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
-    self::assertEquals(1, UTF8::strnatcmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
-    self::assertEquals(-1, UTF8::strnatcmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
-    self::assertEquals(1, UTF8::strnatcmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
-    self::assertEquals(0, UTF8::strnatcmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
-    self::assertEquals(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
+    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
+    self::assertSame(-1, UTF8::strnatcmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strnatcmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
+    self::assertSame(0, UTF8::strnatcmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
+    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
   }
 
   public function testStrtocasefold()
@@ -3133,10 +3178,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC
 
     // valid utf-8
-    self::assertEquals('hello world 中文空白', UTF8::strtocasefold('Hello world 中文空白'));
+    self::assertSame('hello world 中文空白', UTF8::strtocasefold('Hello world 中文空白'));
 
     // invalid utf-8
-    self::assertEquals('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
   }
 
   public function testStrtonatfold()
@@ -3145,11 +3190,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // valid utf-8
     $string = $this->invokeMethod($utf8, 'strtonatfold', array('Hello world 中文空白'));
-    self::assertEquals('Hello world 中文空白', $string);
+    self::assertSame('Hello world 中文空白', $string);
 
     // invalid utf-8
     $string = $this->invokeMethod($utf8, 'strtonatfold', array("Iñtërnâtiôn\xE9àlizætiøn"));
-    self::assertEquals('', $string);
+    self::assertSame('', $string);
   }
 
   /**
@@ -3181,12 +3226,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::str_word_count($actual));
+      self::assertSame($expected, UTF8::str_word_count($actual));
     }
 
-    self::assertEquals(3, UTF8::str_word_count('中文空白 foo öäü'));
-    self::assertEquals(3, UTF8::str_word_count('中文空白 foo öäü', 0));
-    self::assertEquals(
+    self::assertSame(3, UTF8::str_word_count('中文空白 foo öäü'));
+    self::assertSame(3, UTF8::str_word_count('中文空白 foo öäü', 0));
+    self::assertSame(
         array(
             0 => '中文空白',
             1 => 'foo',
@@ -3194,7 +3239,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ),
         UTF8::str_word_count('中文空白 foo öäü', 1)
     );
-    self::assertEquals(
+    self::assertSame(
         array(
             0 => '中文空白',
             5 => 'foo',
@@ -3214,13 +3259,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertEquals($expected, UTF8::max_chr_width($actual));
+      self::assertSame($expected, UTF8::max_chr_width($actual));
     }
   }
 
   public function testSplit()
   {
-    self::assertEquals(
+    self::assertSame(
         array(
             '中',
             '文',
@@ -3229,17 +3274,17 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ),
         UTF8::split('中文空白')
     );
-    self::assertEquals(
+    self::assertSame(
         array(
             '中文',
             '空白',
         ),
         UTF8::split('中文空白', 2)
     );
-    self::assertEquals(array('中文空白'), UTF8::split('中文空白', 4));
-    self::assertEquals(array('中文空白'), UTF8::split('中文空白', 8));
+    self::assertSame(array('中文空白'), UTF8::split('中文空白', 4));
+    self::assertSame(array('中文空白'), UTF8::split('中文空白', 8));
 
-    self::assertEquals(array(1234), UTF8::split(1234, 8));
+    self::assertSame(array('1234'), UTF8::split(1234, 8));
   }
 
   public function testChunkSplit()
@@ -3247,23 +3292,23 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $result = UTF8::chunk_split('ABC-ÖÄÜ-中文空白-κόσμε', 3);
     $expected = "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε";
 
-    self::assertEquals($expected, $result);
+    self::assertSame($expected, $result);
   }
 
   public function testWs()
   {
     $whitespace = UTF8::ws();
 
-    self::assertEquals(true, is_array($whitespace));
-    self::assertEquals(true, count($whitespace) > 0);
+    self::assertSame(true, is_array($whitespace));
+    self::assertSame(true, count($whitespace) > 0);
   }
 
   public function testUrldecodeFixWin1252Chars()
   {
     $urldecode_fix_win1252_chars = UTF8::urldecode_fix_win1252_chars();
 
-    self::assertEquals(true, is_array($urldecode_fix_win1252_chars));
-    self::assertEquals(true, count($urldecode_fix_win1252_chars) > 0);
+    self::assertSame(true, is_array($urldecode_fix_win1252_chars));
+    self::assertSame(true, count($urldecode_fix_win1252_chars) > 0);
   }
 
   public function setUp()

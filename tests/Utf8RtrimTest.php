@@ -11,38 +11,38 @@ class Utf8RtrimTest extends PHPUnit_Framework_TestCase
   {
     $str = 'Iñtërnâtiônàlizætiø';
     $trimmed = 'Iñtërnâtiônàlizæti';
-    self::assertEquals($trimmed, u::rtrim($str, 'ø'));
+    self::assertSame($trimmed, u::rtrim($str, 'ø'));
 
     $str = '//Iñtërnâtiônàlizætiø//';
     $trimmed = '//Iñtërnâtiônàlizætiø';
-    self::assertEquals($trimmed, u::rtrim($str, '/'));
+    self::assertSame($trimmed, u::rtrim($str, '/'));
   }
 
   public function test_no_trim()
   {
     $str = 'Iñtërnâtiônàlizætiøn ';
     $trimmed = 'Iñtërnâtiônàlizætiøn ';
-    self::assertEquals($trimmed, u::rtrim($str, 'ø'));
+    self::assertSame($trimmed, u::rtrim($str, 'ø'));
   }
 
   public function test_empty_string()
   {
     $str = '';
     $trimmed = '';
-    self::assertEquals($trimmed, u::rtrim($str));
+    self::assertSame($trimmed, u::rtrim($str));
   }
 
   public function test_linefeed()
   {
     $str = "Iñtërnâtiônàlizætiø\nø";
     $trimmed = "Iñtërnâtiônàlizætiø\n";
-    self::assertEquals($trimmed, u::rtrim($str, 'ø'));
+    self::assertSame($trimmed, u::rtrim($str, 'ø'));
   }
 
   public function test_linefeed_mask()
   {
     $str = "Iñtërnâtiônàlizætiø\nø";
     $trimmed = 'Iñtërnâtiônàlizæti';
-    self::assertEquals($trimmed, u::rtrim($str, "ø\n"));
+    self::assertSame($trimmed, u::rtrim($str, "ø\n"));
   }
 }

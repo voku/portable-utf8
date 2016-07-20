@@ -1901,7 +1901,12 @@ class UTF8
     $i = (int)$code_point;
 
     if (self::$support['intlChar'] === true) {
-      return \IntlChar::chr($code_point);
+      $return = \IntlChar::chr($code_point);
+      if ($return) {
+        return $return;
+      } else {
+        return '';
+      }
     }
 
     if ($i !== $code_point) {
@@ -1912,7 +1917,12 @@ class UTF8
       return '';
     }
 
-    return self::html_entity_decode("&#{$i};", ENT_QUOTES);
+    $return = self::html_entity_decode("&#{$i};", ENT_QUOTES);
+    if ($return) {
+      return $return;
+    }
+
+    return '';
   }
 
   /**
@@ -3531,7 +3541,7 @@ class UTF8
    *
    * @param string $str
    *
-   * @return int|false false if is't not UTF16, 1 for UTF-16LE, 2 for UTF-16BE.
+   * @return int|false false if is't not UTF-16, 1 for UTF-16LE, 2 for UTF-16BE.
    */
   public static function is_utf16($str)
   {
@@ -3588,7 +3598,7 @@ class UTF8
    *
    * @param string $str
    *
-   * @return int|false false if is't not UTF16, 1 for UTF-32LE, 2 for UTF-32BE.
+   * @return int|false false if is't not UTF-16, 1 for UTF-32LE, 2 for UTF-32BE.
    */
   public static function is_utf32($str)
   {
@@ -3985,7 +3995,7 @@ class UTF8
     static $staticNormalizeEncodingCache = array();
 
     if (!$encoding) {
-      return $encoding;
+      return false;
     }
 
     if ('UTF-8' === $encoding) {
@@ -4715,7 +4725,7 @@ class UTF8
   /**
    * Pad a UTF-8 string to given length with another string.
    *
-   * @param    string $str      The input string
+   * @param    string $str        The input string
    * @param    int    $pad_length The length of return string
    * @param    string $pad_string String to use for padding the input string
    * @param    int    $pad_type   can be STR_PAD_RIGHT, STR_PAD_LEFT or STR_PAD_BOTH
@@ -4761,7 +4771,7 @@ class UTF8
   /**
    * Repeat a string.
    *
-   * @param string $str      <p>
+   * @param string $str        <p>
    *                           The string to be repeated.
    *                           </p>
    * @param int    $multiplier <p>
@@ -4933,6 +4943,7 @@ class UTF8
     $str = (string)$str;
 
     $value = unpack('H*', $str);
+
     return base_convert($value[1], 16, 2);
   }
 
@@ -5974,10 +5985,16 @@ class UTF8
       $str = self::clean($str);
     }
 
+    $str_length = (int)self::strlen($str);
+
     if ($length === null) {
-      $length = (int)self::strlen($str);
+      $length = $str_length;
     } else {
       $length = (int)$length;
+    }
+
+    if ($start > $str_length) {
+      return false;
     }
 
     if (self::$support['mbstring'] === true) {
@@ -6056,12 +6073,16 @@ class UTF8
     $needle = (string)$needle;
 
     if (!isset($haystack[0], $needle[0])) {
-      return 0;
+      return false;
     }
 
     if ($offset || $length) {
       $offset = (int)$offset;
       $length = (int)$length;
+
+      if ($length + $offset <= 0) {
+        return false;
+      }
 
       $haystack = self::substr($haystack, $offset, $length);
     }
