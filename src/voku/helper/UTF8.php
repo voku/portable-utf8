@@ -3899,12 +3899,10 @@ class UTF8
   /**
    * Strip whitespace or other characters from beginning of a UTF-8 string.
    *
-   * WARNING: This is much slower then "ltrim()" !!!!
+   * @param  string $str   The string to be trimmed
+   * @param  string $chars Optional characters to be stripped
    *
-   * @param    string $str   The string to be trimmed
-   * @param    string $chars Optional characters to be stripped
-   *
-   * @return   string The string with unwanted characters stripped from the left
+   * @return string The string with unwanted characters stripped from the left
    */
   public static function ltrim($str = '', $chars = INF)
   {
@@ -3912,6 +3910,11 @@ class UTF8
 
     if (!isset($str[0])) {
       return '';
+    }
+
+    // Info: http://nadeausoftware.com/articles/2007/9/php_tip_how_strip_punctuation_characters_web_page#Unicodecharactercategories
+    if ($chars === INF || !$chars) {
+      return preg_replace('/^[\pZ\pC]+/u', '', $str);
     }
 
     $chars = INF === $chars ? '\s' : self::rxClass($chars);
@@ -4379,8 +4382,6 @@ class UTF8
   /**
    * Strip whitespace or other characters from end of a UTF-8 string.
    *
-   * WARNING: This is much slower then "rtrim()" !!!!
-   *
    * @param    string $str   The string to be trimmed
    * @param    string $chars Optional characters to be stripped
    *
@@ -4392,6 +4393,11 @@ class UTF8
 
     if (!isset($str[0])) {
       return '';
+    }
+
+    // Info: http://nadeausoftware.com/articles/2007/9/php_tip_how_strip_punctuation_characters_web_page#Unicodecharactercategories
+    if ($chars === INF || !$chars) {
+      return preg_replace('/[\pZ\pC]+$/u', '', $str);
     }
 
     $chars = INF === $chars ? '\s' : self::rxClass($chars);

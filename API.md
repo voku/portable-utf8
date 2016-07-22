@@ -440,4 +440,12 @@ Makes string's first char lowercase.
 UTF8::lcfirst('ÑTËRNÂTIÔNÀLIZÆTIØN'); // ñTËRNÂTIÔNÀLIZÆTIØN 
 ```
 
+##### ltrim(string $str, string $chars = INF) : string
+
+Strip whitespace or other characters from beginning of a UTF-8 string.
+
+```php
+UTF8::ltrim('　中文空白　 '); // '中文空白　 '
+```
+
 ... TODO
