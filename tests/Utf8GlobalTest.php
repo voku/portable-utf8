@@ -1083,6 +1083,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     ';
 
+    $testArray[] = 'Ã ñ àáâãäåæ ç èéêë ìíîï';
+
     $result = array();
     $i = 0;
     foreach ($testArray as $test) {
@@ -1985,7 +1987,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
    */
   public function testTrim($input, $output)
   {
-    for ($i = 0; $i <= 100; $i++) {
+    for ($i = 0; $i <= 10; $i++) {
       self::assertSame($output, UTF8::trim($input));
     }
   }
@@ -2229,6 +2231,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $testArray = array(
         'Düsseldorf'   => 'Düsseldorf',
         'Ã'            => 'Ã',
+        'ñ'            => 'ñ',
+        'àáâãäåæ ç èéêë ìíîï' => 'àáâãäåæ ç èéêë ìíîï',
         ' '            => ' ',
         ''             => '',
         "\n"           => "\n",
@@ -2302,6 +2306,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($after, UTF8::json_decode(UTF8::json_encode($before)));
     }
 
+    // ---
+
     $testArray['{"array":[1,2,3],,...}}'] = false;
     foreach ($testArray as $before => $after) {
       self::assertSame(
@@ -2310,6 +2316,27 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
           'tested: ' . $before
       );
     }
+
+    // ----
+
+    $expected = new stdClass();
+    $expected->array = array(1, '¥', 'ä');
+    self::assertEquals($expected, UTF8::json_decode('{"array":[1,"¥","ä"]}'));
+
+    // ----
+
+    self::assertEquals(array(1, '¥', 'ä'), UTF8::json_decode('[1,"\u00a5","\u00e4"]'));
+  }
+
+  public function testJsonEncode()
+  {
+    $test = new stdClass();
+    $test->array = array(1, '¥', 'ä');
+    self::assertEquals('{"array":[1,"\u00a5","\u00e4"]}', UTF8::json_encode($test));
+
+    // ----
+
+    self::assertEquals('[1,"\u00a5","\u00e4"]', UTF8::json_encode(array(1, '¥', 'ä')));
   }
 
   public function testToUtf8_v3()
@@ -2507,39 +2534,73 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testToASCII()
   {
-    $tests = array(
-        1                               => '1',
-        -1                              => '-1',
-        ' '                             => ' ',
-        ''                              => '',
-        'أبز'                           => '\'bz',
-        "\xe2\x80\x99"                  => '\'',
-        'Ɓtest'                         => 'Btest',
-        '  -ABC-中文空白-  '                => '  -ABC-Zhong Wen Kong Bai -  ',
-        "      - abc- \xc2\x87"         => '      - abc- ++',
-        'abc'                           => 'abc',
-        'deja vu'                       => 'deja vu',
-        'déjà vu'                       => 'deja vu',
-        'déjà σσς iıii'                 => 'deja sss iiii',
-        "test\x80-\xBFöäü"              => 'test-oau',
-        'Internationalizaetion'         => 'Internationalizaetion',
-        "中 - &#20013; - %&? - \xc2\x80" => 'Zhong  - &#20013; - %&? - EUR',
-        'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
-        'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
-        'أحبك'                          => '\'Hbk',
-        'キャンパス'                         => 'kiyanpasu',
-        'биологическом'                 => 'biologicheskom',
-        '정, 병호'                         => 'jeong, byeongho',
-        'ますだ, よしひこ'                     => 'masuda, yosihiko',
-        'मोनिच'                         => 'monic',
-        'क्षȸ'                          => 'kssdb',
-        'أحبك 😀'                       => '\'Hbk ?',
-        '∀ i ∈ ℕ'                       => '[?] i [?] N',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? \'Hbk',
-    );
+    if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
+      $tests = array(
+          1                               => '1',
+          -1                              => '-1',
+          ' '                             => ' ',
+          ''                              => '',
+          'أبز'                           => 'abz',
+          "\xe2\x80\x99"                  => '\'',
+          'Ɓtest'                         => 'Btest',
+          '  -ABC-中文空白-  '                => '  -ABC-zhong wen kong bai-  ',
+          "      - abc- \xc2\x87"         => '      - abc- ++',
+          'abc'                           => 'abc',
+          'deja vu'                       => 'deja vu',
+          'déjà vu'                       => 'deja vu',
+          'déjà σσς iıii'                 => 'deja sss iiii',
+          "test\x80-\xBFöäü"              => 'test-oau',
+          'Internationalizaetion'         => 'Internationalizaetion',
+          "中 - &#20013; - %&? - \xc2\x80" => 'zhong - &#20013; - %&? - EUR',
+          'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
+          'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
+          'أحبك'                          => 'ahbk',
+          'キャンパス'                         => 'kyanpasu',
+          'биологическом'                 => 'biologiceskom',
+          '정, 병호'                         => 'jeong, byeongho',
+          'ますだ, よしひこ'                     => 'masuda, yoshihiko',
+          'मोनिच'                         => 'monica',
+          'क्षȸ'                          => 'ksadb',
+          'أحبك 😀'                       => 'ahbk ?',
+          '∀ i ∈ ℕ'                       => '[?] i [?] N',
+          '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? ahbk',
+      );
+    } else {
+      $tests = array(
+          1                               => '1',
+          -1                              => '-1',
+          ' '                             => ' ',
+          ''                              => '',
+          'أبز'                           => '\'bz',
+          "\xe2\x80\x99"                  => '\'',
+          'Ɓtest'                         => 'Btest',
+          '  -ABC-中文空白-  '                => '  -ABC-Zhong Wen Kong Bai -  ',
+          "      - abc- \xc2\x87"         => '      - abc- ++',
+          'abc'                           => 'abc',
+          'deja vu'                       => 'deja vu',
+          'déjà vu'                       => 'deja vu',
+          'déjà σσς iıii'                 => 'deja sss iiii',
+          "test\x80-\xBFöäü"              => 'test-oau',
+          'Internationalizaetion'         => 'Internationalizaetion',
+          "中 - &#20013; - %&? - \xc2\x80" => 'Zhong  - &#20013; - %&? - EUR',
+          'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
+          'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
+          'أحبك'                          => '\'Hbk',
+          'キャンパス'                         => 'kiyanpasu',
+          'биологическом'                 => 'biologicheskom',
+          '정, 병호'                         => 'jeong, byeongho',
+          'ますだ, よしひこ'                     => 'masuda, yosihiko',
+          'मोनिच'                         => 'monic',
+          'क्षȸ'                          => 'kssdb',
+          'أحبك 😀'                       => '\'Hbk ?',
+          '∀ i ∈ ℕ'                       => '[?] i [?] N',
+          '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? \'Hbk',
+      );
+    }
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::to_ascii($before), $before);
+      self::assertSame($after, UTF8::to_ascii($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::str_transliterate($before), 'tested: ' . $before);
     }
   }
 
@@ -2602,39 +2663,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::swapCase($before), $before);
-    }
-  }
-
-  public function testStrTransliterate()
-  {
-    $tests = array(
-        1                               => '1',
-        -1                              => '-1',
-        ' '                             => ' ',
-        ''                              => '',
-        'أبز'                           => '\'bz',
-        "\xe2\x80\x99"                  => '\'',
-        'Ɓtest'                         => 'Btest',
-        '  -ABC-中文空白-  '                => '  -ABC-Zhong Wen Kong Bai -  ',
-        "      - abc- \xc2\x87"         => '      - abc- ++',
-        'abc'                           => 'abc',
-        'deja vu'                       => 'deja vu',
-        'déjà vu'                       => 'deja vu',
-        'déjà σσς iıii'                 => 'deja sss iiii',
-        "test\x80-\xBFöäü"              => 'test-oau',
-        'Internationalizaetion'         => 'Internationalizaetion',
-        "中 - &#20013; - %&? - \xc2\x80" => 'Zhong  - &#20013; - %&? - EUR',
-        'BonJour'                       => 'BonJour',
-        'BonJour & au revoir'           => 'BonJour & au revoir',
-        'Déjà'                          => 'Deja',
-        'trąnslįteration tėst ųsąge ūž' => 'transliteration test usage uz',
-        'това е тестово заглавие'       => 'tova e testovo zaglavie',
-        'это тестовый заголовок'        => 'eto testovyi zagolovok',
-        'führen Aktivitäten Haglöfs'    => 'fuhren Aktivitaten Haglofs',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::str_transliterate($before), $before);
     }
   }
 
@@ -2727,16 +2755,32 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::ltrim($before));
+      self::assertSame($after, ltrim($before));
     }
 
     self::assertSame('tërnâtiônàlizætiøn', UTF8::ltrim('ñtërnâtiônàlizætiøn', 'ñ'));
+    self::assertSame('tërnâtiônàlizætiøn', ltrim('ñtërnâtiônàlizætiøn', 'ñ'));
+
     self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', 'ñ'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', ltrim('Iñtërnâtiônàlizætiøn', 'ñ'));
+
     self::assertSame('', UTF8::ltrim(''));
+    self::assertSame('', ltrim(''));
+
     self::assertSame('', UTF8::ltrim(' '));
+    self::assertSame('', ltrim(' '));
+
     self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('/Iñtërnâtiônàlizætiøn', '/'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', ltrim('/Iñtërnâtiônàlizætiøn', '/'));
+
     self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', '^s'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', ltrim('Iñtërnâtiônàlizætiøn', '^s'));
+
     self::assertSame("\nñtërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", 'ñ'));
+    self::assertSame("\nñtërnâtiônàlizætiøn", ltrim("ñ\nñtërnâtiônàlizætiøn", 'ñ'));
+
     self::assertSame('tërnâtiônàlizætiøn', UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
+    self::assertSame('tërnâtiônàlizætiøn', ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
   }
 
   public function testStr_split()

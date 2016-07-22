@@ -1,6 +1,8 @@
 <?php
 
+use voku\helper\Bootup;
 use voku\helper\UTF8 as u;
+use voku\helper\UTF8;
 
 /**
  * Class Utf8StrTransliterateTest
@@ -13,7 +15,12 @@ class Utf8StrTransliterateTest extends PHPUnit_Framework_TestCase
     self::assertSame('testing', u::str_transliterate($str));
 
     $str = '  -ABC-中文空白-  ';
-    self::assertSame('  -ABC-Zhong Wen Kong Bai -  ', u::str_transliterate($str));
+    if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
+      $expected = '  -ABC-zhong wen kong bai-  ';
+    } else {
+      $expected = '  -ABC-Zhong Wen Kong Bai -  ';
+    }
+    self::assertSame($expected, u::str_transliterate($str));
   }
 
   public function test_ascii()

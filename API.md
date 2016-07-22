@@ -405,4 +405,39 @@ UTF8::is_utf32(file_get_contents('utf-32-be.txt')); // 2
 UTF8::is_utf32(file_get_contents('utf-8.txt')); // false
 ```
 
+##### is_utf8(string $str, bool $strict = false) : bool
+
+Checks whether the passed string contains only byte sequences that appear valid UTF-8 characters.
+
+alias: UTF8::isUtf8()
+
+```php
+UTF8::is_utf8('Iñtërnâtiônàlizætiøn'); // true
+UTF8::is_utf8("Iñtërnâtiônàlizætiøn\xA0\xA1"); // false
+```
+
+##### json_decode(string $json, bool $assoc = false, int $depth = 512, int $options = 0) : mixed
+
+Decodes a JSON string.
+
+```php
+UTF8::json_decode('[1,"\u00a5","\u00e4"]'); // array(1, '¥', 'ä')
+```
+
+##### json_encode(mixed $value, int $options = 0, int $depth = 512) : string
+
+Returns the JSON representation of a value.
+
+```php
+UTF8::json_enocde(array(1, '¥', 'ä')); // '[1,"\u00a5","\u00e4"]'
+```
+
+##### lcfirst(string $str) : string
+
+Makes string's first char lowercase.
+
+```php
+UTF8::lcfirst('ÑTËRNÂTIÔNÀLIZÆTIØN'); // ñTËRNÂTIÔNÀLIZÆTIØN 
+```
+
 ... TODO

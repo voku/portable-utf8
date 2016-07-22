@@ -3837,7 +3837,7 @@ class UTF8
 
   /**
    * (PHP 5 &gt;= 5.2.0, PECL json &gt;= 1.2.0)<br/>
-   * Returns the JSON representation of a value
+   * Returns the JSON representation of a value.
    *
    * @link http://php.net/manual/en/function.json-encode.php
    *
@@ -4432,7 +4432,9 @@ class UTF8
       }
     }
 
-    $class[0] = '[' . $class[0] . ']';
+    if ($class[0]) {
+      $class[0] = '[' . $class[0] . ']';
+    }
 
     if (1 === count($class)) {
       $return = $class[0];
@@ -4890,17 +4892,8 @@ class UTF8
       return str_split($str, $len);
     }
 
-    if (self::$support['intl'] === true) {
-      $a = array();
-      $p = 0;
-      $l = strlen($str);
-      while ($p < $l) {
-        $a[] = \grapheme_extract($str, 1, GRAPHEME_EXTR_COUNT, $p, $p);
-      }
-    } else {
-      preg_match_all('/' . Grapheme::GRAPHEME_CLUSTER_RX . '/u', $str, $a);
-      $a = $a[0];
-    }
+    preg_match_all('/' . Grapheme::GRAPHEME_CLUSTER_RX . '/u', $str, $a);
+    $a = $a[0];
 
     if ($len === 1) {
       return $a;
@@ -4950,114 +4943,16 @@ class UTF8
   }
 
   /**
-   * US-ASCII transliterations of Unicode text.
+   * alias for "UTF8::to_ascii()"
    *
-   * Ported Sean M. Burke's Text::Unidecode Perl module (He did all the hard work!)
-   * Warning: you should only pass this well formed UTF-8!
-   * Be aware it works by making a copy of the input string which it appends transliterated
-   * characters to - it uses a PHP output buffer to do this - it means, memory use will increase,
-   * requiring up to the same amount again as the input string
+   * @param string $str
+   * @param string $unknown
    *
-   * @see    http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm
-   *
-   * @author <hsivonen@iki.fi>
-   *
-   * @param string $str     UTF-8 string to convert
-   * @param string $unknown Character use if character unknown. (default is ?)
-   *
-   * @return string US-ASCII string
+   * @return string
    */
   public static function str_transliterate($str, $unknown = '?')
   {
-    static $UTF8_TO_ASCII;
-
-    $str = (string)$str;
-
-    if (!isset($str[0])) {
-      return '';
-    }
-
-    $str = self::clean($str);
-
-    preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
-    $chars = $ar[0];
-    foreach ($chars as &$c) {
-
-      $ordC0 = ord($c[0]);
-
-      if ($ordC0 >= 0 && $ordC0 <= 127) {
-        continue;
-      }
-
-      $ordC1 = ord($c[1]);
-
-      // ASCII - next please
-      if ($ordC0 >= 192 && $ordC0 <= 223) {
-        $ord = ($ordC0 - 192) * 64 + ($ordC1 - 128);
-      }
-
-      if ($ordC0 >= 224) {
-        $ordC2 = ord($c[2]);
-
-        if ($ordC0 <= 239) {
-          $ord = ($ordC0 - 224) * 4096 + ($ordC1 - 128) * 64 + ($ordC2 - 128);
-        }
-
-        if ($ordC0 >= 240) {
-          $ordC3 = ord($c[3]);
-
-          if ($ordC0 <= 247) {
-            $ord = ($ordC0 - 240) * 262144 + ($ordC1 - 128) * 4096 + ($ordC2 - 128) * 64 + ($ordC3 - 128);
-          }
-
-          if ($ordC0 >= 248) {
-            $ordC4 = ord($c[4]);
-
-            if ($ordC0 <= 251) {
-              $ord = ($ordC0 - 248) * 16777216 + ($ordC1 - 128) * 262144 + ($ordC2 - 128) * 4096 + ($ordC3 - 128) * 64 + ($ordC4 - 128);
-            }
-
-            if ($ordC0 >= 252) {
-              $ordC5 = ord($c[5]);
-
-              if ($ordC0 <= 253) {
-                $ord = ($ordC0 - 252) * 1073741824 + ($ordC1 - 128) * 16777216 + ($ordC2 - 128) * 262144 + ($ordC3 - 128) * 4096 + ($ordC4 - 128) * 64 + ($ordC5 - 128);
-              }
-            }
-          }
-        }
-      }
-
-      if ($ordC0 >= 254 && $ordC0 <= 255) {
-        $c = $unknown;
-        continue;
-      }
-
-      if (!isset($ord)) {
-        $c = $unknown;
-        continue;
-      }
-
-      $bank = $ord >> 8;
-      if (!array_key_exists($bank, (array)$UTF8_TO_ASCII)) {
-        $bankfile = __DIR__ . '/data/' . sprintf('x%02x', $bank) . '.php';
-        if (file_exists($bankfile)) {
-          /** @noinspection PhpIncludeInspection */
-          require $bankfile;
-        } else {
-          $UTF8_TO_ASCII[$bank] = array();
-        }
-      }
-
-      $newchar = $ord & 255;
-      if (array_key_exists($newchar, $UTF8_TO_ASCII[$bank])) {
-        $c = $UTF8_TO_ASCII[$bank][$newchar];
-      } else {
-        $c = $unknown;
-      }
-    }
-
-    return implode('', $chars);
+    return self::to_ascii($str, $unknown);
   }
 
   /**
@@ -6251,81 +6146,113 @@ class UTF8
   /**
    * convert to ASCII
    *
-   * @param string $s The input string e.g. a UTF-8 String
-   * @param string $subst_chr
+   * @param string $str     The input string.
+   * @param string $unknown Character use if character unknown. (default is ?)
    *
    * @return string
    */
-  public static function to_ascii($s, $subst_chr = '?')
+  public static function to_ascii($str, $unknown = '?')
   {
-    static $translitExtra = null;
+    static $UTF8_TO_ASCII;
 
-    $s = (string)$s;
+    // init
+    $str = (string)$str;
 
-    if (!isset($s[0])) {
+    if (!isset($str[0])) {
       return '';
     }
 
-    $s = self::clean($s);
+    $str = self::clean($str);
 
-    if (preg_match("/[\x80-\xFF]/", $s)) {
-      $s = \Normalizer::normalize($s, \Normalizer::NFKC);
+    self::checkForSupport();
+    if (self::$support['intl'] === true && Bootup::is_php('5.4')) {
+      $str = transliterator_transliterate('Any-Latin; Latin-ASCII;', $str);
 
-      $glibc = 'glibc' === ICONV_IMPL;
-
-      preg_match_all('/./u', $s, $s);
-
-      /** @noinspection AlterInForeachInspection */
-      foreach ($s[0] as &$c) {
-
-        if (!isset($c[1])) {
-          continue;
-        }
-
-        if ($glibc) {
-          $t = iconv('UTF-8', 'ASCII//TRANSLIT', $c);
-        } else {
-          $t = iconv('UTF-8', 'ASCII//IGNORE//TRANSLIT', $c);
-
-          if ($t !== false && is_string($t)) {
-            if (!isset($t[0])) {
-              $t = '?';
-            } elseif (isset($t[1])) {
-              $t = ltrim($t, '\'`"^~');
-            }
-          }
-        }
-
-        if ('?' === $t) {
-
-          if ($translitExtra === null) {
-            $translitExtra = (array)self::getData('translit_extra');
-          }
-
-          if (isset($translitExtra[$c])) {
-            $t = $translitExtra[$c];
-          } else {
-            $t = \Normalizer::normalize($c, \Normalizer::NFD);
-
-            if ($t[0] < "\x80") {
-              $t = $t[0];
-            } else {
-              $t = $subst_chr;
-            }
-          }
-        }
-
-        if ('?' === $t) {
-          $t = self::str_transliterate($c, $subst_chr);
-        }
-
-        $c = $t;
+      // check again, if we only have ASCII, now ...
+      if (!preg_match("/[\x80-\xFF]/", $str)) {
+        return $str;
       }
-
-      $s = implode('', $s[0]);
     }
 
-    return $s;
+    preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
+    $chars = $ar[0];
+    foreach ($chars as &$c) {
+
+      $ordC0 = ord($c[0]);
+
+      if ($ordC0 >= 0 && $ordC0 <= 127) {
+        continue;
+      }
+
+      $ordC1 = ord($c[1]);
+
+      // ASCII - next please
+      if ($ordC0 >= 192 && $ordC0 <= 223) {
+        $ord = ($ordC0 - 192) * 64 + ($ordC1 - 128);
+      }
+
+      if ($ordC0 >= 224) {
+        $ordC2 = ord($c[2]);
+
+        if ($ordC0 <= 239) {
+          $ord = ($ordC0 - 224) * 4096 + ($ordC1 - 128) * 64 + ($ordC2 - 128);
+        }
+
+        if ($ordC0 >= 240) {
+          $ordC3 = ord($c[3]);
+
+          if ($ordC0 <= 247) {
+            $ord = ($ordC0 - 240) * 262144 + ($ordC1 - 128) * 4096 + ($ordC2 - 128) * 64 + ($ordC3 - 128);
+          }
+
+          if ($ordC0 >= 248) {
+            $ordC4 = ord($c[4]);
+
+            if ($ordC0 <= 251) {
+              $ord = ($ordC0 - 248) * 16777216 + ($ordC1 - 128) * 262144 + ($ordC2 - 128) * 4096 + ($ordC3 - 128) * 64 + ($ordC4 - 128);
+            }
+
+            if ($ordC0 >= 252) {
+              $ordC5 = ord($c[5]);
+
+              if ($ordC0 <= 253) {
+                $ord = ($ordC0 - 252) * 1073741824 + ($ordC1 - 128) * 16777216 + ($ordC2 - 128) * 262144 + ($ordC3 - 128) * 4096 + ($ordC4 - 128) * 64 + ($ordC5 - 128);
+              }
+            }
+          }
+        }
+      }
+
+      if ($ordC0 >= 254 && $ordC0 <= 255) {
+        $c = $unknown;
+        continue;
+      }
+
+      if (!isset($ord)) {
+        $c = $unknown;
+        continue;
+      }
+
+      $bank = $ord >> 8;
+      if (!array_key_exists($bank, (array)$UTF8_TO_ASCII)) {
+        $bankfile = __DIR__ . '/data/' . sprintf('x%02x', $bank) . '.php';
+        if (file_exists($bankfile)) {
+          /** @noinspection PhpIncludeInspection */
+          require $bankfile;
+        } else {
+          $UTF8_TO_ASCII[$bank] = array();
+        }
+      }
+
+      $newchar = $ord & 255;
+      if (array_key_exists($newchar, $UTF8_TO_ASCII[$bank])) {
+        $c = $UTF8_TO_ASCII[$bank][$newchar];
+      } else {
+        $c = $unknown;
+      }
+    }
+
+    return implode('', $chars);
   }
 
   /**
