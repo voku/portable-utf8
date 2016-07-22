@@ -1,8 +1,8 @@
 <?php
 
 use voku\helper\Bootup;
-use voku\helper\UTF8 as u;
 use voku\helper\UTF8;
+use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8StrTransliterateTest
