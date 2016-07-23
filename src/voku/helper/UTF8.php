@@ -2882,6 +2882,8 @@ class UTF8
       return $str;
     }
 
+    self::checkForSupport();
+
     $encoding = self::normalizeEncoding($encoding);
 
     if ($flags === null) {
@@ -2895,7 +2897,15 @@ class UTF8
     do {
       $str_compare = $str;
 
-      $str = preg_replace_callback("/&#\d{2,5};/", array('\voku\helper\UTF8', 'html_entity_decode_callback'), $str);
+      $str = preg_replace_callback("/&#\d{2,5};/", function($matches) {
+        $returnTmp =  \mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
+
+        if ($returnTmp !== '"' && $returnTmp !== "'") {
+          return $returnTmp;
+        } else {
+          return $matches[0];
+        }
+      }, $str);
 
       // decode numeric & UTF16 two byte entities
       $str = html_entity_decode(
@@ -2907,28 +2917,6 @@ class UTF8
     } while ($str_compare !== $str);
 
     return $str;
-  }
-
-  /**
-   * Callback function for preg_replace_callback use.
-   *
-   * @internal used for "UTF8::html_entity_decode()"
-   *
-   * @param  array $matches PREG matches
-   *
-   * @return string
-   */
-  protected static function html_entity_decode_callback($matches)
-  {
-    self::checkForSupport();
-
-    $return = \mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
-
-    if ($return === "'") {
-      return '&#x27;';
-    }
-
-    return $return;
   }
 
   /**

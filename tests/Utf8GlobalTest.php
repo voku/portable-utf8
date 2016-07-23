@@ -816,7 +816,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '{-test'                  => '&#123;&#45;&#116;&#101;&#115;&#116;',
         '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
         'Dänisch (Å/å, Æ/æ, Ø/ø)' => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍&#32;💩&#32;😄&#32;&#10084;&#32;👍&#32;💩&#32;😄&#32;&#10084;', // TODO?
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍&#32;💩&#32;😄&#32;&#10084;&#32;👍&#32;💩&#32;😄&#32;&#10084;', // TODO? I still see same symbols ... :/
         'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
         'öäü'                     => '&#246;&#228;&#252;',
         ' '                       => '&#32;',
@@ -880,17 +880,24 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
         '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
         '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
-        'who&#039;s online'                                                                         => 'who&#x27;s online',
-        'who&amp;#039;s online'                                                                     => 'who&#x27;s online',
-        'who&#039;s online-'                                                                        => 'who&#x27;s online-',
-        'Who&#039;s Online'                                                                         => 'Who&#x27;s Online',
-        'Who&amp;#039;s Online'                                                                     => 'Who&#x27;s Online',
-        'Who&amp;amp;#039;s Online &#20013;'                                                        => 'Who&#x27;s Online 中',
-        'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
         "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
         '&#20013;&#25991;&#31354;&#30333;'                                                          => '中文空白',
     );
+
+    if (defined('HHVM_VERSION') === false) {
+      $tmpTestArray = array(
+          'who&#039;s online'                                                                         => 'who&#039;s online',
+          'who&amp;#039;s online'                                                                     => 'who&#039;s online',
+          'who&#039;s online-'                                                                        => 'who&#039;s online-',
+          'Who&#039;s Online'                                                                         => 'Who&#039;s Online',
+          'Who&amp;#039;s Online'                                                                     => 'Who&#039;s Online',
+          'Who&amp;amp;#039;s Online &#20013;'                                                        => 'Who&#039;s Online 中',
+          'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+      );
+
+      $testArray = array_merge($testArray, $tmpTestArray);
+    }
 
     foreach ($testArray as $before => $after) {
         self::assertSame($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
@@ -917,13 +924,56 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'Who&#039;s Online'                                                                         => 'Who\'s Online',
         'Who&amp;#039;s Online &#20013;'                                                            => 'Who\'s Online 中',
         'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
-        'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
         "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
     );
 
+    if (defined('HHVM_VERSION') === false) {
+      $tmpTestArray = array(
+          'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+      );
+
+      $testArray = array_merge($testArray, $tmpTestArray);
+    }
+
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
+    }
+  }
+
+  public function testHtmlEntityDecodeWithEntNoQuotes()
+  {
+    $testArray = array(
+        'κόσμε'                                                                                     => 'κόσμε',
+        'Κόσμε'                                                                                     => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                                        => '  ',
+        ''                                                                                          => '',
+        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'(&quot;&2&quot;)',
+        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert(&quot;foo&quot;);</script>, <marquee>test</marquee>',
+        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert(&quot;XSS&quot;)</script>',
+        'who&#039;s online'                                                                         => 'who&#039;s online',
+        'who&amp;#039;s online'                                                                     => 'who&#039;s online',
+        'who&#039;s online-'                                                                        => 'who&#039;s online-',
+        'Who&#039;s Online'                                                                         => 'Who&#039;s Online',
+        'Who&amp;#039;s Online'                                                                     => 'Who&#039;s Online',
+        'Who&amp;amp;#039;s Online &#20013;'                                                        => 'Who&#039;s Online 中',
+        '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
+    );
+
+    if (defined('HHVM_VERSION') === false) {
+      $tmpTestArray = array(
+          'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+      );
+
+      $testArray = array_merge($testArray, $tmpTestArray);
+    }
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::html_entity_decode($before, ENT_NOQUOTES, 'UTF-8'), 'error by ' . $before);
     }
   }
 
@@ -1528,7 +1578,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('foo 測試', $array['arr'][0]);
     self::assertSame('ການທົດສອບ', $array['arr'][1]);
 
-    self::assertSame('測試', $array['Iñtërnâtiônàlizætiøn']);
+    // bug is already reported: https://github.com/facebook/hhvm/issues/6340
+    // -> mb_parse_str not parsing multidimensional array
+    if (defined('HHVM_VERSION') === false) {
+      self::assertSame('測試', $array['Iñtërnâtiônàlizætiøn']);
+    }
 
     // ---
 
@@ -1586,7 +1640,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame($expected, UTF8::range("\x20", "\x23"));
   }
 
-  // TODO: different result with different php-versions / -configs
+  // TODO: different result with different php-versions / -configs, need some more testing
   /*
   public function testStrncmp()
   {
