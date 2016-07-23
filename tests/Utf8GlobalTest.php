@@ -1586,8 +1586,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     self::assertSame(true, $result);
 
-    self::assertSame('foo 測試', $array['arr'][0]);
-    self::assertSame('ການທົດສອບ', $array['arr'][1]);
+    // bug is already reported: https://github.com/facebook/hhvm/issues/6340
+    if (defined('HHVM_VERSION') === false) {
+      self::assertSame('foo 測試', $array['arr'][0]);
+      self::assertSame('ການທົດສອບ', $array['arr'][1]);
+    }
 
     // bug is already reported: https://github.com/facebook/hhvm/issues/6340
     // -> mb_parse_str not parsing multidimensional array
