@@ -885,6 +885,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&#20013;&#25991;&#31354;&#30333;'                                                          => '中文空白',
     );
 
+    // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
       $tmpTestArray = array(
           'who&#039;s online'                                                                         => 'who&#039;s online',
@@ -928,6 +929,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
     );
 
+    // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
       $tmpTestArray = array(
           'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
@@ -955,17 +957,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'(&quot;&2&quot;)',
         '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert(&quot;foo&quot;);</script>, <marquee>test</marquee>',
         '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert(&quot;XSS&quot;)</script>',
-        'who&#039;s online'                                                                         => 'who&#039;s online',
-        'who&amp;#039;s online'                                                                     => 'who&#039;s online',
-        'who&#039;s online-'                                                                        => 'who&#039;s online-',
-        'Who&#039;s Online'                                                                         => 'Who&#039;s Online',
-        'Who&amp;#039;s Online'                                                                     => 'Who&#039;s Online',
-        'Who&amp;amp;#039;s Online &#20013;'                                                        => 'Who&#039;s Online 中',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
     );
 
+    // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
       $tmpTestArray = array(
+          'who&#039;s online'                                                                         => 'who&#039;s online',
+          'who&amp;#039;s online'                                                                     => 'who&#039;s online',
+          'who&#039;s online-'                                                                        => 'who&#039;s online-',
+          'Who&#039;s Online'                                                                         => 'Who&#039;s Online',
+          'Who&amp;#039;s Online'                                                                     => 'Who&#039;s Online',
+          'Who&amp;amp;#039;s Online &#20013;'                                                        => 'Who&#039;s Online 中',
           'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
       );
 
@@ -997,10 +1000,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'Who&#039;s Online'                                                                         => 'Who\'s Online',
         'Who&amp;#039;s Online'                                                                     => 'Who\'s Online',
         'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
-        'who\'s online&colon;'                                                                      => 'who\'s online:',
         "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
     );
+
+    // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
+    if (defined('HHVM_VERSION') === false) {
+      $tmpTestArray = array(
+          'who\'s online&colon;'                                                                      => 'who\'s online:',
+      );
+
+      $testArray = array_merge($testArray, $tmpTestArray);
+    }
 
     if (Bootup::is_php('5.4') === true) {
       foreach ($testArray as $before => $after) {
