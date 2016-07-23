@@ -2897,7 +2897,7 @@ class UTF8
     do {
       $str_compare = $str;
 
-      $str = preg_replace_callback("/&#\d{2,5};/", function($matches) {
+      $str = preg_replace_callback("/&#\d{2,5};/", function ($matches) {
         $returnTmp =  \mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
 
         if ($returnTmp !== '"' && $returnTmp !== "'") {
