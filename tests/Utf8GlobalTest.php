@@ -892,11 +892,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&#20013;&#25991;&#31354;&#30333;'                                                          => '中文空白',
     );
 
-    // WARNING: HipHop error // "ENT_COMPAT" isn't working
-    if (defined('HHVM_VERSION') === false) {
-      foreach ($testArray as $before => $after) {
+    foreach ($testArray as $before => $after) {
         self::assertSame($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
-      }
     }
   }
 
@@ -955,7 +952,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
     );
 
-    if (Bootup::is_php('5.4') === true && defined('HHVM_VERSION') !== true) {
+    if (Bootup::is_php('5.4') === true) {
       foreach ($testArray as $before => $after) {
         self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'error by ' . $before);
       }
@@ -1528,11 +1525,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     self::assertSame(true, $result);
 
-    // WARNING: HipHop VM 3.5.0 error via travis-ci // "Undefined index: arr"
-    if (!defined('HHVM_VERSION')) {
-      self::assertSame('foo 測試', $array['arr'][0]);
-      self::assertSame('ການທົດສອບ', $array['arr'][1]);
-    }
+    self::assertSame('foo 測試', $array['arr'][0]);
+    self::assertSame('ການທົດສອບ', $array['arr'][1]);
 
     self::assertSame('測試', $array['Iñtërnâtiônéàlizætiøn']);
 
@@ -1567,7 +1561,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     $result = UTF8::parse_str($str, $array);
 
-    self::assertSame(false, $result);
+    // bug reported (hhvm (3.6.6~precise)): https://github.com/facebook/hhvm/issues/7247
+    if (defined('HHVM_VERSION') === false) {
+      self::assertSame(false, $result);
+    }
   }
 
   public function testRange()
@@ -2550,7 +2547,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
           'मोनिच'                         => 'monic',
           'क्षȸ'                          => 'kssdb',
           'أحبك 😀'                       => '\'Hbk ?',
-          '∀ i ∈ ℕ'                       => '[?] i [?]',
+          '∀ i ∈ ℕ'                       => '[?] i [?] ',
           '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? \'Hbk',
       );
     }
