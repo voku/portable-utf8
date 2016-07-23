@@ -23,6 +23,16 @@ If BOM already existed there, the Input string is returned.
 UTF8::add_bom_to_string('fòô'); // "\xEF\xBB\xBF" . 'fòô'
 ```
 
+##### binary_to_str(mixed $bin)
+
+Convert binary into an string.
+
+INFO: opposite to UTF8::str_to_binary()
+
+```php
+UTF8::binary_to_str('11110000100111111001100010000011'); // '😃'
+```
+
 ##### bom()
 
 Returns the UTF-8 Byte Order Mark Character.
@@ -34,6 +44,8 @@ UTF8::bom(); // "\xEF\xBB\xBF"
 ##### chr(int $code_point) : string
 
 Generates a UTF-8 encoded character from the given code point.
+
+INFO: opposite to UTF8::ord()
 
 ```php
 UTF8::chr(666); // 'ʚ'
@@ -446,6 +458,93 @@ Strip whitespace or other characters from beginning of a UTF-8 string.
 
 ```php
 UTF8::ltrim('　中文空白　 '); // '中文空白　 '
+```
+
+##### max(mixed $arg) : string
+
+Returns the UTF-8 character with the maximum code point in the given data.
+
+```php
+UTF8::max('abc-äöü-中文空白'); // 'ø'
+```
+
+##### max_chr_width(string $str) : int
+
+Calculates and returns the maximum number of bytes taken by any
+UTF-8 encoded character in the given string.
+
+```php
+UTF8::max_chr_width('Intërnâtiônàlizætiøn'); // 2
+```
+
+##### min(mixed $arg) : string
+
+Returns the UTF-8 character with the minimum code point in the given data.
+
+```php
+UTF8::min('abc-äöü-中文空白'); // '-'
+```
+
+##### normalize_encoding(string $encoding) : string
+
+Normalize the encoding-"name" input.
+
+```php
+UTF8::normalize_encoding('UTF8'); // 'UTF-8'
+```
+
+##### normalize_msword(string $str) : string
+
+Normalize some MS Word special characters.
+
+```php
+UTF8::normalize_msword('„Abcdef…”'); // '"Abcdef..."'
+```
+
+##### normalize_whitespace(string $str, bool $keepNonBreakingSpace = false, bool $keepBidiUnicodeControls = false) : string
+
+Normalize the whitespace.
+
+```php
+UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true); // "abc-\xc2\xa0-öäü- -"
+```
+
+##### ord(string $chr) : int
+
+Calculates Unicode code point of the given UTF-8 encoded character.
+
+INFO: opposite to UTF8::chr()
+
+```php
+UTF8::ord('中'); // 20013
+```
+
+##### parse_str(string $str, &$result) : bool
+
+Parses the string into an array (into the the second parameter).
+
+WARNING: Instead of "parse_str()" this method do not (re-)placing variables in the current scope,
+          if the second parameter is not set!
+
+```php
+UTF8::parse_str('Iñtërnâtiônéàlizætiøn=測試&arr[]=foo+測試&arr[]=ການທົດສອບ', $array);
+echo $array['Iñtërnâtiônéàlizætiøn']; // '測試'
+```
+
+##### range(mixed $var1, mixed $var2) : array
+
+Create an array containing a range of UTF-8 characters.
+
+```php
+UTF8::range('κ', 'ζ'); // array('κ', 'ι', 'θ', 'η', 'ζ',)
+```
+
+##### remove_bom(mixed $var1, mixed $var2) : array
+
+Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.
+
+```php
+UTF8::remove_bom("\xEF\xBB\xBFΜπορώ να"); // 'Μπορώ να'
 ```
 
 ... TODO

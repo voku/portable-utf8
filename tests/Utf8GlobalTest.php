@@ -9,80 +9,708 @@ use voku\helper\UTF8;
 class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 {
 
-  public function testStrlen()
+  /**
+   * helper-function for test -> "testCombineSomeUtf8Functions()"
+   *
+   * @param $comment
+   *
+   * @return string
+   */
+  public function cleanString($comment)
   {
-    // string with UTF-16 (LE) BOM + valid UTF-8 && invalid UTF-8
-    $string = "\xFF\xFE" . 'string <strong>with utf-8 chars åèä</strong>' . "\xa0\xa1" . ' - doo-bee doo-bee dooh';
+    foreach (array('fuck', 'foo', 'bar') as $value) {
+      $value = UTF8::trim($value);
 
-    self::assertSame(74, strlen($string));
-    self::assertSame(71, UTF8::strlen($string));
-    self::assertSame(71, UTF8::strlen($string, 'UTF-8', false));
-    self::assertSame(67, UTF8::strlen($string, 'UTF-8', true));
+      if (UTF8::stripos($comment, $value) !== false) {
 
-    $string_test1 = strip_tags($string);
-    $string_test2 = UTF8::strip_tags($string);
-
-    self::assertSame(57, strlen($string_test1));
-    self::assertSame(50, UTF8::strlen($string_test2));
-
-    $testArray = array(
-        "<a href='κόσμε'>κόσμε</a>" => 25,
-        '<白>'                       => 3,
-        'öäü'                       => 3,
-        ' '                         => 1,
-        ''                          => 0,
-        1                           => 1,
-        -1                          => 2,
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::strlen($actual), $actual);
+        $comment = UTF8::str_ireplace($value, '*****', $comment);
+      }
     }
 
+    $comment = UTF8::trim(strip_tags($comment));
+
+    return (string)$comment;
+  }
+
+  /**
+   * Call protected/private method of a class.
+   *
+   * @param object &$object    Instantiated object that we will run method on.
+   * @param string $methodName Method name to call
+   * @param array  $parameters Array of parameters to pass into method.
+   *
+   * @return mixed Method return.
+   */
+  public function invokeMethod(&$object, $methodName, array $parameters = array())
+  {
+    $reflection = new \ReflectionClass(get_class($object));
+    $method = $reflection->getMethod($methodName);
+    $method->setAccessible(true);
+
+    return $method->invokeArgs($object, $parameters);
+  }
+
+  public function setUp()
+  {
+    error_reporting(E_STRICT);
+  }
+
+  public function testAccess()
+  {
     $testArray = array(
-        "<a href='test'>tester</a>" => 25,
-        '<a>'                       => 3,
-        'abc'                       => 3,
-        ' '                         => 1,
-        ''                          => 0,
-        1                           => 1,
-        -1                          => 2,
+        ''          => array(1 => ''),
+        '中文空白'      => array(2 => '空'),
+        '中文空白-test' => array(3 => '白'),
+        'fòô'       => array(1 => 'ò'),
     );
 
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, strlen($actual), $actual);
+    foreach ($testArray as $actualString => $testDataArray) {
+      foreach ($testDataArray as $stringPos => $expectedString) {
+        self::assertSame($expectedString, UTF8::access($actualString, $stringPos));
+      }
     }
   }
 
-  public function testHtmlspecialchars()
+  public function testCallback()
+  {
+    $actual = UTF8::callback(
+        array(
+            'voku\helper\UTF8',
+            'strtolower',
+        ),
+        'Κόσμε-ÖÄÜ'
+    );
+    $expected = array(
+        'κ',
+        'ό',
+        'σ',
+        'μ',
+        'ε',
+        '-',
+        'ö',
+        'ä',
+        'ü',
+    );
+    self::assertSame($expected, $actual);
+  }
+
+  public function testChar()
   {
     $testArray = array(
-        "<a href='κόσμε'>κόσμε</a>" => "&lt;a href='κόσμε'&gt;κόσμε&lt;/a&gt;",
-        '<白>'                       => '&lt;白&gt;',
-        'öäü'                       => 'öäü',
-        ' '                         => ' ',
-        ''                          => '',
+        '39'  => '\'',
+        '40'  => '(',
+        '41'  => ')',
+        '42'  => '*',
+        '160' => ' ',
+        666   => 'ʚ',
+        165   => '¥',
+        8469  => 'ℕ',
     );
 
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::htmlspecialchars($actual));
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::chr(UTF8::ord(UTF8::chr($before))), 'tested: ' . $before);
+    }
+
+    // --
+
+    $testArrayFail = array(
+        ''    => null, // fail
+        'foo' => null, // fail
+        'fòô' => null, // fail
+    );
+
+    foreach ($testArrayFail as $before => $after) {
+      self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
     }
   }
 
-  public function testHtmlentities()
+  public function testChrSizeList()
   {
     $testArray = array(
-        '<白>'                                                                                                         => '&lt;&#30333;&gt;',
-        '<白-öäü>'                                                                                                     => '&lt;&#30333;-&ouml;&auml;&uuml;&gt;',
-        'dies ist ein test „Goldenen Regeln und Checklisten“.<br /><br /><br />' . UTF8::html_entity_decode('&nbsp;') => 'dies ist ein test &bdquo;Goldenen Regeln und Checklisten&ldquo;.&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&nbsp;',
-        'öäü'                                                                                                         => '&ouml;&auml;&uuml;',
-        ' '                                                                                                           => ' ',
-        ''                                                                                                            => '',
+        "中文空白\xF0\x90\x8C\xBC" => array(
+            3,
+            3,
+            3,
+            3,
+            4,
+        ),
+        'öäü'                  => array(
+            2,
+            2,
+            2,
+        ),
+        'abc'                  => array(
+            1,
+            1,
+            1,
+        ),
+        ''                     => array(),
+        '中文空白-test'            => array(
+            3,
+            3,
+            3,
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+        ),
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::htmlentities($actual));
+      self::assertSame($expected, UTF8::chr_size_list($actual));
     }
+  }
+
+  public function testChrToDecimal()
+  {
+    $tests = array(
+        '~' => 0x7e,
+        '§' => 0xa7,
+        'ሇ' => 0x1207,
+
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::chr_to_decimal($before));
+    }
+  }
+
+  public function testChunkSplit()
+  {
+    $result = UTF8::chunk_split('ABC-ÖÄÜ-中文空白-κόσμε', 3);
+    $expected = "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε";
+
+    self::assertSame($expected, $result);
+  }
+
+  public function testClean()
+  {
+    $examples = array(
+      // Valid UTF-8
+      'κόσμε'                                                                                => array('κόσμε' => 'κόσμε'),
+      '中'                                                                                    => array('中' => '中'),
+      '«foobar»'                                                                             => array('«foobar»' => '«foobar»'),
+      // Valid UTF-8 + UTF-8 NO-BREAK SPACE
+      "κόσμε\xc2\xa0"                                                                        => array("κόσμε\xc2\xa0" => "κόσμε\xc2\xa0"),
+      // Valid UTF-8 + Invalied Chars
+      "κόσμε\xa0\xa1-öäü"                                                                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
+      // Valid UTF-8 + ISO-Erros
+      'DÃ¼sseldorf'                                                                          => array('Düsseldorf' => 'Düsseldorf'),
+      // Valid ASCII
+      'a'                                                                                    => array('a' => 'a'),
+      // Valid emoji (non-UTF-8)
+      '😃'                                                                                   => array('😃' => '😃'),
+      '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => array('🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧'),
+      // Valid ASCII + Invalied Chars
+      "a\xa0\xa1-öäü"                                                                        => array('a-öäü' => 'a-öäü'),
+      // Valid 2 Octet Sequence
+      "\xc3\xb1"                                                                             => array('ñ' => 'ñ'),
+      // Invalid 2 Octet Sequence
+      "\xc3\x28"                                                                             => array('�(' => '('),
+      // Invalid Sequence Identifier
+      "\xa0\xa1"                                                                             => array('��' => ''),
+      // Valid 3 Octet Sequence
+      "\xe2\x82\xa1"                                                                         => array('₡' => '₡'),
+      // Invalid 3 Octet Sequence (in 2nd Octet)
+      "\xe2\x28\xa1"                                                                         => array('�(�' => '('),
+      // Invalid 3 Octet Sequence (in 3rd Octet)
+      "\xe2\x82\x28"                                                                         => array('�(' => '('),
+      // Valid 4 Octet Sequence
+      "\xf0\x90\x8c\xbc"                                                                     => array('𐌼' => '𐌼'),
+      // Invalid 4 Octet Sequence (in 2nd Invalid 4 Octet Sequence (in 2ndOctet)
+      "\xf0\x28\x8c\xbc"                                                                     => array('�(��' => '('),
+      // Invalid 4 Octet Sequence (in 3rd Octet)
+      "\xf0\x90\x28\xbc"                                                                     => array('�(�' => '('),
+      // Invalid 4 Octet Sequence (in 4th Octet)
+      "\xf0\x28\x8c\x28"                                                                     => array('�(�(' => '(('),
+      // Valid 5 Octet Sequence (but not Unicode!)
+      "\xf8\xa1\xa1\xa1\xa1"                                                                 => array('�' => ''),
+      // Valid 6 Octet Sequence (but not Unicode!)
+      "\xfc\xa1\xa1\xa1\xa1\xa1"                                                             => array('�' => ''),
+      // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
+      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82"                                                 => array('�' => ' '),
+    );
+
+    // <<<<--- \"this comment is only a helper for PHPStorm and non UTF-8 chars
+
+    $counter = 0;
+    foreach ($examples as $testString => $testResults) {
+      foreach ($testResults as $before => $after) {
+        self::assertSame($after, UTF8::cleanup($testString), $counter);
+      }
+      $counter++;
+    }
+  }
+
+  public function testCleanup()
+  {
+    $examples = array(
+        ''                                     => array(''),
+        // Valid UTF-8 + UTF-8 NO-BREAK SPACE
+        "κόσμε\xc2\xa0"                        => array('κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"),
+        // Valid UTF-8
+        '中'                                    => array('中' => '中'),
+        // Valid UTF-8 + ISO-Error
+        'DÃ¼sseldorf'                          => array('Düsseldorf' => 'Düsseldorf'),
+        // Valid UTF-8 + Invalid Chars
+        "κόσμε\xa0\xa1-öäü"                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
+        // Valid ASCII
+        'a'                                    => array('a' => 'a'),
+        // Valid ASCII + Invalid Chars
+        "a\xa0\xa1-öäü"                        => array('a-öäü' => 'a-öäü'),
+        // Valid 2 Octet Sequence
+        "\xc3\xb1"                             => array('ñ' => 'ñ'),
+        // Invalid 2 Octet Sequence
+        "\xc3\x28"                             => array('�(' => '('),
+        // Invalid Sequence Identifier
+        "\xa0\xa1"                             => array('��' => ''),
+        // Valid 3 Octet Sequence
+        "\xe2\x82\xa1"                         => array('₡' => '₡'),
+        // Invalid 3 Octet Sequence (in 2nd Octet)
+        "\xe2\x28\xa1"                         => array('�(�' => '('),
+        // Invalid 3 Octet Sequence (in 3rd Octet)
+        "\xe2\x82\x28"                         => array('�(' => '('),
+        // Valid 4 Octet Sequence
+        "\xf0\x90\x8c\xbc"                     => array('𐌼' => '𐌼'),
+        // Invalid 4 Octet Sequence (in 2nd Octet)
+        "\xf0\x28\x8c\xbc"                     => array('�(��' => '('),
+        // Invalid 4 Octet Sequence (in 3rd Octet)
+        "\xf0\x90\x28\xbc"                     => array('�(�' => '('),
+        // Invalid 4 Octet Sequence (in 4th Octet)
+        " \xf0\x28\x8c\x28"                    => array('�(�(' => ' (('),
+        // Valid 5 Octet Sequence (but not Unicode!)
+        "\xf8\xa1\xa1\xa1\xa1"                 => array('�' => ''),
+        // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
+        "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array('�' => ' '),
+        // test for database-insert
+        '
+        <h1>«DÃ¼sseldorf» &ndash; &lt;Köln&gt;</h1>
+        <br /><br />
+        <p>
+          &nbsp;�&foo;❤&nbsp;
+        </p>
+        '                              => array(
+            '' => '
+        <h1>«Düsseldorf» &ndash; &lt;Köln&gt;</h1>
+        <br /><br />
+        <p>
+          &nbsp;&foo;❤&nbsp;
+        </p>
+        ',
+        ),
+    );
+
+    foreach ($examples as $testString => $testResults) {
+      foreach ($testResults as $before => $after) {
+        self::assertSame($after, UTF8::cleanup($testString));
+      }
+    }
+
+  }
+
+  public function testCodepoints()
+  {
+    $testArray = array(
+        "\xF0\x90\x8C\xBC---" => array(
+            0 => 66364,
+            1 => 45,
+            2 => 45,
+            3 => 45,
+        ),
+        '中-abc'               => array(
+            0 => 20013,
+            1 => 45,
+            2 => 97,
+            3 => 98,
+            4 => 99,
+        ),
+        '₧{abc}'              => array(
+            0 => 8359,
+            1 => 123,
+            2 => 97,
+            3 => 98,
+            4 => 99,
+            5 => 125,
+        ),
+        'κöñ'                 => array(
+            0 => 954,
+            1 => 246,
+            2 => 241,
+        ),
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::codepoints($actual));
+    }
+
+    // --- U+xxxx format
+
+    self::assertSame(array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints('κöñ', true));
+    self::assertSame(
+        array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints(
+        array(
+            'κ',
+            'ö',
+            'ñ',
+        ), true
+    )
+    );
+  }
+
+  public function testCombineSomeUtf8Functions()
+  {
+    $testArray = array(
+        "<h1>test\n</h1>"               => 'test',
+        "test\n\nöfuckäü"               => "test\n\nö*****äü",
+        "<b>FUCK\n</b>"                 => '*****',
+        "öäüfoo<strong>lall\n</strong>" => 'öäü*****lall',
+        ' <b>lall</b>'                  => 'lall',
+        "\n"                            => '',
+        "<ul><li>test\n\n</li></ul>"    => 'test',
+        "<blockquote>\n</blockquote>"   => '',
+        '</br>'                         => '',
+        ''                              => '',
+        ' '                             => '',
+    );
+
+    foreach ($testArray as $testString => $testResult) {
+      self::assertSame($testResult, $this->cleanString($testString));
+    }
+  }
+
+  public function testCountChars()
+  {
+    $testArray = array(
+        'κaκbκc' => array(
+            'κ' => 3,
+            'a' => 1,
+            'b' => 1,
+            'c' => 1,
+        ),
+        'cba'    => array(
+            'c' => 1,
+            'b' => 1,
+            'a' => 1,
+        ),
+        'abcöäü' => array(
+            'a' => 1,
+            'b' => 1,
+            'c' => 1,
+            'ö' => 1,
+            'ä' => 1,
+            'ü' => 1,
+        ),
+        '白白'     => array('白' => 2),
+        ''       => array(),
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame(true, $expected === UTF8::count_chars($actual), 'error by ' . $actual);
+    }
+
+    // added invalid UTF-8
+    $testArray['白' . "\xa0\xa1" . '白'] = array('白' => 2);
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame(true, $expected === UTF8::count_chars($actual, true), 'error by ' . $actual);
+    }
+  }
+
+  public function testDecimalToChr()
+  {
+    $tests = array(
+        0x7e   => '~',
+        0xa7   => '§',
+        0x1207 => 'ሇ',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::decimal_to_chr($before));
+    }
+  }
+
+  public function testEncode()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::encode('', $before), 'tested: ' . $before); // do nothing
+    }
+
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::encode('UTF8', $before), 'tested: ' . $before); // UTF-8
+    }
+
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ???- ',
+        'öäü'            => '???',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berb?e',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::encode('CP367', $before), 'tested: ' . $before); // CP367
+    }
+
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::filter(UTF8::encode('ISo88591', $before)), 'tested: ' . $before); // ISO-8859-1
+    }
+
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => '???',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before)))); // ISO-8859-15
+    }
+  }
+
+  public function testEncodeUtf8EncodeUtf8()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
+    }
+  }
+
+  public function testEncodeUtf8Utf8Encode()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æ–‡ç©ºç™½-  ',
+        '      - ÖÄÜ- '  => '      - Ã–Ã„Ãœ- ',
+        'öäü'            => 'Ã¶Ã¤Ã¼',
+        ''               => '',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::utf8_encode(UTF8::encode('UTF-8', $before)));
+    }
+  }
+
+  public function testFileGetContents()
+  {
+    // INFO: UTF-8 shim only works for UTF-8
+    if (UTF8::mbstring_loaded() === true) {
+
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
+
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
+
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
+      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
+
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
+      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
+
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
+      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
+
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt', FILE_TEXT);
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
+
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', null, null, 0);
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
+
+      // text: with offset
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', null, null, 5);
+      self::assertContains('There are better connections.', $testString);
+
+      // text: with offset & max-length
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', null, null, 7, 11);
+      self::assertContains('Iñtërnât', $testString);
+
+      // text: with offset & max-length + timeout
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt', null, null, 7, 10, 15);
+      self::assertContains('ñtërnâtiôn', $testString);
+
+      // text: with timeout
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', null, null, 7, null, 10);
+      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
+
+      // text: with max-length + timeout
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', null, null, null, 10, 10);
+      self::assertContains('Hírek', $testString);
+
+      $context = stream_context_create(
+          array(
+              'http' =>
+                  array(
+                      'timeout' => 10,
+                  ),
+          )
+      );
+
+      // text: with max-length + timeout
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', null, $context, null, 10, 10);
+      self::assertContains('Hírek', $testString);
+
+      // text: do not convert to utf-8 + timeout
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', null, $context, null, 10, 10, false);
+      self::assertRegExp('#H.*rek#', $testString);
+
+      // text: do not convert to utf-8 + timeout
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', null, $context, null, 10, 10, false);
+      self::assertContains('Hírek', $testString);
+
+      // image: do not convert to utf-8 + timeout
+      $image = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', null, $context, null, null, 10, false);
+      self::assertSame(true, UTF8::is_binary($image));
+
+      // image: convert to utf-8 + timeout (ERROR)
+      $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', null, $context, null, null, 10, true);
+      self::assertSame(false, UTF8::is_binary($image2));
+
+      self::assertNotEquals($image2, $image);
+    }
+  }
+
+  public function testFilter()
+  {
+    $c = 'à';
+    $d = \Normalizer::normalize($c, \Normalizer::NFD);
+    $a = array(
+        'n' => 4,
+        'a' => "\xE9",
+        'b' => substr($d, 1),
+        'c' => $c,
+        'd' => $d,
+        'e' => "\n\r\n\r",
+    );
+    $a['f'] = (object)$a;
+    $b = UTF8::filter($a);
+    $b['f'] = (array)$a['f'];
+
+    $expect = array(
+        'n' => 4,
+        'a' => 'é',
+        'b' => '◌' . substr($d, 1),
+        'c' => $c,
+        'd' => $c,
+        'e' => "\n\n\n",
+    );
+    $expect['f'] = $expect;
+
+    self::assertSame($expect, $b);
+
+    // -----
+
+    $result = UTF8::filter(array("\xE9", 'à', 'a', "\xe2\x80\xa8"), \Normalizer::FORM_D);
+
+    self::assertSame(array(0 => 'é', 1 => 'à', 2 => 'a', 3 => "\xe2\x80\xa8"), $result);
+  }
+
+  public function testFilterInput()
+  {
+    $options = array(
+        'options' => array(
+            'default'   => -1,
+            // value to return if the filter fails
+            'min_range' => 90,
+            'max_range' => 99,
+        ),
+    );
+
+    self::assertSame('  -ABC-中文空白-  ', UTF8::filter_var('  -ABC-中文空白-  ', FILTER_DEFAULT));
+    self::assertSame(false, UTF8::filter_var('  -ABC-中文空白-  ', FILTER_VALIDATE_URL));
+    self::assertSame(false, UTF8::filter_var('  -ABC-中文空白-  ', FILTER_VALIDATE_EMAIL));
+    self::assertSame(-1, UTF8::filter_var('中文空白 ', FILTER_VALIDATE_INT, $options));
+    self::assertSame(99, UTF8::filter_var(99, FILTER_VALIDATE_INT, $options));
+    self::assertSame(-1, UTF8::filter_var(100, FILTER_VALIDATE_INT, $options));
+  }
+
+  public function testFilterVarArray()
+  {
+    $filters = array(
+        'name'  => array(
+            'filter'  => FILTER_CALLBACK,
+            'options' => array('voku\helper\UTF8', 'ucwords'),
+        ),
+        'age'   => array(
+            'filter'  => FILTER_VALIDATE_INT,
+            'options' => array(
+                'min_range' => 1,
+                'max_range' => 120,
+            ),
+        ),
+        'email' => FILTER_VALIDATE_EMAIL,
+    );
+
+    $data['name'] = 'κόσμε';
+    $data['age'] = '18';
+    $data['email'] = 'foo@bar.de';
+
+    self::assertSame(
+        array(
+            'name'  => 'Κόσμε',
+            'age'   => 18,
+            'email' => 'foo@bar.de',
+        ),
+        UTF8::filter_var_array($data, $filters, true)
+    );
+
+    self::assertSame(
+        array(
+            'name'  => 'κόσμε',
+            'age'   => '18',
+            'email' => 'foo@bar.de',
+        ),
+        UTF8::filter_var_array($data)
+    );
   }
 
   public function testFitsInside()
@@ -102,20 +730,331 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testParseStr()
+  public function testFixBrokenUtf8()
   {
-    // test-string
-    $str = "Iñtërnâtiôn\xE9àlizætiøn=測試&arr[]=foo+測試&arr[]=ການທົດສອບ";
+    $testArray = array(
+        'Düsseldorf'                                      => 'Düsseldorf',
+        'Ã'                                               => 'Ã',
+        ' '                                               => ' ',
+        ''                                                => '',
+        "\n"                                              => "\n",
+        "test\xc2\x88"                                    => 'testˆ',
+        'DÃ¼sseldorf'                                     => 'Düsseldorf',
+        'Ã¤'                                              => 'ä',
+        'test'                                            => 'test',
+        'FÃÂ©dération Camerounaise de Football'           => 'Fédération Camerounaise de Football',
+        "FÃÂ©dération Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
+        'FÃ©dÃ©ration Camerounaise de Football'           => 'Fédération Camerounaise de Football',
+        "FÃ©dÃ©ration Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
+        'FÃÂ©dÃÂ©ration Camerounaise de Football'         => 'Fédération Camerounaise de Football',
+        "FÃÂ©dÃÂ©ration Camerounaise de Football\n"       => "Fédération Camerounaise de Football\n",
+        'FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football'   => 'Fédération Camerounaise de Football',
+        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football\n" => "Fédération Camerounaise de Football\n",
+    );
 
-    UTF8::parse_str($str, $array);
-
-    // WARNING: HipHop VM 3.5.0 error via travis-ci // "Undefined index: arr"
-    if (!defined('HHVM_VERSION')) {
-      self::assertSame('foo 測試', $array['arr'][0]);
-      self::assertSame('ການທົດສອບ', $array['arr'][1]);
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::fix_utf8($before));
     }
 
-    self::assertSame('測試', $array['Iñtërnâtiônéàlizætiøn']);
+    self::assertSame(array('Düsseldorf', 'Fédération'), UTF8::fix_utf8(array('DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration')));
+  }
+
+  public function testFixSimpleUtf8()
+  {
+    $testArray = array(
+        'Düsseldorf'   => 'Düsseldorf',
+        'Ã'            => 'Ã',
+        ' '            => ' ',
+        ''             => '',
+        "\n"           => "\n",
+        "test\xc2\x88" => 'testˆ',
+        'DÃ¼sseldorf'  => 'Düsseldorf',
+        'Ã¤'           => 'ä',
+        'test'         => 'test',
+    );
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::fix_simple_utf8($before), 'tested: ' . $before);
+    }
+  }
+
+  public function testGetCharDirection()
+  {
+    $testArray = array(
+        'ا'   => 'RTL',
+        'abc' => 'LTR',
+        '?'   => 'LTR',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::getCharDirection($actual), 'error by ' . $actual);
+    }
+  }
+
+  public function testHexToIntAndIntToHex()
+  {
+    $tests = array(
+        'U+2026' => 8230,
+        'U+03ba' => 954,
+        'U+00f6' => 246,
+        'U+00f1' => 241,
+        'U+0000' => 0,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::hex_to_int($before), 'tested: ' . $before);
+    }
+
+    foreach ($tests as $after => $before) {
+      self::assertSame($after, UTF8::int_to_hex($before), 'tested: ' . $before);
+    }
+  }
+
+  public function testHtmlEncode()
+  {
+    $testArray = array(
+        '{-test'                  => '&#123;&#45;&#116;&#101;&#115;&#116;',
+        '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)' => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍&#32;💩&#32;😄&#32;&#10084;&#32;👍&#32;💩&#32;😄&#32;&#10084;', // TODO?
+        'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
+        'öäü'                     => '&#246;&#228;&#252;',
+        ' '                       => '&#32;',
+        ''                        => '',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::html_encode($actual), 'tested:' . $actual);
+    }
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($actual, UTF8::html_decode(UTF8::html_encode($actual)), 'tested:' . $actual);
+    }
+
+    // ---
+
+    $testArray = array(
+        '{-test'                  => '{-test',
+        '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'D&#228;nisch (&#197;/&#229;, &#198;/&#230;, &#216;/&#248;)',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 &#10084; 👍 💩 😄 &#10084;',
+        'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
+        'öäü'                     => '&#246;&#228;&#252;',
+        ' '                       => ' ',
+        ''                        => '',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
+    }
+
+    // --
+
+    $testArray = array(
+        '{-test'                  => '{-test',
+        '中文空白'                    => '中文空白',
+        'κόσμε'                   => 'κόσμε',
+        'öäü'                     => 'öäü',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'Dänisch (Å/å, Æ/æ, Ø/ø)',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
+        ' '                       => ' ',
+        ''                        => '',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
+    }
+  }
+
+  public function testHtmlEntityDecode()
+  {
+    $testArray = array(
+        'κόσμε'                                                                                     => 'κόσμε',
+        'Κόσμε'                                                                                     => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                                        => '  ',
+        ''                                                                                          => '',
+        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
+        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
+        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
+        'who&#039;s online'                                                                         => 'who&#x27;s online',
+        'who&amp;#039;s online'                                                                     => 'who&#x27;s online',
+        'who&#039;s online-'                                                                        => 'who&#x27;s online-',
+        'Who&#039;s Online'                                                                         => 'Who&#x27;s Online',
+        'Who&amp;#039;s Online'                                                                     => 'Who&#x27;s Online',
+        'Who&amp;amp;#039;s Online &#20013;'                                                        => 'Who&#x27;s Online 中',
+        'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
+        '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
+        '&#20013;&#25991;&#31354;&#30333;'                                                          => '中文空白',
+    );
+
+    // WARNING: HipHop error // "ENT_COMPAT" isn't working
+    if (defined('HHVM_VERSION') === false) {
+      foreach ($testArray as $before => $after) {
+        self::assertSame($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
+      }
+    }
+  }
+
+  public function testHtmlEntityDecodeWithEntQuotes()
+  {
+    $testArray = array(
+        'κόσμε'                                                                                     => 'κόσμε',
+        'Κόσμε'                                                                                     => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                                        => '  ',
+        ''                                                                                          => '',
+        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
+        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
+        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
+        'who&#039;s online'                                                                         => 'who\'s online',
+        'who&amp;#039;s online'                                                                     => 'who\'s online',
+        'who&#039;s online-'                                                                        => 'who\'s online-',
+        'Who&#039;s Online'                                                                         => 'Who\'s Online',
+        'Who&amp;#039;s Online &#20013;'                                                            => 'Who\'s Online 中',
+        'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
+        'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
+        '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
+    );
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
+    }
+  }
+
+  public function testHtmlEntityDecodeWithHtml5()
+  {
+    $testArray = array(
+        'κόσμε'                                                                                     => 'κόσμε',
+        'Κόσμε'                                                                                     => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                                        => '  ',
+        ''                                                                                          => '',
+        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
+        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
+        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
+        'who&#039;s online'                                                                         => 'who\'s online',
+        'who&amp;#039;s online'                                                                     => 'who\'s online',
+        'who&#039;s online-'                                                                        => 'who\'s online-',
+        'Who&#039;s Online'                                                                         => 'Who\'s Online',
+        'Who&amp;#039;s Online'                                                                     => 'Who\'s Online',
+        'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
+        'who\'s online&colon;'                                                                      => 'who\'s online:',
+        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
+        '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
+    );
+
+    if (Bootup::is_php('5.4') === true && defined('HHVM_VERSION') !== true) {
+      foreach ($testArray as $before => $after) {
+        self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'error by ' . $before);
+      }
+    }
+  }
+
+  public function testHtmlentities()
+  {
+    $testArray = array(
+        '<白>'                                                                                                         => '&lt;&#30333;&gt;',
+        '<白-öäü>'                                                                                                     => '&lt;&#30333;-&ouml;&auml;&uuml;&gt;',
+        'dies ist ein test „Goldenen Regeln und Checklisten“.<br /><br /><br />' . UTF8::html_entity_decode('&nbsp;') => 'dies ist ein test &bdquo;Goldenen Regeln und Checklisten&ldquo;.&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&nbsp;',
+        'öäü'                                                                                                         => '&ouml;&auml;&uuml;',
+        ' '                                                                                                           => ' ',
+        ''                                                                                                            => '',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::htmlentities($actual));
+    }
+  }
+
+  public function testHtmlspecialchars()
+  {
+    $testArray = array(
+        "<a href='κόσμε'>κόσμε</a>" => "&lt;a href='κόσμε'&gt;κόσμε&lt;/a&gt;",
+        '<白>'                       => '&lt;白&gt;',
+        'öäü'                       => 'öäü',
+        ' '                         => ' ',
+        ''                          => '',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::htmlspecialchars($actual));
+    }
+  }
+
+  public function testIsAscii()
+  {
+    $testArray = array(
+        'κ'      => false,
+        'abc'    => true,
+        'abcöäü' => false,
+        '白'      => false,
+        ' '      => true,
+        ''       => true,
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
+    }
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::isAscii($actual), 'error by ' . $actual);
+    }
+  }
+
+  public function testIsBase64()
+  {
+    $tests = array(
+        0                                          => false,
+        1                                          => false,
+        -1                                         => false,
+        ' '                                        => false,
+        ''                                         => false,
+        'أبز'                                      => false,
+        "\xe2\x80\x99"                             => false,
+        'Ɓtest'                                    => false,
+        base64_encode('true')                      => true,
+        base64_encode('  -ABC-中文空白-  ')            => true,
+        'キャンパス'                                    => false,
+        'биологическом'                            => false,
+        '정, 병호'                                    => false,
+        'on'                                       => false,
+        'ますだ, よしひこ'                                => false,
+        'मोनिच'                                    => false,
+        'क्षȸ'                                     => false,
+        base64_encode('👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك') => true,
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'                => false,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::isBase64($before), $before);
+    }
+  }
+
+  public function testIsBinary()
+  {
+    $tests = array(
+        'öäü'          => false,
+        ''             => false,
+        '1'            => false,
+        decbin(324546) => true,
+        01             => true,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::is_binary($before), 'value: ' . $before);
+    }
   }
 
   public function testIsHtml()
@@ -134,68 +1073,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $testString => $testResult) {
       self::assertSame($testResult, UTF8::isHtml($testString), 'tested: ' . $testString);
     }
-  }
-
-  public function testIsUtf8()
-  {
-    $testArray = array(
-        1                                                                  => true,
-        -1                                                                 => true,
-        'κ'                                                                => true,
-        ''                                                                 => true,
-        ' '                                                                => true,
-        "\n"                                                               => true,
-        'abc'                                                              => true,
-        'abcöäü'                                                           => true,
-        '白'                                                                => true,
-        'សាកល្បង!'                                                         => true,
-        'דיעס איז אַ פּרובירן!'                                            => true,
-        'Штампи іст Ейн тест!'                                             => true,
-        'Штампы гіст Эйн тэст!'                                            => true,
-        '測試！'                                                              => true,
-        'ການທົດສອບ!'                                                       => true,
-        'Iñtërnâtiônàlizætiøn'                                             => true,
-        'ABC 123'                                                          => true,
-        "Iñtërnâtiôn\xE9àlizætiøn"                                         => false,
-        "\xf0\x28\x8c\x28"                                                 => false,
-        "this is an invalid char '\xE9' here"                              => false,
-        "\xC3\xB1"                                                         => true,
-        "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn"               => false,
-        "Iñtërnâtiônàlizætiøn\xA0\xA1Iñtërnâtiônàlizætiøn"                 => false,
-        "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn"             => true,
-        "Iñtërnâtiônàlizætiøn\xE2\x28\xA1Iñtërnâtiônàlizætiøn"             => false,
-        "Iñtërnâtiônàlizætiøn\xE2\x82\x28Iñtërnâtiônàlizætiøn"             => false,
-        "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiøn"         => true,
-        "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiøn"         => false,
-        "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn"     => false,
-        "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => false,
-        "\xC3\x28"                                                         => false,
-        "\xA0\xA1"                                                         => false,
-        "\xE2\x82\xA1"                                                     => true,
-        "\xE2\x28\xA1"                                                     => false,
-        "\xE2\x82\x28"                                                     => false,
-        "\xF0\x90\x8C\xBC"                                                 => true,
-        "\xF0\x28\x8C\xBC"                                                 => false,
-        "\xF0\x90\x28\xBC"                                                 => false,
-        "\xF0\x28\x8C\x28"                                                 => false,
-        "\xF8\xA1\xA1\xA1\xA1"                                             => false,
-        "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
-    );
-
-    $conter = 0;
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
-      $conter++;
-    }
-
-    $conter = 0;
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::isUtf8($actual), 'error by - ' . $conter . ' :' . $actual);
-      $conter++;
-    }
-
-    self::assertSame(false, UTF8::is_utf8(file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt'), true));
-    self::assertSame(false, UTF8::is_utf8(file_get_contents(__DIR__ . '/fixtures/utf-16-be-bom.txt'), true));
   }
 
   public function testIsUtf16()
@@ -334,284 +1211,430 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(2, UTF8::isUtf32(file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt')));
   }
 
-  public function testCountChars()
+  public function testIsUtf8()
   {
     $testArray = array(
-        'κaκbκc' => array(
-            'κ' => 3,
-            'a' => 1,
-            'b' => 1,
-            'c' => 1,
-        ),
-        'cba'    => array(
-            'c' => 1,
-            'b' => 1,
-            'a' => 1,
-        ),
-        'abcöäü' => array(
-            'a' => 1,
-            'b' => 1,
-            'c' => 1,
-            'ö' => 1,
-            'ä' => 1,
-            'ü' => 1,
-        ),
-        '白白'     => array('白' => 2),
-        ''       => array(),
+        1                                                                  => true,
+        -1                                                                 => true,
+        'κ'                                                                => true,
+        ''                                                                 => true,
+        ' '                                                                => true,
+        "\n"                                                               => true,
+        'abc'                                                              => true,
+        'abcöäü'                                                           => true,
+        '白'                                                                => true,
+        'សាកល្បង!'                                                         => true,
+        'דיעס איז אַ פּרובירן!'                                            => true,
+        'Штампи іст Ейн тест!'                                             => true,
+        'Штампы гіст Эйн тэст!'                                            => true,
+        '測試！'                                                              => true,
+        'ການທົດສອບ!'                                                       => true,
+        'Iñtërnâtiônàlizætiøn'                                             => true,
+        'ABC 123'                                                          => true,
+        "Iñtërnâtiôn\xE9àlizætiøn"                                         => false,
+        "\xf0\x28\x8c\x28"                                                 => false,
+        "this is an invalid char '\xE9' here"                              => false,
+        "\xC3\xB1"                                                         => true,
+        "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn"               => false,
+        "Iñtërnâtiônàlizætiøn\xA0\xA1Iñtërnâtiônàlizætiøn"                 => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn"             => true,
+        "Iñtërnâtiônàlizætiøn\xE2\x28\xA1Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xE2\x82\x28Iñtërnâtiônàlizætiøn"             => false,
+        "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiøn"         => true,
+        "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiøn"         => false,
+        "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn"     => false,
+        "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => false,
+        "\xC3\x28"                                                         => false,
+        "\xA0\xA1"                                                         => false,
+        "\xE2\x82\xA1"                                                     => true,
+        "\xE2\x28\xA1"                                                     => false,
+        "\xE2\x82\x28"                                                     => false,
+        "\xF0\x90\x8C\xBC"                                                 => true,
+        "\xF0\x28\x8C\xBC"                                                 => false,
+        "\xF0\x90\x28\xBC"                                                 => false,
+        "\xF0\x28\x8C\x28"                                                 => false,
+        "\xF8\xA1\xA1\xA1\xA1"                                             => false,
+        "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
     );
 
+    $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      self::assertSame(true, $expected === UTF8::count_chars($actual), 'error by ' . $actual);
+      self::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
+      $conter++;
     }
 
-    // added invalid UTF-8
-    $testArray['白' . "\xa0\xa1" . '白'] = array('白' => 2);
-
+    $conter = 0;
     foreach ($testArray as $actual => $expected) {
-      self::assertSame(true, $expected === UTF8::count_chars($actual, true), 'error by ' . $actual);
+      self::assertSame($expected, UTF8::isUtf8($actual), 'error by - ' . $conter . ' :' . $actual);
+      $conter++;
     }
+
+    self::assertSame(false, UTF8::is_utf8(file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt'), true));
+    self::assertSame(false, UTF8::is_utf8(file_get_contents(__DIR__ . '/fixtures/utf-16-be-bom.txt'), true));
   }
 
-  public function testStringHasBom()
+  public function testJsonDecode()
   {
     $testArray = array(
-        ' '                    => false,
-        ''                     => false,
-        UTF8::bom() . 'κ'      => true,
-        'abc'                  => false,
-        UTF8::bom() . 'abcöäü' => true,
-        '白'                    => false,
-        UTF8::bom()            => true,
-    );
-
-    $utf8_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-8-bom.txt');
-    $utf8_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-8-bom-only.txt');
-    $utf16_be_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-16-be-bom.txt');
-    $utf16_be_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-16-be-bom-only.txt');
-    $utf16_le_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom.txt');
-    $utf16_le_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom-only.txt');
-    $utf32_be_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt');
-    $utf32_be_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom-only.txt');
-    $utf32_le_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-32-le-bom.txt');
-    $utf32_le_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-32-le-bom-only.txt');
-
-    $testArray[$utf8_bom] = true;
-    $testArray[$utf8_bom_only] = true;
-    $testArray[$utf16_be_bom] = true;
-    $testArray[$utf16_be_bom_only] = true;
-    $testArray[$utf16_le_bom] = true;
-    $testArray[$utf16_le_bom_only] = true;
-    $testArray[$utf32_be_bom] = true;
-    $testArray[$utf32_be_bom_only] = true;
-    $testArray[$utf32_le_bom] = true;
-    $testArray[$utf32_le_bom_only] = true;
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::string_has_bom($actual), 'error by ' . $actual);
-    }
-  }
-
-  public function testStrrev()
-  {
-    $testArray = array(
-        'κ-öäü'  => 'üäö-κ',
-        'abc'    => 'cba',
-        'abcöäü' => 'üäöcba',
-        '-白-'    => '-白-',
-        ''       => '',
-        ' '      => ' ',
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
-    }
-  }
-
-  public function testIsAscii()
-  {
-    $testArray = array(
-        'κ'      => false,
-        'abc'    => true,
-        'abcöäü' => false,
-        '白'      => false,
-        ' '      => true,
-        ''       => true,
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
-    }
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::isAscii($actual), 'error by ' . $actual);
-    }
-  }
-
-  public function testStrrichr()
-  {
-    $testArray = array(
-        'κόσμε'                                                                            => 'κόσμε',
-        'Κόσμε'                                                                            => 'Κόσμε',
-        'öäü-κόσμεκόσμε-äöü'                                                               => 'κόσμε-äöü',
-        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'κόσμε-äöü',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'κόσμε',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
-        '  '                                                                               => false,
-        ''                                                                                 => false,
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::strrichr($actual, 'κόσμε'), 'error by ' . $actual);
-    }
-  }
-
-  public function testStrrchr()
-  {
-    $testArray = array(
-        'κόσμε'                                                                            => 'κόσμε',
-        'Κόσμε'                                                                            => false,
-        'öäü-κόσμεκόσμε-äöü'                                                               => 'κόσμε-äöü',
-        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'κόσμε-äöü',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'κόσμε',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
-        '  '                                                                               => false,
-        ''                                                                                 => false,
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::strrchr($actual, 'κόσμε'), 'error by ' . $actual);
-    }
-  }
-
-  public function testGetCharDirection()
-  {
-    $testArray = array(
-        'ا'   => 'RTL',
-        'abc' => 'LTR',
-        '?'   => 'LTR',
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::getCharDirection($actual), 'error by ' . $actual);
-    }
-  }
-
-  public function testHtmlEntityDecode()
-  {
-    $testArray = array(
-        'κόσμε'                                                                                     => 'κόσμε',
-        'Κόσμε'                                                                                     => 'Κόσμε',
-        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
-        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        '  '                                                                                        => '  ',
-        ''                                                                                          => '',
-        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
-        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
-        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
-        'who&#039;s online'                                                                         => 'who&#x27;s online',
-        'who&amp;#039;s online'                                                                     => 'who&#x27;s online',
-        'who&#039;s online-'                                                                        => 'who&#x27;s online-',
-        'Who&#039;s Online'                                                                         => 'Who&#x27;s Online',
-        'Who&amp;#039;s Online'                                                                     => 'Who&#x27;s Online',
-        'Who&amp;amp;#039;s Online &#20013;'                                                        => 'Who&#x27;s Online 中',
-        'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
-        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
-        '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
-        '&#20013;&#25991;&#31354;&#30333;'                                                          => '中文空白',
-    );
-
-    // WARNING: HipHop error // "ENT_COMPAT" isn't working
-    if (defined('HHVM_VERSION') === false) {
-      foreach ($testArray as $before => $after) {
-        self::assertSame($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
-      }
-    }
-  }
-
-  public function testHtmlEntityDecodeWithEntQuotes()
-  {
-    $testArray = array(
-        'κόσμε'                                                                                     => 'κόσμε',
-        'Κόσμε'                                                                                     => 'Κόσμε',
-        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
-        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        '  '                                                                                        => '  ',
-        ''                                                                                          => '',
-        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
-        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
-        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
-        'who&#039;s online'                                                                         => 'who\'s online',
-        'who&amp;#039;s online'                                                                     => 'who\'s online',
-        'who&#039;s online-'                                                                        => 'who\'s online-',
-        'Who&#039;s Online'                                                                         => 'Who\'s Online',
-        'Who&amp;#039;s Online &#20013;'                                                            => 'Who\'s Online 中',
-        'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
-        'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
-        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
-        '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
+        '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte f\u00fclle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}'                            => '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte f\u00fclle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}',
+        '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSκόσμε' . "\xa0\xa1" . '-öäüDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte f\u00fclle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}' => '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSκόσμε ¡-öäüDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte fülle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}',
+        '{"array":[1,2,3],"boolean":true,"null":null,"number":123,"object":{"a":"b","c":"d","e":"f"},"string":"Hello World | öäü"}'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     => '{"array":[1,2,3],"boolean":true,"null":null,"number":123,"object":{"a":"b","c":"d","e":"f"},"string":"Hello World | öäü"}',
+        '{"array":[1,"¥","ä"]}'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         => '{"array":[1,"¥","ä"]}',
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
+      self::assertSame($after, UTF8::json_decode(UTF8::json_encode($before)));
+    }
+
+    // ---
+
+    $testArray['{"array":[1,2,3],,...}}'] = false;
+    foreach ($testArray as $before => $after) {
+      self::assertSame(
+          ($after === false ? false : true),
+          UTF8::is_json($before),
+          'tested: ' . $before
+      );
+    }
+
+    // ----
+
+    $expected = new stdClass();
+    $expected->array = array(1, '¥', 'ä');
+    self::assertEquals($expected, UTF8::json_decode('{"array":[1,"¥","ä"]}'));
+
+    // ----
+
+    self::assertEquals(array(1, '¥', 'ä'), UTF8::json_decode('[1,"\u00a5","\u00e4"]'));
+  }
+
+  public function testJsonEncode()
+  {
+    $test = new stdClass();
+    $test->array = array(1, '¥', 'ä');
+    self::assertEquals('{"array":[1,"\u00a5","\u00e4"]}', UTF8::json_encode($test));
+
+    // ----
+
+    self::assertEquals('[1,"\u00a5","\u00e4"]', UTF8::json_encode(array(1, '¥', 'ä')));
+  }
+
+  public function testLcfirst()
+  {
+    self::assertSame('öäü', UTF8::lcfirst('Öäü'));
+    self::assertSame('κόσμε', UTF8::lcfirst('Κόσμε'));
+    self::assertSame('aBC-ÖÄÜ-中文空白', UTF8::lcfirst('ABC-ÖÄÜ-中文空白'));
+    self::assertSame('ñTËRNÂTIÔNÀLIZÆTIØN', UTF8::lcfirst('ÑTËRNÂTIÔNÀLIZÆTIØN'));
+    self::assertSame('ñTËRNÂTIÔNÀLIZÆTIØN', UTF8::lcfirst('ñTËRNÂTIÔNÀLIZÆTIØN'));
+    self::assertSame('', UTF8::lcfirst(''));
+    self::assertSame(' ', UTF8::lcfirst(' '));
+    self::assertSame("\t test", UTF8::lcfirst("\t test"));
+    self::assertSame('ñ', UTF8::lcfirst('Ñ'));
+    self::assertSame("ñTËRN\nâtiônàlizætiøn", UTF8::lcfirst("ÑTËRN\nâtiônàlizætiøn"));
+    self::assertSame('deja', UTF8::lcfirst('Deja'));
+    self::assertSame('σσς', UTF8::lcfirst('Σσς'));
+    self::assertSame('dEJa', UTF8::lcfirst('dEJa'));
+    self::assertSame('σσΣ', UTF8::lcfirst('σσΣ'));
+  }
+
+  public function testLtrim()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '-ABC-中文空白-  ',
+        '      - ÖÄÜ- '  => '- ÖÄÜ- ',
+        'öäü'            => 'öäü',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::ltrim($before));
+      self::assertSame($after, ltrim($before));
+    }
+
+    self::assertSame('tërnâtiônàlizætiøn', UTF8::ltrim('ñtërnâtiônàlizætiøn', 'ñ'));
+    self::assertSame('tërnâtiônàlizætiøn', ltrim('ñtërnâtiônàlizætiøn', 'ñ'));
+
+    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', 'ñ'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', ltrim('Iñtërnâtiônàlizætiøn', 'ñ'));
+
+    self::assertSame('', UTF8::ltrim(''));
+    self::assertSame('', ltrim(''));
+
+    self::assertSame('', UTF8::ltrim(' '));
+    self::assertSame('', ltrim(' '));
+
+    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('/Iñtërnâtiônàlizætiøn', '/'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', ltrim('/Iñtërnâtiônàlizætiøn', '/'));
+
+    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', '^s'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', ltrim('Iñtërnâtiônàlizætiøn', '^s'));
+
+    self::assertSame("\nñtërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", 'ñ'));
+    self::assertSame("\nñtërnâtiônàlizætiøn", ltrim("ñ\nñtërnâtiônàlizætiøn", 'ñ'));
+
+    self::assertSame('tërnâtiônàlizætiøn', UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
+    self::assertSame('tërnâtiônàlizætiøn', ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
+  }
+
+  public function testMax()
+  {
+    $tests = array(
+        'abc-äöü-中文空白'         => '空',
+        'öäü'                  => 'ü',
+        'öäü test öäü'         => 'ü',
+        'ÖÄÜ'                  => 'Ü',
+        '中文空白'                 => '空',
+        'Intërnâtiônàlizætiøn' => 'ø',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::max($before));
     }
   }
 
-  public function testHtmlEntityDecodeWithHtml5()
+  public function testMaxChrWidth()
   {
     $testArray = array(
-        'κόσμε'                                                                                     => 'κόσμε',
-        'Κόσμε'                                                                                     => 'Κόσμε',
-        'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
-        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                                      => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                              => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        '  '                                                                                        => '  ',
-        ''                                                                                          => '',
-        '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'("&2")',
-        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert("foo");</script>, <marquee>test</marquee>',
-        '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert("XSS")</script>',
-        'who&#039;s online'                                                                         => 'who\'s online',
-        'who&amp;#039;s online'                                                                     => 'who\'s online',
-        'who&#039;s online-'                                                                        => 'who\'s online-',
-        'Who&#039;s Online'                                                                         => 'Who\'s Online',
-        'Who&amp;#039;s Online'                                                                     => 'Who\'s Online',
-        'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
-        'who\'s online&colon;'                                                                      => 'who\'s online:',
-        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
-        '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
+        '中文空白'                 => 3,
+        'Intërnâtiônàlizætiøn' => 2,
+        'öäü'                  => 2,
+        'abc'                  => 1,
+        ''                     => 0,
     );
 
-    if (Bootup::is_php('5.4') === true && defined('HHVM_VERSION') !== true) {
-      foreach ($testArray as $before => $after) {
-        self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES | ENT_HTML5, 'UTF-8'), 'error by ' . $before);
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::max_chr_width($actual));
+    }
+  }
+
+  public function testMin()
+  {
+    $tests = array(
+        'abc-äöü-中文空白'     => '-',
+        'öäü'          => 'ä',
+        'öäü test öäü' => ' ',
+        'ÖÄÜ'          => 'Ä',
+        '中文空白'         => '中',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::min($before));
+    }
+  }
+
+  public function testNormalizeEncoding()
+  {
+    $tests = array(
+        'ISO'          => 'ISO-8859-1',
+        'UTF8'         => 'UTF-8',
+        'WINDOWS-1251' => 'WINDOWS-1251',
+        ''             => false,
+        'Utf-8'        => 'UTF-8',
+        'UTF-8'        => 'UTF-8',
+        'ISO-8859-5'   => 'ISO-8859-5',
+        false          => false,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::normalizeEncoding($before), 'tested: ' . $before);
+    }
+  }
+
+  public function testNormalizeMsword()
+  {
+    $tests = array(
+        ''                                                                         => '',
+        ' '                                                                        => ' ',
+        '«foobar»'                                                                 => '"foobar"',
+        '中文空白 ‟'                                                                   => '中文空白 "',
+        "<ㅡㅡ></ㅡㅡ><div>…</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div>...</div><input type='email' name='user[email]' /><a>wtf</a>",
+        '– DÃ¼sseldorf —'                                                          => '- DÃ¼sseldorf -',
+        '„Abcdef…”'                                                                => '"Abcdef..."',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::normalize_msword($before));
+    }
+  }
+
+  public function testNormalizeWhitespace()
+  {
+    $tests = array(
+        ''                                                                                    => '',
+        ' '                                                                                   => ' ',
+        ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => ' foo   öäü ',
+        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => '« foobar »',
+        '中文空白 ‟'                                                                              => '中文空白 ‟',
+        "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div> </div><input type='email' name='user[email]' /><a>wtf</a>",
+        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => '– DÃ¼sseldorf —',
+        "„Abcdef\xe2\x81\x9f”"                                                                => '„Abcdef ”',
+        " foo\t foo "                                                                         => ' foo	 foo ',
+    );
+
+    for ($i = 0; $i < 2; $i++) {
+      foreach ($tests as $before => $after) {
+        self::assertSame($after, UTF8::normalize_whitespace($before));
       }
     }
+
+    // replace "non breaking space"
+    self::assertSame('abc- -öäü- -', UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC"));
+
+    // keep "non breaking space"
+    self::assertSame("abc-\xc2\xa0-öäü- -", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true));
+
+    // ... and keep "bidirectional text chars"
+    self::assertSame("abc-\xc2\xa0-öäü- -\xE2\x80\xAC", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true, true));
   }
 
-  public function testRemoveInvisibleCharacters()
+  public function testNumberFormat()
   {
+    self::assertSame('1.23', UTF8::number_format('1.234567', 2, '.', ''));
+    self::assertSame('1,3', UTF8::number_format('1.298765', 1, ',', ''));
+    self::assertSame('1,0', UTF8::number_format('1', 1, ',', ''));
+    self::assertSame(null, UTF8::number_format('foo', 1, ',', ''));
+    self::assertSame(null, UTF8::number_format(''));
+  }
+
+  public function testOrd()
+  {
+    $nbsp = UTF8::html_entity_decode('&nbsp;');
+
     $testArray = array(
-        "κόσ\0με"                                                                          => 'κόσμε',
-        "Κόσμε\x20"                                                                        => 'Κόσμε ',
-        "öäü-κόσμ\x0εκόσμε-äöü"                                                            => 'öäü-κόσμεκόσμε-äöü',
-        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
-        "äöüäöüäöü-κόσμεκόσμεäöüäöüäöü\xe1\x9a\x80κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε"          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
-        '  '                                                                               => '  ',
-        ''                                                                                 => '',
+        "\xF0\x90\x8C\xBC" => 66364,
+        '中'                => 20013,
+        '₧'                => 8359,
+        'κ'                => 954,
+        'ö'                => 246,
+        'ñ'                => 241,
+        $nbsp              => 160,
+        '{'                => 123,
+        'a'                => 97,
+        '&'                => 38,
+        ' '                => 32,
+        ''                 => 0,
     );
 
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::ord($actual));
+    }
+  }
+
+  public function testParseStr()
+  {
+    // test-string
+    $str = "Iñtërnâtiôn\xE9àlizætiøn=測試&arr[]=foo+測試&arr[]=ການທົດສອບ";
+
+    $result = UTF8::parse_str($str, $array);
+
+    self::assertSame(true, $result);
+
+    // WARNING: HipHop VM 3.5.0 error via travis-ci // "Undefined index: arr"
+    if (!defined('HHVM_VERSION')) {
+      self::assertSame('foo 測試', $array['arr'][0]);
+      self::assertSame('ການທົດສອບ', $array['arr'][1]);
     }
 
-    self::assertSame('κόσ?με 	%00 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", false, '?'));
-    self::assertSame('κόσμε 	 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", true, ''));
+    self::assertSame('測試', $array['Iñtërnâtiônéàlizætiøn']);
+
+    // ---
+
+    $str = 'foo[]=bar&test=lall';
+
+    $foo = '123';
+    $test = '';
+
+    /** @noinspection NonSecureParseStrUsageInspection */
+    parse_str($str); // <- you don't need to use the second parameter, but it is more then recommended!!!
+
+    self::assertSame($foo, array(0 => 'bar'));
+    self::assertSame($test, 'lall');
+    self::assertSame($str, 'foo[]=bar&test=lall');
+
+    $foo = '123';
+    $test = '';
+
+    /** @noinspection NonSecureParseStrUsageInspection */
+    /** @noinspection PhpParamsInspection */
+    UTF8::parse_str($str); // <- you need to use the second parameter!!!
+
+    self::assertSame($foo, '123');
+    self::assertSame($test, '');
+    self::assertSame($str, 'foo[]=bar&test=lall');
+
+    // ---
+
+    $str = '[]';
+
+    $result = UTF8::parse_str($str, $array);
+
+    self::assertSame(false, $result);
   }
+
+  public function testRange()
+  {
+    // --- UTF-8 chars
+
+    $expected = array('κ', 'ι', 'θ', 'η', 'ζ',);
+    self::assertSame($expected, UTF8::range('κ', 'ζ'));
+    self::assertSame(0, count(UTF8::range('κ', '')));
+
+    // --- code points
+
+    $expected = array('₧', '₨', '₩');
+    self::assertSame($expected, UTF8::range(8359, 8361));
+
+    // --- HEX
+
+    $expected = array(' ', '!', '"', '#');
+    self::assertSame($expected, UTF8::range("\x20", "\x23"));
+  }
+
+  // TODO: different result with different php-versions / -configs
+  /*
+  public function testStrncmp()
+  {
+    $tests = array(
+        ''                                                                                    => -3,
+        ' '                                                                                   => -1,
+        'a'                                                                                   => -1,
+        'ü'                                                                                   => 0,
+        'Ü'                                                                                   => -1,
+        ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => -1,
+        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => 1,
+        '中文空白 ‟'                                                                              => 1,
+        "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => -1,
+        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => 1,
+        "„Abcdef\xe2\x81\x9f”"                                                                => 1,
+        " foo\t foo "                                                                         => -1,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::strncmp($before, 'ü', 10), 'tested: ' . $before);
+    }
+  }
+
+  public function testStrncasecmp()
+  {
+    $tests = array(
+        ''                                                                                    => -3,
+        ' '                                                                                   => -1,
+        'a'                                                                                   => -1,
+        'ü'                                                                                   => 0,
+        'Ü'                                                                                   => 0,
+        ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => -1,
+        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => 1,
+        '中文空白 ‟'                                                                              => 1,
+        "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => -1,
+        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => 1,
+        "„Abcdef\xe2\x81\x9f”"                                                                => 1,
+        " foo\t foo "                                                                         => -1,
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::strncasecmp($before, 'ü', 10), 'tested: ' . $before);
+    }
+  }
+  */
 
   public function testRemoveBom()
   {
@@ -626,7 +1649,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testBom as $count => $test) {
       self::assertSame(
           'Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα',
-          UTF8::removeBOM($test),
+          UTF8::remove_bom($test),
           'error by ' . $count
       );
     }
@@ -653,91 +1676,189 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testRange()
-  {
-    $expected = array(
-        'κ',
-        'ι',
-        'θ',
-        'η',
-        'ζ',
-    );
-
-    self::assertSame($expected, UTF8::range('κ', 'ζ'));
-    self::assertSame(0, count(UTF8::range('κ', '')));
-
-  }
-
-  public function testHash()
+  public function testRemoveInvisibleCharacters()
   {
     $testArray = array(
-        2,
-        8,
-        0,
-        100,
-        1234,
+        "κόσ\0με"                                                                          => 'κόσμε',
+        "Κόσμε\x20"                                                                        => 'Κόσμε ',
+        "öäü-κόσμ\x0εκόσμε-äöü"                                                            => 'öäü-κόσμεκόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü',
+        "äöüäöüäöü-κόσμεκόσμεäöüäöüäöü\xe1\x9a\x80κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε"          => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
+        '  '                                                                               => '  ',
+        ''                                                                                 => '',
     );
 
-    foreach ($testArray as $testValue) {
-      self::assertSame($testValue, UTF8::strlen(UTF8::hash($testValue)));
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
     }
+
+    self::assertSame('κόσ?με 	%00 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", false, '?'));
+    self::assertSame('κόσμε 	 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", true, ''));
   }
 
-  public function testHexToIntAndIntToHex()
+  public function testReplaceDiamondQuestionMark()
   {
     $tests = array(
-        'U+2026' => 8230,
-        'U+03ba' => 954,
-        'U+00f6' => 246,
-        'U+00f1' => 241,
-        'U+0000' => 0,
+        ''                                                                         => '',
+        ' '                                                                        => ' ',
+        '�'                                                                        => '',
+        '中文空白 �'                                                                   => '中文空白 ',
+        "<ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>",
+        'DÃ¼�sseldorf'                                                             => 'DÃ¼sseldorf',
+        'Abcdef'                                                                   => 'Abcdef',
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::hex_to_int($before), 'tested: ' . $before);
-    }
-
-    foreach ($tests as $after => $before) {
-      self::assertSame($after, UTF8::int_to_hex($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''));
     }
   }
 
-  public function testCallback()
+  public function testRtrim()
   {
-    $actual = UTF8::callback(
-        array(
-            'voku\helper\UTF8',
-            'strtolower',
-        ),
-        'Κόσμε-ÖÄÜ'
+    $tests = array(
+        '-ABC-中文空白-  '        => '-ABC-中文空白-',
+        '- ÖÄÜ-             ' => '- ÖÄÜ-',
+        'öäü'                 => 'öäü',
     );
-    $expected = array(
-        'κ',
-        'ό',
-        'σ',
-        'μ',
-        'ε',
-        '-',
-        'ö',
-        'ä',
-        'ü',
-    );
-    self::assertSame($expected, $actual);
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::rtrim($before));
+    }
+
+    self::assertSame('Iñtërnâtiônàlizæti', UTF8::rtrim('Iñtërnâtiônàlizætiø', 'ø'));
+    self::assertSame('Iñtërnâtiônàlizætiøn ', UTF8::rtrim('Iñtërnâtiônàlizætiøn ', 'ø'));
+    self::assertSame('', UTF8::rtrim(''));
+    self::assertSame("Iñtërnâtiônàlizætiø\n", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", 'ø'));
+    self::assertSame('Iñtërnâtiônàlizæti', UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "\nø"));
   }
 
-  public function testAccess()
+  public function testSingleChrHtmlEncode()
   {
     $testArray = array(
-        ''          => array(1 => ''),
-        '中文空白'      => array(2 => '空'),
-        '中文空白-test' => array(3 => '白'),
-        'fòô'       => array(1 => 'ò'),
+        '{' => '&#123;',
+        '中' => '&#20013;',
+        'κ' => '&#954;',
+        'ö' => '&#246;',
+        ''  => '',
     );
 
-    foreach ($testArray as $actualString => $testDataArray) {
-      foreach ($testDataArray as $stringPos => $expectedString) {
-        self::assertSame($expectedString, UTF8::access($actualString, $stringPos));
-      }
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::single_chr_html_encode($actual));
+    }
+
+    self::assertSame('a', UTF8::single_chr_html_encode('a', true));
+  }
+
+  public function testSplit()
+  {
+    self::assertSame(
+        array(
+            '中',
+            '文',
+            '空',
+            '白',
+        ),
+        UTF8::split('中文空白')
+    );
+    self::assertSame(
+        array(
+            '中文',
+            '空白',
+        ),
+        UTF8::split('中文空白', 2)
+    );
+    self::assertSame(array('中文空白'), UTF8::split('中文空白', 4));
+    self::assertSame(array('中文空白'), UTF8::split('中文空白', 8));
+
+    self::assertSame(array('1234'), UTF8::split(1234, 8));
+  }
+
+  public function testStrDetectEncoding()
+  {
+    $tests = array(
+        'に対するパッチです'                     => 'UTF-8', // ISO-2022-JP, but PHP can't detect it ...
+        'ASCII'                         => 'ASCII', // ASCII
+        'Iñtërnâtiônàlizætiøn'          => 'UTF-8', // UTF-8
+        '亜 唖 娃 阿 哀 愛 挨 姶 逢 葵 茜 穐 悪 握 渥' => 'UTF-8', // EUC-JP
+        'áéóú'                          => 'UTF-8', // ISO-8859-1
+        '☺'                             => 'UTF-8',
+        '☃'                             => 'UTF-8',
+        '○●◎'                           => 'UTF-8',
+        'öäü'                           => 'UTF-8', // ISO-8859-1
+        ''                              => 'ASCII', // ASCII
+        '1'                             => 'ASCII', // ASCII
+        decbin(324546)                  => 'ASCII', // ASCII
+        01                              => 'ASCII', // ASCII
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
+    }
+  }
+
+  public function testStrLimit()
+  {
+    $testArray = array(
+        array('this...', 'this is a test', 5, '...'),
+        array('this is...', 'this is öäü-foo test', 8, '...'),
+        array('fòô', 'fòô bàř fòô', 6, ''),
+        array('fòô bàř', 'fòô bàř fòô', 8, ''),
+    );
+
+    foreach ($testArray as $test) {
+      self::assertSame($test[0], UTF8::str_limit_after_word($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
+    }
+  }
+
+  public function testStrPad()
+  {
+    $firstString = "Though wise men at their end know dark is right,\nBecause their words had forked no lightning they\n";
+    $secondString = 'Do not go gentle into that good night.';
+    $expectedString = $firstString . $secondString;
+    $actualString = UTF8::str_pad(
+        $firstString,
+        UTF8::strlen($firstString) + UTF8::strlen($secondString),
+        $secondString
+    );
+
+    self::assertSame($expectedString, $actualString);
+
+    self::assertSame('中文空白______', UTF8::str_pad('中文空白', 10, '_', STR_PAD_RIGHT));
+    self::assertSame('______中文空白', UTF8::str_pad('中文空白', 10, '_', STR_PAD_LEFT));
+    self::assertSame('___中文空白___', UTF8::str_pad('中文空白', 10, '_', STR_PAD_BOTH));
+
+    $toPad = '<IñtërnëT>'; // 10 characters
+    $padding = 'ø__'; // 4 characters
+
+    self::assertSame($toPad . '          ', UTF8::str_pad($toPad, 20));
+    self::assertSame('          ' . $toPad, UTF8::str_pad($toPad, 20, ' ', STR_PAD_LEFT));
+    self::assertSame('     ' . $toPad . '     ', UTF8::str_pad($toPad, 20, ' ', STR_PAD_BOTH));
+
+    self::assertSame($toPad, UTF8::str_pad($toPad, 10));
+    self::assertSame('5char', str_pad('5char', 4)); // str_pos won't truncate input string
+    self::assertSame($toPad, UTF8::str_pad($toPad, 8));
+
+    self::assertSame($toPad . 'ø__ø__ø__ø', UTF8::str_pad($toPad, 20, $padding, STR_PAD_RIGHT));
+    self::assertSame('ø__ø__ø__ø' . $toPad, UTF8::str_pad($toPad, 20, $padding, STR_PAD_LEFT));
+    self::assertSame('ø__ø_' . $toPad . 'ø__ø_', UTF8::str_pad($toPad, 20, $padding, STR_PAD_BOTH));
+  }
+
+  public function testStrRepeat()
+  {
+    $tests = array(
+        ''                                                                         => '',
+        ' '                                                                        => '                 ',
+        '�'                                                                        => '�����������������',
+        '中文空白 �'                                                                   => '中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �',
+        "<ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a>",
+        'DÃ¼�sseldorf'                                                             => 'DÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorf',
+        'Abcdef'                                                                   => 'AbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdef',
+        "°~\xf0\x90\x28\xbc"                                                       => '°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::str_repeat($before, 17));
     }
   }
 
@@ -786,77 +1907,736 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testUtf8Strstr()
+  public function testStrToBinary()
   {
     $tests = array(
-        'ABC@中文空白.com' => array(
-            'ABC',
-            '@中文空白.com',
-        ),
-        ' @ - ÖÄÜ- '   => array(
-            ' ',
-            '@ - ÖÄÜ- ',
-        ),
-        'öä@ü'         => array(
-            'öä',
-            '@ü',
-        ),
-        ''             => array(
-            false,
-            false,
-        ),
-        '  '           => array(
-            false,
-            false,
-        ),
+        0    => '110000',
+        '1'  => '110001',
+        '~'  => '1111110',
+        '§'  => '1100001010100111',
+        'ሇ'  => '111000011000100010000111',
+        '😃' => '11110000100111111001100010000011',
+
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after[0], UTF8::strstr($before, '@', true), 'tested: ' . $before);
+      self::assertSame($after, UTF8::str_to_binary($before), 'tested: ' . $before);
     }
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after[1], UTF8::strstr($before, '@'), 'tested: ' . $before);
+      self::assertSame((string)$before, UTF8::binary_to_str(UTF8::str_to_binary($before)), 'tested: ' . $before);
     }
   }
 
-  public function testValidCharsViaUtf8Encode()
+  public function testStr_split()
   {
-    $tests = UTF8::json_decode(UTF8::file_get_contents(__DIR__ . '/valid.json'), true);
+    self::assertSame(
+        array(
+            'd',
+            'é',
+            'j',
+            'à',
+        ),
+        UTF8::str_split('déjà', 1)
+    );
+    self::assertSame(
+        array(
+            'dé',
+            'jà',
+        ),
+        UTF8::str_split('déjà', 2)
+    );
+  }
 
-    foreach ($tests as $test) {
-      self::assertSame($test, UTF8::encode('UTF-8', $test));
+  public function testString()
+  {
+    self::assertSame('', UTF8::string(array()));
+    self::assertSame(
+        'öäü',
+        UTF8::string(
+            array(
+                246,
+                228,
+                252,
+            )
+        )
+    );
+    self::assertSame(
+        'ㅡㅡ',
+        UTF8::string(
+            array(
+                12641,
+                12641,
+            )
+        )
+    );
+  }
+
+  public function testStringHasBom()
+  {
+    $testArray = array(
+        ' '                    => false,
+        ''                     => false,
+        UTF8::bom() . 'κ'      => true,
+        'abc'                  => false,
+        UTF8::bom() . 'abcöäü' => true,
+        '白'                    => false,
+        UTF8::bom()            => true,
+    );
+
+    $utf8_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-8-bom.txt');
+    $utf8_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-8-bom-only.txt');
+    $utf16_be_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-16-be-bom.txt');
+    $utf16_be_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-16-be-bom-only.txt');
+    $utf16_le_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom.txt');
+    $utf16_le_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom-only.txt');
+    $utf32_be_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt');
+    $utf32_be_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom-only.txt');
+    $utf32_le_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-32-le-bom.txt');
+    $utf32_le_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-32-le-bom-only.txt');
+
+    $testArray[$utf8_bom] = true;
+    $testArray[$utf8_bom_only] = true;
+    $testArray[$utf16_be_bom] = true;
+    $testArray[$utf16_be_bom_only] = true;
+    $testArray[$utf16_le_bom] = true;
+    $testArray[$utf16_le_bom_only] = true;
+    $testArray[$utf32_be_bom] = true;
+    $testArray[$utf32_be_bom_only] = true;
+    $testArray[$utf32_le_bom] = true;
+    $testArray[$utf32_le_bom_only] = true;
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::string_has_bom($actual), 'error by ' . $actual);
     }
   }
 
-  public function testUtf8DecodeUtf8Encode()
+  public function testStripTags()
+  {
+    $tests = array(
+        ''                                                                        => '',
+        ' '                                                                       => ' ',
+        '<nav>中文空白 </nav>'                                                        => '中文空白 ',
+        "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
+        '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
+        'Abcdef'                                                                  => 'Abcdef',
+        "<span>κόσμε\xa0\xa1</span>-<span>öäü</span>öäü"                          => 'κόσμε-öäüöäü',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::strip_tags($before));
+    }
+  }
+
+  public function testStripos()
+  {
+    for ($i = 0; $i <= 5; $i++) {
+      self::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
+      self::assertSame(1, UTF8::stripos('aςσb', 'ΣΣ'));
+      self::assertSame(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
+      self::assertSame(4, UTF8::stripos('öäü-κόσμε-κόσμε-κόσμε', 'Κ'));
+      self::assertSame(5, UTF8::stripos('Test κόσμε test κόσμε', 'Κ'));
+      self::assertSame(4, UTF8::stripos('ABC-ÖÄÜ-中文空白-中文空白', 'ö'));
+    }
+  }
+
+  public function testStrirpos()
+  {
+    self::assertSame(1, strripos('DJ', 'J'));
+    self::assertSame(1, UTF8::strripos('DJ', 'J'));
+
+    self::assertSame(3, UTF8::strripos('DÉJÀ', 'à'));
+    self::assertSame(false, UTF8::strripos('aςσb', 'ΣΣ'));
+    self::assertSame(6, UTF8::strripos('κόσμε-κόσμε', 'Κ'));
+    self::assertSame(11, UTF8::strripos('test κόσμε κόσμε test', 'Κ'));
+    self::assertSame(7, UTF8::strripos('中文空白-ÖÄÜ-中文空白', 'ü'));
+  }
+
+  public function testStrlen()
+  {
+    // string with UTF-16 (LE) BOM + valid UTF-8 && invalid UTF-8
+    $string = "\xFF\xFE" . 'string <strong>with utf-8 chars åèä</strong>' . "\xa0\xa1" . ' - doo-bee doo-bee dooh';
+
+    self::assertSame(74, strlen($string));
+    self::assertSame(71, UTF8::strlen($string));
+    self::assertSame(71, UTF8::strlen($string, 'UTF-8', false));
+    self::assertSame(67, UTF8::strlen($string, 'UTF-8', true));
+
+    $string_test1 = strip_tags($string);
+    $string_test2 = UTF8::strip_tags($string);
+
+    self::assertSame(57, strlen($string_test1));
+    self::assertSame(50, UTF8::strlen($string_test2));
+
+    $testArray = array(
+        "<a href='κόσμε'>κόσμε</a>" => 25,
+        '<白>'                       => 3,
+        'öäü'                       => 3,
+        ' '                         => 1,
+        ''                          => 0,
+        1                           => 1,
+        -1                          => 2,
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::strlen($actual), $actual);
+    }
+
+    $testArray = array(
+        "<a href='test'>tester</a>" => 25,
+        '<a>'                       => 3,
+        'abc'                       => 3,
+        ' '                         => 1,
+        ''                          => 0,
+        1                           => 1,
+        -1                          => 2,
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, strlen($actual), $actual);
+    }
+  }
+
+  public function testStrnatcasecmp()
+  {
+    self::assertSame(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
+    self::assertSame(-1, UTF8::strnatcasecmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
+    self::assertSame(-1, UTF8::strnatcasecmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strnatcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
+    self::assertSame(0, UTF8::strnatcasecmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
+    self::assertSame(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
+  }
+
+  public function testStrnatcmp()
+  {
+    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
+    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
+    self::assertSame(-1, UTF8::strnatcmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strnatcmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
+    self::assertSame(0, UTF8::strnatcmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
+    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
+  }
+
+  public function testStrpbrk()
+  {
+    $text = 'This is a Simple text.';
+
+    self::assertSame(false, strpbrk($text, ''));
+    self::assertSame(strpbrk($text, ''), UTF8::strpbrk($text, ''));
+
+    self::assertSame(false, strpbrk('', 'mi'));
+    self::assertSame(strpbrk('', 'mi'), UTF8::strpbrk('', 'mi'));
+
+    // this echoes "is is a Simple text." because 'i' is matched first
+    self::assertSame('is is a Simple text.', strpbrk($text, 'mi'));
+    self::assertSame(strpbrk($text, 'mi'), UTF8::strpbrk($text, 'mi'));
+
+    // this echoes "Simple text." because chars are case sensitive
+    self::assertSame('Simple text.', strpbrk($text, 'S'));
+    self::assertSame('Simple text.', UTF8::strpbrk($text, 'S'));
+
+    // UTF-8
+
+    $text = 'Hello -中文空白-';
+    self::assertSame('白-', UTF8::strpbrk($text, '白'));
+  }
+
+  public function testStrpos()
+  {
+    for ($i = 0; $i <= 3; $i++) { // keep this loop for simple performance tests
+
+      // php compatible tests
+
+      self::assertSame(false, strpos('abc', ''));
+      self::assertSame(false, UTF8::strpos('abc', ''));
+
+      self::assertSame(false, strpos('abc', 'd'));
+      self::assertSame(false, UTF8::strpos('abc', 'd'));
+
+      self::assertSame(false, strpos('abc', 'a', 3));
+      self::assertSame(false, UTF8::strpos('abc', 'a', 3));
+
+      self::assertSame(false, strpos('abc', 'a', 1));
+      self::assertSame(false, UTF8::strpos('abc', 'a', 1));
+
+      self::assertSame(1, strpos('abc', 'b', 1));
+      self::assertSame(1, UTF8::strpos('abc', 'b', 1));
+
+      self::assertSame(1, strpos('abc', 'b', 0));
+      self::assertSame(1, UTF8::strpos('abc', 'b', 0));
+
+      // UTF-8 tests
+
+      self::assertSame(17, strpos('der Straße nach Paris', 'Paris')); // not correct
+      self::assertSame(16, UTF8::strpos('der Straße nach Paris', 'Paris'));
+
+      self::assertSame(3, strpos('한국어', '국')); // not correct
+      self::assertSame(1, UTF8::strpos('한국어', '국'));
+
+      self::assertSame(0, UTF8::strpos('κόσμε-κόσμε-κόσμε', 'κ'));
+      self::assertSame(7, UTF8::strpos('test κόσμε test κόσμε', 'σ'));
+      self::assertSame(8, UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'));
+    }
+  }
+
+  public function testStrrchr()
+  {
+    $testArray = array(
+        'κόσμε'                                                                            => 'κόσμε',
+        'Κόσμε'                                                                            => false,
+        'öäü-κόσμεκόσμε-äöü'                                                               => 'κόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'κόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'κόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
+        '  '                                                                               => false,
+        ''                                                                                 => false,
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::strrchr($actual, 'κόσμε'), 'error by ' . $actual);
+    }
+  }
+
+  public function testStrrev()
+  {
+    $testArray = array(
+        'κ-öäü'  => 'üäö-κ',
+        'abc'    => 'cba',
+        'abcöäü' => 'üäöcba',
+        '-白-'    => '-白-',
+        ''       => '',
+        ' '      => ' ',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
+    }
+  }
+
+  public function testStrrichr()
+  {
+    $testArray = array(
+        'κόσμε'                                                                            => 'κόσμε',
+        'Κόσμε'                                                                            => 'Κόσμε',
+        'öäü-κόσμεκόσμε-äöü'                                                               => 'κόσμε-äöü',
+        'öäü-κόσμεκόσμε-äöüöäü-κόσμεκόσμε-äöü'                                             => 'κόσμε-äöü',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε'                     => 'κόσμε',
+        'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
+        '  '                                                                               => false,
+        ''                                                                                 => false,
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::strrichr($actual, 'κόσμε'), 'error by ' . $actual);
+    }
+  }
+
+  public function testStrrpos()
+  {
+    self::assertSame(1, UTF8::strrpos('11--', '1-', 0, 'UTF-8'));
+    self::assertSame(2, UTF8::strrpos('-11--', '1-', 0, 'UTF-8'));
+    self::assertSame(false, UTF8::strrpos('한국어', '', 'UTF-8'));
+    self::assertSame(1, UTF8::strrpos('한국어', '국', 'UTF-8'));
+    self::assertSame(false, UTF8::strrpos('한국어', ''));
+    self::assertSame(1, UTF8::strrpos('한국어', '국'));
+    self::assertSame(6, UTF8::strrpos('κόσμε-κόσμε', 'κ'));
+    self::assertSame(13, UTF8::strrpos('test κόσμε κόσμε test', 'σ'));
+    self::assertSame(9, UTF8::strrpos('中文空白-ÖÄÜ-中文空白', '中'));
+  }
+
+  public function testStrtocasefold()
+  {
+    self::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱'));    // Original (NFC)
+    self::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌'));   // Uppercased
+    self::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC
+
+    // valid utf-8
+    self::assertSame('hello world 中文空白', UTF8::strtocasefold('Hello world 中文空白'));
+
+    // invalid utf-8
+    self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
+  }
+
+  public function testStrtolower()
+  {
+    $tests = array(
+        1               => '1',
+        -1              => '-1',
+        'ABC-中文空白'      => 'abc-中文空白',
+        'ÖÄÜ'           => 'öäü',
+        'öäü'           => 'öäü',
+        'κόσμε'         => 'κόσμε',
+        'Κόσμε'         => 'κόσμε',
+        'ㅋㅋ-Lol'        => 'ㅋㅋ-lol',
+        'ㅎㄹ..-Daebak'   => 'ㅎㄹ..-daebak',
+        'ㅈㅅ-Sorry'      => 'ㅈㅅ-sorry',
+        'ㅡㅡ-WTF'        => 'ㅡㅡ-wtf',
+        'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::strtolower($before));
+    }
+  }
+
+  public function testStrtonatfold()
+  {
+    $utf8 = new UTF8();
+
+    // valid utf-8
+    $string = $this->invokeMethod($utf8, 'strtonatfold', array('Hello world 中文空白'));
+    self::assertSame('Hello world 中文空白', $string);
+
+    // invalid utf-8
+    $string = $this->invokeMethod($utf8, 'strtonatfold', array("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertSame('', $string);
+  }
+
+  public function testStrtoupper()
+  {
+    $tests = array(
+        1               => '1',
+        -1              => '-1',
+        'abc-中文空白'      => 'ABC-中文空白',
+        'öäü'           => 'ÖÄÜ',
+        'öäü test öäü'  => 'ÖÄÜ TEST ÖÄÜ',
+        'ÖÄÜ'           => 'ÖÄÜ',
+        '中文空白'          => '中文空白',
+        'Déjà Σσς Iıİi' => 'DÉJÀ ΣΣΣ IIİI',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::strtoupper($before));
+    }
+  }
+
+  public function testStrtr()
+  {
+    // php compatible tests
+
+    $arr = array(
+        'Hello' => 'Hi',
+        'world' => 'earth',
+    );
+    self::assertSame('Hi earth', strtr('Hello world', $arr));
+    self::assertSame('Hi earth', UTF8::strtr('Hello world', $arr));
+
+    // UTF-8 tests
+
+    $arr = array(
+        'Hello' => '○●◎',
+        '中文空白'  => 'earth',
+    );
+    self::assertSame('○●◎ earth', UTF8::strtr('Hello 中文空白', $arr));
+
+    self::assertSame('○●◎◎o wor◎d', UTF8::strtr('Hello world', 'Hello', '○●◎'));
+    self::assertSame('Hello world H●◎', UTF8::strtr('Hello world ○●◎', '○', 'Hello'));
+  }
+
+  public function testStrwidth()
+  {
+    $testArray = array(
+        'testtest' => 8,
+        'Ã'        => 1,
+        ' '        => 1,
+        ''         => 0,
+        "\n"       => 1,
+        'test'     => 4,
+        "ひらがな\r"   => 9,
+        "○●◎\r"    => 4,
+    );
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::strwidth($before));
+    }
+  }
+
+  public function testSubstr()
+  {
+    self::assertSame('23', substr(1234, 1, 2));
+    self::assertSame('bc', substr('abcde', 1, 2));
+    self::assertSame('de', substr('abcde', -2, 2));
+    self::assertSame('bc', substr('abcde', 1, 2));
+    self::assertSame('bc', substr('abcde', 1, 2));
+    self::assertSame('bcd', substr('abcde', 1, 3));
+    self::assertSame('bc', substr('abcde', 1, 2));
+
+    self::assertSame('23', UTF8::substr(1234, 1, 2));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2));
+    self::assertSame('de', UTF8::substr('abcde', -2, 2));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2, true));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2, 'UTF-8', true));
+    self::assertSame('bcd', UTF8::substr('abcde', 1, 3));
+    self::assertSame('bc', UTF8::substr('abcde', 1, 2));
+
+    // UTF-8
+    self::assertSame('文空', UTF8::substr('中文空白', 1, 2));
+  }
+
+  public function testSubstrCompare()
+  {
+    // php compatible tests
+
+    self::assertSame(0, substr_compare(12345, 23, 1, 2));
+    self::assertSame(0, UTF8::substr_compare(12345, 23, 1, 2));
+
+    self::assertSame(0, substr_compare('abcde', 'bc', 1, 2));
+    self::assertSame(0, UTF8::substr_compare('abcde', 'bc', 1, 2));
+
+    self::assertSame(0, substr_compare('abcde', 'de', -2, 2));
+    self::assertSame(0, UTF8::substr_compare('abcde', 'de', -2, 2));
+
+    self::assertSame(0, substr_compare('abcde', 'bcg', 1, 2));
+    self::assertSame(0, UTF8::substr_compare('abcde', 'bcg', 1, 2));
+
+    self::assertSame(0, substr_compare('abcde', 'BC', 1, 2, true));
+    self::assertSame(0, UTF8::substr_compare('abcde', 'BC', 1, 2, true));
+
+    self::assertSame(1, substr_compare('abcde', 'bc', 1, 3));
+    self::assertSame(1, UTF8::substr_compare('abcde', 'bc', 1, 3));
+
+    self::assertSame(-1, substr_compare('abcde', 'cd', 1, 2));
+    self::assertSame(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
+
+    // UTF-8 tests
+
+    self::assertSame(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2, false));
+    self::assertSame(0, UTF8::substr_compare('中文空白', '文空', 1, 2, true));
+  }
+
+  public function testSubstrCount()
+  {
+    // php compatible tests
+
+    self::assertSame(false, substr_count('', ''));
+    self::assertSame(false, UTF8::substr_count('', ''));
+
+    self::assertSame(false, substr_count('', '', 1));
+    self::assertSame(false, UTF8::substr_count('', '', 1));
+
+    self::assertSame(false, substr_count('', '', 1, 1));
+    self::assertSame(false, UTF8::substr_count('', '', 1, 1));
+
+    self::assertSame(false, substr_count('', 'test', 1, 1));
+    self::assertSame(false, UTF8::substr_count('', 'test', 1, 1));
+
+    self::assertSame(false, substr_count('test', '', 1, 1));
+    self::assertSame(false, UTF8::substr_count('test', '', 1, 1));
+
+    self::assertSame(0, substr_count('test', 'test', 1, 1));
+    self::assertSame(0, UTF8::substr_count('test', 'test', 1, 1));
+
+    self::assertSame(1, substr_count(12345, 23, 1, 2));
+    self::assertSame(1, UTF8::substr_count(12345, 23, 1, 2));
+
+    self::assertSame(2, substr_count('abcdebc', 'bc'));
+    self::assertSame(2, UTF8::substr_count('abcdebc', 'bc'));
+
+    self::assertSame(false, substr_count('abcde', 'de', -2, 2));
+    self::assertSame(false, UTF8::substr_count('abcde', 'de', -2, 2));
+
+    self::assertSame(0, substr_count('abcde', 'bcg', 1, 2));
+    self::assertSame(0, UTF8::substr_count('abcde', 'bcg', 1, 2));
+
+    self::assertSame(0, substr_count('abcde', 'BC', 1, 2));
+    self::assertSame(0, UTF8::substr_count('abcde', 'BC', 1, 2));
+
+    self::assertSame(1, substr_count('abcde', 'bc', 1, 3));
+    self::assertSame(1, UTF8::substr_count('abcde', 'bc', 1, 3));
+
+    self::assertSame(0, substr_count('abcde', 'cd', 1, 2));
+    self::assertSame(0, UTF8::substr_count('abcde', 'cd', 1, 2));
+
+    // UTF-8 tests
+
+    self::assertSame(2, UTF8::substr_count("○●◎\r◎", '◎'));
+    self::assertSame(1, UTF8::substr_count("○●◎\r", '●◎', 1, 2));
+    self::assertSame(1, UTF8::substr_count('中文空白', '文空', 1, 2));
+  }
+
+  public function testSwapCase()
+  {
+    $tests = array(
+        1                               => '1',
+        -1                              => '-1',
+        ' '                             => ' ',
+        ''                              => '',
+        'أبز'                           => 'أبز',
+        "\xe2\x80\x99"                  => '’',
+        'Ɓtest'                         => 'ɓTEST',
+        '  -ABC-中文空白-  '                => '  -abc-中文空白-  ',
+        "      - abc- \xc2\x87"         => '      - ABC- ',
+        'abc'                           => 'ABC',
+        'deja vu'                       => 'DEJA VU',
+        'déjà vu'                       => 'DÉJÀ VU',
+        'déjà σσς iıii'                 => 'DÉJÀ ΣΣΣ IIII',
+        "test\x80-\xBFöäü"              => 'TEST-ÖÄÜ',
+        'Internationalizaetion'         => 'iNTERNATIONALIZAETION',
+        "中 - &#20013; - %&? - \xc2\x80" => '中 - &#20013; - %&? - ',
+        'BonJour'                       => 'bONjOUR',
+        'BonJour & au revoir'           => 'bONjOUR & AU REVOIR',
+        'Déjà'                          => 'dÉJÀ',
+        'това е тестово заглавие'       => 'ТОВА Е ТЕСТОВО ЗАГЛАВИЕ',
+        'это тестовый заголовок'        => 'ЭТО ТЕСТОВЫЙ ЗАГОЛОВОК',
+        'führen Aktivitäten Haglöfs'    => 'FÜHREN aKTIVITÄTEN hAGLÖFS',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::swapCase($before), $before);
+    }
+  }
+
+  public function testToASCII()
+  {
+    if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
+      $tests = array(
+          1                               => '1',
+          -1                              => '-1',
+          ' '                             => ' ',
+          ''                              => '',
+          'أبز'                           => 'abz',
+          "\xe2\x80\x99"                  => '\'',
+          'Ɓtest'                         => 'Btest',
+          '  -ABC-中文空白-  '                => '  -ABC-zhong wen kong bai-  ',
+          "      - abc- \xc2\x87"         => '      - abc- ++',
+          'abc'                           => 'abc',
+          'deja vu'                       => 'deja vu',
+          'déjà vu'                       => 'deja vu',
+          'déjà σσς iıii'                 => 'deja sss iiii',
+          "test\x80-\xBFöäü"              => 'test-oau',
+          'Internationalizaetion'         => 'Internationalizaetion',
+          "中 - &#20013; - %&? - \xc2\x80" => 'zhong - &#20013; - %&? - EUR',
+          'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
+          'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
+          'أحبك'                          => 'ahbk',
+          'キャンパス'                         => 'kyanpasu',
+          'биологическом'                 => 'biologiceskom',
+          '정, 병호'                         => 'jeong, byeongho',
+          'ますだ, よしひこ'                     => 'masuda, yoshihiko',
+          'मोनिच'                         => 'monica',
+          'क्षȸ'                          => 'ksadb',
+          'أحبك 😀'                       => 'ahbk ?',
+          '∀ i ∈ ℕ'                       => '[?] i [?] N',
+          '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? ahbk',
+      );
+    } else {
+      $tests = array(
+          1                               => '1',
+          -1                              => '-1',
+          ' '                             => ' ',
+          ''                              => '',
+          'أبز'                           => '\'bz',
+          "\xe2\x80\x99"                  => '\'',
+          'Ɓtest'                         => 'Btest',
+          '  -ABC-中文空白-  '                => '  -ABC-Zhong Wen Kong Bai -  ',
+          "      - abc- \xc2\x87"         => '      - abc- ++',
+          'abc'                           => 'abc',
+          'deja vu'                       => 'deja vu',
+          'déjà vu'                       => 'deja vu',
+          'déjà σσς iıii'                 => 'deja sss iiii',
+          "test\x80-\xBFöäü"              => 'test-oau',
+          'Internationalizaetion'         => 'Internationalizaetion',
+          "中 - &#20013; - %&? - \xc2\x80" => 'Zhong  - &#20013; - %&? - EUR',
+          'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
+          'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
+          'أحبك'                          => '\'Hbk',
+          'キャンパス'                         => 'kiyanpasu',
+          'биологическом'                 => 'biologicheskom',
+          '정, 병호'                         => 'jeong, byeongho',
+          'ますだ, よしひこ'                     => 'masuda, yosihiko',
+          'मोनिच'                         => 'monic',
+          'क्षȸ'                          => 'kssdb',
+          'أحبك 😀'                       => '\'Hbk ?',
+          '∀ i ∈ ℕ'                       => '[?] i [?]',
+          '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? \'Hbk',
+      );
+    }
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::to_ascii($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::str_transliterate($before), 'tested: ' . $before);
+    }
+  }
+
+  public function testToLatin1Utf8()
   {
     $tests = array(
         '  -ABC-中文空白-  ' => '  -ABC-????-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
-        'foobar'         => 'foobar',
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::utf8_encode((UTF8::utf8_decode($before))));
+      self::assertSame($after, UTF8::to_utf8(UTF8::to_latin1($before)));
     }
+
+    self::assertSame($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
+
+    // alias
+    self::assertSame($tests, UTF8::to_utf8(UTF8::to_iso8859($tests)));
+    self::assertSame($tests, UTF8::toUTF8(UTF8::toLatin1($tests)));
   }
 
-  public function testUtf8EncodeUtf8Decode()
+  public function testToUtf8()
   {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => 'öäü',
-        ''               => '',
-        'foobar'         => 'foobar',
+    $examples = array(
+      // Valid UTF-8
+      'κόσμε'                                       => array('κόσμε' => 'κόσμε'),
+      '中'                                           => array('中' => '中'),
+      // Valid UTF-8 + "win1252"-encoding
+      'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac" => array('Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'),
+      // Valid UTF-8 + Invalied Chars
+      "κόσμε\xa0\xa1-öäü"                           => array('κόσμε-öäü' => 'κόσμε-öäü'),
+      // Valid emoji (non-UTF-8)
+      '👍 💩 😄 ❤ 👍 💩 😄 ❤'                       => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
+      // Valid ASCII
+      'a'                                           => array('a' => 'a'),
+      // Valid ASCII + Invalied Chars
+      "a\xa0\xa1-öäü"                               => array('a-öäü' => 'a-öäü'),
+      // Valid 2 Octet Sequence
+      "\xc3\xb1"                                    => array('ñ' => 'ñ'),
+      // Invalid 2 Octet Sequence
+      "\xc3\x28"                                    => array('�(' => '('),
+      // Invalid Sequence Identifier
+      "\xa0\xa1"                                    => array('��' => ''),
+      // Valid 3 Octet Sequence
+      "\xe2\x82\xa1"                                => array('₡' => '₡'),
+      // Invalid 3 Octet Sequence (in 2nd Octet)
+      "\xe2\x28\xa1"                                => array('�(�' => '('),
+      // Invalid 3 Octet Sequence (in 3rd Octet)
+      "\xe2\x82\x28"                                => array('�(' => '('),
+      // Valid 4 Octet Sequence
+      "\xf0\x90\x8c\xbc"                            => array('𐌼' => '𐌼'),
+      // Invalid 4 Octet Sequence (in 2nd Octet)
+      "\xf0\x28\x8c\xbc"                            => array('�(��' => '('),
+      // Invalid 4 Octet Sequence (in 3rd Octet)
+      "\xf0\x90\x28\xbc"                            => array('�(�' => '('),
+      // Invalid 4 Octet Sequence (in 4th Octet)
+      "\xf0\x28\x8c\x28"                            => array('�(�(' => '(('),
+      // Valid 5 Octet Sequence (but not Unicode!)
+      "\xf8\xa1\xa1\xa1\xa1"                        => array('�' => ''),
+      // Valid 6 Octet Sequence (but not Unicode!)
+      "\xfc\xa1\xa1\xa1\xa1\xa1"                    => array('�' => ''),
+      // Valid UTF-8 string with null characters
+      "\0\0\0\0中\0 -\0\0 &#20013; - %&? - \xc2\x80" => array('中 - &#20013; - %&? - ' => '中 - &#20013; - %&? - €'),
     );
 
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::utf8_decode(UTF8::utf8_encode($before)));
+    $counter = 0;
+    foreach ($examples as $testString => $testResults) {
+      foreach ($testResults as $before => $after) {
+        self::assertSame($after, UTF8::to_utf8(UTF8::cleanup($testString)), $counter . ' - ' . $before);
+      }
+      $counter++;
     }
+
+    $testString = 'test' . UTF8::html_entity_decode('&nbsp;') . 'test';
+    self::assertSame('test' . "\xc2\xa0" . 'test', $testString);
+    self::assertSame('test&nbsp;test', UTF8::htmlentities($testString));
+    self::assertSame('test' . "\xc2\xa0" . 'test', UTF8::cleanup($testString));
   }
 
   public function testToUtf8ByLanguage()
@@ -1104,1107 +2884,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testEncodeUtf8EncodeUtf8()
-  {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => 'öäü',
-        ''               => '',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
-    }
-  }
-
-  public function testEncode()
-  {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => 'öäü',
-        ''               => '',
-        'abc'            => 'abc',
-        'Berbée'         => 'Berbée',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::encode('', $before), 'tested: ' . $before); // do nothing
-    }
-
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => 'öäü',
-        ''               => '',
-        'abc'            => 'abc',
-        'Berbée'         => 'Berbée',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::encode('UTF8', $before), 'tested: ' . $before); // UTF-8
-    }
-
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
-        '      - ÖÄÜ- '  => '      - ???- ',
-        'öäü'            => '???',
-        ''               => '',
-        'abc'            => 'abc',
-        'Berbée'         => 'Berb?e',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::encode('CP367', $before), 'tested: ' . $before); // CP367
-    }
-
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => 'öäü',
-        ''               => '',
-        'abc'            => 'abc',
-        'Berbée'         => 'Berbée',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::filter(UTF8::encode('ISo88591', $before)), 'tested: ' . $before); // ISO-8859-1
-    }
-
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => '???',
-        ''               => '',
-        'abc'            => 'abc',
-        'Berbée'         => 'Berbée',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before)))); // ISO-8859-15
-    }
-  }
-
-  public function testFilter()
-  {
-    $c = 'à';
-    $d = \Normalizer::normalize($c, \Normalizer::NFD);
-    $a = array(
-        'n' => 4,
-        'a' => "\xE9",
-        'b' => substr($d, 1),
-        'c' => $c,
-        'd' => $d,
-        'e' => "\n\r\n\r",
-    );
-    $a['f'] = (object)$a;
-    $b = UTF8::filter($a);
-    $b['f'] = (array)$a['f'];
-
-    $expect = array(
-        'n' => 4,
-        'a' => 'é',
-        'b' => '◌' . substr($d, 1),
-        'c' => $c,
-        'd' => $c,
-        'e' => "\n\n\n",
-    );
-    $expect['f'] = $expect;
-
-    self::assertSame($expect, $b);
-
-    // -----
-
-    $result = UTF8::filter(array("\xE9", 'à', 'a', "\xe2\x80\xa8"), \Normalizer::FORM_D);
-
-    self::assertSame(array(0 => 'é', 1 => 'à', 2 => 'a', 3 => "\xe2\x80\xa8"), $result);
-  }
-
-  public function testNormalizeEncoding()
-  {
-    $tests = array(
-        'ISO'          => 'ISO-8859-1',
-        'UTF8'         => 'UTF-8',
-        'WINDOWS-1251' => 'WINDOWS-1251',
-        ''             => false,
-        'Utf-8'        => 'UTF-8',
-        'UTF-8'        => 'UTF-8',
-        'ISO-8859-5'   => 'ISO-8859-5',
-        false          => false,
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::normalizeEncoding($before), 'tested: ' . $before);
-    }
-  }
-
-  public function testUtf8DecodeEncodeUtf8()
-  {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => 'öäü',
-        ''               => '',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)));
-    }
-  }
-
-  public function testEncodeUtf8Utf8Encode()
-  {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æ–‡ç©ºç™½-  ',
-        '      - ÖÄÜ- '  => '      - Ã–Ã„Ãœ- ',
-        'öäü'            => 'Ã¶Ã¤Ã¼',
-        ''               => '',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::utf8_encode(UTF8::encode('UTF-8', $before)));
-    }
-  }
-
-  public function testFixSimpleUtf8()
-  {
-    $testArray = array(
-        'Düsseldorf'   => 'Düsseldorf',
-        'Ã'            => 'Ã',
-        ' '            => ' ',
-        ''             => '',
-        "\n"           => "\n",
-        "test\xc2\x88" => 'testˆ',
-        'DÃ¼sseldorf'  => 'Düsseldorf',
-        'Ã¤'           => 'ä',
-        'test'         => 'test',
-    );
-
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::fix_simple_utf8($before), 'tested: ' . $before);
-    }
-  }
-
-  public function testFixBrokenUtf8()
-  {
-    $testArray = array(
-        'Düsseldorf'                                      => 'Düsseldorf',
-        'Ã'                                               => 'Ã',
-        ' '                                               => ' ',
-        ''                                                => '',
-        "\n"                                              => "\n",
-        "test\xc2\x88"                                    => 'testˆ',
-        'DÃ¼sseldorf'                                     => 'Düsseldorf',
-        'Ã¤'                                              => 'ä',
-        'test'                                            => 'test',
-        'FÃÂ©dération Camerounaise de Football'           => 'Fédération Camerounaise de Football',
-        "FÃÂ©dération Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
-        'FÃ©dÃ©ration Camerounaise de Football'           => 'Fédération Camerounaise de Football',
-        "FÃ©dÃ©ration Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
-        'FÃÂ©dÃÂ©ration Camerounaise de Football'         => 'Fédération Camerounaise de Football',
-        "FÃÂ©dÃÂ©ration Camerounaise de Football\n"       => "Fédération Camerounaise de Football\n",
-        'FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football'   => 'Fédération Camerounaise de Football',
-        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football\n" => "Fédération Camerounaise de Football\n",
-    );
-
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::fix_utf8($before));
-    }
-
-    self::assertSame(array('Düsseldorf', 'Fédération'), UTF8::fix_utf8(array('DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration')));
-  }
-
-  public function testUtf8EncodeEncodeUtf8()
-  {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æ–‡ç©ºç™½-  ',
-        '      - ÖÄÜ- '  => '      - Ã–Ã„Ãœ- ',
-        'öäü'            => 'Ã¶Ã¤Ã¼',
-        ''               => '',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_encode($before)));
-    }
-  }
-
-  public function testUtf8EncodeUtf8Encode()
-  {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-Ã¤Â¸Â­Ã¦â€“â€¡Ã§Â©ÂºÃ§â„¢Â½-  ',
-        '      - ÖÄÜ- '  => '      - Ãƒâ€“Ãƒâ€žÃƒÅ“- ',
-        'öäü'            => 'ÃƒÂ¶ÃƒÂ¤ÃƒÂ¼',
-        ''               => '',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::utf8_encode(UTF8::utf8_encode($before)));
-    }
-  }
-
-  public function testUtf8Encode()
-  {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æ–‡ç©ºç™½-  ',
-        '      - ÖÄÜ- '  => '      - Ã–Ã„Ãœ- ',
-        'öäü'            => 'Ã¶Ã¤Ã¼',
-        ''               => '',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::utf8_encode($before));
-    }
-  }
-
-  public function testUtf8FileWithBom()
-  {
-    $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8-bom.txt');
-    self::assertSame(true, $bom);
-
-    $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8.txt');
-    self::assertSame(false, $bom);
-  }
-
-  public function testIsBinary()
-  {
-    $tests = array(
-        'öäü'          => false,
-        ''             => false,
-        '1'            => false,
-        decbin(324546) => true,
-        01             => true,
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::is_binary($before), 'value: ' . $before);
-    }
-  }
-
-  public function testStrDetectEncoding()
-  {
-    $tests = array(
-        'に対するパッチです'                     => 'UTF-8', // ISO-2022-JP, but PHP can't detect it ...
-        'ASCII'                         => 'ASCII', // ASCII
-        'Iñtërnâtiônàlizætiøn'          => 'UTF-8', // UTF-8
-        '亜 唖 娃 阿 哀 愛 挨 姶 逢 葵 茜 穐 悪 握 渥' => 'UTF-8', // EUC-JP
-        'áéóú'                          => 'UTF-8', // ISO-8859-1
-        '☺'                             => 'UTF-8',
-        '☃'                             => 'UTF-8',
-        '○●◎'                           => 'UTF-8',
-        'öäü'                           => 'UTF-8', // ISO-8859-1
-        ''                              => 'ASCII', // ASCII
-        '1'                             => 'ASCII', // ASCII
-        decbin(324546)                  => 'ASCII', // ASCII
-        01                              => 'ASCII', // ASCII
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
-    }
-  }
-
-  public function testFileGetContents()
-  {
-    // INFO: UTF-8 shim only works for UTF-8
-    if (UTF8::mbstring_loaded() === true) {
-
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-      self::assertContains(
-          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-          $testString
-      );
-
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
-      self::assertContains(
-          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-          $testString
-      );
-
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
-      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
-      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
-      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt', FILE_TEXT);
-      self::assertContains(
-          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-          $testString
-      );
-
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', null, null, 0);
-      self::assertContains(
-          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-          $testString
-      );
-
-      // text: with offset
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', null, null, 5);
-      self::assertContains('There are better connections.', $testString);
-
-      // text: with offset & max-length
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', null, null, 7, 11);
-      self::assertContains('Iñtërnât', $testString);
-
-      // text: with offset & max-length + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt', null, null, 7, 10, 15);
-      self::assertContains('ñtërnâtiôn', $testString);
-
-      // text: with timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', null, null, 7, null, 10);
-      self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-      // text: with max-length + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', null, null, null, 10, 10);
-      self::assertContains('Hírek', $testString);
-
-      $context = stream_context_create(
-          array(
-              'http' =>
-                  array(
-                      'timeout' => 10,
-                  ),
-          )
-      );
-
-      // text: with max-length + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', null, $context, null, 10, 10);
-      self::assertContains('Hírek', $testString);
-
-      // text: do not convert to utf-8 + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', null, $context, null, 10, 10, false);
-      self::assertRegExp('#H.*rek#', $testString);
-
-      // text: do not convert to utf-8 + timeout
-      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', null, $context, null, 10, 10, false);
-      self::assertContains('Hírek', $testString);
-
-      // image: do not convert to utf-8 + timeout
-      $image = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', null, $context, null, null, 10, false);
-      self::assertSame(true, UTF8::is_binary($image));
-
-      // image: convert to utf-8 + timeout (ERROR)
-      $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', null, $context, null, null, 10, true);
-      self::assertSame(false, UTF8::is_binary($image2));
-
-      self::assertNotEquals($image2, $image);
-    }
-  }
-
-  public function testToLatin1Utf8()
-  {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => 'öäü',
-        ''               => '',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::to_utf8(UTF8::to_latin1($before)));
-    }
-
-    self::assertSame($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
-
-    // alias
-    self::assertSame($tests, UTF8::to_utf8(UTF8::to_iso8859($tests)));
-    self::assertSame($tests, UTF8::toUTF8(UTF8::toLatin1($tests)));
-  }
-
-  public function testNumberFormat()
-  {
-    self::assertSame('1.23', UTF8::number_format('1.234567', 2, '.', ''));
-    self::assertSame('1,3', UTF8::number_format('1.298765', 1, ',', ''));
-    self::assertSame('1,0', UTF8::number_format('1', 1, ',', ''));
-    self::assertSame(null, UTF8::number_format('foo', 1, ',', ''));
-    self::assertSame(null, UTF8::number_format(''));
-  }
-
-  public function testSubstr()
-  {
-    self::assertSame('23', substr(1234, 1, 2));
-    self::assertSame('bc', substr('abcde', 1, 2));
-    self::assertSame('de', substr('abcde', -2, 2));
-    self::assertSame('bc', substr('abcde', 1, 2));
-    self::assertSame('bc', substr('abcde', 1, 2));
-    self::assertSame('bcd', substr('abcde', 1, 3));
-    self::assertSame('bc', substr('abcde', 1, 2));
-
-    self::assertSame('23', UTF8::substr(1234, 1, 2));
-    self::assertSame('bc', UTF8::substr('abcde', 1, 2));
-    self::assertSame('de', UTF8::substr('abcde', -2, 2));
-    self::assertSame('bc', UTF8::substr('abcde', 1, 2));
-    self::assertSame('bc', UTF8::substr('abcde', 1, 2, true));
-    self::assertSame('bc', UTF8::substr('abcde', 1, 2, 'UTF-8', true));
-    self::assertSame('bcd', UTF8::substr('abcde', 1, 3));
-    self::assertSame('bc', UTF8::substr('abcde', 1, 2));
-
-    // UTF-8
-    self::assertSame('文空', UTF8::substr('中文空白', 1, 2));
-  }
-
-  public function testSubstrCount()
-  {
-    // php compatible tests
-
-    self::assertSame(false, substr_count('', ''));
-    self::assertSame(false, UTF8::substr_count('', ''));
-
-    self::assertSame(false, substr_count('', '', 1));
-    self::assertSame(false, UTF8::substr_count('', '', 1));
-
-    self::assertSame(false, substr_count('', '', 1, 1));
-    self::assertSame(false, UTF8::substr_count('', '', 1, 1));
-
-    self::assertSame(false, substr_count('', 'test', 1, 1));
-    self::assertSame(false, UTF8::substr_count('', 'test', 1, 1));
-
-    self::assertSame(false, substr_count('test', '', 1, 1));
-    self::assertSame(false, UTF8::substr_count('test', '', 1, 1));
-
-    self::assertSame(0, substr_count('test', 'test', 1, 1));
-    self::assertSame(0, UTF8::substr_count('test', 'test', 1, 1));
-
-    self::assertSame(1, substr_count(12345, 23, 1, 2));
-    self::assertSame(1, UTF8::substr_count(12345, 23, 1, 2));
-
-    self::assertSame(2, substr_count('abcdebc', 'bc'));
-    self::assertSame(2, UTF8::substr_count('abcdebc', 'bc'));
-
-    self::assertSame(false, substr_count('abcde', 'de', -2, 2));
-    self::assertSame(false, UTF8::substr_count('abcde', 'de', -2, 2));
-
-    self::assertSame(0, substr_count('abcde', 'bcg', 1, 2));
-    self::assertSame(0, UTF8::substr_count('abcde', 'bcg', 1, 2));
-
-    self::assertSame(0, substr_count('abcde', 'BC', 1, 2));
-    self::assertSame(0, UTF8::substr_count('abcde', 'BC', 1, 2));
-
-    self::assertSame(1, substr_count('abcde', 'bc', 1, 3));
-    self::assertSame(1, UTF8::substr_count('abcde', 'bc', 1, 3));
-
-    self::assertSame(0, substr_count('abcde', 'cd', 1, 2));
-    self::assertSame(0, UTF8::substr_count('abcde', 'cd', 1, 2));
-
-    // UTF-8 tests
-
-    self::assertSame(2, UTF8::substr_count("○●◎\r◎", '◎'));
-    self::assertSame(1, UTF8::substr_count("○●◎\r", '●◎', 1, 2));
-    self::assertSame(1, UTF8::substr_count('中文空白', '文空', 1, 2));
-  }
-
-  public function testSubstrCompare()
-  {
-    // php compatible tests
-
-    self::assertSame(0, substr_compare(12345, 23, 1, 2));
-    self::assertSame(0, UTF8::substr_compare(12345, 23, 1, 2));
-
-    self::assertSame(0, substr_compare('abcde', 'bc', 1, 2));
-    self::assertSame(0, UTF8::substr_compare('abcde', 'bc', 1, 2));
-
-    self::assertSame(0, substr_compare('abcde', 'de', -2, 2));
-    self::assertSame(0, UTF8::substr_compare('abcde', 'de', -2, 2));
-
-    self::assertSame(0, substr_compare('abcde', 'bcg', 1, 2));
-    self::assertSame(0, UTF8::substr_compare('abcde', 'bcg', 1, 2));
-
-    self::assertSame(0, substr_compare('abcde', 'BC', 1, 2, true));
-    self::assertSame(0, UTF8::substr_compare('abcde', 'BC', 1, 2, true));
-
-    self::assertSame(1, substr_compare('abcde', 'bc', 1, 3));
-    self::assertSame(1, UTF8::substr_compare('abcde', 'bc', 1, 3));
-
-    self::assertSame(-1, substr_compare('abcde', 'cd', 1, 2));
-    self::assertSame(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
-
-    // UTF-8 tests
-
-    self::assertSame(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2, false));
-    self::assertSame(0, UTF8::substr_compare('中文空白', '文空', 1, 2, true));
-  }
-
-  public function testStrtr()
-  {
-    // php compatible tests
-
-    $arr = array(
-        'Hello' => 'Hi',
-        'world' => 'earth',
-    );
-    self::assertSame('Hi earth', strtr('Hello world', $arr));
-    self::assertSame('Hi earth', UTF8::strtr('Hello world', $arr));
-
-    // UTF-8 tests
-
-    $arr = array(
-        'Hello' => '○●◎',
-        '中文空白'  => 'earth',
-    );
-    self::assertSame('○●◎ earth', UTF8::strtr('Hello 中文空白', $arr));
-
-    self::assertSame('○●◎◎o wor◎d', UTF8::strtr('Hello world', 'Hello', '○●◎'));
-    self::assertSame('Hello world H●◎', UTF8::strtr('Hello world ○●◎', '○', 'Hello'));
-  }
-
-  public function testStrpbrk()
-  {
-    $text = 'This is a Simple text.';
-
-    self::assertSame(false, strpbrk($text, ''));
-    self::assertSame(strpbrk($text, ''), UTF8::strpbrk($text, ''));
-
-    self::assertSame(false, strpbrk('', 'mi'));
-    self::assertSame(strpbrk('', 'mi'), UTF8::strpbrk('', 'mi'));
-
-    // this echoes "is is a Simple text." because 'i' is matched first
-    self::assertSame('is is a Simple text.', strpbrk($text, 'mi'));
-    self::assertSame(strpbrk($text, 'mi'), UTF8::strpbrk($text, 'mi'));
-
-    // this echoes "Simple text." because chars are case sensitive
-    self::assertSame('Simple text.', strpbrk($text, 'S'));
-    self::assertSame('Simple text.', UTF8::strpbrk($text, 'S'));
-
-    // UTF-8
-
-    $text = 'Hello -中文空白-';
-    self::assertSame('白-', UTF8::strpbrk($text, '白'));
-  }
-
-  // TODO: different result with different php-versions / -configs
-  /*
-  public function testStrncmp()
-  {
-    $tests = array(
-        ''                                                                                    => -3,
-        ' '                                                                                   => -1,
-        'a'                                                                                   => -1,
-        'ü'                                                                                   => 0,
-        'Ü'                                                                                   => -1,
-        ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => -1,
-        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => 1,
-        '中文空白 ‟'                                                                              => 1,
-        "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => -1,
-        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => 1,
-        "„Abcdef\xe2\x81\x9f”"                                                                => 1,
-        " foo\t foo "                                                                         => -1,
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strncmp($before, 'ü', 10), 'tested: ' . $before);
-    }
-  }
-
-  public function testStrncasecmp()
-  {
-    $tests = array(
-        ''                                                                                    => -3,
-        ' '                                                                                   => -1,
-        'a'                                                                                   => -1,
-        'ü'                                                                                   => 0,
-        'Ü'                                                                                   => 0,
-        ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => -1,
-        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => 1,
-        '中文空白 ‟'                                                                              => 1,
-        "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => -1,
-        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => 1,
-        "„Abcdef\xe2\x81\x9f”"                                                                => 1,
-        " foo\t foo "                                                                         => -1,
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strncasecmp($before, 'ü', 10), 'tested: ' . $before);
-    }
-  }
-  */
-
-  public function testStrRepeat()
-  {
-    $tests = array(
-        ''                                                                         => '',
-        ' '                                                                        => '                 ',
-        '�'                                                                        => '�����������������',
-        '中文空白 �'                                                                   => '中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �中文空白 �',
-        "<ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a><ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a>",
-        'DÃ¼�sseldorf'                                                             => 'DÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorf',
-        'Abcdef'                                                                   => 'AbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdef',
-        "°~\xf0\x90\x28\xbc"                                                       => '°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::str_repeat($before, 17));
-    }
-  }
-
-  public function testCombineSomeUtf8Functions()
-  {
-    $testArray = array(
-        "<h1>test\n</h1>"               => 'test',
-        "test\n\nöfuckäü"               => "test\n\nö*****äü",
-        "<b>FUCK\n</b>"                 => '*****',
-        "öäüfoo<strong>lall\n</strong>" => 'öäü*****lall',
-        ' <b>lall</b>'                  => 'lall',
-        "\n"                            => '',
-        "<ul><li>test\n\n</li></ul>"    => 'test',
-        "<blockquote>\n</blockquote>"   => '',
-        '</br>'                         => '',
-        ''                              => '',
-        ' '                             => '',
-    );
-
-    foreach ($testArray as $testString => $testResult) {
-      self::assertSame($testResult, $this->cleanString($testString));
-    }
-  }
-
-  /**
-   * helper-function for test -> "testCombineSomeUtf8Functions()"
-   *
-   * @param $comment
-   *
-   * @return string
-   */
-  public function cleanString($comment)
-  {
-    foreach (array('fuck', 'foo', 'bar') as $value) {
-      $value = UTF8::trim($value);
-
-      if (UTF8::stripos($comment, $value) !== false) {
-
-        $comment = UTF8::str_ireplace($value, '*****', $comment);
-      }
-    }
-
-    $comment = UTF8::trim(strip_tags($comment));
-
-    return (string)$comment;
-  }
-
-  public function testFilterInput()
-  {
-    $options = array(
-        'options' => array(
-            'default'   => -1,
-            // value to return if the filter fails
-            'min_range' => 90,
-            'max_range' => 99,
-        ),
-    );
-
-    self::assertSame('  -ABC-中文空白-  ', UTF8::filter_var('  -ABC-中文空白-  ', FILTER_DEFAULT));
-    self::assertSame(false, UTF8::filter_var('  -ABC-中文空白-  ', FILTER_VALIDATE_URL));
-    self::assertSame(false, UTF8::filter_var('  -ABC-中文空白-  ', FILTER_VALIDATE_EMAIL));
-    self::assertSame(-1, UTF8::filter_var('中文空白 ', FILTER_VALIDATE_INT, $options));
-    self::assertSame(99, UTF8::filter_var(99, FILTER_VALIDATE_INT, $options));
-    self::assertSame(-1, UTF8::filter_var(100, FILTER_VALIDATE_INT, $options));
-  }
-
-  public function testFilterVarArray()
-  {
-    $filters = array(
-        'name'  => array(
-            'filter'  => FILTER_CALLBACK,
-            'options' => array('voku\helper\UTF8', 'ucwords'),
-        ),
-        'age'   => array(
-            'filter'  => FILTER_VALIDATE_INT,
-            'options' => array(
-                'min_range' => 1,
-                'max_range' => 120,
-            ),
-        ),
-        'email' => FILTER_VALIDATE_EMAIL,
-    );
-
-    $data['name'] = 'κόσμε';
-    $data['age'] = '18';
-    $data['email'] = 'foo@bar.de';
-
-    self::assertSame(
-        array(
-            'name'  => 'Κόσμε',
-            'age'   => 18,
-            'email' => 'foo@bar.de',
-        ),
-        UTF8::filter_var_array($data, $filters, true)
-    );
-
-    self::assertSame(
-        array(
-            'name'  => 'κόσμε',
-            'age'   => '18',
-            'email' => 'foo@bar.de',
-        ),
-        UTF8::filter_var_array($data)
-    );
-  }
-
-  public function testReplaceDiamondQuestionMark()
-  {
-    $tests = array(
-        ''                                                                         => '',
-        ' '                                                                        => ' ',
-        '�'                                                                        => '',
-        '中文空白 �'                                                                   => '中文空白 ',
-        "<ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>",
-        'DÃ¼�sseldorf'                                                             => 'DÃ¼sseldorf',
-        'Abcdef'                                                                   => 'Abcdef',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''));
-    }
-  }
-
-  public function testNormalizeMsword()
-  {
-    $tests = array(
-        ''                                                                         => '',
-        ' '                                                                        => ' ',
-        '«foobar»'                                                                 => '"foobar"',
-        '中文空白 ‟'                                                                   => '中文空白 "',
-        "<ㅡㅡ></ㅡㅡ><div>…</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div>...</div><input type='email' name='user[email]' /><a>wtf</a>",
-        '– DÃ¼sseldorf —'                                                          => '- DÃ¼sseldorf -',
-        '„Abcdef…”'                                                                => '"Abcdef..."',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::normalize_msword($before));
-    }
-  }
-
-  public function testNormalizeWhitespace()
-  {
-    $tests = array(
-        ''                                                                                    => '',
-        ' '                                                                                   => ' ',
-        ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => ' foo   öäü ',
-        "«\xe2\x80\x80foobar\xe2\x80\x80»"                                                    => '« foobar »',
-        '中文空白 ‟'                                                                              => '中文空白 ‟',
-        "<ㅡㅡ></ㅡㅡ><div>\xe2\x80\x85</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div> </div><input type='email' name='user[email]' /><a>wtf</a>",
-        "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => '– DÃ¼sseldorf —',
-        "„Abcdef\xe2\x81\x9f”"                                                                => '„Abcdef ”',
-        " foo\t foo "                                                                         => ' foo	 foo ',
-    );
-
-    for ($i = 0; $i < 2; $i++) {
-      foreach ($tests as $before => $after) {
-        self::assertSame($after, UTF8::normalize_whitespace($before));
-      }
-    }
-
-    // replace "non breaking space"
-    self::assertSame('abc- -öäü- -', UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC"));
-    // keep "non breaking space"
-    self::assertSame("abc-\xc2\xa0-öäü- -", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true));
-    // ... and keep "bidirectional text chars"
-    self::assertSame("abc-\xc2\xa0-öäü- -\xE2\x80\xAC", UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true, true));
-  }
-
-  public function testString()
-  {
-    self::assertSame('', UTF8::string(array()));
-    self::assertSame(
-        'öäü',
-        UTF8::string(
-            array(
-                246,
-                228,
-                252,
-            )
-        )
-    );
-    self::assertSame(
-        'ㅡㅡ',
-        UTF8::string(
-            array(
-                12641,
-                12641,
-            )
-        )
-    );
-  }
-
-  public function testStripTags()
-  {
-    $tests = array(
-        ''                                                                        => '',
-        ' '                                                                       => ' ',
-        '<nav>中文空白 </nav>'                                                        => '中文空白 ',
-        "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
-        '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
-        'Abcdef'                                                                  => 'Abcdef',
-        "<span>κόσμε\xa0\xa1</span>-<span>öäü</span>öäü"                          => 'κόσμε-öäüöäü',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strip_tags($before));
-    }
-  }
-
-  public function testStrPad()
-  {
-    $firstString = "Though wise men at their end know dark is right,\nBecause their words had forked no lightning they\n";
-    $secondString = 'Do not go gentle into that good night.';
-    $expectedString = $firstString . $secondString;
-    $actualString = UTF8::str_pad(
-        $firstString,
-        UTF8::strlen($firstString) + UTF8::strlen($secondString),
-        $secondString
-    );
-
-    self::assertSame($expectedString, $actualString);
-
-    self::assertSame('中文空白______', UTF8::str_pad('中文空白', 10, '_', STR_PAD_RIGHT));
-    self::assertSame('______中文空白', UTF8::str_pad('中文空白', 10, '_', STR_PAD_LEFT));
-    self::assertSame('___中文空白___', UTF8::str_pad('中文空白', 10, '_', STR_PAD_BOTH));
-
-    $toPad = '<IñtërnëT>'; // 10 characters
-    $padding = 'ø__'; // 4 characters
-
-    self::assertSame($toPad . '          ', UTF8::str_pad($toPad, 20));
-    self::assertSame('          ' . $toPad, UTF8::str_pad($toPad, 20, ' ', STR_PAD_LEFT));
-    self::assertSame('     ' . $toPad . '     ', UTF8::str_pad($toPad, 20, ' ', STR_PAD_BOTH));
-
-    self::assertSame($toPad, UTF8::str_pad($toPad, 10));
-    self::assertSame('5char', str_pad('5char', 4)); // str_pos won't truncate input string
-    self::assertSame($toPad, UTF8::str_pad($toPad, 8));
-
-    self::assertSame($toPad . 'ø__ø__ø__ø', UTF8::str_pad($toPad, 20, $padding, STR_PAD_RIGHT));
-    self::assertSame('ø__ø__ø__ø' . $toPad, UTF8::str_pad($toPad, 20, $padding, STR_PAD_LEFT));
-    self::assertSame('ø__ø_' . $toPad . 'ø__ø_', UTF8::str_pad($toPad, 20, $padding, STR_PAD_BOTH));
-  }
-
-  /**
-   * @dataProvider trimProvider
-   *
-   * @param $input
-   * @param $output
-   */
-  public function testTrim($input, $output)
-  {
-    for ($i = 0; $i <= 10; $i++) {
-      self::assertSame($output, UTF8::trim($input));
-    }
-  }
-
-  /**
-   * @dataProvider trimProviderAdvancedWithMoreThenTwoBytes
-   *
-   * @param $input
-   * @param $output
-   */
-  public function testTrimAdvancedWithMoreThenTwoBytes($input, $output)
-  {
-    self::assertSame($output, UTF8::trim($input, '白'));
-  }
-
-  /**
-   * @return array
-   */
-  public function trimProviderAdvancedWithMoreThenTwoBytes()
-  {
-    return array(
-        array(
-            1,
-            '1',
-        ),
-        array(
-            -1,
-            '-1',
-        ),
-        array(
-            '  ',
-            '  ',
-        ),
-        array(
-            '',
-            '',
-        ),
-        array(
-            '白',
-            '',
-        ),
-        array(
-            '白白',
-            '',
-        ),
-        array(
-            '　中文空白',
-            '　中文空',
-        ),
-        array(
-            'do not go gentle into that good night',
-            'do not go gentle into that good night',
-        ),
-    );
-  }
-
-  /**
-   * @dataProvider trimProviderAdvanced
-   *
-   * @param $input
-   * @param $output
-   */
-  public function testTrimAdvanced($input, $output)
-  {
-    self::assertSame($output, UTF8::trim($input, ' '));
-  }
-
-  /**
-   * @return array
-   */
-  public function trimProviderAdvanced()
-  {
-    return array(
-        array(
-            1,
-            '1',
-        ),
-        array(
-            -1,
-            '-1',
-        ),
-        array(
-            '  ',
-            '',
-        ),
-        array(
-            '',
-            '',
-        ),
-        array(
-            ' 白 ',
-            '白',
-        ),
-        array(
-            '   白白 ',
-            '白白',
-        ),
-        array(
-            '　中文空白',
-            '　中文空白',
-        ),
-        array(
-            'do not go gentle into that good night',
-            'do not go gentle into that good night',
-        ),
-    );
-  }
-
-  /**
-   * @return array
-   */
-  public function trimProvider()
-  {
-    return array(
-        array(
-            1,
-            '1',
-        ),
-        array(
-            -1,
-            '-1',
-        ),
-        array(
-            '  ',
-            '',
-        ),
-        array(
-            '',
-            '',
-        ),
-        array(
-            '　中文空白　 ',
-            '中文空白',
-        ),
-        array(
-            'do not go gentle into that good night',
-            'do not go gentle into that good night',
-        ),
-    );
-  }
-
-  public function testToUtf8()
-  {
-    $examples = array(
-      // Valid UTF-8
-      'κόσμε'                                       => array('κόσμε' => 'κόσμε'),
-      '中'                                           => array('中' => '中'),
-      // Valid UTF-8 + "win1252"-encoding
-      'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac" => array('Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'),
-      // Valid UTF-8 + Invalied Chars
-      "κόσμε\xa0\xa1-öäü"                           => array('κόσμε-öäü' => 'κόσμε-öäü'),
-      // Valid emoji (non-UTF-8)
-      '👍 💩 😄 ❤ 👍 💩 😄 ❤'                       => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
-      // Valid ASCII
-      'a'                                           => array('a' => 'a'),
-      // Valid ASCII + Invalied Chars
-      "a\xa0\xa1-öäü"                               => array('a-öäü' => 'a-öäü'),
-      // Valid 2 Octet Sequence
-      "\xc3\xb1"                                    => array('ñ' => 'ñ'),
-      // Invalid 2 Octet Sequence
-      "\xc3\x28"                                    => array('�(' => '('),
-      // Invalid Sequence Identifier
-      "\xa0\xa1"                                    => array('��' => ''),
-      // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"                                => array('₡' => '₡'),
-      // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"                                => array('�(�' => '('),
-      // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"                                => array('�(' => '('),
-      // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"                            => array('𐌼' => '𐌼'),
-      // Invalid 4 Octet Sequence (in 2nd Octet)
-      "\xf0\x28\x8c\xbc"                            => array('�(��' => '('),
-      // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"                            => array('�(�' => '('),
-      // Invalid 4 Octet Sequence (in 4th Octet)
-      "\xf0\x28\x8c\x28"                            => array('�(�(' => '(('),
-      // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"                        => array('�' => ''),
-      // Valid 6 Octet Sequence (but not Unicode!)
-      "\xfc\xa1\xa1\xa1\xa1\xa1"                    => array('�' => ''),
-      // Valid UTF-8 string with null characters
-      "\0\0\0\0中\0 -\0\0 &#20013; - %&? - \xc2\x80" => array('中 - &#20013; - %&? - ' => '中 - &#20013; - %&? - €'),
-    );
-
-    $counter = 0;
-    foreach ($examples as $testString => $testResults) {
-      foreach ($testResults as $before => $after) {
-        self::assertSame($after, UTF8::to_utf8(UTF8::cleanup($testString)), $counter . ' - ' . $before);
-      }
-      $counter++;
-    }
-
-    $testString = 'test' . UTF8::html_entity_decode('&nbsp;') . 'test';
-    self::assertSame('test' . "\xc2\xa0" . 'test', $testString);
-    self::assertSame('test&nbsp;test', UTF8::htmlentities($testString));
-    self::assertSame('test' . "\xc2\xa0" . 'test', UTF8::cleanup($testString));
-  }
-
-  public function testStrwidth()
-  {
-    $testArray = array(
-        'testtest' => 8,
-        'Ã'        => 1,
-        ' '        => 1,
-        ''         => 0,
-        "\n"       => 1,
-        'test'     => 4,
-        "ひらがな\r"   => 9,
-        "○●◎\r"    => 4,
-    );
-
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::strwidth($before));
-    }
-  }
-
   public function testToUtf8_v2()
   {
     $testArray = array(
@@ -2226,24 +2905,90 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testUtf8FixWin1252Chars()
+  public function testToUtf8_v3()
   {
-    $testArray = array(
-        'Düsseldorf'   => 'Düsseldorf',
-        'Ã'            => 'Ã',
-        'ñ'            => 'ñ',
-        'àáâãäåæ ç èéêë ìíîï' => 'àáâãäåæ ç èéêë ìíîï',
-        ' '            => ' ',
-        ''             => '',
-        "\n"           => "\n",
-        "test\xc2\x88" => 'testˆ',
-        'DÃ¼sseldorf'  => 'Düsseldorf',
-        'Ã¤'           => 'ä',
-    );
+    $utf8File = file_get_contents(__DIR__ . '/utf-8.txt');
+    $latinFile = file_get_contents(__DIR__ . '/latin.txt');
+
+    $utf8File = explode("\n", $utf8File);
+    $latinFile = explode("\n", $latinFile);
+
+    $testArray = array_combine($latinFile, $utf8File);
 
     foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::utf8_fix_win1252_chars($before));
+      self::assertSame($after, UTF8::to_utf8($before));
     }
+  }
+
+  /**
+   * @dataProvider trimProvider
+   *
+   * @param $input
+   * @param $output
+   */
+  public function testTrim($input, $output)
+  {
+    for ($i = 0; $i <= 10; $i++) {
+      self::assertSame($output, UTF8::trim($input));
+    }
+  }
+
+  /**
+   * @dataProvider trimProviderAdvanced
+   *
+   * @param $input
+   * @param $output
+   */
+  public function testTrimAdvanced($input, $output)
+  {
+    self::assertSame($output, UTF8::trim($input, ' '));
+  }
+
+  /**
+   * @dataProvider trimProviderAdvancedWithMoreThenTwoBytes
+   *
+   * @param $input
+   * @param $output
+   */
+  public function testTrimAdvancedWithMoreThenTwoBytes($input, $output)
+  {
+    self::assertSame($output, UTF8::trim($input, '白'));
+  }
+
+  public function testUcWords()
+  {
+    self::assertSame('Iñt Ërn ÂTi Ônà Liz Æti Øn', UTF8::ucwords('iñt ërn âTi ônà liz æti øn'));
+    self::assertSame("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
+    self::assertSame('', UTF8::ucwords(''));
+    self::assertSame('Ñ', UTF8::ucwords('ñ'));
+    self::assertSame("Iñt ËrN Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërN âti\n ônà liz æti øn"));
+    self::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucwords('ñtërnâtiônàlizætIøN'));
+    self::assertSame('ÑtërnâtiônàlizætIøN Test câse', UTF8::ucwords('ñtërnâtiônàlizætIøN test câse', array('câse')));
+    self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ'));
+  }
+
+  public function testUcfirst()
+  {
+    self::assertSame('Öäü', UTF8::ucfirst('Öäü'));
+    self::assertSame('Öäü', UTF8::ucfirst('öäü'));
+    self::assertSame('Κόσμε', UTF8::ucfirst('κόσμε'));
+    self::assertSame('ABC-ÖÄÜ-中文空白', UTF8::ucfirst('aBC-ÖÄÜ-中文空白'));
+    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ucfirst('iñtërnâtiônàlizætiøn'));
+    self::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('ñtërnâtiônàlizætiøn'));
+    self::assertSame(' iñtërnâtiônàlizætiøn', UTF8::ucfirst(' iñtërnâtiônàlizætiøn'));
+    self::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('Ñtërnâtiônàlizætiøn'));
+    self::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucfirst('ñtërnâtiônàlizætIøN'));
+    self::assertSame('ÑtërnâtiônàlizætIøN test câse', UTF8::ucfirst('ñtërnâtiônàlizætIøN test câse'));
+    self::assertSame('', UTF8::ucfirst(''));
+    self::assertSame('Ñ', UTF8::ucfirst('ñ'));
+    self::assertSame("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
+    self::assertSame('Deja', UTF8::ucfirst('deja'));
+    self::assertSame('Σσς', UTF8::ucfirst('σσς'));
+    self::assertSame('DEJa', UTF8::ucfirst('dEJa'));
+    self::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
+
+    // alias
+    self::assertSame('Öäü', UTF8::ucword('öäü'));
   }
 
   public function testUrlDecode()
@@ -2293,448 +3038,170 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testJsonDecode()
+  public function testUrldecodeFixWin1252Chars()
+  {
+    $urldecode_fix_win1252_chars = UTF8::urldecode_fix_win1252_chars();
+
+    self::assertSame(true, is_array($urldecode_fix_win1252_chars));
+    self::assertSame(true, count($urldecode_fix_win1252_chars) > 0);
+  }
+
+  public function testUtf8DecodeEncodeUtf8()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)));
+    }
+  }
+
+  public function testUtf8DecodeUtf8Encode()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'foobar'         => 'foobar',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::utf8_encode((UTF8::utf8_decode($before))));
+    }
+  }
+
+  public function testUtf8Encode()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æ–‡ç©ºç™½-  ',
+        '      - ÖÄÜ- '  => '      - Ã–Ã„Ãœ- ',
+        'öäü'            => 'Ã¶Ã¤Ã¼',
+        ''               => '',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::utf8_encode($before));
+    }
+  }
+
+  public function testUtf8EncodeEncodeUtf8()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æ–‡ç©ºç™½-  ',
+        '      - ÖÄÜ- '  => '      - Ã–Ã„Ãœ- ',
+        'öäü'            => 'Ã¶Ã¤Ã¼',
+        ''               => '',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_encode($before)));
+    }
+  }
+
+  public function testUtf8EncodeUtf8Decode()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'foobar'         => 'foobar',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::utf8_decode(UTF8::utf8_encode($before)));
+    }
+  }
+
+  public function testUtf8EncodeUtf8Encode()
+  {
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-Ã¤Â¸Â­Ã¦â€“â€¡Ã§Â©ÂºÃ§â„¢Â½-  ',
+        '      - ÖÄÜ- '  => '      - Ãƒâ€“Ãƒâ€žÃƒÅ“- ',
+        'öäü'            => 'ÃƒÂ¶ÃƒÂ¤ÃƒÂ¼',
+        ''               => '',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::utf8_encode(UTF8::utf8_encode($before)));
+    }
+  }
+
+  public function testUtf8FileWithBom()
+  {
+    $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8-bom.txt');
+    self::assertSame(true, $bom);
+
+    $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8.txt');
+    self::assertSame(false, $bom);
+  }
+
+  public function testUtf8FixWin1252Chars()
   {
     $testArray = array(
-        '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte f\u00fclle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}'                            => '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte f\u00fclle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}',
-        '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSκόσμε' . "\xa0\xa1" . '-öäüDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte f\u00fclle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}' => '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSκόσμε ¡-öäüDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte fülle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}',
-        '{"array":[1,2,3],"boolean":true,"null":null,"number":123,"object":{"a":"b","c":"d","e":"f"},"string":"Hello World | öäü"}' => '{"array":[1,2,3],"boolean":true,"null":null,"number":123,"object":{"a":"b","c":"d","e":"f"},"string":"Hello World | öäü"}',
-        '{"array":[1,"¥","ä"]}' => '{"array":[1,"¥","ä"]}',
+        'Düsseldorf'          => 'Düsseldorf',
+        'Ã'                   => 'Ã',
+        'ñ'                   => 'ñ',
+        'àáâãäåæ ç èéêë ìíîï' => 'àáâãäåæ ç èéêë ìíîï',
+        ' '                   => ' ',
+        ''                    => '',
+        "\n"                  => "\n",
+        "test\xc2\x88"        => 'testˆ',
+        'DÃ¼sseldorf'         => 'Düsseldorf',
+        'Ã¤'                  => 'ä',
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::json_decode(UTF8::json_encode($before)));
-    }
-
-    // ---
-
-    $testArray['{"array":[1,2,3],,...}}'] = false;
-    foreach ($testArray as $before => $after) {
-      self::assertSame(
-          ($after === false ? false : true),
-          UTF8::is_json($before),
-          'tested: ' . $before
-      );
-    }
-
-    // ----
-
-    $expected = new stdClass();
-    $expected->array = array(1, '¥', 'ä');
-    self::assertEquals($expected, UTF8::json_decode('{"array":[1,"¥","ä"]}'));
-
-    // ----
-
-    self::assertEquals(array(1, '¥', 'ä'), UTF8::json_decode('[1,"\u00a5","\u00e4"]'));
-  }
-
-  public function testJsonEncode()
-  {
-    $test = new stdClass();
-    $test->array = array(1, '¥', 'ä');
-    self::assertEquals('{"array":[1,"\u00a5","\u00e4"]}', UTF8::json_encode($test));
-
-    // ----
-
-    self::assertEquals('[1,"\u00a5","\u00e4"]', UTF8::json_encode(array(1, '¥', 'ä')));
-  }
-
-  public function testToUtf8_v3()
-  {
-    $utf8File = file_get_contents(__DIR__ . '/utf-8.txt');
-    $latinFile = file_get_contents(__DIR__ . '/latin.txt');
-
-    $utf8File = explode("\n", $utf8File);
-    $latinFile = explode("\n", $latinFile);
-
-    $testArray = array_combine($latinFile, $utf8File);
-
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::to_utf8($before));
+      self::assertSame($after, UTF8::utf8_fix_win1252_chars($before));
     }
   }
 
-  public function testChar()
+  public function testUtf8Strstr()
   {
-    $testArray = array(
-        '39'  => '\'',
-        '40'  => '(',
-        '41'  => ')',
-        '42'  => '*',
-        '160' => ' ',
-        666   => 'ʚ',
-        165   => '¥',
-        ''    => null,
-        'foo' => null,
-        'fòô' => null,
-    );
-
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
-    }
-  }
-
-  public function testWordsLimit()
-  {
-    $testArray = array(
-        array('this is a test', 'this is a test', 5, '...'),
-        array('this is öäü-foo test', 'this is öäü-foo test', 8, '...'),
-        array('fòô...öäü', 'fòô bàř fòô', 1, '...öäü'),
-        array('fòô', 'fòô bàř fòô', 1, ''),
-        array('fòô bàř', 'fòô bàř fòô', 2, ''),
-        array('fòô', 'fòô', 1, ''),
-        array('', 'fòô', 0, ''),
-        array('', '', 1, '...'),
-        array('', '', 0, '...'),
-    );
-
-    foreach ($testArray as $test) {
-      self::assertSame($test[0], UTF8::words_limit($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
-    }
-  }
-
-  public function testStrLimit()
-  {
-    $testArray = array(
-        array('this...', 'this is a test', 5, '...'),
-        array('this is...', 'this is öäü-foo test', 8, '...'),
-        array('fòô', 'fòô bàř fòô', 6, ''),
-        array('fòô bàř', 'fòô bàř fòô', 8, ''),
-    );
-
-    foreach ($testArray as $test) {
-      self::assertSame($test[0], UTF8::str_limit_after_word($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
-    }
-  }
-
-  public function testClean()
-  {
-    $examples = array(
-      // Valid UTF-8
-      'κόσμε'                                                                                => array('κόσμε' => 'κόσμε'),
-      '中'                                                                                    => array('中' => '中'),
-      '«foobar»'                                                                             => array('«foobar»' => '«foobar»'),
-      // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-      "κόσμε\xc2\xa0"                                                                        => array("κόσμε\xc2\xa0" => "κόσμε\xc2\xa0"),
-      // Valid UTF-8 + Invalied Chars
-      "κόσμε\xa0\xa1-öäü"                                                                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
-      // Valid UTF-8 + ISO-Erros
-      'DÃ¼sseldorf'                                                                          => array('Düsseldorf' => 'Düsseldorf'),
-      // Valid ASCII
-      'a'                                                                                    => array('a' => 'a'),
-      // Valid emoji (non-UTF-8)
-      '😃'                                                                                   => array('😃' => '😃'),
-      '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => array('🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧'),
-      // Valid ASCII + Invalied Chars
-      "a\xa0\xa1-öäü"                                                                        => array('a-öäü' => 'a-öäü'),
-      // Valid 2 Octet Sequence
-      "\xc3\xb1"                                                                             => array('ñ' => 'ñ'),
-      // Invalid 2 Octet Sequence
-      "\xc3\x28"                                                                             => array('�(' => '('),
-      // Invalid Sequence Identifier
-      "\xa0\xa1"                                                                             => array('��' => ''),
-      // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"                                                                         => array('₡' => '₡'),
-      // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"                                                                         => array('�(�' => '('),
-      // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"                                                                         => array('�(' => '('),
-      // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"                                                                     => array('𐌼' => '𐌼'),
-      // Invalid 4 Octet Sequence (in 2nd Invalid 4 Octet Sequence (in 2ndOctet)
-      "\xf0\x28\x8c\xbc"                                                                     => array('�(��' => '('),
-      // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"                                                                     => array('�(�' => '('),
-      // Invalid 4 Octet Sequence (in 4th Octet)
-      "\xf0\x28\x8c\x28"                                                                     => array('�(�(' => '(('),
-      // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"                                                                 => array('�' => ''),
-      // Valid 6 Octet Sequence (but not Unicode!)
-      "\xfc\xa1\xa1\xa1\xa1\xa1"                                                             => array('�' => ''),
-      // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
-      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82"                                                 => array('�' => ' '),
-    );
-
-    // <<<<--- \"this comment is only a helper for PHPStorm and non UTF-8 chars
-
-    $counter = 0;
-    foreach ($examples as $testString => $testResults) {
-      foreach ($testResults as $before => $after) {
-        self::assertSame($after, UTF8::cleanup($testString), $counter);
-      }
-      $counter++;
-    }
-  }
-
-  public function testCleanup()
-  {
-    $examples = array(
-        ''                                     => array(''),
-        // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-        "κόσμε\xc2\xa0"                        => array('κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"),
-        // Valid UTF-8
-        '中'                                    => array('中' => '中'),
-        // Valid UTF-8 + ISO-Error
-        'DÃ¼sseldorf'                          => array('Düsseldorf' => 'Düsseldorf'),
-        // Valid UTF-8 + Invalid Chars
-        "κόσμε\xa0\xa1-öäü"                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
-        // Valid ASCII
-        'a'                                    => array('a' => 'a'),
-        // Valid ASCII + Invalid Chars
-        "a\xa0\xa1-öäü"                        => array('a-öäü' => 'a-öäü'),
-        // Valid 2 Octet Sequence
-        "\xc3\xb1"                             => array('ñ' => 'ñ'),
-        // Invalid 2 Octet Sequence
-        "\xc3\x28"                             => array('�(' => '('),
-        // Invalid Sequence Identifier
-        "\xa0\xa1"                             => array('��' => ''),
-        // Valid 3 Octet Sequence
-        "\xe2\x82\xa1"                         => array('₡' => '₡'),
-        // Invalid 3 Octet Sequence (in 2nd Octet)
-        "\xe2\x28\xa1"                         => array('�(�' => '('),
-        // Invalid 3 Octet Sequence (in 3rd Octet)
-        "\xe2\x82\x28"                         => array('�(' => '('),
-        // Valid 4 Octet Sequence
-        "\xf0\x90\x8c\xbc"                     => array('𐌼' => '𐌼'),
-        // Invalid 4 Octet Sequence (in 2nd Octet)
-        "\xf0\x28\x8c\xbc"                     => array('�(��' => '('),
-        // Invalid 4 Octet Sequence (in 3rd Octet)
-        "\xf0\x90\x28\xbc"                     => array('�(�' => '('),
-        // Invalid 4 Octet Sequence (in 4th Octet)
-        " \xf0\x28\x8c\x28"                    => array('�(�(' => ' (('),
-        // Valid 5 Octet Sequence (but not Unicode!)
-        "\xf8\xa1\xa1\xa1\xa1"                 => array('�' => ''),
-        // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
-        "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array('�' => ' '),
-        // test for database-insert
-        '
-        <h1>«DÃ¼sseldorf» &ndash; &lt;Köln&gt;</h1>
-        <br /><br />
-        <p>
-          &nbsp;�&foo;❤&nbsp;
-        </p>
-        '                              => array(
-            '' => '
-        <h1>«Düsseldorf» &ndash; &lt;Köln&gt;</h1>
-        <br /><br />
-        <p>
-          &nbsp;&foo;❤&nbsp;
-        </p>
-        ',
+    $tests = array(
+        'ABC@中文空白.com' => array(
+            'ABC',
+            '@中文空白.com',
+        ),
+        ' @ - ÖÄÜ- '   => array(
+            ' ',
+            '@ - ÖÄÜ- ',
+        ),
+        'öä@ü'         => array(
+            'öä',
+            '@ü',
+        ),
+        ''             => array(
+            false,
+            false,
+        ),
+        '  '           => array(
+            false,
+            false,
         ),
     );
 
-    foreach ($examples as $testString => $testResults) {
-      foreach ($testResults as $before => $after) {
-        self::assertSame($after, UTF8::cleanup($testString));
-      }
-    }
-
-  }
-
-  public function testToASCII()
-  {
-    if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
-      $tests = array(
-          1                               => '1',
-          -1                              => '-1',
-          ' '                             => ' ',
-          ''                              => '',
-          'أبز'                           => 'abz',
-          "\xe2\x80\x99"                  => '\'',
-          'Ɓtest'                         => 'Btest',
-          '  -ABC-中文空白-  '                => '  -ABC-zhong wen kong bai-  ',
-          "      - abc- \xc2\x87"         => '      - abc- ++',
-          'abc'                           => 'abc',
-          'deja vu'                       => 'deja vu',
-          'déjà vu'                       => 'deja vu',
-          'déjà σσς iıii'                 => 'deja sss iiii',
-          "test\x80-\xBFöäü"              => 'test-oau',
-          'Internationalizaetion'         => 'Internationalizaetion',
-          "中 - &#20013; - %&? - \xc2\x80" => 'zhong - &#20013; - %&? - EUR',
-          'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
-          'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
-          'أحبك'                          => 'ahbk',
-          'キャンパス'                         => 'kyanpasu',
-          'биологическом'                 => 'biologiceskom',
-          '정, 병호'                         => 'jeong, byeongho',
-          'ますだ, よしひこ'                     => 'masuda, yoshihiko',
-          'मोनिच'                         => 'monica',
-          'क्षȸ'                          => 'ksadb',
-          'أحبك 😀'                       => 'ahbk ?',
-          '∀ i ∈ ℕ'                       => '[?] i [?] N',
-          '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? ahbk',
-      );
-    } else {
-      $tests = array(
-          1                               => '1',
-          -1                              => '-1',
-          ' '                             => ' ',
-          ''                              => '',
-          'أبز'                           => '\'bz',
-          "\xe2\x80\x99"                  => '\'',
-          'Ɓtest'                         => 'Btest',
-          '  -ABC-中文空白-  '                => '  -ABC-Zhong Wen Kong Bai -  ',
-          "      - abc- \xc2\x87"         => '      - abc- ++',
-          'abc'                           => 'abc',
-          'deja vu'                       => 'deja vu',
-          'déjà vu'                       => 'deja vu',
-          'déjà σσς iıii'                 => 'deja sss iiii',
-          "test\x80-\xBFöäü"              => 'test-oau',
-          'Internationalizaetion'         => 'Internationalizaetion',
-          "中 - &#20013; - %&? - \xc2\x80" => 'Zhong  - &#20013; - %&? - EUR',
-          'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
-          'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
-          'أحبك'                          => '\'Hbk',
-          'キャンパス'                         => 'kiyanpasu',
-          'биологическом'                 => 'biologicheskom',
-          '정, 병호'                         => 'jeong, byeongho',
-          'ますだ, よしひこ'                     => 'masuda, yosihiko',
-          'मोनिच'                         => 'monic',
-          'क्षȸ'                          => 'kssdb',
-          'أحبك 😀'                       => '\'Hbk ?',
-          '∀ i ∈ ℕ'                       => '[?] i [?] N',
-          '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? \'Hbk',
-      );
+    foreach ($tests as $before => $after) {
+      self::assertSame($after[0], UTF8::strstr($before, '@', true), 'tested: ' . $before);
     }
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::to_ascii($before), 'tested: ' . $before);
-      self::assertSame($after, UTF8::str_transliterate($before), 'tested: ' . $before);
+      self::assertSame($after[1], UTF8::strstr($before, '@'), 'tested: ' . $before);
     }
   }
 
-
-  public function testIsBase64()
+  public function testValidCharsViaUtf8Encode()
   {
-    $tests = array(
-        0                                          => false,
-        1                                          => false,
-        -1                                         => false,
-        ' '                                        => false,
-        ''                                         => false,
-        'أبز'                                      => false,
-        "\xe2\x80\x99"                             => false,
-        'Ɓtest'                                    => false,
-        base64_encode('true')                      => true,
-        base64_encode('  -ABC-中文空白-  ')            => true,
-        'キャンパス'                                    => false,
-        'биологическом'                            => false,
-        '정, 병호'                                    => false,
-        'on'                                       => false,
-        'ますだ, よしひこ'                                => false,
-        'मोनिच'                                    => false,
-        'क्षȸ'                                     => false,
-        base64_encode('👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك') => true,
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'                => false,
-    );
+    $tests = UTF8::json_decode(UTF8::file_get_contents(__DIR__ . '/valid.json'), true);
 
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::isBase64($before), $before);
+    foreach ($tests as $test) {
+      self::assertSame($test, UTF8::encode('UTF-8', $test));
     }
-  }
-
-  public function testSwapCase()
-  {
-    $tests = array(
-        1                               => '1',
-        -1                              => '-1',
-        ' '                             => ' ',
-        ''                              => '',
-        'أبز'                           => 'أبز',
-        "\xe2\x80\x99"                  => '’',
-        'Ɓtest'                         => 'ɓTEST',
-        '  -ABC-中文空白-  '                => '  -abc-中文空白-  ',
-        "      - abc- \xc2\x87"         => '      - ABC- ',
-        'abc'                           => 'ABC',
-        'deja vu'                       => 'DEJA VU',
-        'déjà vu'                       => 'DÉJÀ VU',
-        'déjà σσς iıii'                 => 'DÉJÀ ΣΣΣ IIII',
-        "test\x80-\xBFöäü"              => 'TEST-ÖÄÜ',
-        'Internationalizaetion'         => 'iNTERNATIONALIZAETION',
-        "中 - &#20013; - %&? - \xc2\x80" => '中 - &#20013; - %&? - ',
-        'BonJour'                       => 'bONjOUR',
-        'BonJour & au revoir'           => 'bONjOUR & AU REVOIR',
-        'Déjà'                          => 'dÉJÀ',
-        'това е тестово заглавие'       => 'ТОВА Е ТЕСТОВО ЗАГЛАВИЕ',
-        'это тестовый заголовок'        => 'ЭТО ТЕСТОВЫЙ ЗАГОЛОВОК',
-        'führen Aktivitäten Haglöfs'    => 'FÜHREN aKTIVITÄTEN hAGLÖFS',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::swapCase($before), $before);
-    }
-  }
-
-  public function testDecimalToChr()
-  {
-    $tests = array(
-        0x7e   => '~',
-        0xa7   => '§',
-        0x1207 => 'ሇ',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::decimal_to_chr($before));
-    }
-  }
-
-  public function testChrToDecimal()
-  {
-    $tests = array(
-        '~' => 0x7e,
-        '§' => 0xa7,
-        'ሇ' => 0x1207,
-
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::chr_to_decimal($before));
-    }
-  }
-
-  public function testStrToBinary()
-  {
-    $tests = array(
-        0   => '110000',
-        '1' => '110001',
-        '~' => '1111110',
-        '§' => '1100001010100111',
-        'ሇ' => '111000011000100010000111',
-        '😃' => '11110000100111111001100010000011',
-
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::str_to_binary($before), 'tested: ' . $before);
-    }
-
-    foreach ($tests as $before => $after) {
-      // TODO: use "self::assertSame()"
-      self::assertEquals($before, UTF8::binary_to_str(UTF8::str_to_binary($before)), 'tested: ' . $before);
-    }
-  }
-
-  public function testcleanParameter()
-  {
-    $dirtyTestString = "\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃";
-
-    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString));
-    self::assertSame("\xEF\xBB\xBF„Abcdef \x20…” — 😃", UTF8::clean($dirtyTestString, false, true, false, false));
-    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, true));
-    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, false));
-    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, true));
-    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, false));
-    self::assertSame("\xEF\xBB\xBF\"Abcdef  ...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, false));
-    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, true));
-    self::assertSame("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, false));
-    self::assertSame("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, true));
-    self::assertSame("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, false));
-    self::assertSame("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, true));
-    self::assertSame('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, false));
-    self::assertSame('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, true));
-    self::assertSame('"Abcdef  ..." - 😃', UTF8::clean($dirtyTestString, true, true, true, false));
-    self::assertSame("\"Abcdef\xc2\xa0 ...\" - 😃", UTF8::clean($dirtyTestString, true, true, true, true));
   }
 
   public function testWhitespace()
@@ -2743,533 +3210,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($whitespaces as $whitespace) {
       self::assertSame(' ', UTF8::clean($whitespace, false, true));
     }
-  }
-
-  public function testLtrim()
-  {
-    $tests = array(
-        '  -ABC-中文空白-  ' => '-ABC-中文空白-  ',
-        '      - ÖÄÜ- '  => '- ÖÄÜ- ',
-        'öäü'            => 'öäü',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::ltrim($before));
-      self::assertSame($after, ltrim($before));
-    }
-
-    self::assertSame('tërnâtiônàlizætiøn', UTF8::ltrim('ñtërnâtiônàlizætiøn', 'ñ'));
-    self::assertSame('tërnâtiônàlizætiøn', ltrim('ñtërnâtiônàlizætiøn', 'ñ'));
-
-    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', 'ñ'));
-    self::assertSame('Iñtërnâtiônàlizætiøn', ltrim('Iñtërnâtiônàlizætiøn', 'ñ'));
-
-    self::assertSame('', UTF8::ltrim(''));
-    self::assertSame('', ltrim(''));
-
-    self::assertSame('', UTF8::ltrim(' '));
-    self::assertSame('', ltrim(' '));
-
-    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('/Iñtërnâtiônàlizætiøn', '/'));
-    self::assertSame('Iñtërnâtiônàlizætiøn', ltrim('/Iñtërnâtiônàlizætiøn', '/'));
-
-    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ltrim('Iñtërnâtiônàlizætiøn', '^s'));
-    self::assertSame('Iñtërnâtiônàlizætiøn', ltrim('Iñtërnâtiônàlizætiøn', '^s'));
-
-    self::assertSame("\nñtërnâtiônàlizætiøn", UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", 'ñ'));
-    self::assertSame("\nñtërnâtiônàlizætiøn", ltrim("ñ\nñtërnâtiônàlizætiøn", 'ñ'));
-
-    self::assertSame('tërnâtiônàlizætiøn', UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
-    self::assertSame('tërnâtiônàlizætiøn', ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
-  }
-
-  public function testStr_split()
-  {
-    self::assertSame(
-        array(
-            'd',
-            'é',
-            'j',
-            'à',
-        ),
-        UTF8::str_split('déjà', 1)
-    );
-    self::assertSame(
-        array(
-            'dé',
-            'jà',
-        ),
-        UTF8::str_split('déjà', 2)
-    );
-  }
-
-  public function testRtrim()
-  {
-    $tests = array(
-        '-ABC-中文空白-  '        => '-ABC-中文空白-',
-        '- ÖÄÜ-             ' => '- ÖÄÜ-',
-        'öäü'                 => 'öäü',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::rtrim($before));
-    }
-
-    self::assertSame('Iñtërnâtiônàlizæti', UTF8::rtrim('Iñtërnâtiônàlizætiø', 'ø'));
-    self::assertSame('Iñtërnâtiônàlizætiøn ', UTF8::rtrim('Iñtërnâtiônàlizætiøn ', 'ø'));
-    self::assertSame('', UTF8::rtrim(''));
-    self::assertSame("Iñtërnâtiônàlizætiø\n", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", 'ø'));
-    self::assertSame('Iñtërnâtiônàlizæti', UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "\nø"));
-  }
-
-  public function testStrtolower()
-  {
-    $tests = array(
-        1               => '1',
-        -1              => '-1',
-        'ABC-中文空白'      => 'abc-中文空白',
-        'ÖÄÜ'           => 'öäü',
-        'öäü'           => 'öäü',
-        'κόσμε'         => 'κόσμε',
-        'Κόσμε'         => 'κόσμε',
-        'ㅋㅋ-Lol'        => 'ㅋㅋ-lol',
-        'ㅎㄹ..-Daebak'   => 'ㅎㄹ..-daebak',
-        'ㅈㅅ-Sorry'      => 'ㅈㅅ-sorry',
-        'ㅡㅡ-WTF'        => 'ㅡㅡ-wtf',
-        'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strtolower($before));
-    }
-  }
-
-  public function testStrtoupper()
-  {
-    $tests = array(
-        1               => '1',
-        -1              => '-1',
-        'abc-中文空白'      => 'ABC-中文空白',
-        'öäü'           => 'ÖÄÜ',
-        'öäü test öäü'  => 'ÖÄÜ TEST ÖÄÜ',
-        'ÖÄÜ'           => 'ÖÄÜ',
-        '中文空白'          => '中文空白',
-        'Déjà Σσς Iıİi' => 'DÉJÀ ΣΣΣ IIİI',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strtoupper($before));
-    }
-  }
-
-  public function testMin()
-  {
-    $tests = array(
-        'abc-中文空白'     => '-',
-        'öäü'          => 'ä',
-        'öäü test öäü' => ' ',
-        'ÖÄÜ'          => 'Ä',
-        '中文空白'         => '中',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::min($before));
-    }
-  }
-
-  public function testMax()
-  {
-    $tests = array(
-        'abc-中文空白'     => '空',
-        'öäü'          => 'ü',
-        'öäü test öäü' => 'ü',
-        'ÖÄÜ'          => 'Ü',
-        '中文空白'         => '空',
-    );
-
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::max($before));
-    }
-  }
-
-  public function testUcfirst()
-  {
-    self::assertSame('Öäü', UTF8::ucfirst('Öäü'));
-    self::assertSame('Öäü', UTF8::ucfirst('öäü'));
-    self::assertSame('Κόσμε', UTF8::ucfirst('κόσμε'));
-    self::assertSame('ABC-ÖÄÜ-中文空白', UTF8::ucfirst('aBC-ÖÄÜ-中文空白'));
-    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ucfirst('iñtërnâtiônàlizætiøn'));
-    self::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('ñtërnâtiônàlizætiøn'));
-    self::assertSame(' iñtërnâtiônàlizætiøn', UTF8::ucfirst(' iñtërnâtiônàlizætiøn'));
-    self::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('Ñtërnâtiônàlizætiøn'));
-    self::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucfirst('ñtërnâtiônàlizætIøN'));
-    self::assertSame('ÑtërnâtiônàlizætIøN test câse', UTF8::ucfirst('ñtërnâtiônàlizætIøN test câse'));
-    self::assertSame('', UTF8::ucfirst(''));
-    self::assertSame('Ñ', UTF8::ucfirst('ñ'));
-    self::assertSame("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
-    self::assertSame('Deja', UTF8::ucfirst('deja'));
-    self::assertSame('Σσς', UTF8::ucfirst('σσς'));
-    self::assertSame('DEJa', UTF8::ucfirst('dEJa'));
-    self::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
-
-    // alias
-    self::assertSame('Öäü', UTF8::ucword('öäü'));
-  }
-
-  public function testUcWords()
-  {
-    self::assertSame('Iñt Ërn ÂTi Ônà Liz Æti Øn', UTF8::ucwords('iñt ërn âTi ônà liz æti øn'));
-    self::assertSame("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
-    self::assertSame('', UTF8::ucwords(''));
-    self::assertSame('Ñ', UTF8::ucwords('ñ'));
-    self::assertSame("Iñt ËrN Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërN âti\n ônà liz æti øn"));
-    self::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucwords('ñtërnâtiônàlizætIøN'));
-    self::assertSame('ÑtërnâtiônàlizætIøN Test câse', UTF8::ucwords('ñtërnâtiônàlizætIøN test câse', array('câse')));
-    self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ'));
-  }
-
-  public function testLcfirst()
-  {
-    self::assertSame('öäü', UTF8::lcfirst('Öäü'));
-    self::assertSame('κόσμε', UTF8::lcfirst('Κόσμε'));
-    self::assertSame('aBC-ÖÄÜ-中文空白', UTF8::lcfirst('ABC-ÖÄÜ-中文空白'));
-    self::assertSame('ñTËRNÂTIÔNÀLIZÆTIØN', UTF8::lcfirst('ÑTËRNÂTIÔNÀLIZÆTIØN'));
-    self::assertSame('ñTËRNÂTIÔNÀLIZÆTIØN', UTF8::lcfirst('ñTËRNÂTIÔNÀLIZÆTIØN'));
-    self::assertSame('', UTF8::lcfirst(''));
-    self::assertSame(' ', UTF8::lcfirst(' '));
-    self::assertSame("\t test", UTF8::lcfirst("\t test"));
-    self::assertSame('ñ', UTF8::lcfirst('Ñ'));
-    self::assertSame("ñTËRN\nâtiônàlizætiøn", UTF8::lcfirst("ÑTËRN\nâtiônàlizætiøn"));
-    self::assertSame('deja', UTF8::lcfirst('Deja'));
-    self::assertSame('σσς', UTF8::lcfirst('Σσς'));
-    self::assertSame('dEJa', UTF8::lcfirst('dEJa'));
-    self::assertSame('σσΣ', UTF8::lcfirst('σσΣ'));
-  }
-
-  public function testStrirpos()
-  {
-    self::assertSame(1, strripos('DJ', 'J'));
-    self::assertSame(1, UTF8::strripos('DJ', 'J'));
-
-    self::assertSame(3, UTF8::strripos('DÉJÀ', 'à'));
-    self::assertSame(false, UTF8::strripos('aςσb', 'ΣΣ'));
-    self::assertSame(6, UTF8::strripos('κόσμε-κόσμε', 'Κ'));
-    self::assertSame(11, UTF8::strripos('test κόσμε κόσμε test', 'Κ'));
-    self::assertSame(7, UTF8::strripos('中文空白-ÖÄÜ-中文空白', 'ü'));
-  }
-
-  public function testStrrpos()
-  {
-    self::assertSame(1, UTF8::strrpos('11--', '1-', 0, 'UTF-8'));
-    self::assertSame(2, UTF8::strrpos('-11--', '1-', 0, 'UTF-8'));
-    self::assertSame(false, UTF8::strrpos('한국어', '', 'UTF-8'));
-    self::assertSame(1, UTF8::strrpos('한국어', '국', 'UTF-8'));
-    self::assertSame(false, UTF8::strrpos('한국어', ''));
-    self::assertSame(1, UTF8::strrpos('한국어', '국'));
-    self::assertSame(6, UTF8::strrpos('κόσμε-κόσμε', 'κ'));
-    self::assertSame(13, UTF8::strrpos('test κόσμε κόσμε test', 'σ'));
-    self::assertSame(9, UTF8::strrpos('中文空白-ÖÄÜ-中文空白', '中'));
-  }
-
-  public function testStrpos()
-  {
-    for ($i = 0; $i <= 3; $i++) { // keep this loop for simple performance tests
-
-      // php compatible tests
-
-      self::assertSame(false, strpos('abc', ''));
-      self::assertSame(false, UTF8::strpos('abc', ''));
-
-      self::assertSame(false, strpos('abc', 'd'));
-      self::assertSame(false, UTF8::strpos('abc', 'd'));
-
-      self::assertSame(false, strpos('abc', 'a', 3));
-      self::assertSame(false, UTF8::strpos('abc', 'a', 3));
-
-      self::assertSame(false, strpos('abc', 'a', 1));
-      self::assertSame(false, UTF8::strpos('abc', 'a', 1));
-
-      self::assertSame(1, strpos('abc', 'b', 1));
-      self::assertSame(1, UTF8::strpos('abc', 'b', 1));
-
-      self::assertSame(1, strpos('abc', 'b', 0));
-      self::assertSame(1, UTF8::strpos('abc', 'b', 0));
-
-      // UTF-8 tests
-
-      self::assertSame(17, strpos('der Straße nach Paris', 'Paris')); // not correct
-      self::assertSame(16, UTF8::strpos('der Straße nach Paris', 'Paris'));
-
-      self::assertSame(3, strpos('한국어', '국')); // not correct
-      self::assertSame(1, UTF8::strpos('한국어', '국'));
-
-      self::assertSame(0, UTF8::strpos('κόσμε-κόσμε-κόσμε', 'κ'));
-      self::assertSame(7, UTF8::strpos('test κόσμε test κόσμε', 'σ'));
-      self::assertSame(8, UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'));
-    }
-  }
-
-  public function testStripos()
-  {
-    for ($i = 0; $i <= 5; $i++) {
-      self::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
-      self::assertSame(1, UTF8::stripos('aςσb', 'ΣΣ'));
-      self::assertSame(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
-      self::assertSame(4, UTF8::stripos('öäü-κόσμε-κόσμε-κόσμε', 'Κ'));
-      self::assertSame(5, UTF8::stripos('Test κόσμε test κόσμε', 'Κ'));
-      self::assertSame(4, UTF8::stripos('ABC-ÖÄÜ-中文空白-中文空白', 'ö'));
-    }
-  }
-
-  public function testCodepoints()
-  {
-    $testArray = array(
-        "\xF0\x90\x8C\xBC---" => array(
-            0 => 66364,
-            1 => 45,
-            2 => 45,
-            3 => 45,
-        ),
-        '中-abc'               => array(
-            0 => 20013,
-            1 => 45,
-            2 => 97,
-            3 => 98,
-            4 => 99,
-        ),
-        '₧{abc}'              => array(
-            0 => 8359,
-            1 => 123,
-            2 => 97,
-            3 => 98,
-            4 => 99,
-            5 => 125,
-        ),
-        'κöñ'                 => array(
-            0 => 954,
-            1 => 246,
-            2 => 241,
-        ),
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::codepoints($actual));
-    }
-
-    // --- U+xxxx format
-
-    self::assertSame(array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints('κöñ', true));
-    self::assertSame(
-        array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints(
-        array(
-            'κ',
-            'ö',
-            'ñ',
-        ), true
-    )
-    );
-  }
-
-  public function testOrd()
-  {
-    $nbsp = UTF8::html_entity_decode('&nbsp;');
-
-    $testArray = array(
-        "\xF0\x90\x8C\xBC" => 66364,
-        '中'                => 20013,
-        '₧'                => 8359,
-        'κ'                => 954,
-        'ö'                => 246,
-        'ñ'                => 241,
-        $nbsp              => 160,
-        '{'                => 123,
-        'a'                => 97,
-        '&'                => 38,
-        ' '                => 32,
-        ''                 => 0,
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::ord($actual));
-    }
-  }
-
-  public function testHtmlEncode()
-  {
-    $testArray = array(
-        '{-test'                  => '&#123;&#45;&#116;&#101;&#115;&#116;',
-        '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
-        'Dänisch (Å/å, Æ/æ, Ø/ø)' => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍&#32;💩&#32;😄&#32;&#10084;&#32;👍&#32;💩&#32;😄&#32;&#10084;', // TODO?
-        'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
-        'öäü'                     => '&#246;&#228;&#252;',
-        ' '                       => '&#32;',
-        ''                        => '',
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::html_encode($actual), 'tested:' . $actual);
-    }
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($actual, UTF8::html_decode(UTF8::html_encode($actual)), 'tested:' . $actual);
-    }
-
-    // ---
-
-    $testArray = array(
-        '{-test'                  => '{-test',
-        '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
-        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'D&#228;nisch (&#197;/&#229;, &#198;/&#230;, &#216;/&#248;)',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 &#10084; 👍 💩 😄 &#10084;',
-        'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
-        'öäü'                     => '&#246;&#228;&#252;',
-        ' '                       => ' ',
-        ''                        => '',
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
-    }
-
-    // --
-
-    $testArray = array(
-        '{-test'                  => '{-test',
-        '中文空白'                    => '中文空白',
-        'κόσμε'                   => 'κόσμε',
-        'öäü'                     => 'öäü',
-        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'Dänisch (Å/å, Æ/æ, Ø/ø)',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
-        ' '                       => ' ',
-        ''                        => '',
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
-    }
-  }
-
-  public function testSingleChrHtmlEncode()
-  {
-    $testArray = array(
-        '{' => '&#123;',
-        '中' => '&#20013;',
-        'κ' => '&#954;',
-        'ö' => '&#246;',
-        ''  => '',
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::single_chr_html_encode($actual));
-    }
-
-    self::assertSame('a', UTF8::single_chr_html_encode('a', true));
-  }
-
-  public function testChrSizeList()
-  {
-    $testArray = array(
-        "中文空白\xF0\x90\x8C\xBC" => array(
-            3,
-            3,
-            3,
-            3,
-            4,
-        ),
-        'öäü'                  => array(
-            2,
-            2,
-            2,
-        ),
-        'abc'                  => array(
-            1,
-            1,
-            1,
-        ),
-        ''                     => array(),
-        '中文空白-test'            => array(
-            3,
-            3,
-            3,
-            3,
-            1,
-            1,
-            1,
-            1,
-            1,
-        ),
-    );
-
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::chr_size_list($actual));
-    }
-  }
-
-  public function testStrnatcasecmp()
-  {
-    self::assertSame(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
-    self::assertSame(1, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
-    self::assertSame(-1, UTF8::strnatcasecmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
-    self::assertSame(-1, UTF8::strnatcasecmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
-    self::assertSame(1, UTF8::strnatcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
-    self::assertSame(0, UTF8::strnatcasecmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
-    self::assertSame(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
-  }
-
-  public function testStrnatcmp()
-  {
-    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
-    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
-    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
-    self::assertSame(-1, UTF8::strnatcmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
-    self::assertSame(1, UTF8::strnatcmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
-    self::assertSame(0, UTF8::strnatcmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
-    self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
-  }
-
-  public function testStrtocasefold()
-  {
-    self::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱'));    // Original (NFC)
-    self::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌'));   // Uppercased
-    self::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC
-
-    // valid utf-8
-    self::assertSame('hello world 中文空白', UTF8::strtocasefold('Hello world 中文空白'));
-
-    // invalid utf-8
-    self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
-  }
-
-  public function testStrtonatfold()
-  {
-    $utf8 = new UTF8();
-
-    // valid utf-8
-    $string = $this->invokeMethod($utf8, 'strtonatfold', array('Hello world 中文空白'));
-    self::assertSame('Hello world 中文空白', $string);
-
-    // invalid utf-8
-    $string = $this->invokeMethod($utf8, 'strtonatfold', array("Iñtërnâtiôn\xE9àlizætiøn"));
-    self::assertSame('', $string);
-  }
-
-  /**
-   * Call protected/private method of a class.
-   *
-   * @param object &$object    Instantiated object that we will run method on.
-   * @param string $methodName Method name to call
-   * @param array  $parameters Array of parameters to pass into method.
-   *
-   * @return mixed Method return.
-   */
-  public function invokeMethod(&$object, $methodName, array $parameters = array())
-  {
-    $reflection = new \ReflectionClass(get_class($object));
-    $method = $reflection->getMethod($methodName);
-    $method->setAccessible(true);
-
-    return $method->invokeArgs($object, $parameters);
   }
 
   public function testWordCount()
@@ -3306,50 +3246,23 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
   }
 
-  public function testMaxChrWidth()
+  public function testWordsLimit()
   {
     $testArray = array(
-        '中文空白' => 3,
-        'öäü'  => 2,
-        'abc'  => 1,
-        ''     => 0,
+        array('this is a test', 'this is a test', 5, '...'),
+        array('this is öäü-foo test', 'this is öäü-foo test', 8, '...'),
+        array('fòô...öäü', 'fòô bàř fòô', 1, '...öäü'),
+        array('fòô', 'fòô bàř fòô', 1, ''),
+        array('fòô bàř', 'fòô bàř fòô', 2, ''),
+        array('fòô', 'fòô', 1, ''),
+        array('', 'fòô', 0, ''),
+        array('', '', 1, '...'),
+        array('', '', 0, '...'),
     );
 
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::max_chr_width($actual));
+    foreach ($testArray as $test) {
+      self::assertSame($test[0], UTF8::words_limit($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
     }
-  }
-
-  public function testSplit()
-  {
-    self::assertSame(
-        array(
-            '中',
-            '文',
-            '空',
-            '白',
-        ),
-        UTF8::split('中文空白')
-    );
-    self::assertSame(
-        array(
-            '中文',
-            '空白',
-        ),
-        UTF8::split('中文空白', 2)
-    );
-    self::assertSame(array('中文空白'), UTF8::split('中文空白', 4));
-    self::assertSame(array('中文空白'), UTF8::split('中文空白', 8));
-
-    self::assertSame(array('1234'), UTF8::split(1234, 8));
-  }
-
-  public function testChunkSplit()
-  {
-    $result = UTF8::chunk_split('ABC-ÖÄÜ-中文空白-κόσμε', 3);
-    $expected = "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε";
-
-    self::assertSame($expected, $result);
   }
 
   public function testWs()
@@ -3360,16 +3273,140 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(true, count($whitespace) > 0);
   }
 
-  public function testUrldecodeFixWin1252Chars()
+  public function testcleanParameter()
   {
-    $urldecode_fix_win1252_chars = UTF8::urldecode_fix_win1252_chars();
+    $dirtyTestString = "\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃";
 
-    self::assertSame(true, is_array($urldecode_fix_win1252_chars));
-    self::assertSame(true, count($urldecode_fix_win1252_chars) > 0);
+    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString));
+    self::assertSame("\xEF\xBB\xBF„Abcdef \x20…” — 😃", UTF8::clean($dirtyTestString, false, true, false, false));
+    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, true));
+    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, false));
+    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, true));
+    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, false));
+    self::assertSame("\xEF\xBB\xBF\"Abcdef  ...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, false));
+    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, true));
+    self::assertSame("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, false));
+    self::assertSame("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, true));
+    self::assertSame("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, false));
+    self::assertSame("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, true));
+    self::assertSame('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, false));
+    self::assertSame('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, true));
+    self::assertSame('"Abcdef  ..." - 😃', UTF8::clean($dirtyTestString, true, true, true, false));
+    self::assertSame("\"Abcdef\xc2\xa0 ...\" - 😃", UTF8::clean($dirtyTestString, true, true, true, true));
   }
 
-  public function setUp()
+  /**
+   * @return array
+   */
+  public function trimProvider()
   {
-    error_reporting(E_STRICT);
+    return array(
+        array(
+            1,
+            '1',
+        ),
+        array(
+            -1,
+            '-1',
+        ),
+        array(
+            '  ',
+            '',
+        ),
+        array(
+            '',
+            '',
+        ),
+        array(
+            '　中文空白　 ',
+            '中文空白',
+        ),
+        array(
+            'do not go gentle into that good night',
+            'do not go gentle into that good night',
+        ),
+    );
+  }
+
+  /**
+   * @return array
+   */
+  public function trimProviderAdvanced()
+  {
+    return array(
+        array(
+            1,
+            '1',
+        ),
+        array(
+            -1,
+            '-1',
+        ),
+        array(
+            '  ',
+            '',
+        ),
+        array(
+            '',
+            '',
+        ),
+        array(
+            ' 白 ',
+            '白',
+        ),
+        array(
+            '   白白 ',
+            '白白',
+        ),
+        array(
+            '　中文空白',
+            '　中文空白',
+        ),
+        array(
+            'do not go gentle into that good night',
+            'do not go gentle into that good night',
+        ),
+    );
+  }
+
+  /**
+   * @return array
+   */
+  public function trimProviderAdvancedWithMoreThenTwoBytes()
+  {
+    return array(
+        array(
+            1,
+            '1',
+        ),
+        array(
+            -1,
+            '-1',
+        ),
+        array(
+            '  ',
+            '  ',
+        ),
+        array(
+            '',
+            '',
+        ),
+        array(
+            '白',
+            '',
+        ),
+        array(
+            '白白',
+            '',
+        ),
+        array(
+            '　中文空白',
+            '　中文空',
+        ),
+        array(
+            'do not go gentle into that good night',
+            'do not go gentle into that good night',
+        ),
+    );
   }
 }
