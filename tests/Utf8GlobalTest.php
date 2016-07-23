@@ -1528,7 +1528,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('foo 測試', $array['arr'][0]);
     self::assertSame('ການທົດສອບ', $array['arr'][1]);
 
-    self::assertSame('測試', $array['Iñtërnâtiônéàlizætiøn']);
+    self::assertSame('測試', $array['Iñtërnâtiônàlizætiøn']);
 
     // ---
 

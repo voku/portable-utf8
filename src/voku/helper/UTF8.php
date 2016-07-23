@@ -4204,7 +4204,8 @@ class UTF8
   {
     // init
     self::checkForSupport();
-    $str = self::filter($str);
+
+    $str = self::clean($str);
 
     $return = \mb_parse_str($str, $result);
     if ($return === false || empty($result)) {
@@ -5122,7 +5123,7 @@ class UTF8
    */
   public static function strip_tags($str, $allowable_tags = null)
   {
-    //clean broken utf8
+    // clean broken utf8
     $str = self::clean($str);
 
     return strip_tags($str, $allowable_tags);
