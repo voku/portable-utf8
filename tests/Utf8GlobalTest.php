@@ -489,7 +489,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $tests = array(
         '  -ABC-中文空白-  ' => '  -ABC-????-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => '???',
+        'öäü'            => 'öäü',
         ''               => '',
         'abc'            => 'abc',
         'Berbée'         => 'Berbée',
@@ -1528,7 +1528,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         " foo\t foo "                                                                         => ' foo	 foo ',
     );
 
-    for ($i = 0; $i < 2; $i++) {
+    for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
       foreach ($tests as $before => $after) {
         self::assertSame($after, UTF8::normalize_whitespace($before));
       }
@@ -1857,9 +1857,17 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         01                              => 'ASCII', // ASCII
     );
 
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
+    for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+      foreach ($tests as $before => $after) {
+        self::assertSame($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
+      }
     }
+
+    $testString = file_get_contents(__DIR__ . '/fixtures/latin.txt');
+    self::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString));
+
+    $testString = file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
+    self::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString)); // ?
   }
 
   public function testStrLimit()
@@ -2095,7 +2103,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStripos()
   {
-    for ($i = 0; $i <= 5; $i++) {
+    for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
       self::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
       self::assertSame(1, UTF8::stripos('aςσb', 'ΣΣ'));
       self::assertSame(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
@@ -2210,7 +2218,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrpos()
   {
-    for ($i = 0; $i <= 3; $i++) { // keep this loop for simple performance tests
+    for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
 
       // php compatible tests
 
@@ -2993,7 +3001,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
    */
   public function testTrim($input, $output)
   {
-    for ($i = 0; $i <= 10; $i++) {
+    for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
       self::assertSame($output, UTF8::trim($input));
     }
   }

@@ -4317,10 +4317,9 @@ class UTF8
   }
 
   /**
-   * Remove Invisible Characters
+   * Remove invisible characters from a string.
    *
-   * This prevents sandwiching null characters
-   * between ascii characters, like Java\0script.
+   * e.g.: This prevents sandwiching null characters between ascii characters, like Java\0script.
    *
    * copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
    *
@@ -4352,7 +4351,7 @@ class UTF8
   }
 
   /**
-   * replace diamond question mark (�)
+   * Replace the diamond question mark (�) with the replacement.
    *
    * @param string $str
    * @param string $unknown
@@ -4612,14 +4611,14 @@ class UTF8
     // INFO: UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always with "\mb_detect_encoding()"
 
     $detectOrder = array(
-        'windows-1251',
-        'ISO-8859-1',
-        'ASCII',
-        'UTF-8',
+        'ISO-8859-1', 'ISO-8859-2', 'ISO-8859-3', 'ISO-8859-4', 'ISO-8859-5',
+        'ISO-8859-6', 'ISO-8859-7', 'ISO-8859-8', 'ISO-8859-9', 'ISO-8859-10',
+        'ISO-8859-13', 'ISO-8859-14', 'ISO-8859-15', 'ISO-8859-16',
+        'WINDOWS-1251', 'WINDOWS-1252', 'WINDOWS-1254',
+        'ISO-2022-JP', 'JIS', 'EUC-JP',
     );
 
     self::checkForSupport();
-
     $encoding = \mb_detect_encoding($str, $detectOrder, true);
     if ($encoding) {
       return $encoding;

@@ -539,12 +539,71 @@ Create an array containing a range of UTF-8 characters.
 UTF8::range('κ', 'ζ'); // array('κ', 'ι', 'θ', 'η', 'ζ',)
 ```
 
-##### remove_bom(mixed $var1, mixed $var2) : array
+##### remove_bom(string $str) : string
 
 Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.
 
 ```php
 UTF8::remove_bom("\xEF\xBB\xBFΜπορώ να"); // 'Μπορώ να'
 ```
+
+##### remove_duplicates(string $str, string|array $what = ' ') : string
+
+Removes duplicate occurrences of a string in another string.
+
+```php
+UTF8::remove_duplicates('öäü-κόσμεκόσμε-äöü', 'κόσμε'); // 'öäü-κόσμε-äöü'
+```
+
+##### remove_invisible_characters(string $str, bool $url_encoded = true, string $replacement = '') : string
+
+Remove invisible characters from a string.
+
+```php
+UTF8::remove_duplicates("κόσ\0με"); // 'κόσμε'
+```
+
+##### replace_diamond_question_mark(string $str, string $unknown = '?') : string
+
+Replace the diamond question mark (�) with the replacement.
+
+```php
+UTF8::replace_diamond_question_mark('中文空白�'); // '中文空白'
+```
+
+##### rtrim(string $str = '', string $chars = INF) : string
+
+Strip whitespace or other characters from end of a UTF-8 string.
+
+```php
+UTF8::rtrim('-ABC-中文空白-  '); // '-ABC-中文空白-'
+```
+
+##### single_chr_html_encode(string $char, bool $keepAsciiChars = false) : string
+
+Converts a UTF-8 character to HTML Numbered Entity like "&#123;".
+
+```php
+UTF8::single_chr_html_encode('κ'); // '&#954;'
+```
+
+##### split(string $str, int $length = 1, bool $cleanUtf8 = false) : array
+
+Convert a string to an array of Unicode characters.
+
+```php
+UTF8::split('中文空白'); // array('中', '文', '空', '白')
+```
+
+##### str_detect_encoding(string $str, int $length = 1, bool $cleanUtf8 = false) : array
+
+Optimized "\mb_detect_encoding()"-function -> with support for UTF-16 and UTF-32.
+
+```php
+UTF8::str_detect_encoding('中文空白'); // array('中', '文', '空', '白')
+```
+
+
+
 
 ... TODO
