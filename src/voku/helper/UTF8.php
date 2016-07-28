@@ -4680,7 +4680,7 @@ class UTF8
     }
 
     $subject = preg_replace($search, $replace, $subject, -1, $replace);
-    $count = $replace;
+    $count = $replace; // used as reference parameter
 
     return $subject;
   }
@@ -4875,7 +4875,7 @@ class UTF8
   }
 
   /**
-   * Convert a string to an array.
+   * Split a string into an array.
    *
    * @param string $str
    * @param int    $len
@@ -4950,11 +4950,11 @@ class UTF8
    *
    * @param string $str    The input string.
    * @param int    $format <strong>0</strong> => return a number of words<br />
-   *                       <strong>1</strong> => return an array of words
+   *                       <strong>1</strong> => return an array of words<br />
    *                       <strong>2</strong> => return an array of words with word-offset as key
-   * @param string $charlist
+   * @param string $charlist Chars that contains to words and do not start a new word (default: "'", "’")
    *
-   * @return array|float The number of words in the string
+   * @return array|int The number of words in the string
    */
   public static function str_word_count($str, $format = 0, $charlist = '')
   {

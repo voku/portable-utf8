@@ -1844,6 +1844,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $tests = array(
         'に対するパッチです'                     => 'UTF-8', // ISO-2022-JP, but PHP can't detect it ...
         'ASCII'                         => 'ASCII', // ASCII
+        'Abc'                           => 'ASCII', // ASCII
         'Iñtërnâtiônàlizætiøn'          => 'UTF-8', // UTF-8
         '亜 唖 娃 阿 哀 愛 挨 姶 逢 葵 茜 穐 悪 握 渥' => 'UTF-8', // EUC-JP
         'áéóú'                          => 'UTF-8', // ISO-8859-1
@@ -1881,6 +1882,25 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $test) {
       self::assertSame($test[0], UTF8::str_limit_after_word($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
+    }
+  }
+
+  public function testStrShuffle()
+  {
+    $testArray = array(
+        'this is a test',
+        'this is öäü-foo test',
+        'fòô bàř fòô',
+    );
+
+    foreach ($testArray as $test) {
+      self::assertEquals(
+          array(),
+          array_diff(
+              UTF8::str_split($test),
+              UTF8::str_split(UTF8::str_shuffle($test))
+          )
+          , 'tested: ' . $test);
     }
   }
 
@@ -3288,11 +3308,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testWordCount()
   {
     $testArray = array(
-        '中文空白'        => 1,
-        'öäü öäü öäü' => 3,
-        'abc'         => 1,
-        ''            => 0,
-        ' '           => 0,
+        '中文空白 öäü abc' => 3,
+        'öäü öäü öäü'     => 3,
+        'abc'             => 1,
+        ''                => 0,
+        ' '               => 0,
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -3316,6 +3336,35 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
             9 => 'öäü',
         ),
         UTF8::str_word_count('中文空白 foo öäü', 2)
+    );
+    self::assertSame(
+        array(
+            'test',
+            'foo',
+            'test',
+            'test-test',
+            'test',
+            'test',
+            'test\'s',
+            'test’s',
+            'test#s',
+        ),
+        UTF8::str_word_count('test,foo test test-test test_test test\'s test’s test#s', 1, '#')
+    );
+    self::assertSame(
+        array(
+            'test',
+            'foo',
+            'test',
+            'test-test',
+            'test',
+            'test',
+            'test\'s',
+            'test’s',
+            'test',
+            's',
+        ),
+        UTF8::str_word_count('test,foo test test-test test_test test\'s test’s test#s', 1)
     );
   }
 

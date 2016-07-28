@@ -595,15 +595,95 @@ Convert a string to an array of Unicode characters.
 UTF8::split('中文空白'); // array('中', '文', '空', '白')
 ```
 
-##### str_detect_encoding(string $str, int $length = 1, bool $cleanUtf8 = false) : array
+##### str_detect_encoding(string $str) : string
 
 Optimized "\mb_detect_encoding()"-function -> with support for UTF-16 and UTF-32.
 
 ```php
-UTF8::str_detect_encoding('中文空白'); // array('中', '文', '空', '白')
+UTF8::str_detect_encoding('中文空白'); // 'UTF-8'
+UTF8::str_detect_encoding('Abc'); // 'ASCII'
 ```
 
+##### str_ireplace(mixed $search, mixed $replace, mixed $subject, int &$count = null) : mixed
 
+Case-insensitive and UTF-8 safe version of <function>str_replace</function>.
 
+```php
+UTF8::str_ireplace('lIzÆ', 'lise', array('Iñtërnâtiônàlizætiøn')); // array('Iñtërnâtiônàlisetiøn')
+```
+
+##### str_limit_after_word(string $str, int $length = 100, stirng $strAddOn = '...') : string
+
+Limit the number of characters in a string, but also after the next word.
+
+```php
+UTF8::str_limit_after_word('fòô bàř fòô', 8, ''); // 'fòô bàř'
+```
+
+##### str_pad(string $str, int $pad_length, string $pad_string = ' ', int $pad_type = STR_PAD_RIGHT) : string
+
+Pad a UTF-8 string to given length with another string.
+
+```php
+UTF8::str_pad('中文空白', 10, '_', STR_PAD_BOTH); // '___中文空白___'
+```
+
+##### str_pad(string $str, int $pad_length, string $pad_string = ' ', int $pad_type = STR_PAD_RIGHT) : string
+
+Pad a UTF-8 string to given length with another string.
+
+```php
+UTF8::str_pad('中文空白', 10, '_', STR_PAD_BOTH); // '___中文空白___'
+```
+
+##### str_repeat(string $str, int $multiplier) : string
+
+Repeat a string.
+
+```php
+UTF8::str_repeat("°~\xf0\x90\x28\xbc", 2); // '°~ð(¼°~ð(¼'
+```
+
+##### str_shuffle(string $str) : string
+
+Shuffles all the characters in the string.
+
+```php
+UTF8::str_shuffle('fòô bàř fòô'); // 'àòôřb ffòô '
+```
+
+##### str_sort(string $str, bool $unique = false, bool $desc = false) : string
+
+Sort all characters according to code points.
+
+```php
+UTF8::str_sort('  -ABC-中文空白-  '); // '    ---ABC中文白空'
+```
+
+##### str_split(string $str, int $len = 1) : array
+
+Split a string into an array.
+
+```php
+UTF8::split('déjà', 2); // array('dé', 'jà')
+```
+
+##### str_to_binary(string $str) : string
+
+Get a binary representation of a specific string.
+
+```php
+UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'
+```
+
+##### str_word_count(string $str, int $format = 0, string $charlist = '') : string
+
+Get a binary representation of a specific string.
+
+```php
+UTF8::str_word_count('中文空白 öäü abc'); // 3
+UTF8::str_word_count('中文空白 öäü abc', 1); // array('中文空白', 'öäü', 'abc')
+UTF8::str_word_count('中文空白 öäü abc', 2); // array(0 => '中文空白', 5 => 'öäü', 9 => 'abc')
+```
 
 ... TODO
