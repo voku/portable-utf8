@@ -1899,8 +1899,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
           array_diff(
               UTF8::str_split($test),
               UTF8::str_split(UTF8::str_shuffle($test))
-          )
-          , 'tested: ' . $test);
+          ), 'tested: ' . $test);
     }
   }
 
