@@ -4952,7 +4952,7 @@ class UTF8
    * @param int    $format <strong>0</strong> => return a number of words<br />
    *                       <strong>1</strong> => return an array of words<br />
    *                       <strong>2</strong> => return an array of words with word-offset as key
-   * @param string $charlist Chars that contains to words and do not start a new word (default: "'", "’")
+   * @param string $charlist Additional chars that contains to words and do not start a new word (default: "'", "’")
    *
    * @return array|int The number of words in the string
    */
@@ -4996,7 +4996,9 @@ class UTF8
    * @param string $str1
    * @param string $str2
    *
-   * @return int Returns < 0 if str1 is less than str2; > 0 if str1 is greater than str2, and 0 if they are equal.
+   * @return int <strong>&lt; 0</strong> if str1 is less than str2;<br />
+   *             <strong>&gt; 0</strong> if str1 is greater than str2,<br />
+   *             <strong>0</strong> if they are equal.
    */
   public static function strcasecmp($str1, $str2)
   {
@@ -5004,13 +5006,13 @@ class UTF8
   }
 
   /**
-   * String comparison.
+   * Case-sensitive string comparison.
    *
    * @param string $str1
    * @param string $str2
    *
-   * @return int  <strong>< 0</strong> if str1 is less than str2<br />
-   *              <strong>> 0</strong> if str1 is greater than str2<br />
+   * @return int  <strong>&lt; 0</strong> if str1 is less than str2<br />
+   *              <strong>&gt; 0</strong> if str1 is greater than str2<br />
    *              <strong>0</strong> if they are equal.
    */
   public static function strcmp($str1, $str2)
@@ -5237,8 +5239,8 @@ class UTF8
    * @param string $str1
    * @param string $str2
    *
-   * @return int <strong>< 0</strong> if str1 is less than str2<br />
-   *             <strong>> 0</strong> if str1 is greater than str2<br />
+   * @return int <strong>&lt; 0</strong> if str1 is less than str2<br />
+   *             <strong>&gt; 0</strong> if str1 is greater than str2<br />
    *             <strong>0</strong> if they are equal
    */
   public static function strnatcasecmp($str1, $str2)

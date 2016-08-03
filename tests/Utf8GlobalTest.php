@@ -3328,6 +3328,24 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ),
         UTF8::str_word_count('中文空白 foo öäü', 1)
     );
+    self::assertSame(3, UTF8::str_word_count('中文空白 foo öäü#s', 0, '#'));
+    self::assertSame(4, UTF8::str_word_count('中文空白 foo öäü#s', 0, ''));
+    self::assertSame(
+        array(
+            '中文空白',
+            'foo',
+            'öäü#s',
+        ),
+        UTF8::str_word_count('中文空白 foo öäü#s', 1, '#')
+    );
+    self::assertSame(
+        array(
+            0 => '中文空白',
+            5 => 'foo',
+            9 => 'öäü#s',
+        ),
+        UTF8::str_word_count('中文空白 foo öäü#s', 2, '#')
+    );
     self::assertSame(
         array(
             0 => '中文空白',

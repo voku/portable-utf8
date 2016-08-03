@@ -672,6 +672,8 @@ UTF8::split('déjà', 2); // array('dé', 'jà')
 
 Get a binary representation of a specific string.
 
+INFO: opposite to UTF8::binary_to_str()
+
 ```php
 UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'
 ```
@@ -681,9 +683,44 @@ UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'
 Get a binary representation of a specific string.
 
 ```php
-UTF8::str_word_count('中文空白 öäü abc'); // 3
-UTF8::str_word_count('中文空白 öäü abc', 1); // array('中文空白', 'öäü', 'abc')
-UTF8::str_word_count('中文空白 öäü abc', 2); // array(0 => '中文空白', 5 => 'öäü', 9 => 'abc')
+// format: 0 -> return only word count (int)
+//
+UTF8::str_word_count('中文空白 öäü abc#c'); // 4
+UTF8::str_word_count('中文空白 öäü abc#c', 0, '#'); // 3
+
+// format: 1 -> return words (array) 
+//
+UTF8::str_word_count('中文空白 öäü abc#c', 1); // array('中文空白', 'öäü', 'abc', 'c')
+UTF8::str_word_count('中文空白 öäü abc#c', 1, '#'); // array('中文空白', 'öäü', 'abc#c')
+
+// format: 2 -> return words with offset (array) 
+//
+UTF8::str_word_count('中文空白 öäü ab#c', 2); // array(0 => '中文空白', 5 => 'öäü', 9 => 'abc', 13 => 'c')
+UTF8::str_word_count('中文空白 öäü ab#c', 2, '#'); // array(0 => '中文空白', 5 => 'öäü', 9 => 'abc#c')
+```
+
+##### strcasecmp(string $str1, string $str2) : int
+
+Case-insensitive string comparison: < 0 if str1 is less than str2; 
+                                    > 0 if str1 is greater than str2, 
+                                    0 if they are equal.
+
+INFO: Case-insensitive version of UTF8::strcmp()
+
+```php
+UTF8::strcasecmp("iñtërnâtiôn\nàlizætiøn", "Iñtërnâtiôn\nàlizætiøn"); // 0
+```
+
+##### strcmp(string $str1, string $str2) : int
+
+Case-insensitive string comparison: < 0 if str1 is less than str2; 
+                                    > 0 if str1 is greater than str2, 
+                                    0 if they are equal.
+
+INFO: Case-sensitive version of UTF8::strcasecmp()
+
+```php
+UTF8::strcmp("iñtërnâtiôn\nàlizætiøn", "iñtërnâtiôn\nàlizætiøn"); // 0
 ```
 
 ... TODO
