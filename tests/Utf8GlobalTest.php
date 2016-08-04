@@ -1672,7 +1672,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strncmp($before, 'ü', 10), 'tested: ' . $before);
+      if ($after < 0) {
+        self::assertSame(true, UTF8::strncmp($before, 'ü', 10) < 0, 'tested: ' . $before);
+      } else if ($after > 0) {
+        self::assertSame(true, UTF8::strncmp($before, 'ü', 10) > 0, 'tested: ' . $before);
+      } else {
+        self::assertSame(true, UTF8::strncmp($before, 'ü', 10) === 0, 'tested: ' . $before);
+      }
     }
   }
 
@@ -1694,7 +1700,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strncasecmp($before, 'ü', 10), 'tested: ' . $before);
+      if ($after < 0) {
+        self::assertSame(true, UTF8::strncasecmp($before, 'ü', 10) < 0, 'tested: ' . $before);
+      } else if ($after > 0) {
+        self::assertSame(true, UTF8::strncasecmp($before, 'ü', 10) > 0, 'tested: ' . $before);
+      } else {
+        self::assertSame(true, UTF8::strncasecmp($before, 'ü', 10) === 0, 'tested: ' . $before);
+      }
+
     }
   }
 
