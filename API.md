@@ -116,6 +116,8 @@ UTF8::cleanup("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃 - DÃ¼sseldorf"
 
 Accepts a string and returns an array of Unicode code points.
 
+INFO: opposite to UTF8::string()
+
 ```php
 UTF8::codepoints('κöñ'); // array(954, 246, 241)
 // ... OR ...
@@ -699,6 +701,32 @@ UTF8::str_word_count('中文空白 öäü ab#c', 2); // array(0 => '中文空白
 UTF8::str_word_count('中文空白 öäü ab#c', 2, '#'); // array(0 => '中文空白', 5 => 'öäü', 9 => 'abc#c')
 ```
 
+##### strcmp(string $str1, string $str2) : int
+
+Case-insensitive string comparison: < 0 if str1 is less than str2; 
+                                    > 0 if str1 is greater than str2, 
+                                    0 if they are equal.
+
+```php
+UTF8::strcmp("iñtërnâtiôn\nàlizætiøn", "iñtërnâtiôn\nàlizætiøn"); // 0
+```
+
+##### strnatcmp(string $str1, string $str2) : int
+
+Case sensitive string comparisons using a "natural order" algorithm: < 0 if str1 is less than str2; 
+                                                                     > 0 if str1 is greater than str2, 
+                                                                     0 if they are equal.
+
+INFO: natural order version of UTF8::strcmp()
+
+```php
+UTF8::strnatcmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'); // -1
+UTF8::strcmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'); // 1
+
+UTF8::strnatcmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'); // 1
+UTF8::strcmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!')); // -1
+```
+
 ##### strcasecmp(string $str1, string $str2) : int
 
 Case-insensitive string comparison: < 0 if str1 is less than str2; 
@@ -711,16 +739,83 @@ INFO: Case-insensitive version of UTF8::strcmp()
 UTF8::strcasecmp("iñtërnâtiôn\nàlizætiøn", "Iñtërnâtiôn\nàlizætiøn"); // 0
 ```
 
-##### strcmp(string $str1, string $str2) : int
+##### strnatcasecmp(string $str1, string $str2) : int
 
-Case-insensitive string comparison: < 0 if str1 is less than str2; 
-                                    > 0 if str1 is greater than str2, 
-                                    0 if they are equal.
+Case insensitive string comparisons using a "natural order" algorithm: < 0 if str1 is less than str2; 
+                                                                       > 0 if str1 is greater than str2, 
+                                                                       0 if they are equal.
 
-INFO: Case-sensitive version of UTF8::strcasecmp()
+INFO: natural order version of UTF8::strcasecmp()
 
 ```php
-UTF8::strcmp("iñtërnâtiôn\nàlizætiøn", "iñtërnâtiôn\nàlizætiøn"); // 0
+UTF8::strnatcasecmp('2', '10Hello WORLD 中文空白!'); // -1
+UTF8::strcasecmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'); // 1
+    
+UTF8::strnatcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'); // 1
+UTF8::strcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'); // -1
 ```
 
-... TODO
+##### strncasecmp(string $str1, string $str2, int $len) : int
+
+Case-insensitive string comparison of the first n characters.: 
+    < 0 if str1 is less than str2; 
+    > 0 if str1 is greater than str2, 
+    0 if they are equal.
+
+INFO: Case-insensitive version of UTF8::strncmp()
+
+```php
+UTF8::strcasecmp("iñtërnâtiôn\nàlizætiøn", "Iñtërnâtiôn\nàlizætiøn"); // 0
+```
+
+
+##### string(string $str1, string $str2) : int
+
+Create a UTF-8 string from code points.
+
+INFO: opposite to UTF8::codepoints()
+
+```php
+UTF8::string(array(246, 228, 252)); // 'öäü'
+```
+
+##### string_has_bom(string $str) : bool
+
+Checks if string starts with "BOM" (Byte Order Mark Character) character.
+
+alias: UTF8::hasBom()
+
+```php
+UTF8::string_has_bom("\xef\xbb\xbf foobar"); // true
+```
+
+##### strip_tags(string $str, sting|null $allowable_tags = null) : string
+
+Strip HTML and PHP tags from a string + clean invalid UTF-8.
+
+```php
+UTF8::strip_tags("<span>κόσμε\xa0\xa1</span>"); // 'κόσμε'
+```
+
+##### stripos($str, $needle, $before_needle = false) : string|false
+
+Finds position of first occurrence of a string within another, case insensitive.
+
+```php
+$str = 'iñtërnâtiônàlizætiøn';
+$search = 'NÂT';
+
+UTF8::stristr($str, $search)); // 'nâtiônàlizætiøn'
+UTF8::stristr($str, $search, true)); // 'iñtër'
+```
+
+##### strlen(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : int
+
+Get the string length, not the byte-length!
+
+```php
+UTF8::strlen('κόσμε')); // 5
+```
+
+
+... TODO ...

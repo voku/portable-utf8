@@ -2111,6 +2111,8 @@ class UTF8
   /**
    * Accepts a string or a array of strings and returns an array of Unicode code points.
    *
+   * INFO: opposite to UTF8::string()
+   *
    * @param    string|string[] $arg     A UTF-8 encoded string or an array of such strings.
    * @param    bool            $u_style If True, will return code points in U+xxxx format,
    *                                    default, code points will be returned as integers.
@@ -4663,8 +4665,7 @@ class UTF8
    *                       reference.
    *                       </p>
    *
-   * @return mixed a string or an array of replacements.
-   * @since 5.0
+   * @return mixed A string or an array of replacements.
    */
   public static function str_ireplace($search, $replace, $subject, &$count = null)
   {
@@ -4993,6 +4994,8 @@ class UTF8
   /**
    * Case-insensitive string comparison.
    *
+   * INFO: Case-insensitive version of UTF8::strcmp()
+   *
    * @param string $str1
    * @param string $str2
    *
@@ -5054,13 +5057,15 @@ class UTF8
   }
 
   /**
-   * Makes a UTF-8 string from code points.
+   * Create a UTF-8 string from code points.
    *
-   * @param    array $array Integer or Hexadecimal codepoints
+   * INFO: opposite to UTF8::codepoints()
    *
-   * @return   string UTF-8 encoded string
+   * @param  array $array Integer or Hexadecimal codepoints
+   *
+   * @return string UTF-8 encoded string
    */
-  public static function string($array)
+  public static function string(array $array)
   {
     return implode(
         array_map(
@@ -5071,6 +5076,20 @@ class UTF8
             $array
         )
     );
+  }
+
+  /**
+   * alias for "UTF8::string_has_bom()"
+   *
+   * @see UTF8::string_has_bom()
+   *
+   * @param string $str
+   *
+   * @return bool
+   */
+  public static function hasBom($str)
+  {
+    return self::string_has_bom($str);
   }
 
   /**
@@ -5092,7 +5111,7 @@ class UTF8
   }
 
   /**
-   * Strip HTML and PHP tags from a string.
+   * Strip HTML and PHP tags from a string + clean invalid UTF-8.
    *
    * @link http://php.net/manual/en/function.strip-tags.php
    *
@@ -5135,11 +5154,10 @@ class UTF8
    *                           to start searching
    *                           </p>
    * @param string  $encoding
-   * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
+   * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string.
    *
-   * @return int Return the numeric position of the first occurrence of
-   * needle in the haystack
-   * string, or false if needle is not found.
+   * @return int|false Return the numeric position of the first occurrence of needle in the haystack string,<br />
+   *                   or false if needle is not found.
    */
   public static function stripos($haystack, $needle, $offset = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
@@ -5175,7 +5193,7 @@ class UTF8
    * @param string $needle
    * @param bool   $before_needle
    *
-   * @return false|string
+   * @return false|string sub-string, or false if needle is not found
    */
   public static function stristr($str, $needle, $before_needle = false)
   {
@@ -5198,10 +5216,7 @@ class UTF8
    * @param string  $encoding  Set the charset for e.g. "\mb_" function
    * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
    *
-   * @return int the number of characters in
-   *           string str having character encoding
-   *           encoding. A multi-byte character is
-   *           counted as 1.
+   * @return int the number of characters in the string $str having character encoding $encoding. (One multi-byte character counted as +1)
    */
   public static function strlen($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
@@ -5236,6 +5251,8 @@ class UTF8
   /**
    * Case insensitive string comparisons using a "natural order" algorithm.
    *
+   * INFO: natural order version of UTF8::strcasecmp()
+   *
    * @param string $str1
    * @param string $str2
    *
@@ -5251,6 +5268,8 @@ class UTF8
   /**
    * String comparisons using a "natural order" algorithm
    *
+   * INFO: natural order version of UTF8::strcmp()
+   *
    * @link  http://php.net/manual/en/function.strnatcmp.php
    *
    * @param string $str1 <p>
@@ -5264,8 +5283,6 @@ class UTF8
    * str1 is less than str2; &gt;
    * 0 if str1 is greater than
    * str2, and 0 if they are equal.
-   * @since 4.0
-   * @since 5.0
    */
   public static function strnatcmp($str1, $str2)
   {
@@ -5273,7 +5290,7 @@ class UTF8
   }
 
   /**
-   * Binary safe case-insensitive string comparison of the first n characters
+   * Case-insensitive string comparison of the first n characters.
    *
    * @link  http://php.net/manual/en/function.strncasecmp.php
    *
@@ -5290,8 +5307,6 @@ class UTF8
    * @return int &lt; 0 if <i>str1</i> is less than
    * <i>str2</i>; &gt; 0 if <i>str1</i> is
    * greater than <i>str2</i>, and 0 if they are equal.
-   * @since 4.0.4
-   * @since 5.0
    */
   public static function strncasecmp($str1, $str2, $len)
   {
@@ -5299,7 +5314,7 @@ class UTF8
   }
 
   /**
-   * Binary safe string comparison of the first n characters
+   * String comparison of the first n characters.
    *
    * @link  http://php.net/manual/en/function.strncmp.php
    *
@@ -5317,12 +5332,13 @@ class UTF8
    * <i>str2</i>; &gt; 0 if <i>str1</i>
    * is greater than <i>str2</i>, and 0 if they are
    * equal.
-   * @since 4.0
-   * @since 5.0
    */
   public static function strncmp($str1, $str2, $len)
   {
-    return self::strcmp(self::substr($str1, 0, $len), self::substr($str2, 0, $len));
+    $str1 = self::substr($str1, 0, $len);
+    $str2 = self::substr($str2, 0, $len);
+
+    return self::strcmp($str1, $str2);
   }
 
   /**
@@ -5337,9 +5353,7 @@ class UTF8
    *                          This parameter is case sensitive.
    *                          </p>
    *
-   * @return string a string starting from the character found, or false if it is
-   * not found.
-   * @since 5.0
+   * @return string a string starting from the character found, or false if it is not found.
    */
   public static function strpbrk($haystack, $char_list)
   {
@@ -5798,8 +5812,6 @@ class UTF8
    * translating all occurrences of each character in
    * from to the corresponding character in
    * to.
-   * @since 4.0
-   * @since 5.0
    */
   public static function strtr($str, $from, $to = INF)
   {
@@ -5853,8 +5865,7 @@ class UTF8
    * @param string  $encoding
    * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
    *
-   * @return string mb_substr returns the portion of
-   * str specified by the start and length parameters.
+   * @return string Returns a sub-string specified by the start and length parameters.
    */
   public static function substr($str, $start = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
@@ -5956,8 +5967,6 @@ class UTF8
    *                         </p>
    *
    * @return int This functions returns an integer.
-   * @since 4.0
-   * @since 5.0
    */
   public static function substr_count($haystack, $needle, $offset = 0, $length = null)
   {
@@ -6962,8 +6971,6 @@ class UTF8
    *                      </p>
    *
    * @return string the given string wrapped at the specified column.
-   * @since 4.0.2
-   * @since 5.0
    */
   public static function wordwrap($str, $width = 75, $break = "\n", $cut = false)
   {

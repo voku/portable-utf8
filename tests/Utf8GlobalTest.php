@@ -1654,8 +1654,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame($expected, UTF8::range("\x20", "\x23"));
   }
 
-  // TODO: different result with different php-versions / -configs, need some more testing
-  /*
   public function testStrncmp()
   {
     $tests = array(
@@ -1699,7 +1697,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($after, UTF8::strncasecmp($before, 'ü', 10), 'tested: ' . $before);
     }
   }
-  */
 
   public function testRemoveBom()
   {
@@ -2062,6 +2059,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
             )
         )
     );
+    self::assertSame('中文空白', UTF8::string(UTF8::codepoints('中文空白')));
   }
 
   public function testStringHasBom()
@@ -2123,12 +2121,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testStripos()
   {
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
-      self::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
+      self::assertSame(false, UTF8::stripos('DÉJÀ', 'ä'));
+      self::assertSame(false, UTF8::stripos('DÉJÀ', ' '));
+      self::assertSame(false, UTF8::stripos('DÉJÀ', ''));
+      self::assertSame(false, UTF8::stripos('', 'ä'));
+      self::assertSame(false, UTF8::stripos('', ' '));
+      self::assertSame(false, UTF8::stripos('', ''));
       self::assertSame(1, UTF8::stripos('aςσb', 'ΣΣ'));
-      self::assertSame(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
+      self::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
       self::assertSame(4, UTF8::stripos('öäü-κόσμε-κόσμε-κόσμε', 'Κ'));
-      self::assertSame(5, UTF8::stripos('Test κόσμε test κόσμε', 'Κ'));
       self::assertSame(4, UTF8::stripos('ABC-ÖÄÜ-中文空白-中文空白', 'ö'));
+      self::assertSame(5, UTF8::stripos('Test κόσμε test κόσμε', 'Κ'));
+      self::assertSame(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
     }
   }
 
@@ -2195,7 +2199,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(1, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
     self::assertSame(-1, UTF8::strnatcasecmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
     self::assertSame(-1, UTF8::strnatcasecmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strcasecmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!')); // strcasecmp
     self::assertSame(1, UTF8::strnatcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
+    self::assertSame(-1, UTF8::strcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!')); // strcasecmp
     self::assertSame(0, UTF8::strnatcasecmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
     self::assertSame(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
   }
@@ -2206,7 +2212,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白'));
     self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白', 'Hello WORLD 中文空白!'));
     self::assertSame(-1, UTF8::strnatcmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!'));
+    self::assertSame(1, UTF8::strcmp('2Hello world 中文空白!', '10Hello WORLD 中文空白!')); // strcmp
     self::assertSame(1, UTF8::strnatcmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'));
+    self::assertSame(-1, UTF8::strcmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!')); // strcmp
     self::assertSame(0, UTF8::strnatcmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
     self::assertSame(1, UTF8::strnatcmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
   }
