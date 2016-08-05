@@ -2899,15 +2899,19 @@ class UTF8
     do {
       $str_compare = $str;
 
-      $str = preg_replace_callback("/&#\d{2,5};/", function ($matches) {
-        $returnTmp =  \mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
+      $str = preg_replace_callback(
+          "/&#\d{2,5};/",
+          function ($matches) {
+            $returnTmp = \mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
 
-        if ($returnTmp !== '"' && $returnTmp !== "'") {
-          return $returnTmp;
-        } else {
-          return $matches[0];
-        }
-      }, $str);
+            if ($returnTmp !== '"' && $returnTmp !== "'") {
+              return $returnTmp;
+            } else {
+              return $matches[0];
+            }
+          },
+          $str
+      );
 
       // decode numeric & UTF16 two byte entities
       $str = html_entity_decode(
@@ -4613,11 +4617,26 @@ class UTF8
     // INFO: UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always with "\mb_detect_encoding()"
 
     $detectOrder = array(
-        'ISO-8859-1', 'ISO-8859-2', 'ISO-8859-3', 'ISO-8859-4', 'ISO-8859-5',
-        'ISO-8859-6', 'ISO-8859-7', 'ISO-8859-8', 'ISO-8859-9', 'ISO-8859-10',
-        'ISO-8859-13', 'ISO-8859-14', 'ISO-8859-15', 'ISO-8859-16',
-        'WINDOWS-1251', 'WINDOWS-1252', 'WINDOWS-1254',
-        'ISO-2022-JP', 'JIS', 'EUC-JP',
+        'ISO-8859-1',
+        'ISO-8859-2',
+        'ISO-8859-3',
+        'ISO-8859-4',
+        'ISO-8859-5',
+        'ISO-8859-6',
+        'ISO-8859-7',
+        'ISO-8859-8',
+        'ISO-8859-9',
+        'ISO-8859-10',
+        'ISO-8859-13',
+        'ISO-8859-14',
+        'ISO-8859-15',
+        'ISO-8859-16',
+        'WINDOWS-1251',
+        'WINDOWS-1252',
+        'WINDOWS-1254',
+        'ISO-2022-JP',
+        'JIS',
+        'EUC-JP',
     );
 
     self::checkForSupport();
@@ -4949,10 +4968,10 @@ class UTF8
   /**
    * Counts number of words in the UTF-8 string.
    *
-   * @param string $str    The input string.
-   * @param int    $format <strong>0</strong> => return a number of words<br />
-   *                       <strong>1</strong> => return an array of words<br />
-   *                       <strong>2</strong> => return an array of words with word-offset as key
+   * @param string $str      The input string.
+   * @param int    $format   <strong>0</strong> => return a number of words<br />
+   *                         <strong>1</strong> => return an array of words<br />
+   *                         <strong>2</strong> => return an array of words with word-offset as key
    * @param string $charlist Additional chars that contains to words and do not start a new word (default: "'", "’")
    *
    * @return array|int The number of words in the string
@@ -5193,7 +5212,7 @@ class UTF8
    * @param string $needle
    * @param bool   $before_needle
    *
-   * @return false|string sub-string, or false if needle is not found
+   * @return false|string A sub-string,<br />or <strong>false</strong> if needle is not found.
    */
   public static function stristr($str, $needle, $before_needle = false)
   {
@@ -5216,7 +5235,8 @@ class UTF8
    * @param string  $encoding  Set the charset for e.g. "\mb_" function
    * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
    *
-   * @return int the number of characters in the string $str having character encoding $encoding. (One multi-byte character counted as +1)
+   * @return int the number of characters in the string $str having character encoding $encoding. (One multi-byte
+   *             character counted as +1)
    */
   public static function strlen($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
@@ -5279,10 +5299,9 @@ class UTF8
    *                     The second string.
    *                     </p>
    *
-   * @return int Similar to other string comparison functions, this one returns &lt; 0 if
-   * str1 is less than str2; &gt;
-   * 0 if str1 is greater than
-   * str2, and 0 if they are equal.
+   * @return int <strong>&lt; 0</strong> if str1 is less than str2;<br />
+   *             <strong>&gt; 0</strong> if str1 is greater than str2;<br />
+   *             <strong>0</strong> if they are equal
    */
   public static function strnatcmp($str1, $str2)
   {
@@ -5304,9 +5323,9 @@ class UTF8
    *                     The length of strings to be used in the comparison.
    *                     </p>
    *
-   * @return int &lt; 0 if <i>str1</i> is less than
-   * <i>str2</i>; &gt; 0 if <i>str1</i> is
-   * greater than <i>str2</i>, and 0 if they are equal.
+   * @return int <strong>&lt; 0</strong> if <i>str1</i> is less than <i>str2</i>;<br />
+   *             <strong>&gt; 0</strong> if <i>str1</i> is greater than <i>str2</i>;<br />
+   *             <strong>0</strong> if they are equal
    */
   public static function strncasecmp($str1, $str2, $len)
   {
@@ -5328,10 +5347,9 @@ class UTF8
    *                     Number of characters to use in the comparison.
    *                     </p>
    *
-   * @return int &lt; 0 if <i>str1</i> is less than
-   * <i>str2</i>; &gt; 0 if <i>str1</i>
-   * is greater than <i>str2</i>, and 0 if they are
-   * equal.
+   * @return int <strong>&lt; 0</strong> if <i>str1</i> is less than <i>str2</i>;<br />
+   *             <strong>&gt; 0</strong> if <i>str1</i> is greater than <i>str2</i>;<br />
+   *             <strong>0</strong> if they are equal
    */
   public static function strncmp($str1, $str2, $len)
   {
@@ -5342,7 +5360,7 @@ class UTF8
   }
 
   /**
-   * Search a string for any of a set of characters
+   * Search a string for any of a set of characters.
    *
    * @link  http://php.net/manual/en/function.strpbrk.php
    *
@@ -5353,7 +5371,7 @@ class UTF8
    *                          This parameter is case sensitive.
    *                          </p>
    *
-   * @return string a string starting from the character found, or false if it is not found.
+   * @return string String starting from the character found, or false if it is not found.
    */
   public static function strpbrk($haystack, $char_list)
   {
@@ -5388,8 +5406,8 @@ class UTF8
    * @param string  $encoding
    * @param boolean $cleanUtf8    Clean non UTF-8 chars from the string.
    *
-   * @return int The numeric position of the first occurrence of needle in the haystack string.<br />
-   *             If needle is not found it returns false.
+   * @return int|false The numeric position of the first occurrence of needle in the haystack string.<br />
+   *                   If needle is not found it returns false.
    */
   public static function strpos($haystack, $needle, $offset = 0, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
@@ -5475,8 +5493,7 @@ class UTF8
    *                         If it is omitted, internal character encoding is used.
    *                         </p>
    *
-   * @return string the portion of haystack.
-   * or false if needle is not found.
+   * @return string|false The portion of haystack or false if needle is not found.
    */
   public static function strrchr($haystack, $needle, $part = false, $encoding = 'UTF-8')
   {
@@ -5487,14 +5504,52 @@ class UTF8
   }
 
   /**
+   * alias for "UTF8::strstr()"
+   *
+   * @see UTF8::strstr()
+   *
+   * @param string $haystack
+   * @param string $needle
+   * @param bool   $before_needle
+   *
+   * @return string|false
+   */
+  public static function strchr($haystack, $needle, $before_needle = false)
+  {
+    return self::strstr($haystack, $needle, $before_needle);
+  }
+
+  /**
+   * alias for "UTF8::stristr()"
+   *
+   * @see UTF8::stristr()
+   *
+   * @param string $haystack
+   * @param string $needle
+   * @param bool   $before_needle
+   *
+   * @return string|false
+   */
+  public static function strichr($haystack, $needle, $before_needle = false)
+  {
+    return self::stristr($haystack, $needle, $before_needle);
+  }
+
+  /**
    * Reverses characters order in the string.
    *
-   * @param    string $str The input string
+   * @param  string $str The input string
    *
-   * @return   string The string with characters in the reverse sequence
+   * @return string The string with characters in the reverse sequence
    */
   public static function strrev($str)
   {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
     return implode(array_reverse(self::split($str)));
   }
 
@@ -5523,8 +5578,7 @@ class UTF8
    *                         If it is omitted, internal character encoding is used.
    *                         </p>
    *
-   * @return string the portion of haystack.
-   * or false if needle is not found.
+   * @return string|false The portion of haystack or false if needle is not found.
    */
   public static function strrichr($haystack, $needle, $part = false, $encoding = 'UTF-8')
   {
@@ -5537,15 +5591,17 @@ class UTF8
   /**
    * Find position of last occurrence of a case-insensitive string.
    *
-   * @param    string $haystack The string to look in
-   * @param    string $needle   The string to look for
-   * @param    int    $offset   (Optional) Number of characters to ignore in the beginning or end
+   * @param string  $haystack  The string to look in
+   * @param string  $needle    The string to look for
+   * @param int     $offset    (Optional) Number of characters to ignore in the beginning or end
+   * @param boolean $cleanUtf8 Clean non UTF-8 chars from the string
    *
-   * @return   int The position of offset
+   * @return int|false The numeric position of the last occurrence of needle in the haystack string.<br />If needle is
+   *                   not found, it returns false.
    */
-  public static function strripos($haystack, $needle, $offset = 0)
+  public static function strripos($haystack, $needle, $offset = 0, $cleanUtf8 = false)
   {
-    return self::strrpos(self::strtolower($haystack), self::strtolower($needle), $offset);
+    return self::strrpos(self::strtolower($haystack), self::strtolower($needle), $offset, $cleanUtf8);
   }
 
   /**
@@ -5566,10 +5622,8 @@ class UTF8
    *                              prior to the end of the string.
    * @param boolean    $cleanUtf8 Clean non UTF-8 chars from the string
    *
-   * @return int the numeric position of
-   * the last occurrence of needle in the
-   * haystack string. If
-   * needle is not found, it returns false.
+   * @return int|false The numeric position of the last occurrence of needle in the haystack string.<br />If needle is
+   *                   not found, it returns false.
    */
   public static function strrpos($haystack, $needle, $offset = null, $cleanUtf8 = false)
   {
@@ -5660,7 +5714,7 @@ class UTF8
    *                              haystack before the first occurrence of the needle (excluding the needle).
    *                              </p>
    *
-   * @return string the portion of string, or FALSE if needle is not found.
+   * @return string|false A sub-string,<br />or <strong>false</strong> if needle is not found.
    */
   public static function strstr($haystack, $needle, $before_needle = false)
   {

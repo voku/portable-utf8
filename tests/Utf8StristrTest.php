@@ -21,6 +21,10 @@ class Utf8StristrTest extends PHPUnit_Framework_TestCase
     $str = 'iñtërnâtiônàlizætiøn';
     $search = 'foo';
     self::assertFalse(u::stristr($str, $search));
+
+    // ---
+
+    self::assertFalse(u::strstr($str, $search));
   }
 
   public function test_empty_search()
@@ -55,6 +59,17 @@ class Utf8StristrTest extends PHPUnit_Framework_TestCase
   {
     $str = "iñtërn\nâtiônàlizætiøn";
     $search = "N\nÂT";
+    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search));
+  }
+
+  public function test_case()
+  {
+    $str = "iñtërn\nâtiônàlizætiøn";
+    $search = "n\nÂT";
+    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search));
+
+    // ---
+
     self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search));
   }
 }

@@ -765,9 +765,32 @@ Case-insensitive string comparison of the first n characters.:
 INFO: Case-insensitive version of UTF8::strncmp()
 
 ```php
-UTF8::strcasecmp("iñtërnâtiôn\nàlizætiøn", "Iñtërnâtiôn\nàlizætiøn"); // 0
+UTF8::strcasecmp("iñtërnâtiôn\nàlizætiøn321", "iñtërnâtiôn\nàlizætiøn123", 5); // 0
 ```
 
+##### strncasecmp(string $str1, string $str2, int $len) : int
+
+Case-insensitive string comparison of the first n characters.: 
+    < 0 if str1 is less than str2; 
+    > 0 if str1 is greater than str2, 
+    0 if they are equal.
+
+INFO: Case-insensitive version of UTF8::strncmp()
+
+```php
+UTF8::strcasecmp("iñtërnâtiôn\nàlizætiøn321", "Iñtërnâtiôn\nàlizætiøn123", 5); // 0
+```
+
+##### strncmp(string $str1, string $str2, int $len) : int
+
+Case-sensitive string comparison of the first n characters.: 
+    < 0 if str1 is less than str2; 
+    > 0 if str1 is greater than str2, 
+    0 if they are equal.
+
+```php
+UTF8::strncmp("Iñtërnâtiôn\nàlizætiøn321", "Iñtërnâtiôn\nàlizætiøn123", 5); // 0
+```
 
 ##### string(string $str1, string $str2) : int
 
@@ -797,6 +820,30 @@ Strip HTML and PHP tags from a string + clean invalid UTF-8.
 UTF8::strip_tags("<span>κόσμε\xa0\xa1</span>"); // 'κόσμε'
 ```
 
+##### strlen(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : int
+
+Get the string length, not the byte-length!
+
+```php
+UTF8::strlen('κόσμε')); // 5
+```
+
+##### strpbrk(string $haystack, string $char_list) : string
+
+Search a string for any of a set of characters.
+
+```php
+UTF8::strpbrk('-中文空白-', '白'); // '白-'
+```
+
+##### strpos(string $haystack, string $char_list) : string|false
+
+Find position of first occurrence of string in a string.
+
+```php
+UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 8
+```
+
 ##### stripos($str, $needle, $before_needle = false) : string|false
 
 Finds position of first occurrence of a string within another, case insensitive.
@@ -809,12 +856,44 @@ UTF8::stristr($str, $search)); // 'nâtiônàlizætiøn'
 UTF8::stristr($str, $search, true)); // 'iñtër'
 ```
 
-##### strlen(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : int
+##### strrpos(string $haystack, string $needle, int $offset = 0, bool $cleanUtf8 = false) : string|false
 
-Get the string length, not the byte-length!
+Find position of last occurrence of a string in a string.
 
 ```php
-UTF8::strlen('κόσμε')); // 5
+UTF8::strrpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 13
+```
+
+##### strripos(string $haystack, string $needle, int $offset = 0, bool $cleanUtf8 = false) : string|false
+
+Find position of last occurrence of a case-insensitive string.
+
+```php
+UTF8::strripos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 13
+```
+
+##### strrchr(string $haystack, string $needle, bool $part = false, string $encoding) : string|false
+
+Finds the last occurrence of a character in a string within another.
+
+```php
+UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε'); // 'κόσμε-äöü'
+```
+
+##### strrichr(string $haystack, string $needle, bool $part = false, string $encoding) : string|false
+
+Finds the last occurrence of a character in a string within another, case insensitive.
+
+```php
+UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε'); // 'Aκόσμεκόσμε-äöü'
+```
+
+##### strrev(string $str) : string
+
+Reverses characters order in the string.
+
+```php
+UTF8::strrev('κ-öäü'); // 'üäö-κ'
 ```
 
 

@@ -2151,14 +2151,20 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrirpos()
   {
+    self::assertSame(false, strripos('', ''));
+    self::assertSame(false, strripos(' ', ''));
+    self::assertSame(false, strripos('', ' '));
+    self::assertSame(false, strripos('DJ', ''));
+    self::assertSame(false, strripos('', 'J'));
+    self::assertSame(false, UTF8::strripos('aςσb', 'ΣΣ'));
     self::assertSame(1, strripos('DJ', 'J'));
     self::assertSame(1, UTF8::strripos('DJ', 'J'));
-
     self::assertSame(3, UTF8::strripos('DÉJÀ', 'à'));
-    self::assertSame(false, UTF8::strripos('aςσb', 'ΣΣ'));
+    self::assertSame(4, UTF8::strripos('ÀDÉJÀ', 'à'));
     self::assertSame(6, UTF8::strripos('κόσμε-κόσμε', 'Κ'));
-    self::assertSame(11, UTF8::strripos('test κόσμε κόσμε test', 'Κ'));
     self::assertSame(7, UTF8::strripos('中文空白-ÖÄÜ-中文空白', 'ü'));
+    self::assertSame(11, UTF8::strripos('test κόσμε κόσμε test', 'Κ'));
+    self::assertSame(13, UTF8::strripos('ABC-ÖÄÜ-中文空白-中文空白', '中'));
   }
 
   public function testStrlen()
@@ -2310,22 +2316,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::strrchr($actual, 'κόσμε'), 'error by ' . $actual);
     }
-  }
 
-  public function testStrrev()
-  {
-    $testArray = array(
-        'κ-öäü'  => 'üäö-κ',
-        'abc'    => 'cba',
-        'abcöäü' => 'üäöcba',
-        '-白-'    => '-白-',
-        ''       => '',
-        ' '      => ' ',
-    );
+    // ---
 
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
-    }
+    self::assertSame('κόσμε-äöü', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε'));
+    self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε'));
   }
 
   public function testStrrichr()
@@ -2344,6 +2339,26 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::strrichr($actual, 'κόσμε'), 'error by ' . $actual);
     }
+
+    // ---
+
+    self::assertSame('Aκόσμεκόσμε-äöü', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε'));
+  }
+
+  public function testStrrev()
+  {
+    $testArray = array(
+        'κ-öäü'  => 'üäö-κ',
+        'abc'    => 'cba',
+        'abcöäü' => 'üäöcba',
+        '-白-'    => '-白-',
+        ''       => '',
+        ' '      => ' ',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
+    }
   }
 
   public function testStrrpos()
@@ -2357,6 +2372,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(6, UTF8::strrpos('κόσμε-κόσμε', 'κ'));
     self::assertSame(13, UTF8::strrpos('test κόσμε κόσμε test', 'σ'));
     self::assertSame(9, UTF8::strrpos('中文空白-ÖÄÜ-中文空白', '中'));
+    self::assertSame(13, UTF8::strrpos('ABC-ÖÄÜ-中文空白-中文空白', '中'));
   }
 
   public function testStrtocasefold()
@@ -3301,6 +3317,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($tests as $before => $after) {
       self::assertSame($after[0], UTF8::strstr($before, '@', true), 'tested: ' . $before);
+      // alias
+      self::assertSame($after[0], UTF8::strchr($before, '@', true), 'tested: ' . $before);
     }
 
     foreach ($tests as $before => $after) {
