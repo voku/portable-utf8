@@ -4826,20 +4826,11 @@ final class UTF8
    *
    * @link  http://php.net/manual/en/function.strtr.php
    *
-   * @param string       $str  <p>
-   *                           The string being translated.
-   *                           </p>
-   * @param string|array $from <p>
-   *                           The string replacing from.
-   *                           </p>
-   * @param string|array $to   <p>
-   *                           The string being translated to to.
-   *                           </p>
+   * @param string       $str  <p>The string being translated.</p>
+   * @param string|array $from <p>The string replacing from.</p>
+   * @param string|array $to   <p>The string being translated to to.</p>
    *
-   * @return string This function returns a copy of str,
-   * translating all occurrences of each character in
-   * from to the corresponding character in
-   * to.
+   * @return string This function returns a copy of str, translating all occurrences of each character in from to the corresponding character in to.
    */
   public static function strtr($str, $from, $to = INF)
   {
@@ -4864,13 +4855,26 @@ final class UTF8
   /**
    * Return the width of a string.
    *
-   * @param string $s
+   * @param string $str
+   * @param string $encoding
+   * @param bool   $cleanUtf8
    *
    * @return int
    */
-  public static function strwidth($s)
+  public static function strwidth($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    return \mb_strwidth($s, 'UTF-8');
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
+
+    if ($cleanUtf8 === true) {
+      // iconv and mbstring are not tolerant to invalid encoding
+      // further, their behaviour is inconsistent with that of PHP's substr
+
+      $str = self::clean($str);
+    }
+
+    return \mb_strwidth($str, $encoding);
   }
 
   /**

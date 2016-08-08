@@ -825,7 +825,15 @@ UTF8::strip_tags("<span>κόσμε\xa0\xa1</span>"); // 'κόσμε'
 Get the string length, not the byte-length!
 
 ```php
-UTF8::strlen('κόσμε')); // 5
+UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn")); // 20
+```
+
+##### strwidth(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : int
+
+Return the width of a string.
+
+```php
+UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn")); // 21
 ```
 
 ##### strpbrk(string $haystack, string $char_list) : string
@@ -938,6 +946,26 @@ Make a string lowercase.
 
 ```php
 UTF8::strtolower('DÉJÀ Σσς Iıİi'); // 'déjà σσς iıii'
+```
+
+##### strtoupper(string $str, string $encoding = 'UTF-8') : string
+
+Make a string uppercase.
+
+```php
+UTF8::strtoupper('Déjà Σσς Iıİi'); // 'DÉJÀ ΣΣΣ IIİI'
+```
+
+##### strtr(string $str, string|array $from, string|array $to = INF) : string
+
+Translate characters or replace sub-strings.
+
+```php
+$arr = array(
+    'Hello'   => '○●◎',
+    '中文空白' => 'earth',
+);
+UTF8::strtr('Hello 中文空白', $arr); // '○●◎ earth'
 ```
 
 

@@ -2480,6 +2480,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::strwidth($before));
     }
+
+    // test + Invalied Chars
+
+    self::assertSame(21, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertSame(20, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
+
+    self::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
   }
 
   public function testSubstr()
