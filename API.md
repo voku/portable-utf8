@@ -836,7 +836,7 @@ Search a string for any of a set of characters.
 UTF8::strpbrk('-中文空白-', '白'); // '白-'
 ```
 
-##### strpos(string $haystack, string $char_list) : string|false
+##### strpos(string $haystack, string $char_list) : int|false
 
 Find position of first occurrence of string in a string.
 
@@ -844,16 +844,12 @@ Find position of first occurrence of string in a string.
 UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 8
 ```
 
-##### stripos($str, $needle, $before_needle = false) : string|false
+##### stripos($str, $needle, $before_needle = false) : int|false
 
 Finds position of first occurrence of a string within another, case insensitive.
 
 ```php
-$str = 'iñtërnâtiônàlizætiøn';
-$search = 'NÂT';
-
-UTF8::stristr($str, $search)); // 'nâtiônàlizætiøn'
-UTF8::stristr($str, $search, true)); // 'iñtër'
+UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 8
 ```
 
 ##### strrpos(string $haystack, string $needle, int $offset = 0, bool $cleanUtf8 = false) : string|false
@@ -894,6 +890,54 @@ Reverses characters order in the string.
 
 ```php
 UTF8::strrev('κ-öäü'); // 'üäö-κ'
+```
+
+##### strspn(string $str, string $mask, int $offset = 0, int $length = 2147483647) : string
+
+Finds the length of the initial segment of a string consisting entirely of characters contained within a given mask.
+
+```php
+UTF8::strspn('iñtërnâtiônàlizætiøn', 'itñ'); // '3'
+```
+
+##### strstr(string $str, string $needle, bool $before_needle = false) : string
+
+Returns part of haystack string from the first occurrence of needle to the end of haystack.
+
+```php
+$str = 'iñtërnâtiônàlizætiøn';
+$search = 'nât';
+
+UTF8::strstr($str, $search)); // 'nâtiônàlizætiøn'
+UTF8::strstr($str, $search, true)); // 'iñtër'
+```
+
+##### stristr(string $str, string $needle, bool $before_needle = false) : string
+
+Returns all of haystack starting from and including the first occurrence of needle to the end.
+
+```php
+$str = 'iñtërnâtiônàlizætiøn';
+$search = 'NÂT';
+
+UTF8::stristr($str, $search)); // 'nâtiônàlizætiøn'
+UTF8::stristr($str, $search, true)); // 'iñtër'
+```
+
+##### strtocasefold(string $str, bool $full = true) : string
+
+Unicode transformation for case-less matching.
+
+```php
+UTF8::strtocasefold('ǰ◌̱'); // 'ǰ◌̱'
+```
+
+##### strtolower(string $str, string $encoding = 'UTF-8') : string
+
+Make a string lowercase.
+
+```php
+UTF8::strtolower('DÉJÀ Σσς Iıİi'); // 'déjà σσς iıii'
 ```
 
 

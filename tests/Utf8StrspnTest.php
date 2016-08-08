@@ -10,6 +10,12 @@ class Utf8StrspnTest extends PHPUnit_Framework_TestCase
   public function test_match()
   {
     $str = 'iñtërnâtiônàlizætiøn';
+
+    self::assertSame(1, u::strspn($str, 'i'));
+    self::assertSame(0, u::strspn($str, 'â'));
+    self::assertSame(0, u::strspn($str, 'âë'));
+    self::assertSame(3, u::strspn($str, 'itñ'));
+    self::assertSame(3, u::strspn($str, 'iñt'));
     self::assertSame(11, u::strspn($str, 'âëiônñrt'));
   }
 

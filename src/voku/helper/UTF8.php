@@ -10,12 +10,12 @@ use Symfony\Polyfill\Xml\Xml;
  *
  * @package voku\helper
  */
-class UTF8
+final class UTF8
 {
   /**
    * @var array
    */
-  protected static $win1252ToUtf8 = array(
+  private static $win1252ToUtf8 = array(
       128 => "\xe2\x82\xac", // EURO SIGN
       130 => "\xe2\x80\x9a", // SINGLE LOW-9 QUOTATION MARK
       131 => "\xc6\x92", // LATIN SMALL LETTER F WITH HOOK
@@ -48,7 +48,7 @@ class UTF8
   /**
    * @var array
    */
-  protected static $cp1252ToUtf8 = array(
+  private static $cp1252ToUtf8 = array(
       '' => '€',
       '' => '‚',
       '' => 'ƒ',
@@ -85,7 +85,7 @@ class UTF8
    *
    * @var array
    */
-  protected static $bom = array(
+  private static $bom = array(
       "\xef\xbb\xbf"     => 3, // UTF-8 BOM
       'ï»¿'              => 6, // UTF-8 BOM as "WINDOWS-1252" (one char has [maybe] more then one byte ...)
       "\x00\x00\xfe\xff" => 4, // UTF-32 (BE) BOM
@@ -103,7 +103,7 @@ class UTF8
    *
    * @var array
    */
-  protected static $whitespace = array(
+  private static $whitespace = array(
     // NUL Byte
     0     => "\x0",
     // Tab
@@ -159,7 +159,7 @@ class UTF8
   /**
    * @var array
    */
-  protected static $whitespaceTable = array(
+  private static $whitespaceTable = array(
       'SPACE'                     => "\x20",
       'NO-BREAK SPACE'            => "\xc2\xa0",
       'OGHAM SPACE MARK'          => "\xe1\x9a\x80",
@@ -189,7 +189,7 @@ class UTF8
    *
    * @var array
    */
-  protected static $bidiUniCodeControlsTable = array(
+  private static $bidiUniCodeControlsTable = array(
     // LEFT-TO-RIGHT EMBEDDING (use -> dir = "ltr")
     8234 => "\xE2\x80\xAA",
     // RIGHT-TO-LEFT EMBEDDING (use -> dir = "rtl")
@@ -213,7 +213,7 @@ class UTF8
   /**
    * @var array
    */
-  protected static $commonCaseFold = array(
+  private static $commonCaseFold = array(
       'ſ'            => 's',
       "\xCD\x85"     => 'ι',
       'ς'            => 'σ',
@@ -231,7 +231,7 @@ class UTF8
   /**
    * @var array
    */
-  protected static $brokenUtf8ToUtf8 = array(
+  private static $brokenUtf8ToUtf8 = array(
       "\xc2\x80" => "\xe2\x82\xac", // EURO SIGN
       "\xc2\x82" => "\xe2\x80\x9a", // SINGLE LOW-9 QUOTATION MARK
       "\xc2\x83" => "\xc6\x92", // LATIN SMALL LETTER F WITH HOOK
@@ -322,7 +322,7 @@ class UTF8
   /**
    * @var array
    */
-  protected static $utf8ToWin1252 = array(
+  private static $utf8ToWin1252 = array(
       "\xe2\x82\xac" => "\x80", // EURO SIGN
       "\xe2\x80\x9a" => "\x82", // SINGLE LOW-9 QUOTATION MARK
       "\xc6\x92"     => "\x83", // LATIN SMALL LETTER F WITH HOOK
@@ -355,7 +355,7 @@ class UTF8
   /**
    * @var array
    */
-  protected static $utf8MSWord = array(
+  private static $utf8MSWord = array(
       "\xc2\xab"     => '"', // « (U+00AB) in UTF-8
       "\xc2\xbb"     => '"', // » (U+00BB) in UTF-8
       "\xe2\x80\x98" => "'", // ‘ (U+2018) in UTF-8
@@ -373,7 +373,7 @@ class UTF8
       "\xe2\x80\xa6" => '...' // … (U+2026) in UTF-8
   );
 
-  protected static $iconvEncoding = array(
+  private static $iconvEncoding = array(
       'ANSI_X3.4-1968',
       'ANSI_X3.4-1986',
       'ASCII',
@@ -881,7 +881,7 @@ class UTF8
    *
    * @return   string An array with lower case chars as keys and upper chars as values.
    */
-  protected static function case_table()
+  private static function case_table()
   {
     static $case = array(
 
@@ -1890,7 +1890,9 @@ class UTF8
    */
   public static function checkForSupport()
   {
-    if (!isset(self::$support['mbstring'])) {
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+
+      self::$support['already_checked_via_portable_utf8'] = true;
 
       self::$support['mbstring'] = self::mbstring_loaded();
       self::$support['iconv'] = self::iconv_loaded();
@@ -1911,9 +1913,12 @@ class UTF8
    */
   public static function chr($code_point)
   {
-    self::checkForSupport();
-
+    // init
     $i = (int)$code_point;
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
 
     if (self::$support['intlChar'] === true) {
       return \IntlChar::chr($code_point);
@@ -2169,8 +2174,6 @@ class UTF8
    */
   public static function decimal_to_chr($code)
   {
-    self::checkForSupport();
-
     return \mb_convert_encoding(
         '&#x' . dechex($code) . ';',
         'UTF-8',
@@ -2200,7 +2203,10 @@ class UTF8
       return $str;
     }
 
-    $encoding = self::normalizeEncoding($encoding);
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
+
     $encodingDetected = self::str_detect_encoding($str);
 
     if (
@@ -2212,7 +2218,6 @@ class UTF8
             $encodingDetected !== $encoding
         )
     ) {
-      self::checkForSupport();
 
       if (
           $encoding === 'UTF-8'
@@ -2364,8 +2369,6 @@ class UTF8
     }
 
     if ($convertToUtf8 === true) {
-      self::checkForSupport();
-
       $data = self::encode('UTF-8', $data, false);
       $data = self::cleanup($data);
     }
@@ -2599,8 +2602,9 @@ class UTF8
    */
   public static function getCharDirection($char)
   {
-    // init
-    self::checkForSupport();
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
 
     if (self::$support['intlChar'] === true) {
       $tmpReturn = \IntlChar::charDirection($char);
@@ -2716,7 +2720,7 @@ class UTF8
    *
    * @return bool|string|array|int false on error
    */
-  protected static function getData($file)
+  private static function getData($file)
   {
     $file = __DIR__ . '/data/' . $file . '.php';
     if (file_exists($file)) {
@@ -2782,7 +2786,9 @@ class UTF8
         $startCode = 0x80;
       }
 
-      $encoding = self::normalizeEncoding($encoding);
+      if ($encoding !== 'UTF-8') {
+        $encoding = self::normalize_encoding($encoding);
+      }
 
       return mb_encode_numericentity(
           $str,
@@ -2884,9 +2890,9 @@ class UTF8
       return $str;
     }
 
-    self::checkForSupport();
-
-    $encoding = self::normalizeEncoding($encoding);
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
 
     if ($flags === null) {
       if (Bootup::is_php('5.4') === true) {
@@ -3030,7 +3036,9 @@ class UTF8
    */
   public static function htmlentities($str, $flags = ENT_COMPAT, $encoding = 'UTF-8', $double_encode = true)
   {
-    $encoding = self::normalizeEncoding($encoding);
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
 
     $str = htmlentities($str, $flags, $encoding, $double_encode);
 
@@ -3166,7 +3174,9 @@ class UTF8
    */
   public static function htmlspecialchars($str, $flags = ENT_COMPAT, $encoding = 'UTF-8', $double_encode = true)
   {
-    $encoding = self::normalizeEncoding($encoding);
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
 
     return htmlspecialchars($str, $flags, $encoding, $double_encode);
   }
@@ -3516,7 +3526,6 @@ class UTF8
     $str = self::remove_bom($str);
 
     if (self::is_binary($str)) {
-      self::checkForSupport();
 
       $maybeUTF16LE = 0;
       $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16LE');
@@ -3573,7 +3582,6 @@ class UTF8
     $str = self::remove_bom($str);
 
     if (self::is_binary($str)) {
-      self::checkForSupport();
 
       $maybeUTF32LE = 0;
       $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32LE');
@@ -4016,13 +4024,13 @@ class UTF8
         'ISO'         => 'ISO-8859-1',
         'LATIN1'      => 'ISO-8859-1',
         'LATIN'       => 'ISO-8859-1',
+        'WIN1252'     => 'ISO-8859-1',
+        'WINDOWS1252' => 'ISO-8859-1',
         'UTF16'       => 'UTF-16',
         'UTF32'       => 'UTF-32',
         'UTF8'        => 'UTF-8',
         'UTF'         => 'UTF-8',
         'UTF7'        => 'UTF-7',
-        'WIN1252'     => 'ISO-8859-1',
-        'WINDOWS1252' => 'ISO-8859-1',
         '8BIT'        => 'CP850',
         'BINARY'      => 'CP850',
     );
@@ -4149,8 +4157,9 @@ class UTF8
       return 0;
     }
 
-    // init
-    self::checkForSupport();
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
 
     if (self::$support['intlChar'] === true) {
       $tmpReturn = \IntlChar::ord($chr);
@@ -4197,8 +4206,6 @@ class UTF8
   public static function parse_str($str, &$result)
   {
     // init
-    self::checkForSupport();
-
     $str = self::clean($str);
 
     $return = \mb_parse_str($str, $result);
@@ -4413,7 +4420,7 @@ class UTF8
    *
    * @return string
    */
-  protected static function rxClass($s, $class = '')
+  private static function rxClass($s, $class = '')
   {
     static $rxClassCache = array();
 
@@ -4454,7 +4461,7 @@ class UTF8
   }
 
   /**
-   * Echo native UTF8-Support libs, e.g. for debugging.
+   * WARNING: Echo native UTF8-Support libs, e.g. for debugging.
    */
   public static function showSupport()
   {
@@ -4506,9 +4513,12 @@ class UTF8
     }
 
     // init
-    self::checkForSupport();
     $str = (string)$str;
     $ret = array();
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
 
     if (self::$support['pcre_utf8'] === true) {
 
@@ -4639,7 +4649,6 @@ class UTF8
         'EUC-JP',
     );
 
-    self::checkForSupport();
     $encoding = \mb_detect_encoding($str, $detectOrder, true);
     if ($encoding) {
       return $encoding;
@@ -4818,9 +4827,8 @@ class UTF8
   }
 
   /**
-   * INFO: this is only a wrapper for "str_replace()"  -> the original functions is already UTF-8 safe
+   * INFO: This is only a wrapper for "str_replace()"  -> the original functions is already UTF-8 safe.
    *
-   * (PHP 4, PHP 5)<br/>
    * Replace all occurrences of the search string with the replacement string
    *
    * @link http://php.net/manual/en/function.str-replace.php
@@ -4905,7 +4913,6 @@ class UTF8
   public static function str_split($str, $len = 1)
   {
     // init
-    self::checkForSupport();
     $len = (int)$len;
 
     if ($len < 1) {
@@ -4991,8 +4998,6 @@ class UTF8
       }
 
     } elseif ($format === 2) {
-
-      self::checkForSupport();
 
       $numberOfWords = array();
       $offset = self::strlen($strParts[0]);
@@ -5187,19 +5192,16 @@ class UTF8
       return false;
     }
 
-    // init
-    self::checkForSupport();
-
     if ($cleanUtf8 === true) {
       $haystack = self::clean($haystack);
       $needle = self::clean($needle);
     }
 
     // INFO: this is only a fallback for old versions
-    if ($encoding === true || $encoding === false) {
+    if ($encoding === 'UTF-8' || $encoding === true || $encoding === false) {
       $encoding = 'UTF-8';
     } else {
-      $encoding = self::normalizeEncoding($encoding);
+      $encoding = self::normalize_encoding($encoding);
     }
 
     return \mb_stripos($haystack, $needle, $offset, $encoding);
@@ -5219,9 +5221,6 @@ class UTF8
     if ('' === $needle .= '') {
       return false;
     }
-
-    // init
-    self::checkForSupport();
 
     return \mb_stristr($str, $needle, $before_needle, 'UTF-8');
   }
@@ -5247,10 +5246,10 @@ class UTF8
     }
 
     // INFO: this is only a fallback for old versions
-    if ($encoding === true || $encoding === false) {
+    if ($encoding === 'UTF-8' || $encoding === true || $encoding === false) {
       $encoding = 'UTF-8';
     } else {
-      $encoding = self::normalizeEncoding($encoding);
+      $encoding = self::normalize_encoding($encoding);
     }
 
     switch ($encoding) {
@@ -5258,8 +5257,6 @@ class UTF8
       case 'CP850':
         return strlen($str);
     }
-
-    self::checkForSupport();
 
     if ($encoding === 'UTF-8' && $cleanUtf8 === true) {
       $str = self::clean($str);
@@ -5419,13 +5416,12 @@ class UTF8
     }
 
     // init
-    self::checkForSupport();
     $offset = (int)$offset;
 
     // iconv and mbstring do not support integer $needle
 
     if (((int)$needle) === $needle && ($needle >= 0)) {
-      $needle = self::chr($needle);
+      $needle = (string)self::chr($needle);
     }
 
     if ($cleanUtf8 === true) {
@@ -5436,13 +5432,17 @@ class UTF8
       $haystack = self::clean($haystack);
     }
 
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     if (self::$support['mbstring'] === true) {
 
       // INFO: this is only a fallback for old versions
-      if ($encoding === true || $encoding === false) {
+      if ($encoding === 'UTF-8' || $encoding === true || $encoding === false) {
         $encoding = 'UTF-8';
       } else {
-        $encoding = self::normalizeEncoding($encoding);
+        $encoding = self::normalize_encoding($encoding);
       }
 
       return \mb_strpos($haystack, $needle, $offset, $encoding);
@@ -5497,8 +5497,9 @@ class UTF8
    */
   public static function strrchr($haystack, $needle, $part = false, $encoding = 'UTF-8')
   {
-    self::checkForSupport();
-    $encoding = self::normalizeEncoding($encoding);
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
 
     return \mb_strrchr($haystack, $needle, $part, $encoding);
   }
@@ -5582,8 +5583,9 @@ class UTF8
    */
   public static function strrichr($haystack, $needle, $part = false, $encoding = 'UTF-8')
   {
-    self::checkForSupport();
-    $encoding = self::normalizeEncoding($encoding);
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
 
     return \mb_strrichr($haystack, $needle, $part, $encoding);
   }
@@ -5640,8 +5642,6 @@ class UTF8
     }
 
     // init
-    self::checkForSupport();
-
     $needle = (string)$needle;
     $offset = (int)$offset;
 
@@ -5650,6 +5650,11 @@ class UTF8
 
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
+    }
+
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
     }
 
     if (self::$support['mbstring'] === true) {
@@ -5687,7 +5692,7 @@ class UTF8
    * @param int    $offset
    * @param int    $length
    *
-   * @return int|null
+   * @return int
    */
   public static function strspn($str, $mask, $offset = 0, $length = 2147483647)
   {
@@ -5718,8 +5723,6 @@ class UTF8
    */
   public static function strstr($haystack, $needle, $before_needle = false)
   {
-    self::checkForSupport();
-
     return \grapheme_strstr($haystack, $needle, $before_needle);
   }
 
@@ -5729,7 +5732,8 @@ class UTF8
    * @link http://unicode.org/reports/tr21/tr21-5.html
    *
    * @param string $str
-   * @param bool   $full
+   * @param bool   $full <b>true</b> === replace full case folding chars + strtolower,<br />
+   *                     <b>false</b> use only $commonCaseFold +  strtolower
    *
    * @return string
    */
@@ -5762,29 +5766,27 @@ class UTF8
   }
 
   /**
-   * (PHP 4 &gt;= 4.3.0, PHP 5)<br/>
    * Make a string lowercase.
    *
    * @link http://php.net/manual/en/function.mb-strtolower.php
    *
-   * @param string $str <p>
-   *                    The string being lowercased.
-   *                    </p>
+   * @param string $str      <p>The string being lowercased.</p>
    * @param string $encoding
    *
    * @return string str with all alphabetic characters converted to lowercase.
    */
   public static function strtolower($str, $encoding = 'UTF-8')
   {
+    // init
     $str = (string)$str;
 
     if (!isset($str[0])) {
       return '';
     }
 
-    // init
-    self::checkForSupport();
-    $encoding = self::normalizeEncoding($encoding);
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
 
     return \mb_strtolower($str, $encoding);
   }
@@ -5796,7 +5798,7 @@ class UTF8
    *
    * @return string
    */
-  protected static function strtonatfold($s)
+  private static function strtonatfold($s)
   {
     return preg_replace('/\p{Mn}+/u', '', \Normalizer::normalize($s, \Normalizer::NFD));
   }
@@ -5821,11 +5823,15 @@ class UTF8
       return '';
     }
 
-    // init
-    self::checkForSupport();
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
 
     if (self::$support['mbstring'] === true) {
-      $encoding = self::normalizeEncoding($encoding);
+
+      if ($encoding !== 'UTF-8') {
+        $encoding = self::normalize_encoding($encoding);
+      }
 
       return \mb_strtoupper($str, $encoding);
     } else {
@@ -5896,9 +5902,6 @@ class UTF8
    */
   public static function strwidth($s)
   {
-    // init
-    self::checkForSupport();
-
     return \mb_strwidth($s, 'UTF-8');
   }
 
@@ -5923,14 +5926,12 @@ class UTF8
    */
   public static function substr($str, $start = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
+    // init
     $str = (string)$str;
 
     if (!isset($str[0])) {
       return '';
     }
-
-    // init
-    self::checkForSupport();
 
     if ($cleanUtf8 === true) {
       // iconv and mbstring are not tolerant to invalid encoding
@@ -5954,13 +5955,17 @@ class UTF8
       $length = (int)$length;
     }
 
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     if (self::$support['mbstring'] === true) {
 
       // INFO: this is only a fallback for old versions
-      if ($encoding === true || $encoding === false) {
+      if ($encoding === 'UTF-8' || $encoding === true || $encoding === false) {
         $encoding = 'UTF-8';
       } else {
-        $encoding = self::normalizeEncoding($encoding);
+        $encoding = self::normalize_encoding($encoding);
       }
 
       return \mb_substr($str, $start, $length, $encoding);
@@ -6042,8 +6047,6 @@ class UTF8
       $haystack = self::substr($haystack, $offset, $length);
     }
 
-    self::checkForSupport();
-
     return \mb_substr_count($haystack, $needle);
   }
 
@@ -6115,8 +6118,6 @@ class UTF8
     preg_match_all('/./us', (string)$replacement, $rmatches);
 
     if ($length === null) {
-      self::checkForSupport();
-
       $length = \mb_strlen($str);
     }
 
@@ -6141,7 +6142,10 @@ class UTF8
       return '';
     }
 
-    $encoding = self::normalizeEncoding($encoding);
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
+
     $str = self::clean($str);
 
     $strSwappedCase = preg_replace_callback(
@@ -6225,7 +6229,10 @@ class UTF8
 
     $str = self::clean($str);
 
-    self::checkForSupport();
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     if (self::$support['intl'] === true && Bootup::is_php('5.4')) {
       $str = transliterator_transliterate('Any-Latin; Latin-ASCII;', $str);
 
@@ -6449,8 +6456,6 @@ class UTF8
       }
     }
 
-    self::checkForSupport();
-
     // decode unicode escape sequences
     $buf = preg_replace_callback(
         '/\\\\u([0-9a-f]{4})/i',
@@ -6479,7 +6484,7 @@ class UTF8
    *
    * @return string|array
    */
-  protected static function to_win1252($str)
+  private static function to_win1252($str)
   {
     if (is_array($str)) {
 
@@ -6894,8 +6899,6 @@ class UTF8
     }
 
     // init
-    self::checkForSupport();
-
     $str = self::to_utf8($str);
 
     if ($utf8ToWin1252Keys === null) {

@@ -34,7 +34,7 @@ class Utf8StrcspnTest extends PHPUnit_Framework_TestCase
     self::assertSame(5, u::strcspn($str, 'ø', 1, 5));
   }
 
-  public function test_compare_strspn()
+  public function test_compare_strcspn()
   {
     $str = 'aeioustr';
     self::assertSame(strcspn($str, 'tr'), u::strcspn($str, 'tr'));
