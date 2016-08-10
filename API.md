@@ -968,5 +968,12 @@ $arr = array(
 UTF8::strtr('Hello 中文空白', $arr); // '○●◎ earth'
 ```
 
+##### substr(string $str, int $start = 0, int $length = null, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string
+
+Get part of a string.
+
+```php
+UTF8::substr('中文空白', 1, 2); // '文空'
+```
 
 ... TODO ...

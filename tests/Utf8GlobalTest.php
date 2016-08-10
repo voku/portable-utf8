@@ -1033,6 +1033,29 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::htmlentities($actual));
+
+      self::assertSame($actual, UTF8::html_entity_decode(
+          UTF8::htmlentities($actual)
+      ));
+    }
+
+    // ---
+
+    $testArray = array(
+        'abc'  => 'abc',
+        'öäü'  => '&Atilde;&para;&Atilde;&curren;&Atilde;&frac14;',
+        ' '    => ' ',
+        ''     => '',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::htmlentities($actual, ENT_COMPAT, 'ISO-8859-1', false));
+
+      self::assertSame($actual, UTF8::html_entity_decode(
+          UTF8::htmlentities($actual, ENT_COMPAT, 'ISO-8859-1', false),
+          ENT_COMPAT,
+          'ISO-8859-1')
+      );
     }
   }
 
@@ -3102,6 +3125,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucwords('ñtërnâtiônàlizætIøN'));
     self::assertSame('ÑtërnâtiônàlizætIøN Test câse', UTF8::ucwords('ñtërnâtiônàlizætIøN test câse', array('câse')));
     self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ'));
+
+    self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('de')));
+    self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('d', 'e')));
+
+    self::assertSame('deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('deja')));
+    self::assertSame('deja Σσς DEJa σσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('deja', 'σσΣ')));
   }
 
   public function testUcfirst()
