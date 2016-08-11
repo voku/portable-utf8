@@ -1,6 +1,6 @@
 # Portable UTF-8 | API
 
-The API from the "UTF8"-Class is written as small static methods that will match the default PHP-API e.g.
+The API from the "UTF8"-Class is written as small static methods that will match the default PHP-API.
 
 
 ## Methods

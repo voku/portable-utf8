@@ -33,7 +33,7 @@ class Utf8StrWordwrapTest extends PHPUnit_Framework_TestCase
   public function test_break_at_ten()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
-    $wrapped = 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn';
+    $wrapped = "Iñtërnâtiô\nnàlizætiøn";
     self::assertSame($wrapped, u::wordwrap($str, 10, "\n", true));
   }
 
@@ -61,7 +61,7 @@ class Utf8StrWordwrapTest extends PHPUnit_Framework_TestCase
   public function test_break_at_two_br()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
-    $wrapped = 'Iñtërnâtiô<br>nàlizætiøn';
+    $wrapped = 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn';
     self::assertSame($wrapped, u::wordwrap($str, 2, '<br>', true));
   }
 
