@@ -18,17 +18,15 @@
 
 This library is a Unicode aware alternative to PHP's native string handling API.
 
-- Based on Hamid Sarfraz's work: http://pageconfig.com/attachments/portable-utf8.php
-- Based on Nicolas Grekas's work: https://github.com/tchwork/utf8
-- Based on Behat's work: https://github.com/Behat/Transliterator
-- Based on Sebastián Grignoli's work: https://github.com/neitanod/forceutf8
-- Based on Ivan Enderlin's work: https://github.com/hoaproject/Ustring
-- Used Symfony Polyfills (Iconv, Intl, Mbstring, Xml, ...): https://github.com/symfony/polyfill
+--> [Documentation + Examples](https://github.com/voku/portable-utf8/blob/master/API.md)
 
 ## Description
 
+It is written in PHP (>= 5.3) and can work without "mbstring", "iconv" or any other extra encoding php-extension on your server. 
+The benefit of Portable UTF-8 is that it is easy to use, easy to bundle. This library will also auto-detect your server environment and will use the installed php-extensions if they are available, so you will have the best possible performance.
+As Fallback we will use Symfony Polyfills (Iconv, Intl, Mbstring, Xml, ... | https://github.com/symfony/polyfill). 
 
-It is written in PHP (>= 5.3) and can work without "mbstring", "iconv" or any other extra encoding php-extension on your server. The benefit of Portable UTF-8 is that it is easy to use, easy to bundle. This library will also auto-detect your server environment and will use the installed php-extensions if they are available, so you will have the best possible performance.
+The project based on Hamid Sarfraz's work (http://pageconfig.com/attachments/portable-utf8.php) + parts of Nicolas Grekas's work (https://github.com/tchwork/utf8) + parts of Behat's work (https://github.com/Behat/Transliterator) + parts of Sebastián Grignoli's work (https://github.com/neitanod/forceutf8) + parts of Ivan Enderlin's work (https://github.com/hoaproject/Ustring) + cherry-picks from many gist and stackoverflow snippets.
 
 
 ## Alternative
