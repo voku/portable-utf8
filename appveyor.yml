@@ -12,7 +12,7 @@ install:
   - SET PATH=C:\Program Files\OpenSSL;%PATH%
   - cinst -y php
   - cd C:\tools\php\ext
-  - curl -O http://xdebug.org/files/php_xdebug-2.3.2-5.6-vc11-nts-x86_64.dll
+  - curl -O https://xdebug.org/files/php_xdebug-2.4.1-7.0-vc14-nts-x86_64.dll
   - cd C:\tools\php
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
