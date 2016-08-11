@@ -976,4 +976,30 @@ Get part of a string.
 UTF8::substr('中文空白', 1, 2); // '文空'
 ```
 
+##### substr_compare(string $main_str, string $str, int $offset, int $length = 2147483647, bool $case_insensitivity = false) : int
+
+Binary safe comparison of two strings from an offset, up to length characters.
+
+```php
+UTF8::substr_compare("○●◎\r", '●◎', 0, 2); // -1
+UTF8::substr_compare("○●◎\r", '◎●', 1, 2); // 1
+UTF8::substr_compare("○●◎\r", '●◎', 1, 2); // 0
+```
+
+##### substr_count(string $haystack, string $needle, int $offset = 0, int $length = null, string $encoding = 'UTF-8') : int
+
+Count the number of substring occurrences.
+
+```php
+UTF8::substr_count('中文空白', '文空', 1, 2); // 1
+```
+
+##### substr_replace(string|string[] $str, string|string[] $replacement, int|int[] $start, int|int[] $length = null) : string|array
+
+Replace text within a portion of a string.
+
+```php
+UTF8::substr_replace(array('Iñtërnâtiônàlizætiøn', 'foo'), 'æ', 1); // array('Iæñtërnâtiônàlizætiøn', 'fæoo')
+```
+
 ... TODO ...

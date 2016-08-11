@@ -3314,8 +3314,8 @@ final class UTF8
   /**
    * Removes duplicate occurrences of a string in another string.
    *
-   * @param string       $str  <p>The base string.</p>
-   * @param string|array $what <p>String to search for in the base string.</p>
+   * @param string          $str  <p>The base string.</p>
+   * @param string|string[] $what <p>String to search for in the base string.</p>
    *
    * @return string <p>The result string with removed duplicates.</p>
    */
@@ -3507,7 +3507,7 @@ final class UTF8
    * @param int     $length    [optional] <p>Max character length of each array element.</p>
    * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
-   * @return array <p>An array containing chunks of the string.</p>
+   * @return string[] <p>An array containing chunks of the string.</p>
    */
   public static function split($str, $length = 1, $cleanUtf8 = false)
   {
@@ -4843,12 +4843,14 @@ final class UTF8
    *
    * @link  http://php.net/manual/en/function.strtr.php
    *
-   * @param string       $str  <p>The string being translated.</p>
-   * @param string|array $from <p>The string replacing from.</p>
-   * @param string|array $to   <p>The string being translated to to.</p>
+   * @param string          $str  <p>The string being translated.</p>
+   * @param string|string[] $from <p>The string replacing from.</p>
+   * @param string|string[] $to   <p>The string being translated to to.</p>
    *
-   * @return string This function returns a copy of str, translating all occurrences of each character in from to the
+   * @return string <p>
+   *                This function returns a copy of str, translating all occurrences of each character in from to the
    *                corresponding character in to.
+   *                </p>
    */
   public static function strtr($str, $from, $to = INF)
   {
@@ -4997,7 +4999,7 @@ final class UTF8
   }
 
   /**
-   * Count the number of substring occurrences
+   * Count the number of substring occurrences.
    *
    * @link  http://php.net/manual/en/function.substr-count.php
    *
@@ -5045,12 +5047,12 @@ final class UTF8
    *
    * source: https://gist.github.com/stemar/8287074
    *
-   * @param string|array   $str         <p>The input string or an array of stings.</p>
-   * @param string|array   $replacement <p>The replacement string or an array of stings.</p>
-   * @param int|array      $start
-   * @param null|int|array $length      [optional]
+   * @param string|string[] $str         <p>The input string or an array of stings.</p>
+   * @param string|string[] $replacement <p>The replacement string or an array of stings.</p>
+   * @param int|int[]       $start
+   * @param int|int[]|void  $length      [optional]
    *
-   * @return array|string
+   * @return string|string[]
    */
   public static function substr_replace($str, $replacement, $start, $length = null)
   {
@@ -5320,7 +5322,7 @@ final class UTF8
    *
    * @param string $str
    *
-   * @return array|string
+   * @return string|string[]
    */
   public static function to_iso8859($str)
   {
@@ -5332,9 +5334,9 @@ final class UTF8
    *
    * @see UTF8::to_win1252()
    *
-   * @param string|array $str
+   * @param string|string[] $str
    *
-   * @return string|array
+   * @return string|string[]
    */
   public static function to_latin1($str)
   {
@@ -5358,15 +5360,16 @@ final class UTF8
    * 2) when any of these: àáâãäåæçèéêëìíîï  are followed by TWO chars from group B,
    * 3) when any of these: ðñòó  are followed by THREE chars from group B.
    *
-   * @param string|array $str Any string or array.
+   * @param string|string[] $str <p>Any string or array.</p>
    *
-   * @return string The same string, but UTF8 encoded.
+   * @return string|string[] <p>The UTF-8 encoded string.</p>
    */
   public static function to_utf8($str)
   {
     if (is_array($str)) {
       foreach ($str as $k => $v) {
         /** @noinspection AlterInForeachInspection */
+        /** @noinspection OffsetOperationsInspection */
         $str[$k] = self::to_utf8($v);
       }
 
@@ -5470,9 +5473,9 @@ final class UTF8
   /**
    * Convert a string into "win1252"-encoding.
    *
-   * @param string|array $str
+   * @param string|string[] $str
    *
-   * @return string|array
+   * @return string|string[]
    */
   private static function to_win1252($str)
   {
@@ -5553,8 +5556,8 @@ final class UTF8
   /**
    * Uppercase for all words in the string.
    *
-   * @param string $str        <p>The input string.</p>
-   * @param array  $exceptions [optional] <p>Exclusion for some words.</p>
+   * @param string   $str        <p>The input string.</p>
+   * @param string[] $exceptions [optional] <p>Exclusion for some words.</p>
    *
    * @return string
    */
