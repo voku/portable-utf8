@@ -2637,7 +2637,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'abc'                           => 'ABC',
         'deja vu'                       => 'DEJA VU',
         'déjà vu'                       => 'DÉJÀ VU',
-        'déjà σσς iıii'                 => 'DÉJÀ ΣΣΣ IIII',
+        'déJÀ σσς iıII'                 => 'DÉjà ΣΣΣ IIii',
         "test\x80-\xBFöäü"              => 'TEST-ÖÄÜ',
         'Internationalizaetion'         => 'iNTERNATIONALIZAETION',
         "中 - &#20013; - %&? - \xc2\x80" => '中 - &#20013; - %&? - ',
@@ -2739,10 +2739,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($after, UTF8::to_utf8(UTF8::to_latin1($before)));
     }
 
-    self::assertSame($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
-
     // alias
-    self::assertSame($tests, UTF8::to_utf8(UTF8::to_iso8859($tests)));
+    self::assertSame($tests, UTF8::to_utf8(UTF8::toIso8859($tests)));
+    self::assertSame($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
     self::assertSame($tests, UTF8::toUTF8(UTF8::toLatin1($tests)));
   }
 

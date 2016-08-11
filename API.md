@@ -454,14 +454,6 @@ Makes string's first char lowercase.
 UTF8::lcfirst('ÑTËRNÂTIÔNÀLIZÆTIØN'); // ñTËRNÂTIÔNÀLIZÆTIØN 
 ```
 
-##### ltrim(string $str, string $chars = INF) : string
-
-Strip whitespace or other characters from beginning of a UTF-8 string.
-
-```php
-UTF8::ltrim('　中文空白　 '); // '中文空白　 '
-```
-
 ##### max(mixed $arg) : string
 
 Returns the UTF-8 character with the maximum code point in the given data.
@@ -573,12 +565,28 @@ Replace the diamond question mark (�) with the replacement.
 UTF8::replace_diamond_question_mark('中文空白�'); // '中文空白'
 ```
 
+##### trim(string $str = '', string $chars = INF) : string
+
+Strip whitespace or other characters from beginning or end of a UTF-8 string.
+
+```php
+UTF8::rtrim('   -ABC-中文空白-  '); // '-ABC-中文空白-'
+```
+
 ##### rtrim(string $str = '', string $chars = INF) : string
 
 Strip whitespace or other characters from end of a UTF-8 string.
 
 ```php
 UTF8::rtrim('-ABC-中文空白-  '); // '-ABC-中文空白-'
+```
+
+##### ltrim(string $str, string $chars = INF) : string
+
+Strip whitespace or other characters from beginning of a UTF-8 string.
+
+```php
+UTF8::ltrim('　中文空白　 '); // '中文空白　 '
 ```
 
 ##### single_chr_html_encode(string $char, bool $keepAsciiChars = false) : string
@@ -1002,4 +1010,108 @@ Replace text within a portion of a string.
 UTF8::substr_replace(array('Iñtërnâtiônàlizætiøn', 'foo'), 'æ', 1); // array('Iæñtërnâtiônàlizætiøn', 'fæoo')
 ```
 
-... TODO ...
+##### swapCase(string $str, string string $encoding = 'UTF-8') : string
+
+Returns a case swapped version of the string.
+
+```php
+UTF8::swapCase('déJÀ σσς iıII'); // 'DÉjà ΣΣΣ IIii'
+```
+
+##### swapCase(string $str, string string $encoding = 'UTF-8') : string
+
+Returns a case swapped version of the string.
+
+```php
+UTF8::swapCase('déJÀ σσς iıII'); // 'DÉjà ΣΣΣ IIii'
+```
+
+##### to_ascii(string $str, string $unknown = '?') : string
+
+Convert a string into ASCII.
+
+alias: UTF8::toAscii()
+
+```php
+UTF8::to_ascii('déjà σσς iıii'); // 'deja sss iiii'
+```
+
+##### to_utf8(string|string[] $str) : string|string[]
+
+This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.
+
+alias: UTF8::toUtf8()
+
+```php
+UTF8::to_utf8("\u0063\u0061\u0074"); // 'cat'
+```
+
+##### to_iso8859(string|string[] $str) : string|string[]
+
+Convert a string into "ISO-8859"-encoding (Latin-1).
+
+alias: UTF8::toIso8859()
+alias: UTF8::to_latin1()
+alias: UTF8::toLatin1()
+
+```php
+UTF8::to_utf8(UTF8::to_latin1('  -ABC-中文空白-  ')); // '  -ABC-????-  ' 
+```
+
+##### ucfirst(string $str) : string
+
+Makes string's first char uppercase.
+
+alias: UTF8::ucword()
+
+```php
+UTF8::ucfirst('ñtërnâtiônàlizætiøn'); // 'Ñtërnâtiônàlizætiøn'
+```
+
+##### ucwords(string $str) : string
+
+Uppercase for all words in the string.
+
+```php
+UTF8::ucwords('iñt ërn âTi ônà liz æti øn'); // 'Iñt Ërn ÂTi Ônà Liz Æti Øn'
+```
+
+##### urldecode(string $str) : string
+
+Multi decode html entity & fix urlencoded-win1252-chars.
+
+```php
+UTF8::urldecode('tes%20öäü%20\u00edtest'); // 'tes öäü ítest'
+```
+
+##### utf8_decode(string $str) : string
+
+Decodes an UTF-8 string to ISO-8859-1.
+
+```php
+UTF8::encode('UTF-8', UTF8::utf8_decode('-ABC-中文空白-')); // '-ABC-????-'
+```
+
+##### utf8_encode(string $str) : string
+
+Encodes an ISO-8859-1 string to UTF-8.
+
+```php
+UTF8::utf8_decode(UTF8::utf8_encode('-ABC-中文空白-')); // '-ABC-中文空白-'
+```
+
+##### words_limit(string $str, int $words = 100, string $strAddOn = '...') : string
+
+Limit the number of words in a string.
+
+```php
+UTF8::words_limit('fòô bàř fòô', 2, ''); // 'fòô bàř'
+```
+
+##### wordwrap(string $str, int $width = 75, string $break = "\n", bool $cut = false) : string
+
+Wraps a string to a given number of characters
+
+```php
+UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 10, "\n", true)); // 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn'
+```

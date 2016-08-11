@@ -1236,7 +1236,7 @@ final class UTF8
               || $encodingDetected === 'UTF-8'
           )
       ) {
-        return self::to_win1252($str);
+        return self::to_iso8859($str);
       }
 
       $strEncoded = \mb_convert_encoding(
@@ -5316,23 +5316,23 @@ final class UTF8
   }
 
   /**
-   * alias for "UTF8::to_win1252()"
+   * alias for "UTF8::to_iso8859()"
    *
-   * @see UTF8::to_win1252()
+   * @see UTF8::to_iso8859()
    *
    * @param string $str
    *
    * @return string|string[]
    */
-  public static function to_iso8859($str)
+  public static function toIso8859($str)
   {
-    return self::to_win1252($str);
+    return self::to_iso8859($str);
   }
 
   /**
-   * alias for "UTF8::to_win1252()"
+   * alias for "UTF8::to_iso8859()"
    *
-   * @see UTF8::to_win1252()
+   * @see UTF8::to_iso8859()
    *
    * @param string|string[] $str
    *
@@ -5340,11 +5340,13 @@ final class UTF8
    */
   public static function to_latin1($str)
   {
-    return self::to_win1252($str);
+    return self::to_iso8859($str);
   }
 
   /**
    * This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.
+   *
+   * - It decode UTF-8 codepoints and unicode escape sequences.
    *
    * - It assumes that the encoding of the original string is either WINDOWS-1252 or ISO-8859-1.
    *
@@ -5471,19 +5473,20 @@ final class UTF8
   }
 
   /**
-   * Convert a string into "win1252"-encoding.
+   * Convert a string into "ISO-8859"-encoding (Latin-1).
    *
    * @param string|string[] $str
    *
    * @return string|string[]
    */
-  private static function to_win1252($str)
+  public static function to_iso8859($str)
   {
     if (is_array($str)) {
 
       foreach ($str as $k => $v) {
         /** @noinspection AlterInForeachInspection */
-        $str[$k] = self::to_win1252($v);
+        /** @noinspection OffsetOperationsInspection */
+        $str[$k] = self::to_iso8859($v);
       }
 
       return $str;
@@ -6008,7 +6011,6 @@ final class UTF8
    *                      If the cut is set to true, the string is
    *                      always wrapped at or before the specified width. So if you have
    *                      a word that is larger than the given width, it is broken apart.
-   *                      (See second example).
    *                      </p>
    *
    * @return string <p>The given string wrapped at the specified column.</p>
