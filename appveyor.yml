@@ -36,6 +36,6 @@ test_script:
   - cd C:\projects\utf8
   - php.exe --version
   - dir
-  - php.exe vendor\phpunit\phpunit -c phpunit.xml
+  - php.exe vendor\phpunit\phpunit\phpunit -c phpunit.xml
   - php.exe vendor\satooshi\php-coveralls\bin -v
   - php.exe ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
