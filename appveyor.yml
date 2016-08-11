@@ -25,6 +25,7 @@ install:
   - cd C:\projects\utf8
   - mkdir build\logs
   - php -r "readfile('http://getcomposer.org/installer');" | php
+  - curl -O https://scrutinizer-ci.com/ocular.phar
   - php composer.phar config -g github-oauth.github.com %GITHUB_TOKEN%
   - php composer.phar self-update
   - php composer.phar require satooshi/php-coveralls:dev-master
@@ -35,5 +36,6 @@ test_script:
   - cd C:\projects\utf8
   - php.exe --version
   - dir
-  - php vendor\bin\phpunit -c phpunit.xml
-  - php vendor\bin\coveralls -v
+  - php.exe vendor\bin\phpunit -c phpunit.xml
+  - php.exe vendor\bin\coveralls -v
+  - php.exe ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
