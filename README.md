@@ -801,7 +801,7 @@ UTF8::remove_duplicates("κόσ\0με"); // 'κόσμε'
 Replace the diamond question mark (�) with the replacement.
 
 ```php
-UTF8::replace_diamond_question_mark('中文空白�'); // '中文空白'
+UTF8::replace_diamond_question_mark('中文空白�', ''); // '中文空白'
 ```
 
 ##### trim(string $str = '', string $chars = INF) : string
