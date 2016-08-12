@@ -791,6 +791,23 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testChrToHex()
+  {
+    $tests = array(
+        ''  => 'U+0000',
+        0   => 'U+0000',
+        ' ' => 'U+0020',
+        'a' => 'U+0061',
+        'ä' => 'U+00e4',
+        'ό' => 'U+1f79',
+        '❤' => 'U+2764',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::chr_to_hex($before), 'tested: ' . $before);
+    }
+  }
+
   public function testHexToIntAndIntToHex()
   {
     $tests = array(
@@ -816,7 +833,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '{-test'                  => '&#123;&#45;&#116;&#101;&#115;&#116;',
         '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
         'Dänisch (Å/å, Æ/æ, Ø/ø)' => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍&#32;💩&#32;😄&#32;&#10084;&#32;👍&#32;💩&#32;😄&#32;&#10084;', // TODO? I still see some symbols ... :/
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍&#32;💩&#32;😄&#32;&#10084;&#32;👍&#32;💩&#32;😄&#32;&#10084;',
+        // TODO? I still see some symbols ... :/
         'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
         'öäü'                     => '&#246;&#228;&#252;',
         ' '                       => '&#32;',
@@ -888,20 +906,20 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
       $tmpTestArray = array(
-          'who&#039;s online'                                                                         => 'who&#039;s online',
-          'who&amp;#039;s online'                                                                     => 'who&#039;s online',
-          'who&#039;s online-'                                                                        => 'who&#039;s online-',
-          'Who&#039;s Online'                                                                         => 'Who&#039;s Online',
-          'Who&amp;#039;s Online'                                                                     => 'Who&#039;s Online',
-          'Who&amp;amp;#039;s Online &#20013;'                                                        => 'Who&#039;s Online 中',
-          'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+          'who&#039;s online'                  => 'who&#039;s online',
+          'who&amp;#039;s online'              => 'who&#039;s online',
+          'who&#039;s online-'                 => 'who&#039;s online-',
+          'Who&#039;s Online'                  => 'Who&#039;s Online',
+          'Who&amp;#039;s Online'              => 'Who&#039;s Online',
+          'Who&amp;amp;#039;s Online &#20013;' => 'Who&#039;s Online 中',
+          'who\'s online&colon;'               => 'who\'s online&colon;',
       );
 
       $testArray = array_merge($testArray, $tmpTestArray);
     }
 
     foreach ($testArray as $before => $after) {
-        self::assertSame($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
+      self::assertSame($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
     }
   }
 
@@ -932,7 +950,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
       $tmpTestArray = array(
-          'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+          'who\'s online&colon;' => 'who\'s online&colon;',
       );
 
       $testArray = array_merge($testArray, $tmpTestArray);
@@ -963,13 +981,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
       $tmpTestArray = array(
-          'who&#039;s online'                                                                         => 'who&#039;s online',
-          'who&amp;#039;s online'                                                                     => 'who&#039;s online',
-          'who&#039;s online-'                                                                        => 'who&#039;s online-',
-          'Who&#039;s Online'                                                                         => 'Who&#039;s Online',
-          'Who&amp;#039;s Online'                                                                     => 'Who&#039;s Online',
-          'Who&amp;amp;#039;s Online &#20013;'                                                        => 'Who&#039;s Online 中',
-          'who\'s online&colon;'                                                                      => 'who\'s online&colon;',
+          'who&#039;s online'                  => 'who&#039;s online',
+          'who&amp;#039;s online'              => 'who&#039;s online',
+          'who&#039;s online-'                 => 'who&#039;s online-',
+          'Who&#039;s Online'                  => 'Who&#039;s Online',
+          'Who&amp;#039;s Online'              => 'Who&#039;s Online',
+          'Who&amp;amp;#039;s Online &#20013;' => 'Who&#039;s Online 中',
+          'who\'s online&colon;'               => 'who\'s online&colon;',
       );
 
       $testArray = array_merge($testArray, $tmpTestArray);
@@ -1007,7 +1025,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
       $tmpTestArray = array(
-          'who\'s online&colon;'                                                                      => 'who\'s online:',
+          'who\'s online&colon;' => 'who\'s online:',
       );
 
       $testArray = array_merge($testArray, $tmpTestArray);
@@ -1034,27 +1052,33 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::htmlentities($actual));
 
-      self::assertSame($actual, UTF8::html_entity_decode(
-          UTF8::htmlentities($actual)
-      ));
+      self::assertSame(
+          $actual,
+          UTF8::html_entity_decode(
+              UTF8::htmlentities($actual)
+          )
+      );
     }
 
     // ---
 
     $testArray = array(
-        'abc'  => 'abc',
-        'öäü'  => '&Atilde;&para;&Atilde;&curren;&Atilde;&frac14;',
-        ' '    => ' ',
-        ''     => '',
+        'abc' => 'abc',
+        'öäü' => '&Atilde;&para;&Atilde;&curren;&Atilde;&frac14;',
+        ' '   => ' ',
+        ''    => '',
     );
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::htmlentities($actual, ENT_COMPAT, 'ISO-8859-1', false));
 
-      self::assertSame($actual, UTF8::html_entity_decode(
-          UTF8::htmlentities($actual, ENT_COMPAT, 'ISO-8859-1', false),
-          ENT_COMPAT,
-          'ISO-8859-1')
+      self::assertSame(
+          $actual,
+          UTF8::html_entity_decode(
+              UTF8::htmlentities($actual, ENT_COMPAT, 'ISO-8859-1', false),
+              ENT_COMPAT,
+              'ISO-8859-1'
+          )
       );
     }
   }
@@ -1490,7 +1514,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testMin()
   {
     $tests = array(
-        'abc-äöü-中文空白'     => '-',
+        'abc-äöü-中文空白' => '-',
         'öäü'          => 'ä',
         'öäü test öäü' => ' ',
         'ÖÄÜ'          => 'Ä',
@@ -1938,7 +1962,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
           array_diff(
               UTF8::str_split($test),
               UTF8::str_split(UTF8::str_shuffle($test))
-          ), 'tested: ' . $test);
+          ), 'tested: ' . $test
+      );
     }
   }
 
@@ -3394,10 +3419,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     $testArray = array(
         '中文空白 öäü abc' => 3,
-        'öäü öäü öäü'     => 3,
-        'abc'             => 1,
-        ''                => 0,
-        ' '               => 0,
+        'öäü öäü öäü'  => 3,
+        'abc'          => 1,
+        ''             => 0,
+        ' '            => 0,
     );
 
     foreach ($testArray as $actual => $expected) {
