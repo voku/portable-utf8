@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<index xmlns="http://xml.phpdox.net/src" basedir="/home/lars/PhpstormProjects/portable-utf8/src">
-  <namespace name="voku\helper">
-    <class name="Bootup" src="voku/helper/Bootup.php" description="Class Bootup" xml="classes/voku_helper_Bootup.xml"/>
-    <class name="UTF8" src="voku/helper/UTF8.php" description="UTF8-Helper-Class" xml="classes/voku_helper_UTF8.xml"/>
-  </namespace>
-</index>
