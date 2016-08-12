@@ -1744,12 +1744,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "\xFF\xFE\x00\x00Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
     );
 
-    foreach ($testBom as $count => $test) {
+    foreach ($testBom as $count => &$test) {
+
+      $test = UTF8::remove_bom($test);
+
       self::assertSame(
           'Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα',
-          UTF8::remove_bom($test),
+          $test,
           'error by ' . $count
       );
+
+      $test = UTF8::add_bom_to_string($test);
+      self::assertSame(true, UTF8::string_has_bom($test));
     }
   }
 
