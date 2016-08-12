@@ -5013,7 +5013,7 @@ final class UTF8
    *                          </p>
    * @param string $encoding  <p>Set the charset for e.g. "\mb_" function.</p>
    *
-   * @return int <p>This functions returns an integer.</p>
+   * @return int|false <p>This functions returns an integer or false if there isn't a string.</p>
    */
   public static function substr_count($haystack, $needle, $offset = 0, $length = null, $encoding = 'UTF-8')
   {

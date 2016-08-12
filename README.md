@@ -1212,7 +1212,7 @@ UTF8::substr_compare("○●◎\r", '◎●', 1, 2); // 1
 UTF8::substr_compare("○●◎\r", '●◎', 1, 2); // 0
 ```
 
-##### substr_count(string $haystack, string $needle, int $offset = 0, int $length = null, string $encoding = 'UTF-8') : int
+##### substr_count(string $haystack, string $needle, int $offset = 0, int $length = null, string $encoding = 'UTF-8') : int|false
 
 Count the number of substring occurrences.
 
