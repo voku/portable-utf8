@@ -2217,7 +2217,7 @@ final class UTF8
    */
   public static function intlChar_loaded()
   {
-    return Bootup::is_php('7.0') === true and class_exists('IntlChar');
+    return (Bootup::is_php('7.0') === true && class_exists('IntlChar') === true);
   }
 
   /**
