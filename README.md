@@ -134,7 +134,7 @@ The project based on Hamid Sarfraz's work (http://pageconfig.com/attachments/por
     * [substr_count](#substr_countstring-haystack-string-needle-int-offset--0-int-length--null-string-encoding--utf-8--int) 
     * [substr_replace](#substr_replacestringstring-str-stringstring-replacement-intint-start-intint-length--null--stringarray) 
     * [swapCase](#swapcasestring-str-string-string-encoding--utf-8--string)
-    * [to_ascii](#to_asciistring-str-string-unknown----string) 
+    * [to_ascii](#to_asciistring-str-string-unknown---bool-strict--string) 
     * [to_utf8](#to_utf8stringstring-str--stringstring) 
     * [to_iso8859](#to_iso8859stringstring-str--stringstring) 
     * [ucfirst](#ucfirststring-str--string) 
