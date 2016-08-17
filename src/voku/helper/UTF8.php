@@ -5231,7 +5231,7 @@ final class UTF8
       return '';
     }
 
-    $str = self::clean($str);
+    $str = self::clean($str, false, true, true);
 
     // check if we only have ASCII
     if (self::is_ascii($str) === true) {

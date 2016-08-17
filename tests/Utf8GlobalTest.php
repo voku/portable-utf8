@@ -2733,7 +2733,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "      - abc- \xc2\x87"         => '      - abc- ++',
         'abc'                           => 'abc',
         'deja vu'                       => 'deja vu',
-        'déjà vu'                       => 'deja vu',
+        'déjà vu '                       => 'deja vu ',
         'déjà σσς iıii'                 => 'deja sss iiii',
         "test\x80-\xBFöäü"              => 'test-oau',
         'Internationalizaetion'         => 'Internationalizaetion',
