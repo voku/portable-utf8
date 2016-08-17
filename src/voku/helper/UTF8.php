@@ -1407,11 +1407,14 @@ final class UTF8
         }
         break;
       case 'string':
+
         if (false !== strpos($var, "\r")) {
           // Workaround https://bugs.php.net/65732
           $var = str_replace(array("\r\n", "\r"), "\n", $var);
         }
-        if (preg_match('/[\x80-\xFF]/', $var)) {
+
+        if (self::is_ascii($var) === false) {
+
           if (\Normalizer::isNormalized($var, $normalization_form)) {
             $n = '-';
           } else {
@@ -1422,9 +1425,13 @@ final class UTF8
             } else {
               $var = self::encode('UTF-8', $var);
             }
-
           }
-          if ($var[0] >= "\x80" && isset($n[0], $leading_combining[0]) && preg_match('/^\p{Mn}/u', $var)) {
+
+          if (
+              $var[0] >= "\x80" && isset($n[0], $leading_combining[0])
+              &&
+              preg_match('/^\p{Mn}/u', $var)
+          ) {
             // Prevent leading combining chars
             // for NFC-safe concatenations.
             $var = $leading_combining . $var;
@@ -3973,12 +3980,13 @@ final class UTF8
    *
    * @param string $str
    * @param string $unknown
+   * @param bool   $strict
    *
    * @return string
    */
-  public static function str_transliterate($str, $unknown = '?')
+  public static function str_transliterate($str, $unknown = '?', $strict = false)
   {
-    return self::to_ascii($str, $unknown);
+    return self::to_ascii($str, $unknown, $strict);
   }
 
   /**
@@ -5164,12 +5172,13 @@ final class UTF8
    *
    * @param string $s
    * @param string $subst_chr
+   * @param bool   $strict
    *
    * @return string
    */
-  public static function toAscii($s, $subst_chr = '?')
+  public static function toAscii($s, $subst_chr = '?', $strict = false)
   {
-    return self::to_ascii($s, $subst_chr);
+    return self::to_ascii($s, $subst_chr, $strict);
   }
 
   /**
@@ -5205,10 +5214,13 @@ final class UTF8
    *
    * @param string $str     <p>The input string.</p>
    * @param string $unknown [optional] <p>Character use if character unknown. (default is ?)</p>
+   * @param bool   $strict  [optional] <p>Use "transliterator_transliterate" from PHP-Intl | WARNING: bad performance</p>
    *
    * @return string
+   *
+   * @throws \Exception
    */
-  public static function to_ascii($str, $unknown = '?')
+  public static function to_ascii($str, $unknown = '?', $strict = false)
   {
     static $UTF8_TO_ASCII;
 
@@ -5221,16 +5233,26 @@ final class UTF8
 
     $str = self::clean($str);
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
+    // check if we only have ASCII
+    if (self::is_ascii($str) === true) {
+      return $str;
     }
 
-    if (self::$support['intl'] === true && Bootup::is_php('5.4')) {
-      $str = transliterator_transliterate('Any-Latin; Latin-ASCII;', $str);
+    if ($strict === true) {
+      if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+        self::checkForSupport();
+      }
 
-      // check again, if we only have ASCII, now ...
-      if (!preg_match("/[\x80-\xFF]/", $str)) {
-        return $str;
+      if (self::$support['intl'] == true && Bootup::is_php('5.4')) {
+        $str = transliterator_transliterate('Any-Latin; Latin-ASCII;', $str);
+
+        // check again, if we only have ASCII, now ...
+        if (!preg_match("/[\x80-\xFF]/", $str)) {
+          return $str;
+        }
+
+      } else {
+        throw new \Exception('Intl is not supported or you use PHP < 5.4!');
       }
     }
 

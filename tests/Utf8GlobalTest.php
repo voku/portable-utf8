@@ -2687,8 +2687,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testToASCII()
   {
+    $testsStrict = array();
     if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
-      $tests = array(
+      $testsStrict = array(
           1                               => '1',
           -1                              => '-1',
           ' '                             => ' ',
@@ -2718,42 +2719,50 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
           '∀ i ∈ ℕ'                       => '[?] i [?] N',
           '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? ahbk',
       );
-    } else {
-      $tests = array(
-          1                               => '1',
-          -1                              => '-1',
-          ' '                             => ' ',
-          ''                              => '',
-          'أبز'                           => '\'bz',
-          "\xe2\x80\x99"                  => '\'',
-          'Ɓtest'                         => 'Btest',
-          '  -ABC-中文空白-  '                => '  -ABC-Zhong Wen Kong Bai -  ',
-          "      - abc- \xc2\x87"         => '      - abc- ++',
-          'abc'                           => 'abc',
-          'deja vu'                       => 'deja vu',
-          'déjà vu'                       => 'deja vu',
-          'déjà σσς iıii'                 => 'deja sss iiii',
-          "test\x80-\xBFöäü"              => 'test-oau',
-          'Internationalizaetion'         => 'Internationalizaetion',
-          "中 - &#20013; - %&? - \xc2\x80" => 'Zhong  - &#20013; - %&? - EUR',
-          'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
-          'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
-          'أحبك'                          => '\'Hbk',
-          'キャンパス'                         => 'kiyanpasu',
-          'биологическом'                 => 'biologicheskom',
-          '정, 병호'                         => 'jeong, byeongho',
-          'ますだ, よしひこ'                     => 'masuda, yosihiko',
-          'मोनिच'                         => 'monic',
-          'क्षȸ'                          => 'kssdb',
-          'أحبك 😀'                       => '\'Hbk ?',
-          '∀ i ∈ ℕ'                       => '[?] i [?] ',
-          '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? \'Hbk',
-      );
     }
 
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::to_ascii($before), 'tested: ' . $before);
-      self::assertSame($after, UTF8::str_transliterate($before), 'tested: ' . $before);
+    $tests = array(
+        1                               => '1',
+        -1                              => '-1',
+        ' '                             => ' ',
+        ''                              => '',
+        'أبز'                           => '\'bz',
+        "\xe2\x80\x99"                  => '\'',
+        'Ɓtest'                         => 'Btest',
+        '  -ABC-中文空白-  '                => '  -ABC-Zhong Wen Kong Bai -  ',
+        "      - abc- \xc2\x87"         => '      - abc- ++',
+        'abc'                           => 'abc',
+        'deja vu'                       => 'deja vu',
+        'déjà vu'                       => 'deja vu',
+        'déjà σσς iıii'                 => 'deja sss iiii',
+        "test\x80-\xBFöäü"              => 'test-oau',
+        'Internationalizaetion'         => 'Internationalizaetion',
+        "中 - &#20013; - %&? - \xc2\x80" => 'Zhong  - &#20013; - %&? - EUR',
+        'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
+        'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
+        'أحبك'                          => '\'Hbk',
+        'キャンパス'                         => 'kiyanpasu',
+        'биологическом'                 => 'biologicheskom',
+        '정, 병호'                         => 'jeong, byeongho',
+        'ますだ, よしひこ'                     => 'masuda, yosihiko',
+        'मोनिच'                         => 'monic',
+        'क्षȸ'                          => 'kssdb',
+        'أحبك 😀'                       => '\'Hbk ?',
+        '∀ i ∈ ℕ'                       => '[?] i [?] ',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? \'Hbk',
+    );
+
+    for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+      foreach ($tests as $before => $after) {
+        self::assertSame($after, UTF8::to_ascii($before), 'tested: ' . $before);
+        self::assertSame($after, UTF8::str_transliterate($before), 'tested: ' . $before);
+      }
+    }
+
+    foreach ($testsStrict as $before => $after) {
+      self::assertSame($after, UTF8::to_ascii($before, '?', true), 'tested: ' . $before);
+      self::assertSame($after, UTF8::toAscii($before, '?', true), 'tested: ' . $before);
+      self::assertSame($after, UTF8::str_transliterate($before, '?', true), 'tested: ' . $before);
     }
   }
 

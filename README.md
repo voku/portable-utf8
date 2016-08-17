@@ -1236,11 +1236,12 @@ Returns a case swapped version of the string.
 UTF8::swapCase('déJÀ σσς iıII'); // 'DÉjà ΣΣΣ IIii'
 ```
 
-##### to_ascii(string $str, string $unknown = '?') : string
+##### to_ascii(string $str, string $unknown = '?', bool $strict) : string
 
 Convert a string into ASCII.
 
 alias: UTF8::toAscii()
+alias: UTF8::str_transliterate()
 
 ```php
 UTF8::to_ascii('déjà σσς iıii'); // 'deja sss iiii'
