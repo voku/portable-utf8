@@ -5247,7 +5247,7 @@ final class UTF8
         $str = transliterator_transliterate('Any-Latin; Latin-ASCII;', $str);
 
         // check again, if we only have ASCII, now ...
-        if (!preg_match("/[\x80-\xFF]/", $str)) {
+        if (self::is_ascii($str) === true) {
           return $str;
         }
 
