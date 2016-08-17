@@ -5214,7 +5214,7 @@ final class UTF8
    *
    * @param string $str     <p>The input string.</p>
    * @param string $unknown [optional] <p>Character use if character unknown. (default is ?)</p>
-   * @param bool   $strict  [optional] <p>Use "transliterator_transliterate" from PHP-Intl | WARNING: bad performance</p>
+   * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad performance</p>
    *
    * @return string
    *
