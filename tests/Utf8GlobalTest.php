@@ -2794,7 +2794,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid UTF-8 + "win1252"-encoding
       'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac" => array('Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'),
       // Valid UTF-8 + Invalied Chars
-      "κόσμε\xa0\xa1-öäü"                           => array('κόσμε-öäü' => 'κόσμε-öäü'),
+      "κόσμε\xa0\xa1-öäü-‽‽‽"                           => array('κόσμε-öäü-‽‽‽' => 'κόσμε-öäü-‽‽‽'),
       // Valid emoji (non-UTF-8)
       '👍 💩 😄 ❤ 👍 💩 😄 ❤'                       => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
       // Valid ASCII
