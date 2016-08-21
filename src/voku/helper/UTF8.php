@@ -906,8 +906,10 @@ final class UTF8
    */
   public static function chr($code_point)
   {
-    // init
     $i = (int)$code_point;
+    if ($i !== $code_point) {
+      return null;
+    }
 
     if (!isset(self::$support['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
@@ -917,15 +919,37 @@ final class UTF8
       return \IntlChar::chr($code_point);
     }
 
-    if ($i !== $code_point) {
-      $i = self::hex_to_int($code_point);
+    // use static cache, if there is no support for "IntlChar"
+    static $cache = array();
+    if (isset($cache[$code_point]) === true) {
+      return $cache[$code_point];
     }
 
-    if (!$i) {
-      return null;
+
+    if ($code_point <= 0x7f) {
+      return $cache[$code_point] = chr($code_point);
     }
 
-    return self::html_entity_decode("&#{$i};", ENT_QUOTES);
+    if ($code_point <= 0x7ff) {
+      return $cache[$code_point] = chr(0xc0 | ($code_point >> 6)) .
+                                   chr(0x80 | ($code_point & 0x3f));
+    }
+
+    if ($code_point <= 0xffff) {
+      return $cache[$code_point] = chr(0xe0 | ($code_point >> 12)) .
+                                   chr(0x80 | (($code_point >> 6) & 0x3f)) .
+                                   chr(0x80 | ($code_point & 0x3f));
+    }
+
+    if ($code_point <= 0x10ffff) {
+      return $cache[$code_point] = chr(0xf0 | ($code_point >> 18)) .
+                                   chr(0x80 | (($code_point >> 12) & 0x3f)) .
+                                   chr(0x80 | (($code_point >> 6) & 0x3f)) .
+                                   chr(0x80 | ($code_point & 0x3f));
+    }
+
+    # U+FFFD REPLACEMENT CHARACTER
+    return $cache[$code_point] = "\xEF\xBF\xBD";
   }
 
   /**
@@ -1889,7 +1913,15 @@ final class UTF8
       return '';
     }
 
-    if (strpos($str, '&') === false) {
+    if (!isset($str[3])) { // examples: &; || &x;
+      return $str;
+    }
+
+    if (
+        strpos($str, '&') === false
+        ||
+        strpos($str, ';') === false
+    ) {
       return $str;
     }
 
@@ -3184,22 +3216,29 @@ final class UTF8
       }
     }
 
+    // use static cache, if there is no support for "IntlChar"
+    static $cache = array();
+    if (isset($cache[$chr]) === true) {
+      return $cache[$chr];
+    }
+
+    $chr_orig = $chr;
     $chr = unpack('C*', substr($chr, 0, 4));
     $a = $chr ? $chr[1] : 0;
 
     if (0xF0 <= $a && isset($chr[4])) {
-      return (($a - 0xF0) << 18) + (($chr[2] - 0x80) << 12) + (($chr[3] - 0x80) << 6) + $chr[4] - 0x80;
+      return $cache[$chr_orig] = (($a - 0xF0) << 18) + (($chr[2] - 0x80) << 12) + (($chr[3] - 0x80) << 6) + $chr[4] - 0x80;
     }
 
     if (0xE0 <= $a && isset($chr[3])) {
-      return (($a - 0xE0) << 12) + (($chr[2] - 0x80) << 6) + $chr[3] - 0x80;
+      return $cache[$chr_orig] = (($a - 0xE0) << 12) + (($chr[2] - 0x80) << 6) + $chr[3] - 0x80;
     }
 
     if (0xC0 <= $a && isset($chr[2])) {
-      return (($a - 0xC0) << 6) + $chr[2] - 0x80;
+      return $cache[$chr_orig] = (($a - 0xC0) << 6) + $chr[2] - 0x80;
     }
 
-    return $a;
+    return $cache[$chr_orig] = $a;
   }
 
   /**
@@ -3785,7 +3824,13 @@ final class UTF8
   {
     $str_length = self::strlen($str);
 
-    if (is_int($pad_length) && ($pad_length > 0) && ($pad_length >= $str_length)) {
+    if (
+        is_int($pad_length) === true
+        &&
+        $pad_length > 0
+        &&
+        $pad_length >= $str_length
+    ) {
       $ps_length = self::strlen($pad_string);
 
       $diff = $pad_length - $str_length;
@@ -4441,10 +4486,9 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // \mb_strpos returns wrong position if invalid characters are found in $haystack before $needle
-      // iconv_strpos is not tolerant to invalid characters
-
-      $needle = self::clean((string)$needle);
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $needle = self::clean($needle);
       $haystack = self::clean($haystack);
     }
 
@@ -4462,18 +4506,14 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
-    ) {
+    if (self::$support['mbstring'] === true) {
       return \mb_strpos($haystack, $needle, $offset, $encoding);
     }
 
     if (self::$support['iconv'] === true) {
-      // ignore invalid negative offset to keep compatility
+      // ignore invalid negative offset to keep compatibility
       // with php < 5.5.35, < 5.6.21, < 7.0.6
-      return \grapheme_strpos($haystack, $needle, $offset > 0 ? $offset : 0);
+      return \iconv_strpos($haystack, $needle, $offset > 0 ? $offset : 0, $encoding);
     }
 
     if ($offset > 0) {
@@ -4963,16 +5003,12 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
-    ) {
+    if (self::$support['mbstring'] === true) {
       return \mb_substr($str, $start, $length, $encoding);
     }
 
     if (self::$support['iconv'] === true) {
-      return (string)\grapheme_substr($str, $start, $length);
+      return \iconv_substr($str, $start, $length, $encoding);
     }
 
     // fallback
@@ -5214,7 +5250,8 @@ final class UTF8
    *
    * @param string $str     <p>The input string.</p>
    * @param string $unknown [optional] <p>Character use if character unknown. (default is ?)</p>
-   * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad performance</p>
+   * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad
+   *                        performance</p>
    *
    * @return string
    *

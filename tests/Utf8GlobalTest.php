@@ -107,9 +107,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         8469  => 'ℕ',
     );
 
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
-      self::assertSame($after, UTF8::chr(UTF8::ord(UTF8::chr($before))), 'tested: ' . $before);
+    for ($i = 0; $i < 20000; $i++) { // keep this loop for simple performance tests
+      foreach ($testArray as $before => $after) {
+        self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
+        self::assertSame($after, UTF8::chr(UTF8::ord(UTF8::chr($before))), 'tested: ' . $before);
+      }
     }
 
     // --
@@ -877,6 +879,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
         ' '                       => ' ',
         ''                        => '',
+        '&#d;'                    => '&#d;',
+        '&d;'                     => '&d;',
+        '&gt;'                    => '>',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -1619,8 +1624,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ''                 => 0,
     );
 
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::ord($actual));
+    for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+      foreach ($testArray as $actual => $expected) {
+        self::assertSame($expected, UTF8::ord($actual));
+      }
     }
   }
 
