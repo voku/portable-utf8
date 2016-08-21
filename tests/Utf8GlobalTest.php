@@ -820,7 +820,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'U+0000' => 0,
     );
 
-    foreach ($tests as $before => $after) {
+    $testsForHexToInt = array(
+        '\u2026' => 8230,
+        '\u03ba' => 954,
+        '\u00f6' => 246,
+        '\u00f1' => 241,
+        '\u0000' => 0,
+        //
+        '2026' => 8230,
+        '03ba' => 954,
+        '00f6' => 246,
+        '00f1' => 241,
+        '0000' => 0,
+    );
+
+    foreach (array_replace($testsForHexToInt, $tests) as $before => $after) {
       self::assertSame($after, UTF8::hex_to_int($before), 'tested: ' . $before);
     }
 
@@ -1112,6 +1126,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '白'      => false,
         ' '      => true,
         ''       => true,
+        '!!!'    => true,
+        '§§§'    => false,
     );
 
     foreach ($testArray as $actual => $expected) {

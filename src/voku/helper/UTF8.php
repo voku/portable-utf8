@@ -1771,6 +1771,10 @@ final class UTF8
    */
   public static function hex_to_int($str)
   {
+    if (!$str) {
+      return false;
+    }
+
     if (preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $str, $match)) {
       return intval($match[1], 16);
     }
@@ -2408,6 +2412,12 @@ final class UTF8
    */
   public static function is_ascii($str)
   {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return true;
+    }
+
     return (bool)!preg_match('/[\x80-\xFF]/', $str);
   }
 
@@ -3975,6 +3985,11 @@ final class UTF8
   {
     // init
     $len = (int)$len;
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return array();
+    }
 
     if ($len < 1) {
       return str_split($str, $len);
@@ -4137,16 +4152,19 @@ final class UTF8
 
     if ($offset || 2147483647 !== $length) {
       $str = (string)self::substr($str, $offset, $length);
-    } else {
-      $str = (string)$str;
+    }
+
+    $str = (string)$str;
+    if (!isset($str[0])) {
+      return null;
     }
 
     if (preg_match('/^(.*?)' . self::rxClass($charList) . '/us', $str, $length)) {
       /** @noinspection OffsetOperationsInspection */
       return self::strlen($length[1]);
-    } else {
-      return self::strlen($str);
     }
+
+    return self::strlen($str);
   }
 
   /**
@@ -4745,8 +4763,17 @@ final class UTF8
    */
   public static function strspn($str, $mask, $offset = 0, $length = 2147483647)
   {
+    // init
+    $length = (int)$length;
+    $offset = (int)$offset;
+
     if ($offset || 2147483647 !== $length) {
       $str = self::substr($str, $offset, $length);
+    }
+
+    $str = (string)$str;
+    if (!isset($str[0])) {
+      return '';
     }
 
     return preg_match('/^' . self::rxClass($mask) . '+/u', $str, $str) ? self::strlen($str[0]) : 0;
