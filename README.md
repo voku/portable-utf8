@@ -257,7 +257,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 Return the character at the specified position: $str[1] like functionality.
 
 ```php
-UTF8::access('fòô', 1); // 'ô'
+UTF8::access('fòô', 1); // 'ò'
 ```
 
 ##### add_bom_to_string(string $str)
