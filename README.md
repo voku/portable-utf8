@@ -531,8 +531,10 @@ Convert all HTML entities to their applicable characters
 
 INFO: opposite to UTF8::html_encode()
 
+alias: UTF8::html_decode()
+
 ```php
-UTF8::html_encode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白' 
+UTF8::html_entity_decode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白' 
 ```
 
 ##### htmlentities(string $str, int $flags = ENT_COMPAT, string $encoding = 'UTF-8', bool $double_encode = true) : string
