@@ -865,6 +865,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($actual, UTF8::html_decode(UTF8::html_encode($actual)), 'tested:' . $actual);
     }
 
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($actual, UTF8::html_entity_decode(UTF8::html_encode($actual)), 'tested:' . $actual);
+    }
+
     // ---
 
     $testArray = array(
