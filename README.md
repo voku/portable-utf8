@@ -792,7 +792,7 @@ UTF8::remove_duplicates('öäü-κόσμεκόσμε-äöü', 'κόσμε'); 
 Remove invisible characters from a string.
 
 ```php
-UTF8::remove_duplicates("κόσ\0με"); // 'κόσμε'
+UTF8::remove_invisible_characters("κόσ\0με"); // 'κόσμε'
 ```
 
 ##### replace_diamond_question_mark(string $str, string $unknown = '?') : string
