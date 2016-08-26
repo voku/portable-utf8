@@ -1323,7 +1323,7 @@ UTF8::words_limit('fòô bàř fòô', 2, ''); // 'fòô bàř'
 Wraps a string to a given number of characters
 
 ```php
-UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 10, "\n", true)); // 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn'
+UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 2, '<br>', true)); // 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn'
 ```
 
 
