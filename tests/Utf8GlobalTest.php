@@ -978,6 +978,23 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
     }
+
+    // ---
+
+    $testArray = array(
+        'κόσμε'                                                                                     => 'κόσμε',
+        'who&#039;s online'                                                                         => 'who\'s online',
+        'who&amp;#039;s online'                                                                     => 'who\'s online',
+        'who&#039;s online-'                                                                        => 'who\'s online-',
+        'Who&#039;s Online'                                                                         => 'Who\'s Online',
+        'Who&amp;#039;s Online &#20013;'                                                            => 'Who\'s Online ?',
+        'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
+        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
+    );
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'ISO'), 'error by ' . $before); // 'ISO-8859-1'
+    }
   }
 
   public function testHtmlEntityDecodeWithEntNoQuotes()

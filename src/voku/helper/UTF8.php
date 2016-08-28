@@ -1946,8 +1946,8 @@ final class UTF8
 
       $str = preg_replace_callback(
           "/&#\d{2,5};/",
-          function ($matches) {
-            $returnTmp = \mb_convert_encoding($matches[0], 'UTF-8', 'HTML-ENTITIES');
+          function ($matches) use ($encoding) {
+            $returnTmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
 
             if ($returnTmp !== '"' && $returnTmp !== "'") {
               return $returnTmp;
