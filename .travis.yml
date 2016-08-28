@@ -13,6 +13,7 @@ matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
+    - php: 7.1
   include:
     - php: 5.3
       env: extension='true'
@@ -33,6 +34,10 @@ matrix:
     - php: 7.0
       env: extension='true'
     - php: 7.0
+      env: extension='false'
+    - php: 7.1
+      env: extension='true'
+    - php: 7.1
       env: extension='false'
 
 before_script:
