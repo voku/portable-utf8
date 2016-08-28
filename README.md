@@ -10,7 +10,6 @@
 [![Latest Stable Version](https://poser.pugx.org/voku/portable-utf8/v/stable)](https://packagist.org/packages/voku/portable-utf8) 
 [![Total Downloads](https://poser.pugx.org/voku/portable-utf8/downloads)](https://packagist.org/packages/voku/portable-utf8) 
 [![Latest Unstable Version](https://poser.pugx.org/voku/portable-utf8/v/unstable)](https://packagist.org/packages/voku/portable-utf8)
-[![PHP 7 ready](http://php7ready.timesplinter.ch/voku/portable-utf8/badge.svg)](https://travis-ci.org/voku/portable-utf8)
 [![License](https://poser.pugx.org/voku/portable-utf8/license)](https://packagist.org/packages/voku/portable-utf8)
 
 # Portable UTF-8
@@ -532,8 +531,10 @@ Convert all HTML entities to their applicable characters
 
 INFO: opposite to UTF8::html_encode()
 
+alias: UTF8::html_decode()
+
 ```php
-UTF8::html_encode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白' 
+UTF8::html_entity_decode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白' 
 ```
 
 ##### htmlentities(string $str, int $flags = ENT_COMPAT, string $encoding = 'UTF-8', bool $double_encode = true) : string
@@ -793,7 +794,7 @@ UTF8::remove_duplicates('öäü-κόσμεκόσμε-äöü', 'κόσμε'); 
 Remove invisible characters from a string.
 
 ```php
-UTF8::remove_duplicates("κόσ\0με"); // 'κόσμε'
+UTF8::remove_invisible_characters("κόσ\0με"); // 'κόσμε'
 ```
 
 ##### replace_diamond_question_mark(string $str, string $unknown = '?') : string
@@ -1324,7 +1325,7 @@ UTF8::words_limit('fòô bàř fòô', 2, ''); // 'fòô bàř'
 Wraps a string to a given number of characters
 
 ```php
-UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 10, "\n", true)); // 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn'
+UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 2, '<br>', true)); // 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn'
 ```
 
 
