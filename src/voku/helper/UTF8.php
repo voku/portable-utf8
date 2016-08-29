@@ -1924,7 +1924,11 @@ final class UTF8
     if (
         strpos($str, '&') === false
         ||
-        strpos($str, ';') === false
+        (
+            strpos($str, '&#') === false
+            &&
+            strpos($str, ';') === false
+        )
     ) {
       return $str;
     }
