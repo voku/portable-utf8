@@ -2727,6 +2727,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::swapCase($before), $before);
     }
+
+    // ---
+
+    self::assertSame('BonJour & au revoir', UTF8::swapCase('bONjOUR & AU REVOIR', 'ISO'));
   }
 
   public function testToASCII()
