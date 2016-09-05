@@ -2535,8 +2535,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strtoupper($before));
+      self::assertSame($after, UTF8::strtoupper($before), 'tested: ' . $before);
     }
+
+    // ---
+
+    self::assertNotSame('Déjà Σσς Iıİi', UTF8::strtoupper('DÉJÀ ΣΣΣ IIİI', 'ISO'));
+    self::assertSame('ÖÄÜ TEST ÖÄÜ', UTF8::strtoupper('ÖÄÜ TEST ÖÄÜ', 'ISO'));
   }
 
   public function testStrtr()
@@ -2735,6 +2740,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
+    self::assertNotSame('это тестовый заголовок', UTF8::swapCase('ЭТО ТЕСТОВЫЙ ЗАГОЛОВОК', 'ISO'));
     self::assertSame('BonJour & au revoir', UTF8::swapCase('bONjOUR & AU REVOIR', 'ISO'));
   }
 
