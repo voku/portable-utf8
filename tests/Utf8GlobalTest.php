@@ -2695,6 +2695,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(2, UTF8::substr_count("○●◎\r◎", '◎'));
     self::assertSame(1, UTF8::substr_count("○●◎\r", '●◎', 1, 2));
     self::assertSame(1, UTF8::substr_count('中文空白', '文空', 1, 2));
+
+    // ISO
+
+    self::assertSame(0, UTF8::substr_count('中文空白', '文空', 1, 2, 'ISO'));
+    self::assertSame(1, UTF8::substr_count('abcde', 'bc', 1, 2, 'ISO'));
   }
 
   public function testSwapCase()
