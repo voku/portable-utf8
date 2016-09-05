@@ -3207,6 +3207,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     self::assertSame('Iñt Ërn ÂTi Ônà Liz Æti Øn', UTF8::ucwords('iñt ërn âTi ônà liz æti øn'));
     self::assertSame("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
+    self::assertSame('中文空白 foo Oo Oöäü#s', UTF8::ucwords('中文空白 foo oo oöäü#s', array('foo'), '#'));
+    self::assertSame('中文空白 foo Oo Oöäü#S', UTF8::ucwords('中文空白 foo oo oöäü#s', array('foo'), ''));
     self::assertSame('', UTF8::ucwords(''));
     self::assertSame('Ñ', UTF8::ucwords('ñ'));
     self::assertSame("Iñt ËrN Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërN âti\n ônà liz æti øn"));

@@ -4062,8 +4062,7 @@ final class UTF8
    *                         <strong>1</strong> => return an array of words<br />
    *                         <strong>2</strong> => return an array of words with word-offset as key
    *                         </p>
-   * @param string $charlist [optional] <p>Additional chars that contains to words and do not start a new word
-   *                         (default: "'", "’")</p>
+   * @param string $charlist [optional] <p>Additional chars that contains to words and do not start a new word.</p>
    *
    * @return array|int <p>The number of words in the string</p>
    */
@@ -5651,17 +5650,18 @@ final class UTF8
    *
    * @param string   $str        <p>The input string.</p>
    * @param string[] $exceptions [optional] <p>Exclusion for some words.</p>
+   * @param string $charlist [optional] <p>Additional chars that contains to words and do not start a new word.</p>
    *
    * @return string
    */
-  public static function ucwords($str, $exceptions = array())
+  public static function ucwords($str, $exceptions = array(), $charlist = '')
   {
     if (!$str) {
       return '';
     }
 
-    // init
-    $words = explode(' ', $str);
+    $charlist = self::rxClass($charlist, '\pL');
+    $words = \preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
     $newwords = array();
 
     if (count($exceptions) > 0) {
@@ -5671,6 +5671,11 @@ final class UTF8
     }
 
     foreach ($words as $word) {
+
+      if (!$word) {
+        continue;
+      }
+
       if (
           ($useExceptions === false)
           ||
@@ -5682,10 +5687,11 @@ final class UTF8
       ) {
         $word = self::ucfirst($word);
       }
+
       $newwords[] = $word;
     }
 
-    return implode(' ', $newwords);
+    return implode('', $newwords);
   }
 
   /**
