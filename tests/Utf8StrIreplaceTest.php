@@ -143,6 +143,13 @@ class Utf8StrIreplaceTest extends PHPUnit_Framework_TestCase
     self::assertSame($replaced, u::str_ireplace('lIzÆ', 'lise', $str));
   }
 
+  public function test_replace_linefeed_array()
+  {
+    $str = "Iñtërnâti\nônàlizætiøn";
+    $replaced = "Iñtërnâti\n\nônàlisetiøn";
+    self::assertSame($replaced, u::str_ireplace(array('lIzÆ', "\n"), array('lise', "\n\n"), $str));
+  }
+
   public function test_replace_linefeed_search()
   {
     $str = "Iñtërnâtiônàli\nzætiøn";
