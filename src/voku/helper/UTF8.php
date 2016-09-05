@@ -6124,10 +6124,6 @@ final class UTF8
     $strSplit = explode($break, $str);
     $count = count($strSplit);
 
-    if (1 === $count && '' === $strSplit[0]) {
-      return '';
-    }
-
     $chars = array();
     /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $count; ++$i) {
