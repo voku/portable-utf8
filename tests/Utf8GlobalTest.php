@@ -888,7 +888,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
     }
 
-    // --
+    // ---
 
     $testArray = array(
         '{-test'                  => '{-test',
@@ -906,6 +906,34 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
+    }
+
+    // --- ISO
+
+    $testArray = array(
+        '中文空白'                    => '中文空白',
+        'κόσμε'                   => 'κόσμε',
+        'öäü'                     => 'öäü',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'Dänisch (Å/å, Æ/æ, Ø/ø)',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertNotSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO')), 'tested:' . $actual);
+    }
+
+    $testArray = array(
+        '{-test'                  => '{-test',
+        'abc'                     => 'abc',
+        ' '                       => ' ',
+        ''                        => '',
+        '&#d;'                    => '&#d;',
+        '&d;'                     => '&d;',
+        '&gt;'                    => '>',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO')), 'tested:' . $actual);
     }
   }
 
