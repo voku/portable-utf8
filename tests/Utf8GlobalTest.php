@@ -843,6 +843,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($tests as $after => $before) {
       self::assertSame($after, UTF8::int_to_hex($before), 'tested: ' . $before);
     }
+
+    // --- fail
+
+    self::assertSame(false, UTF8::hex_to_int(''));
+    self::assertSame(false, UTF8::hex_to_int('abc-öäü'));
   }
 
   public function testHtmlEncode()
