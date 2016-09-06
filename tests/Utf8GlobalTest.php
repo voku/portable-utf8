@@ -2307,6 +2307,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $string = "\xFF\xFE" . 'string <strong>with utf-8 chars åèä</strong>' . "\xa0\xa1" . ' - doo-bee doo-bee dooh';
 
     self::assertSame(74, strlen($string));
+    self::assertSame(74, UTF8::strlen($string, '8bit'));
     self::assertSame(71, UTF8::strlen($string));
     self::assertSame(71, UTF8::strlen($string, 'UTF-8', false));
     self::assertSame(67, UTF8::strlen($string, 'UTF-8', true));
@@ -2439,6 +2440,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // UTF-8 tests
 
       self::assertSame(17, strpos('der Straße nach Paris', 'Paris')); // not correct
+      self::assertSame(17, UTF8::strpos('der Straße nach Paris', 'Paris', 0, '8bit')); // not correct
       self::assertSame(16, UTF8::strpos('der Straße nach Paris', 'Paris'));
 
       self::assertSame(3, strpos('한국어', '국')); // not correct
@@ -2559,10 +2561,22 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrrpos()
   {
-    self::assertSame(1, UTF8::strrpos('11--', '1-', 0, 'UTF-8'));
-    self::assertSame(2, UTF8::strrpos('-11--', '1-', 0, 'UTF-8'));
-    self::assertSame(false, UTF8::strrpos('한국어', '', 'UTF-8'));
-    self::assertSame(1, UTF8::strrpos('한국어', '국', 'UTF-8'));
+    self::assertSame(3, strrpos('한국어', '국'));
+    self::assertSame(1, UTF8::strrpos('한국어', '국', false, '8bit'));
+    self::assertSame(1, UTF8::strrpos('한국어', '국', false, 'ISO'));
+    self::assertSame(1, UTF8::strrpos('한국어', '국', false, 'UTF-8'));
+
+    // ---
+
+    self::assertSame(11, UTF8::strrpos("Iñtërnâtiôn\xE9àlizætiøn", 'à', 0, true, 'UTF-8'));
+    self::assertSame(12, UTF8::strrpos("Iñtërnâtiôn\xE9àlizætiøn", 'à', 0, false, 'UTF-8'));
+
+    // ---
+
+    self::assertSame(1, UTF8::strrpos('11--', '1-', 0, false, 'UTF-8'));
+    self::assertSame(2, UTF8::strrpos('-11--', '1-', 0, false, 'UTF-8'));
+    self::assertSame(false, UTF8::strrpos('한국어', '', 0, false, 'UTF-8'));
+    self::assertSame(1, UTF8::strrpos('한국어', '국', 0, true));
     self::assertSame(false, UTF8::strrpos('한국어', ''));
     self::assertSame(1, UTF8::strrpos('한국어', '국'));
     self::assertSame(6, UTF8::strrpos('κόσμε-κόσμε', 'κ'));

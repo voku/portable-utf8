@@ -4693,11 +4693,12 @@ final class UTF8
    *                              the end of the string.
    *                              </p>
    * @param boolean    $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string     $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
    *
    * @return int|false <p>The numeric position of the last occurrence of needle in the haystack string.<br />If needle
    *                   is not found, it returns false.</p>
    */
-  public static function strrpos($haystack, $needle, $offset = null, $cleanUtf8 = false)
+  public static function strrpos($haystack, $needle, $offset = null, $cleanUtf8 = false, $encoding = 'UTF-8')
   {
     $haystack = (string)$haystack;
 
@@ -4722,13 +4723,20 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-
     if (!isset(self::$support['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
-    if (self::$support['mbstring'] === true) {
-      return \mb_strrpos($haystack, $needle, $offset, 'UTF-8');
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
+
+    if (
+        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
+        ||
+        self::$support['mbstring'] === true
+    ) {
+      return \mb_strrpos($haystack, $needle, $offset, $encoding);
     }
 
     if (self::$support['iconv'] === true) {
