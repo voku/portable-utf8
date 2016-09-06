@@ -2656,7 +2656,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // test + Invalied Chars
 
-    self::assertSame(21, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+    if (Bootup::is_php('5.4')) {
+      self::assertSame(21, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false)); // invalied UTF-8 + PHP 5.3 = 20 => error
+    }
+
     self::assertSame(20, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
 
     self::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
