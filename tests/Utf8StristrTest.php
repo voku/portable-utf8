@@ -14,6 +14,11 @@ class Utf8StristrTest extends PHPUnit_Framework_TestCase
 
     self::assertSame('nâtiônàlizætiøn', u::stristr($str, $search));
     self::assertSame('iñtër', u::stristr($str, $search, true));
+
+    // --- alias
+
+    self::assertSame('nâtiônàlizætiøn', u::strichr($str, $search));
+    self::assertSame('iñtër', u::strichr($str, $search, true));
   }
 
   public function test_substr_no_match()

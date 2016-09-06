@@ -105,4 +105,17 @@ class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
 
     self::assertSame($array, u::split($str));
   }
+
+  public function test_split_zero_length()
+  {
+    $str = 'Iñtë';
+    $array = array(
+        'I',
+        'ñ',
+        't',
+        'ë',
+    );
+
+    self::assertSame($array, u::split($str, 0));
+  }
 }

@@ -19,6 +19,18 @@ class Utf8StrspnTest extends PHPUnit_Framework_TestCase
     self::assertSame(11, u::strspn($str, 'âëiônñrt'));
   }
 
+  public function test_no_charlist()
+  {
+    $str = 'iñtërnâtiônàlizætiøn';
+    self::assertSame(0, u::strspn($str, ''));
+  }
+
+  public function test_empty_input()
+  {
+    $str = '';
+    self::assertSame(0, u::strspn($str, "\n"));
+  }
+
   public function test_match_two()
   {
     $str = 'iñtërnâtiônàlizætiøn';

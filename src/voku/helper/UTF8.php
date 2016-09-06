@@ -4556,30 +4556,30 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strrchr.php
    *
-   * @param string $haystack <p>The string from which to get the last occurrence of needle.</p>
-   * @param string $needle   <p>The string to find in haystack</p>
-   * @param bool   $part     [optional] <p>
-   *                         Determines which portion of haystack
-   *                         this function returns.
-   *                         If set to true, it returns all of haystack
-   *                         from the beginning to the last occurrence of needle.
-   *                         If set to false, it returns all of haystack
-   *                         from the last occurrence of needle to the end,
-   *                         </p>
-   * @param string $encoding [optional] <p>
-   *                         Character encoding name to use.
-   *                         If it is omitted, internal character encoding is used.
-   *                         </p>
+   * @param string $haystack      <p>The string from which to get the last occurrence of needle.</p>
+   * @param string $needle        <p>The string to find in haystack</p>
+   * @param bool   $before_needle [optional] <p>
+   *                              Determines which portion of haystack
+   *                              this function returns.
+   *                              If set to true, it returns all of haystack
+   *                              from the beginning to the last occurrence of needle.
+   *                              If set to false, it returns all of haystack
+   *                              from the last occurrence of needle to the end,
+   *                              </p>
+   * @param string $encoding      [optional] <p>
+   *                              Character encoding name to use.
+   *                              If it is omitted, internal character encoding is used.
+   *                              </p>
    *
    * @return string|false The portion of haystack or false if needle is not found.
    */
-  public static function strrchr($haystack, $needle, $part = false, $encoding = 'UTF-8')
+  public static function strrchr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8')
   {
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding);
     }
 
-    return \mb_strrchr($haystack, $needle, $part, $encoding);
+    return \mb_strrchr($haystack, $needle, $before_needle, $encoding);
   }
 
   /**
@@ -4637,30 +4637,30 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strrichr.php
    *
-   * @param string $haystack <p>The string from which to get the last occurrence of needle.</p>
-   * @param string $needle   <p>The string to find in haystack.</p>
-   * @param bool   $part     [optional] <p>
-   *                         Determines which portion of haystack
-   *                         this function returns.
-   *                         If set to true, it returns all of haystack
-   *                         from the beginning to the last occurrence of needle.
-   *                         If set to false, it returns all of haystack
-   *                         from the last occurrence of needle to the end,
-   *                         </p>
-   * @param string $encoding [optional] <p>
-   *                         Character encoding name to use.
-   *                         If it is omitted, internal character encoding is used.
-   *                         </p>
+   * @param string $haystack      <p>The string from which to get the last occurrence of needle.</p>
+   * @param string $needle        <p>The string to find in haystack.</p>
+   * @param bool   $before_needle [optional] <p>
+   *                              Determines which portion of haystack
+   *                              this function returns.
+   *                              If set to true, it returns all of haystack
+   *                              from the beginning to the last occurrence of needle.
+   *                              If set to false, it returns all of haystack
+   *                              from the last occurrence of needle to the end,
+   *                              </p>
+   * @param string $encoding      [optional] <p>
+   *                              Character encoding name to use.
+   *                              If it is omitted, internal character encoding is used.
+   *                              </p>
    *
    * @return string|false <p>The portion of haystack or<br />false if needle is not found.</p>
    */
-  public static function strrichr($haystack, $needle, $part = false, $encoding = 'UTF-8')
+  public static function strrichr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8')
   {
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding);
     }
 
-    return \mb_strrichr($haystack, $needle, $part, $encoding);
+    return \mb_strrichr($haystack, $needle, $before_needle, $encoding);
   }
 
   /**
@@ -4775,8 +4775,8 @@ final class UTF8
     }
 
     $str = (string)$str;
-    if (!isset($str[0])) {
-      return '';
+    if (!isset($str[0], $mask[0])) {
+      return 0;
     }
 
     return preg_match('/^' . self::rxClass($mask) . '+/u', $str, $str) ? self::strlen($str[0]) : 0;
@@ -5650,7 +5650,7 @@ final class UTF8
    *
    * @param string   $str        <p>The input string.</p>
    * @param string[] $exceptions [optional] <p>Exclusion for some words.</p>
-   * @param string $charlist [optional] <p>Additional chars that contains to words and do not start a new word.</p>
+   * @param string   $charlist   [optional] <p>Additional chars that contains to words and do not start a new word.</p>
    *
    * @return string
    */

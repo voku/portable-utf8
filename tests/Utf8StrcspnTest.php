@@ -13,6 +13,12 @@ class Utf8StrcspnTest extends PHPUnit_Framework_TestCase
     self::assertSame(null, u::strcspn($str, ''));
   }
 
+  public function test_empty_input()
+  {
+    $str = '';
+    self::assertSame(null, u::strcspn($str, "\n"));
+  }
+
   public function test_no_match_single_byte_search()
   {
     $str = 'iñtërnâtiônàlizætiøn';

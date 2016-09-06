@@ -291,14 +291,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '
         <h1>«DÃ¼sseldorf» &ndash; &lt;Köln&gt;</h1>
         <br /><br />
-        <p>
+        <!--suppress CheckDtdRefs -->
+<p>
           &nbsp;�&foo;❤&nbsp;
         </p>
         '                              => array(
             '' => '
         <h1>«Düsseldorf» &ndash; &lt;Köln&gt;</h1>
         <br /><br />
-        <p>
+        <!--suppress CheckDtdRefs -->
+<p>
           &nbsp;&foo;❤&nbsp;
         </p>
         ',
@@ -1824,6 +1826,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
       $test = UTF8::add_bom_to_string($test);
       self::assertSame(true, UTF8::string_has_bom($test));
+      self::assertSame(true, UTF8::hasBom($test)); // alias
     }
   }
 
@@ -2338,6 +2341,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrpbrk()
   {
+    // php compatible tests
+
     $text = 'This is a Simple text.';
 
     self::assertSame(false, strpbrk($text, ''));
@@ -2354,10 +2359,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('Simple text.', strpbrk($text, 'S'));
     self::assertSame('Simple text.', UTF8::strpbrk($text, 'S'));
 
-    // UTF-8
+    // ---
 
+    // UTF-8
     $text = 'Hello -中文空白-';
     self::assertSame('白-', UTF8::strpbrk($text, '白'));
+
+    // empty input
+    self::assertSame(false, UTF8::strpbrk('', 'z'));
+
+    // empty char-list
+    self::assertSame(false, UTF8::strpbrk($text, ''));
+
+    // not matching char-list
+    $text = 'Hello -中文空白-';
+    self::assertSame(false, UTF8::strpbrk($text, 'z'));
   }
 
   public function testStrpos()
@@ -2381,6 +2397,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame(1, strpos('abc', 'b', 1));
       self::assertSame(1, UTF8::strpos('abc', 'b', 1));
 
+      self::assertSame(false, strpos('abc', 'b', -1));
+      self::assertSame(false, UTF8::strpos('abc', 'b', -1));
+
       self::assertSame(1, strpos('abc', 'b', 0));
       self::assertSame(1, UTF8::strpos('abc', 'b', 0));
 
@@ -2395,6 +2414,28 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame(0, UTF8::strpos('κόσμε-κόσμε-κόσμε', 'κ'));
       self::assertSame(7, UTF8::strpos('test κόσμε test κόσμε', 'σ'));
       self::assertSame(8, UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'));
+
+      // --- invalid UTF-8
+
+      self::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
+      self::assertSame(false, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
+      self::assertSame(false, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -4));
+      self::assertSame(false, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -1));
+      self::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
+      self::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 4));
+      self::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 8));
+      self::assertSame(14, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0, 'UTF-8', true));
+      self::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0, 'UTF-8', false));
+      self::assertSame(26, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0, 'ISO', true));
+      self::assertSame(27, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0, 'ISO', false));
+
+      // ISO
+
+      self::assertSame(17, strpos('der Straße nach Paris', 'Paris', 0)); // not correct
+      self::assertSame(17, UTF8::strpos('der Straße nach Paris', 'Paris', 0, 'ISO')); // not correct
+
+      self::assertSame(3, strpos('한국어', '국', 0)); // not correct
+      self::assertSame(3, UTF8::strpos('한국어', '국', 0, 'ISO')); // not correct
     }
   }
 
@@ -2415,10 +2456,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($expected, UTF8::strrchr($actual, 'κόσμε'), 'error by ' . $actual);
     }
 
-    // ---
+    // --- UTF-8
 
-    self::assertSame('κόσμε-äöü', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε'));
-    self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε'));
+    self::assertSame('κόσμε-äöü', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε', false, 'UTF-8'));
+    self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε', false, 'UTF-8'));
+
+    self::assertSame('κόσμε', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε', true, 'UTF-8'));
+    self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8'));
+
+    // --- ISO
+
+    self::assertSame('κόσμε-äöü', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε', false, 'ISO'));
+    self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε', false, 'ISO'));
+
+    self::assertSame('κόσμε', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε', true, 'ISO'));
+    self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'ISO'));
   }
 
   public function testStrrichr()
@@ -2438,9 +2490,22 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($expected, UTF8::strrichr($actual, 'κόσμε'), 'error by ' . $actual);
     }
 
-    // ---
+    // --- UTF-8
 
-    self::assertSame('Aκόσμεκόσμε-äöü', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε'));
+    self::assertSame('Aκόσμεκόσμε-äöü', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', false, 'UTF-8'));
+    self::assertSame('ü-abc', UTF8::strrichr('äöü-abc', 'ü', false, 'UTF-8'));
+
+    self::assertSame('', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8'));
+    self::assertSame('äö', UTF8::strrichr('äöü-abc', 'ü', true, 'UTF-8'));
+
+    // --- ISO
+
+    self::assertSame('Aκόσμεκόσμε-äöü', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', false, 'ISO'));
+    self::assertSame('ü-abc', UTF8::strrichr('äöü-abc', 'ü', false, 'ISO'));
+
+    self::assertSame('', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'ISO'));
+    self::assertSame('äö', UTF8::strrichr('äöü-abc', 'ü', true, 'ISO'));
+
   }
 
   public function testStrrev()
@@ -2504,8 +2569,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strtolower($before));
+      self::assertSame($after, UTF8::strtolower($before), 'tested: ' . $before);
     }
+
+    // ---
+
+    self::assertNotSame('déjà σσς iıii', UTF8::strtolower('DÉJÀ Σσς Iıİi', 'ISO'));
+    self::assertNotSame('öäü', UTF8::strtolower('ÖÄÜ', 'ISO'));
   }
 
   public function testStrtonatfold()
@@ -2540,8 +2610,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
-    self::assertNotSame('Déjà Σσς Iıİi', UTF8::strtoupper('DÉJÀ ΣΣΣ IIİI', 'ISO'));
-    self::assertSame('ÖÄÜ TEST ÖÄÜ', UTF8::strtoupper('ÖÄÜ TEST ÖÄÜ', 'ISO'));
+    self::assertNotSame('DÉJÀ ΣΣΣ IIİI', UTF8::strtoupper('Déjà Σσς Iıİi', 'ISO'));
+    self::assertSame('ABC TEST', UTF8::strtoupper('abc test', 'ISO'));
   }
 
   public function testStrtr()
@@ -2586,11 +2656,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // test + Invalied Chars
 
-    //self::assertSame(21, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn")); // TODO: for PHP5.3 ?
+    self::assertSame(21, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
     self::assertSame(20, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
 
-    self::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
     self::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
+
+    // ISO
+
+    self::assertSame(28, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'ISO', false));
+    self::assertSame(28, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'ISO', true));
   }
 
   public function testSubstr()
@@ -3464,9 +3539,34 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($after[0], UTF8::strchr($before, '@', true), 'tested: ' . $before);
     }
 
+    // ---
+
     foreach ($tests as $before => $after) {
       self::assertSame($after[1], UTF8::strstr($before, '@'), 'tested: ' . $before);
     }
+
+    // --- UTF-8
+
+    self::assertSame('ABC', UTF8::strstr('ABC@中文空白.com', '@', true, 'UTF-8'));
+    self::assertSame('@中文空白.com', UTF8::strstr('ABC@中文空白.com', '@', false, 'UTF-8'));
+
+    self::assertSame('ABC@', UTF8::strstr('ABC@中文空白.com', '中文空白', true, 'UTF-8'));
+    self::assertSame('中文空白.com', UTF8::strstr('ABC@中文空白.com', '中文空白', false, 'UTF-8'));
+
+    // --- ISO
+
+    self::assertSame('ABC', UTF8::strstr('ABC@中文空白.com', '@', true, 'ISO'));
+    self::assertSame('@中文空白.com', UTF8::strstr('ABC@中文空白.com', '@', false, 'ISO'));
+
+    self::assertSame('ABC@', UTF8::strstr('ABC@中文空白.com', '中文空白', true, 'ISO'));
+    self::assertSame('中文空白.com', UTF8::strstr('ABC@中文空白.com', '中文空白', false, 'ISO'));
+
+    // --- false
+
+    self::assertSame(false, UTF8::strstr('ABC@中文空白.com', 'z', true, 'UTF-8'));
+    self::assertSame(false, UTF8::strstr('ABC@中文空白.com', 'z', false, 'UTF-8'));
+    self::assertSame(false, UTF8::strstr('', 'z', true, 'UTF-8'));
+    self::assertSame(false, UTF8::strstr('', 'z', false, 'UTF-8'));
   }
 
   public function testValidCharsViaUtf8Encode()
