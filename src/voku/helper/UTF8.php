@@ -4744,7 +4744,11 @@ final class UTF8
     $needle = (string)$needle;
     $offset = (int)$offset;
 
-    if ($cleanUtf8 === true) {
+    if (
+        $cleanUtf8 === true
+        ||
+        $encoding === true // INFO: the "bool"-check is only a fallback for old versions
+    ) {
       // \mb_strrpos && iconv_strrpos is not tolerant to invalid characters
 
       $needle = self::clean($needle);
