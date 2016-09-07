@@ -2565,11 +2565,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     if (defined('HHVM_VERSION') === true) {
       self::assertSame(1, UTF8::strrpos('한국어', '국', 0, '8bit', false));
+      self::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'ISO', false));
     } else {
       self::assertSame(3, UTF8::strrpos('한국어', '국', 0, '8bit', false));
+      self::assertSame(3, UTF8::strrpos('한국어', '국', 0, 'ISO', false));
     }
 
-    self::assertSame(3, UTF8::strrpos('한국어', '국', 0, 'ISO', false));
     self::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'UTF-8', false));
 
     // ---
