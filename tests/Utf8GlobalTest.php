@@ -2567,9 +2567,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     if (defined('HHVM_VERSION') === true) {
       self::assertSame(1, UTF8::strrpos('한국어', '국', 0, '8bit', false));
       self::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'ISO', false));
+      self::assertSame(1, UTF8::strrpos('한국어', '국', 0, '', true));
+
     } else {
       self::assertSame(3, UTF8::strrpos('한국어', '국', 0, '8bit', false));
       self::assertSame(3, UTF8::strrpos('한국어', '국', 0, 'ISO', false));
+      self::assertSame(false, UTF8::strrpos('한국어', '국', 0, '', true));
     }
 
     self::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'UTF-8', false));
@@ -2584,7 +2587,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(1, UTF8::strrpos('11--', '1-', 0, 'UTF-8', false));
     self::assertSame(2, UTF8::strrpos('-11--', '1-', 0, 'UTF-8', false));
     self::assertSame(false, UTF8::strrpos('한국어', '', 0, 'UTF-8', false));
-    self::assertSame(false, UTF8::strrpos('한국어', '국', 0, '', true));
     self::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'UTF8', true));
     self::assertSame(false, UTF8::strrpos('한국어', ''));
     self::assertSame(1, UTF8::strrpos('한국어', '국'));

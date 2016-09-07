@@ -4728,12 +4728,11 @@ final class UTF8
    */
   public static function strrpos($haystack, $needle, $offset = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    $haystack = (string)$haystack;
-
     if (((int)$needle) === $needle && ($needle >= 0)) {
       $needle = self::chr($needle);
     }
 
+    $haystack = (string)$haystack;
     $needle = (string)$needle;
 
     if (!isset($haystack[0], $needle[0])) {
