@@ -1755,10 +1755,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     $result = UTF8::parse_str($str, $array);
 
-    // bug reported (hhvm (3.6.6~precise)): https://github.com/facebook/hhvm/issues/7247
-    if (defined('HHVM_VERSION') === false) {
-      self::assertSame(false, $result);
-    }
+    self::assertSame(false, $result);
   }
 
   public function testRange()
