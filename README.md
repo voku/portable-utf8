@@ -1087,7 +1087,7 @@ Finds position of first occurrence of a string within another, case insensitive.
 UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 8
 ```
 
-##### strrpos(string $haystack, string $needle, int $offset = 0, bool $cleanUtf8 = false) : string|false
+##### strrpos(string $haystack, string $needle, int $offset = 0, string $encoding, bool $cleanUtf8 = false) : string|false
 
 Find position of last occurrence of a string in a string.
 
@@ -1095,7 +1095,7 @@ Find position of last occurrence of a string in a string.
 UTF8::strrpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 13
 ```
 
-##### strripos(string $haystack, string $needle, int $offset = 0, bool $cleanUtf8 = false) : string|false
+##### strripos(string $haystack, string $needle, int $offset = 0, string $encoding, bool $cleanUtf8 = false) : string|false
 
 Find position of last occurrence of a case-insensitive string.
 

@@ -22,13 +22,13 @@ class Utf8StrrposTest extends PHPUnit_Framework_TestCase
   public function test_utf8_invalid()
   {
     $str = "Iñtërnâtiôn\xE9àlizætiøn";
-    self::assertSame(15, u::strrpos($str, 'æ', 0, true));
+    self::assertSame(15, u::strrpos($str, 'æ', 0, 'UTF-8', true));
   }
 
   public function test_utf8_with_code_point()
   {
     $str = "I*ñtërnâtiôn\xE9àlizætiøn";
-    self::assertSame(1, u::strrpos($str, 42, 0, true));
+    self::assertSame(1, u::strrpos($str, 42, 0, 'UTF-8', true));
   }
 
   public function test_ascii()

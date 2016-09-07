@@ -2562,21 +2562,22 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testStrrpos()
   {
     self::assertSame(3, strrpos('한국어', '국'));
-    self::assertSame(1, UTF8::strrpos('한국어', '국', false, '8bit'));
-    self::assertSame(1, UTF8::strrpos('한국어', '국', false, 'ISO'));
-    self::assertSame(1, UTF8::strrpos('한국어', '국', false, 'UTF-8'));
+    self::assertSame(3, UTF8::strrpos('한국어', '국', 0, '8bit', false));
+    self::assertSame(3, UTF8::strrpos('한국어', '국', 0, 'ISO', false));
+    self::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'UTF-8', false));
 
     // ---
 
-    self::assertSame(11, UTF8::strrpos("Iñtërnâtiôn\xE9àlizætiøn", 'à', 0, true, 'UTF-8'));
-    self::assertSame(12, UTF8::strrpos("Iñtërnâtiôn\xE9àlizætiøn", 'à', 0, false, 'UTF-8'));
+    self::assertSame(11, UTF8::strrpos("Iñtërnâtiôn\xE9àlizætiøn", 'à', 0, 'UTF-8', true));
+    self::assertSame(12, UTF8::strrpos("Iñtërnâtiôn\xE9àlizætiøn", 'à', 0, 'UTF-8', false));
 
     // ---
 
-    self::assertSame(1, UTF8::strrpos('11--', '1-', 0, false, 'UTF-8'));
-    self::assertSame(2, UTF8::strrpos('-11--', '1-', 0, false, 'UTF-8'));
-    self::assertSame(false, UTF8::strrpos('한국어', '', 0, false, 'UTF-8'));
-    self::assertSame(1, UTF8::strrpos('한국어', '국', 0, true));
+    self::assertSame(1, UTF8::strrpos('11--', '1-', 0, 'UTF-8', false));
+    self::assertSame(2, UTF8::strrpos('-11--', '1-', 0, 'UTF-8', false));
+    self::assertSame(false, UTF8::strrpos('한국어', '', 0, 'UTF-8', false));
+    self::assertSame(false, UTF8::strrpos('한국어', '국', 0, '', true));
+    self::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'UTF8', true));
     self::assertSame(false, UTF8::strrpos('한국어', ''));
     self::assertSame(1, UTF8::strrpos('한국어', '국'));
     self::assertSame(6, UTF8::strrpos('κόσμε-κόσμε', 'κ'));
@@ -2860,7 +2861,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::swapCase($before), $before);
+      self::assertSame($after, UTF8::swapCase($before, 'UTF-8', true), $before);
     }
 
     // ---

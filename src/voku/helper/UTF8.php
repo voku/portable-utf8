@@ -1761,6 +1761,20 @@ final class UTF8
   }
 
   /**
+   * alias for "UTF8::string_has_bom()"
+   *
+   * @see UTF8::string_has_bom()
+   *
+   * @param string $str
+   *
+   * @return bool
+   */
+  public static function hasBom($str)
+  {
+    return self::string_has_bom($str);
+  }
+
+  /**
    * Converts hexadecimal U+xxxx code point representation to integer.
    *
    * INFO: opposite to UTF8::int_to_hex()
@@ -3340,6 +3354,20 @@ final class UTF8
   }
 
   /**
+   * alias for "UTF8::remove_bom()"
+   *
+   * @see UTF8::remove_bom()
+   *
+   * @param string $str
+   *
+   * @return string
+   */
+  public static function removeBOM($str)
+  {
+    return self::remove_bom($str);
+  }
+
+  /**
    * Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.
    *
    * @param string $str <p>The input string.</p>
@@ -3355,20 +3383,6 @@ final class UTF8
     }
 
     return $str;
-  }
-
-  /**
-   * alias for "UTF8::remove_bom()"
-   *
-   * @see UTF8::remove_bom()
-   *
-   * @param string $str
-   *
-   * @return string
-   */
-  public static function removeBOM($str)
-  {
-    return self::remove_bom($str);
   }
 
   /**
@@ -4118,6 +4132,24 @@ final class UTF8
   }
 
   /**
+   * alias for "UTF8::strstr()"
+   *
+   * @see UTF8::strstr()
+   *
+   * @param string  $haystack
+   * @param string  $needle
+   * @param bool    $before_needle
+   * @param string  $encoding
+   * @param boolean $cleanUtf8
+   *
+   * @return string|false
+   */
+  public static function strchr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8', $cleanUtf8 = false)
+  {
+    return self::strstr($haystack, $needle, $before_needle, $encoding, $cleanUtf8);
+  }
+
+  /**
    * Case-sensitive string comparison.
    *
    * @param string $str1
@@ -4171,6 +4203,24 @@ final class UTF8
   }
 
   /**
+   * alias for "UTF8::stristr()"
+   *
+   * @see UTF8::stristr()
+   *
+   * @param string  $haystack
+   * @param string  $needle
+   * @param bool    $before_needle
+   * @param string  $encoding
+   * @param boolean $cleanUtf8
+   *
+   * @return string|false
+   */
+  public static function strichr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8', $cleanUtf8 = false)
+  {
+    return self::stristr($haystack, $needle, $before_needle, $encoding, $cleanUtf8);
+  }
+
+  /**
    * Create a UTF-8 string from code points.
    *
    * INFO: opposite to UTF8::codepoints()
@@ -4190,20 +4240,6 @@ final class UTF8
             $array
         )
     );
-  }
-
-  /**
-   * alias for "UTF8::string_has_bom()"
-   *
-   * @see UTF8::string_has_bom()
-   *
-   * @param string $str
-   *
-   * @return bool
-   */
-  public static function hasBom($str)
-  {
-    return self::string_has_bom($str);
   }
 
   /**
@@ -4305,17 +4341,18 @@ final class UTF8
   /**
    * Returns all of haystack starting from and including the first occurrence of needle to the end.
    *
-   * @param string $haystack      <p>The input string. Must be valid UTF-8.</p>
-   * @param string $needle        <p>The string to look for. Must be valid UTF-8.</p>
-   * @param bool   $before_needle [optional] <p>
-   *                              If <b>TRUE</b>, grapheme_strstr() returns the part of the
-   *                              haystack before the first occurrence of the needle (excluding the needle).
-   *                              </p>
-   * @param string $encoding      [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string  $haystack      <p>The input string. Must be valid UTF-8.</p>
+   * @param string  $needle        <p>The string to look for. Must be valid UTF-8.</p>
+   * @param bool    $before_needle [optional] <p>
+   *                               If <b>TRUE</b>, grapheme_strstr() returns the part of the
+   *                               haystack before the first occurrence of the needle (excluding the needle).
+   *                               </p>
+   * @param string  $encoding      [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param boolean $cleanUtf8     [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return false|string A sub-string,<br />or <strong>false</strong> if needle is not found.
    */
-  public static function stristr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8')
+  public static function stristr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     if ('' === $needle .= '') {
       return false;
@@ -4323,6 +4360,13 @@ final class UTF8
 
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding);
+    }
+
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $needle = self::clean($needle);
+      $haystack = self::clean($haystack);
     }
 
     return \mb_stristr($haystack, $needle, $before_needle, $encoding);
@@ -4573,45 +4617,20 @@ final class UTF8
    *
    * @return string|false The portion of haystack or false if needle is not found.
    */
-  public static function strrchr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8')
+  public static function strrchr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding);
     }
 
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $needle = self::clean($needle);
+      $haystack = self::clean($haystack);
+    }
+
     return \mb_strrchr($haystack, $needle, $before_needle, $encoding);
-  }
-
-  /**
-   * alias for "UTF8::strstr()"
-   *
-   * @see UTF8::strstr()
-   *
-   * @param string $haystack
-   * @param string $needle
-   * @param bool   $before_needle
-   *
-   * @return string|false
-   */
-  public static function strchr($haystack, $needle, $before_needle = false)
-  {
-    return self::strstr($haystack, $needle, $before_needle);
-  }
-
-  /**
-   * alias for "UTF8::stristr()"
-   *
-   * @see UTF8::stristr()
-   *
-   * @param string $haystack
-   * @param string $needle
-   * @param bool   $before_needle
-   *
-   * @return string|false
-   */
-  public static function strichr($haystack, $needle, $before_needle = false)
-  {
-    return self::stristr($haystack, $needle, $before_needle);
   }
 
   /**
@@ -4637,27 +4656,35 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strrichr.php
    *
-   * @param string $haystack      <p>The string from which to get the last occurrence of needle.</p>
-   * @param string $needle        <p>The string to find in haystack.</p>
-   * @param bool   $before_needle [optional] <p>
-   *                              Determines which portion of haystack
-   *                              this function returns.
-   *                              If set to true, it returns all of haystack
-   *                              from the beginning to the last occurrence of needle.
-   *                              If set to false, it returns all of haystack
-   *                              from the last occurrence of needle to the end,
-   *                              </p>
-   * @param string $encoding      [optional] <p>
-   *                              Character encoding name to use.
-   *                              If it is omitted, internal character encoding is used.
-   *                              </p>
+   * @param string  $haystack      <p>The string from which to get the last occurrence of needle.</p>
+   * @param string  $needle        <p>The string to find in haystack.</p>
+   * @param bool    $before_needle [optional] <p>
+   *                               Determines which portion of haystack
+   *                               this function returns.
+   *                               If set to true, it returns all of haystack
+   *                               from the beginning to the last occurrence of needle.
+   *                               If set to false, it returns all of haystack
+   *                               from the last occurrence of needle to the end,
+   *                               </p>
+   * @param string  $encoding      [optional] <p>
+   *                               Character encoding name to use.
+   *                               If it is omitted, internal character encoding is used.
+   *                               </p>
+   * @param boolean $cleanUtf8     [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string|false <p>The portion of haystack or<br />false if needle is not found.</p>
    */
-  public static function strrichr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8')
+  public static function strrichr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding);
+    }
+
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $needle = self::clean($needle);
+      $haystack = self::clean($haystack);
     }
 
     return \mb_strrichr($haystack, $needle, $before_needle, $encoding);
@@ -4669,6 +4696,7 @@ final class UTF8
    * @param string  $haystack  <p>The string to look in.</p>
    * @param string  $needle    <p>The string to look for.</p>
    * @param int     $offset    [optional] <p>Number of characters to ignore in the beginning or end.</p>
+   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
    * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return int|false <p>
@@ -4676,9 +4704,9 @@ final class UTF8
    *                   not found, it returns false.
    *                   </p>
    */
-  public static function strripos($haystack, $needle, $offset = 0, $cleanUtf8 = false)
+  public static function strripos($haystack, $needle, $offset = 0, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    return self::strrpos(self::strtolower($haystack), self::strtolower($needle), $offset, $cleanUtf8);
+    return self::strrpos(self::strtolower($haystack), self::strtolower($needle), $offset, $encoding, $cleanUtf8);
   }
 
   /**
@@ -4692,13 +4720,13 @@ final class UTF8
    *                              into the string. Negative values will stop searching at an arbitrary point prior to
    *                              the end of the string.
    *                              </p>
-   * @param boolean    $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    * @param string     $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param boolean    $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return int|false <p>The numeric position of the last occurrence of needle in the haystack string.<br />If needle
    *                   is not found, it returns false.</p>
    */
-  public static function strrpos($haystack, $needle, $offset = null, $cleanUtf8 = false, $encoding = 'UTF-8')
+  public static function strrpos($haystack, $needle, $offset = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     $haystack = (string)$haystack;
 
@@ -4727,7 +4755,13 @@ final class UTF8
       self::checkForSupport();
     }
 
-    if ($encoding !== 'UTF-8') {
+    if (
+        $encoding === 'UTF-8'
+        ||
+        $encoding === true || $encoding === false // INFO: the "bool"-check is only a fallback for old versions
+    ) {
+      $encoding = 'UTF-8';
+    } else {
       $encoding = self::normalize_encoding($encoding);
     }
 
@@ -4793,18 +4827,26 @@ final class UTF8
   /**
    * Returns part of haystack string from the first occurrence of needle to the end of haystack.
    *
-   * @param string $haystack      <p>The input string. Must be valid UTF-8.</p>
-   * @param string $needle        <p>The string to look for. Must be valid UTF-8.</p>
-   * @param bool   $before_needle [optional] <p>
-   *                              If <b>TRUE</b>, strstr() returns the part of the
-   *                              haystack before the first occurrence of the needle (excluding the needle).
-   *                              </p>
-   * @param string $encoding      [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param string  $haystack      <p>The input string. Must be valid UTF-8.</p>
+   * @param string  $needle        <p>The string to look for. Must be valid UTF-8.</p>
+   * @param bool    $before_needle [optional] <p>
+   *                               If <b>TRUE</b>, strstr() returns the part of the
+   *                               haystack before the first occurrence of the needle (excluding the needle).
+   *                               </p>
+   * @param string  $encoding      [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param boolean $cleanUtf8     [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string|false A sub-string,<br />or <strong>false</strong> if needle is not found.
    */
-  public static function strstr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8')
+  public static function strstr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $needle = self::clean($needle);
+      $haystack = self::clean($haystack);
+    }
+
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding);
     }
@@ -4866,18 +4908,25 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strtolower.php
    *
-   * @param string $str      <p>The string being lowercased.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string  $str       <p>The string being lowercased.</p>
+   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string str with all alphabetic characters converted to lowercase.
    */
-  public static function strtolower($str, $encoding = 'UTF-8')
+  public static function strtolower($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     // init
     $str = (string)$str;
 
     if (!isset($str[0])) {
       return '';
+    }
+
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $str = self::clean($str);
     }
 
     if ($encoding !== 'UTF-8') {
@@ -4904,17 +4953,24 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strtoupper.php
    *
-   * @param string $str      <p>The string being uppercased.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param string  $str       <p>The string being uppercased.</p>
+   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string str with all alphabetic characters converted to uppercase.
    */
-  public static function strtoupper($str, $encoding = 'UTF-8')
+  public static function strtoupper($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     $str = (string)$str;
 
     if (!isset($str[0])) {
       return '';
+    }
+
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $str = self::clean($str);
     }
 
     if ($encoding !== 'UTF-8') {
@@ -5085,19 +5141,20 @@ final class UTF8
    *
    * @link  http://php.net/manual/en/function.substr-count.php
    *
-   * @param string $haystack  <p>The string to search in.</p>
-   * @param string $needle    <p>The substring to search for.</p>
-   * @param int    $offset    [optional] <p>The offset where to start counting.</p>
-   * @param int    $length    [optional] <p>
-   *                          The maximum length after the specified offset to search for the
-   *                          substring. It outputs a warning if the offset plus the length is
-   *                          greater than the haystack length.
-   *                          </p>
-   * @param string $encoding  <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param string  $haystack  <p>The string to search in.</p>
+   * @param string  $needle    <p>The substring to search for.</p>
+   * @param int     $offset    [optional] <p>The offset where to start counting.</p>
+   * @param int     $length    [optional] <p>
+   *                           The maximum length after the specified offset to search for the
+   *                           substring. It outputs a warning if the offset plus the length is
+   *                           greater than the haystack length.
+   *                           </p>
+   * @param string  $encoding  <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return int|false <p>This functions returns an integer or false if there isn't a string.</p>
    */
-  public static function substr_count($haystack, $needle, $offset = 0, $length = null, $encoding = 'UTF-8')
+  public static function substr_count($haystack, $needle, $offset = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     $haystack = (string)$haystack;
     $needle = (string)$needle;
@@ -5119,6 +5176,13 @@ final class UTF8
 
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding);
+    }
+
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $needle = self::clean($needle);
+      $haystack = self::clean($haystack);
     }
 
     return \mb_substr_count($haystack, $needle, $encoding);
@@ -5203,12 +5267,13 @@ final class UTF8
   /**
    * Returns a case swapped version of the string.
    *
-   * @param string $str      <p>The input string.</p>
-   * @param string $encoding [optional] <p>Default is UTF-8</p>
+   * @param string  $str       <p>The input string.</p>
+   * @param string  $encoding  [optional] <p>Default is UTF-8</p>
+   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string <p>Each character's case swapped.</p>
    */
-  public static function swapCase($str, $encoding = 'UTF-8')
+  public static function swapCase($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     $str = (string)$str;
 
@@ -5220,7 +5285,11 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    $str = self::clean($str);
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $str = self::clean($str);
+    }
 
     $strSwappedCase = preg_replace_callback(
         '/[\S]/u',
@@ -5253,6 +5322,20 @@ final class UTF8
   public static function toAscii($s, $subst_chr = '?', $strict = false)
   {
     return self::to_ascii($s, $subst_chr, $strict);
+  }
+
+  /**
+   * alias for "UTF8::to_iso8859()"
+   *
+   * @see UTF8::to_iso8859()
+   *
+   * @param string $str
+   *
+   * @return string|string[]
+   */
+  public static function toIso8859($str)
+  {
+    return self::to_iso8859($str);
   }
 
   /**
@@ -5413,17 +5496,32 @@ final class UTF8
   }
 
   /**
-   * alias for "UTF8::to_iso8859()"
+   * Convert a string into "ISO-8859"-encoding (Latin-1).
    *
-   * @see UTF8::to_iso8859()
-   *
-   * @param string $str
+   * @param string|string[] $str
    *
    * @return string|string[]
    */
-  public static function toIso8859($str)
+  public static function to_iso8859($str)
   {
-    return self::to_iso8859($str);
+    if (is_array($str)) {
+
+      foreach ($str as $k => $v) {
+        /** @noinspection AlterInForeachInspection */
+        /** @noinspection OffsetOperationsInspection */
+        $str[$k] = self::to_iso8859($v);
+      }
+
+      return $str;
+    }
+
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    return self::utf8_decode($str);
   }
 
   /**
@@ -5570,35 +5668,6 @@ final class UTF8
   }
 
   /**
-   * Convert a string into "ISO-8859"-encoding (Latin-1).
-   *
-   * @param string|string[] $str
-   *
-   * @return string|string[]
-   */
-  public static function to_iso8859($str)
-  {
-    if (is_array($str)) {
-
-      foreach ($str as $k => $v) {
-        /** @noinspection AlterInForeachInspection */
-        /** @noinspection OffsetOperationsInspection */
-        $str[$k] = self::to_iso8859($v);
-      }
-
-      return $str;
-    }
-
-    $str = (string)$str;
-
-    if (!isset($str[0])) {
-      return '';
-    }
-
-    return self::utf8_decode($str);
-  }
-
-  /**
    * Strip whitespace or other characters from beginning or end of a UTF-8 string.
    *
    * INFO: This is slower then "trim()"
@@ -5630,13 +5699,15 @@ final class UTF8
   /**
    * Makes string's first char uppercase.
    *
-   * @param string $str <p>The input string.</p>
+   * @param string  $str       <p>The input string.</p>
+   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string <p>The resulting string</p>
    */
-  public static function ucfirst($str)
+  public static function ucfirst($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    return self::strtoupper(self::substr($str, 0, 1)) . self::substr($str, 1);
+    return self::strtoupper(self::substr($str, 0, 1, $encoding, $cleanUtf8), $encoding, $cleanUtf8) . self::substr($str, 1, null, $encoding, $cleanUtf8);
   }
 
   /**
@@ -5644,13 +5715,15 @@ final class UTF8
    *
    * @see UTF8::ucfirst()
    *
-   * @param string $word
+   * @param string  $word
+   * @param string  $encoding
+   * @param boolean $cleanUtf8
    *
    * @return string
    */
-  public static function ucword($word)
+  public static function ucword($word, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    return self::ucfirst($word);
+    return self::ucfirst($word, $encoding, $cleanUtf8);
   }
 
   /**
@@ -5659,10 +5732,12 @@ final class UTF8
    * @param string   $str        <p>The input string.</p>
    * @param string[] $exceptions [optional] <p>Exclusion for some words.</p>
    * @param string   $charlist   [optional] <p>Additional chars that contains to words and do not start a new word.</p>
+   * @param string   $encoding   [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param boolean  $cleanUtf8  [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string
    */
-  public static function ucwords($str, $exceptions = array(), $charlist = '')
+  public static function ucwords($str, $exceptions = array(), $charlist = '', $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     if (!$str) {
       return '';
@@ -5693,7 +5768,7 @@ final class UTF8
               !in_array($word, $exceptions, true)
           )
       ) {
-        $word = self::ucfirst($word);
+        $word = self::ucfirst($word, $encoding, $cleanUtf8);
       }
 
       $newwords[] = $word;
