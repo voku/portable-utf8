@@ -2563,6 +2563,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     self::assertSame(3, strrpos('한국어', '국'));
 
+    // TODO? for HHVM
     if (defined('HHVM_VERSION') === true) {
       self::assertSame(1, UTF8::strrpos('한국어', '국', 0, '8bit', false));
       self::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'ISO', false));
