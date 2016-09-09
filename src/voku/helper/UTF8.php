@@ -5053,7 +5053,7 @@ final class UTF8
    * @param string  $encoding  [optional] <p>Default is UTF-8</p>
    * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
-   * @return string Returns a sub-string specified by the start and length parameters.
+   * @return string <p>Returns a sub-string specified by the start and length parameters.</p>
    */
   public static function substr($str, $start = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {

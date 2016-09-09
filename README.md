@@ -1071,7 +1071,7 @@ Search a string for any of a set of characters.
 UTF8::strpbrk('-中文空白-', '白'); // '白-'
 ```
 
-##### strpos(string $haystack, string $char_list) : int|false
+##### strpos(string $haystack, string $needle, int $offset = 0, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : int|false
 
 Find position of first occurrence of string in a string.
 
@@ -1079,7 +1079,7 @@ Find position of first occurrence of string in a string.
 UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 8
 ```
 
-##### stripos($str, $needle, $before_needle = false) : int|false
+##### stripos(string $str, string $needle, int $offset = null, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : int|false
 
 Finds position of first occurrence of a string within another, case insensitive.
 
@@ -1087,7 +1087,7 @@ Finds position of first occurrence of a string within another, case insensitive.
 UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 8
 ```
 
-##### strrpos(string $haystack, string $needle, int $offset = 0, string $encoding, bool $cleanUtf8 = false) : string|false
+##### strrpos(string $haystack, string $needle, int $offset = 0, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string|false
 
 Find position of last occurrence of a string in a string.
 
@@ -1095,7 +1095,7 @@ Find position of last occurrence of a string in a string.
 UTF8::strrpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 13
 ```
 
-##### strripos(string $haystack, string $needle, int $offset = 0, string $encoding, bool $cleanUtf8 = false) : string|false
+##### strripos(string $haystack, string $needle, int $offset = 0, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string|false
 
 Find position of last occurrence of a case-insensitive string.
 
@@ -1103,7 +1103,7 @@ Find position of last occurrence of a case-insensitive string.
 UTF8::strripos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 13
 ```
 
-##### strrchr(string $haystack, string $needle, bool $part = false, string $encoding) : string|false
+##### strrchr(string $haystack, string $needle, bool $part = false, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string|false
 
 Finds the last occurrence of a character in a string within another.
 
@@ -1111,7 +1111,7 @@ Finds the last occurrence of a character in a string within another.
 UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε'); // 'κόσμε-äöü'
 ```
 
-##### strrichr(string $haystack, string $needle, bool $part = false, string $encoding) : string|false
+##### strrichr(string $haystack, string $needle, bool $part = false, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string|false
 
 Finds the last occurrence of a character in a string within another, case insensitive.
 
@@ -1135,9 +1135,11 @@ Finds the length of the initial segment of a string consisting entirely of chara
 UTF8::strspn('iñtërnâtiônàlizætiøn', 'itñ'); // '3'
 ```
 
-##### strstr(string $str, string $needle, bool $before_needle = false) : string
+##### strstr(string $str, string $needle, bool $before_needle = false, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string
 
 Returns part of haystack string from the first occurrence of needle to the end of haystack.
+
+alias: UTF8::strchr()
 
 ```php
 $str = 'iñtërnâtiônàlizætiøn';
@@ -1147,9 +1149,11 @@ UTF8::strstr($str, $search)); // 'nâtiônàlizætiøn'
 UTF8::strstr($str, $search, true)); // 'iñtër'
 ```
 
-##### stristr(string $str, string $needle, bool $before_needle = false) : string
+##### stristr(string $str, string $needle, bool $before_needle = false, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string
 
 Returns all of haystack starting from and including the first occurrence of needle to the end.
+
+alias: UTF8::strichr()
 
 ```php
 $str = 'iñtërnâtiônàlizætiøn';
@@ -1167,7 +1171,7 @@ Unicode transformation for case-less matching.
 UTF8::strtocasefold('ǰ◌̱'); // 'ǰ◌̱'
 ```
 
-##### strtolower(string $str, string $encoding = 'UTF-8') : string
+##### strtolower(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string
 
 Make a string lowercase.
 
@@ -1175,7 +1179,7 @@ Make a string lowercase.
 UTF8::strtolower('DÉJÀ Σσς Iıİi'); // 'déjà σσς iıii'
 ```
 
-##### strtoupper(string $str, string $encoding = 'UTF-8') : string
+##### strtoupper(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string
 
 Make a string uppercase.
 
@@ -1213,7 +1217,7 @@ UTF8::substr_compare("○●◎\r", '◎●', 1, 2); // 1
 UTF8::substr_compare("○●◎\r", '●◎', 1, 2); // 0
 ```
 
-##### substr_count(string $haystack, string $needle, int $offset = 0, int $length = null, string $encoding = 'UTF-8') : int|false
+##### substr_count(string $haystack, string $needle, int $offset = 0, int $length = null, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : int|false
 
 Count the number of substring occurrences.
 
@@ -1229,7 +1233,7 @@ Replace text within a portion of a string.
 UTF8::substr_replace(array('Iñtërnâtiônàlizætiøn', 'foo'), 'æ', 1); // array('Iæñtërnâtiônàlizætiøn', 'fæoo')
 ```
 
-##### swapCase(string $str, string string $encoding = 'UTF-8') : string
+##### swapCase(string $str, string string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string
 
 Returns a case swapped version of the string.
 
@@ -1270,7 +1274,7 @@ alias: UTF8::toLatin1()
 UTF8::to_utf8(UTF8::to_latin1('  -ABC-中文空白-  ')); // '  -ABC-????-  ' 
 ```
 
-##### ucfirst(string $str) : string
+##### ucfirst(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string
 
 Makes string's first char uppercase.
 
@@ -1280,7 +1284,7 @@ alias: UTF8::ucword()
 UTF8::ucfirst('ñtërnâtiônàlizætiøn'); // 'Ñtërnâtiônàlizætiøn'
 ```
 
-##### ucwords(string $str) : string
+##### ucwords(string $str, array $exceptions = array(), string $charlist = '', string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string
 
 Uppercase for all words in the string.
 
