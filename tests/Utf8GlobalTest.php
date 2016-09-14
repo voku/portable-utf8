@@ -1741,13 +1741,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $foo = '123';
     $test = '';
 
-    /** @noinspection NonSecureParseStrUsageInspection */
-    /** @noinspection PhpParamsInspection */
-    UTF8::parse_str($str); // <- you need to use the second parameter!!!
+    if (Bootup::is_php('7.1') === false) {
+      /** @noinspection NonSecureParseStrUsageInspection */
+      /** @noinspection PhpParamsInspection */
+      UTF8::parse_str($str); // <- you need to use the second parameter!!!
 
-    self::assertSame($foo, '123');
-    self::assertSame($test, '');
-    self::assertSame($str, 'foo[]=bar&test=lall');
+      self::assertSame($foo, '123');
+      self::assertSame($test, '');
+      self::assertSame($str, 'foo[]=bar&test=lall');
+    }
 
     // ---
 
