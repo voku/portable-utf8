@@ -5170,7 +5170,11 @@ final class UTF8
       $offset = (int)$offset;
       $length = (int)$length;
 
-      if ($length + $offset <= 0) {
+      if (
+          Bootup::is_php('7.1') === false
+          &&
+          $length + $offset <= 0
+      ) {
         return false;
       }
 
