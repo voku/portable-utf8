@@ -5408,7 +5408,7 @@ final class UTF8
         self::checkForSupport();
       }
 
-      if (self::$support['intl'] == true && Bootup::is_php('5.4')) {
+      if (self::$support['intl'] === true && Bootup::is_php('5.4')) {
         $str = transliterator_transliterate('Any-Latin; Latin-ASCII;', $str);
 
         // check again, if we only have ASCII, now ...
