@@ -132,7 +132,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * // @expectedException PHPUnit_Framework_Error_Warning
+   * // @ todo expectedException PHPUnit_Framework_Error_Warning
    */
   // PHP 7.1 dosn't throw an warning -> https://github.com/php/php-src/blob/php-7.1.0RC1/UPGRADING
   // -> TODO: test this only for <= PHP 7.0
