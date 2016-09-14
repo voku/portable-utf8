@@ -5793,11 +5793,12 @@ final class UTF8
    * 'D%C3%83%C2%BCsseldorf'         => 'Düsseldorf'
    * 'D%25C3%2583%25C2%25BCsseldorf' => 'Düsseldorf'
    *
-   * @param string $str <p>The input string.</p>
+   * @param string $str          <p>The input string.</p>
+   * @param bool   $multi_decode <p>Decode as often as possible.</p>
    *
    * @return string
    */
-  public static function urldecode($str)
+  public static function urldecode($str, $multi_decode = true)
   {
     $str = (string)$str;
 
@@ -5809,14 +5810,19 @@ final class UTF8
 
     $flags = Bootup::is_php('5.4') ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
 
-    $str = self::fix_simple_utf8(
-        rawurldecode(
-            self::html_entity_decode(
-                self::to_utf8($str),
-                $flags
-            )
-        )
-    );
+    do {
+      $str_compare = $str;
+
+      $str = self::fix_simple_utf8(
+          rawurldecode(
+              self::html_entity_decode(
+                  self::to_utf8($str),
+                  $flags
+              )
+          )
+      );
+
+    } while ($multi_decode === true && $str_compare !== $str);
 
     return (string)$str;
   }
@@ -5824,7 +5830,9 @@ final class UTF8
   /**
    * Return a array with "urlencoded"-win1252 -> UTF-8
    *
-   * @return mixed
+   * @deprecated use the "UTF8::urldecode()" function to decode a string
+   *
+   * @return array
    */
   public static function urldecode_fix_win1252_chars()
   {
