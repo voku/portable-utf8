@@ -2455,7 +2455,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // --- invalid UTF-8
 
       self::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
-      self::assertSame(false, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
+
+      if (Bootup::is_php('7.1') === false) {
+        self::assertSame(false, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
+      } else {
+        self::assertSame(20, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
+      }
+
       self::assertSame(false, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -4));
       self::assertSame(false, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -1));
       self::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
@@ -2818,8 +2824,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(2, substr_count('abcdebc', 'bc'));
     self::assertSame(2, UTF8::substr_count('abcdebc', 'bc'));
 
-    self::assertSame(false, substr_count('abcde', 'de', -2, 2));
-    self::assertSame(false, UTF8::substr_count('abcde', 'de', -2, 2));
+    if (Bootup::is_php('7.1') === false) {
+      self::assertSame(false, substr_count('abcde', 'de', -2, 2));
+      self::assertSame(false, UTF8::substr_count('abcde', 'de', -2, 2));
+    } else {
+      self::assertSame(1, substr_count('abcde', 'de', -2, 2));
+      self::assertSame(1, UTF8::substr_count('abcde', 'de', -2, 2));
+    }
 
     self::assertSame(0, substr_count('abcde', 'bcg', 1, 2));
     self::assertSame(0, UTF8::substr_count('abcde', 'bcg', 1, 2));
