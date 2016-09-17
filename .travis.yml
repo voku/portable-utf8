@@ -17,6 +17,9 @@ matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
+    - php: hhvm-3.3
+    - php: hhvm-3.9
+    - php: hhvm-3.12
   include:
     - php: hhvm-3.3
       env: extension=true
@@ -102,6 +105,7 @@ matrix:
       env: extension=false
 
 before_script:
+  - stty cols 120
   - php --version
   - mkdir -p $(dirname ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini)
   - touch ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
