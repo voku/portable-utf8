@@ -18,6 +18,46 @@ matrix:
   allow_failures:
     - php: nightly
   include:
+    - php: hhvm-3.3
+      env: extension=true
+      sudo: required
+      dist: trusty
+      group: edge
+    - php: hhvm-3.3
+      env: extension=false
+      sudo: required
+      dist: trusty
+      group: edge
+    - php: hhvm-3.6
+      env: extension=true
+      sudo: required
+      dist: trusty
+      group: edge
+    - php: hhvm-3.6
+      env: extension=false
+      sudo: required
+      dist: trusty
+      group: edge
+    - php: hhvm-3.9
+      env: extension=true
+      sudo: required
+      dist: trusty
+      group: edge
+    - php: hhvm-3.9
+      env: extension=false
+      sudo: required
+      dist: trusty
+      group: edge
+    - php: hhvm-3.12
+      env: extension=true
+      sudo: required
+      dist: trusty
+      group: edge
+    - php: hhvm-3.12
+      env: extension=false
+      sudo: required
+      dist: trusty
+      group: edge
     - php: 5.3
       env: extension=true
     - php: 5.3
@@ -68,11 +108,8 @@ before_script:
   - echo "php-config -> orig"
   - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - if [[ $extension = 'false' ]]; then sed -i.bkp "s/^extension\ =\ mbstring.so$/#extension = mbstring.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
-  - if [[ $extension = 'false' ]]; then phpenv config-rm mbstring.ini; fi
   - if [[ $extension = 'false' ]]; then sed -i.bkp "s/^extension\ =\ intl.so$/#extension = intl.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
-  - if [[ $extension = 'false' ]]; then phpenv config-rm intl.ini; fi
   - if [[ $extension = 'false' ]]; then sed -i.bkp "s/^extension\ =\ iconv.so$/#extension = iconv.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
-  - if [[ $extension = 'false' ]]; then phpenv config-rm iconv.ini; fi
   - echo "php-config -> new"
   - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - wget https://scrutinizer-ci.com/ocular.phar
