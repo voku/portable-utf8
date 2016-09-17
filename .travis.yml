@@ -68,8 +68,11 @@ before_script:
   - echo "php-config -> orig"
   - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - if [[ $extension = 'false' ]]; then sed -i.bkp "s/^extension\ =\ mbstring.so$/#extension = mbstring.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [[ $extension = 'false' ]]; then phpenv config-rm mbstring.ini; fi
   - if [[ $extension = 'false' ]]; then sed -i.bkp "s/^extension\ =\ intl.so$/#extension = intl.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [[ $extension = 'false' ]]; then phpenv config-rm intl.ini; fi
   - if [[ $extension = 'false' ]]; then sed -i.bkp "s/^extension\ =\ iconv.so$/#extension = iconv.so/" ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
+  - if [[ $extension = 'false' ]]; then phpenv config-rm iconv.ini; fi
   - echo "php-config -> new"
   - cat ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - wget https://scrutinizer-ci.com/ocular.phar
