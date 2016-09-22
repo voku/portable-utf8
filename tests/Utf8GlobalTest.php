@@ -114,6 +114,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       }
     }
 
+    // -- with encoding
+
+    self::assertSame(97, UTF8::ord('a', 'ISO'));
+    self::assertSame('a', UTF8::chr(97, 'ISO'));
+
     // --
 
     $testArrayFail = array(
@@ -172,7 +177,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '~' => 0x7e,
         '§' => 0xa7,
         'ሇ' => 0x1207,
-
     );
 
     foreach ($tests as $before => $after) {
