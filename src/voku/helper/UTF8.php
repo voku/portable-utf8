@@ -1604,6 +1604,7 @@ final class UTF8
   {
     if (is_array($str)) {
 
+      /** @noinspection ForeachSourceInspection */
       foreach ($str as $k => $v) {
         /** @noinspection AlterInForeachInspection */
         /** @noinspection OffsetOperationsInspection */
@@ -3400,6 +3401,7 @@ final class UTF8
     }
 
     if (is_array($what)) {
+      /** @noinspection ForeachSourceInspection */
       foreach ($what as $item) {
         $str = preg_replace('/(' . preg_quote($item, '/') . ')+/', $item, $str);
       }
@@ -5513,6 +5515,7 @@ final class UTF8
   {
     if (is_array($str)) {
 
+      /** @noinspection ForeachSourceInspection */
       foreach ($str as $k => $v) {
         /** @noinspection AlterInForeachInspection */
         /** @noinspection OffsetOperationsInspection */
@@ -5571,6 +5574,7 @@ final class UTF8
   public static function to_utf8($str)
   {
     if (is_array($str)) {
+      /** @noinspection ForeachSourceInspection */
       foreach ($str as $k => $v) {
         /** @noinspection AlterInForeachInspection */
         /** @noinspection OffsetOperationsInspection */
