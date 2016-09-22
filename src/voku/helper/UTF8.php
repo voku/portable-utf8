@@ -905,7 +905,7 @@ final class UTF8
    *
    * @return string|null <p>Multi-Byte character, returns null on failure to encode.</p>
    */
-  public static function chr($code_point, $encoding)
+  public static function chr($code_point, $encoding = 'UTF-8')
   {
     $i = (int)$code_point;
     if ($i !== $code_point) {
