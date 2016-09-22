@@ -918,7 +918,7 @@ final class UTF8
 
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding);
-    } else if (self::$support['intlChar'] === true) {
+    } elseif (self::$support['intlChar'] === true) {
       return \IntlChar::chr($code_point);
     }
 
