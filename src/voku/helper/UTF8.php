@@ -1588,15 +1588,15 @@ final class UTF8
       return '';
     }
 
-    static $brokenUtf8ToUtf8Keys = null;
-    static $brokenUtf8ToUtf8Values = null;
+    static $BROKEN_UTF8_TO_UTF8_KEYS_CACHE = null;
+    static $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = null;
 
-    if ($brokenUtf8ToUtf8Keys === null) {
-      $brokenUtf8ToUtf8Keys = array_keys(self::$brokenUtf8ToUtf8);
-      $brokenUtf8ToUtf8Values = array_values(self::$brokenUtf8ToUtf8);
+    if ($BROKEN_UTF8_TO_UTF8_KEYS_CACHE === null) {
+      $BROKEN_UTF8_TO_UTF8_KEYS_CACHE = array_keys(self::$brokenUtf8ToUtf8);
+      $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = array_values(self::$brokenUtf8ToUtf8);
     }
 
-    return str_replace($brokenUtf8ToUtf8Keys, $brokenUtf8ToUtf8Values, $str);
+    return str_replace($BROKEN_UTF8_TO_UTF8_KEYS_CACHE, $BROKEN_UTF8_TO_UTF8_VALUES_CACHE, $str);
   }
 
   /**
@@ -3140,15 +3140,15 @@ final class UTF8
       return '';
     }
 
-    static $utf8MSWordKeys = null;
-    static $utf8MSWordValues = null;
+    static $UTF8_MSWORD_KEYS_CACHE = null;
+    static $UTF8_MSWORD_VALUES_CACHE = null;
 
-    if ($utf8MSWordKeys === null) {
-      $utf8MSWordKeys = array_keys(self::$utf8MSWord);
-      $utf8MSWordValues = array_values(self::$utf8MSWord);
+    if ($UTF8_MSWORD_KEYS_CACHE === null) {
+      $UTF8_MSWORD_KEYS_CACHE = array_keys(self::$utf8MSWord);
+      $UTF8_MSWORD_VALUES_CACHE = array_values(self::$utf8MSWord);
     }
 
-    return str_replace($utf8MSWordKeys, $utf8MSWordValues, $str);
+    return str_replace($UTF8_MSWORD_KEYS_CACHE, $UTF8_MSWORD_VALUES_CACHE, $str);
   }
 
   /**
@@ -3163,32 +3163,39 @@ final class UTF8
    */
   public static function normalize_whitespace($str, $keepNonBreakingSpace = false, $keepBidiUnicodeControls = false)
   {
-    static $whitespaces = array();
-    static $bidiUniCodeControls = null;
+    // init
+    $str = (string)$str;
 
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    static $WHITESPACE_CACHE = array();
     $cacheKey = (int)$keepNonBreakingSpace;
 
-    if (!isset($whitespaces[$cacheKey])) {
+    if (!isset($WHITESPACE_CACHE[$cacheKey])) {
 
-      $whitespaces[$cacheKey] = self::$whitespaceTable;
+      $WHITESPACE_CACHE[$cacheKey] = self::$whitespaceTable;
 
       if ($keepNonBreakingSpace === true) {
         /** @noinspection OffsetOperationsInspection */
-        unset($whitespaces[$cacheKey]['NO-BREAK SPACE']);
+        unset($WHITESPACE_CACHE[$cacheKey]['NO-BREAK SPACE']);
       }
 
-      $whitespaces[$cacheKey] = array_values($whitespaces[$cacheKey]);
+      $WHITESPACE_CACHE[$cacheKey] = array_values($WHITESPACE_CACHE[$cacheKey]);
     }
 
     if ($keepBidiUnicodeControls === false) {
-      if ($bidiUniCodeControls === null) {
-        $bidiUniCodeControls = array_values(self::$bidiUniCodeControlsTable);
+      static $BIDI_UNICODE_CONTROLS_CACHE = null;
+
+      if ($BIDI_UNICODE_CONTROLS_CACHE === null) {
+        $BIDI_UNICODE_CONTROLS_CACHE = array_values(self::$bidiUniCodeControlsTable);
       }
 
-      $str = str_replace($bidiUniCodeControls, '', $str);
+      $str = str_replace($BIDI_UNICODE_CONTROLS_CACHE, '', $str);
     }
 
-    return str_replace($whitespaces[$cacheKey], ' ', $str);
+    return str_replace($WHITESPACE_CACHE[$cacheKey], ' ', $str);
   }
 
   /**
@@ -4916,15 +4923,15 @@ final class UTF8
       return '';
     }
 
-    static $commonCaseFoldKeys = null;
-    static $commonCaseFoldValues = null;
+    static $COMMON_CASE_FOLD_KEYS_CACHE = null;
+    static $COMMAN_CASE_FOLD_VALUES_CACHE = null;
 
-    if ($commonCaseFoldKeys === null) {
-      $commonCaseFoldKeys = array_keys(self::$commonCaseFold);
-      $commonCaseFoldValues = array_values(self::$commonCaseFold);
+    if ($COMMON_CASE_FOLD_KEYS_CACHE === null) {
+      $COMMON_CASE_FOLD_KEYS_CACHE = array_keys(self::$commonCaseFold);
+      $COMMAN_CASE_FOLD_VALUES_CACHE = array_values(self::$commonCaseFold);
     }
 
-    $str = str_replace($commonCaseFoldKeys, $commonCaseFoldValues, $str);
+    $str = str_replace($COMMON_CASE_FOLD_KEYS_CACHE, $COMMAN_CASE_FOLD_VALUES_CACHE, $str);
 
     if ($full) {
 
@@ -6130,16 +6137,16 @@ final class UTF8
 
     $str = (string)self::to_utf8($str);
 
-    static $utf8ToWin1252Keys = null;
-    static $utf8ToWin1252Values = null;
+    static $UTF8_TO_WIN1252_KEYS_CACHE = null;
+    static $UTF8_TO_WIN1252_VALUES_CACHE = null;
 
-    if ($utf8ToWin1252Keys === null) {
-      $utf8ToWin1252Keys = array_keys(self::$utf8ToWin1252);
-      $utf8ToWin1252Values = array_values(self::$utf8ToWin1252);
+    if ($UTF8_TO_WIN1252_KEYS_CACHE === null) {
+      $UTF8_TO_WIN1252_KEYS_CACHE = array_keys(self::$utf8ToWin1252);
+      $UTF8_TO_WIN1252_VALUES_CACHE = array_values(self::$utf8ToWin1252);
     }
 
     /** @noinspection PhpInternalEntityUsedInspection */
-    return Xml::utf8_decode(str_replace($utf8ToWin1252Keys, $utf8ToWin1252Values, $str));
+    return Xml::utf8_decode(str_replace($UTF8_TO_WIN1252_KEYS_CACHE, $UTF8_TO_WIN1252_VALUES_CACHE, $str));
   }
 
   /**
@@ -6164,15 +6171,15 @@ final class UTF8
       return $str;
     } else {
 
-      static $cp1252ToUtf8Keys = null;
-      static $cp1252ToUtf8Values = null;
+      static $CP1252_TO_UTF8_KEYS_CACHE = null;
+      static $CP1252_TO_UTF8_VALUES_CACHE = null;
 
-      if ($cp1252ToUtf8Keys === null) {
-        $cp1252ToUtf8Keys = array_keys(self::$cp1252ToUtf8);
-        $cp1252ToUtf8Values = array_values(self::$cp1252ToUtf8);
+      if ($CP1252_TO_UTF8_KEYS_CACHE === null) {
+        $CP1252_TO_UTF8_KEYS_CACHE = array_keys(self::$cp1252ToUtf8);
+        $CP1252_TO_UTF8_VALUES_CACHE = array_values(self::$cp1252ToUtf8);
       }
 
-      return str_replace($cp1252ToUtf8Keys, $cp1252ToUtf8Values, $str);
+      return str_replace($CP1252_TO_UTF8_KEYS_CACHE, $CP1252_TO_UTF8_VALUES_CACHE, $str);
     }
   }
 
