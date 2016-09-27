@@ -1442,9 +1442,11 @@ final class UTF8
 
         if (self::is_ascii($var) === false) {
 
+          /** @noinspection PhpUndefinedClassInspection */
           if (\Normalizer::isNormalized($var, $normalization_form)) {
             $n = '-';
           } else {
+            /** @noinspection PhpUndefinedClassInspection */
             $n = \Normalizer::normalize($var, $normalization_form);
 
             if (isset($n[0])) {
@@ -1579,14 +1581,15 @@ final class UTF8
    */
   public static function fix_simple_utf8($str)
   {
-    static $brokenUtf8ToUtf8Keys = null;
-    static $brokenUtf8ToUtf8Values = null;
-
+    // init
     $str = (string)$str;
 
     if (!isset($str[0])) {
       return '';
     }
+
+    static $brokenUtf8ToUtf8Keys = null;
+    static $brokenUtf8ToUtf8Values = null;
 
     if ($brokenUtf8ToUtf8Keys === null) {
       $brokenUtf8ToUtf8Keys = array_keys(self::$brokenUtf8ToUtf8);
@@ -3130,6 +3133,13 @@ final class UTF8
    */
   public static function normalize_msword($str)
   {
+    // init
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
     static $utf8MSWordKeys = null;
     static $utf8MSWordValues = null;
 
@@ -3261,6 +3271,7 @@ final class UTF8
     }
 
     $chr_orig = $chr;
+    /** @noinspection CallableParameterUseCaseInTypeContextInspection */
     $chr = unpack('C*', substr($chr, 0, 4));
     $code = $chr ? $chr[1] : 0;
 
@@ -3294,7 +3305,7 @@ final class UTF8
    */
   public static function parse_str($str, &$result)
   {
-    // init
+    // clean broken utf8
     $str = self::clean($str);
 
     $return = \mb_parse_str($str, $result);
@@ -3520,6 +3531,7 @@ final class UTF8
       return $rxClassCache[$cacheKey];
     }
 
+    /** @noinspection CallableParameterUseCaseInTypeContextInspection */
     $class = array($class);
 
     /** @noinspection SuspiciousLoopInspection */
@@ -4024,6 +4036,7 @@ final class UTF8
       return str_split($str, $len);
     }
 
+    /** @noinspection PhpInternalEntityUsedInspection */
     preg_match_all('/' . Grapheme::GRAPHEME_CLUSTER_RX . '/u', $str, $a);
     $a = $a[0];
 
@@ -4174,6 +4187,7 @@ final class UTF8
    */
   public static function strcmp($str1, $str2)
   {
+    /** @noinspection PhpUndefinedClassInspection */
     return $str1 . '' === $str2 . '' ? 0 : strcmp(
         \Normalizer::normalize($str1, \Normalizer::NFD),
         \Normalizer::normalize($str2, \Normalizer::NFD)
@@ -4332,6 +4346,8 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
       $haystack = self::clean($haystack);
       $needle = self::clean($needle);
     }
@@ -4419,7 +4435,7 @@ final class UTF8
         return strlen($str);
     }
 
-    if ($encoding === 'UTF-8' && $cleanUtf8 === true) {
+    if ($cleanUtf8 === true) {
       $str = self::clean($str);
     }
 
@@ -4625,6 +4641,7 @@ final class UTF8
    *                              Character encoding name to use.
    *                              If it is omitted, internal character encoding is used.
    *                              </p>
+   * @param bool   $cleanUtf8     [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string|false The portion of haystack or false if needle is not found.
    */
@@ -4740,7 +4757,7 @@ final class UTF8
   public static function strrpos($haystack, $needle, $offset = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     if (((int)$needle) === $needle && ($needle >= 0)) {
-      $needle = self::chr($needle);
+      $needle = (string)self::chr($needle);
     }
 
     $haystack = (string)$haystack;
@@ -4881,17 +4898,24 @@ final class UTF8
    *
    * @link http://unicode.org/reports/tr21/tr21-5.html
    *
-   * @param string $str  <p>The input string.</p>
-   * @param bool   $full <p>
-   *                     <b>true</b> === replace full case folding chars + strtolower (default)<br />
-   *                     <b>false</b> use only $commonCaseFold +  strtolower
-   *                     </p>
+   * @param string  $str       <p>The input string.</p>
+   * @param bool    $full      [optional] <p>
+   *                           <b>true</b>, replace full case folding chars (default)<br />
+   *                           <b>false</b>, use only limited static array [UTF8::$commonCaseFold]
+   *                           </p>
+   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string
    */
-  public static function strtocasefold($str, $full = true)
+  public static function strtocasefold($str, $full = true, $cleanUtf8 = false)
   {
-    static $fullCaseFold = null;
+    // init
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
     static $commonCaseFoldKeys = null;
     static $commonCaseFoldValues = null;
 
@@ -4904,6 +4928,8 @@ final class UTF8
 
     if ($full) {
 
+      static $fullCaseFold = null;
+
       if ($fullCaseFold === null) {
         $fullCaseFold = self::getData('caseFolding_full');
       }
@@ -4912,7 +4938,9 @@ final class UTF8
       $str = str_replace($fullCaseFold[0], $fullCaseFold[1], $str);
     }
 
-    $str = self::clean($str);
+    if ($cleanUtf8 === true) {
+      $str = self::clean($str);
+    }
 
     return self::strtolower($str);
   }
@@ -4959,6 +4987,7 @@ final class UTF8
    */
   private static function strtonatfold($str)
   {
+    /** @noinspection PhpUndefinedClassInspection */
     return preg_replace('/\p{Mn}+/u', '', \Normalizer::normalize($str, \Normalizer::NFD));
   }
 
@@ -5182,9 +5211,9 @@ final class UTF8
       $length = (int)$length;
 
       if (
-          Bootup::is_php('7.1') === false
-          &&
           $length + $offset <= 0
+          &&
+          Bootup::is_php('7.1') === false
       ) {
         return false;
       }
@@ -5274,7 +5303,7 @@ final class UTF8
     preg_match_all('/./us', (string)$replacement, $rmatches);
 
     if ($length === null) {
-      $length = \mb_strlen($str);
+      $length = (int)\mb_strlen($str);
     }
 
     array_splice($smatches[0], $start, $length, $rmatches[0]);
@@ -6092,23 +6121,24 @@ final class UTF8
    */
   public static function utf8_decode($str)
   {
-    static $utf8ToWin1252Keys = null;
-    static $utf8ToWin1252Values = null;
-
+    // init
     $str = (string)$str;
 
     if (!isset($str[0])) {
       return '';
     }
 
-    // init
-    $str = self::to_utf8($str);
+    $str = (string)self::to_utf8($str);
+
+    static $utf8ToWin1252Keys = null;
+    static $utf8ToWin1252Values = null;
 
     if ($utf8ToWin1252Keys === null) {
       $utf8ToWin1252Keys = array_keys(self::$utf8ToWin1252);
       $utf8ToWin1252Values = array_values(self::$utf8ToWin1252);
     }
 
+    /** @noinspection PhpInternalEntityUsedInspection */
     return Xml::utf8_decode(str_replace($utf8ToWin1252Keys, $utf8ToWin1252Values, $str));
   }
 
@@ -6121,6 +6151,13 @@ final class UTF8
    */
   public static function utf8_encode($str)
   {
+    // init
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
     $str = \utf8_encode($str);
 
     if (false === strpos($str, "\xC2")) {

@@ -2610,7 +2610,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrtocasefold()
   {
-    self::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱'));    // Original (NFC)
+    self::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱', true));    // Original (NFC)
     self::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌'));   // Uppercased
     self::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC
 
@@ -2618,7 +2618,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('hello world 中文空白', UTF8::strtocasefold('Hello world 中文空白'));
 
     // invalid utf-8
-    self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true));
+    self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true, true));
   }
 
   public function testStrtolower()
@@ -2738,7 +2740,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ISO
 
     self::assertSame(28, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'ISO', false));
-    self::assertSame(28, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'ISO', true));
+    self::assertSame(27, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'ISO', true));
   }
 
   public function testSubstr()
