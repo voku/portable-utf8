@@ -201,16 +201,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       '«foobar»'                                                                             => array('«foobar»' => '«foobar»'),
       // Valid UTF-8 + UTF-8 NO-BREAK SPACE
       "κόσμε\xc2\xa0"                                                                        => array("κόσμε\xc2\xa0" => "κόσμε\xc2\xa0"),
-      // Valid UTF-8 + Invalied Chars
+      // Valid UTF-8 + Invalid Chars
       "κόσμε\xa0\xa1-öäü"                                                                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
-      // Valid UTF-8 + ISO-Erros
+      // Valid UTF-8 + ISO-Errors
       'DÃ¼sseldorf'                                                                          => array('Düsseldorf' => 'Düsseldorf'),
       // Valid ASCII
       'a'                                                                                    => array('a' => 'a'),
       // Valid emoji (non-UTF-8)
       '😃'                                                                                   => array('😃' => '😃'),
       '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => array('🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧'),
-      // Valid ASCII + Invalied Chars
+      // Valid ASCII + Invalid Chars
       "a\xa0\xa1-öäü"                                                                        => array('a-öäü' => 'a-öäü'),
       // Valid 2 Octet Sequence
       "\xc3\xb1"                                                                             => array('ñ' => 'ñ'),
@@ -2610,16 +2610,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrtocasefold()
   {
-    self::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱', true));    // Original (NFC)
-    self::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌'));   // Uppercased
+    self::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱', true)); // Original (NFC)
+    self::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌')); // Uppercased
     self::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC
 
     // valid utf-8
     self::assertSame('hello world 中文空白', UTF8::strtocasefold('Hello world 中文空白'));
 
     // invalid utf-8
-    self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
-    self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true));
+
+    if (Bootup::is_php('5.4')) {
+      // invalid UTF-8 + PHP 5.3 = 20 => error
+      self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
+      self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true));
+    }
+    
     self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true, true));
   }
 
@@ -2726,10 +2731,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($after, UTF8::strwidth($before));
     }
 
-    // test + Invalied Chars
+    // test + Invalid Chars
 
     if (Bootup::is_php('5.4')) {
-      self::assertSame(21, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false)); // invalied UTF-8 + PHP 5.3 = 20 => error
+      // invalid UTF-8 + PHP 5.3 = 20 => error
+      self::assertSame(21, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
     }
 
     self::assertSame(20, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
@@ -3007,13 +3013,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       '中'                                           => array('中' => '中'),
       // Valid UTF-8 + "win1252"-encoding
       'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac" => array('Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'),
-      // Valid UTF-8 + Invalied Chars
+      // Valid UTF-8 + Invalid Chars
       "κόσμε\xa0\xa1-öäü-‽‽‽"                           => array('κόσμε-öäü-‽‽‽' => 'κόσμε-öäü-‽‽‽'),
       // Valid emoji (non-UTF-8)
       '👍 💩 😄 ❤ 👍 💩 😄 ❤'                       => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
       // Valid ASCII
       'a'                                           => array('a' => 'a'),
-      // Valid ASCII + Invalied Chars
+      // Valid ASCII + Invalid Chars
       "a\xa0\xa1-öäü"                               => array('a-öäü' => 'a-öäü'),
       // Valid 2 Octet Sequence
       "\xc3\xb1"                                    => array('ñ' => 'ñ'),
