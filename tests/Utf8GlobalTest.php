@@ -195,6 +195,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testClean()
   {
     $examples = array(
+      // Valid defaults
+      ''                                                                                     => array('' => ''),
+      ' '                                                                                    => array(' ' => ' '),
+      null                                                                                   => array(null => ''),
+      1                                                                                      => array(1 => '1'),
+      '2'                                                                                    => array('2' => '2'),
+      '+1'                                                                                   => array('+1' => '+1'),
       // Valid UTF-8
       'κόσμε'                                                                                => array('κόσμε' => 'κόσμε'),
       '中'                                                                                    => array('中' => '中'),
@@ -833,11 +840,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '\u00f1' => 241,
         '\u0000' => 0,
         //
-        '2026' => 8230,
-        '03ba' => 954,
-        '00f6' => 246,
-        '00f1' => 241,
-        '0000' => 0,
+        '2026'   => 8230,
+        '03ba'   => 954,
+        '00f6'   => 246,
+        '00f1'   => 241,
+        '0000'   => 0,
     );
 
     foreach (array_replace($testsForHexToInt, $tests) as $before => $after) {
@@ -932,13 +939,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
 
     $testArray = array(
-        '{-test'                  => '{-test',
-        'abc'                     => 'abc',
-        ' '                       => ' ',
-        ''                        => '',
-        '&#d;'                    => '&#d;',
-        '&d;'                     => '&d;',
-        '&gt;'                    => '>',
+        '{-test' => '{-test',
+        'abc'    => 'abc',
+        ' '      => ' ',
+        ''       => '',
+        '&#d;'   => '&#d;',
+        '&d;'    => '&d;',
+        '&gt;'   => '>',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -1025,14 +1032,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     $testArray = array(
-        'κόσμε'                                                                                     => 'κόσμε',
-        'who&#039;s online'                                                                         => 'who\'s online',
-        'who&amp;#039;s online'                                                                     => 'who\'s online',
-        'who&#039;s online-'                                                                        => 'who\'s online-',
-        'Who&#039;s Online'                                                                         => 'Who\'s Online',
-        'Who&amp;#039;s Online &#20013;'                                                            => 'Who\'s Online ?',
-        'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
-        "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
+        'κόσμε'                          => 'κόσμε',
+        'who&#039;s online'              => 'who\'s online',
+        'who&amp;#039;s online'          => 'who\'s online',
+        'who&#039;s online-'             => 'who\'s online-',
+        'Who&#039;s Online'              => 'Who\'s Online',
+        'Who&amp;#039;s Online &#20013;' => 'Who\'s Online ?',
+        'Who&amp;amp;#039;s Online'      => 'Who\'s Online',
+        "Who\'s Online&#x0003A;"         => 'Who\\\'s Online:',
     );
 
     foreach ($testArray as $before => $after) {
@@ -1529,6 +1536,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '  -ABC-中文空白-  ' => '-ABC-中文空白-  ',
         '      - ÖÄÜ- '  => '- ÖÄÜ- ',
         'öäü'            => 'öäü',
+        1                => '1',
+        ''               => '',
+        null             => '',
     );
 
     foreach ($tests as $before => $after) {
@@ -2257,12 +2267,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testStripTags()
   {
     $tests = array(
+        null                                                                      => '',
         ''                                                                        => '',
         ' '                                                                       => ' ',
-        '<nav>中文空白 </nav>'                                                        => '中文空白 ',
-        "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
-        '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
+        1                                                                         => '1',
+        '2'                                                                       => '2',
         'Abcdef'                                                                  => 'Abcdef',
+        '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
+        "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
+        '<nav>中文空白 </nav>'                                                        => '中文空白 ',
         "<span>κόσμε\xa0\xa1</span>-<span>öäü</span>öäü"                          => 'κόσμε-öäüöäü',
     );
 
@@ -2624,7 +2637,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
       self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true));
     }
-    
+
     self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true, true));
   }
 
@@ -2953,7 +2966,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "      - abc- \xc2\x87"         => '      - abc- ++',
         'abc'                           => 'abc',
         'deja vu'                       => 'deja vu',
-        'déjà vu '                       => 'deja vu ',
+        'déjà vu '                      => 'deja vu ',
         'déjà σσς iıii'                 => 'deja sss iiii',
         "test\x80-\xBFöäü"              => 'test-oau',
         'Internationalizaetion'         => 'Internationalizaetion',
@@ -3014,7 +3027,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid UTF-8 + "win1252"-encoding
       'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac" => array('Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'),
       // Valid UTF-8 + Invalid Chars
-      "κόσμε\xa0\xa1-öäü-‽‽‽"                           => array('κόσμε-öäü-‽‽‽' => 'κόσμε-öäü-‽‽‽'),
+      "κόσμε\xa0\xa1-öäü-‽‽‽"                       => array('κόσμε-öäü-‽‽‽' => 'κόσμε-öäü-‽‽‽'),
       // Valid emoji (non-UTF-8)
       '👍 💩 😄 ❤ 👍 💩 😄 ❤'                       => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
       // Valid ASCII
