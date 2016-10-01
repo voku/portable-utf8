@@ -854,6 +854,24 @@ UTF8::str_detect_encoding('中文空白'); // 'UTF-8'
 UTF8::str_detect_encoding('Abc'); // 'ASCII'
 ```
 
+##### str_ends_with(string $haystack, string $needle) : bool
+
+Check if the string ends with the given substring.
+
+```php
+UTF8::str_ends_with('BeginMiddleΚόσμε', 'Κόσμε'); // true
+UTF8::str_ends_with('BeginMiddleΚόσμε', 'κόσμε'); // false
+```
+
+##### str_iends_with(string $haystack, string $needle) : bool
+
+Check if the string ends with the given substring, case insensitive.
+
+```php
+UTF8::str_iends_with('BeginMiddleΚόσμε', 'Κόσμε'); // true
+UTF8::str_iends_with('BeginMiddleΚόσμε', 'κόσμε'); // true
+```
+
 ##### str_ireplace(mixed $search, mixed $replace, mixed $subject, int &$count = null) : mixed
 
 Case-insensitive and UTF-8 safe version of <function>str_replace</function>.
@@ -908,6 +926,24 @@ Split a string into an array.
 
 ```php
 UTF8::split('déjà', 2); // array('dé', 'jà')
+```
+
+##### str_starts_with(string $haystack, string $needle) : bool
+
+Check if the string starts with the given substring.
+
+```php
+UTF8::str_starts_with('ΚόσμεMiddleEnd', 'Κόσμε'); // true
+UTF8::str_starts_with('ΚόσμεMiddleEnd', 'κόσμε'); // false
+```
+
+##### str_istarts_with(string $haystack, string $needle) : bool
+
+Check if the string starts with the given substring, case insensitive.
+
+```php
+UTF8::str_starts_with('ΚόσμεMiddleEnd', 'Κόσμε'); // true
+UTF8::str_istarts_with('ΚόσμεMiddleEnd', 'κόσμε'); // true
 ```
 
 ##### str_to_binary(string $str) : string

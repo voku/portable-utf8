@@ -3781,6 +3781,54 @@ final class UTF8
   }
 
   /**
+   * Check if the string ends with the given substring.
+   *
+   * @param string $haystack <p>The string to search in.</p>
+   * @param string $needle   <p>The substring to search for.</p>
+   *
+   * @return bool
+   */
+  public static function str_ends_with($haystack, $needle)
+  {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0], $needle[0])) {
+      return false;
+    }
+
+    if ($needle === self::substr($haystack, -self::strlen($needle))) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Check if the string ends with the given substring, case insensitive.
+   *
+   * @param string $haystack <p>The string to search in.</p>
+   * @param string $needle   <p>The substring to search for.</p>
+   *
+   * @return bool
+   */
+  public static function str_iends_with($haystack, $needle)
+  {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0], $needle[0])) {
+      return false;
+    }
+
+    if (self::strcasecmp(self::substr($haystack, -self::strlen($needle)), $needle) === 0) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Case-insensitive and UTF-8 safe version of <function>str_replace</function>.
    *
    * @link  http://php.net/manual/en/function.str-ireplace.php
@@ -3822,6 +3870,30 @@ final class UTF8
     $count = $replace; // used as reference parameter
 
     return $subject;
+  }
+
+  /**
+   * Check if the string starts with the given substring, case insensitive.
+   *
+   * @param string $haystack <p>The string to search in.</p>
+   * @param string $needle   <p>The substring to search for.</p>
+   *
+   * @return bool
+   */
+  public static function str_istarts_with($haystack, $needle)
+  {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0], $needle[0])) {
+      return false;
+    }
+
+    if (self::stripos($haystack, $needle) === 0) {
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -4064,6 +4136,30 @@ final class UTF8
     }
 
     return $arrayOutput;
+  }
+
+  /**
+   * Check if the string starts with the given substring.
+   *
+   * @param string $haystack <p>The string to search in.</p>
+   * @param string $needle   <p>The substring to search for.</p>
+   *
+   * @return bool
+   */
+  public static function str_starts_with($haystack, $needle)
+  {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0], $needle[0])) {
+      return false;
+    }
+
+    if (self::strpos($haystack, $needle) === 0) {
+      return true;
+    }
+
+    return false;
   }
 
   /**
