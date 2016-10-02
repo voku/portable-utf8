@@ -2050,6 +2050,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         array('this is...', 'this is öäü-foo test', 8, '...'),
         array('fòô', 'fòô bàř fòô', 6, ''),
         array('fòô bàř', 'fòô bàř fòô', 8, ''),
+        array('fòô bàř', "fòô bàř fòô \x00", 8, ''),
+        array('', "fòô bàř \x00fòô", 0, ''),
+        array('fòô bàř', "fòô bàř \x00fòô", -1, ''),
+        array('fòô bàř白', "fòô bàř \x00fòô", 8, '白'),
+        array('白白', '白白 白白', 3),
+        array('白白白', '白白白', 100),
+        array('', '', 1),
+        array('', null, 1),
+        array('', false, 1),
     );
 
     foreach ($testArray as $test) {
