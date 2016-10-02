@@ -2971,6 +2971,134 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(1, UTF8::substr_count('abcde', 'bc', 1, 2, 'ISO'));
   }
 
+  public function testSubstrILeft()
+  {
+    $str = 'ΚόσμεMiddleEnd';
+
+    $tests = array(
+        'Κόσμε' => 'MiddleEnd',
+        'κόσμε' => 'MiddleEnd',
+        ''      => 'ΚόσμεMiddleEnd',
+        ' '     => 'ΚόσμεMiddleEnd',
+        false   => 'ΚόσμεMiddleEnd',
+        'Κ'     => 'όσμεMiddleEnd',
+        'End'   => 'ΚόσμεMiddleEnd',
+        'end'   => 'ΚόσμεMiddleEnd',
+    );
+
+    foreach ($tests as $test => $result) {
+      self::assertSame($result, UTF8::substr_ileft($str, $test), 'tested: ' . $test);
+    }
+
+    // ---
+
+    self::assertSame('MiddleEndΚόσμε', UTF8::substr_ileft('ΚόσμεMiddleEndΚόσμε', 'Κόσμε'));
+
+    // ---
+
+    self::assertSame('ΚόσμεMiddleEndΚόσμε', UTF8::substr_ileft('ΚόσμεMiddleEndΚόσμε', ''));
+
+    // --- false
+
+    self::assertSame(false, UTF8::substr_ileft('', 'Κόσμε'));
+  }
+
+  public function testSubstrIRight()
+  {
+    $str = 'BeginMiddleΚόσμε';
+
+    $tests = array(
+        'Κόσμε' => 'BeginMiddle',
+        'κόσμε' => 'BeginMiddle',
+        ''      => 'BeginMiddleΚόσμε',
+        ' '     => 'BeginMiddleΚόσμε',
+        false   => 'BeginMiddleΚόσμε',
+        'ε'     => 'BeginMiddleΚόσμ',
+        'End'   => 'BeginMiddleΚόσμε',
+        'end'   => 'BeginMiddleΚόσμε',
+    );
+
+    foreach ($tests as $test => $result) {
+      self::assertSame($result, UTF8::substr_iright($str, $test), 'tested: ' . $test);
+    }
+
+    // ---
+
+    self::assertSame('ΚόσμεMiddleEnd', UTF8::substr_iright('ΚόσμεMiddleEndΚόσμε', 'Κόσμε'));
+
+    // ---
+
+    self::assertSame('ΚόσμεMiddleEndΚόσμε', UTF8::substr_iright('ΚόσμεMiddleEndΚόσμε', ''));
+
+    // --- false
+
+    self::assertSame(false, UTF8::substr_iright('', 'Κόσμε'));
+  }
+
+  public function testSubstrLeft()
+  {
+    $str = 'ΚόσμεMiddleEnd';
+
+    $tests = array(
+        'Κόσμε' => 'MiddleEnd',
+        'κόσμε' => 'ΚόσμεMiddleEnd',
+        ''      => 'ΚόσμεMiddleEnd',
+        ' '     => 'ΚόσμεMiddleEnd',
+        false   => 'ΚόσμεMiddleEnd',
+        'Κ'     => 'όσμεMiddleEnd',
+        'End'   => 'ΚόσμεMiddleEnd',
+        'end'   => 'ΚόσμεMiddleEnd',
+    );
+
+    foreach ($tests as $test => $result) {
+      self::assertSame($result, UTF8::substr_left($str, $test), 'tested: ' . $test);
+    }
+
+    // ---
+
+    self::assertSame('MiddleEndΚόσμε', UTF8::substr_left('ΚόσμεMiddleEndΚόσμε', 'Κόσμε'));
+
+    // ---
+
+    self::assertSame('ΚόσμεMiddleEndΚόσμε', UTF8::substr_left('ΚόσμεMiddleEndΚόσμε', ''));
+
+    // --- false
+
+    self::assertSame(false, UTF8::substr_left('', 'Κόσμε'));
+  }
+
+  public function testSubstrRight()
+  {
+    $str = 'BeginMiddleΚόσμε';
+
+    $tests = array(
+        'Κόσμε' => 'BeginMiddle',
+        'κόσμε' => 'BeginMiddleΚόσμε',
+        ''      => 'BeginMiddleΚόσμε',
+        ' '     => 'BeginMiddleΚόσμε',
+        false   => 'BeginMiddleΚόσμε',
+        'ε'     => 'BeginMiddleΚόσμ',
+        'End'   => 'BeginMiddleΚόσμε',
+        'end'   => 'BeginMiddleΚόσμε',
+    );
+
+    foreach ($tests as $test => $result) {
+      self::assertSame($result, UTF8::substr_right($str, $test), 'tested: ' . $test);
+    }
+
+    // ---
+
+    self::assertSame('ΚόσμεMiddleEnd', UTF8::substr_right('ΚόσμεMiddleEndΚόσμε', 'Κόσμε'));
+
+    // ---
+
+    self::assertSame('ΚόσμεMiddleEndΚόσμε', UTF8::substr_right('ΚόσμεMiddleEndΚόσμε', ''));
+
+    // --- false
+
+    self::assertSame(false, UTF8::substr_right('', 'Κόσμε'));
+  }
+
   public function testSwapCase()
   {
     $tests = array(

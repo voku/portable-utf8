@@ -5339,6 +5339,90 @@ final class UTF8
   }
 
   /**
+   * Removes an prefix ($needle) from start of the string ($haystack), case insensitive.
+   *
+   * @param string $haystack <p>The string to search in.</p>
+   * @param string $needle   <p>The substring to search for.</p>
+   *
+   * @return false|string <p>Return the sub-string, false if there was no input ($haystack).</p>
+   */
+  public static function substr_ileft($haystack, $needle)
+  {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0])) {
+      return false;
+    }
+
+    if (!isset($needle[0])) {
+      return $haystack;
+    }
+
+    if (self::str_istarts_with($haystack, $needle) === true) {
+      $haystack = self::substr($haystack, self::strlen($needle));
+    }
+
+    return $haystack;
+  }
+
+  /**
+   * Removes an suffix ($needle) from end of the string ($haystack), case insensitive.
+   *
+   * @param string $haystack <p>The string to search in.</p>
+   * @param string $needle   <p>The substring to search for.</p>
+   *
+   * @return false|string <p>Return the sub-string, false if there was no input ($haystack).</p>
+   */
+  public static function substr_iright($haystack, $needle)
+  {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0])) {
+      return false;
+    }
+
+    if (!isset($needle[0])) {
+      return $haystack;
+    }
+
+    if (self::str_iends_with($haystack, $needle) === true) {
+      $haystack = self::substr($haystack, 0, self::strlen($haystack) - self::strlen($needle));
+    }
+
+    return $haystack;
+  }
+
+  /**
+   * Removes an prefix ($needle) from start of the string ($haystack).
+   *
+   * @param string $haystack <p>The string to search in.</p>
+   * @param string $needle   <p>The substring to search for.</p>
+   *
+   * @return false|string <p>Return the sub-string, false if there was no input ($haystack).</p>
+   */
+  public static function substr_left($haystack, $needle)
+  {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0])) {
+      return false;
+    }
+
+    if (!isset($needle[0])) {
+      return $haystack;
+    }
+
+    if (self::str_starts_with($haystack, $needle) === true) {
+      $haystack = self::substr($haystack, self::strlen($needle));
+    }
+
+    return $haystack;
+  }
+
+  /**
    * Replace text within a portion of a string.
    *
    * source: https://gist.github.com/stemar/8287074
@@ -5412,6 +5496,34 @@ final class UTF8
     array_splice($smatches[0], $start, $length, $rmatches[0]);
 
     return implode($smatches[0], null);
+  }
+
+  /**
+   * Removes an suffix ($needle) from end of the string ($haystack).
+   *
+   * @param string $haystack <p>The string to search in.</p>
+   * @param string $needle   <p>The substring to search for.</p>
+   *
+   * @return false|string <p>Return the sub-string, false if there was no input ($haystack).</p>
+   */
+  public static function substr_right($haystack, $needle)
+  {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0])) {
+      return false;
+    }
+
+    if (!isset($needle[0])) {
+      return $haystack;
+    }
+
+    if (self::str_ends_with($haystack, $needle) === true) {
+      $haystack = self::substr($haystack, 0, self::strlen($haystack) - self::strlen($needle));
+    }
+
+    return $haystack;
   }
 
   /**
