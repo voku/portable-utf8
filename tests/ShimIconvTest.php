@@ -11,7 +11,16 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
   {
     // Native iconv() behavior varies between versions and OS for these two tests
     // See e.g. https://bugs.php.net/52211
-    if (!defined('HHVM_VERSION') && (PHP_VERSION_ID >= 50610 || (PHP_VERSION_ID >= 50526 && PHP_VERSION_ID < 50600) || '\\' === DIRECTORY_SEPARATOR)) {
+    if (
+        !defined('HHVM_VERSION')
+        &&
+        (
+            PHP_VERSION_ID >= 50610
+            ||
+            (PHP_VERSION_ID >= 50526 && PHP_VERSION_ID < 50600)
+            ||
+            '\\' === DIRECTORY_SEPARATOR)
+    ) {
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
       self::assertSame(PHP_VERSION_ID >= 50400 ? false : 'n', @iconv('UTF-8', 'ISO-8859-1', 'nœud'));
       self::assertSame('nud', iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
@@ -29,10 +38,19 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
       }
 
     } else {
-      /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      self::assertSame('n', @iconv('UTF-8', 'ISO-8859-1', 'nœud'));
-      /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      self::assertSame('nud', @iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
+
+      // See e.g. https://bugs.php.net/52211
+      /** @noinspection PhpUndefinedConstantInspection */
+      if (defined('HHVM_VERSION') && HHVM_VERSION_ID >= 30901) {
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        self::assertFalse(@iconv('UTF-8', 'ISO-8859-1', 'nœud'));
+        self::assertSame('nud', iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
+      } else {
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        self::assertSame('n', @iconv('UTF-8', 'ISO-8859-1', 'nœud'));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        self::assertSame('nud', @iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
+      }
     }
 
     // The recent Windows behavior is the most useful
@@ -46,50 +64,22 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
     self::assertSame('4', p::iconv('UTF-8', 'UTF-8', 4));
   }
 
-  public function testIconvStrlen()
+  public function testIconvGetEncoding()
   {
-    self::assertSame(4, p::iconv_strlen('déjà'));
-    self::assertSame(3, p::iconv_strlen('한국어'));
-
-    self::assertSame(4, p::strlen1('déjà'));
-    self::assertSame(3, p::strlen2('한국어'));
-
-    self::assertSame(4, p::strlen1('déjà'));
-    self::assertSame(3, p::strlen2('한국어'));
-  }
-
-  public function testIconvStrPos()
-  {
-    self::assertSame(1, p::iconv_strpos('11--', '1-', 0, 'UTF-8'));
-    self::assertSame(2, p::iconv_strpos('-11--', '1-', 0, 'UTF-8'));
-    self::assertSame(false, p::iconv_strrpos('한국어', '', 'UTF-8'));
-    self::assertSame(1, p::iconv_strrpos('한국어', '국', 'UTF-8'));
-    self::assertSame(false, p::iconv_strrpos('한국어', ''));
-    self::assertSame(1, p::iconv_strrpos('한국어', '국'));
-    self::assertSame(6, p::iconv_strrpos('κόσμε-κόσμε', 'κ'));
-    self::assertSame(13, p::iconv_strrpos('test κόσμε κόσμε test', 'σ'));
-    self::assertSame(9, p::iconv_strrpos('中文空白-ÖÄÜ-中文空白', '中'));
-  }
-
-  public function testIconvSubstr()
-  {
-    self::assertSame('x', p::iconv_substr('x', 0, 1, 'UTF-8'));
-  }
-
-  public function testIconvMimeEncode()
-  {
-    $text = "\xE3\x83\x86\xE3\x82\xB9\xE3\x83\x88\xE3\x83\x86\xE3\x82\xB9\xE3\x83\x88";
-    $options = array(
-        'scheme'         => 'Q',
-        'input-charset'  => 'UTF-8',
-        'output-charset' => 'UTF-8',
-        'line-length'    => 30,
+    $a = array(
+        'input_encoding'    => 'UTF-8',
+        'output_encoding'   => 'UTF-8',
+        'internal_encoding' => 'UTF-8',
     );
 
-    self::assertSame(
-        "Subject: =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=\r\n =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=",
-        p::iconv_mime_encode('Subject', $text, $options)
-    );
+    foreach ($a as $t => $e) {
+      self::assertTrue(p::iconv_set_encoding($t, $e));
+      self::assertSame($e, p::iconv_get_encoding($t));
+    }
+
+    self::assertSame($a, p::iconv_get_encoding('all'));
+
+    self::assertFalse(p::iconv_set_encoding('foo', 'UTF-8'));
   }
 
   /**
@@ -134,21 +124,49 @@ HEADERS;
     self::assertSame($result, p::iconv_mime_decode_headers($headers, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8'));
   }
 
-  public function testIconvGetEncoding()
+  public function testIconvMimeEncode()
   {
-    $a = array(
-        'input_encoding'    => 'UTF-8',
-        'output_encoding'   => 'UTF-8',
-        'internal_encoding' => 'UTF-8',
+    $text = "\xE3\x83\x86\xE3\x82\xB9\xE3\x83\x88\xE3\x83\x86\xE3\x82\xB9\xE3\x83\x88";
+    $options = array(
+        'scheme'         => 'Q',
+        'input-charset'  => 'UTF-8',
+        'output-charset' => 'UTF-8',
+        'line-length'    => 30,
     );
 
-    foreach ($a as $t => $e) {
-      self::assertTrue(p::iconv_set_encoding($t, $e));
-      self::assertSame($e, p::iconv_get_encoding($t));
-    }
+    self::assertSame(
+        "Subject: =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=\r\n =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=",
+        p::iconv_mime_encode('Subject', $text, $options)
+    );
+  }
 
-    self::assertSame($a, p::iconv_get_encoding('all'));
+  public function testIconvStrPos()
+  {
+    self::assertSame(1, p::iconv_strpos('11--', '1-', 0, 'UTF-8'));
+    self::assertSame(2, p::iconv_strpos('-11--', '1-', 0, 'UTF-8'));
+    self::assertSame(false, p::iconv_strrpos('한국어', '', 'UTF-8'));
+    self::assertSame(1, p::iconv_strrpos('한국어', '국', 'UTF-8'));
+    self::assertSame(false, p::iconv_strrpos('한국어', ''));
+    self::assertSame(1, p::iconv_strrpos('한국어', '국'));
+    self::assertSame(6, p::iconv_strrpos('κόσμε-κόσμε', 'κ'));
+    self::assertSame(13, p::iconv_strrpos('test κόσμε κόσμε test', 'σ'));
+    self::assertSame(9, p::iconv_strrpos('中文空白-ÖÄÜ-中文空白', '中'));
+  }
 
-    self::assertFalse(p::iconv_set_encoding('foo', 'UTF-8'));
+  public function testIconvStrlen()
+  {
+    self::assertSame(4, p::iconv_strlen('déjà'));
+    self::assertSame(3, p::iconv_strlen('한국어'));
+
+    self::assertSame(4, p::strlen1('déjà'));
+    self::assertSame(3, p::strlen2('한국어'));
+
+    self::assertSame(4, p::strlen1('déjà'));
+    self::assertSame(3, p::strlen2('한국어'));
+  }
+
+  public function testIconvSubstr()
+  {
+    self::assertSame('x', p::iconv_substr('x', 0, 1, 'UTF-8'));
   }
 }
