@@ -1261,7 +1261,7 @@ Count the number of substring occurrences.
 UTF8::substr_count('中文空白', '文空', 1, 2); // 1
 ```
 
-##### substr_left(string $haystack, string $needle) : false|string
+##### substr_left(string $haystack, string $needle) : string
 
 Removes an prefix ($needle) from start of the string ($haystack).
 
@@ -1270,7 +1270,7 @@ UTF8::substr_left('ΚόσμεMiddleEnd', 'Κόσμε'); // 'MiddleEnd'
 UTF8::substr_left('ΚόσμεMiddleEnd', 'κόσμε'); // 'ΚόσμεMiddleEnd'
 ```
 
-##### substr_ileft(string $haystack, string $needle) : false|string
+##### substr_ileft(string $haystack, string $needle) : string
 
 Removes an prefix ($needle) from start of the string ($haystack), case insensitive.
 
@@ -1279,7 +1279,7 @@ UTF8::substr_ileft('ΚόσμεMiddleEnd', 'Κόσμε'); // 'MiddleEnd'
 UTF8::substr_ileft('ΚόσμεMiddleEnd', 'κόσμε'); // 'MiddleEnd'
 ```
 
-##### substr_right(string $haystack, string $needle) : false|string
+##### substr_right(string $haystack, string $needle) : string
 
 Removes an suffix ($needle) from end of the string ($haystack).
 
@@ -1288,7 +1288,7 @@ UTF8::substr_right('BeginMiddleΚόσμε', 'Κόσμε'); // 'BeginMiddle'
 UTF8::substr_right('BeginMiddleΚόσμε', 'κόσμε'); // 'BeginMiddleΚόσμε'
 ```
 
-##### substr_iright(string $haystack, string $needle) : false|string
+##### substr_iright(string $haystack, string $needle) : string
 
 Removes an suffix ($needle) from end of the string ($haystack), case insensitive.
 

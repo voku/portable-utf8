@@ -2998,9 +2998,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     self::assertSame('ΚόσμεMiddleEndΚόσμε', UTF8::substr_ileft('ΚόσμεMiddleEndΚόσμε', ''));
 
-    // --- false
+    // ---
 
-    self::assertSame(false, UTF8::substr_ileft('', 'Κόσμε'));
+    self::assertSame('', UTF8::substr_ileft('', 'Κόσμε'));
   }
 
   public function testSubstrIRight()
@@ -3030,9 +3030,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     self::assertSame('ΚόσμεMiddleEndΚόσμε', UTF8::substr_iright('ΚόσμεMiddleEndΚόσμε', ''));
 
-    // --- false
+    // ---
 
-    self::assertSame(false, UTF8::substr_iright('', 'Κόσμε'));
+    self::assertSame('', UTF8::substr_iright('', 'Κόσμε'));
   }
 
   public function testSubstrLeft()
@@ -3062,9 +3062,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     self::assertSame('ΚόσμεMiddleEndΚόσμε', UTF8::substr_left('ΚόσμεMiddleEndΚόσμε', ''));
 
-    // --- false
+    // ---
 
-    self::assertSame(false, UTF8::substr_left('', 'Κόσμε'));
+    self::assertSame('', UTF8::substr_left('', 'Κόσμε'));
   }
 
   public function testSubstrRight()
@@ -3094,9 +3094,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     self::assertSame('ΚόσμεMiddleEndΚόσμε', UTF8::substr_right('ΚόσμεMiddleEndΚόσμε', ''));
 
-    // --- false
+    // ---
 
-    self::assertSame(false, UTF8::substr_right('', 'Κόσμε'));
+    self::assertSame('', UTF8::substr_right('', 'Κόσμε'));
   }
 
   public function testSwapCase()

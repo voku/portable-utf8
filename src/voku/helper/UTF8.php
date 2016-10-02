@@ -5344,7 +5344,7 @@ final class UTF8
    * @param string $haystack <p>The string to search in.</p>
    * @param string $needle   <p>The substring to search for.</p>
    *
-   * @return false|string <p>Return the sub-string, false if there was no input ($haystack).</p>
+   * @return string <p>Return the sub-string.</p>
    */
   public static function substr_ileft($haystack, $needle)
   {
@@ -5352,7 +5352,7 @@ final class UTF8
     $needle = (string)$needle;
 
     if (!isset($haystack[0])) {
-      return false;
+      return '';
     }
 
     if (!isset($needle[0])) {
@@ -5372,7 +5372,7 @@ final class UTF8
    * @param string $haystack <p>The string to search in.</p>
    * @param string $needle   <p>The substring to search for.</p>
    *
-   * @return false|string <p>Return the sub-string, false if there was no input ($haystack).</p>
+   * @return string <p>Return the sub-string.</p>
    */
   public static function substr_iright($haystack, $needle)
   {
@@ -5380,7 +5380,7 @@ final class UTF8
     $needle = (string)$needle;
 
     if (!isset($haystack[0])) {
-      return false;
+      return '';
     }
 
     if (!isset($needle[0])) {
@@ -5400,7 +5400,7 @@ final class UTF8
    * @param string $haystack <p>The string to search in.</p>
    * @param string $needle   <p>The substring to search for.</p>
    *
-   * @return false|string <p>Return the sub-string, false if there was no input ($haystack).</p>
+   * @return string <p>Return the sub-string.</p>
    */
   public static function substr_left($haystack, $needle)
   {
@@ -5408,7 +5408,7 @@ final class UTF8
     $needle = (string)$needle;
 
     if (!isset($haystack[0])) {
-      return false;
+      return '';
     }
 
     if (!isset($needle[0])) {
@@ -5504,7 +5504,7 @@ final class UTF8
    * @param string $haystack <p>The string to search in.</p>
    * @param string $needle   <p>The substring to search for.</p>
    *
-   * @return false|string <p>Return the sub-string, false if there was no input ($haystack).</p>
+   * @return string <p>Return the sub-string.</p>
    */
   public static function substr_right($haystack, $needle)
   {
@@ -5512,7 +5512,7 @@ final class UTF8
     $needle = (string)$needle;
 
     if (!isset($haystack[0])) {
-      return false;
+      return '';
     }
 
     if (!isset($needle[0])) {
