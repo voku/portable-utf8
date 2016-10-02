@@ -4985,6 +4985,10 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     if (
         $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
         ||

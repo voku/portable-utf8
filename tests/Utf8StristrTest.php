@@ -72,9 +72,27 @@ class Utf8StristrTest extends PHPUnit_Framework_TestCase
     $str = "iñtërn\nâtiônàlizætiøn";
     $search = "n\nÂT";
     self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search));
+  }
 
-    // ---
+  public function test_encoding()
+  {
+    $str = "iñtërn\nâtiônàlizætiøn";
+    $search = "n\nÂT";
 
-    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search));
+    // UTF-8
+    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search, 0, 'UTF-8', false));
+
+    // UTF-7
+    self::assertSame("n\n??ti??n??liz??ti??n", u::stristr($str, $search, 0, 'UTF-7', false));
+  }
+
+  public function test_clean_utf8()
+  {
+    $str = "iñtërn\nâtiônàl\x00izætiøn";
+    $search = "n\nÂT";
+
+    // UTF-8
+    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search, 0, 'UTF-8', true));
+
   }
 }
