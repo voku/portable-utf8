@@ -8,6 +8,13 @@ use voku\helper\UTF8;
  */
 class BootupTest extends PHPUnit_Framework_TestCase
 {
+  public function testInitAll()
+  {
+    Bootup::initAll();
+
+    self::assertSame('UTF-8', ini_get('default_charset'));
+  }
+
   public function testFilterRequestInputs()
   {
     UTF8::checkForSupport();
@@ -91,6 +98,18 @@ class BootupTest extends PHPUnit_Framework_TestCase
     $uriB = '/' . urlencode(utf8_decode('bàr'));
     $uriC = '/' . utf8_decode('bàr');
     $uriD = '/' . 'bàr';
+
+    // ---
+
+    $u = Bootup::filterRequestUri(null, false);
+    self::assertSame(false, $u);
+
+    $_SERVER['REQUEST_URI'] = $uriA;
+
+    $u = Bootup::filterRequestUri(null, false);
+    self::assertSame('/b%C3%A0r', $u);
+
+    // ---
 
     $u = Bootup::filterRequestUri($uriA, false);
     self::assertSame($uriA, $u);
