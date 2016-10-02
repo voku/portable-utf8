@@ -241,7 +241,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Invalid 2 Octet Sequence
       "\xc3\x28"                                                                             => array('�(' => '('),
       // Invalid
-      "\x00"                                                                                 => array('�' => ""),
+      "\x00"                                                                                 => array('�' => ''),
       // Invalid Sequence Identifier
       "\xa0\xa1"                                                                             => array('��' => ''),
       // Valid 3 Octet Sequence
@@ -302,7 +302,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid 2 Octet Sequence
       "\xc3\xb1"                             => array('ñ' => 'ñ'),
       // Invalid
-      "\x00"                                 => array('�' => ""),
+      "\x00"                                 => array('�' => ''),
       // Invalid 2 Octet Sequence
       "\xc3\x28"                             => array('�(' => '('),
       // Invalid Sequence Identifier
