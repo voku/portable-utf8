@@ -1364,12 +1364,20 @@ Uppercase for all words in the string.
 UTF8::ucwords('iñt ërn âTi ônà liz æti øn'); // 'Iñt Ërn ÂTi Ônà Liz Æti Øn'
 ```
 
+##### rawurldecode(string $str) : string
+
+Multi decode html entity & fix urlencoded-win1252-chars.
+
+```php
+UTF8::urldecode('tes%20öäü%20\u00edtest+test'); // 'tes öäü ítest+test'
+```
+
 ##### urldecode(string $str) : string
 
 Multi decode html entity & fix urlencoded-win1252-chars.
 
 ```php
-UTF8::urldecode('tes%20öäü%20\u00edtest'); // 'tes öäü ítest'
+UTF8::urldecode('tes%20öäü%20\u00edtest+test'); // 'tes öäü ítest test'
 ```
 
 ##### utf8_decode(string $str) : string
