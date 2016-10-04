@@ -6172,6 +6172,7 @@ final class UTF8
    * Multi decode html entity & fix urlencoded-win1252-chars.
    *
    * e.g:
+   * 'test+test'                     => 'test test'
    * 'D&#252;sseldorf'               => 'Düsseldorf'
    * 'D%FCsseldorf'                  => 'Düsseldorf'
    * 'D&#xFC;sseldorf'               => 'Düsseldorf'
@@ -6194,7 +6195,61 @@ final class UTF8
       return '';
     }
 
-    $str = preg_replace('/%u([0-9a-f]{3,4})/i', '&#x\\1;', urldecode($str));
+    $pattern = '/%u([0-9a-f]{3,4})/i';
+    if (preg_match($pattern, $str)) {
+      $str = preg_replace($pattern, '&#x\\1;', urldecode($str));
+    }
+
+    $flags = Bootup::is_php('5.4') ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
+
+    do {
+      $str_compare = $str;
+
+      $str = self::fix_simple_utf8(
+          urldecode(
+              self::html_entity_decode(
+                  self::to_utf8($str),
+                  $flags
+              )
+          )
+      );
+
+    } while ($multi_decode === true && $str_compare !== $str);
+
+    return (string)$str;
+  }
+
+  /**
+   * Multi decode html entity & fix urlencoded-win1252-chars.
+   *
+   * e.g:
+   * 'test+test'                     => 'test+test'
+   * 'D&#252;sseldorf'               => 'Düsseldorf'
+   * 'D%FCsseldorf'                  => 'Düsseldorf'
+   * 'D&#xFC;sseldorf'               => 'Düsseldorf'
+   * 'D%26%23xFC%3Bsseldorf'         => 'Düsseldorf'
+   * 'DÃ¼sseldorf'                   => 'Düsseldorf'
+   * 'D%C3%BCsseldorf'               => 'Düsseldorf'
+   * 'D%C3%83%C2%BCsseldorf'         => 'Düsseldorf'
+   * 'D%25C3%2583%25C2%25BCsseldorf' => 'Düsseldorf'
+   *
+   * @param string $str          <p>The input string.</p>
+   * @param bool   $multi_decode <p>Decode as often as possible.</p>
+   *
+   * @return string
+   */
+  public static function rawurldecode($str, $multi_decode = true)
+  {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    $pattern = '/%u([0-9a-f]{3,4})/i';
+    if (preg_match($pattern, $str)) {
+      $str = preg_replace($pattern, '&#x\\1;', rawurldecode($str));
+    }
 
     $flags = Bootup::is_php('5.4') ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
 
