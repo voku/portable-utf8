@@ -696,7 +696,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(array(0 => 'é', 1 => 'à', 2 => 'a', 3 => "\xe2\x80\xa8"), $result);
   }
 
-  public function testFilterInput()
+  public function testFilterVar()
   {
     $options = array(
         'options' => array(
