@@ -3781,6 +3781,20 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testUtf8DecodeEncodeUtf8()
   {
+
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::encode('UTF-8', $before));
+    }
+
+    // ---
+
     $tests = array(
         '  -ABC-中文空白-  ' => '  -ABC-????-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
@@ -3790,6 +3804,19 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)));
+    }
+
+    // ---
+
+    $tests = array(
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::utf8_encode(UTF8::encode('ISO-8859-1', $before, false)));
     }
   }
 
