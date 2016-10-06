@@ -823,13 +823,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testGetCharDirection()
   {
     $testArray = array(
-        'ا'     => 'RTL',
-        'abc'   => 'LTR',
-        '?'     => 'LTR',
-        '💩'    => 'LTR',
-        '中文空白'  => 'LTR',
-        'أحبك'  => 'RTL',
-        'मोनिच' => 'LTR',
+        'ا'                 => 'RTL',
+        'أحبك'              => 'RTL',
+        'זאת השפה העברית.א' => 'RTL', // http://dotancohen.com/howto/rtl_right_to_left.html
+        'זאת השפה העברית.‏' => 'RTL',
+        'abc'               => 'LTR',
+        'öäü'               => 'LTR',
+        '?'                 => 'LTR',
+        '💩'                => 'LTR',
+        '中文空白'              => 'LTR',
+        'मोनिच'             => 'LTR',
+        'क्षȸ'              => 'LTR',
+        'ますだ, よしひこ'         => 'LTR',
     );
 
     foreach ($testArray as $actual => $expected) {
