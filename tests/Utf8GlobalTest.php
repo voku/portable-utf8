@@ -874,10 +874,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($after, UTF8::int_to_hex($before), 'tested: ' . $before);
     }
 
-    // --- fail
+    // --- fail (hex_to_int)
 
     self::assertSame(false, UTF8::hex_to_int(''));
     self::assertSame(false, UTF8::hex_to_int('abc-öäü'));
+
+    // --- fail (int_to_hex)
+
+    self::assertSame('', UTF8::int_to_hex(''));
+    self::assertSame('', UTF8::int_to_hex('abc-öäü'));
+
   }
 
   public function testHtmlEncode()
