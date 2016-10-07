@@ -102,14 +102,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '41'  => ')',
         '42'  => '*',
         '160' => ' ',
-        666   => 'ʚ',
-        165   => '¥',
-        8469  => 'ℕ',
+        0x666   => '٦',
+        0x165   => 'ť',
+        0x8469  => '葩',
+        0x2603  => '☃',
     );
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
+    }
 
     for ($i = 0; $i < 20000; $i++) { // keep this loop for simple performance tests
       foreach ($testArray as $before => $after) {
-        self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
         self::assertSame($after, UTF8::chr(UTF8::ord(UTF8::chr($before))), 'tested: ' . $before);
       }
     }
