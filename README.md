@@ -294,7 +294,7 @@ Generates a UTF-8 encoded character from the given code point.
 INFO: opposite to UTF8::ord()
 
 ```php
-UTF8::chr(666); // 'ʚ'
+UTF8::chr(0x2603); // '☃'
 ```
 
 ##### chr_map(string|array $callback, string $str) : array
@@ -750,7 +750,7 @@ Calculates Unicode code point of the given UTF-8 encoded character.
 INFO: opposite to UTF8::chr()
 
 ```php
-UTF8::ord('中'); // 20013
+UTF8::ord('☃'); // 0x2603
 ```
 
 ##### parse_str(string $str, &$result) : bool
