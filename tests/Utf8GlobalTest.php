@@ -1272,7 +1272,24 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::isBinary($before), 'value: ' . $before);
       self::assertSame($after, UTF8::is_binary($before), 'value: ' . $before);
+    }
+  }
+
+  public function testIsBom()
+  {
+    $testArray = array(
+        "\xef\xbb\xbf" => true,
+        '  þÿ'         => true,
+        'foo'          => false,
+        ''             => false,
+        ' '            => false,
+    );
+
+    foreach ($testArray as $test => $expected) {
+      self::assertSame($expected, UTF8::isBom($test), 'tested: ' . $test);
+      self::assertSame($expected, UTF8::is_bom($test), 'tested: ' . $test);
     }
   }
 
@@ -3650,7 +3667,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $testArray = array_combine($latinFile, $utf8File);
 
     foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::to_utf8($before));
+      self::assertSame($after, UTF8::to_utf8($before), 'tested: ' . $before);
     }
   }
 

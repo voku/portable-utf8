@@ -89,7 +89,9 @@ final class UTF8
       "\xef\xbb\xbf"     => 3, // UTF-8 BOM
       'ï»¿'              => 6, // UTF-8 BOM as "WINDOWS-1252" (one char has [maybe] more then one byte ...)
       "\x00\x00\xfe\xff" => 4, // UTF-32 (BE) BOM
+      '  þÿ'             => 6, // UTF-32 (BE) BOM as "WINDOWS-1252"
       "\xff\xfe\x00\x00" => 4, // UTF-32 (LE) BOM
+      'ÿþ  '             => 6, // UTF-32 (LE) BOM as "WINDOWS-1252"
       "\xfe\xff"         => 2, // UTF-16 (BE) BOM
       'þÿ'               => 4, // UTF-16 (BE) BOM as "WINDOWS-1252"
       "\xff\xfe"         => 2, // UTF-16 (LE) BOM
