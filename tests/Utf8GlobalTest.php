@@ -839,7 +839,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '中文空白'                                                                             => 'LTR',
         'मोनिच'                                                                            => 'LTR',
         'क्षȸ'                                                                             => 'LTR',
-        "ࡘ"                                                                                => 'RTL',
+        'ࡘ'                                                                                => 'RTL',
         '𐤹'                                                                               => 'RTL',
         // https://www.compart.com/de/unicode/U+10939
         '𐠅'                                                                               => 'RTL',
