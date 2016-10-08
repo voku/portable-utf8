@@ -905,8 +905,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '{-test'                  => '&#123;&#45;&#116;&#101;&#115;&#116;',
         '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
         'Dänisch (Å/å, Æ/æ, Ø/ø)' => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍&#32;💩&#32;😄&#32;&#10084;&#32;👍&#32;💩&#32;😄&#32;&#10084;',
-        // TODO? I still see some symbols ... :/
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;&#32;&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;',
         'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
         'öäü'                     => '&#246;&#228;&#252;',
         ' '                       => '&#32;',
@@ -931,7 +930,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '{-test'                  => '{-test',
         '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
         'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'D&#228;nisch (&#197;/&#229;, &#198;/&#230;, &#216;/&#248;)',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 &#10084; 👍 💩 😄 &#10084;',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084;',
         'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
         'öäü'                     => '&#246;&#228;&#252;',
         ' '                       => ' ',
@@ -940,6 +939,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
+      self::assertSame($actual, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
     }
 
     // ---
@@ -1648,6 +1648,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::max($before));
     }
+
+    self::assertSame('ü', UTF8::max(array('öäü', 'test', 'abc')));
   }
 
   public function testMaxChrWidth()
@@ -1678,6 +1680,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::min($before));
     }
+
+    self::assertSame('a', UTF8::min(array('öäü', 'test', 'abc')));
   }
 
   public function testNormalizeEncoding()
@@ -3393,7 +3397,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid 6 Octet Sequence (but not Unicode!)
       "\xfc\xa1\xa1\xa1\xa1\xa1"                    => array('�' => ''),
       // Valid UTF-8 string with null characters
-      "\0\0\0\0中\0 -\0\0 &#20013; - %&? - \xc2\x80" => array('中 - &#20013; - %&? - ' => '中 - &#20013; - %&? - €'),
+      "\0\0\0\0中\0 -\0\0 &#20013; - &#128077; - %&? - \xc2\x80" => array('中 - 中 - 👍 - %&? - €' => '中 - 中 - 👍 - %&? - €'),
     );
 
     $counter = 0;
@@ -3669,6 +3673,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&#39;'                        => '\'',
         "\u0063\u0061\u0074"           => 'cat',
         "\u0039&#39;\u0039"            => '9\'9',
+        '&#35;&#8419;'                 => '#⃣',
     );
 
     foreach ($testArray as $before => $after) {

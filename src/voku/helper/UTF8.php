@@ -375,6 +375,9 @@ final class UTF8
       "\xe2\x80\xa6" => '...' // … (U+2026) in UTF-8
   );
 
+  /**
+   * @var array
+   */
   private static $iconvEncoding = array(
       'ANSI_X3.4-1968',
       'ANSI_X3.4-1986',
@@ -1957,6 +1960,17 @@ final class UTF8
    */
   public static function html_encode($str, $keepAsciiChars = false, $encoding = 'UTF-8')
   {
+    // init
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
+
     # INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
     if (function_exists('mb_encode_numericentity')) {
 
@@ -1965,21 +1979,18 @@ final class UTF8
         $startCode = 0x80;
       }
 
-      if ($encoding !== 'UTF-8') {
-        $encoding = self::normalize_encoding($encoding);
-      }
-
       return mb_encode_numericentity(
           $str,
-          array($startCode, 0xffff, 0, 0xffff,),
+          array($startCode, 0xfffff, 0, 0xfffff, 0),
           $encoding
       );
     }
 
     return implode(
+        '',
         array_map(
-            function ($data) use ($keepAsciiChars) {
-              return UTF8::single_chr_html_encode($data, $keepAsciiChars);
+            function ($data) use ($keepAsciiChars, $encoding) {
+              return UTF8::single_chr_html_encode($data, $keepAsciiChars, $encoding);
             },
             self::split($str)
         )
@@ -2057,6 +2068,7 @@ final class UTF8
    */
   public static function html_entity_decode($str, $flags = null, $encoding = 'UTF-8')
   {
+    // init
     $str = (string)$str;
 
     if (!isset($str[0])) {
@@ -2095,7 +2107,7 @@ final class UTF8
       $str_compare = $str;
 
       $str = preg_replace_callback(
-          "/&#\d{2,5};/",
+          "/&#\d{2,6};/",
           function ($matches) use ($encoding) {
             $returnTmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
 
@@ -2110,7 +2122,7 @@ final class UTF8
 
       // decode numeric & UTF16 two byte entities
       $str = html_entity_decode(
-          preg_replace('/(&#(?:x0*[0-9a-f]{2,5}(?![0-9a-f;])|(?:0*\d{2,4}(?![0-9;]))))/iS', '$1;', $str),
+          preg_replace('/(&#(?:x0*[0-9a-f]{2,6}(?![0-9a-f;])|(?:0*\d{2,6}(?![0-9;]))))/iS', '$1;', $str),
           $flags,
           $encoding
       );
@@ -3107,9 +3119,7 @@ final class UTF8
       return preg_replace('/^[\pZ\pC]+/u', '', $str);
     }
 
-    $chars = INF === $chars ? '\s' : self::rxClass($chars);
-
-    return preg_replace("/^{$chars}+/u", '', $str);
+    return preg_replace("/^" . self::rxClass($chars) . "+/u", '', $str);
   }
 
   /**
@@ -3122,7 +3132,7 @@ final class UTF8
   public static function max($arg)
   {
     if (is_array($arg)) {
-      $arg = implode($arg);
+      $arg = implode('', $arg);
     }
 
     return self::chr(max(self::codepoints($arg)));
@@ -3172,7 +3182,7 @@ final class UTF8
   public static function min($arg)
   {
     if (is_array($arg)) {
-      $arg = implode($arg);
+      $arg = implode('', $arg);
     }
 
     return self::chr(min(self::codepoints($arg)));
@@ -3640,9 +3650,7 @@ final class UTF8
       return preg_replace('/[\pZ\pC]+$/u', '', $str);
     }
 
-    $chars = INF === $chars ? '\s' : self::rxClass($chars);
-
-    return preg_replace("/{$chars}+$/u", '', $str);
+    return preg_replace("/" . self::rxClass($chars) . "+$/u", '', $str);
   }
 
   /**
@@ -3709,12 +3717,16 @@ final class UTF8
    *
    * @param string $char           <p>The Unicode character to be encoded as numbered entity.</p>
    * @param bool   $keepAsciiChars <p>Set to <strong>true</strong> to keep ASCII chars.</>
+   * @param string $encoding   [optional] <p>Default is UTF-8</p>
    *
    * @return string <p>The HTML numbered entity.</p>
    */
-  public static function single_chr_html_encode($char, $keepAsciiChars = false)
+  public static function single_chr_html_encode($char, $keepAsciiChars = false, $encoding = 'UTF-8')
   {
-    if (!$char) {
+    // init
+    $char = (string)$char;
+
+    if (!isset($char[0])) {
       return '';
     }
 
@@ -3726,7 +3738,11 @@ final class UTF8
       return $char;
     }
 
-    return '&#' . self::ord($char) . ';';
+    if ($encoding !== 'UTF-8') {
+      $encoding = self::normalize_encoding($encoding);
+    }
+
+    return '&#' . self::ord($char, $encoding) . ';';
   }
 
   /**
@@ -3801,7 +3817,9 @@ final class UTF8
     if ($length > 1) {
       $ret = array_chunk($ret, $length);
 
-      $ret = array_map('implode', $ret);
+      return array_map(function($item) {
+        return implode('', $item);
+      }, $ret);
     }
 
     /** @noinspection OffsetOperationsInspection */
@@ -4485,6 +4503,7 @@ final class UTF8
   public static function string(array $array)
   {
     return implode(
+        '',
         array_map(
             array(
                 '\\voku\\helper\\UTF8',
@@ -4904,7 +4923,7 @@ final class UTF8
       return '';
     }
 
-    return implode(array_reverse(self::split($str)));
+    return implode('', array_reverse(self::split($str)));
   }
 
   /**
@@ -5099,6 +5118,13 @@ final class UTF8
    */
   public static function strstr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0], $needle[0])) {
+      return false;
+    }
+
     if ($cleanUtf8 === true) {
       // "\mb_strpos" and "\iconv_strpos" returns wrong position,
       // if invalid characters are found in $haystack before $needle
@@ -5386,7 +5412,7 @@ final class UTF8
     $array = self::split($str);
 
     // extract relevant part, and join to make sting again
-    return implode(array_slice($array, $start, $length));
+    return implode('', array_slice($array, $start, $length));
   }
 
   /**
@@ -5431,6 +5457,7 @@ final class UTF8
    */
   public static function substr_count($haystack, $needle, $offset = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
+    // init
     $haystack = (string)$haystack;
     $needle = (string)$needle;
 
@@ -5464,7 +5491,16 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    return \mb_substr_count($haystack, $needle, $encoding);
+    if (
+        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
+        ||
+        self::$support['mbstring'] === true
+    ) {
+      return \mb_substr_count($haystack, $needle, $encoding);
+    }
+
+    preg_match_all('/' . preg_quote($needle, '/') . '/us', $haystack, $matches, PREG_SET_ORDER);
+    return count($matches);
   }
 
   /**
@@ -5624,7 +5660,7 @@ final class UTF8
 
     array_splice($smatches[0], $start, $length, $rmatches[0]);
 
-    return implode($smatches[0], null);
+    return implode('', $smatches[0]);
   }
 
   /**
@@ -6050,7 +6086,7 @@ final class UTF8
 
     // decode UTF-8 codepoints
     $buf = preg_replace_callback(
-        '/&#\d{2,4};/',
+        '/&#\d{2,6};/',
         function ($match) {
           return \mb_convert_encoding($match[0], 'UTF-8', 'HTML-ENTITIES');
         },
