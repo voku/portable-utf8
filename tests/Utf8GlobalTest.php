@@ -1632,6 +1632,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     self::assertSame('tërnâtiônàlizætiøn', UTF8::ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
     self::assertSame('tërnâtiônàlizætiøn', ltrim("ñ\nñtërnâtiônàlizætiøn", "ñ\n"));
+
+    // UTF-8
+
+    self::assertSame("#string#\xc2\xa0\xe1\x9a\x80", UTF8::ltrim("\xe2\x80\x83\x20#string#\xc2\xa0\xe1\x9a\x80"));
   }
 
   public function testMax()
@@ -2019,6 +2023,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('', UTF8::rtrim(''));
     self::assertSame("Iñtërnâtiônàlizætiø\n", UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", 'ø'));
     self::assertSame('Iñtërnâtiônàlizæti', UTF8::rtrim("Iñtërnâtiônàlizætiø\nø", "\nø"));
+    self::assertSame("\xe2\x80\x83\x20#string#", UTF8::rtrim("\xe2\x80\x83\x20#string#\xc2\xa0\xe1\x9a\x80"));
   }
 
   public function testSingleChrHtmlEncode()
@@ -2462,7 +2467,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(false, strripos('', ' '));
     self::assertSame(false, strripos('DJ', ''));
     self::assertSame(false, strripos('', 'J'));
-    self::assertSame(false, UTF8::strripos('aςσb', 'ΣΣ'));
+    self::assertSame(1, UTF8::strripos('aςσb', 'ΣΣ'));
     self::assertSame(1, strripos('DJ', 'J'));
     self::assertSame(1, UTF8::strripos('DJ', 'J'));
     self::assertSame(3, UTF8::strripos('DÉJÀ', 'à'));
@@ -2491,6 +2496,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(50, UTF8::strlen($string_test2));
 
     $testArray = array(
+        '⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞' => 22,
         "<a href='κόσμε'>κόσμε</a>" => 25,
         '<白>'                       => 3,
         'öäü'                       => 3,
@@ -2866,6 +2872,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ㅈㅅ-Sorry'      => 'ㅈㅅ-sorry',
         'ㅡㅡ-WTF'        => 'ㅡㅡ-wtf',
         'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii',
+        'ABC-ΣΣ'        => 'abc-σσ',
     );
 
     foreach ($tests as $before => $after) {
@@ -2993,6 +3000,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // UTF-8
     self::assertSame('文空', UTF8::substr('中文空白', 1, 2));
+    self::assertSame('Я можу', UTF8::substr('Я можу їсти скло', 0, 6));
   }
 
   public function testSubstrCompare()
@@ -3081,6 +3089,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // UTF-8 tests
 
+    self::assertSame(2, UTF8::substr_count('Можам да јадам стакло, а не ме штета.', 'д'));
     self::assertSame(2, UTF8::substr_count("○●◎\r◎", '◎'));
     self::assertSame(1, UTF8::substr_count("○●◎\r", '●◎', 1, 2));
     self::assertSame(1, UTF8::substr_count('中文空白', '文空', 1, 2));
