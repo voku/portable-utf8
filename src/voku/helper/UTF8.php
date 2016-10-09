@@ -3536,6 +3536,57 @@ final class UTF8
   }
 
   /**
+   * Multi decode html entity & fix urlencoded-win1252-chars.
+   *
+   * e.g:
+   * 'test+test'                     => 'test+test'
+   * 'D&#252;sseldorf'               => 'Düsseldorf'
+   * 'D%FCsseldorf'                  => 'Düsseldorf'
+   * 'D&#xFC;sseldorf'               => 'Düsseldorf'
+   * 'D%26%23xFC%3Bsseldorf'         => 'Düsseldorf'
+   * 'DÃ¼sseldorf'                   => 'Düsseldorf'
+   * 'D%C3%BCsseldorf'               => 'Düsseldorf'
+   * 'D%C3%83%C2%BCsseldorf'         => 'Düsseldorf'
+   * 'D%25C3%2583%25C2%25BCsseldorf' => 'Düsseldorf'
+   *
+   * @param string $str          <p>The input string.</p>
+   * @param bool   $multi_decode <p>Decode as often as possible.</p>
+   *
+   * @return string
+   */
+  public static function rawurldecode($str, $multi_decode = true)
+  {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    $pattern = '/%u([0-9a-f]{3,4})/i';
+    if (preg_match($pattern, $str)) {
+      $str = preg_replace($pattern, '&#x\\1;', rawurldecode($str));
+    }
+
+    $flags = Bootup::is_php('5.4') ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
+
+    do {
+      $str_compare = $str;
+
+      $str = self::fix_simple_utf8(
+          rawurldecode(
+              self::html_entity_decode(
+                  self::to_utf8($str),
+                  $flags
+              )
+          )
+      );
+
+    } while ($multi_decode === true && $str_compare !== $str);
+
+    return (string)$str;
+  }
+
+  /**
    * alias for "UTF8::remove_bom()"
    *
    * @see UTF8::remove_bom()
@@ -3736,7 +3787,7 @@ final class UTF8
    *
    * @param string $char           <p>The Unicode character to be encoded as numbered entity.</p>
    * @param bool   $keepAsciiChars <p>Set to <strong>true</strong> to keep ASCII chars.</>
-   * @param string $encoding   [optional] <p>Default is UTF-8</p>
+   * @param string $encoding       [optional] <p>Default is UTF-8</p>
    *
    * @return string <p>The HTML numbered entity.</p>
    */
@@ -3836,9 +3887,11 @@ final class UTF8
     if ($length > 1) {
       $ret = array_chunk($ret, $length);
 
-      return array_map(function ($item) {
-        return implode('', $item);
-      }, $ret);
+      return array_map(
+          function ($item) {
+            return implode('', $item);
+          }, $ret
+      );
     }
 
     /** @noinspection OffsetOperationsInspection */
@@ -4740,8 +4793,8 @@ final class UTF8
 
     if (
         $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-       ||
-       self::$support['mbstring'] === true
+        ||
+        self::$support['mbstring'] === true
     ) {
       return \mb_strlen($str, $encoding);
     }
@@ -4941,7 +4994,7 @@ final class UTF8
     }
 
     if (self::$support['intl'] === true) {
-      $returnTmp =  \grapheme_strpos($haystack, $needle, $offset);
+      $returnTmp = \grapheme_strpos($haystack, $needle, $offset);
       if ($returnTmp !== false) {
         return $returnTmp;
       }
@@ -5122,7 +5175,7 @@ final class UTF8
     }
 
     if (self::$support['intl'] === true) {
-      $returnTmp =  \grapheme_strripos($haystack, $needle, $offset);
+      $returnTmp = \grapheme_strripos($haystack, $needle, $offset);
       if ($returnTmp !== false) {
         return $returnTmp;
       }
@@ -5669,6 +5722,7 @@ final class UTF8
     }
 
     preg_match_all('/' . preg_quote($needle, '/') . '/us', $haystack, $matches, PREG_SET_ORDER);
+
     return count($matches);
   }
 
@@ -6414,57 +6468,6 @@ final class UTF8
 
       $str = self::fix_simple_utf8(
           urldecode(
-              self::html_entity_decode(
-                  self::to_utf8($str),
-                  $flags
-              )
-          )
-      );
-
-    } while ($multi_decode === true && $str_compare !== $str);
-
-    return (string)$str;
-  }
-
-  /**
-   * Multi decode html entity & fix urlencoded-win1252-chars.
-   *
-   * e.g:
-   * 'test+test'                     => 'test+test'
-   * 'D&#252;sseldorf'               => 'Düsseldorf'
-   * 'D%FCsseldorf'                  => 'Düsseldorf'
-   * 'D&#xFC;sseldorf'               => 'Düsseldorf'
-   * 'D%26%23xFC%3Bsseldorf'         => 'Düsseldorf'
-   * 'DÃ¼sseldorf'                   => 'Düsseldorf'
-   * 'D%C3%BCsseldorf'               => 'Düsseldorf'
-   * 'D%C3%83%C2%BCsseldorf'         => 'Düsseldorf'
-   * 'D%25C3%2583%25C2%25BCsseldorf' => 'Düsseldorf'
-   *
-   * @param string $str          <p>The input string.</p>
-   * @param bool   $multi_decode <p>Decode as often as possible.</p>
-   *
-   * @return string
-   */
-  public static function rawurldecode($str, $multi_decode = true)
-  {
-    $str = (string)$str;
-
-    if (!isset($str[0])) {
-      return '';
-    }
-
-    $pattern = '/%u([0-9a-f]{3,4})/i';
-    if (preg_match($pattern, $str)) {
-      $str = preg_replace($pattern, '&#x\\1;', rawurldecode($str));
-    }
-
-    $flags = Bootup::is_php('5.4') ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
-
-    do {
-      $str_compare = $str;
-
-      $str = self::fix_simple_utf8(
-          rawurldecode(
               self::html_entity_decode(
                   self::to_utf8($str),
                   $flags
