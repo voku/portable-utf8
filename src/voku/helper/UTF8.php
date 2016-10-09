@@ -3138,7 +3138,7 @@ final class UTF8
       return preg_replace('/^[\pZ\pC]+/u', '', $str);
     }
 
-    return preg_replace("/^" . self::rxClass($chars) . "+/u", '', $str);
+    return preg_replace('/^' . self::rxClass($chars) . '+/u', '', $str);
   }
 
   /**
@@ -3669,7 +3669,7 @@ final class UTF8
       return preg_replace('/[\pZ\pC]+$/u', '', $str);
     }
 
-    return preg_replace("/" . self::rxClass($chars) . "+$/u", '', $str);
+    return preg_replace('/' . self::rxClass($chars) . '+$/u', '', $str);
   }
 
   /**
@@ -3836,7 +3836,7 @@ final class UTF8
     if ($length > 1) {
       $ret = array_chunk($ret, $length);
 
-      return array_map(function($item) {
+      return array_map(function ($item) {
         return implode('', $item);
       }, $ret);
     }
@@ -5123,7 +5123,7 @@ final class UTF8
 
     if (self::$support['intl'] === true) {
       $returnTmp =  \grapheme_strripos($haystack, $needle, $offset);
-      if ($returnTmp !== false ) {
+      if ($returnTmp !== false) {
         return $returnTmp;
       }
     }
@@ -5198,7 +5198,7 @@ final class UTF8
 
     if (self::$support['intl'] === true) {
       $returnTmp = \grapheme_strrpos($haystack, $needle, $offset);
-      if ($returnTmp !== false ) {
+      if ($returnTmp !== false) {
         return $returnTmp;
       }
     }
