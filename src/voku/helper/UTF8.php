@@ -4630,8 +4630,10 @@ final class UTF8
 
     if (
         $encoding == 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
-        ||
+        &&
         self::$support['intl'] === true
+        &&
+        Bootup::is_php('5.4')
     ) {
       return \grapheme_stripos($haystack, $needle, $offset);
     }

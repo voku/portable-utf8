@@ -2457,6 +2457,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame(4, UTF8::stripos('ABC-ÖÄÜ-中文空白-中文空白', 'ö'));
       self::assertSame(5, UTF8::stripos('Test κόσμε test κόσμε', 'Κ'));
       self::assertSame(16, UTF8::stripos('der Straße nach Paris', 'Paris'));
+
+      // ---
+
+      self::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
+      self::assertSame(3, UTF8::stripos('DÉJÀ', 'à', 1));
+      self::assertSame(3, UTF8::stripos('DÉJÀ', 'à', 1, 'UTF-8'));
+      self::assertSame(false, UTF8::stripos('DÉJÀ', 'à', 1, 'ISO'));
     }
   }
 
