@@ -1280,6 +1280,16 @@ final class UTF8
         return self::to_iso8859($str);
       }
 
+      if (
+          $encoding !== 'UTF-8'
+          &&
+          $encoding !== 'WINDOWS-1252'
+          &&
+          self::$support['mbstring'] === false
+      ) {
+        trigger_error('UTF8::encode() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      }
+
       $strEncoded = \mb_convert_encoding(
           $str,
           $encoding,
@@ -4727,10 +4737,14 @@ final class UTF8
     }
 
     if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['mbstring'] === false
     ) {
+      trigger_error('UTF8::stristr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (self::$support['mbstring'] === true) {
       return \mb_stristr($haystack, $needle, $before_needle, $encoding);
     }
 
@@ -4792,10 +4806,14 @@ final class UTF8
     }
 
     if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['mbstring'] === false
     ) {
+      trigger_error('UTF8::strlen() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (self::$support['mbstring'] === true) {
       return \mb_strlen($str, $encoding);
     }
 
@@ -4813,6 +4831,7 @@ final class UTF8
       }
     }
 
+    // fallback via vanilla php
     preg_match_all('/./us', $str, $parts);
     $returnTmp = count($parts[0]);
     if ($returnTmp !== 0) {
@@ -4980,14 +4999,22 @@ final class UTF8
     }
 
     if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['mbstring'] === false
     ) {
+      trigger_error('UTF8::strpos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (self::$support['mbstring'] === true) {
       return \mb_strpos($haystack, $needle, $offset, $encoding);
     }
 
-    if (self::$support['iconv'] === true) {
+    if (
+        $offset >= 0 // iconv_strpos() can't handle negative offset
+        &&
+        self::$support['iconv'] === true
+    ) {
       // ignore invalid negative offset to keep compatibility
       // with php < 5.5.35, < 5.6.21, < 7.0.6
       return \iconv_strpos($haystack, $needle, $offset > 0 ? $offset : 0, $encoding);
@@ -5013,7 +5040,13 @@ final class UTF8
       return false;
     }
 
-    return $offset + self::strlen(substr($haystack, 0, $pos));
+    $returnTmp = $offset + self::strlen(substr($haystack, 0, $pos));
+    if ($returnTmp !== false) {
+      return $returnTmp;
+    }
+
+    // fallback to "mb_"-function via polyfill
+    return \mb_strpos($haystack, $needle, $offset);
   }
 
   /**
@@ -5052,6 +5085,7 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
+    // fallback to "mb_"-function via polyfill
     return \mb_strrchr($haystack, $needle, $before_needle, $encoding);
   }
 
@@ -5167,10 +5201,14 @@ final class UTF8
     }
 
     if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['mbstring'] === false
     ) {
+      trigger_error('UTF8::strripos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (self::$support['mbstring'] === true) {
       return \mb_strripos($haystack, $needle, $offset, $encoding);
     }
 
@@ -5180,6 +5218,8 @@ final class UTF8
         return $returnTmp;
       }
     }
+
+    // fallback via vanilla php
 
     return self::strrpos(self::strtolower($haystack, $encoding), self::strtolower($needle, $encoding), $offset, $encoding, $cleanUtf8);
   }
@@ -5242,11 +5282,18 @@ final class UTF8
     }
 
     if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['mbstring'] === false
     ) {
-      return \mb_strrpos($haystack, $needle, $offset, $encoding);
+      trigger_error('UTF8::strrpos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (self::$support['mbstring'] === true) {
+      $returnTmp = \mb_strrpos($haystack, $needle, $offset, $encoding);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     if (self::$support['intl'] === true) {
@@ -5341,15 +5388,25 @@ final class UTF8
     }
 
     if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['mbstring'] === false
     ) {
-      return \mb_strstr($haystack, $needle, $before_needle, $encoding);
+      trigger_error('UTF8::strstr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (self::$support['mbstring'] === true) {
+      $returnTmp = \mb_strstr($haystack, $needle, $before_needle, $encoding);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     if (self::$support['intl'] === true) {
-      return \grapheme_strstr($haystack, $needle, $before_needle);
+      $returnTmp = \grapheme_strstr($haystack, $needle, $before_needle);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     preg_match('/^(.*?)' . preg_quote($needle, '/') . '/us', $haystack, $match);
@@ -5551,6 +5608,7 @@ final class UTF8
       $str = self::clean($str);
     }
 
+    // fallback to "mb_"-function via polyfill
     return \mb_strwidth($str, $encoding);
   }
 
@@ -5613,15 +5671,23 @@ final class UTF8
     }
 
     if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['mbstring'] === false
     ) {
+      trigger_error('UTF8::substr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (self::$support['mbstring'] === true) {
       return \mb_substr($str, $start, $length, $encoding);
     }
 
-    if (self::$support['iconv'] === true) {
-      return \iconv_substr($str, $start, $length, $encoding);
+    if (
+        $length >= 0 // "iconv_substr()" can't handle negative length
+        &&
+        self::$support['iconv'] === true
+    ) {
+      return \iconv_substr($str, $start, $length);
     }
 
     if (self::$support['intl'] === true) {
@@ -5714,10 +5780,14 @@ final class UTF8
     }
 
     if (
-        $encoding !== 'UTF-8' // INFO: use "mb_"-function (with polyfill) also if we need another encoding
-        ||
-        self::$support['mbstring'] === true
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['mbstring'] === false
     ) {
+      trigger_error('UTF8::substr_count() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (self::$support['mbstring'] === true) {
       return \mb_substr_count($haystack, $needle, $encoding);
     }
 
@@ -5736,6 +5806,7 @@ final class UTF8
    */
   public static function substr_ileft($haystack, $needle)
   {
+    // init
     $haystack = (string)$haystack;
     $needle = (string)$needle;
 
@@ -5764,6 +5835,7 @@ final class UTF8
    */
   public static function substr_iright($haystack, $needle)
   {
+    // init
     $haystack = (string)$haystack;
     $needle = (string)$needle;
 
@@ -5792,6 +5864,7 @@ final class UTF8
    */
   public static function substr_left($haystack, $needle)
   {
+    // init
     $haystack = (string)$haystack;
     $needle = (string)$needle;
 
@@ -5815,12 +5888,24 @@ final class UTF8
    *
    * source: https://gist.github.com/stemar/8287074
    *
-   * @param string|string[] $str         <p>The input string or an array of stings.</p>
-   * @param string|string[] $replacement <p>The replacement string or an array of stings.</p>
-   * @param int|int[]       $start
-   * @param int|int[]|void  $length      [optional]
+   * @param string|string[] $str              <p>The input string or an array of stings.</p>
+   * @param string|string[] $replacement      <p>The replacement string or an array of stings.</p>
+   * @param int|int[]       $start            <p>
+   *                                          If start is positive, the replacing will begin at the start'th offset
+   *                                          into string.
+   *                                          <br /><br />
+   *                                          If start is negative, the replacing will begin at the start'th character
+   *                                          from the end of string.
+   *                                          </p>
+   * @param int|int[]|void  $length           [optional] <p>If given and is positive, it represents the length of the
+   *                                          portion of string which is to be replaced. If it is negative, it
+   *                                          represents the number of characters from the end of string at which to
+   *                                          stop replacing. If it is not given, then it will default to strlen(
+   *                                          string ); i.e. end the replacing at the end of string. Of course, if
+   *                                          length is zero then this function will have the effect of inserting
+   *                                          replacement into string at the given start offset.</p>
    *
-   * @return string|string[]
+   * @return string|string[] <p>The result string is returned. If string is an array then array is returned.</p>
    */
   public static function substr_replace($str, $replacement, $start, $length = null)
   {
@@ -5864,7 +5949,9 @@ final class UTF8
 
       // Recursive call
       return array_map(array(__CLASS__, 'substr_replace'), $str, $replacement, $start, $length);
+
     } else {
+
       if (is_array($replacement)) {
         if (count($replacement) > 0) {
           $replacement = $replacement[0];
@@ -5874,11 +5961,19 @@ final class UTF8
       }
     }
 
-    preg_match_all('/./us', (string)$str, $smatches);
-    preg_match_all('/./us', (string)$replacement, $rmatches);
+    // init
+    $str = (string)$str;
+    $replacement = (string)$replacement;
+
+    if (!isset($str[0])) {
+      return $replacement;
+    }
+
+    preg_match_all('/./us', $str, $smatches);
+    preg_match_all('/./us', $replacement, $rmatches);
 
     if ($length === null) {
-      $length = (int)\mb_strlen($str);
+      $length = (int)self::strlen($str);
     }
 
     array_splice($smatches[0], $start, $length, $rmatches[0]);
@@ -6308,13 +6403,7 @@ final class UTF8
     );
 
     // decode UTF-8 codepoints
-    $buf = preg_replace_callback(
-        '/&#\d{2,6};/',
-        function ($match) {
-          return \mb_convert_encoding($match[0], 'UTF-8', 'HTML-ENTITIES');
-        },
-        $buf
-    );
+    $buf = self::html_entity_decode($buf, ENT_QUOTES);
 
     return $buf;
   }
