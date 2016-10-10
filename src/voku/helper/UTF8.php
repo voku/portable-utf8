@@ -5162,7 +5162,7 @@ final class UTF8
    */
   public static function strripos($haystack, $needle, $offset = 0, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    if (((int)$needle) === $needle && ($needle >= 0)) {
+    if ((int)$needle === $needle && $needle >= 0) {
       $needle = (string)self::chr($needle);
     }
 
@@ -5221,7 +5221,7 @@ final class UTF8
 
     // fallback via vanilla php
 
-    return self::strrpos(self::strtolower($haystack, $encoding), self::strtolower($needle, $encoding), $offset, $encoding, $cleanUtf8);
+    return self::strrpos(self::strtoupper($haystack, $encoding), self::strtoupper($needle, $encoding), $offset, $encoding, $cleanUtf8);
   }
 
   /**
@@ -5243,7 +5243,7 @@ final class UTF8
    */
   public static function strrpos($haystack, $needle, $offset = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    if (((int)$needle) === $needle && ($needle >= 0)) {
+    if ((int)$needle === $needle && $needle >= 0) {
       $needle = (string)self::chr($needle);
     }
 

@@ -970,7 +970,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '中文空白'                    => '中文空白',
         'κόσμε'                   => 'κόσμε',
         'öäü'                     => 'öäü',
-        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'Dänisch (Å/å, Æ/æ, Ø/ø)',
+        '(Å/å, Æ/æ, Ø/ø, Σ/σ)' => '(Å/å, Æ/æ, Ø/ø, Σ/σ)',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
     );
 
@@ -2482,12 +2482,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(false, strripos('DJ', ''));
     self::assertSame(false, strripos('', 'J'));
 
-    // TODO: error with lower-case in word-final position? // https://en.wikipedia.org/wiki/Sigma
-    if (UTF8::mbstring_loaded() === false && UTF8::intl_loaded() === false) {
-      self::assertSame(1, UTF8::strripos('aσσb', 'ΣΣ'));
-    } else {
-      self::assertSame(1, UTF8::strripos('aςσb', 'ΣΣ'));
-    }
+    self::assertSame(1, UTF8::strripos('aσσb', 'ΣΣ'));
+    self::assertSame(1, UTF8::strripos('aςσb', 'ΣΣ'));
 
     self::assertSame(1, strripos('DJ', 'J'));
     self::assertSame(1, UTF8::strripos('DJ', 'J'));
@@ -2908,6 +2904,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ㅡㅡ-WTF'        => 'ㅡㅡ-wtf',
         'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii',
         'ABC-ΣΣ'        => 'abc-σσ',
+        'Å/å, Æ/æ, Ø/ø' => 'å/å, æ/æ, ø/ø',
+        'ΣΣΣ'           => 'σσσ',
     );
 
     foreach ($tests as $before => $after) {
@@ -2944,6 +2942,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ÖÄÜ'           => 'ÖÄÜ',
         '中文空白'          => '中文空白',
         'Déjà Σσς Iıİi' => 'DÉJÀ ΣΣΣ IIİI',
+        'Å/å, Æ/æ, Ø/ø' => 'Å/Å, Æ/Æ, Ø/Ø',
+        'σσς'           => 'ΣΣΣ',
+        'σσσ'           => 'ΣΣΣ',
     );
 
     foreach ($tests as $before => $after) {
