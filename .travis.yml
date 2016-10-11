@@ -13,6 +13,13 @@ env:
   global:
     - setup=basic
 
+git:
+  depth: 2
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 matrix:
   fast_finish: true
   allow_failures:
