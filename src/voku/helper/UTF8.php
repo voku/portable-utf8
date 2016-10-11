@@ -1243,6 +1243,10 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     $encodingDetected = self::str_detect_encoding($str);
 
     if (
@@ -4736,6 +4740,10 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     if (
         $encoding !== 'UTF-8'
         &&
@@ -4803,6 +4811,10 @@ final class UTF8
 
     if ($cleanUtf8 === true) {
       $str = self::clean($str);
+    }
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
     }
 
     if (
@@ -4984,10 +4996,6 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
-    }
-
     if (
         $encoding === 'UTF-8'
         ||
@@ -4996,6 +5004,10 @@ final class UTF8
       $encoding = 'UTF-8';
     } else {
       $encoding = self::normalize_encoding($encoding);
+    }
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
     }
 
     if (
@@ -5186,10 +5198,6 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
-    }
-
     if (
         $encoding === 'UTF-8'
         ||
@@ -5198,6 +5206,10 @@ final class UTF8
       $encoding = 'UTF-8';
     } else {
       $encoding = self::normalize_encoding($encoding);
+    }
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
     }
 
     if (
@@ -5267,10 +5279,6 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
-    }
-
     if (
         $encoding === 'UTF-8'
         ||
@@ -5279,6 +5287,10 @@ final class UTF8
       $encoding = 'UTF-8';
     } else {
       $encoding = self::normalize_encoding($encoding);
+    }
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
     }
 
     if (
@@ -5656,10 +5668,6 @@ final class UTF8
       $length = (int)$length;
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
-    }
-
     if (
         $encoding === 'UTF-8'
         ||
@@ -5668,6 +5676,10 @@ final class UTF8
       $encoding = 'UTF-8';
     } else {
       $encoding = self::normalize_encoding($encoding);
+    }
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
     }
 
     if (
@@ -5777,6 +5789,10 @@ final class UTF8
       // if invalid characters are found in $haystack before $needle
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
+    }
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
     }
 
     if (
