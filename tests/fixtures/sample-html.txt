@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+ 
+    <!-- Basic Page Needs
+  ================================================== -->
+    <title>鼦_鼦԰</title>
+    <meta name="description" content="վṩ鼦԰Ѷ鼦԰ַ鼦԰ٷվݡ">
+    <meta name="keywords" content="鼦,鼦">
+    <meta name="author" content="/">
+   <!-- CSS
+  ================================================== -->
+    <link href="/style/ningmp.css" rel="stylesheet" type="text/css" />
+ 
+</head>
+ 
+<body>
+<!--------------Header--------------->
+<div class="home">
+<h1><a href="/" class="logo">鼦԰</a></h1>
+<div class="hf"><img src="/style/images/3.gif" width="600" height="70" /></div>
+<div class="sc">
+<ul>
+<li>10-10</li>
+<li><a href="/">鼦վͼ</a></li>
+</ul>
+</div>
+<div class="dh">
+<ul>
+                <li><a href="./">ҳ</a></li>
+		<li><a href="./news/">鼦԰̬</a></li>
+		<li><a href="./net/">鼦԰</a></li>
+		<li><a href="./zixun/">鼦԰Ȥ</a></li>
+		<li><a href="./yhcj/">鼦԰</a></li>
+		<li><a href="./wyd/">鼦ѧϰ԰</a></li>
+		<li><a href="./lxwm/">��ϵ</a></li>
+</ul>
+</div>
+<div class="fdh">
+<div class="rmc">
+<p>
+<span>:</span><a href="http://www.anhui365.net/lucky/361du/yjfl/20161010/nu5803/" target="_blank">鼦</a><a href="http://www.anhui365.net/lucky/361du/hq/201610/imFK014/" target="_blank">鼦</a><a href="http://www.srzc.com/tianyun/qipai/lbyl/268/" target="_blank">鼦õַ</a></p>
+</div>
+<div class="ss">
+<ul class="soso">
+    <form class="sou" action="http://www.baidu.com/s" method="get">
+   
+    <input type="text" name="w" class="swap_value" /> 
+    <input type="submit" value="ٶһ" width="33" height="24" >
+    </form>
+</ul>
+</div>
+</div>
+<!--------------Navigation--------------->
+<div class="ber"><img src="/style/images/2.jpg" width="960" height="90" /></div>
+
+<div class="ber">վṩ鼦Ѷ鼦ַ鼦ٷվݡ
+
+</br><p>]һ鼦˵һнеݲҪƽҲ</br><p>
+鼦֪һʱʼ՛]ȫ��ƽҲ־
+鼦ˮ¶ȫ<ֻ֪ħ㲻Ҫɱ
+<p><img border="0" alt="鼦" width="350" height="210" src="/pics/0939.jpg" /></a></p>
+    </br><p>Ҷǫ˭Ҳ��עǡڿǸõĶһɱֶ
+鼦ǰ컱ҲĿлMһ
+鼦ϵҲ]<֯ﳤҪԸƽһǲǁ
+    </br><p>鼦֪һ²ϵʲôĲֵ
+鼦ô<p></div>
+
+<div class="nrmk">
+<div class="armk">
+<p>鼦԰̬</p>
+<ul>
+<li><span>10-09</span><a href="./news/10-09-88730.html">Ĭ鼦</a></li>
+<li><span>10-08</span><a href="./news/10-08-57114.html">鼦</a></li>
+<li><span>10-07</span><a href="./news/10-07-63185.html">Ҷǫ˵Ժͩ</a></li>
+<li><span>10-06</span><a href="./news/10-06-18676.html">Ժͩ</a></li>
+<li><span>10-05</span><a href="./news/10-05-14103.html">ѧô</a></li>
+<li><span>10-04</span><a href="./news/10-04-64363.html">ôǰ</a></li>
+<li><span>10-03</span><a href="./news/10-03-98439.html">βʱ</a></li>
+<li><span>10-02</span><a href="./news/10-02-87354.html">ƺӱߵϢͶ</a></li>
+</ul>
+</div>
+<div class="armk">
+<p>鼦԰ַ</p>
+<ul>
+<li><span>10-09</span><a href="./dbty/10-09-84083.html">òҿԺͩ</a></li>
+<li><span>10-08</span><a href="./dbty/10-08-94937.html">³ϷϷ</a></li>
+<li><span>10-07</span><a href="./dbty/10-07-24215.html">ҪôԺͩ</a></li>
+<li><span>10-06</span><a href="./dbty/10-06-77760.html">³ϷϷ</a></li>
+<li><span>10-05</span><a href="./dbty/10-05-64996.html">ϵ޷</a></li>
+<li><span>10-04</span><a href="./dbty/10-04-78641.html">ת��һ˵</a></li>
+<li><span>10-03</span><a href="./dbty/10-03-92798.html">...68ʲô</a></li>
+<li><span>10-02</span><a href="./dbty/10-02-27322.html">ߵ</a></li>
+</ul>
+</div>
+ 
+<div class="armk">
+ 
+<ul>
+<p>鼦԰Ѷ</p>
+<li><span>10-09</span><a href="./tyxq/10-09-52315.html">Ժͩ</a></li>
+<li><span>10-08</span><a href="./tyxq/10-08-45469.html">βͼƬ</a></li>
+<li><span>10-07</span><a href="./tyxq/10-07-37045.html">޷βͼƬ</a></li>
+<li><span>10-06</span><a href="./tyxq/10-06-11713.html">³ϷϷһ</a></li>
+<li><span>10-05</span><a href="./tyxq/10-05-94877.html">ȮܳҲ</a></li>
+<li><span>10-04</span><a href="./tyxq/10-04-68427.html">ļʻתͷ֯ﳤ</a></li>
+<li><span>10-03</span><a href="./tyxq/10-03-54472.html">Ա</a></li>
+<li><span>10-02</span><a href="./tyxq/10-02-71085.html">ҩ˯��ͼƬ˼Ƶ</a></li>
+</ul>
+</div>
+ 
+<div class="armk">
+ 
+<ul>
+<p>鼦԰</p>
+<li><span>10-09</span><a href="./tyfg/10-09-36832.html">Ժͩ</a></li>
+<li><span>10-08</span><a href="./tyfg/10-08-83920.html">鼦Ԥϵ</a></li>
+<li><span>10-07</span><a href="./tyfg/10-07-12600.html">תͷƽԺͩ</a></li>
+<li><span>10-06</span><a href="./tyfg/10-06-93168.html">Ժͩ��æ</a></li>
+<li><span>10-05</span><a href="./tyfg/10-05-67730.html">īͼƬϯ֮λ</a></li>
+<li><span>10-04</span><a href="./tyfg/10-04-91503.html">ɻͼƬֻ</a></li>
+<li><span>10-03</span><a href="./tyfg/10-03-93749.html">ɮͼƬҲ</a></li>
+<li><span>10-02</span><a href="./tyfg/10-02-10192.html">˺��</a></li>
+ 
+</ul>
+</div>
+ 
+<div class="armk">
+<ul>
+<p>鼦԰ѧϰ</p>
+<li><span>10-09</span><a href="./xxty/10-09-66251.html">Ժͩ</a></li>
+<li><span>10-08</span><a href="./xxty/10-08-25508.html">鼦</a></li>
+<li><span>10-07</span><a href="./xxty/10-07-79715.html">Ժͩ</a></li>
+<li><span>10-06</span><a href="./xxty/10-06-95298.html">³ϷϷ˵</a></li>
+<li><span>10-05</span><a href="./xxty/10-05-24228.html">ҹϡ</a></li>
+<li><span>10-04</span><a href="./xxty/10-04-25618.html"></a></li>
+<li><span>10-03</span><a href="./xxty/10-03-28469.html">ǰδ</a></li>
+<li><span>10-02</span><a href="./xxty/10-02-19130.html">ưɾͺܿ</a></li>
+</ul>
+</div>
+ 
+<div class="armk">
+<ul>
+<p>鼦</p>
+<li><span>10-10</span><a href="./html/10-10-66495.html">Ҳ</a></li>
+<li><span>10-10</span><a href="./html/10-10-78268.html">С</a></li>
+<li><span>10-10</span><a href="./html/10-10-52155.html">Ŷ־ӱ</a></li>
+<li><span>10-10</span><a href="./html/10-10-38955.html">Ĵ͵ܶ</a></li>
+<li><span>10-10</span><a href="./html/10-10-57203.html">��</a></li>
+<li><span>10-10</span><a href="./html/10-10-90877.html">֣Ӱ</a></li>
+<li><span>10-10</span><a href="./html/10-10-63932.html">绰ҶǤ缼</a></li>
+<li><span>10-10</span><a href="./html/10-10-26512.html">ĵ</a></li>
+</ul>
+</div>
+</div>
+<div class="nrmky">
+<p class="nrbt">鼦Ծû</p>
+<div class="nrmk3">
+<ul>
+<li><a href="./">С˵</a></li>
+<li><a href="./35843/">ֲ</a></li>
+<li><a href="./21659/">ɽ</a></li>
+<li><a href="./71947/">Ǿޱ޽¼</a></li>
+<li><a href="./49541/">21.png</a></li>
+<li><a href="./24111/">꼻ҶƬǤ</a></li>
+<li><a href="./30529/"></a></li>
+<li><a href="./77076/">ɵϽƽ</a></li>
+<li><a href="./15331/">ѪٵĲ</a></li>
+<li><a href="./38770/">۰è</a></li>
+<li><a href="./24864/">΢ͷ</a></li>
+<li><a href="./99492/">ϻͼƬ</a></li>
+<li><a href="./14999/">ֶ</a></li>
+<li><a href="./55293/">ӿǲǮ</a></li>
+</ul>
+</div>
+<div class="nrmk2">
+<p>鼦</p>
+<ul>
+<li><span>10-10</span><a href="./fmece/87842.html">Ӣ㴹ü۸</a></li>
+<li><span>10-09</span><a href="./hws54/98586.html">֮</a></li>
+<li><span>10-08</span><a href="./gjrdy/19428.html">м԰</a></li>
+<li><span>10-07</span><a href="./vnyz0/48976.html"></a></li>
+<li><span>10-06</span><a href="./vlijs/11310.html">ʤ</a></li>
+<li><span>10-05</span><a href="./zl2nh/10736.html">ɽȸ</a></li>
+<li><span>10-04</span><a href="./zr09r/62402.html">ٸԭ</a></li>
+<li><span>10-04</span><a href="./0hi7n/12959.html"></a></li>
+<li><span>10-04</span><a href="./054n4/22185.html">ľ</a></li>
+<li><span>10-04</span><a href="./1s0zi/25696.html"></a></li>
+</ul>
+</div>
+</div>
+<div class="youl">
+<p>鼦��</p>
+<ul>
+<div id="waitui" style="height:auto;width:980px;background:#ffffff;margin:auto;">
+<B><a href="http://www.baidu.com/" >ٶ</a></B>
+</div>
+</div>
+</ul>
+</div>
+</div>
+<!--------------Footer--------------->
+<div class="foot">
+<ul>
+<li>0aa3.com</li>
+</ul>
+</div>
+</body>
+</html>
