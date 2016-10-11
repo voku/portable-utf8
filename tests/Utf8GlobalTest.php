@@ -224,6 +224,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       '2'                                                                                    => array('2' => '2'),
       '+1'                                                                                   => array('+1' => '+1'),
       // Valid UTF-8
+      '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强' => array('纳达尔绝境下大反击拒绝冷门逆转晋级中网四强' => '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强'),
       'κόσμε'                                                                                => array('κόσμε' => 'κόσμε'),
       '中'                                                                                    => array('中' => '中'),
       '«foobar»'                                                                             => array('«foobar»' => '«foobar»'),
@@ -3741,6 +3742,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "\u0063\u0061\u0074"           => 'cat',
         "\u0039&#39;\u0039"            => '9\'9',
         '&#35;&#8419;'                 => '#⃣',
+        "\xcf\x80"                     => 'π',
     );
 
     foreach ($testArray as $before => $after) {
