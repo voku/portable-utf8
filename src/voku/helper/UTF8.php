@@ -4725,7 +4725,10 @@ final class UTF8
    */
   public static function stristr($haystack, $needle, $before_needle = false, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    if ('' === $needle .= '') {
+    $haystack = (string)$haystack;
+    $needle = (string)$needle;
+
+    if (!isset($haystack[0], $needle[0])) {
       return false;
     }
 
