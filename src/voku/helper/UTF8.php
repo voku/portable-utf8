@@ -3791,6 +3791,10 @@ final class UTF8
    */
   public static function showSupport()
   {
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     foreach (self::$support as $utf8Support) {
       echo $utf8Support . "\n<br>";
     }
@@ -4693,6 +4697,10 @@ final class UTF8
       $encoding = 'UTF-8';
     } else {
       $encoding = self::normalize_encoding($encoding);
+    }
+
+    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
     }
 
     if (
