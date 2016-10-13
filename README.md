@@ -1235,6 +1235,14 @@ $arr = array(
 UTF8::strtr('Hello 中文空白', $arr); // '○●◎ earth'
 ```
 
+##### str_to_words(string $str, string $charlist = '') : array
+
+Convert a string into an array of words.
+
+```php
+UTF8::str_to_words('中文空白 oöäü#s', '#') // array('', '中文空白', ' ', 'oöäü#s', '')
+```
+
 ##### substr(string $str, int $start = 0, int $length = null, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : string
 
 Get part of a string.

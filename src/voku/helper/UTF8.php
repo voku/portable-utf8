@@ -4428,6 +4428,26 @@ final class UTF8
   }
 
   /**
+   * Convert a string into an array of words.
+   *
+   * @param string $str
+   * @param string $charlist
+   *
+   * @return array
+   */
+  public static function str_to_words($str, $charlist = '')
+  {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return array('');
+    }
+
+    $charlist = self::rxClass($charlist, '\pL');
+    return \preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+  }
+
+  /**
    * Counts number of words in the UTF-8 string.
    *
    * @param string $str      <p>The input string.</p>
@@ -4442,8 +4462,7 @@ final class UTF8
    */
   public static function str_word_count($str, $format = 0, $charlist = '')
   {
-    $charlist = self::rxClass($charlist, '\pL');
-    $strParts = \preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $strParts = self::str_to_words($str, $charlist);
 
     $len = count($strParts);
 
@@ -6511,8 +6530,7 @@ final class UTF8
       return '';
     }
 
-    $charlist = self::rxClass($charlist, '\pL');
-    $words = \preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $words = self::str_to_words($str, $charlist);
     $newwords = array();
 
     if (count($exceptions) > 0) {
