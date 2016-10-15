@@ -119,12 +119,12 @@ before_script:
   - echo "php-config -> orig"
   - cat $TRAVIS_PHP_INI_FILE
   - cat $MAIN_PHP_INI_FILE
-  - if [[ $extension = 'false' ]]; then phpenv config-rm mbstring.ini || echo "mbstring not available"; fi
-  - if [[ $extension = 'false' ]]; then phpenv config-rm intl.ini || echo "intl not available"; fi
-  - if [[ $extension = 'false' ]]; then phpenv config-rm iconv.ini || echo "iconv not available"; fi
-  - if [[ $extension = 'true' ]]; then phpenv config-add mbstring.ini || echo "mbstring not available"; fi
-  - if [[ $extension = 'true' ]]; then phpenv config-add intl.ini || echo "intl not available"; fi
-  - if [[ $extension = 'true' ]]; then phpenv config-add iconv.ini || echo "iconv not available"; fi
+  - if [[ $extension = false ]]; then phpenv config-rm mbstring.ini || echo "mbstring not available"; fi
+  - if [[ $extension = false ]]; then phpenv config-rm intl.ini || echo "intl not available"; fi
+  - if [[ $extension = false ]]; then phpenv config-rm iconv.ini || echo "iconv not available"; fi
+  - if [[ $extension = true ]]; then phpenv config-add mbstring.ini || echo "mbstring not available"; fi
+  - if [[ $extension = true ]]; then phpenv config-add intl.ini || echo "intl not available"; fi
+  - if [[ $extension = true ]]; then phpenv config-add iconv.ini || echo "iconv not available"; fi
   - echo "php-config -> new"
   - cat $TRAVIS_PHP_INI_FILE
   - cat $MAIN_PHP_INI_FILE
