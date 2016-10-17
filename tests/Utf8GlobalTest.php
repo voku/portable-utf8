@@ -547,6 +547,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before)))); // ISO-8859-15
     }
+
+    // ---
+
+    self::assertSame('éàa', UTF8::encode('UTF-8', UTF8::encode('ISO-8859-1', 'éàa')));
   }
 
   public function testEncodeUtf8EncodeUtf8()
