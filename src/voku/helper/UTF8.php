@@ -869,6 +869,7 @@ final class UTF8
 
   /**
    * @alias of UTF8::chr_map()
+   *
    * @see   UTF8::chr_map()
    *
    * @param string|array $callback
@@ -1102,6 +1103,10 @@ final class UTF8
     | ( [\xC0-\xFF] )                 # invalid byte in range 11000000 - 11111111
     /x';
     $str = preg_replace($regx, '$1', $str);
+    $save = \mb_substitute_character();
+    \mb_substitute_character('none');
+    $str = \mb_convert_encoding($str, 'UTF-8', 'UTF-8');
+    \mb_substitute_character($save);
 
     $str = self::replace_diamond_question_mark($str, '');
     $str = self::remove_invisible_characters($str);
@@ -1115,7 +1120,7 @@ final class UTF8
     }
 
     if ($remove_bom === true) {
-      $str = self::removeBOM($str);
+      $str = self::remove_bom($str);
     }
 
     return $str;
@@ -1774,7 +1779,9 @@ final class UTF8
     $last = '';
     while ($last !== $str) {
       $last = $str;
-      $str = self::to_utf8(self::utf8_decode($str));
+      $str = self::to_utf8(
+          self::utf8_decode($str)
+      );
     }
 
     return $str;
@@ -1926,6 +1933,8 @@ final class UTF8
    * @param string $str
    *
    * @return bool
+   *
+   * @deprecated
    */
   public static function hasBom($str)
   {
@@ -2476,6 +2485,8 @@ final class UTF8
    * @param string $str
    *
    * @return boolean
+   *
+   * @deprecated
    */
   public static function isAscii($str)
   {
@@ -2490,6 +2501,8 @@ final class UTF8
    * @param string $str
    *
    * @return bool
+   *
+   * @deprecated
    */
   public static function isBase64($str)
   {
@@ -2504,6 +2517,8 @@ final class UTF8
    * @param string $str
    *
    * @return bool
+   *
+   * @deprecated
    */
   public static function isBinary($str)
   {
@@ -2518,6 +2533,8 @@ final class UTF8
    * @param string $utf8_chr
    *
    * @return boolean
+   *
+   * @deprecated
    */
   public static function isBom($utf8_chr)
   {
@@ -2532,6 +2549,8 @@ final class UTF8
    * @param string $str
    *
    * @return boolean
+   *
+   * @deprecated
    */
   public static function isHtml($str)
   {
@@ -2546,6 +2565,8 @@ final class UTF8
    * @param string $str
    *
    * @return bool
+   *
+   * @deprecated
    */
   public static function isJson($str)
   {
@@ -2560,6 +2581,8 @@ final class UTF8
    * @param string $str
    *
    * @return int|false false if is't not UTF16, 1 for UTF-16LE, 2 for UTF-16BE.
+   *
+   * @deprecated
    */
   public static function isUtf16($str)
   {
@@ -2574,6 +2597,8 @@ final class UTF8
    * @param string $str
    *
    * @return int|false false if is't not UTF16, 1 for UTF-32LE, 2 for UTF-32BE.
+   *
+   * @deprecated
    */
   public static function isUtf32($str)
   {
@@ -2589,6 +2614,8 @@ final class UTF8
    * @param bool   $strict
    *
    * @return bool
+   *
+   * @deprecated
    */
   public static function isUtf8($str, $strict = false)
   {
@@ -3229,6 +3256,8 @@ final class UTF8
    * @param string $encoding
    *
    * @return string
+   *
+   * @deprecated
    */
   public static function normalizeEncoding($encoding)
   {
@@ -3608,6 +3637,8 @@ final class UTF8
    * @param string $str
    *
    * @return string
+   *
+   * @deprecated
    */
   public static function removeBOM($str)
   {
@@ -3821,7 +3852,7 @@ final class UTF8
     if (
         $keepAsciiChars === true
         &&
-        self::isAscii($char) === true
+        self::is_ascii($char) === true
     ) {
       return $char;
     }
@@ -4005,7 +4036,7 @@ final class UTF8
     foreach (self::$iconvEncoding as $encodingTmp) {
       # INFO: //IGNORE and //TRANSLIT still throw notice
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (md5(@\iconv($encodingTmp, $encodingTmp, $str)) === $md5) {
+      if (md5(@\iconv($encodingTmp, $encodingTmp . '//IGNORE', $str)) === $md5) {
         return $encodingTmp;
       }
     }
@@ -6109,6 +6140,8 @@ final class UTF8
    * @param bool   $strict
    *
    * @return string
+   *
+   * @deprecated
    */
   public static function toAscii($s, $subst_chr = '?', $strict = false)
   {
@@ -6123,6 +6156,8 @@ final class UTF8
    * @param string $str
    *
    * @return string|string[]
+   *
+   * @deprecated
    */
   public static function toIso8859($str)
   {
@@ -6137,6 +6172,8 @@ final class UTF8
    * @param $str
    *
    * @return string
+   *
+   * @deprecated
    */
   public static function toLatin1($str)
   {
@@ -6151,6 +6188,8 @@ final class UTF8
    * @param string $str
    *
    * @return string
+   *
+   * @deprecated
    */
   public static function toUTF8($str)
   {
@@ -6349,18 +6388,19 @@ final class UTF8
    * 2) when any of these: àáâãäåæçèéêëìíîï  are followed by TWO chars from group B,
    * 3) when any of these: ðñòó  are followed by THREE chars from group B.
    *
-   * @param string|string[] $str <p>Any string or array.</p>
+   * @param string|string[] $str                    <p>Any string or array.</p>
+   * @param bool            $decodeHtmlEntityToUtf8 <p>Set to true, if you need to decode html-entities.</p>
    *
    * @return string|string[] <p>The UTF-8 encoded string.</p>
    */
-  public static function to_utf8($str)
+  public static function to_utf8($str, $decodeHtmlEntityToUtf8 = false)
   {
     if (is_array($str)) {
       /** @noinspection ForeachSourceInspection */
       foreach ($str as $k => $v) {
         /** @noinspection AlterInForeachInspection */
         /** @noinspection OffsetOperationsInspection */
-        $str[$k] = self::to_utf8($v);
+        $str[$k] = self::to_utf8($v, $decodeHtmlEntityToUtf8);
       }
 
       return $str;
@@ -6449,7 +6489,9 @@ final class UTF8
     );
 
     // decode UTF-8 codepoints
-    $buf = self::html_entity_decode($buf, ENT_QUOTES);
+    if ($decodeHtmlEntityToUtf8 === true) {
+      $buf = self::html_entity_decode($buf, ENT_QUOTES);
+    }
 
     return $buf;
   }

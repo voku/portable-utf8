@@ -3469,7 +3469,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid 6 Octet Sequence (but not Unicode!)
       "\xfc\xa1\xa1\xa1\xa1\xa1"                    => array('�' => ''),
       // Valid UTF-8 string with null characters
-      "\0\0\0\0中\0 -\0\0 &#20013; - &#128077; - %&? - \xc2\x80" => array('中 - 中 - 👍 - %&? - €' => '中 - 中 - 👍 - %&? - €'),
+      "\0\0\0\0中\0 -\0\0 &#20013; - &#128077; - %&? - \xc2\x80" => array('中 - &#20013; - &#128077; - %&? - €' => '中 - &#20013; - &#128077; - %&? - €'),
+      // InValid UTF-8 string with null characters + HMTL
+      "\0\0\0\0中\0 -\0\0 &#20013; - &shy; - &nbsp; - %&? - \xc2\x80\x80\x80" => array('中 - &#20013; - &shy; - &nbsp; - %&? - €' => '中 - &#20013; - &shy; - &nbsp; - %&? - €'),
     );
 
     $counter = 0;
@@ -3741,6 +3743,28 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ''                             => '',
         "\n"                           => "\n",
         'test'                         => 'test',
+        'Here&#39;s some quoted text.' => 'Here&#39;s some quoted text.',
+        '&#39;'                        => '&#39;',
+        "\u0063\u0061\u0074"           => 'cat',
+        "\u0039&#39;\u0039"            => '9&#39;9',
+        '&#35;&#8419;'                 => '&#35;&#8419;',
+        "\xcf\x80"                     => 'π',
+    );
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::to_utf8($before));
+    }
+
+    // ---
+
+    $testArray = array(
+        'Düsseldorf'                   => 'Düsseldorf',
+        'Ã'                            => 'Ã',
+        'foobar  || 😃'                => 'foobar  || 😃',
+        ' '                            => ' ',
+        ''                             => '',
+        "\n"                           => "\n",
+        'test'                         => 'test',
         'Here&#39;s some quoted text.' => 'Here\'s some quoted text.',
         '&#39;'                        => '\'',
         "\u0063\u0061\u0074"           => 'cat',
@@ -3750,7 +3774,34 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::to_utf8($before));
+      self::assertSame($after, UTF8::to_utf8($before, true));
+    }
+
+    // ---
+
+    $invalidTest = array(
+      // Min/max overlong
+      "\xC0\x80a" => 'Overlong representation of U+0000 | 1',
+      "\xE0\x80\x80a" => 'Overlong representation of U+0000 | 2',
+      "\xF0\x80\x80\x80a" => 'Overlong representation of U+0000 | 3',
+      "\xF8\x80\x80\x80\x80a" => 'Overlong representation of U+0000 | 4',
+      "\xFC\x80\x80\x80\x80\x80a" => 'Overlong representation of U+0000 | 5',
+      "\xC1\xBFa" => 'Overlong representation of U+007F | 6',
+      "\xE0\x9F\xBFa" => 'Overlong representation of U+07FF | 7',
+      "\xF0\x8F\xBF\xBFa" => 'Overlong representation of U+FFFF | 8',
+      "a\xDF" => 'Incomplete two byte sequence (missing final byte) | 9',
+      "a\xEF\xBF" => 'Incomplete three byte sequence (missing final byte) | 10',
+      "a\xF4\xBF\xBF" => 'Incomplete four byte sequence (missing final byte) | 11',
+      // Min/max continuation bytes
+      "a\x80" => 'Lone 80 continuation byte | 12',
+      "a\xBF" => 'Lone BF continuation byte | 13',
+      // Invalid bytes (these can never occur)
+      "a\xFE" => 'Invalid FE byte | 14',
+      "a\xFF" => 'Invalid FF byte | 15'
+    );
+
+    foreach ($invalidTest as $test => $note) {
+      self::assertSame('a', UTF8::cleanup($test), $note);
     }
   }
 
