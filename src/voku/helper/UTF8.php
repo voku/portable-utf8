@@ -1470,7 +1470,6 @@ final class UTF8
         }
 
         if (self::is_ascii($var) === false) {
-
           /** @noinspection PhpUndefinedClassInspection */
           if (\Normalizer::isNormalized($var, $normalization_form)) {
             $n = '-';
@@ -1495,6 +1494,7 @@ final class UTF8
             $var = $leading_combining . $var;
           }
         }
+
         break;
     }
 
@@ -2419,9 +2419,10 @@ final class UTF8
   {
     $return = extension_loaded('iconv') ? true : false;
 
-    if (Bootup::is_php('5.6')) {
-      // "default_charset" is already set by the "Bootup"-class
-    } else {
+    // INFO: "default_charset" is already set by the "Bootup"-class
+
+    if (!Bootup::is_php('5.6')) {
+      // INFO: "iconv_set_encoding" is deprecated cince PHP 5.6
       iconv_set_encoding('input_encoding', 'UTF-8');
       iconv_set_encoding('output_encoding', 'UTF-8');
       iconv_set_encoding('internal_encoding', 'UTF-8');
