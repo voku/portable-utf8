@@ -97,15 +97,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testChar()
   {
     $testArray = array(
-        '39'  => '\'',
-        '40'  => '(',
-        '41'  => ')',
-        '42'  => '*',
-        '160' => ' ',
-        0x666   => '٦',
-        0x165   => 'ť',
-        0x8469  => '葩',
-        0x2603  => '☃',
+        '39'   => '\'',
+        '40'   => '(',
+        '41'   => ')',
+        '42'   => '*',
+        '160'  => ' ',
+        0x666  => '٦',
+        0x165  => 'ť',
+        0x8469 => '葩',
+        0x2603 => '☃',
     );
 
     foreach ($testArray as $before => $after) {
@@ -224,7 +224,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       '2'                                                                                    => array('2' => '2'),
       '+1'                                                                                   => array('+1' => '+1'),
       // Valid UTF-8
-      '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强' => array('纳达尔绝境下大反击拒绝冷门逆转晋级中网四强' => '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强'),
+      '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强'                                                                => array('纳达尔绝境下大反击拒绝冷门逆转晋级中网四强' => '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强'),
       'κόσμε'                                                                                => array('κόσμε' => 'κόσμε'),
       '中'                                                                                    => array('中' => '中'),
       '«foobar»'                                                                             => array('«foobar»' => '«foobar»'),
@@ -928,6 +928,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'öäü'                     => '&#246;&#228;&#252;',
         ' '                       => '&#32;',
         ''                        => '',
+        '�'                      => '&#65533;',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -983,11 +984,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // --- ISO
 
     $testArray = array(
-        '中文空白'                    => '中文空白',
-        'κόσμε'                   => 'κόσμε',
-        'öäü'                     => 'öäü',
-        '(Å/å, Æ/æ, Ø/ø, Σ/σ)' => '(Å/å, Æ/æ, Ø/ø, Σ/σ)',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
+        '中文空白'                  => '中文空白',
+        'κόσμε'                 => 'κόσμε',
+        'öäü'                   => 'öäü',
+        '(Å/å, Æ/æ, Ø/ø, Σ/σ)'  => '(Å/å, Æ/æ, Ø/ø, Σ/σ)',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -1125,13 +1126,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     $testArray = array(
-        'κόσμε'                          => 'κόσμε',
-        'who&#039;s online'              => 'who\'s online',
-        'who&amp;#039;s online'          => 'who\'s online',
-        'who&#039;s online-'             => 'who\'s online-',
-        'Who&#039;s Online'              => 'Who\'s Online',
-        'Who&amp;amp;#039;s Online'      => 'Who\'s Online',
-        "Who\'s Online&#x0003A;"         => 'Who\\\'s Online:',
+        'κόσμε'                     => 'κόσμε',
+        'who&#039;s online'         => 'who\'s online',
+        'who&amp;#039;s online'     => 'who\'s online',
+        'who&#039;s online-'        => 'who\'s online-',
+        'Who&#039;s Online'         => 'Who\'s Online',
+        'Who&amp;amp;#039;s Online' => 'Who\'s Online',
+        "Who\'s Online&#x0003A;"    => 'Who\\\'s Online:',
     );
 
     foreach ($testArray as $before => $after) {
@@ -1816,7 +1817,28 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // test-string
     $str = "Iñtërnâtiôn\xE9àlizætiøn=測試&arr[]=foo+測試&arr[]=ການທົດສອບ";
 
-    $result = UTF8::parse_str($str, $array);
+    $result = UTF8::parse_str($str, $array, true);
+
+    self::assertSame(true, $result);
+
+    // bug is already reported: https://github.com/facebook/hhvm/issues/6340
+    if (defined('HHVM_VERSION') === false) {
+      self::assertSame('foo 測試', $array['arr'][0]);
+      self::assertSame('ການທົດສອບ', $array['arr'][1]);
+    }
+
+    // bug is already reported: https://github.com/facebook/hhvm/issues/6340
+    // -> mb_parse_str not parsing multidimensional array
+    if (defined('HHVM_VERSION') === false) {
+      self::assertSame('測試', $array['Iñtërnâtiônàlizætiøn']);
+    }
+
+    // ---
+
+    // test-string
+    $str = "Iñtërnâtiônàlizætiøn=測試&arr[]=foo+測試&arr[]=ການທົດສອບ";
+
+    $result = UTF8::parse_str($str, $array, false);
 
     self::assertSame(true, $result);
 
@@ -2022,6 +2044,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "<ㅡㅡ></ㅡㅡ><div>�</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>",
         'DÃ¼�sseldorf'                                                             => 'DÃ¼sseldorf',
         'Abcdef'                                                                   => 'Abcdef',
+        "\xC0\x80foo|&#65533;"                                                     => 'foo|&#65533;',
     );
 
     foreach ($tests as $before => $after) {
@@ -2364,6 +2387,15 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testStrToWords()
+  {
+    self::assertSame(array('', 'iñt', ' ', 'ërn', '',), UTF8::str_to_words('iñt ërn'));
+    self::assertSame(array('', 'âti', "\n ", 'ônà', ''), UTF8::str_to_words("âti\n ônà"));
+    self::assertSame(array('', '中文空白', ' ', 'oöäü#s', ''), UTF8::str_to_words('中文空白 oöäü#s', '#'));
+    self::assertSame(array('', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''), UTF8::str_to_words('foo oo oöäü#s', ''));
+    self::assertSame(array(''), UTF8::str_to_words(''));
+  }
+
   public function testStr_split()
   {
     self::assertSame(
@@ -2464,7 +2496,26 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::strip_tags($before));
+      self::assertSame($after, UTF8::strip_tags($before, null, true));
+    }
+
+    // ---
+
+    $tests = array(
+        null                                                                      => '',
+        ''                                                                        => '',
+        ' '                                                                       => ' ',
+        1                                                                         => '1',
+        '2'                                                                       => '2',
+        'Abcdef'                                                                  => 'Abcdef',
+        '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
+        "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
+        '<nav>中文空白 </nav>'                                                        => '中文空白 ',
+        "<span>κόσμε</span>-<span>öäü</span>öäü"                                  => '<span>κόσμε</span>-<span>öäü</span>öäü',
+    );
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::strip_tags($before, '<span>', false));
     }
   }
 
@@ -2532,10 +2583,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $string_test2 = UTF8::strip_tags($string);
 
     self::assertSame(57, strlen($string_test1));
-    self::assertSame(50, UTF8::strlen($string_test2));
+    self::assertSame(54, UTF8::strlen($string_test2, 'UTF-8', false));
+    self::assertSame(50, UTF8::strlen($string_test2, 'UTF-8', true));
 
     $testArray = array(
-        '⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞' => 22,
+        '⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞'    => 22,
         "<a href='κόσμε'>κόσμε</a>" => 25,
         '<白>'                       => 3,
         'öäü'                       => 3,
@@ -3432,44 +3484,44 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     $examples = array(
       // Valid UTF-8
-      'κόσμε'                                       => array('κόσμε' => 'κόσμε'),
-      '中'                                           => array('中' => '中'),
+      'κόσμε'                                                                => array('κόσμε' => 'κόσμε'),
+      '中'                                                                    => array('中' => '中'),
       // Valid UTF-8 + "win1252"-encoding
-      'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac" => array('Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'),
+      'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac"                          => array('Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'),
       // Valid UTF-8 + Invalid Chars
-      "κόσμε\xa0\xa1-öäü-‽‽‽"                       => array('κόσμε-öäü-‽‽‽' => 'κόσμε-öäü-‽‽‽'),
+      "κόσμε\xa0\xa1-öäü-‽‽‽"                                                => array('κόσμε-öäü-‽‽‽' => 'κόσμε-öäü-‽‽‽'),
       // Valid emoji (non-UTF-8)
-      '👍 💩 😄 ❤ 👍 💩 😄 ❤'                       => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
+      '👍 💩 😄 ❤ 👍 💩 😄 ❤'                                                => array('👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤'),
       // Valid ASCII
-      'a'                                           => array('a' => 'a'),
+      'a'                                                                    => array('a' => 'a'),
       // Valid ASCII + Invalid Chars
-      "a\xa0\xa1-öäü"                               => array('a-öäü' => 'a-öäü'),
+      "a\xa0\xa1-öäü"                                                        => array('a-öäü' => 'a-öäü'),
       // Valid 2 Octet Sequence
-      "\xc3\xb1"                                    => array('ñ' => 'ñ'),
+      "\xc3\xb1"                                                             => array('ñ' => 'ñ'),
       // Invalid 2 Octet Sequence
-      "\xc3\x28"                                    => array('�(' => '('),
+      "\xc3\x28"                                                             => array('�(' => '('),
       // Invalid Sequence Identifier
-      "\xa0\xa1"                                    => array('��' => ''),
+      "\xa0\xa1"                                                             => array('��' => ''),
       // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"                                => array('₡' => '₡'),
+      "\xe2\x82\xa1"                                                         => array('₡' => '₡'),
       // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"                                => array('�(�' => '('),
+      "\xe2\x28\xa1"                                                         => array('�(�' => '('),
       // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"                                => array('�(' => '('),
+      "\xe2\x82\x28"                                                         => array('�(' => '('),
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"                            => array('𐌼' => '𐌼'),
+      "\xf0\x90\x8c\xbc"                                                     => array('𐌼' => '𐌼'),
       // Invalid 4 Octet Sequence (in 2nd Octet)
-      "\xf0\x28\x8c\xbc"                            => array('�(��' => '('),
+      "\xf0\x28\x8c\xbc"                                                     => array('�(��' => '('),
       // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"                            => array('�(�' => '('),
+      "\xf0\x90\x28\xbc"                                                     => array('�(�' => '('),
       // Invalid 4 Octet Sequence (in 4th Octet)
-      "\xf0\x28\x8c\x28"                            => array('�(�(' => '(('),
+      "\xf0\x28\x8c\x28"                                                     => array('�(�(' => '(('),
       // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"                        => array('�' => ''),
+      "\xf8\xa1\xa1\xa1\xa1"                                                 => array('�' => ''),
       // Valid 6 Octet Sequence (but not Unicode!)
-      "\xfc\xa1\xa1\xa1\xa1\xa1"                    => array('�' => ''),
+      "\xfc\xa1\xa1\xa1\xa1\xa1"                                             => array('�' => ''),
       // Valid UTF-8 string with null characters
-      "\0\0\0\0中\0 -\0\0 &#20013; - &#128077; - %&? - \xc2\x80" => array('中 - &#20013; - &#128077; - %&? - €' => '中 - &#20013; - &#128077; - %&? - €'),
+      "\0\0\0\0中\0 -\0\0 &#20013; - &#128077; - %&? - \xc2\x80"              => array('中 - &#20013; - &#128077; - %&? - €' => '中 - &#20013; - &#128077; - %&? - €'),
       // InValid UTF-8 string with null characters + HMTL
       "\0\0\0\0中\0 -\0\0 &#20013; - &shy; - &nbsp; - %&? - \xc2\x80\x80\x80" => array('中 - &#20013; - &shy; - &nbsp; - %&? - €' => '中 - &#20013; - &shy; - &nbsp; - %&? - €'),
     );
@@ -3781,23 +3833,23 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     $invalidTest = array(
       // Min/max overlong
-      "\xC0\x80a" => 'Overlong representation of U+0000 | 1',
-      "\xE0\x80\x80a" => 'Overlong representation of U+0000 | 2',
-      "\xF0\x80\x80\x80a" => 'Overlong representation of U+0000 | 3',
-      "\xF8\x80\x80\x80\x80a" => 'Overlong representation of U+0000 | 4',
+      "\xC0\x80a"                 => 'Overlong representation of U+0000 | 1',
+      "\xE0\x80\x80a"             => 'Overlong representation of U+0000 | 2',
+      "\xF0\x80\x80\x80a"         => 'Overlong representation of U+0000 | 3',
+      "\xF8\x80\x80\x80\x80a"     => 'Overlong representation of U+0000 | 4',
       "\xFC\x80\x80\x80\x80\x80a" => 'Overlong representation of U+0000 | 5',
-      "\xC1\xBFa" => 'Overlong representation of U+007F | 6',
-      "\xE0\x9F\xBFa" => 'Overlong representation of U+07FF | 7',
-      "\xF0\x8F\xBF\xBFa" => 'Overlong representation of U+FFFF | 8',
-      "a\xDF" => 'Incomplete two byte sequence (missing final byte) | 9',
-      "a\xEF\xBF" => 'Incomplete three byte sequence (missing final byte) | 10',
-      "a\xF4\xBF\xBF" => 'Incomplete four byte sequence (missing final byte) | 11',
+      "\xC1\xBFa"                 => 'Overlong representation of U+007F | 6',
+      "\xE0\x9F\xBFa"             => 'Overlong representation of U+07FF | 7',
+      "\xF0\x8F\xBF\xBFa"         => 'Overlong representation of U+FFFF | 8',
+      "a\xDF"                     => 'Incomplete two byte sequence (missing final byte) | 9',
+      "a\xEF\xBF"                 => 'Incomplete three byte sequence (missing final byte) | 10',
+      "a\xF4\xBF\xBF"             => 'Incomplete four byte sequence (missing final byte) | 11',
       // Min/max continuation bytes
-      "a\x80" => 'Lone 80 continuation byte | 12',
-      "a\xBF" => 'Lone BF continuation byte | 13',
+      "a\x80"                     => 'Lone 80 continuation byte | 12',
+      "a\xBF"                     => 'Lone BF continuation byte | 13',
       // Invalid bytes (these can never occur)
-      "a\xFE" => 'Invalid FE byte | 14',
-      "a\xFF" => 'Invalid FF byte | 15'
+      "a\xFE"                     => 'Invalid FE byte | 14',
+      "a\xFF"                     => 'Invalid FF byte | 15',
     );
 
     foreach ($invalidTest as $test => $note) {
@@ -3854,15 +3906,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testTrimAdvancedWithMoreThenTwoBytes($input, $output)
   {
     self::assertSame($output, UTF8::trim($input, '白'));
-  }
-
-  public function testStrToWords()
-  {
-    self::assertSame(array('', 'iñt', ' ', 'ërn', '',), UTF8::str_to_words('iñt ërn'));
-    self::assertSame(array('', 'âti', "\n ", 'ônà', ''), UTF8::str_to_words("âti\n ônà"));
-    self::assertSame(array('', '中文空白', ' ', 'oöäü#s', ''), UTF8::str_to_words('中文空白 oöäü#s', '#'));
-    self::assertSame(array('', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''), UTF8::str_to_words('foo oo oöäü#s', ''));
-    self::assertSame(array(''), UTF8::str_to_words(''));
   }
 
   public function testUcWords()

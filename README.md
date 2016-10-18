@@ -753,7 +753,7 @@ INFO: opposite to UTF8::chr()
 UTF8::ord('☃'); // 0x2603
 ```
 
-##### parse_str(string $str, &$result) : bool
+##### parse_str(string $str, &$result, bool $cleanUtf8 = false) : bool
 
 Parses the string into an array (into the the second parameter).
 
@@ -1075,7 +1075,7 @@ alias: UTF8::hasBom()
 UTF8::string_has_bom("\xef\xbb\xbf foobar"); // true
 ```
 
-##### strip_tags(string $str, sting|null $allowable_tags = null) : string
+##### strip_tags(string $str, sting|null $allowable_tags = null, bool $cleanUtf8 = false) : string
 
 Strip HTML and PHP tags from a string + clean invalid UTF-8.
 
@@ -1332,7 +1332,7 @@ alias: UTF8::str_transliterate()
 UTF8::to_ascii('déjà σσς iıii'); // 'deja sss iiii'
 ```
 
-##### to_utf8(string|string[] $str) : string|string[]
+##### to_utf8(string|string[] $str, bool $decodeHtmlEntityToUtf8 = false) : string|string[]
 
 This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.
 

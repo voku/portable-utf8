@@ -1103,10 +1103,6 @@ final class UTF8
     | ( [\xC0-\xFF] )                 # invalid byte in range 11000000 - 11111111
     /x';
     $str = preg_replace($regx, '$1', $str);
-    $save = \mb_substitute_character();
-    \mb_substitute_character('none');
-    $str = \mb_convert_encoding($str, 'UTF-8', 'UTF-8');
-    \mb_substitute_character($save);
 
     $str = self::replace_diamond_question_mark($str, '');
     $str = self::remove_invisible_characters($str);
@@ -3502,15 +3498,17 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.parse-str.php
    *
-   * @param string $str    <p>The input string.</p>
-   * @param array  $result <p>The result will be returned into this reference parameter.</p>
+   * @param string  $str       <p>The input string.</p>
+   * @param array   $result    <p>The result will be returned into this reference parameter.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return bool <p>Will return <strong>false</strong> if php can't parse the string and we haven't any $result.</p>
    */
-  public static function parse_str($str, &$result)
+  public static function parse_str($str, &$result, $cleanUtf8 = false)
   {
-    // clean broken utf8
-    $str = self::clean($str);
+    if ($cleanUtf8 === true) {
+      $str = self::clean($str);
+    }
 
     $return = \mb_parse_str($str, $result);
     if ($return === false || empty($result)) {
@@ -3731,6 +3729,22 @@ final class UTF8
    */
   public static function replace_diamond_question_mark($str, $unknown = '?')
   {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    $unknownHelper = $unknown;
+    if ($unknown === '') {
+      $unknownHelper = 'none';
+    }
+
+    $save = \mb_substitute_character();
+    \mb_substitute_character($unknownHelper);
+    $str = \mb_convert_encoding($str, 'UTF-8', 'UTF-8');
+    \mb_substitute_character($save);
+
     return str_replace(
         array(
             "\xEF\xBF\xBD",
@@ -4443,22 +4457,6 @@ final class UTF8
   }
 
   /**
-   * alias for "UTF8::to_ascii()"
-   *
-   * @see UTF8::to_ascii()
-   *
-   * @param string $str
-   * @param string $unknown
-   * @param bool   $strict
-   *
-   * @return string
-   */
-  public static function str_transliterate($str, $unknown = '?', $strict = false)
-  {
-    return self::to_ascii($str, $unknown, $strict);
-  }
-
-  /**
    * Convert a string into an array of words.
    *
    * @param string $str
@@ -4475,7 +4473,24 @@ final class UTF8
     }
 
     $charlist = self::rxClass($charlist, '\pL');
+
     return \preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+  }
+
+  /**
+   * alias for "UTF8::to_ascii()"
+   *
+   * @see UTF8::to_ascii()
+   *
+   * @param string $str
+   * @param string $unknown
+   * @param bool   $strict
+   *
+   * @return string
+   */
+  public static function str_transliterate($str, $unknown = '?', $strict = false)
+  {
+    return self::to_ascii($str, $unknown, $strict);
   }
 
   /**
@@ -4677,24 +4692,26 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.strip-tags.php
    *
-   * @param string $str            <p>
-   *                               The input string.
-   *                               </p>
-   * @param string $allowable_tags [optional] <p>
-   *                               You can use the optional second parameter to specify tags which should
-   *                               not be stripped.
-   *                               </p>
-   *                               <p>
-   *                               HTML comments and PHP tags are also stripped. This is hardcoded and
-   *                               can not be changed with allowable_tags.
-   *                               </p>
+   * @param string  $str            <p>
+   *                                The input string.
+   *                                </p>
+   * @param string  $allowable_tags [optional] <p>
+   *                                You can use the optional second parameter to specify tags which should
+   *                                not be stripped.
+   *                                </p>
+   *                                <p>
+   *                                HTML comments and PHP tags are also stripped. This is hardcoded and
+   *                                can not be changed with allowable_tags.
+   *                                </p>
+   * @param boolean $cleanUtf8      [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string <p>The stripped string.</p>
    */
-  public static function strip_tags($str, $allowable_tags = null)
+  public static function strip_tags($str, $allowable_tags = null, $cleanUtf8 = false)
   {
-    // clean broken utf8
-    $str = self::clean($str);
+    if ($cleanUtf8) {
+      $str = self::clean($str);
+    }
 
     return strip_tags($str, $allowable_tags);
   }
@@ -5335,7 +5352,6 @@ final class UTF8
         $encoding === true // INFO: the "bool"-check is only a fallback for old versions
     ) {
       // \mb_strrpos && iconv_strrpos is not tolerant to invalid characters
-
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
     }
@@ -5677,7 +5693,6 @@ final class UTF8
     if ($cleanUtf8 === true) {
       // iconv and mbstring are not tolerant to invalid encoding
       // further, their behaviour is inconsistent with that of PHP's substr
-
       $str = self::clean($str);
     }
 
@@ -5710,7 +5725,6 @@ final class UTF8
     if ($cleanUtf8 === true) {
       // iconv and mbstring are not tolerant to invalid encoding
       // further, their behaviour is inconsistent with that of PHP's substr
-
       $str = self::clean($str);
     }
 
@@ -6219,7 +6233,7 @@ final class UTF8
       return '';
     }
 
-    $str = self::clean($str, false, true, true);
+    $str = self::clean($str, true, true, true);
 
     // check if we only have ASCII
     if (self::is_ascii($str) === true) {
