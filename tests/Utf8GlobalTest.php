@@ -1024,19 +1024,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
-    $testArray = array(
-        '{-test' => '{-test',
-        'abc'    => 'abc',
-        ' '      => ' ',
-        ''       => '',
-        '&#d;'   => '&#d;',
-        '&d;'    => '&d;',
-        '&gt;'   => '>',
-        '&#39;'  => '&#39;',
-    );
+    // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
+    if (defined('HHVM_VERSION') === false) {
+      $testArray = array(
+          '&#d;'  => '&#d;',
+          '&d;'   => '&d;',
+          '&gt;'  => '>',
+          '&#39;' => '&#39;',
+      );
 
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO'), ENT_COMPAT), 'tested:' . $actual);
+      foreach ($testArray as $actual => $expected) {
+        self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO'), ENT_COMPAT), 'tested:' . $actual);
+      }
     }
   }
 
@@ -3848,10 +3847,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ''                             => '',
         "\n"                           => "\n",
         'test'                         => 'test',
-        'Here&#39;s some quoted text.' => 'Here&#39;s some quoted text.',
-        '&#39;'                        => '&#39;',
+        'Here&#39;s some quoted text.' => 'Here\'s some quoted text.',
+        '&#39;'                        => '\'',
         "\u0063\u0061\u0074"           => 'cat',
-        "\u0039&#39;\u0039"            => '9&#39;9',
+        "\u0039&#39;\u0039"            => '9\'9',
         '&#35;&#8419;'                 => '#⃣',
         "\xcf\x80"                     => 'π',
     );

@@ -2176,9 +2176,9 @@ final class UTF8
 
     if ($flags === null) {
       if (Bootup::is_php('5.4') === true) {
-        $flags = ENT_COMPAT | ENT_HTML5;
+        $flags = ENT_QUOTES | ENT_HTML5;
       } else {
-        $flags = ENT_COMPAT;
+        $flags = ENT_QUOTES;
       }
     }
 
