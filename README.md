@@ -273,7 +273,7 @@ UTF8::add_bom_to_string('fòô'); // "\xEF\xBB\xBF" . 'fòô'
 
 Convert binary into an string.
 
-INFO: opposite to UTF8::str_to_binary()
+opposite: UTF8::str_to_binary()
 
 ```php
 UTF8::binary_to_str('11110000100111111001100010000011'); // '😃'
@@ -291,7 +291,7 @@ UTF8::bom(); // "\xEF\xBB\xBF"
 
 Generates a UTF-8 encoded character from the given code point.
 
-INFO: opposite to UTF8::ord()
+opposite: UTF8::ord()
 
 ```php
 UTF8::chr(0x2603); // '☃'
@@ -322,6 +322,10 @@ UTF8::chr_size_list('中文空白-test'); // [3, 3, 3, 3, 1, 1, 1, 1, 1]
 
 Get a decimal code representation of a specific character.
 
+opposite: UTF8::decimal_to_chr()
+
+alias: UTF8::chr_to_int()
+
 ```php
 UTF8::chr_to_decimal('§'); // 0xa7
 ```
@@ -331,7 +335,7 @@ UTF8::chr_to_decimal('§'); // 0xa7
 Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.
 
 ```php
-UTF8::chr_to_hex('§'); // 0xa7
+UTF8::chr_to_hex('§'); // U+00a7
 ```
 
 ##### chunk_split(string $body, int $chunklen = 76, string $end = "\r\n") : string
@@ -362,7 +366,7 @@ UTF8::cleanup("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃 - DÃ¼sseldorf"
 
 Accepts a string and returns an array of Unicode code points.
 
-INFO: opposite to UTF8::string()
+opposite: UTF8::string()
 
 ```php
 UTF8::codepoints('κöñ'); // array(954, 246, 241)
@@ -376,6 +380,18 @@ Returns count of characters used in a string.
 
 ```php
 UTF8::count_chars('κaκbκc'); // array('κ' => 3, 'a' => 1, 'b' => 1, 'c' => 1)
+```
+
+##### decimal_to_chr(int $int) : string
+
+Converts a int-value into an UTF-8 character.
+
+opposite: UTF8::chr_to_decimal()
+
+alias: UTF8::int_to_chr()
+
+```php
+UTF8::decimal_to_chr(931); // 'Σ'
 ```
 
 ##### encode(string $encoding, string $str, bool $force = true) : string
@@ -497,11 +513,21 @@ Get character of a specific character.
 UTF8::getCharDirection('ا'); // 'RTL'
 ```
 
-##### hex_to_int(string $str) : int|false
+##### hex_to_chr(string $hexdec) : string|false
+
+Converts a hexadecimal-value into an UTF-8 character.
+
+opposite: UTF8::chr_to_hex()
+
+```php
+UTF8::hex_to_chr('U+00a7'); // '§'
+```
+
+##### hex_to_int(string $hexdec) : int|false
 
 Converts hexadecimal U+xxxx code point representation to integer.
 
-INFO: opposite to UTF8::int_to_hex()
+opposite: UTF8::int_to_hex()
 
 ```php
 UTF8::hex_to_int('U+00f1'); // 241
@@ -511,7 +537,7 @@ UTF8::hex_to_int('U+00f1'); // 241
 
 Converts a UTF-8 string to a series of HTML numbered entities.
 
-INFO: opposite to UTF8::html_decode()
+opposite: UTF8::html_decode()
 
 ```php
 UTF8::html_encode('中文空白'); // '&#20013;&#25991;&#31354;&#30333;'
@@ -529,7 +555,7 @@ semicolons, so we are left with our own little solution here. Bummer.
 
 Convert all HTML entities to their applicable characters
 
-INFO: opposite to UTF8::html_encode()
+opposite: UTF8::html_encode()
 
 alias: UTF8::html_decode()
 
@@ -559,7 +585,7 @@ UTF8::htmlspecialchars('<白-öäü>'); // '&lt;白-öäü&gt;'
 
 Converts Integer to hexadecimal U+xxxx code point representation.
 
-INFO: opposite to UTF8::hex_to_int()
+opposite: UTF8::hex_to_int()
 
 ```php
 UTF8::int_to_hex(241); // 'U+00f1'
@@ -747,7 +773,7 @@ UTF8::normalize_whitespace("abc-\xc2\xa0-öäü-\xe2\x80\xaf-\xE2\x80\xAC", true
 
 Calculates Unicode code point of the given UTF-8 encoded character.
 
-INFO: opposite to UTF8::chr()
+opposite: UTF8::chr()
 
 ```php
 UTF8::ord('☃'); // 0x2603
@@ -950,7 +976,7 @@ UTF8::str_iistarts_with('ΚόσμεMiddleEnd', 'κόσμε'); // true
 
 Get a binary representation of a specific string.
 
-INFO: opposite to UTF8::binary_to_str()
+opposite: UTF8::binary_to_str()
 
 ```php
 UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'
@@ -1059,7 +1085,7 @@ UTF8::strncmp("Iñtërnâtiôn\nàlizætiøn321", "Iñtërnâtiôn\nàlizætiøn
 
 Create a UTF-8 string from code points.
 
-INFO: opposite to UTF8::codepoints()
+opposite: UTF8::codepoints()
 
 ```php
 UTF8::string(array(246, 228, 252)); // 'öäü'

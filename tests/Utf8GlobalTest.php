@@ -126,6 +126,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // --
 
     $testArrayFail = array(
+        null  => null, // fail
         ''    => null, // fail
         'foo' => null, // fail
         'fòô' => null, // fail
@@ -185,6 +186,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::chr_to_decimal($before));
+      self::assertSame($after, UTF8::chr_to_int(UTF8::int_to_chr(UTF8::chr_to_int($before))));
     }
   }
 
@@ -201,8 +203,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::chr_to_hex($before), 'tested: ' . $before);
+      self::assertSame($after, UTF8::chr_to_hex(UTF8::hex_to_chr(UTF8::chr_to_hex($before))), 'tested: ' . $before);
     }
+
+    // ---
+
+    self::assertSame('U+2764', UTF8::chr_to_hex('❤'));
+    self::assertSame('U+00a7', UTF8::chr_to_hex('§'));
+
+    // ---
+
+    self::assertSame('U+0000', UTF8::chr_to_hex(UTF8::hex_to_chr(UTF8::chr_to_hex(''))));
+
   }
 
   public function testChunkSplit()
@@ -928,7 +940,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'öäü'                     => '&#246;&#228;&#252;',
         ' '                       => '&#32;',
         ''                        => '',
-        '�'                      => '&#65533;',
+        '�'                       => '&#65533;',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -1688,6 +1700,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'öäü'                  => 2,
         'abc'                  => 1,
         ''                     => 0,
+        null                   => 0,
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -4362,6 +4375,29 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, true));
     self::assertSame('"Abcdef  ..." - 😃', UTF8::clean($dirtyTestString, true, true, true, false));
     self::assertSame("\"Abcdef\xc2\xa0 ...\" - 😃", UTF8::clean($dirtyTestString, true, true, true, true));
+  }
+
+  public function testhex_to_chr()
+  {
+    self::assertEquals('<', UTF8::hex_to_chr('3c'));
+    self::assertEquals('<', UTF8::hex_to_chr('003c'));
+    self::assertEquals('&', UTF8::hex_to_chr('26'));
+    self::assertEquals('}', UTF8::hex_to_chr('7d'));
+    self::assertEquals('Σ', UTF8::hex_to_chr('3A3'));
+    self::assertEquals('Σ', UTF8::hex_to_chr('03A3'));
+    self::assertEquals('Σ', UTF8::hex_to_chr('3a3'));
+    self::assertEquals('Σ', UTF8::hex_to_chr('03a3'));
+  }
+
+  public function testhtml_encode_chr()
+  {
+    self::assertEquals('&', UTF8::decimal_to_chr(38));
+    self::assertEquals('&', UTF8::decimal_to_chr('38'));
+    self::assertEquals('<', UTF8::decimal_to_chr(60));
+    self::assertEquals('Σ', UTF8::decimal_to_chr(931));
+    self::assertEquals('Σ', UTF8::decimal_to_chr('0931'));
+    // alias
+    self::assertEquals('Σ', UTF8::int_to_chr('0931'));
   }
 
   /**

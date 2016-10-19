@@ -824,6 +824,17 @@ final class UTF8
    */
   public static function access($str, $pos)
   {
+    $str = (string)$str;
+    $pos = (int)$pos;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    if ($pos < 0) {
+      return '';
+    }
+
     return self::substr($str, $pos, 1);
   }
 
@@ -854,17 +865,23 @@ final class UTF8
    */
   public static function binary_to_str($bin)
   {
+    if (!isset($bin[0])) {
+      return '';
+    }
+
     return pack('H*', base_convert($bin, 2, 16));
   }
 
   /**
    * Returns the UTF-8 Byte Order Mark Character.
    *
+   * INFO: take a look at UTF8::$bom for e.g. UTF-16 and UTF-32 BOM values
+   *
    * @return string UTF-8 Byte Order Mark
    */
   public static function bom()
   {
-    return "\xEF\xBB\xBF";
+    return "\xef\xbb\xbf";
   }
 
   /**
@@ -918,7 +935,7 @@ final class UTF8
    * @param int    $code_point <p>The code point for which to generate a character.</p>
    * @param string $encoding   [optional] <p>Default is UTF-8</p>
    *
-   * @return string|null <p>Multi-Byte character, returns null on failure to encode.</p>
+   * @return string|null <p>Multi-Byte character, returns null on failure or empty input.</p>
    */
   public static function chr($code_point, $encoding = 'UTF-8')
   {
@@ -999,7 +1016,9 @@ final class UTF8
    */
   public static function chr_size_list($str)
   {
-    if (!$str) {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
       return array();
     }
 
@@ -1056,7 +1075,25 @@ final class UTF8
    */
   public static function chr_to_hex($char, $pfix = 'U+')
   {
+    if ($char === '&#0;') {
+      $char = '';
+    }
+
     return self::int_to_hex(self::ord($char), $pfix);
+  }
+
+  /**
+   * alias for "UTF8::chr_to_decimal()"
+   *
+   * @see UTF8::chr_to_decimal()
+   *
+   * @param string $chr
+   *
+   * @return int
+   */
+  public static function chr_to_int($chr)
+  {
+    return self::chr_to_decimal($chr);
   }
 
   /**
@@ -1203,19 +1240,15 @@ final class UTF8
   }
 
   /**
-   * Get a UTF-8 character from its decimal code representation.
+   * Converts a int-value into an UTF-8 character.
    *
-   * @param int $code
+   * @param int $int
    *
    * @return string
    */
-  public static function decimal_to_chr($code)
+  public static function decimal_to_chr($int)
   {
-    return \mb_convert_encoding(
-        '&#x' . dechex($code) . ';',
-        'UTF-8',
-        'HTML-ENTITIES'
-    );
+    return self::html_decode('&#' . $int . ';');
   }
 
   /**
@@ -1938,21 +1971,33 @@ final class UTF8
   }
 
   /**
+   * Converts a hexadecimal-value into an UTF-8 character.
+   *
+   * @param string $hexdec <p>The hexadecimal value.</p>
+   *
+   * @return string|false <p>One single UTF-8 character.</p>
+   */
+  public static function hex_to_chr($hexdec)
+  {
+    return self::decimal_to_chr(hexdec($hexdec));
+  }
+
+  /**
    * Converts hexadecimal U+xxxx code point representation to integer.
    *
    * INFO: opposite to UTF8::int_to_hex()
    *
-   * @param string $str <p>The hexadecimal code point representation.</p>
+   * @param string $hexdec <p>The hexadecimal code point representation.</p>
    *
    * @return int|false <p>The code point, or false on failure.</p>
    */
-  public static function hex_to_int($str)
+  public static function hex_to_int($hexdec)
   {
-    if (!$str) {
+    if (!$hexdec) {
       return false;
     }
 
-    if (preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $str, $match)) {
+    if (preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $hexdec, $match)) {
       return intval($match[1], 16);
     }
 
@@ -2429,6 +2474,20 @@ final class UTF8
     }
 
     return $return;
+  }
+
+  /**
+   * alias for "UTF8::decimal_to_chr()"
+   *
+   * @see UTF8::decimal_to_chr()
+   *
+   * @param int $int
+   *
+   * @return string
+   */
+  public static function int_to_chr($int)
+  {
+    return self::decimal_to_chr($int);
   }
 
   /**
@@ -3743,6 +3802,7 @@ final class UTF8
 
     $save = \mb_substitute_character();
     \mb_substitute_character($unknownHelper);
+    /** @noinspection CallableParameterUseCaseInTypeContextInspection */
     $str = \mb_convert_encoding($str, 'UTF-8', 'UTF-8');
     \mb_substitute_character($save);
 
