@@ -1248,7 +1248,13 @@ final class UTF8
    */
   public static function decimal_to_chr($int)
   {
-    return self::html_decode('&#' . $int . ';');
+    if (Bootup::is_php('5.4') === true) {
+      $flags = ENT_QUOTES | ENT_HTML5;
+    } else {
+      $flags = ENT_QUOTES;
+    }
+
+    return self::html_entity_decode('&#' . $int . ';', $flags);
   }
 
   /**
@@ -6565,7 +6571,7 @@ final class UTF8
 
     // decode UTF-8 codepoints
     if ($decodeHtmlEntityToUtf8 === true) {
-      $buf = self::html_entity_decode($buf, ENT_QUOTES);
+      $buf = self::html_entity_decode($buf);
     }
 
     return $buf;

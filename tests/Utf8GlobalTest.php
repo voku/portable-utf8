@@ -1015,10 +1015,28 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&#d;'   => '&#d;',
         '&d;'    => '&d;',
         '&gt;'   => '>',
+        '&#39;'  => '\'',
     );
 
     foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO')), 'tested:' . $actual);
+      self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO'), ENT_QUOTES), 'tested:' . $actual);
+    }
+
+    // ---
+
+    $testArray = array(
+        '{-test' => '{-test',
+        'abc'    => 'abc',
+        ' '      => ' ',
+        ''       => '',
+        '&#d;'   => '&#d;',
+        '&d;'    => '&d;',
+        '&gt;'   => '>',
+        '&#39;'  => '&#39;',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO'), ENT_COMPAT), 'tested:' . $actual);
     }
   }
 
@@ -3830,10 +3848,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ''                             => '',
         "\n"                           => "\n",
         'test'                         => 'test',
-        'Here&#39;s some quoted text.' => 'Here\'s some quoted text.',
-        '&#39;'                        => '\'',
+        'Here&#39;s some quoted text.' => 'Here&#39;s some quoted text.',
+        '&#39;'                        => '&#39;',
         "\u0063\u0061\u0074"           => 'cat',
-        "\u0039&#39;\u0039"            => '9\'9',
+        "\u0039&#39;\u0039"            => '9&#39;9',
         '&#35;&#8419;'                 => '#⃣',
         "\xcf\x80"                     => 'π',
     );
@@ -4391,6 +4409,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testhtml_encode_chr()
   {
+    self::assertEquals('\'', UTF8::decimal_to_chr(39));
+    self::assertEquals('\'', UTF8::decimal_to_chr('39'));
     self::assertEquals('&', UTF8::decimal_to_chr(38));
     self::assertEquals('&', UTF8::decimal_to_chr('38'));
     self::assertEquals('<', UTF8::decimal_to_chr(60));
