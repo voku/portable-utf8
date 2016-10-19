@@ -1849,7 +1849,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     // test-string
-    $str = "Iñtërnâtiônàlizætiøn=測試&arr[]=foo+測試&arr[]=ການທົດສອບ";
+    $str = 'Iñtërnâtiônàlizætiøn=測試&arr[]=foo+測試&arr[]=ການທົດສອບ';
 
     $result = UTF8::parse_str($str, $array, false);
 
@@ -2524,7 +2524,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
         "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
         '<nav>中文空白 </nav>'                                                        => '中文空白 ',
-        "<span>κόσμε</span>-<span>öäü</span>öäü"                                  => '<span>κόσμε</span>-<span>öäü</span>öäü',
+        '<span>κόσμε</span>-<span>öäü</span>öäü'                                  => '<span>κόσμε</span>-<span>öäü</span>öäü',
     );
 
     foreach ($tests as $before => $after) {
