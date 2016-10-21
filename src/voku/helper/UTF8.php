@@ -3788,8 +3788,8 @@ final class UTF8
   /**
    * Replace the diamond question mark (�) with the replacement.
    *
-   * @param string $str
-   * @param string $unknown
+   * @param string $str <p>The input string</p>
+   * @param string $unknown <p>The replacement character.</p>
    *
    * @return string
    */
@@ -3804,6 +3804,10 @@ final class UTF8
     $unknownHelper = $unknown;
     if ($unknown === '') {
       $unknownHelper = 'none';
+    }
+
+    if (self::$support['mbstring'] === false) {
+      trigger_error('UTF8::replace_diamond_question_mark() without mbstring cannot handle all chars correctly', E_USER_WARNING);
     }
 
     $save = \mb_substitute_character();
@@ -4966,24 +4970,40 @@ final class UTF8
         $encoding !== 'UTF-8'
         &&
         self::$support['mbstring'] === false
+        &&
+        self::$support['iconv'] === false
     ) {
-      trigger_error('UTF8::strlen() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      trigger_error('UTF8::strlen() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (self::$support['mbstring'] === true) {
-      return \mb_strlen($str, $encoding);
-    }
-
-    if (self::$support['iconv'] === true) {
+    if (
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['iconv'] === true
+        &&
+        self::$support['mbstring'] === false
+    ) {
       $returnTmp = \iconv_strlen($str, $encoding);
       if ($returnTmp !== false) {
         return $returnTmp;
       }
     }
 
+    if (self::$support['mbstring'] === true) {
+      return \mb_strlen($str, $encoding);
+    }
+
     if (self::$support['intl'] === true) {
+      $str = self::clean($str);
       $returnTmp = \grapheme_strlen($str);
       if ($returnTmp !== null) {
+        return $returnTmp;
+      }
+    }
+
+    if (self::$support['iconv'] === true) {
+      $returnTmp = \iconv_strlen($str, $encoding);
+      if ($returnTmp !== false) {
         return $returnTmp;
       }
     }
@@ -5157,14 +5177,37 @@ final class UTF8
 
     if (
         $encoding !== 'UTF-8'
+        &
+        self::$support['iconv'] === true
         &&
         self::$support['mbstring'] === false
     ) {
-      trigger_error('UTF8::strpos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      trigger_error('UTF8::strpos() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (
+        $offset >= 0 // iconv_strpos() can't handle negative offset
+        &&
+        $encoding !== 'UTF-8'
+        &&
+        self::$support['mbstring'] === false
+        &&
+        self::$support['iconv'] === true
+    ) {
+      // ignore invalid negative offset to keep compatibility
+      // with php < 5.5.35, < 5.6.21, < 7.0.6
+      return \iconv_strpos($haystack, $needle, $offset > 0 ? $offset : 0, $encoding);
     }
 
     if (self::$support['mbstring'] === true) {
       return \mb_strpos($haystack, $needle, $offset, $encoding);
+    }
+
+    if (self::$support['intl'] === true) {
+      $returnTmp = \grapheme_strpos($haystack, $needle, $offset);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     if (
@@ -5175,13 +5218,6 @@ final class UTF8
       // ignore invalid negative offset to keep compatibility
       // with php < 5.5.35, < 5.6.21, < 7.0.6
       return \iconv_strpos($haystack, $needle, $offset > 0 ? $offset : 0, $encoding);
-    }
-
-    if (self::$support['intl'] === true) {
-      $returnTmp = \grapheme_strpos($haystack, $needle, $offset);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
     }
 
     // fallback via vanilla php
@@ -5378,7 +5414,7 @@ final class UTF8
 
     // fallback via vanilla php
 
-    return self::strrpos(self::strtoupper($haystack, $encoding), self::strtoupper($needle, $encoding), $offset, $encoding, $cleanUtf8);
+    return self::strrpos(self::strtonatfold($haystack), self::strtonatfold($needle), $offset, $encoding, $cleanUtf8);
   }
 
   /**
