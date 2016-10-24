@@ -3786,14 +3786,15 @@ final class UTF8
   }
 
   /**
-   * Replace the diamond question mark (�) with the replacement.
+   * Replace the diamond question mark (�) and invalid-UTF8 chars with the replacement.
    *
-   * @param string $str <p>The input string</p>
-   * @param string $unknown <p>The replacement character.</p>
+   * @param string $str                <p>The input string</p>
+   * @param string $replacementChar    <p>The replacement character.</p>
+   * @param bool   $processInvalidUtf8 <p>Convert invalid UTF-8 chars </p>
    *
    * @return string
    */
-  public static function replace_diamond_question_mark($str, $unknown = '?')
+  public static function replace_diamond_question_mark($str, $replacementChar = '', $processInvalidUtf8 = true)
   {
     $str = (string)$str;
 
@@ -3801,20 +3802,22 @@ final class UTF8
       return '';
     }
 
-    $unknownHelper = $unknown;
-    if ($unknown === '') {
-      $unknownHelper = 'none';
-    }
+    if ($processInvalidUtf8 === true) {
+      $replacementCharHelper = $replacementChar;
+      if ($replacementChar === '') {
+        $replacementCharHelper = 'none';
+      }
 
-    if (self::$support['mbstring'] === false) {
-      trigger_error('UTF8::replace_diamond_question_mark() without mbstring cannot handle all chars correctly', E_USER_WARNING);
-    }
+      if (self::$support['mbstring'] === false) {
+        trigger_error('UTF8::replace_diamond_question_mark() without mbstring cannot handle all chars correctly', E_USER_WARNING);
+      }
 
-    $save = \mb_substitute_character();
-    \mb_substitute_character($unknownHelper);
-    /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-    $str = \mb_convert_encoding($str, 'UTF-8', 'UTF-8');
-    \mb_substitute_character($save);
+      $save = \mb_substitute_character();
+      \mb_substitute_character($replacementCharHelper);
+      /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+      $str = \mb_convert_encoding($str, 'UTF-8', 'UTF-8');
+      \mb_substitute_character($save);
+    }
 
     return str_replace(
         array(
@@ -3822,8 +3825,8 @@ final class UTF8
             '�',
         ),
         array(
-            $unknown,
-            $unknown,
+            $replacementChar,
+            $replacementChar,
         ),
         $str
     );

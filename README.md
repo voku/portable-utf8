@@ -823,9 +823,9 @@ Remove invisible characters from a string.
 UTF8::remove_invisible_characters("κόσ\0με"); // 'κόσμε'
 ```
 
-##### replace_diamond_question_mark(string $str, string $unknown = '?') : string
+##### replace_diamond_question_mark(string $str, string $replacementChar = '', bool $processInvalidUtf8 = true) : string
 
-Replace the diamond question mark (�) with the replacement.
+Replace the diamond question mark (�) and invalid-UTF8 chars with the replacement.
 
 ```php
 UTF8::replace_diamond_question_mark('中文空白�', ''); // '中文空白'

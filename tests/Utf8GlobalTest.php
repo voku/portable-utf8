@@ -2091,6 +2091,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''), 'tested: ' . $before . ' | counter: ' . $counter);
       ++$counter;
     }
+
+    // ---
+
+    self::assertSame('Iñtërnâtiônàlizætiøn??Iñtërnâtiônàlizætiøn', UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', true));
+
+    // ---
+
+    self::assertSame("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', false));
   }
 
   public function testRtrim()
