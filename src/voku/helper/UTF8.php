@@ -3808,6 +3808,10 @@ final class UTF8
         $replacementCharHelper = 'none';
       }
 
+      if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+        self::checkForSupport();
+      }
+
       if (self::$support['mbstring'] === false) {
         trigger_error('UTF8::replace_diamond_question_mark() without mbstring cannot handle all chars correctly', E_USER_WARNING);
       }
