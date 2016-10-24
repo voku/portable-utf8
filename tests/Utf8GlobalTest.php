@@ -987,6 +987,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&#d;'                    => '&#d;',
         '&d;'                     => '&d;',
         '&gt;'                    => '>',
+        '%ABREPRESENT%C9%BB'      => '%ABREPRESENT%C9%BB',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -3850,6 +3851,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "\u0039&#39;\u0039"            => '9&#39;9',
         '&#35;&#8419;'                 => '&#35;&#8419;',
         "\xcf\x80"                     => 'π',
+        'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
+        '%ABREPRESENT%C9%BB. «REPRESENTÉ»' => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
     );
 
     foreach ($testArray as $before => $after) {
@@ -3872,6 +3875,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "\u0039&#39;\u0039"            => '9\'9',
         '&#35;&#8419;'                 => '#⃣',
         "\xcf\x80"                     => 'π',
+        'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
+        '%ABREPRESENT%C9%BB. «REPRESENTÉ»' => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
     );
 
     foreach ($testArray as $before => $after) {

@@ -1360,7 +1360,11 @@ UTF8::to_ascii('déjà σσς iıii'); // 'deja sss iiii'
 
 ##### to_utf8(string|string[] $str, bool $decodeHtmlEntityToUtf8 = false) : string|string[]
 
-This function leaves UTF8 characters alone, while converting almost all non-UTF8 to UTF8.
+This function leaves UTF-8 characters alone, while converting almost all non-UTF8 to UTF8.
+
+* It decode UTF-8 codepoints and unicode escape sequences.
+* It assumes that the encoding of the original string is either WINDOWS-1252 or ISO-8859-1.
+* WARNING: It does not remove invalid UTF-8 characters, so you maybe need to use "UTF8::clean()" for this case.
 
 alias: UTF8::toUtf8()
 
