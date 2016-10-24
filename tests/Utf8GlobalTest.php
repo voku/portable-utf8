@@ -2075,10 +2075,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'DÃ¼�sseldorf'                                                             => 'DÃ¼sseldorf',
         'Abcdef'                                                                   => 'Abcdef',
         "\xC0\x80foo|&#65533;"                                                     => 'foo|&#65533;',
+        "Iñtërnâtiôn\xe9àlizætiøn" => "Iñtërnâtiônàlizætiøn", // invalid UTF-8 string
+        "Iñtërnâtiônàlizætiøn\xfc\xa1\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn" => "IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn", // invalid six octet sequence
+        "Iñtërnâtiônàlizætiøn\xf0\x28\x8c\xbcIñtërnâtiônàlizætiøn" => "Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn", // invalid four octet sequence
+        "Iñtërnâtiônàlizætiøn \xc3\x28 Iñtërnâtiônàlizætiøn" => "Iñtërnâtiônàlizætiøn ( Iñtërnâtiônàlizætiøn", // invalid two octet sequence
+        "this is an invalid char '\xe9' here" => "this is an invalid char '' here", // invalid ASCII string
+        "Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn" => "IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn", // invalid id between two and three
+        "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn" => "IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn", //  invalid five octet sequence
+        "Iñtërnâtiônàlizætiøn\xe2\x82\x28Iñtërnâtiônàlizætiøn" => "Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn", // invalid three octet sequence third
+        "Iñtërnâtiônàlizætiøn\xe2\x28\xa1Iñtërnâtiônàlizætiøn" => "Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn", // invalid three octet sequence second
     );
 
+    $counter = 0;
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''));
+      self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''), 'tested: ' . $before . ' | counter: ' . $counter);
+      ++$counter;
     }
   }
 
