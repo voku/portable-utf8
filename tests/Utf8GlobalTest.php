@@ -2109,7 +2109,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
-    self::assertSame('Iñtërnâtiônàlizætiøn??Iñtërnâtiônàlizætiøn', UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', true));
+    if (Bootup::is_php('5.4')) { // invalid UTF-8 + PHP 5.3 => error
+      self::assertSame('Iñtërnâtiônàlizætiøn??Iñtërnâtiônàlizætiøn', UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', true));
+    }
 
     // ---
 
