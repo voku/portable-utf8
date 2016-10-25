@@ -2076,6 +2076,17 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'DÃ¼�sseldorf'                                                             => 'DÃ¼sseldorf',
         'Abcdef'                                                                   => 'Abcdef',
         "\xC0\x80foo|&#65533;"                                                     => 'foo|&#65533;',
+    );
+
+    $counter = 0;
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''), 'tested: ' . $before . ' | counter: ' . $counter);
+      ++$counter;
+    }
+
+    // ---
+
+    $tests = array(
         "Iñtërnâtiôn\xe9àlizætiøn" => 'Iñtërnâtiônàlizætiøn', // invalid UTF-8 string
         "Iñtërnâtiônàlizætiøn\xfc\xa1\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn" => 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn', // invalid six octet sequence
         "Iñtërnâtiônàlizætiøn\xf0\x28\x8c\xbcIñtërnâtiônàlizætiøn" => 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn', // invalid four octet sequence
@@ -2088,9 +2099,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     $counter = 0;
-    foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''), 'tested: ' . $before . ' | counter: ' . $counter);
-      ++$counter;
+
+    if (Bootup::is_php('5.4')) { // invalid UTF-8 + PHP 5.3 => error
+      foreach ($tests as $before => $after) {
+        self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''), 'tested: ' . $before . ' | counter: ' . $counter);
+        ++$counter;
+      }
     }
 
     // ---
