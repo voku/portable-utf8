@@ -4408,6 +4408,25 @@ final class UTF8
   }
 
   /**
+   * Replace the first "$search"-term with the "$replace"-term.
+   *
+   * @param string $search
+   * @param string $replace
+   * @param string $subject
+   *
+   * @return string
+   */
+  public static function str_replace_first($search, $replace, $subject) {
+    $pos = self::strpos($subject, $search);
+
+    if ($pos !== false) {
+      return self::substr_replace($subject, $replace, $pos, self::strlen($search));
+    }
+
+    return $subject;
+  }
+
+  /**
    * Shuffles all the characters in the string.
    *
    * @param string $str <p>The input string</p>
