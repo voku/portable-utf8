@@ -1,0 +1,1460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="bda2e245-1bf6-4556-86f6-3f7cea1d3b36" name="Default" comment="[+]: try to build the docs via">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.bookignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SUMMARY.md" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/book.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitattributes" afterPath="$PROJECT_DIR$/.gitattributes" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+    </list>
+    <ignored path="portable-utf8.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/portable-utf8$tests.coverage" NAME="tests Coverage Results" MODIFIED="1475771497764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="PhpCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+  <component name="CoverageOptionsProvider">
+    <option name="myAddOrReplace" value="0" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="D:\xampp\htdocs\portable-utf8" />
+  </component>
+  <component name="DatabaseView">
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="portable-utf8" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
+      <file leaf-file-name="UTF8.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/voku/helper/UTF8.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="25">
+              <caret line="4418" column="42" selection-start-line="4418" selection-start-column="25" selection-end-line="4418" selection-end-column="42" />
+              <folding>
+                <marker date="1478097053171" expanded="true" signature="43401:43649" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="43687:43787" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="43836:44019" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="44068:44251" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="45269:45501" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="45546:46268" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="46302:46526" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="46571:46689" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="47639:47717" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="47760:47925" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="47968:48139" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="48487:49780" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="48522:49780" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="51166:51288" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="51333:52085" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="52119:52343" ph="..." />
+                <marker date="1478097053171" expanded="true" signature="52388:52506" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="12" column="32" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".bookignore" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.bookignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="4" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="325">
+              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="book.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/book.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SUMMARY.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/SUMMARY.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="100">
+                <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+                <folding />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="standard_1.php" pinned="false" current-in-tab="false">
+        <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_1.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18625">
+              <caret line="745" column="39" selection-start-line="745" selection-start-column="39" selection-end-line="745" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="composer.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/composer.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="50">
+              <caret line="2" column="105" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="105" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="715">
+                <caret line="1367" column="0" selection-start-line="1367" selection-start-column="0" selection-end-line="1367" selection-end-column="0" />
+                <folding />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitattributes" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitattributes">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="to_ascii" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/bootstrap.php" />
+        <option value="$PROJECT_DIR$/phpunit.xml" />
+        <option value="$PROJECT_DIR$/tests/fixtures/sample-utf-32-be-bom.txt" />
+        <option value="$PROJECT_DIR$/tests/fixtures/sample-utf-32-le-bom.txt" />
+        <option value="$PROJECT_DIR$/tests/ZNormalizationTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8LtrimTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8RtrimTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8StrcasecmpTest.php" />
+        <option value="$PROJECT_DIR$/API.md" />
+        <option value="$PROJECT_DIR$/ISSUE_TEMPLATE.md" />
+        <option value="$PROJECT_DIR$/PULL_REQUEST_TEMPLATE.md" />
+        <option value="$PROJECT_DIR$/tests/Utf8StrTransliterateTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8StrIreplaceTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8StrWordwrapTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8SubstrReplaceTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8StrcspnTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8StrspnTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8StrSplitTest.php" />
+        <option value="$PROJECT_DIR$/tests/Utf8StrrposTest.php" />
+        <option value="$PROJECT_DIR$/tests/ShimMbstringTest.php" />
+        <option value="$PROJECT_DIR$/circle.yml" />
+        <option value="$PROJECT_DIR$/appveyor.yml" />
+        <option value="$PROJECT_DIR$/.styleci.yml" />
+        <option value="$PROJECT_DIR$/.scrutinizer.yml" />
+        <option value="$PROJECT_DIR$/CONTRIBUTING.md" />
+        <option value="$PROJECT_DIR$/vendor/symfony/polyfill/tests/Iconv/IconvTest.php" />
+        <option value="$PROJECT_DIR$/tests/ShimIconvTest.php" />
+        <option value="$PROJECT_DIR$/tests/BootupTest.php" />
+        <option value="$PROJECT_DIR$/tests/fixtures/utf-7.txt" />
+        <option value="$PROJECT_DIR$/tests/fixtures/euc-kr.txt" />
+        <option value="$PROJECT_DIR$/tests/fixtures/koi8-u.txt" />
+        <option value="$PROJECT_DIR$/tests/fixtures/latin.txt" />
+        <option value="$PROJECT_DIR$/tests/Utf8StrlenTest.php" />
+        <option value="$PROJECT_DIR$/tests/fixtures/textDebug.txt" />
+        <option value="$PROJECT_DIR$/tests/Utf8StristrTest.php" />
+        <option value="$PROJECT_DIR$/.travis.yml" />
+        <option value="$PROJECT_DIR$/src/voku/helper/Bootup.php" />
+        <option value="$PROJECT_DIR$/composer.json" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/tests/Utf8GlobalTest.php" />
+        <option value="$PROJECT_DIR$/src/voku/helper/UTF8.php" />
+        <option value="$PROJECT_DIR$/book.json" />
+        <option value="$PROJECT_DIR$/SUMMARY.md" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/.gitattributes" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+  </component>
+  <component name="PhpServers">
+    <servers />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="PHP 7" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-11" />
+    <option name="y" value="-11" />
+    <option name="width" value="1942" />
+    <option name="height" value="1042" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="portable-utf8" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="portable-utf8" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="portable-utf8" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
+    <property name="settings.editor.splitter.proportion" value="0.21052632" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="js-jscs-nodeInterpreter" value="D:\xampp\nodejs\node.exe" />
+    <property name="SearchEverywhereHistoryKey" value="testToUtf8_v2&#9;null&#9;null&#10;testIconv&#9;null&#9;null&#10;testmb_strstr&#9;null&#9;null&#10;testSubstrCount&#9;null&#9;null&#10;testmb_strpos_negative_offset&#9;null&#9;null&#10;REAM&#9;FILE&#9;file://D:/xampp/htdocs/portable-utf8/README.md&#10;testAsc&#9;null&#9;null&#10;testParseStr&#9;null&#9;null&#10;testStrwidth&#9;null&#9;null&#10;upper&#9;FILE&#9;file://D:/xampp/htdocs/portable-utf8/vendor/symfony/polyfill/src/Mbstring/Resources/unidata/upperCase.php&#10;test_linefeed&#9;null&#9;null&#10;est_compare_equal&#9;null&#9;null&#10;parse_str&#9;null&#9;null&#10;testToASC&#9;null&#9;null&#10;is_utf16&#9;null&#9;null&#10;ZNormalizationTest&#9;null&#9;null&#10;testNormalize&#9;null&#9;null&#10;testStrncmp&#9;null&#9;null" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\xampp\htdocs\portable-utf8" />
+      <recent name="D:\xampp\htdocs\portable-utf8\tests\fixtures" />
+    </key>
+  </component>
+  <component name="RunManager" selected="PHPUnit.Utf8GlobalTest">
+    <configuration default="false" name="tests" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner directory="$PROJECT_DIR$/tests" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Utf8GlobalTest.testHtmlEncode" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Utf8GlobalTest" file="$PROJECT_DIR$/tests/Utf8GlobalTest.php" method="testHtmlEncode" scope="Method" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Utf8GlobalTest.testReplaceDiamondQuestionMark" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Utf8GlobalTest" file="$PROJECT_DIR$/tests/Utf8GlobalTest.php" method="testReplaceDiamondQuestionMark" scope="Method" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Utf8GlobalTest.testToUtf8_v2" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Utf8GlobalTest" file="$PROJECT_DIR$/tests/Utf8GlobalTest.php" method="testToUtf8_v2" scope="Method" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Utf8GlobalTest" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <TestRunner class="Utf8GlobalTest" file="$PROJECT_DIR$/tests/Utf8GlobalTest.php" scope="Class" />
+      <method />
+    </configuration>
+    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="C:\Program Files\Git\usr\bin\bash.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" working-dir="">
+      <method />
+    </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
+      <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run-script" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <working-directory />
+      <pass-parent-env>true</pass-parent-env>
+      <envs />
+      <ui>bdd</ui>
+      <extra-mocha-options />
+      <test-kind>DIRECTORY</test-kind>
+      <test-directory />
+      <recursive>false</recursive>
+      <method />
+    </configuration>
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="PHPUnit.tests" />
+      <item index="1" class="java.lang.String" itemvalue="PHPUnit.Utf8GlobalTest.testHtmlEncode" />
+      <item index="2" class="java.lang.String" itemvalue="PHPUnit.Utf8GlobalTest.testReplaceDiamondQuestionMark" />
+      <item index="3" class="java.lang.String" itemvalue="PHPUnit.Utf8GlobalTest.testToUtf8_v2" />
+      <item index="4" class="java.lang.String" itemvalue="PHPUnit.Utf8GlobalTest" />
+    </list>
+    <recent_temporary>
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="PHPUnit.Utf8GlobalTest" />
+        <item index="1" class="java.lang.String" itemvalue="PHPUnit.Utf8GlobalTest.testHtmlEncode" />
+        <item index="2" class="java.lang.String" itemvalue="PHPUnit.Utf8GlobalTest.testToUtf8_v2" />
+        <item index="3" class="java.lang.String" itemvalue="PHPUnit.Utf8GlobalTest.testReplaceDiamondQuestionMark" />
+        <item index="4" class="java.lang.String" itemvalue="PHPUnit.tests" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bda2e245-1bf6-4556-86f6-3f7cea1d3b36" name="Default" comment="" />
+      <created>1464806096369</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1464806096369</updated>
+      <workItem from="1464806098515" duration="1566000" />
+      <workItem from="1464869928293" duration="917000" />
+      <workItem from="1464879840768" duration="28000" />
+      <workItem from="1464965354108" duration="609000" />
+      <workItem from="1465475663231" duration="459000" />
+      <workItem from="1465826592116" duration="424000" />
+      <workItem from="1465827489911" duration="192000" />
+      <workItem from="1465827877538" duration="631000" />
+      <workItem from="1465901641736" duration="1807000" />
+      <workItem from="1465907542489" duration="2550000" />
+      <workItem from="1465991617442" duration="1308000" />
+      <workItem from="1466008377027" duration="763000" />
+      <workItem from="1466013304092" duration="7470000" />
+      <workItem from="1466294124641" duration="5867000" />
+      <workItem from="1466303773049" duration="1806000" />
+      <workItem from="1466434820972" duration="1897000" />
+      <workItem from="1466519676935" duration="7481000" />
+      <workItem from="1466605216262" duration="11892000" />
+      <workItem from="1466631806251" duration="2650000" />
+      <workItem from="1466667669226" duration="1006000" />
+      <workItem from="1466687451283" duration="1823000" />
+      <workItem from="1466703206589" duration="16427000" />
+      <workItem from="1466976390447" duration="21000" />
+      <workItem from="1467113015597" duration="2125000" />
+      <workItem from="1467196994158" duration="2129000" />
+      <workItem from="1467227149270" duration="159000" />
+      <workItem from="1467239783645" duration="3216000" />
+      <workItem from="1467291083457" duration="42000" />
+      <workItem from="1467304997381" duration="630000" />
+      <workItem from="1467313982252" duration="740000" />
+      <workItem from="1467356526202" duration="3976000" />
+      <workItem from="1467441082389" duration="596000" />
+      <workItem from="1467628820988" duration="1162000" />
+      <workItem from="1467763242353" duration="599000" />
+      <workItem from="1467770157559" duration="755000" />
+      <workItem from="1467996210702" duration="598000" />
+      <workItem from="1467997218976" duration="1044000" />
+      <workItem from="1468303641011" duration="4316000" />
+      <workItem from="1468863734928" duration="7288000" />
+      <workItem from="1468964418882" duration="21820000" />
+      <workItem from="1469030826934" duration="11758000" />
+      <workItem from="1469094289816" duration="11750000" />
+      <workItem from="1469207666293" duration="19718000" />
+      <workItem from="1469309231330" duration="4472000" />
+      <workItem from="1469343405188" duration="1584000" />
+      <workItem from="1469368102158" duration="1036000" />
+      <workItem from="1469382816562" duration="1247000" />
+      <workItem from="1469391268778" duration="1413000" />
+      <workItem from="1469431576390" duration="873000" />
+      <workItem from="1469465302458" duration="5789000" />
+      <workItem from="1469573854068" duration="4408000" />
+      <workItem from="1469640592860" duration="6158000" />
+      <workItem from="1470176849409" duration="10074000" />
+      <workItem from="1470293054061" duration="7961000" />
+      <workItem from="1470331722403" duration="11183000" />
+      <workItem from="1470642707632" duration="19355000" />
+      <workItem from="1470850352757" duration="26491000" />
+      <workItem from="1471002385002" duration="791000" />
+      <workItem from="1471005234896" duration="595000" />
+      <workItem from="1471024866839" duration="408000" />
+      <workItem from="1471048422553" duration="3030000" />
+      <workItem from="1471242897176" duration="1876000" />
+      <workItem from="1471255308042" duration="1730000" />
+      <workItem from="1471422040358" duration="3450000" />
+      <workItem from="1471555923660" duration="352000" />
+      <workItem from="1471605900981" duration="162000" />
+      <workItem from="1471788184812" duration="5535000" />
+      <workItem from="1471798647834" duration="3090000" />
+      <workItem from="1471802340678" duration="443000" />
+      <workItem from="1471803386451" duration="139000" />
+      <workItem from="1471847374684" duration="687000" />
+      <workItem from="1472394768010" duration="3046000" />
+      <workItem from="1472403331045" duration="663000" />
+      <workItem from="1472412362664" duration="2286000" />
+      <workItem from="1473092238365" duration="1508000" />
+      <workItem from="1473095625885" duration="478000" />
+      <workItem from="1473096116269" duration="6282000" />
+      <workItem from="1473183326137" duration="10171000" />
+      <workItem from="1473274637788" duration="3465000" />
+      <workItem from="1473409927442" duration="11560000" />
+      <workItem from="1473838552585" duration="3427000" />
+      <workItem from="1474009009427" duration="597000" />
+      <workItem from="1474011634924" duration="3906000" />
+      <workItem from="1474135438781" duration="1633000" />
+      <workItem from="1474148914629" duration="1836000" />
+      <workItem from="1474192553532" duration="598000" />
+      <workItem from="1474203354539" duration="5455000" />
+      <workItem from="1474527367808" duration="7465000" />
+      <workItem from="1474665208169" duration="585000" />
+      <workItem from="1474745489565" duration="754000" />
+      <workItem from="1474764648474" duration="1625000" />
+      <workItem from="1474792075190" duration="198000" />
+      <workItem from="1474836612756" duration="622000" />
+      <workItem from="1474875847847" duration="1290000" />
+      <workItem from="1474885054535" duration="613000" />
+      <workItem from="1474896267718" duration="1278000" />
+      <workItem from="1474955441124" duration="7260000" />
+      <workItem from="1474967482700" duration="36000" />
+      <workItem from="1474967544792" duration="639000" />
+      <workItem from="1474972610713" duration="53000" />
+      <workItem from="1474982696322" duration="1341000" />
+      <workItem from="1475168492606" duration="924000" />
+      <workItem from="1475264573060" duration="1161000" />
+      <workItem from="1475355074420" duration="12736000" />
+      <workItem from="1475426131156" duration="2638000" />
+      <workItem from="1475430615906" duration="3598000" />
+      <workItem from="1475476983482" duration="4941000" />
+      <workItem from="1475589112796" duration="4961000" />
+      <workItem from="1475601676511" duration="1185000" />
+      <workItem from="1475678866585" duration="1229000" />
+      <workItem from="1475687014768" duration="1774000" />
+      <workItem from="1475757051712" duration="690000" />
+      <workItem from="1475770958824" duration="8692000" />
+      <workItem from="1475849531077" duration="646000" />
+      <workItem from="1475858220808" duration="19086000" />
+      <workItem from="1476000993625" duration="10025000" />
+      <workItem from="1476105000730" duration="1261000" />
+      <workItem from="1476118097845" duration="9231000" />
+      <workItem from="1476206139452" duration="4520000" />
+      <workItem from="1476267468768" duration="1839000" />
+      <workItem from="1476289651575" duration="1299000" />
+      <workItem from="1476342816519" duration="2775000" />
+      <workItem from="1476364699908" duration="4206000" />
+      <workItem from="1476390129693" duration="3701000" />
+      <workItem from="1476433645826" duration="1905000" />
+      <workItem from="1476520365517" duration="4420000" />
+      <workItem from="1476576913095" duration="2335000" />
+      <workItem from="1476737158043" duration="982000" />
+      <workItem from="1476743765731" duration="150000" />
+      <workItem from="1476776776868" duration="1601000" />
+      <workItem from="1476785069088" duration="26000" />
+      <workItem from="1476785143264" duration="3142000" />
+      <workItem from="1476795721514" duration="5059000" />
+      <workItem from="1476857256711" duration="10638000" />
+      <workItem from="1476893819111" duration="3584000" />
+      <workItem from="1476950927058" duration="717000" />
+      <workItem from="1476984500111" duration="5017000" />
+      <workItem from="1477066983376" duration="1591000" />
+      <workItem from="1477210040990" duration="1155000" />
+      <workItem from="1477301286086" duration="2251000" />
+      <workItem from="1477325788567" duration="519000" />
+      <workItem from="1477327953862" duration="3478000" />
+      <workItem from="1477392916184" duration="1428000" />
+      <workItem from="1477400805687" duration="3085000" />
+      <workItem from="1478012575830" duration="698000" />
+      <workItem from="1478092278633" duration="363000" />
+      <workItem from="1478096840280" duration="883000" />
+      <workItem from="1478391231758" duration="1225000" />
+    </task>
+    <task id="LOCAL-00153" summary="[+]: travis-ci -&gt; edit for hhvm 3.6">
+      <created>1475569013389</created>
+      <option name="number" value="00153" />
+      <option name="presentableId" value="LOCAL-00153" />
+      <option name="project" value="LOCAL" />
+      <updated>1475569013389</updated>
+    </task>
+    <task id="LOCAL-00154" summary="[!]: don't mix &quot;urldecode()&quot; and &quot;rawurldecode()&quot;&#10;&#10;WARNING: urldecode decodes + as spaces while rawurldecode dosn't decode it ...&#10;">
+      <created>1475592337541</created>
+      <option name="number" value="00154" />
+      <option name="presentableId" value="LOCAL-00154" />
+      <option name="project" value="LOCAL" />
+      <updated>1475592337541</updated>
+    </task>
+    <task id="LOCAL-00155" summary="[!]: don't mix &quot;urldecode()&quot; and &quot;rawurldecode()&quot; v2&#10;&#10;WARNING: urldecode decodes + as spaces while rawurldecode dosn't decode it ...&#10;">
+      <created>1475596528791</created>
+      <option name="number" value="00155" />
+      <option name="presentableId" value="LOCAL-00155" />
+      <option name="project" value="LOCAL" />
+      <updated>1475596528791</updated>
+    </task>
+    <task id="LOCAL-00156" summary="[+]: add more tests for &quot;UTF8::encode()&quot;">
+      <created>1475772196779</created>
+      <option name="number" value="00156" />
+      <option name="presentableId" value="LOCAL-00156" />
+      <option name="project" value="LOCAL" />
+      <updated>1475772196779</updated>
+    </task>
+    <task id="LOCAL-00157" summary="[+]: add more tests for &quot;UTF8::getCharDirection()&quot;">
+      <created>1475772459216</created>
+      <option name="number" value="00157" />
+      <option name="presentableId" value="LOCAL-00157" />
+      <option name="project" value="LOCAL" />
+      <updated>1475772459216</updated>
+    </task>
+    <task id="LOCAL-00158" summary="[+]: add more tests for &quot;UTF8::getCharDirection()&quot; v2">
+      <created>1475772899935</created>
+      <option name="number" value="00158" />
+      <option name="presentableId" value="LOCAL-00158" />
+      <option name="project" value="LOCAL" />
+      <updated>1475772899935</updated>
+    </task>
+    <task id="LOCAL-00159" summary="[+]: add more tests for &quot;UTF8::htmlspecialchars()&quot;">
+      <created>1475773188632</created>
+      <option name="number" value="00159" />
+      <option name="presentableId" value="LOCAL-00159" />
+      <option name="project" value="LOCAL" />
+      <updated>1475773188632</updated>
+    </task>
+    <task id="LOCAL-00160" summary="[+]: add more tests for &quot;UTF8::int_to_hex()&quot;">
+      <created>1475773419763</created>
+      <option name="number" value="00160" />
+      <option name="presentableId" value="LOCAL-00160" />
+      <option name="project" value="LOCAL" />
+      <updated>1475773419763</updated>
+    </task>
+    <task id="LOCAL-00161" summary="[+]: add more tests for &quot;UTF8::is_bom()&quot;">
+      <created>1475823195618</created>
+      <option name="number" value="00161" />
+      <option name="presentableId" value="LOCAL-00161" />
+      <option name="project" value="LOCAL" />
+      <updated>1475823195618</updated>
+    </task>
+    <task id="LOCAL-00162" summary="[+]: add more tests for &quot;UTF8::getCharDirection()&quot;">
+      <created>1475833797173</created>
+      <option name="number" value="00162" />
+      <option name="presentableId" value="LOCAL-00162" />
+      <option name="project" value="LOCAL" />
+      <updated>1475833797173</updated>
+    </task>
+    <task id="LOCAL-00163" summary="[+]: fix tests for &quot;UTF8::chr()&quot;">
+      <created>1475834346724</created>
+      <option name="number" value="00163" />
+      <option name="presentableId" value="LOCAL-00163" />
+      <option name="project" value="LOCAL" />
+      <updated>1475834346724</updated>
+    </task>
+    <task id="LOCAL-00164" summary="[+]: fix tests for &quot;UTF8::chr()&quot; v2">
+      <created>1475834460295</created>
+      <option name="number" value="00164" />
+      <option name="presentableId" value="LOCAL-00164" />
+      <option name="project" value="LOCAL" />
+      <updated>1475834460295</updated>
+    </task>
+    <task id="LOCAL-00165" summary="[+]: fix &quot;UTF8:html_encode()&quot; / &quot;UTF8::html_entity_decode()&quot;&quot;&#10;[~]: optimize usage of &quot;implode()&quot;&#10;[+]: optimize &quot;UTF8::ltrim()&quot; / UTF8::rtrim&#10;[+]: add more tests">
+      <created>1475964013148</created>
+      <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
+      <option name="project" value="LOCAL" />
+      <updated>1475964013149</updated>
+    </task>
+    <task id="LOCAL-00166" summary="[+]: try to use installed extensions early, then try an fallback or the polyfill &#10;[+]: add more tests">
+      <created>1475974116101</created>
+      <option name="number" value="00166" />
+      <option name="presentableId" value="LOCAL-00166" />
+      <option name="project" value="LOCAL" />
+      <updated>1475974116101</updated>
+    </task>
+    <task id="LOCAL-00167" summary="[+]: try to use installed extensions early, then try an fallback or the polyfill v2">
+      <created>1475975412298</created>
+      <option name="number" value="00167" />
+      <option name="presentableId" value="LOCAL-00167" />
+      <option name="project" value="LOCAL" />
+      <updated>1475975412298</updated>
+    </task>
+    <task id="LOCAL-00168" summary="[~]: fix code-style by PhpStorm">
+      <created>1476001255171</created>
+      <option name="number" value="00168" />
+      <option name="presentableId" value="LOCAL-00168" />
+      <option name="project" value="LOCAL" />
+      <updated>1476001255187</updated>
+    </task>
+    <task id="LOCAL-00169" summary="[!]: add warnings for missing polyfills">
+      <created>1476043159672</created>
+      <option name="number" value="00169" />
+      <option name="presentableId" value="LOCAL-00169" />
+      <option name="project" value="LOCAL" />
+      <updated>1476043159672</updated>
+    </task>
+    <task id="LOCAL-00170" summary="[!]: add warnings for missing polyfills v2">
+      <created>1476096575025</created>
+      <option name="number" value="00170" />
+      <option name="presentableId" value="LOCAL-00170" />
+      <option name="project" value="LOCAL" />
+      <updated>1476096575025</updated>
+    </task>
+    <task id="LOCAL-00171" summary="[+]: use &quot;UTF8::strtoupper()&quot; for &quot;UTF8::strripos()&quot;&#10;&#10;-&gt; fix error with lower-case in word-final position">
+      <created>1476119945971</created>
+      <option name="number" value="00171" />
+      <option name="presentableId" value="LOCAL-00171" />
+      <option name="project" value="LOCAL" />
+      <updated>1476119945971</updated>
+    </task>
+    <task id="LOCAL-00172" summary="[+]: try to fix &quot;travis-ci&quot; tests with missing php-extensions">
+      <created>1476165479916</created>
+      <option name="number" value="00172" />
+      <option name="presentableId" value="LOCAL-00172" />
+      <option name="project" value="LOCAL" />
+      <updated>1476165479916</updated>
+    </task>
+    <task id="LOCAL-00173" summary="[+]: add test for issue #47">
+      <created>1476167453022</created>
+      <option name="number" value="00173" />
+      <option name="presentableId" value="LOCAL-00173" />
+      <option name="project" value="LOCAL" />
+      <updated>1476167453022</updated>
+    </task>
+    <task id="LOCAL-00174" summary="[+]: try to fix &quot;travis-ci&quot; tests with missing php-extensions v2">
+      <created>1476168279793</created>
+      <option name="number" value="00174" />
+      <option name="presentableId" value="LOCAL-00174" />
+      <option name="project" value="LOCAL" />
+      <updated>1476168279793</updated>
+    </task>
+    <task id="LOCAL-00175" summary="[+]: try to fix &quot;travis-ci&quot; tests with missing php-extensions v3">
+      <created>1476170352668</created>
+      <option name="number" value="00175" />
+      <option name="presentableId" value="LOCAL-00175" />
+      <option name="project" value="LOCAL" />
+      <updated>1476170352668</updated>
+    </task>
+    <task id="LOCAL-00176" summary="[+]: try to improve Travis CI builds &#10;&#10;-&gt; http://raphaelstolt.blogspot.de/2016/10/eight-knobs-to-adjust-and-improve-your.html">
+      <created>1476171067734</created>
+      <option name="number" value="00176" />
+      <option name="presentableId" value="LOCAL-00176" />
+      <option name="project" value="LOCAL" />
+      <updated>1476171067734</updated>
+    </task>
+    <task id="LOCAL-00177" summary="[+]: fix php-warnings">
+      <created>1476215833757</created>
+      <option name="number" value="00177" />
+      <option name="presentableId" value="LOCAL-00177" />
+      <option name="project" value="LOCAL" />
+      <updated>1476215833757</updated>
+    </task>
+    <task id="LOCAL-00178" summary="[+]: add some more tests">
+      <created>1476217224014</created>
+      <option name="number" value="00178" />
+      <option name="presentableId" value="LOCAL-00178" />
+      <option name="project" value="LOCAL" />
+      <updated>1476217224014</updated>
+    </task>
+    <task id="LOCAL-00179" summary="[+]: optimize &quot;UTF8::stristr()&quot;">
+      <created>1476289877319</created>
+      <option name="number" value="00179" />
+      <option name="presentableId" value="LOCAL-00179" />
+      <option name="project" value="LOCAL" />
+      <updated>1476289877334</updated>
+    </task>
+    <task id="LOCAL-00180" summary="[+]: fix php-warnings v2">
+      <created>1476345682637</created>
+      <option name="number" value="00180" />
+      <option name="presentableId" value="LOCAL-00180" />
+      <option name="project" value="LOCAL" />
+      <updated>1476345682637</updated>
+    </task>
+    <task id="LOCAL-00181" summary="[+]: add &quot;UTF8::str_to_words()&quot; + doc +tests">
+      <created>1476371166878</created>
+      <option name="number" value="00181" />
+      <option name="presentableId" value="LOCAL-00181" />
+      <option name="project" value="LOCAL" />
+      <updated>1476371166878</updated>
+    </task>
+    <task id="LOCAL-00182" summary="[-]: &quot;phpdox&quot; isn't used anymore">
+      <created>1476443017620</created>
+      <option name="number" value="00182" />
+      <option name="presentableId" value="LOCAL-00182" />
+      <option name="project" value="LOCAL" />
+      <updated>1476443017620</updated>
+    </task>
+    <task id="LOCAL-00183" summary="[*]: try to optimize travis-ci build&#10;&#10;-&gt; &quot;phpenv config-add mbstring.ini&quot; dosn't work ?">
+      <created>1476522476909</created>
+      <option name="number" value="00183" />
+      <option name="presentableId" value="LOCAL-00183" />
+      <option name="project" value="LOCAL" />
+      <updated>1476522476909</updated>
+    </task>
+    <task id="LOCAL-00184" summary="[*]: try to optimize travis-ci build v2&#10;&#10;-&gt; &quot;phpenv config-add mbstring.ini&quot; dosn't work ?">
+      <created>1476523082482</created>
+      <option name="number" value="00184" />
+      <option name="presentableId" value="LOCAL-00184" />
+      <option name="project" value="LOCAL" />
+      <updated>1476523082482</updated>
+    </task>
+    <task id="LOCAL-00185" summary="[*]: try to optimize travis-ci build v3&#10;&#10;-&gt; &quot;phpenv config-add mbstring.ini&quot; dosn't work ?">
+      <created>1476523563061</created>
+      <option name="number" value="00185" />
+      <option name="presentableId" value="LOCAL-00185" />
+      <option name="project" value="LOCAL" />
+      <updated>1476523563061</updated>
+    </task>
+    <task id="LOCAL-00186" summary="[+]: add one more test">
+      <created>1476738026165</created>
+      <option name="number" value="00186" />
+      <option name="presentableId" value="LOCAL-00186" />
+      <option name="project" value="LOCAL" />
+      <updated>1476738026165</updated>
+    </task>
+    <task id="LOCAL-00187" summary="[!]: add new default parameter for &quot;UTF8::to_utf8()&quot; / $decodeHtmlEntityToUtf8&#10;[+]: optimize &quot;UTF8::clean()&quot;&#10;&#10;-&gt; so this is a breaking change [!], because &quot;to_utf8()&quot; also decoded html-entities in the past (via &quot;UTF8::html_entity_decode()&quot;)">
+      <created>1476786643155</created>
+      <option name="number" value="00187" />
+      <option name="presentableId" value="LOCAL-00187" />
+      <option name="project" value="LOCAL" />
+      <updated>1476786643157</updated>
+    </task>
+    <task id="LOCAL-00188" summary="[!]: add new parameter for &quot;UTF8::strip_tags()&quot; / &quot;UTF8::parse_str()&quot; -&gt; $cleanUtf8 = false&#10;&#10;-&gt; so now you have the ability to clean the input by the parameter or you can use your own implementation&#10;&#10;-&gt; I changed the behavior, because of the performance and the api-consistence of the class. All &quot;$cleanUtf8&quot;-parameter are &quot;false&quot; by default and you can use it if needed">
+      <created>1476811761723</created>
+      <option name="number" value="00188" />
+      <option name="presentableId" value="LOCAL-00188" />
+      <option name="project" value="LOCAL" />
+      <updated>1476811761723</updated>
+    </task>
+    <task id="LOCAL-00189" summary="[~]: refactoring hints, reported by PhpStorm">
+      <created>1476813376494</created>
+      <option name="number" value="00189" />
+      <option name="presentableId" value="LOCAL-00189" />
+      <option name="project" value="LOCAL" />
+      <updated>1476813376494</updated>
+    </task>
+    <task id="LOCAL-00190" summary="[+]: add more &quot;character&quot;-converting methods&#10;&#10;-&gt; UTF8::hex_to_chr()&#10;-&gt; UTF8::decimal_to_chr()">
+      <created>1476863368643</created>
+      <option name="number" value="00190" />
+      <option name="presentableId" value="LOCAL-00190" />
+      <option name="project" value="LOCAL" />
+      <updated>1476863368644</updated>
+    </task>
+    <task id="LOCAL-00191" summary="[+]: add more &quot;character&quot;-converting methods v2&#10;&#10;-&gt; UTF8::hex_to_chr()&#10;-&gt; UTF8::decimal_to_chr()">
+      <created>1476869773407</created>
+      <option name="number" value="00191" />
+      <option name="presentableId" value="LOCAL-00191" />
+      <option name="project" value="LOCAL" />
+      <updated>1476869773407</updated>
+    </task>
+    <task id="LOCAL-00192" summary="[+]: add more &quot;character&quot;-converting methods v2.1&#10;&#10;-&gt; UTF8::hex_to_chr()&#10;-&gt; UTF8::decimal_to_chr()">
+      <created>1476870636285</created>
+      <option name="number" value="00192" />
+      <option name="presentableId" value="LOCAL-00192" />
+      <option name="project" value="LOCAL" />
+      <updated>1476870636285</updated>
+    </task>
+    <task id="LOCAL-00193" summary="[+]: add some more fallbacks (without mbstring)">
+      <created>1477035587098</created>
+      <option name="number" value="00193" />
+      <option name="presentableId" value="LOCAL-00193" />
+      <option name="project" value="LOCAL" />
+      <updated>1477035587098</updated>
+    </task>
+    <task id="LOCAL-00194" summary="[+]: add some more tests">
+      <created>1477302141969</created>
+      <option name="number" value="00194" />
+      <option name="presentableId" value="LOCAL-00194" />
+      <option name="project" value="LOCAL" />
+      <updated>1477302141969</updated>
+    </task>
+    <task id="LOCAL-00195" summary="[+]: add some more tests v2">
+      <created>1477302850463</created>
+      <option name="number" value="00195" />
+      <option name="presentableId" value="LOCAL-00195" />
+      <option name="project" value="LOCAL" />
+      <updated>1477302850463</updated>
+    </task>
+    <task id="LOCAL-00196" summary="[+]: fix php-notice">
+      <created>1477325848400</created>
+      <option name="number" value="00196" />
+      <option name="presentableId" value="LOCAL-00196" />
+      <option name="project" value="LOCAL" />
+      <updated>1477325848400</updated>
+    </task>
+    <task id="LOCAL-00197" summary="[*]: fix branch-alias">
+      <created>1477328081963</created>
+      <option name="number" value="00197" />
+      <option name="presentableId" value="LOCAL-00197" />
+      <option name="project" value="LOCAL" />
+      <updated>1477328081967</updated>
+    </task>
+    <task id="LOCAL-00198" summary="[*]: fix doc from &quot;UTF8::to_utf8()&quot;">
+      <created>1477336930520</created>
+      <option name="number" value="00198" />
+      <option name="presentableId" value="LOCAL-00198" />
+      <option name="project" value="LOCAL" />
+      <updated>1477336930520</updated>
+    </task>
+    <task id="LOCAL-00199" summary="[+]: PHP 5.3 + invalid UTF-8 =&gt; error">
+      <created>1477400512274</created>
+      <option name="number" value="00199" />
+      <option name="presentableId" value="LOCAL-00199" />
+      <option name="project" value="LOCAL" />
+      <updated>1477400512274</updated>
+    </task>
+    <task id="LOCAL-00200" summary="[+]: PHP 5.3 + invalid UTF-8 =&gt; error v2">
+      <created>1477401947370</created>
+      <option name="number" value="00200" />
+      <option name="presentableId" value="LOCAL-00200" />
+      <option name="project" value="LOCAL" />
+      <updated>1477401947371</updated>
+    </task>
+    <task id="LOCAL-00201" summary="[+]: add &quot;UTF8::str_replace_first()&quot;">
+      <created>1478097113599</created>
+      <option name="number" value="00201" />
+      <option name="presentableId" value="LOCAL-00201" />
+      <option name="project" value="LOCAL" />
+      <updated>1478097113599</updated>
+    </task>
+    <option name="localTasksCounter" value="202" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Utf8GlobalTest - 2016.10.25 at 14h 55m 22s.xml">
+      <configuration name="Utf8GlobalTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Utf8GlobalTest - 2016.10.25 at 14h 56m 01s.xml">
+      <configuration name="Utf8GlobalTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Utf8GlobalTest - 2016.10.25 at 14h 56m 36s.xml">
+      <configuration name="Utf8GlobalTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Utf8GlobalTest - 2016.10.25 at 14h 56m 48s.xml">
+      <configuration name="Utf8GlobalTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Utf8GlobalTest - 2016.10.25 at 14h 57m 23s.xml">
+      <configuration name="Utf8GlobalTest" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Utf8GlobalTest_testToUtf8_v2 - 2016.10.24 at 19h 35m 56s.xml">
+      <configuration name="Utf8GlobalTest.testToUtf8_v2" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Utf8GlobalTest_testToUtf8_v2 - 2016.10.24 at 19h 36m 16s.xml">
+      <configuration name="Utf8GlobalTest.testToUtf8_v2" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Utf8GlobalTest_testToUtf8_v2 - 2016.10.24 at 19h 36m 37s.xml">
+      <configuration name="Utf8GlobalTest.testToUtf8_v2" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Utf8GlobalTest_testToUtf8_v2 - 2016.10.24 at 19h 36m 46s.xml">
+      <configuration name="Utf8GlobalTest.testToUtf8_v2" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="tests - 2016.10.24 at 11h 53m 01s.xml">
+      <configuration name="tests" configurationId="PHPUnitRunConfigurationType" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="528387000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-11" y="-11" width="1942" height="1042" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19567567" sideWeight="0.4903581" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936978" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32968238" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3959572" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6575505" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16594595" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.7348395" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13189189" sideWeight="0.5096419" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20864865" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="89" y="89" width="1724" height="842" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3650416" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39840183" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936978" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20906113" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="89" y="89" width="1724" height="842" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6575505" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.49702734" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.65398335" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13755459" sideWeight="0.4903581" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32972974" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3959572" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16630316" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13189189" sideWeight="0.5096419" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39952436" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="[+]: try to improve Travis CI builds &#10;&#10;-&gt; http://raphaelstolt.blogspot.de/2016/10/eight-knobs-to-adjust-and-improve-your.html" />
+    <MESSAGE value="[+]: fix php-warnings" />
+    <MESSAGE value="[+]: optimize &quot;UTF8::stristr()&quot;" />
+    <MESSAGE value="[+]: fix php-warnings v2" />
+    <MESSAGE value="[+]: add &quot;UTF8::str_to_words()&quot; + doc +tests" />
+    <MESSAGE value="[-]: &quot;phpdox&quot; isn't used anymore" />
+    <MESSAGE value="[*]: try to optimize travis-ci build&#10;&#10;-&gt; &quot;phpenv config-add mbstring.ini&quot; dosn't work ?" />
+    <MESSAGE value="[*]: try to optimize travis-ci build v2&#10;&#10;-&gt; &quot;phpenv config-add mbstring.ini&quot; dosn't work ?" />
+    <MESSAGE value="[*]: try to optimize travis-ci build v3&#10;&#10;-&gt; &quot;phpenv config-add mbstring.ini&quot; dosn't work ?" />
+    <MESSAGE value="[+]: add one more test" />
+    <MESSAGE value="[!]: add new default parameter for &quot;UTF8::to_utf8()&quot; / $decodeHtmlEntityToUtf8&#10;[+]: optimize &quot;UTF8::clean()&quot;&#10;&#10;-&gt; so this is a breaking change [!], because &quot;to_utf8()&quot; also decoded html-entities in the past (via &quot;UTF8::html_entity_decode()&quot;)" />
+    <MESSAGE value="[!]: add new parameter for &quot;UTF8::strip_tags()&quot; / &quot;UTF8::parse_str()&quot; -&gt; $cleanUtf8 = false&#10;&#10;-&gt; so now you have the ability to clean the input by the parameter or you can use your own implementation&#10;&#10;-&gt; I changed the behavior, because of the performance and the api-consistence of the class. All &quot;$cleanUtf8&quot;-parameter are &quot;false&quot; by default and you can use it if needed" />
+    <MESSAGE value="[~]: refactoring hints, reported by PhpStorm" />
+    <MESSAGE value="[+]: add more &quot;character&quot;-converting methods&#10;&#10;-&gt; UTF8::hex_to_chr()&#10;-&gt; UTF8::decimal_to_chr()" />
+    <MESSAGE value="[+]: add more &quot;character&quot;-converting methods v2&#10;&#10;-&gt; UTF8::hex_to_chr()&#10;-&gt; UTF8::decimal_to_chr()" />
+    <MESSAGE value="[+]: add more &quot;character&quot;-converting methods v2.1&#10;&#10;-&gt; UTF8::hex_to_chr()&#10;-&gt; UTF8::decimal_to_chr()" />
+    <MESSAGE value="[+]: add some more fallbacks (without mbstring)" />
+    <MESSAGE value="[+]: add some more tests" />
+    <MESSAGE value="[+]: add some more tests v2" />
+    <MESSAGE value="[+]: fix php-notice" />
+    <MESSAGE value="[*]: fix branch-alias" />
+    <MESSAGE value="[*]: fix doc from &quot;UTF8::to_utf8()&quot;" />
+    <MESSAGE value="[+]: PHP 5.3 + invalid UTF-8 =&gt; error" />
+    <MESSAGE value="[+]: PHP 5.3 + invalid UTF-8 =&gt; error v2" />
+    <MESSAGE value="[+]: add &quot;UTF8::str_replace_first()&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+]: add &quot;UTF8::str_replace_first()&quot;" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="22" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/voku/helper/data/x8f.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/voku/helper/data/x74.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8ToAsciiTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1050">
+          <caret line="42" column="15" selection-start-line="42" selection-start-column="15" selection-end-line="42" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/appveyor.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="10" column="26" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8LtrimTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="825">
+          <caret line="33" column="45" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/polyfill/tests/Iconv/IconvTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="32" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/fixtures/cp1251.txt" />
+    <entry file="file://$PROJECT_DIR$/tests/fixtures/euc-kr.txt" />
+    <entry file="file://$PROJECT_DIR$/tests/fixtures/koi8-u.txt" />
+    <entry file="file://$PROJECT_DIR$/tests/fixtures/latin.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="6" column="29" selection-start-line="6" selection-start-column="29" selection-end-line="6" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/filter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3050">
+          <caret line="122" column="0" selection-start-line="122" selection-start-column="0" selection-end-line="148" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/fixtures/sample-utf-32-le-bom-only.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/BootupTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2600">
+          <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/ShimIconvTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1150">
+          <caret line="46" column="35" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_0.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9325">
+          <caret line="373" column="3" selection-start-line="373" selection-start-column="3" selection-end-line="373" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/IntlChar.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20650">
+          <caret line="826" column="74" selection-start-line="826" selection-start-column="68" selection-end-line="826" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8CompliantTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/polyfill/src/Iconv/bootstrap.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="28" column="7" selection-start-line="28" selection-start-column="7" selection-end-line="28" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/iconv.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="153" column="9" selection-start-line="153" selection-start-column="9" selection-end-line="153" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8SubstrTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="72" column="33" selection-start-line="72" selection-start-column="33" selection-end-line="72" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/polyfill/src/Intl/Grapheme/bootstrap.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8StrlenTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="17" column="9" selection-start-line="17" selection-start-column="9" selection-end-line="17" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/intl.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110900">
+          <caret line="4436" column="9" selection-start-line="4436" selection-start-column="9" selection-end-line="4436" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8SubstrReplaceTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/fixtures/sample-html.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="2" column="66" selection-start-line="2" selection-start-column="52" selection-end-line="2" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.scrutinizer.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/HhvmTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/fixtures/utf-16-be.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="1" column="109" selection-start-line="1" selection-start-column="109" selection-end-line="1" selection-end-column="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/mbstring.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14350">
+          <caret line="574" column="7" selection-start-line="574" selection-start-column="7" selection-end-line="574" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bootstrap.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="5" column="14" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_5.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27125">
+          <caret line="1085" column="21" selection-start-line="1085" selection-start-column="14" selection-end-line="1085" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8StristrTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2450">
+          <caret line="98" column="3" selection-start-line="98" selection-start-column="3" selection-end-line="98" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/phpunit.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="20" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.styleci.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3475">
+          <caret line="139" column="29" selection-start-line="139" selection-start-column="27" selection-end-line="139" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8UcfirstTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="18" column="33" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8TrimTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/polyfill/src/Mbstring/bootstrap.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="18" column="86" selection-start-line="18" selection-start-column="86" selection-end-line="18" selection-end-column="86" />
+          <folding>
+            <element signature="e#7#236#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/symfony/polyfill/src/Mbstring/Mbstring.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2725">
+          <caret line="116" column="19" selection-start-line="116" selection-start-column="19" selection-end-line="116" selection-end-column="19" />
+          <folding>
+            <element signature="e#7#236#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/voku/helper/Bootup.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="14" column="7" selection-start-line="14" selection-start-column="7" selection-end-line="14" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Utf8GlobalTest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80150">
+          <caret line="3207" column="42" selection-start-line="3207" selection-start-column="42" selection-end-line="3207" selection-end-column="42" />
+          <folding>
+            <element signature="e#7#30#0#PHP" expanded="false" />
+            <marker date="1477401939840" expanded="true" signature="12931:12938" ph="–" />
+            <marker date="1477401939840" expanded="true" signature="12939:12943" ph="&lt;" />
+            <marker date="1477401939840" expanded="true" signature="12947:12951" ph="&gt;" />
+            <marker date="1477401939840" expanded="true" signature="13018:13061" ph="..." />
+            <marker date="1477401939840" expanded="true" signature="13030:13036" ph=" " />
+            <marker date="1477401939840" expanded="true" signature="13037:13042" ph="..." />
+            <marker date="1477401939840" expanded="true" signature="13043:13049" ph=" " />
+            <marker date="1477401939840" expanded="true" signature="13155:13162" ph="–" />
+            <marker date="1477401939840" expanded="true" signature="13163:13167" ph="&lt;" />
+            <marker date="1477401939840" expanded="true" signature="13171:13175" ph="&gt;" />
+            <marker date="1477401939840" expanded="true" signature="13242:13284" ph="..." />
+            <marker date="1477401939840" expanded="true" signature="13254:13260" ph=" " />
+            <marker date="1477401939840" expanded="true" signature="13260:13265" ph="..." />
+            <marker date="1477401939840" expanded="true" signature="13266:13272" ph=" " />
+            <marker date="1477401939840" expanded="true" signature="40908:40914" ph="&quot;" />
+            <marker date="1477401939840" expanded="true" signature="40916:40922" ph="&quot;" />
+            <marker date="1477401939840" expanded="true" signature="88347:88353" ph="..." />
+            <marker date="1477401939840" expanded="true" signature="190794:190800" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_1.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18625">
+          <caret line="745" column="39" selection-start-line="745" selection-start-column="39" selection-end-line="745" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/voku/helper/UTF8.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="4418" column="42" selection-start-line="4418" selection-start-column="25" selection-end-line="4418" selection-end-column="42" />
+          <folding>
+            <marker date="1478097053171" expanded="true" signature="43401:43649" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="43687:43787" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="43836:44019" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="44068:44251" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="45269:45501" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="45546:46268" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="46302:46526" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="46571:46689" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="47639:47717" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="47760:47925" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="47968:48139" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="48487:49780" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="48522:49780" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="51166:51288" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="51333:52085" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="52119:52343" ph="..." />
+            <marker date="1478097053171" expanded="true" signature="52388:52506" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="2" column="105" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="105" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/book.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="8" column="1" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="715">
+            <caret line="1367" column="0" selection-start-line="1367" selection-start-column="0" selection-end-line="1367" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SUMMARY.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="100">
+            <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitattributes">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.bookignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="4" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="12" column="32" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

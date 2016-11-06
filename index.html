@@ -1,0 +1,1050 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Introduction | Portable UTF-8</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Portable UTF-8 library with polyfill / shim for Iconv, Intl, Mbstring, Normalizrer etc.">
+        <meta name="generator" content="GitBook 2.5.2">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-highlight/website.css">
+        
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-search/search.css">
+        
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-fontsettings/website.css">
+        
+    
+    
+
+        
+    
+    
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="0" data-chapter-title="Introduction" data-filepath="README.md" data-basepath="." data-revision="Sun Nov 06 2016 01:34:49 GMT+0100 (Mitteleuropäische Zeit)">
+    
+
+<div class="book-summary">
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+            
+
+            
+
+            
+    
+        <li class="chapter active" data-level="0" data-path="index.html">
+            
+                
+                    <a href="./index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="index.html">
+            
+            <span><b>1.</b> API Reference</span>
+            
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="./" >Portable UTF-8</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <p><a href="https://waffle.io/voku/portable-utf8" target="_blank"><img src="https://badge.waffle.io/voku/portable-utf8.png?label=ready&amp;title=Ready" alt="Stories in Ready"></a>
+<a href="https://travis-ci.org/voku/portable-utf8" target="_blank"><img src="https://travis-ci.org/voku/portable-utf8.svg?branch=master" alt="Build Status"></a>
+<a href="https://ci.appveyor.com/project/voku/portable-utf8/branch/master" target="_blank"><img src="https://ci.appveyor.com/api/projects/status/gnejjnk7qplr7f5t/branch/master?svg=true" alt="Build status"></a>
+<a href="https://coveralls.io/github/voku/portable-utf8?branch=master" target="_blank"><img src="https://coveralls.io/repos/voku/portable-utf8/badge.svg?branch=master&amp;service=github" alt="Coverage Status"></a>
+<a href="https://scrutinizer-ci.com/g/voku/portable-utf8/?branch=master" target="_blank"><img src="https://scrutinizer-ci.com/g/voku/portable-utf8/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"></a>
+<a href="https://www.codacy.com/app/voku/portable-utf8" target="_blank"><img src="https://www.codacy.com/project/badge/997c9bb10d1c4791967bdf2e42013e8e" alt="Codacy Badge"></a>
+<a href="https://insight.sensiolabs.com/projects/be5bf087-366c-463e-ac9f-c184db6347ba" target="_blank"><img src="https://insight.sensiolabs.com/projects/be5bf087-366c-463e-ac9f-c184db6347ba/mini.png" alt="SensioLabsInsight"></a>
+<a href="https://www.versioneye.com/php/voku:portable-utf8/dev-master" target="_blank"><img src="https://www.versioneye.com/php/voku:portable-utf8/dev-master/badge.svg" alt="Dependency Status"></a>
+<a href="https://www.versioneye.com/php/voku:portable-utf8/references" target="_blank"><img src="https://www.versioneye.com/php/voku:portable-utf8/reference_badge.svg?style=flat" alt="Reference Status"></a>
+<a href="https://packagist.org/packages/voku/portable-utf8" target="_blank"><img src="https://poser.pugx.org/voku/portable-utf8/v/stable" alt="Latest Stable Version"></a> 
+<a href="https://packagist.org/packages/voku/portable-utf8" target="_blank"><img src="https://poser.pugx.org/voku/portable-utf8/downloads" alt="Total Downloads"></a> 
+<a href="https://packagist.org/packages/voku/portable-utf8" target="_blank"><img src="https://poser.pugx.org/voku/portable-utf8/v/unstable" alt="Latest Unstable Version"></a>
+<a href="https://packagist.org/packages/voku/portable-utf8" target="_blank"><img src="https://poser.pugx.org/voku/portable-utf8/license" alt="License"></a></p>
+<h1 id="portable-utf8">Portable UTF-8</h1>
+<h2 id="description">Description</h2>
+<p>It is written in PHP (&gt;= 5.3) and can work without &quot;mbstring&quot;, &quot;iconv&quot; or any other extra encoding php-extension on your server. 
+The benefit of Portable UTF-8 is that it is easy to use, easy to bundle. This library will also auto-detect your server environment and will use the installed php-extensions if they are available, so you will have the best possible performance.
+As Fallback we will use Symfony Polyfills (Iconv, Intl, Mbstring, Xml, ... | <a href="https://github.com/symfony/polyfill" target="_blank">https://github.com/symfony/polyfill</a>). </p>
+<p>The project based on Hamid Sarfraz&apos;s work (<a href="http://pageconfig.com/attachments/portable-utf8.php" target="_blank">http://pageconfig.com/attachments/portable-utf8.php</a>) + parts of Nicolas Grekas&apos;s work (<a href="https://github.com/tchwork/utf8" target="_blank">https://github.com/tchwork/utf8</a>) + parts of Behat&apos;s work (<a href="https://github.com/Behat/Transliterator" target="_blank">https://github.com/Behat/Transliterator</a>) + parts of Sebasti&#xE1;n Grignoli&apos;s work (<a href="https://github.com/neitanod/forceutf8" target="_blank">https://github.com/neitanod/forceutf8</a>) + parts of Ivan Enderlin&apos;s work (<a href="https://github.com/hoaproject/Ustring" target="_blank">https://github.com/hoaproject/Ustring</a>) + cherry-picks from many gist and stackoverflow snippets.</p>
+<ul>
+<li><a href="#alternative">Alternative</a></li>
+<li><a href="#install-portable-utf-8-via-composer-require">Install</a></li>
+<li><a href="#why-portable-utf-8">Why Portable UTF-8?</a></li>
+<li><a href="#requirements-and-recommendations">Requirements and Recommendations</a></li>
+<li><a href="#warning">Warning</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#class-methods">Class methods</a><ul>
+<li><a href="#accessstring-str-int-pos">access</a></li>
+<li><a href="#add_bom_to_stringstring-str">add_bom_to_string</a></li>
+<li><a href="#binary_to_strmixed-bin">binary_to_str</a></li>
+<li><a href="#bom">bom</a></li>
+<li><a href="#chrint-code_point--string">chr</a></li>
+<li><a href="#chr_mapstringarray-callback-string-str--array">chr_map</a></li>
+<li><a href="#chr_size_liststring-str--array">chr_size_list</a></li>
+<li><a href="#chr_to_decimalstring-chr--int">chr_to_decimal</a></li>
+<li><a href="#chr_to_hexstring-chr-string-pfix--u">chr_to_hex</a></li>
+<li><a href="#chunk_splitstring-body-int-chunklen--76-string-end--rn--string">chunk_split</a></li>
+<li><a href="#cleanstring-str-bool-remove_bom--false-bool-normalize_whitespace--false-bool-normalize_msword--false-bool-keep_non_breaking_space--false--string">clean</a></li>
+<li><a href="#cleanupstring-str--string">cleanup</a></li>
+<li><a href="#codepointsmixed-arg-bool-u_style--false--array">codepoints</a></li>
+<li><a href="#count_charsstring-str-bool-cleanutf8--false--array">count_chars</a></li>
+<li><a href="#encodestring-encoding-string-str-bool-force--true--string">encode</a></li>
+<li><a href="#file_get_contentsstring-filename-intnull-flags--null-resourcenull-context--null-intnull-offset--null-intnull-maxlen--null-int-timeout--10-bool-converttoutf8--true--string">file_get_contents</a> </li>
+<li><a href="#file_has_bomstring-file_path--bool">file_has_bom</a></li>
+<li><a href="#filtermixed-var-int-normalization_form--4-string-leading_combining----mixed">filter</a></li>
+<li><a href="#filter_inputint-type-string-var-int-filter--filter_default-nullarray-option--null--string">filter_input</a> </li>
+<li><a href="#filter_input_arrayint-type-mixed-definition--null-bool-add_empty--true--mixed">filter_input_array</a> </li>
+<li><a href="#filter_varstring-var-int-filter--filter_default-array-option--null--string">filter_var</a> </li>
+<li><a href="#filter_var_arrayarray-data-mixed-definition--null-bool-add_empty--true--mixed">filter_var_array</a></li>
+<li><a href="#fits_insidestring-str-int-box_size--bool">fits_inside</a></li>
+<li><a href="#fix_simple_utf8string-str--string">fix_simple_utf8</a></li>
+<li><a href="#fix_utf8stringstring-str--mixed">fix_utf8</a> </li>
+<li><a href="#getchardirectionstring-char--string-rtl-or-ltr">getCharDirection</a></li>
+<li><a href="#hex_to_intstring-str--intfalse">hex_to_int</a></li>
+<li><a href="#html_encodestring-str-bool-keepasciichars--false-string-encoding--utf-8--string">html_encode</a></li>
+<li><a href="#html_entity_decodestring-str-int-flags--null-string-encoding--utf-8--string">html_entity_decode</a> </li>
+<li><a href="#htmlentitiesstring-str-int-flags--ent_compat-string-encoding--utf-8-bool-double_encode--true--string">htmlentities</a> </li>
+<li><a href="#htmlspecialcharsstring-str-int-flags--ent_compat-string-encoding--utf-8-bool-double_encode--true--string">htmlspecialchars</a> </li>
+<li><a href="#int_to_hexint-int-string-pfix--u--str">int_to_hex</a></li>
+<li><a href="#is_asciistring-str--bool">is_ascii</a> </li>
+<li><a href="#is_base64string-str--bool">is_base64</a> </li>
+<li><a href="#is_binarymixed-input--bool">is_binary</a></li>
+<li><a href="#is_binary_filestring-file--bool">is_binary_file</a> </li>
+<li><a href="#is_bomstring-str--bool">is_bom</a></li>
+<li><a href="#is_jsonstring-str--bool">is_json</a></li>
+<li><a href="#is_htmlstring-str--bool">is_html</a></li>
+<li><a href="#is_utf16string-str--intfalse">is_utf16</a> </li>
+<li><a href="#is_utf32string-str--intfalse">is_utf32</a> </li>
+<li><a href="#is_utf8string-str-bool-strict--false--bool">is_utf8</a></li>
+<li><a href="#json_decodestring-json-bool-assoc--false-int-depth--512-int-options--0--mixed">json_decode</a> </li>
+<li><a href="#json_encodemixed-value-int-options--0-int-depth--512--string">json_encode</a></li>
+<li><a href="#lcfirststring-str--string">lcfirst</a></li>
+<li><a href="#maxmixed-arg--string">max</a> </li>
+<li><a href="#max_chr_widthstring-str--int">max_chr_width</a></li>
+<li><a href="#minmixed-arg--string">min</a></li>
+<li><a href="#normalize_encodingstring-encoding--string">normalize_encoding</a></li>
+<li><a href="#normalize_mswordstring-str--string">normalize_msword</a></li>
+<li><a href="#normalize_whitespacestring-str-bool-keepnonbreakingspace--false-bool-keepbidiunicodecontrols--false--string">normalize_whitespace</a></li>
+<li><a href="#ordstring-chr--int">ord</a> </li>
+<li><a href="#parse_strstring-str-result--bool">parse_str</a></li>
+<li><a href="#rangemixed-var1-mixed-var2--array">range</a></li>
+<li><a href="#remove_bomstring-str--string">remove_bom</a></li>
+<li><a href="#remove_duplicatesstring-str-stringarray-what-----string">remove_duplicates</a></li>
+<li><a href="#remove_invisible_charactersstring-str-bool-url_encoded--true-string-replacement----string">remove_invisible_characters</a> </li>
+<li><a href="#replace_diamond_question_markstring-str-string-unknown----string">replace_diamond_question_mark</a> </li>
+<li><a href="#trimstring-str---string-chars--inf--string">trim</a> </li>
+<li><a href="#rtrimstring-str---string-chars--inf--string">rtrim</a> </li>
+<li><a href="#ltrimstring-str-string-chars--inf--string">ltrim</a> </li>
+<li><a href="#single_chr_html_encodestring-char-bool-keepasciichars--false--string">single_chr_html_encode</a> </li>
+<li><a href="#splitstring-str-int-length--1-bool-cleanutf8--false--array">split</a> </li>
+<li><a href="#str_detect_encodingstring-str--string">str_detect_encoding</a> </li>
+<li><a href="#str_ireplacemixed-search-mixed-replace-mixed-subject-int-count--null--mixed">str_ireplace</a> </li>
+<li><a href="#str_limit_after_wordstring-str-int-length--100-stirng-straddon----string">str_limit_after_word</a> </li>
+<li><a href="#str_padstring-str-int-pad_length-string-pad_string----int-pad_type--str_pad_right--string">str_pad</a> </li>
+<li><a href="#str_repeatstring-str-int-multiplier--string">str_repeat</a> </li>
+<li><a href="#str_shufflestring-str--string">str_shuffle</a> </li>
+<li><a href="#str_sortstring-str-bool-unique--false-bool-desc--false--string">str_sort</a> </li>
+<li><a href="#str_splitstring-str-int-len--1--array">str_split</a> </li>
+<li><a href="#str_to_binarystring-str--string">str_to_binary</a> </li>
+<li><a href="#str_word_countstring-str-int-format--0-string-charlist----string">str_word_count</a> </li>
+<li><a href="#strcmpstring-str1-string-str2--int">strcmp</a> </li>
+<li><a href="#strnatcmpstring-str1-string-str2--int">strnatcmp</a> </li>
+<li><a href="#strcasecmpstring-str1-string-str2--int">strcasecmp</a> </li>
+<li><a href="#strnatcasecmpstring-str1-string-str2--int">strnatcasecmp</a> </li>
+<li><a href="#strncasecmpstring-str1-string-str2-int-len--int">strncasecmp</a></li>
+<li><a href="#strncmpstring-str1-string-str2-int-len--int">strncmp</a> </li>
+<li><a href="#stringstring-str1-string-str2--int">string</a> </li>
+<li><a href="#string_has_bomstring-str--bool">string_has_bom</a> </li>
+<li><a href="#strip_tagsstring-str-stingnull-allowable_tags--null--string">strip_tags</a> </li>
+<li><a href="#strlenstring-str-string-encoding--utf-8-bool-cleanutf8--false--int">strlen</a> </li>
+<li><a href="#strwidthstring-str-string-encoding--utf-8-bool-cleanutf8--false--int">strwidth</a> </li>
+<li><a href="#strpbrkstring-haystack-string-char_list--string">strpbrk</a> </li>
+<li><a href="#strposstring-haystack-string-char_list--intfalse">strpos</a> </li>
+<li><a href="#striposstr-needle-before_needle--false--intfalse">stripos</a> </li>
+<li><a href="#strrposstring-haystack-string-needle-int-offset--0-bool-cleanutf8--false--stringfalse">strrpos</a> </li>
+<li><a href="#strriposstring-haystack-string-needle-int-offset--0-bool-cleanutf8--false--stringfalse">strripos</a> </li>
+<li><a href="#strrchrstring-haystack-string-needle-bool-part--false-string-encoding--stringfalse">strrchr</a> </li>
+<li><a href="#strrichrstring-haystack-string-needle-bool-part--false-string-encoding--stringfalse">strrichr</a> </li>
+<li><a href="#strrevstring-str--string">strrev</a></li>
+<li><a href="#strspnstring-str-string-mask-int-offset--0-int-length--2147483647--string">strspn</a> </li>
+<li><a href="#strstrstring-str-string-needle-bool-before_needle--false--string">strstr</a> </li>
+<li><a href="#stristrstring-str-string-needle-bool-before_needle--false--string">stristr</a></li>
+<li><a href="#strtocasefoldstring-str-bool-full--true--string">strtocasefold</a> </li>
+<li><a href="#strtolowerstring-str-string-encoding--utf-8--string">strtolower</a> </li>
+<li><a href="#strtoupperstring-str-string-encoding--utf-8--string">strtoupper</a> </li>
+<li><a href="#strtrstring-str-stringarray-from-stringarray-to--inf--string">strtr</a> </li>
+<li><a href="#substrstring-str-int-start--0-int-length--null-string-encoding--utf-8-bool-cleanutf8--false--string">substr</a> </li>
+<li><a href="#substr_comparestring-main_str-string-str-int-offset-int-length--2147483647-bool-case_insensitivity--false--int">substr_compare</a> </li>
+<li><a href="#substr_countstring-haystack-string-needle-int-offset--0-int-length--null-string-encoding--utf-8--int">substr_count</a> </li>
+<li><a href="#substr_replacestringstring-str-stringstring-replacement-intint-start-intint-length--null--stringarray">substr_replace</a> </li>
+<li><a href="#swapcasestring-str-string-string-encoding--utf-8--string">swapCase</a></li>
+<li><a href="#to_asciistring-str-string-unknown---bool-strict--string">to_ascii</a> </li>
+<li><a href="#to_utf8stringstring-str--stringstring">to_utf8</a> </li>
+<li><a href="#to_iso8859stringstring-str--stringstring">to_iso8859</a> </li>
+<li><a href="#ucfirststring-str--string">ucfirst</a> </li>
+<li><a href="#ucwordsstring-str--string">ucwords</a></li>
+<li><a href="#urldecodestring-str--string">urldecode</a></li>
+<li><a href="#utf8_decodestring-str--string">utf8_decode</a></li>
+<li><a href="#utf8_encodestring-str--string">utf8_encode</a> </li>
+<li><a href="#words_limitstring-str-int-words--100-string-straddon----string">words_limit</a> </li>
+<li><a href="#wordwrapstring-str-int-width--75-string-break--n-bool-cut--false--string">wordwrap</a> </li>
+</ul>
+</li>
+<li><a href="#unit-test">Unit Test</a></li>
+<li><a href="#license-and-copyright">License and Copyright</a></li>
+</ul>
+<h2 id="alternative">Alternative</h2>
+<p>If you like a more Object Oriented Way to edit strings, then you can take a look at <a href="https://github.com/voku/Stringy" target="_blank">voku/Stringy</a>, it&apos;s a fork of &quot;danielstjules/Stringy&quot; but it used the &quot;Portable UTF-8&quot;-Class and some extra methodes. </p>
+<pre><code class="lang-php"><span class="hljs-comment">// Standard library</span>
+strtoupper(<span class="hljs-string">&apos;f&#xF2;&#xF4;b&#xE0;&#x159;&apos;</span>);       <span class="hljs-comment">// &apos;F&#xF2;&#xF4;B&#xE0;&#x159;&apos;</span>
+strlen(<span class="hljs-string">&apos;f&#xF2;&#xF4;b&#xE0;&#x159;&apos;</span>);           <span class="hljs-comment">// 10</span>
+
+<span class="hljs-comment">// mbstring </span>
+<span class="hljs-comment">// WARNING: if you don&apos;t use a polyfill like &quot;Portable UTF-8&quot;, you need to install the php-extension &quot;mbstring&quot; on your server</span>
+mb_strtoupper(<span class="hljs-string">&apos;f&#xF2;&#xF4;b&#xE0;&#x159;&apos;</span>);    <span class="hljs-comment">// &apos;F&#xD2;&#xD4;B&#xC0;&#x158;&apos;</span>
+mb_strlen(<span class="hljs-string">&apos;f&#xF2;&#xF4;b&#xE0;&#x159;&apos;</span>);        <span class="hljs-comment">// &apos;6&apos;</span>
+
+<span class="hljs-comment">// Portable UTF-8</span>
+<span class="hljs-keyword">use</span> <span class="hljs-title">voku</span>\<span class="hljs-title">helper</span>\<span class="hljs-title">UTF8</span>;
+UTF8::strtoupper(<span class="hljs-string">&apos;f&#xF2;&#xF4;b&#xE0;&#x159;&apos;</span>);    <span class="hljs-comment">// &apos;F&#xD2;&#xD4;B&#xC0;&#x158;&apos;</span>
+UTF8::strlen(<span class="hljs-string">&apos;f&#xF2;&#xF4;b&#xE0;&#x159;&apos;</span>);        <span class="hljs-comment">// &apos;6&apos;</span>
+
+<span class="hljs-comment">// voku/Stringy</span>
+<span class="hljs-keyword">use</span> <span class="hljs-title">Stringy</span>\<span class="hljs-title">Stringy</span> <span class="hljs-title">as</span> <span class="hljs-title">S</span>;
+<span class="hljs-variable">$stringy</span> = S::create(<span class="hljs-string">&apos;f&#xF2;&#xF4;b&#xE0;&#x159;&apos;</span>);
+<span class="hljs-variable">$stringy</span>-&gt;toUpperCase();    <span class="hljs-comment">// &apos;F&#xD2;&#xD4;B&#xC0;&#x158;&apos;</span>
+<span class="hljs-variable">$stringy</span>-&gt;length();         <span class="hljs-comment">// &apos;6&apos;</span>
+</code></pre>
+<h2 id="install-portable-utf8-via-composer-require">Install &quot;Portable UTF-8&quot; via &quot;composer require&quot;</h2>
+<pre><code class="lang-shell">composer require voku/portable-utf8
+</code></pre>
+<h2 id="why-portable-utf8">Why Portable UTF-8?<a href=""></a></h2>
+<p>PHP 5 and earlier versions have no native Unicode support. To bridge the gap, there exist several extensions like &quot;mbstring&quot;, &quot;iconv&quot; and &quot;intl&quot;.</p>
+<p>The problem with &quot;mbstring&quot; and others is that most of the time you cannot ensure presence of a specific one on a server. If you rely on one of these, your application is no more portable. This problem gets even severe for open source applications that have to run on different servers with different configurations. Considering these, I decided to write a library:</p>
+<h2 id="requirements-and-recommendations">Requirements and Recommendations</h2>
+<ul>
+<li>No extensions are required to run this library. Portable UTF-8 only needs PCRE library that is available by default since PHP 4.2.0 and cannot be disabled since PHP 5.3.0. &quot;\u&quot; modifier support in PCRE for UTF-8 handling is not a must.</li>
+<li>PHP 5.3 is the minimum requirement, and all later versions are fine with Portable UTF-8.</li>
+<li>To speed up string handling, it is recommended that you have &quot;mbstring&quot; or &quot;iconv&quot; available on your server, as well as the latest version of PCRE library</li>
+<li>Although Portable UTF-8 is easy to use; moving from native API to Portable UTF-8 may not be straight-forward for everyone. It is highly recommended that you do not update your scripts to include Portable UTF-8 or replace or change anything before you first know the reason and consequences. Most of the time, some native function may be all what you need.</li>
+<li>There is also a shim for &quot;mbstring&quot;, &quot;iconv&quot; and &quot;intl&quot;, so you can use it also on shared webspace. </li>
+</ul>
+<h2 id="warning">Warning</h2>
+<p>By default this library requires that you using &quot;UTF-8&quot;-encoding on your server and it will force &quot;UTF-8&quot; by &quot;bootstrap.php&quot;.
+If you need to disable this behavior you can define &quot;PORTABLE_UTF8__DISABLE_AUTO_FILTER&quot;.</p>
+<pre><code class="lang-php">define(<span class="hljs-string">&apos;PORTABLE_UTF8__DISABLE_AUTO_FILTER&apos;</span>, <span class="hljs-number">1</span>);
+</code></pre>
+<h2 id="usage">Usage</h2>
+<p>Example 1: UTF8::cleanup()</p>
+<pre><code class="lang-php">  <span class="hljs-keyword">echo</span> UTF8::cleanup(<span class="hljs-string">&apos;&#xFFFD;D&#xC3;&#xBC;sseldorf&#xFFFD;&apos;</span>);
+
+  <span class="hljs-comment">// will output</span>
+  <span class="hljs-comment">// D&#xFC;sseldorf</span>
+</code></pre>
+<p>Example 2: UTF8::strlen()</p>
+<pre><code class="lang-php">  <span class="hljs-variable">$string</span> = <span class="hljs-string">&apos;string &lt;strong&gt;with utf-8 chars &#xE5;&#xE8;&#xE4;&lt;/strong&gt; - doo-bee doo-bee dooh&apos;</span>;
+
+  <span class="hljs-keyword">echo</span> strlen(<span class="hljs-variable">$string</span>) . <span class="hljs-string">&quot;\n&lt;br /&gt;&quot;</span>;
+  <span class="hljs-keyword">echo</span> UTF8::strlen(<span class="hljs-variable">$string</span>) . <span class="hljs-string">&quot;\n&lt;br /&gt;&quot;</span>;
+
+  <span class="hljs-comment">// will output:</span>
+  <span class="hljs-comment">// 70</span>
+  <span class="hljs-comment">// 67</span>
+
+  <span class="hljs-variable">$string_test1</span> = strip_tags(<span class="hljs-variable">$string</span>);
+  <span class="hljs-variable">$string_test2</span> = UTF8::strip_tags(<span class="hljs-variable">$string</span>);
+
+  <span class="hljs-keyword">echo</span> strlen(<span class="hljs-variable">$string_test1</span>) . <span class="hljs-string">&quot;\n&lt;br /&gt;&quot;</span>;
+  <span class="hljs-keyword">echo</span> UTF8::strlen(<span class="hljs-variable">$string_test2</span>) . <span class="hljs-string">&quot;\n&lt;br /&gt;&quot;</span>;
+
+  <span class="hljs-comment">// will output:</span>
+  <span class="hljs-comment">// 53</span>
+  <span class="hljs-comment">// 50</span>
+</code></pre>
+<p>Example 3: UTF8::fix_utf8()</p>
+<pre><code class="lang-php">
+  <span class="hljs-keyword">echo</span> UTF8::fix_utf8(<span class="hljs-string">&apos;D&#xC3;&#xBC;sseldorf&apos;</span>);
+  <span class="hljs-keyword">echo</span> UTF8::fix_utf8(<span class="hljs-string">&apos;&#xC3;&#xA4;&apos;</span>);
+
+  <span class="hljs-comment">// will output:</span>
+  <span class="hljs-comment">// D&#xFC;sseldorf</span>
+  <span class="hljs-comment">// &#xE4;</span>
+</code></pre>
+<h1 id="portable-utf8--api">Portable UTF-8 | API</h1>
+<p>The API from the &quot;UTF8&quot;-Class is written as small static methods that will match the default PHP-API.</p>
+<h2 id="class-methods">Class methods</h2>
+<h5 id="accessstring-str-int-pos">access(string $str, int $pos)</h5>
+<p>Return the character at the specified position: $str[1] like functionality.</p>
+<pre><code class="lang-php">UTF8::access(<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// &apos;&#xF2;&apos;</span>
+</code></pre>
+<h5 id="addbomtostringstring-str">add_bom_to_string(string $str)</h5>
+<p>Prepends UTF-8 BOM character to the string and returns the whole string.</p>
+<p>If BOM already existed there, the Input string is returned.</p>
+<pre><code class="lang-php">UTF8::add_bom_to_string(<span class="hljs-string">&apos;f&#xF2;&#xF4;&apos;</span>); <span class="hljs-comment">// &quot;\xEF\xBB\xBF&quot; . &apos;f&#xF2;&#xF4;&apos;</span>
+</code></pre>
+<h5 id="binarytostrmixed-bin">binary_to_str(mixed $bin)</h5>
+<p>Convert binary into an string.</p>
+<p>opposite: UTF8::str_to_binary()</p>
+<pre><code class="lang-php">UTF8::binary_to_str(<span class="hljs-string">&apos;11110000100111111001100010000011&apos;</span>); <span class="hljs-comment">// &apos;&#x1F603;&apos;</span>
+</code></pre>
+<h5 id="bom">bom()</h5>
+<p>Returns the UTF-8 Byte Order Mark Character.</p>
+<pre><code class="lang-php">UTF8::bom(); <span class="hljs-comment">// &quot;\xEF\xBB\xBF&quot;</span>
+</code></pre>
+<h5 id="chrint-codepoint--string">chr(int $code_point) : string</h5>
+<p>Generates a UTF-8 encoded character from the given code point.</p>
+<p>opposite: UTF8::ord()</p>
+<pre><code class="lang-php">UTF8::chr(<span class="hljs-number">0x2603</span>); <span class="hljs-comment">// &apos;&#x2603;&apos;</span>
+</code></pre>
+<h5 id="chrmapstringarray-callback-string-str--array">chr_map(string|array $callback, string $str) : array</h5>
+<p>Applies callback to all characters of a string.</p>
+<pre><code class="lang-php">UTF8::chr_map([<span class="hljs-string">&apos;voku\helper\UTF8&apos;</span>, <span class="hljs-string">&apos;strtolower&apos;</span>], <span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// [&apos;&#x3BA;&apos;,&apos;&#x1F79;&apos;, &apos;&#x3C3;&apos;, &apos;&#x3BC;&apos;, &apos;&#x3B5;&apos;]</span>
+</code></pre>
+<h5 id="chrsizeliststring-str--array">chr_size_list(string $str) : array</h5>
+<p>Generates a UTF-8 encoded character from the given code point.</p>
+<p> 1 byte =&gt; U+0000  - U+007F
+ 2 byte =&gt; U+0080  - U+07FF
+ 3 byte =&gt; U+0800  - U+FFFF
+ 4 byte =&gt; U+10000 - U+10FFFF</p>
+<pre><code class="lang-php">UTF8::chr_size_list(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;-test&apos;</span>); <span class="hljs-comment">// [3, 3, 3, 3, 1, 1, 1, 1, 1]</span>
+</code></pre>
+<h5 id="chrtodecimalstring-chr--int">chr_to_decimal(string $chr) : int</h5>
+<p>Get a decimal code representation of a specific character.</p>
+<p>opposite: UTF8::decimal_to_chr()</p>
+<p>alias: UTF8::chr_to_int()</p>
+<pre><code class="lang-php">UTF8::chr_to_decimal(<span class="hljs-string">&apos;&#xA7;&apos;</span>); <span class="hljs-comment">// 0xa7</span>
+</code></pre>
+<h5 id="chrtohexstring-chr-string-pfix--u">chr_to_hex(string $chr, string $pfix = &apos;U+&apos;)</h5>
+<p>Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.</p>
+<pre><code class="lang-php">UTF8::chr_to_hex(<span class="hljs-string">&apos;&#xA7;&apos;</span>); <span class="hljs-comment">// U+00a7</span>
+</code></pre>
+<h5 id="chunksplitstring-body-int-chunklen--76-string-end--rn--string">chunk_split(string $body, int $chunklen = 76, string $end = &quot;\r\n&quot;) : string</h5>
+<p>Splits a string into smaller chunks and multiple lines, using the specified line ending character.</p>
+<pre><code class="lang-php">UTF8::chunk_split(<span class="hljs-string">&apos;ABC-&#xD6;&#xC4;&#xDC;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-number">3</span>); <span class="hljs-comment">// &quot;ABC\r\n-&#xD6;&#xC4;\r\n&#xDC;-&#x4E2D;\r\n&#x6587;&#x7A7A;&#x767D;\r\n-&#x3BA;&#x1F79;\r\n&#x3C3;&#x3BC;&#x3B5;&quot;</span>
+</code></pre>
+<h5 id="cleanstring-str-bool-removebom--false-bool-normalizewhitespace--false-bool-normalizemsword--false-bool-keepnonbreakingspace--false--string">clean(string $str, bool $remove_bom = false, bool $normalize_whitespace = false, bool $normalize_msword = false, bool $keep_non_breaking_space = false) : string</h5>
+<p>Accepts a string and removes all non-UTF-8 characters from it + extras if needed.</p>
+<pre><code class="lang-php">UTF8::clean(<span class="hljs-string">&quot;\xEF\xBB\xBF&#x201E;Abcdef\xc2\xa0\x20&#x2026;&#x201D; &#x2014; &#x1F603; - D&#xC3;&#xBC;sseldorf&quot;</span>, <span class="hljs-keyword">true</span>, <span class="hljs-keyword">true</span>); <span class="hljs-comment">// &apos;&#x201E;Abcdef  &#x2026;&#x201D; &#x2014; &#x1F603; - D&#xC3;&#xBC;sseldorf&apos;</span>
+</code></pre>
+<h5 id="cleanupstring-str--string">cleanup(string $str) : string</h5>
+<p>Clean-up a and show only printable UTF-8 chars at the end + fix UTF-8 encoding.</p>
+<pre><code class="lang-php">UTF8::cleanup(<span class="hljs-string">&quot;\xEF\xBB\xBF&#x201E;Abcdef\xc2\xa0\x20&#x2026;&#x201D; &#x2014; &#x1F603; - D&#xC3;&#xBC;sseldorf&quot;</span>, <span class="hljs-keyword">true</span>, <span class="hljs-keyword">true</span>); <span class="hljs-comment">// &apos;&#x201E;Abcdef  &#x2026;&#x201D; &#x2014; &#x1F603; - D&#xFC;sseldorf&apos;</span>
+</code></pre>
+<h5 id="codepointsmixed-arg-bool-ustyle--false--array">codepoints(mixed $arg, bool $u_style = false) : array</h5>
+<p>Accepts a string and returns an array of Unicode code points.</p>
+<p>opposite: UTF8::string()</p>
+<pre><code class="lang-php">UTF8::codepoints(<span class="hljs-string">&apos;&#x3BA;&#xF6;&#xF1;&apos;</span>); <span class="hljs-comment">// array(954, 246, 241)</span>
+<span class="hljs-comment">// ... OR ...</span>
+UTF8::codepoints(<span class="hljs-string">&apos;&#x3BA;&#xF6;&#xF1;&apos;</span>, <span class="hljs-keyword">true</span>); <span class="hljs-comment">// array(&apos;U+03ba&apos;, &apos;U+00f6&apos;, &apos;U+00f1&apos;)</span>
+</code></pre>
+<h5 id="countcharsstring-str-bool-cleanutf8--false--array">count_chars(string $str, bool $cleanUtf8 = false) : array</h5>
+<p>Returns count of characters used in a string.</p>
+<pre><code class="lang-php">UTF8::count_chars(<span class="hljs-string">&apos;&#x3BA;a&#x3BA;b&#x3BA;c&apos;</span>); <span class="hljs-comment">// array(&apos;&#x3BA;&apos; =&gt; 3, &apos;a&apos; =&gt; 1, &apos;b&apos; =&gt; 1, &apos;c&apos; =&gt; 1)</span>
+</code></pre>
+<h5 id="decimaltochrint-int--string">decimal_to_chr(int $int) : string</h5>
+<p>Converts a int-value into an UTF-8 character.</p>
+<p>opposite: UTF8::chr_to_decimal()</p>
+<p>alias: UTF8::int_to_chr()</p>
+<pre><code class="lang-php">UTF8::decimal_to_chr(<span class="hljs-number">931</span>); <span class="hljs-comment">// &apos;&#x3A3;&apos;</span>
+</code></pre>
+<h5 id="encodestring-encoding-string-str-bool-force--true--string">encode(string $encoding, string $str, bool $force = true) : string</h5>
+<p>Encode a string with a new charset-encoding.</p>
+<p>INFO:  The different to &quot;UTF8::utf8_encode()&quot; is that this function, try to fix also broken / double encoding,
+       so you can call this function also on a UTF-8 String and you don&apos;t mess the string.</p>
+<pre><code class="lang-php">UTF8::encode(<span class="hljs-string">&apos;ISO-8859-1&apos;</span>, <span class="hljs-string">&apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>); <span class="hljs-comment">// &apos;-ABC-????-&apos;</span>
+<span class="hljs-comment">//</span>
+UTF8::encode(<span class="hljs-string">&apos;UTF-8&apos;</span>, <span class="hljs-string">&apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>); <span class="hljs-comment">// &apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>
+</code></pre>
+<h5 id="filegetcontentsstring-filename-intnull-flags--null-resourcenull-context--null-intnull-offset--null-intnull-maxlen--null-int-timeout--10-bool-converttoutf8--true--string">file_get_contents(string $filename, int|null $flags = null, resource|null $context = null, int|null $offset = null, int|null $maxlen = null, int $timeout = 10, bool $convertToUtf8 = true) : string</h5>
+<p>Reads entire file into a string.</p>
+<p>WARNING: do not use UTF-8 Option ($convertToUtf8) for binary-files (e.g.: images) !!!</p>
+<pre><code class="lang-php">UTF8::file_get_contents(<span class="hljs-string">&apos;utf16le.txt&apos;</span>); <span class="hljs-comment">// ...</span>
+</code></pre>
+<h5 id="filehasbomstring-filepath--bool">file_has_bom(string $file_path) : bool</h5>
+<p>Checks if a file starts with BOM (Byte Order Mark) character.</p>
+<pre><code class="lang-php">UTF8::file_has_bom(<span class="hljs-string">&apos;utf8_with_bom.txt&apos;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="filtermixed-var-int-normalizationform--4-string-leadingcombining--&#x25CC;--mixed">filter(mixed $var, int $normalization_form = 4, string $leading_combining = &apos;&#x25CC;&apos;) : mixed</h5>
+<p>Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</p>
+<pre><code class="lang-php">UTF8::filter(<span class="hljs-keyword">array</span>(<span class="hljs-string">&quot;\xE9&quot;</span>, <span class="hljs-string">&apos;&#xE0;&apos;</span>, <span class="hljs-string">&apos;a&apos;</span>)); <span class="hljs-comment">// array(&apos;&#xE9;&apos;, &apos;a&#x300;&apos;, &apos;a&apos;)</span>
+</code></pre>
+<h5 id="filterinputint-type-string-var-int-filter--filterdefault-nullarray-option--null--string">filter_input(int $type, string $var, int $filter = FILTER_DEFAULT, null|array $option = null) : string</h5>
+<p>&quot;filter_input()&quot;-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</p>
+<pre><code class="lang-php"><span class="hljs-comment">// _GET[&apos;foo&apos;] = &apos;bar&apos;;</span>
+UTF8::filter_input(INPUT_GET, <span class="hljs-string">&apos;foo&apos;</span>, FILTER_SANITIZE_STRING)); <span class="hljs-comment">// &apos;bar&apos;</span>
+</code></pre>
+<h5 id="filterinputarrayint-type-mixed-definition--null-bool-addempty--true--mixed">filter_input_array(int $type, mixed $definition = null, bool $add_empty = true) : mixed</h5>
+<p>&quot;filter_input_array()&quot;-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</p>
+<pre><code class="lang-php"><span class="hljs-comment">// _GET[&apos;foo&apos;] = &apos;bar&apos;;</span>
+UTF8::filter_input_array(INPUT_GET, <span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;foo&apos;</span> =&gt; <span class="hljs-string">&apos;FILTER_SANITIZE_STRING&apos;</span>)); <span class="hljs-comment">// array(&apos;bar&apos;)</span>
+</code></pre>
+<h5 id="filtervarstring-var-int-filter--filterdefault-array-option--null--string">filter_var(string $var, int $filter = FILTER_DEFAULT, array $option = null) : string</h5>
+<p>&quot;filter_var()&quot;-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</p>
+<pre><code class="lang-php">UTF8::filter_var(<span class="hljs-string">&apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>, FILTER_VALIDATE_URL); <span class="hljs-comment">// false</span>
+</code></pre>
+<h5 id="filtervararrayarray-data-mixed-definition--null-bool-addempty--true--mixed">filter_var_array(array $data, mixed $definition = null, bool $add_empty = true) : mixed</h5>
+<p>&quot;filter_var_array()&quot;-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$filters</span> = [ 
+  <span class="hljs-string">&apos;name&apos;</span>  =&gt; [<span class="hljs-string">&apos;filter&apos;</span>  =&gt; FILTER_CALLBACK, <span class="hljs-string">&apos;options&apos;</span> =&gt; [<span class="hljs-string">&apos;voku\helper\UTF8&apos;</span>, <span class="hljs-string">&apos;ucwords&apos;</span>]],
+  <span class="hljs-string">&apos;age&apos;</span>   =&gt; [<span class="hljs-string">&apos;filter&apos;</span>  =&gt; FILTER_VALIDATE_INT, <span class="hljs-string">&apos;options&apos;</span> =&gt; [<span class="hljs-string">&apos;min_range&apos;</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-string">&apos;max_range&apos;</span> =&gt; <span class="hljs-number">120</span>]],
+  <span class="hljs-string">&apos;email&apos;</span> =&gt; FILTER_VALIDATE_EMAIL,
+];
+
+<span class="hljs-variable">$data</span> = [
+  <span class="hljs-string">&apos;name&apos;</span> =&gt; <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, 
+  <span class="hljs-string">&apos;age&apos;</span> =&gt; <span class="hljs-string">&apos;18&apos;</span>, 
+  <span class="hljs-string">&apos;email&apos;</span> =&gt; <span class="hljs-string">&apos;foo@bar.de&apos;</span>
+];
+
+UTF8::filter_var_array(<span class="hljs-variable">$data</span>, <span class="hljs-variable">$filters</span>, <span class="hljs-keyword">true</span>); <span class="hljs-comment">// [&apos;name&apos; =&gt; &apos;&#x39A;&#x3CC;&#x3C3;&#x3BC;&#x3B5;&apos;, &apos;age&apos; =&gt; 18, &apos;email&apos; =&gt; &apos;foo@bar.de&apos;]</span>
+</code></pre>
+<h5 id="fitsinsidestring-str-int-boxsize--bool">fits_inside(string $str, int $box_size) : bool</h5>
+<p>Check if the number of unicode characters are not more than the specified integer.</p>
+<pre><code class="lang-php">UTF8::fits_inside(<span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-number">6</span>); <span class="hljs-comment">// false</span>
+</code></pre>
+<h5 id="fixsimpleutf8string-str--string">fix_simple_utf8(string $str) : string</h5>
+<p>Try to fix simple broken UTF-8 strings.</p>
+<p>INFO: Take a look at &quot;UTF8::fix_utf8()&quot; if you need a more advanced fix for broken UTF-8 strings.</p>
+<pre><code class="lang-php">UTF8::fix_simple_utf8(<span class="hljs-string">&apos;D&#xC3;&#xBC;sseldorf&apos;</span>); <span class="hljs-comment">// &apos;D&#xFC;sseldorf&apos;</span>
+</code></pre>
+<h5 id="fixutf8stringstring-str--mixed">fix_utf8(string|string[] $str) : mixed</h5>
+<p>Fix a double (or multiple) encoded UTF8 string.</p>
+<pre><code class="lang-php">UTF8::fix_utf8(<span class="hljs-string">&apos;F&#xC3;&#xC2;&#xC2;&#xC2;&#xC2;&#xA9;d&#xC3;&#xC2;&#xC2;&#xC2;&#xC2;&#xA9;ration&apos;</span>); <span class="hljs-comment">// &apos;F&#xE9;d&#xE9;ration&apos;</span>
+</code></pre>
+<h5 id="getchardirectionstring-char--string-rtl-or-ltr">getCharDirection(string $char) : string (&apos;RTL&apos; or &apos;LTR&apos;)</h5>
+<p>Get character of a specific character.</p>
+<pre><code class="lang-php">UTF8::getCharDirection(<span class="hljs-string">&apos;&#x627;&apos;</span>); <span class="hljs-comment">// &apos;RTL&apos;</span>
+</code></pre>
+<h5 id="hextochrstring-hexdec--stringfalse">hex_to_chr(string $hexdec) : string|false</h5>
+<p>Converts a hexadecimal-value into an UTF-8 character.</p>
+<p>opposite: UTF8::chr_to_hex()</p>
+<pre><code class="lang-php">UTF8::hex_to_chr(<span class="hljs-string">&apos;U+00a7&apos;</span>); <span class="hljs-comment">// &apos;&#xA7;&apos;</span>
+</code></pre>
+<h5 id="hextointstring-hexdec--intfalse">hex_to_int(string $hexdec) : int|false</h5>
+<p>Converts hexadecimal U+xxxx code point representation to integer.</p>
+<p>opposite: UTF8::int_to_hex()</p>
+<pre><code class="lang-php">UTF8::hex_to_int(<span class="hljs-string">&apos;U+00f1&apos;</span>); <span class="hljs-comment">// 241</span>
+</code></pre>
+<h5 id="htmlencodestring-str-bool-keepasciichars--false-string-encoding--utf8--string">html_encode(string $str, bool $keepAsciiChars = false, string $encoding = &apos;UTF-8&apos;) : string</h5>
+<p>Converts a UTF-8 string to a series of HTML numbered entities.</p>
+<p>opposite: UTF8::html_decode()</p>
+<pre><code class="lang-php">UTF8::html_encode(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>); <span class="hljs-comment">// &apos;&amp;#20013;&amp;#25991;&amp;#31354;&amp;#30333;&apos;</span>
+</code></pre>
+<h5 id="htmlentitydecodestring-str-int-flags--null-string-encoding--utf8--string">html_entity_decode(string $str, int $flags = null, string $encoding = &apos;UTF-8&apos;) : string</h5>
+<p>UTF-8 version of html_entity_decode()</p>
+<p>The reason we are not using html_entity_decode() by itself is because
+while it is not technically correct to leave out the semicolon
+at the end of an entity most browsers will still interpret the entity
+correctly. html_entity_decode() does not convert entities without
+semicolons, so we are left with our own little solution here. Bummer.</p>
+<p>Convert all HTML entities to their applicable characters</p>
+<p>opposite: UTF8::html_encode()</p>
+<p>alias: UTF8::html_decode()</p>
+<pre><code class="lang-php">UTF8::html_entity_decode(<span class="hljs-string">&apos;&amp;#20013;&amp;#25991;&amp;#31354;&amp;#30333;&apos;</span>); <span class="hljs-comment">// &apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>
+</code></pre>
+<h5 id="htmlentitiesstring-str-int-flags--entcompat-string-encoding--utf8-bool-doubleencode--true--string">htmlentities(string $str, int $flags = ENT_COMPAT, string $encoding = &apos;UTF-8&apos;, bool $double_encode = true) : string</h5>
+<p>Convert all applicable characters to HTML entities: UTF-8 version of htmlentities()</p>
+<pre><code class="lang-php">UTF8::htmlentities(<span class="hljs-string">&apos;&lt;&#x767D;-&#xF6;&#xE4;&#xFC;&gt;&apos;</span>); <span class="hljs-comment">// &apos;&amp;lt;&amp;#30333;-&amp;ouml;&amp;auml;&amp;uuml;&amp;gt;&apos;</span>
+</code></pre>
+<h5 id="htmlspecialcharsstring-str-int-flags--entcompat-string-encoding--utf8-bool-doubleencode--true--string">htmlspecialchars(string $str, int $flags = ENT_COMPAT, string $encoding = &apos;UTF-8&apos;, bool $double_encode = true) : string</h5>
+<p>Convert only special characters to HTML entities: UTF-8 version of htmlspecialchars()</p>
+<p>INFO: Take a look at &quot;UTF8::htmlentities()&quot;</p>
+<pre><code class="lang-php">UTF8::htmlspecialchars(<span class="hljs-string">&apos;&lt;&#x767D;-&#xF6;&#xE4;&#xFC;&gt;&apos;</span>); <span class="hljs-comment">// &apos;&amp;lt;&#x767D;-&#xF6;&#xE4;&#xFC;&amp;gt;&apos;</span>
+</code></pre>
+<h5 id="inttohexint-int-string-pfix--u--str">int_to_hex(int $int, string $pfix = &apos;U+&apos;) : str</h5>
+<p>Converts Integer to hexadecimal U+xxxx code point representation.</p>
+<p>opposite: UTF8::hex_to_int()</p>
+<pre><code class="lang-php">UTF8::int_to_hex(<span class="hljs-number">241</span>); <span class="hljs-comment">// &apos;U+00f1&apos;</span>
+</code></pre>
+<h5 id="isasciistring-str--bool">is_ascii(string $str) : bool</h5>
+<p>Checks if a string is 7 bit ASCII.</p>
+<p>alias: UTF8::isAscii()</p>
+<pre><code class="lang-php">UTF8::is_ascii(<span class="hljs-string">&apos;&#x767D;&apos;</span>); <span class="hljs-comment">// false</span>
+</code></pre>
+<h5 id="isbase64string-str--bool">is_base64(string $str) : bool</h5>
+<p>Returns true if the string is base64 encoded, false otherwise.</p>
+<p>alias: UTF8::isBase64()</p>
+<pre><code class="lang-php">UTF8::is_base64(<span class="hljs-string">&apos;4KSu4KWL4KSo4KS/4KSa&apos;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="isbinarymixed-input--bool">is_binary(mixed $input) : bool</h5>
+<p>Check if the input is binary... (is look like a hack).</p>
+<p>alias: UTF8::isBinary()</p>
+<pre><code class="lang-php">UTF8::is_binary(<span class="hljs-number">01</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="isbinaryfilestring-file--bool">is_binary_file(string $file) : bool</h5>
+<p>Check if the file is binary.</p>
+<pre><code class="lang-php">UTF8::is_binary(<span class="hljs-string">&apos;./utf32.txt&apos;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="isbomstring-str--bool">is_bom(string $str) : bool</h5>
+<p>Checks if the given string is equal to any &quot;Byte Order Mark&quot;.</p>
+<p>WARNING: Use &quot;UTF8::string_has_bom()&quot; if you will check BOM in a string.</p>
+<p>alias: UTF8::isBom()</p>
+<pre><code class="lang-php">UTF8::is_bom(<span class="hljs-string">&quot;\xef\xbb\xbf&quot;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="isjsonstring-str--bool">is_json(string $str) : bool</h5>
+<p>Try to check if &quot;$str&quot; is an json-string.</p>
+<p>alias: UTF8::isJson()</p>
+<pre><code class="lang-php">UTF8::is_json(<span class="hljs-string">&apos;{&quot;array&quot;:[1,&quot;&#xA5;&quot;,&quot;&#xE4;&quot;]}&apos;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="ishtmlstring-str--bool">is_html(string $str) : bool</h5>
+<p>Check if the string contains any html-tags <lall>.</lall></p>
+<p>alias: UTF8::isHtml()</p>
+<pre><code class="lang-php">UTF8::is_html(<span class="hljs-string">&apos;&lt;b&gt;lall&lt;/b&gt;&apos;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="isutf16string-str--intfalse">is_utf16(string $str) : int|false</h5>
+<p>Check if the string is UTF-16: This function will return  false if is&apos;t not UTF-16, 1 for UTF-16LE, 2 for UTF-16BE.</p>
+<p>alias: UTF8::isUtf16()</p>
+<pre><code class="lang-php">UTF8::is_utf16(file_get_contents(<span class="hljs-string">&apos;utf-16-le.txt&apos;</span>)); <span class="hljs-comment">// 1</span>
+UTF8::is_utf16(file_get_contents(<span class="hljs-string">&apos;utf-16-be.txt&apos;</span>)); <span class="hljs-comment">// 2</span>
+UTF8::is_utf16(file_get_contents(<span class="hljs-string">&apos;utf-8.txt&apos;</span>)); <span class="hljs-comment">// false</span>
+</code></pre>
+<h5 id="isutf32string-str--intfalse">is_utf32(string $str) : int|false</h5>
+<p>Check if the string is UTF-32: This function will return  false if is&apos;t not UTF-32, 1 for UTF-32LE, 2 for UTF-32BE.</p>
+<p>alias: UTF8::isUtf16()</p>
+<pre><code class="lang-php">UTF8::is_utf32(file_get_contents(<span class="hljs-string">&apos;utf-32-le.txt&apos;</span>)); <span class="hljs-comment">// 1</span>
+UTF8::is_utf32(file_get_contents(<span class="hljs-string">&apos;utf-32-be.txt&apos;</span>)); <span class="hljs-comment">// 2</span>
+UTF8::is_utf32(file_get_contents(<span class="hljs-string">&apos;utf-8.txt&apos;</span>)); <span class="hljs-comment">// false</span>
+</code></pre>
+<h5 id="isutf8string-str-bool-strict--false--bool">is_utf8(string $str, bool $strict = false) : bool</h5>
+<p>Checks whether the passed string contains only byte sequences that appear valid UTF-8 characters.</p>
+<p>alias: UTF8::isUtf8()</p>
+<pre><code class="lang-php">UTF8::is_utf8(<span class="hljs-string">&apos;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>); <span class="hljs-comment">// true</span>
+UTF8::is_utf8(<span class="hljs-string">&quot;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n\xA0\xA1&quot;</span>); <span class="hljs-comment">// false</span>
+</code></pre>
+<h5 id="jsondecodestring-json-bool-assoc--false-int-depth--512-int-options--0--mixed">json_decode(string $json, bool $assoc = false, int $depth = 512, int $options = 0) : mixed</h5>
+<p>Decodes a JSON string.</p>
+<pre><code class="lang-php">UTF8::json_decode(<span class="hljs-string">&apos;[1,&quot;\u00a5&quot;,&quot;\u00e4&quot;]&apos;</span>); <span class="hljs-comment">// array(1, &apos;&#xA5;&apos;, &apos;&#xE4;&apos;)</span>
+</code></pre>
+<h5 id="jsonencodemixed-value-int-options--0-int-depth--512--string">json_encode(mixed $value, int $options = 0, int $depth = 512) : string</h5>
+<p>Returns the JSON representation of a value.</p>
+<pre><code class="lang-php">UTF8::json_enocde(<span class="hljs-keyword">array</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&apos;&#xA5;&apos;</span>, <span class="hljs-string">&apos;&#xE4;&apos;</span>)); <span class="hljs-comment">// &apos;[1,&quot;\u00a5&quot;,&quot;\u00e4&quot;]&apos;</span>
+</code></pre>
+<h5 id="lcfirststring-str--string">lcfirst(string $str) : string</h5>
+<p>Makes string&apos;s first char lowercase.</p>
+<pre><code class="lang-php">UTF8::lcfirst(<span class="hljs-string">&apos;&#xD1;T&#xCB;RN&#xC2;TI&#xD4;N&#xC0;LIZ&#xC6;TI&#xD8;N&apos;</span>); <span class="hljs-comment">// &#xF1;T&#xCB;RN&#xC2;TI&#xD4;N&#xC0;LIZ&#xC6;TI&#xD8;N</span>
+</code></pre>
+<h5 id="maxmixed-arg--string">max(mixed $arg) : string</h5>
+<p>Returns the UTF-8 character with the maximum code point in the given data.</p>
+<pre><code class="lang-php">UTF8::max(<span class="hljs-string">&apos;abc-&#xE4;&#xF6;&#xFC;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>); <span class="hljs-comment">// &apos;&#xF8;&apos;</span>
+</code></pre>
+<h5 id="maxchrwidthstring-str--int">max_chr_width(string $str) : int</h5>
+<p>Calculates and returns the maximum number of bytes taken by any
+UTF-8 encoded character in the given string.</p>
+<pre><code class="lang-php">UTF8::max_chr_width(<span class="hljs-string">&apos;Int&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>); <span class="hljs-comment">// 2</span>
+</code></pre>
+<h5 id="minmixed-arg--string">min(mixed $arg) : string</h5>
+<p>Returns the UTF-8 character with the minimum code point in the given data.</p>
+<pre><code class="lang-php">UTF8::min(<span class="hljs-string">&apos;abc-&#xE4;&#xF6;&#xFC;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>); <span class="hljs-comment">// &apos;-&apos;</span>
+</code></pre>
+<h5 id="normalizeencodingstring-encoding--string">normalize_encoding(string $encoding) : string</h5>
+<p>Normalize the encoding-&quot;name&quot; input.</p>
+<pre><code class="lang-php">UTF8::normalize_encoding(<span class="hljs-string">&apos;UTF8&apos;</span>); <span class="hljs-comment">// &apos;UTF-8&apos;</span>
+</code></pre>
+<h5 id="normalizemswordstring-str--string">normalize_msword(string $str) : string</h5>
+<p>Normalize some MS Word special characters.</p>
+<pre><code class="lang-php">UTF8::normalize_msword(<span class="hljs-string">&apos;&#x201E;Abcdef&#x2026;&#x201D;&apos;</span>); <span class="hljs-comment">// &apos;&quot;Abcdef...&quot;&apos;</span>
+</code></pre>
+<h5 id="normalizewhitespacestring-str-bool-keepnonbreakingspace--false-bool-keepbidiunicodecontrols--false--string">normalize_whitespace(string $str, bool $keepNonBreakingSpace = false, bool $keepBidiUnicodeControls = false) : string</h5>
+<p>Normalize the whitespace.</p>
+<pre><code class="lang-php">UTF8::normalize_whitespace(<span class="hljs-string">&quot;abc-\xc2\xa0-&#xF6;&#xE4;&#xFC;-\xe2\x80\xaf-\xE2\x80\xAC&quot;</span>, <span class="hljs-keyword">true</span>); <span class="hljs-comment">// &quot;abc-\xc2\xa0-&#xF6;&#xE4;&#xFC;- -&quot;</span>
+</code></pre>
+<h5 id="ordstring-chr--int">ord(string $chr) : int</h5>
+<p>Calculates Unicode code point of the given UTF-8 encoded character.</p>
+<p>opposite: UTF8::chr()</p>
+<pre><code class="lang-php">UTF8::ord(<span class="hljs-string">&apos;&#x2603;&apos;</span>); <span class="hljs-comment">// 0x2603</span>
+</code></pre>
+<h5 id="parsestrstring-str-result-bool-cleanutf8--false--bool">parse_str(string $str, &amp;$result, bool $cleanUtf8 = false) : bool</h5>
+<p>Parses the string into an array (into the the second parameter).</p>
+<p>WARNING: Instead of &quot;parse_str()&quot; this method do not (re-)placing variables in the current scope,
+          if the second parameter is not set!</p>
+<pre><code class="lang-php">UTF8::parse_str(<span class="hljs-string">&apos;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE9;&#xE0;liz&#xE6;ti&#xF8;n=&#x6E2C;&#x8A66;&amp;arr[]=foo+&#x6E2C;&#x8A66;&amp;arr[]=&#xE81;&#xEB2;&#xE99;&#xE97;&#xEBB;&#xE94;&#xEAA;&#xEAD;&#xE9A;&apos;</span>, <span class="hljs-variable">$array</span>);
+<span class="hljs-keyword">echo</span> <span class="hljs-variable">$array</span>[<span class="hljs-string">&apos;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE9;&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>]; <span class="hljs-comment">// &apos;&#x6E2C;&#x8A66;&apos;</span>
+</code></pre>
+<h5 id="rangemixed-var1-mixed-var2--array">range(mixed $var1, mixed $var2) : array</h5>
+<p>Create an array containing a range of UTF-8 characters.</p>
+<pre><code class="lang-php">UTF8::range(<span class="hljs-string">&apos;&#x3BA;&apos;</span>, <span class="hljs-string">&apos;&#x3B6;&apos;</span>); <span class="hljs-comment">// array(&apos;&#x3BA;&apos;, &apos;&#x3B9;&apos;, &apos;&#x3B8;&apos;, &apos;&#x3B7;&apos;, &apos;&#x3B6;&apos;,)</span>
+</code></pre>
+<h5 id="removebomstring-str--string">remove_bom(string $str) : string</h5>
+<p>Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.</p>
+<pre><code class="lang-php">UTF8::remove_bom(<span class="hljs-string">&quot;\xEF\xBB\xBF&#x39C;&#x3C0;&#x3BF;&#x3C1;&#x3CE; &#x3BD;&#x3B1;&quot;</span>); <span class="hljs-comment">// &apos;&#x39C;&#x3C0;&#x3BF;&#x3C1;&#x3CE; &#x3BD;&#x3B1;&apos;</span>
+</code></pre>
+<h5 id="removeduplicatesstring-str-stringarray-what-----string">remove_duplicates(string $str, string|array $what = &apos; &apos;) : string</h5>
+<p>Removes duplicate occurrences of a string in another string.</p>
+<pre><code class="lang-php">UTF8::remove_duplicates(<span class="hljs-string">&apos;&#xF6;&#xE4;&#xFC;-&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;-&#xE4;&#xF6;&#xFC;&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;&#xF6;&#xE4;&#xFC;-&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;-&#xE4;&#xF6;&#xFC;&apos;</span>
+</code></pre>
+<h5 id="removeinvisiblecharactersstring-str-bool-urlencoded--true-string-replacement----string">remove_invisible_characters(string $str, bool $url_encoded = true, string $replacement = &apos;&apos;) : string</h5>
+<p>Remove invisible characters from a string.</p>
+<pre><code class="lang-php">UTF8::remove_invisible_characters(<span class="hljs-string">&quot;&#x3BA;&#x1F79;&#x3C3;\0&#x3BC;&#x3B5;&quot;</span>); <span class="hljs-comment">// &apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>
+</code></pre>
+<h5 id="replacediamondquestionmarkstring-str-string-replacementchar---bool-processinvalidutf8--true--string">replace_diamond_question_mark(string $str, string $replacementChar = &apos;&apos;, bool $processInvalidUtf8 = true) : string</h5>
+<p>Replace the diamond question mark (&#xFFFD;) and invalid-UTF8 chars with the replacement.</p>
+<pre><code class="lang-php">UTF8::replace_diamond_question_mark(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&#xFFFD;&apos;</span>, <span class="hljs-string">&apos;&apos;</span>); <span class="hljs-comment">// &apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>
+</code></pre>
+<h5 id="trimstring-str---string-chars--inf--string">trim(string $str = &apos;&apos;, string $chars = INF) : string</h5>
+<p>Strip whitespace or other characters from beginning or end of a UTF-8 string.</p>
+<pre><code class="lang-php">UTF8::rtrim(<span class="hljs-string">&apos;   -ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-  &apos;</span>); <span class="hljs-comment">// &apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>
+</code></pre>
+<h5 id="rtrimstring-str---string-chars--inf--string">rtrim(string $str = &apos;&apos;, string $chars = INF) : string</h5>
+<p>Strip whitespace or other characters from end of a UTF-8 string.</p>
+<pre><code class="lang-php">UTF8::rtrim(<span class="hljs-string">&apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-  &apos;</span>); <span class="hljs-comment">// &apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>
+</code></pre>
+<h5 id="ltrimstring-str-string-chars--inf--string">ltrim(string $str, string $chars = INF) : string</h5>
+<p>Strip whitespace or other characters from beginning of a UTF-8 string.</p>
+<pre><code class="lang-php">UTF8::ltrim(<span class="hljs-string">&apos;&#x3000;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&#x3000; &apos;</span>); <span class="hljs-comment">// &apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&#x3000; &apos;</span>
+</code></pre>
+<h5 id="singlechrhtmlencodestring-char-bool-keepasciichars--false--string">single_chr_html_encode(string $char, bool $keepAsciiChars = false) : string</h5>
+<p>Converts a UTF-8 character to HTML Numbered Entity like &quot;{&quot;.</p>
+<pre><code class="lang-php">UTF8::single_chr_html_encode(<span class="hljs-string">&apos;&#x3BA;&apos;</span>); <span class="hljs-comment">// &apos;&amp;#954;&apos;</span>
+</code></pre>
+<h5 id="splitstring-str-int-length--1-bool-cleanutf8--false--array">split(string $str, int $length = 1, bool $cleanUtf8 = false) : array</h5>
+<p>Convert a string to an array of Unicode characters.</p>
+<pre><code class="lang-php">UTF8::split(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>); <span class="hljs-comment">// array(&apos;&#x4E2D;&apos;, &apos;&#x6587;&apos;, &apos;&#x7A7A;&apos;, &apos;&#x767D;&apos;)</span>
+</code></pre>
+<h5 id="strdetectencodingstring-str--string">str_detect_encoding(string $str) : string</h5>
+<p>Optimized &quot;\mb_detect_encoding()&quot;-function -&gt; with support for UTF-16 and UTF-32.</p>
+<pre><code class="lang-php">UTF8::str_detect_encoding(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>); <span class="hljs-comment">// &apos;UTF-8&apos;</span>
+UTF8::str_detect_encoding(<span class="hljs-string">&apos;Abc&apos;</span>); <span class="hljs-comment">// &apos;ASCII&apos;</span>
+</code></pre>
+<h5 id="strendswithstring-haystack-string-needle--bool">str_ends_with(string $haystack, string $needle) : bool</h5>
+<p>Check if the string ends with the given substring.</p>
+<pre><code class="lang-php">UTF8::str_ends_with(<span class="hljs-string">&apos;BeginMiddle&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// true</span>
+UTF8::str_ends_with(<span class="hljs-string">&apos;BeginMiddle&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// false</span>
+</code></pre>
+<h5 id="striendswithstring-haystack-string-needle--bool">str_iends_with(string $haystack, string $needle) : bool</h5>
+<p>Check if the string ends with the given substring, case insensitive.</p>
+<pre><code class="lang-php">UTF8::str_iends_with(<span class="hljs-string">&apos;BeginMiddle&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// true</span>
+UTF8::str_iends_with(<span class="hljs-string">&apos;BeginMiddle&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="strireplacemixed-search-mixed-replace-mixed-subject-int-count--null--mixed">str_ireplace(mixed $search, mixed $replace, mixed $subject, int &amp;$count = null) : mixed</h5>
+<p>Case-insensitive and UTF-8 safe version of <function>str_replace</function>.</p>
+<pre><code class="lang-php">UTF8::str_ireplace(<span class="hljs-string">&apos;lIz&#xC6;&apos;</span>, <span class="hljs-string">&apos;lise&apos;</span>, <span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>)); <span class="hljs-comment">// array(&apos;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liseti&#xF8;n&apos;)</span>
+</code></pre>
+<h5 id="strlimitafterwordstring-str-int-length--100-stirng-straddon----string">str_limit_after_word(string $str, int $length = 100, stirng $strAddOn = &apos;...&apos;) : string</h5>
+<p>Limit the number of characters in a string, but also after the next word.</p>
+<pre><code class="lang-php">UTF8::str_limit_after_word(<span class="hljs-string">&apos;f&#xF2;&#xF4; b&#xE0;&#x159; f&#xF2;&#xF4;&apos;</span>, <span class="hljs-number">8</span>, <span class="hljs-string">&apos;&apos;</span>); <span class="hljs-comment">// &apos;f&#xF2;&#xF4; b&#xE0;&#x159;&apos;</span>
+</code></pre>
+<h5 id="strpadstring-str-int-padlength-string-padstring----int-padtype--strpadright--string">str_pad(string $str, int $pad_length, string $pad_string = &apos; &apos;, int $pad_type = STR_PAD_RIGHT) : string</h5>
+<p>Pad a UTF-8 string to given length with another string.</p>
+<pre><code class="lang-php">UTF8::str_pad(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>, <span class="hljs-number">10</span>, <span class="hljs-string">&apos;_&apos;</span>, STR_PAD_BOTH); <span class="hljs-comment">// &apos;___&#x4E2D;&#x6587;&#x7A7A;&#x767D;___&apos;</span>
+</code></pre>
+<h5 id="strrepeatstring-str-int-multiplier--string">str_repeat(string $str, int $multiplier) : string</h5>
+<p>Repeat a string.</p>
+<pre><code class="lang-php">UTF8::str_repeat(<span class="hljs-string">&quot;&#xB0;~\xf0\x90\x28\xbc&quot;</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// &apos;&#xB0;~&#xF0;&#x90;(&#xBC;&#xB0;~&#xF0;&#x90;(&#xBC;&apos;</span>
+</code></pre>
+<h5 id="strshufflestring-str--string">str_shuffle(string $str) : string</h5>
+<p>Shuffles all the characters in the string.</p>
+<pre><code class="lang-php">UTF8::str_shuffle(<span class="hljs-string">&apos;f&#xF2;&#xF4; b&#xE0;&#x159; f&#xF2;&#xF4;&apos;</span>); <span class="hljs-comment">// &apos;&#xE0;&#xF2;&#xF4;&#x159;b ff&#xF2;&#xF4; &apos;</span>
+</code></pre>
+<h5 id="strsortstring-str-bool-unique--false-bool-desc--false--string">str_sort(string $str, bool $unique = false, bool $desc = false) : string</h5>
+<p>Sort all characters according to code points.</p>
+<pre><code class="lang-php">UTF8::str_sort(<span class="hljs-string">&apos;  -ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-  &apos;</span>); <span class="hljs-comment">// &apos;    ---ABC&#x4E2D;&#x6587;&#x767D;&#x7A7A;&apos;</span>
+</code></pre>
+<h5 id="strsplitstring-str-int-len--1--array">str_split(string $str, int $len = 1) : array</h5>
+<p>Split a string into an array.</p>
+<pre><code class="lang-php">UTF8::split(<span class="hljs-string">&apos;d&#xE9;j&#xE0;&apos;</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// array(&apos;d&#xE9;&apos;, &apos;j&#xE0;&apos;)</span>
+</code></pre>
+<h5 id="strstartswithstring-haystack-string-needle--bool">str_starts_with(string $haystack, string $needle) : bool</h5>
+<p>Check if the string starts with the given substring.</p>
+<pre><code class="lang-php">UTF8::str_starts_with(<span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;MiddleEnd&apos;</span>, <span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// true</span>
+UTF8::str_starts_with(<span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;MiddleEnd&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// false</span>
+</code></pre>
+<h5 id="stristartswithstring-haystack-string-needle--bool">str_istarts_with(string $haystack, string $needle) : bool</h5>
+<p>Check if the string starts with the given substring, case insensitive.</p>
+<pre><code class="lang-php">UTF8::str_istarts_with(<span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;MiddleEnd&apos;</span>, <span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// true</span>
+UTF8::str_iistarts_with(<span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;MiddleEnd&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="strtobinarystring-str--string">str_to_binary(string $str) : string</h5>
+<p>Get a binary representation of a specific string.</p>
+<p>opposite: UTF8::binary_to_str()</p>
+<pre><code class="lang-php">UTF8::str_to_binary(<span class="hljs-string">&apos;&#x1F603;&apos;</span>); <span class="hljs-comment">// &apos;11110000100111111001100010000011&apos;</span>
+</code></pre>
+<h5 id="strwordcountstring-str-int-format--0-string-charlist----string">str_word_count(string $str, int $format = 0, string $charlist = &apos;&apos;) : string</h5>
+<p>Get a binary representation of a specific string.</p>
+<pre><code class="lang-php"><span class="hljs-comment">// format: 0 -&gt; return only word count (int)</span>
+<span class="hljs-comment">//</span>
+UTF8::str_word_count(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D; &#xF6;&#xE4;&#xFC; abc#c&apos;</span>); <span class="hljs-comment">// 4</span>
+UTF8::str_word_count(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D; &#xF6;&#xE4;&#xFC; abc#c&apos;</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&apos;#&apos;</span>); <span class="hljs-comment">// 3</span>
+
+<span class="hljs-comment">// format: 1 -&gt; return words (array) </span>
+<span class="hljs-comment">//</span>
+UTF8::str_word_count(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D; &#xF6;&#xE4;&#xFC; abc#c&apos;</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// array(&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;, &apos;&#xF6;&#xE4;&#xFC;&apos;, &apos;abc&apos;, &apos;c&apos;)</span>
+UTF8::str_word_count(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D; &#xF6;&#xE4;&#xFC; abc#c&apos;</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&apos;#&apos;</span>); <span class="hljs-comment">// array(&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;, &apos;&#xF6;&#xE4;&#xFC;&apos;, &apos;abc#c&apos;)</span>
+
+<span class="hljs-comment">// format: 2 -&gt; return words with offset (array) </span>
+<span class="hljs-comment">//</span>
+UTF8::str_word_count(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D; &#xF6;&#xE4;&#xFC; ab#c&apos;</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// array(0 =&gt; &apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;, 5 =&gt; &apos;&#xF6;&#xE4;&#xFC;&apos;, 9 =&gt; &apos;abc&apos;, 13 =&gt; &apos;c&apos;)</span>
+UTF8::str_word_count(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D; &#xF6;&#xE4;&#xFC; ab#c&apos;</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&apos;#&apos;</span>); <span class="hljs-comment">// array(0 =&gt; &apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;, 5 =&gt; &apos;&#xF6;&#xE4;&#xFC;&apos;, 9 =&gt; &apos;abc#c&apos;)</span>
+</code></pre>
+<h5 id="strcmpstring-str1-string-str2--int">strcmp(string $str1, string $str2) : int</h5>
+<p>Case-insensitive string comparison: &lt; 0 if str1 is less than str2; </p>
+<pre><code>                                &gt; 0 if str1 is greater than str2, 
+                                0 if they are equal.
+</code></pre><pre><code class="lang-php">UTF8::strcmp(<span class="hljs-string">&quot;i&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\n&#xE0;liz&#xE6;ti&#xF8;n&quot;</span>, <span class="hljs-string">&quot;i&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\n&#xE0;liz&#xE6;ti&#xF8;n&quot;</span>); <span class="hljs-comment">// 0</span>
+</code></pre>
+<h5 id="strnatcmpstring-str1-string-str2--int">strnatcmp(string $str1, string $str2) : int</h5>
+<p>Case sensitive string comparisons using a &quot;natural order&quot; algorithm: &lt; 0 if str1 is less than str2; </p>
+<pre><code>                                                                 &gt; 0 if str1 is greater than str2, 
+                                                                 0 if they are equal.
+</code></pre><p>INFO: natural order version of UTF8::strcmp()</p>
+<pre><code class="lang-php">UTF8::strnatcmp(<span class="hljs-string">&apos;2Hello world &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>, <span class="hljs-string">&apos;10Hello WORLD &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>); <span class="hljs-comment">// -1</span>
+UTF8::strcmp(<span class="hljs-string">&apos;2Hello world &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>, <span class="hljs-string">&apos;10Hello WORLD &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>); <span class="hljs-comment">// 1</span>
+
+UTF8::strnatcmp(<span class="hljs-string">&apos;10Hello world &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>, <span class="hljs-string">&apos;2Hello WORLD &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>); <span class="hljs-comment">// 1</span>
+UTF8::strcmp(<span class="hljs-string">&apos;10Hello world &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>, <span class="hljs-string">&apos;2Hello WORLD &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>)); <span class="hljs-comment">// -1</span>
+</code></pre>
+<h5 id="strcasecmpstring-str1-string-str2--int">strcasecmp(string $str1, string $str2) : int</h5>
+<p>Case-insensitive string comparison: &lt; 0 if str1 is less than str2; </p>
+<pre><code>                                &gt; 0 if str1 is greater than str2, 
+                                0 if they are equal.
+</code></pre><p>INFO: Case-insensitive version of UTF8::strcmp()</p>
+<pre><code class="lang-php">UTF8::strcasecmp(<span class="hljs-string">&quot;i&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\n&#xE0;liz&#xE6;ti&#xF8;n&quot;</span>, <span class="hljs-string">&quot;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\n&#xE0;liz&#xE6;ti&#xF8;n&quot;</span>); <span class="hljs-comment">// 0</span>
+</code></pre>
+<h5 id="strnatcasecmpstring-str1-string-str2--int">strnatcasecmp(string $str1, string $str2) : int</h5>
+<p>Case insensitive string comparisons using a &quot;natural order&quot; algorithm: &lt; 0 if str1 is less than str2; </p>
+<pre><code>                                                                   &gt; 0 if str1 is greater than str2, 
+                                                                   0 if they are equal.
+</code></pre><p>INFO: natural order version of UTF8::strcasecmp()</p>
+<pre><code class="lang-php">UTF8::strnatcasecmp(<span class="hljs-string">&apos;2&apos;</span>, <span class="hljs-string">&apos;10Hello WORLD &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>); <span class="hljs-comment">// -1</span>
+UTF8::strcasecmp(<span class="hljs-string">&apos;2Hello world &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>, <span class="hljs-string">&apos;10Hello WORLD &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>); <span class="hljs-comment">// 1</span>
+
+UTF8::strnatcasecmp(<span class="hljs-string">&apos;10Hello world &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>, <span class="hljs-string">&apos;2Hello WORLD &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>); <span class="hljs-comment">// 1</span>
+UTF8::strcasecmp(<span class="hljs-string">&apos;10Hello world &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>, <span class="hljs-string">&apos;2Hello WORLD &#x4E2D;&#x6587;&#x7A7A;&#x767D;!&apos;</span>); <span class="hljs-comment">// -1</span>
+</code></pre>
+<h5 id="strncasecmpstring-str1-string-str2-int-len--int">strncasecmp(string $str1, string $str2, int $len) : int</h5>
+<p>Case-insensitive string comparison of the first n characters.: 
+    &lt; 0 if str1 is less than str2; </p>
+<pre><code>&gt; 0 if str1 is greater than str2, 
+0 if they are equal.
+</code></pre><p>INFO: Case-insensitive version of UTF8::strncmp()</p>
+<pre><code class="lang-php">UTF8::strcasecmp(<span class="hljs-string">&quot;i&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\n&#xE0;liz&#xE6;ti&#xF8;n321&quot;</span>, <span class="hljs-string">&quot;i&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\n&#xE0;liz&#xE6;ti&#xF8;n123&quot;</span>, <span class="hljs-number">5</span>); <span class="hljs-comment">// 0</span>
+</code></pre>
+<h5 id="strncmpstring-str1-string-str2-int-len--int">strncmp(string $str1, string $str2, int $len) : int</h5>
+<p>Case-sensitive string comparison of the first n characters.: 
+    &lt; 0 if str1 is less than str2; </p>
+<pre><code>&gt; 0 if str1 is greater than str2, 
+0 if they are equal.
+</code></pre><pre><code class="lang-php">UTF8::strncmp(<span class="hljs-string">&quot;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\n&#xE0;liz&#xE6;ti&#xF8;n321&quot;</span>, <span class="hljs-string">&quot;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\n&#xE0;liz&#xE6;ti&#xF8;n123&quot;</span>, <span class="hljs-number">5</span>); <span class="hljs-comment">// 0</span>
+</code></pre>
+<h5 id="stringstring-str1-string-str2--int">string(string $str1, string $str2) : int</h5>
+<p>Create a UTF-8 string from code points.</p>
+<p>opposite: UTF8::codepoints()</p>
+<pre><code class="lang-php">UTF8::string(<span class="hljs-keyword">array</span>(<span class="hljs-number">246</span>, <span class="hljs-number">228</span>, <span class="hljs-number">252</span>)); <span class="hljs-comment">// &apos;&#xF6;&#xE4;&#xFC;&apos;</span>
+</code></pre>
+<h5 id="stringhasbomstring-str--bool">string_has_bom(string $str) : bool</h5>
+<p>Checks if string starts with &quot;BOM&quot; (Byte Order Mark Character) character.</p>
+<p>alias: UTF8::hasBom()</p>
+<pre><code class="lang-php">UTF8::string_has_bom(<span class="hljs-string">&quot;\xef\xbb\xbf foobar&quot;</span>); <span class="hljs-comment">// true</span>
+</code></pre>
+<h5 id="striptagsstring-str-stingnull-allowabletags--null-bool-cleanutf8--false--string">strip_tags(string $str, sting|null $allowable_tags = null, bool $cleanUtf8 = false) : string</h5>
+<p>Strip HTML and PHP tags from a string + clean invalid UTF-8.</p>
+<pre><code class="lang-php">UTF8::strip_tags(<span class="hljs-string">&quot;&lt;span&gt;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;\xa0\xa1&lt;/span&gt;&quot;</span>); <span class="hljs-comment">// &apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>
+</code></pre>
+<h5 id="strlenstring-str-string-encoding--utf8-bool-cleanutf8--false--int">strlen(string $str, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : int</h5>
+<p>Get the string length, not the byte-length!</p>
+<pre><code class="lang-php">UTF8::strlen(<span class="hljs-string">&quot;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\xE9&#xE0;liz&#xE6;ti&#xF8;n&quot;</span>)); <span class="hljs-comment">// 20</span>
+</code></pre>
+<h5 id="strwidthstring-str-string-encoding--utf8-bool-cleanutf8--false--int">strwidth(string $str, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : int</h5>
+<p>Return the width of a string.</p>
+<pre><code class="lang-php">UTF8::strwidth(<span class="hljs-string">&quot;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n\xE9&#xE0;liz&#xE6;ti&#xF8;n&quot;</span>)); <span class="hljs-comment">// 21</span>
+</code></pre>
+<h5 id="strpbrkstring-haystack-string-charlist--string">strpbrk(string $haystack, string $char_list) : string</h5>
+<p>Search a string for any of a set of characters.</p>
+<pre><code class="lang-php">UTF8::strpbrk(<span class="hljs-string">&apos;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>, <span class="hljs-string">&apos;&#x767D;&apos;</span>); <span class="hljs-comment">// &apos;&#x767D;-&apos;</span>
+</code></pre>
+<h5 id="strposstring-haystack-string-needle-int-offset--0-string-encoding--utf8-bool-cleanutf8--false--intfalse">strpos(string $haystack, string $needle, int $offset = 0, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : int|false</h5>
+<p>Find position of first occurrence of string in a string.</p>
+<pre><code class="lang-php">UTF8::strpos(<span class="hljs-string">&apos;ABC-&#xD6;&#xC4;&#xDC;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>, <span class="hljs-string">&apos;&#x4E2D;&apos;</span>); <span class="hljs-comment">// 8</span>
+</code></pre>
+<h5 id="striposstring-str-string-needle-int-offset--null-string-encoding--utf8-bool-cleanutf8--false--intfalse">stripos(string $str, string $needle, int $offset = null, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : int|false</h5>
+<p>Finds position of first occurrence of a string within another, case insensitive.</p>
+<pre><code class="lang-php">UTF8::strpos(<span class="hljs-string">&apos;ABC-&#xD6;&#xC4;&#xDC;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>, <span class="hljs-string">&apos;&#x4E2D;&apos;</span>); <span class="hljs-comment">// 8</span>
+</code></pre>
+<h5 id="strrposstring-haystack-string-needle-int-offset--0-string-encoding--utf8-bool-cleanutf8--false--stringfalse">strrpos(string $haystack, string $needle, int $offset = 0, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string|false</h5>
+<p>Find position of last occurrence of a string in a string.</p>
+<pre><code class="lang-php">UTF8::strrpos(<span class="hljs-string">&apos;ABC-&#xD6;&#xC4;&#xDC;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>, <span class="hljs-string">&apos;&#x4E2D;&apos;</span>); <span class="hljs-comment">// 13</span>
+</code></pre>
+<h5 id="strriposstring-haystack-string-needle-int-offset--0-string-encoding--utf8-bool-cleanutf8--false--stringfalse">strripos(string $haystack, string $needle, int $offset = 0, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string|false</h5>
+<p>Find position of last occurrence of a case-insensitive string.</p>
+<pre><code class="lang-php">UTF8::strripos(<span class="hljs-string">&apos;ABC-&#xD6;&#xC4;&#xDC;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>, <span class="hljs-string">&apos;&#x4E2D;&apos;</span>); <span class="hljs-comment">// 13</span>
+</code></pre>
+<h5 id="strrchrstring-haystack-string-needle-bool-part--false-string-encoding--utf8-bool-cleanutf8--false--stringfalse">strrchr(string $haystack, string $needle, bool $part = false, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string|false</h5>
+<p>Finds the last occurrence of a character in a string within another.</p>
+<pre><code class="lang-php">UTF8::strrchr(<span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;-&#xE4;&#xF6;&#xFC;&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;-&#xE4;&#xF6;&#xFC;&apos;</span>
+</code></pre>
+<h5 id="strrichrstring-haystack-string-needle-bool-part--false-string-encoding--utf8-bool-cleanutf8--false--stringfalse">strrichr(string $haystack, string $needle, bool $part = false, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string|false</h5>
+<p>Finds the last occurrence of a character in a string within another, case insensitive.</p>
+<pre><code class="lang-php">UTF8::strrichr(<span class="hljs-string">&apos;A&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;-&#xE4;&#xF6;&#xFC;&apos;</span>, <span class="hljs-string">&apos;a&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;A&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;-&#xE4;&#xF6;&#xFC;&apos;</span>
+</code></pre>
+<h5 id="strrevstring-str--string">strrev(string $str) : string</h5>
+<p>Reverses characters order in the string.</p>
+<pre><code class="lang-php">UTF8::strrev(<span class="hljs-string">&apos;&#x3BA;-&#xF6;&#xE4;&#xFC;&apos;</span>); <span class="hljs-comment">// &apos;&#xFC;&#xE4;&#xF6;-&#x3BA;&apos;</span>
+</code></pre>
+<h5 id="strspnstring-str-string-mask-int-offset--0-int-length--2147483647--string">strspn(string $str, string $mask, int $offset = 0, int $length = 2147483647) : string</h5>
+<p>Finds the length of the initial segment of a string consisting entirely of characters contained within a given mask.</p>
+<pre><code class="lang-php">UTF8::strspn(<span class="hljs-string">&apos;i&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>, <span class="hljs-string">&apos;it&#xF1;&apos;</span>); <span class="hljs-comment">// &apos;3&apos;</span>
+</code></pre>
+<h5 id="strstrstring-str-string-needle-bool-beforeneedle--false-string-encoding--utf8-bool-cleanutf8--false--string">strstr(string $str, string $needle, bool $before_needle = false, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string</h5>
+<p>Returns part of haystack string from the first occurrence of needle to the end of haystack.</p>
+<p>alias: UTF8::strchr()</p>
+<pre><code class="lang-php"><span class="hljs-variable">$str</span> = <span class="hljs-string">&apos;i&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>;
+<span class="hljs-variable">$search</span> = <span class="hljs-string">&apos;n&#xE2;t&apos;</span>;
+
+UTF8::strstr(<span class="hljs-variable">$str</span>, <span class="hljs-variable">$search</span>)); <span class="hljs-comment">// &apos;n&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>
+UTF8::strstr(<span class="hljs-variable">$str</span>, <span class="hljs-variable">$search</span>, <span class="hljs-keyword">true</span>)); <span class="hljs-comment">// &apos;i&#xF1;t&#xEB;r&apos;</span>
+</code></pre>
+<h5 id="stristrstring-str-string-needle-bool-beforeneedle--false-string-encoding--utf8-bool-cleanutf8--false--string">stristr(string $str, string $needle, bool $before_needle = false, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string</h5>
+<p>Returns all of haystack starting from and including the first occurrence of needle to the end.</p>
+<p>alias: UTF8::strichr()</p>
+<pre><code class="lang-php"><span class="hljs-variable">$str</span> = <span class="hljs-string">&apos;i&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>;
+<span class="hljs-variable">$search</span> = <span class="hljs-string">&apos;N&#xC2;T&apos;</span>;
+
+UTF8::stristr(<span class="hljs-variable">$str</span>, <span class="hljs-variable">$search</span>)); <span class="hljs-comment">// &apos;n&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>
+UTF8::stristr(<span class="hljs-variable">$str</span>, <span class="hljs-variable">$search</span>, <span class="hljs-keyword">true</span>)); <span class="hljs-comment">// &apos;i&#xF1;t&#xEB;r&apos;</span>
+</code></pre>
+<h5 id="strtocasefoldstring-str-bool-full--true--string">strtocasefold(string $str, bool $full = true) : string</h5>
+<p>Unicode transformation for case-less matching.</p>
+<pre><code class="lang-php">UTF8::strtocasefold(<span class="hljs-string">&apos;&#x1F0;&#x25CC;&#x331;&apos;</span>); <span class="hljs-comment">// &apos;j&#x30C;&#x25CC;&#x331;&apos;</span>
+</code></pre>
+<h5 id="strtolowerstring-str-string-encoding--utf8-bool-cleanutf8--false--string">strtolower(string $str, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string</h5>
+<p>Make a string lowercase.</p>
+<pre><code class="lang-php">UTF8::strtolower(<span class="hljs-string">&apos;D&#xC9;J&#xC0; &#x3A3;&#x3C3;&#x3C2; I&#x131;&#x130;i&apos;</span>); <span class="hljs-comment">// &apos;d&#xE9;j&#xE0; &#x3C3;&#x3C3;&#x3C2; i&#x131;ii&apos;</span>
+</code></pre>
+<h5 id="strtoupperstring-str-string-encoding--utf8-bool-cleanutf8--false--string">strtoupper(string $str, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string</h5>
+<p>Make a string uppercase.</p>
+<pre><code class="lang-php">UTF8::strtoupper(<span class="hljs-string">&apos;D&#xE9;j&#xE0; &#x3A3;&#x3C3;&#x3C2; I&#x131;&#x130;i&apos;</span>); <span class="hljs-comment">// &apos;D&#xC9;J&#xC0; &#x3A3;&#x3A3;&#x3A3; II&#x130;I&apos;</span>
+</code></pre>
+<h5 id="strtrstring-str-stringarray-from-stringarray-to--inf--string">strtr(string $str, string|array $from, string|array $to = INF) : string</h5>
+<p>Translate characters or replace sub-strings.</p>
+<pre><code class="lang-php"><span class="hljs-variable">$arr</span> = <span class="hljs-keyword">array</span>(
+    <span class="hljs-string">&apos;Hello&apos;</span>   =&gt; <span class="hljs-string">&apos;&#x25CB;&#x25CF;&#x25CE;&apos;</span>,
+    <span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span> =&gt; <span class="hljs-string">&apos;earth&apos;</span>,
+);
+UTF8::strtr(<span class="hljs-string">&apos;Hello &#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>, <span class="hljs-variable">$arr</span>); <span class="hljs-comment">// &apos;&#x25CB;&#x25CF;&#x25CE; earth&apos;</span>
+</code></pre>
+<h5 id="strtowordsstring-str-string-charlist----array">str_to_words(string $str, string $charlist = &apos;&apos;) : array</h5>
+<p>Convert a string into an array of words.</p>
+<pre><code class="lang-php">UTF8::str_to_words(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D; o&#xF6;&#xE4;&#xFC;#s&apos;</span>, <span class="hljs-string">&apos;#&apos;</span>) <span class="hljs-comment">// array(&apos;&apos;, &apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;, &apos; &apos;, &apos;o&#xF6;&#xE4;&#xFC;#s&apos;, &apos;&apos;)</span>
+</code></pre>
+<h5 id="substrstring-str-int-start--0-int-length--null-string-encoding--utf8-bool-cleanutf8--false--string">substr(string $str, int $start = 0, int $length = null, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string</h5>
+<p>Get part of a string.</p>
+<pre><code class="lang-php">UTF8::substr(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// &apos;&#x6587;&#x7A7A;&apos;</span>
+</code></pre>
+<h5 id="substrcomparestring-mainstr-string-str-int-offset-int-length--2147483647-bool-caseinsensitivity--false--int">substr_compare(string $main_str, string $str, int $offset, int $length = 2147483647, bool $case_insensitivity = false) : int</h5>
+<p>Binary safe comparison of two strings from an offset, up to length characters.</p>
+<pre><code class="lang-php">UTF8::substr_compare(<span class="hljs-string">&quot;&#x25CB;&#x25CF;&#x25CE;\r&quot;</span>, <span class="hljs-string">&apos;&#x25CF;&#x25CE;&apos;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// -1</span>
+UTF8::substr_compare(<span class="hljs-string">&quot;&#x25CB;&#x25CF;&#x25CE;\r&quot;</span>, <span class="hljs-string">&apos;&#x25CE;&#x25CF;&apos;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// 1</span>
+UTF8::substr_compare(<span class="hljs-string">&quot;&#x25CB;&#x25CF;&#x25CE;\r&quot;</span>, <span class="hljs-string">&apos;&#x25CF;&#x25CE;&apos;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// 0</span>
+</code></pre>
+<h5 id="substrcountstring-haystack-string-needle-int-offset--0-int-length--null-string-encoding--utf8-bool-cleanutf8--false--intfalse">substr_count(string $haystack, string $needle, int $offset = 0, int $length = null, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : int|false</h5>
+<p>Count the number of substring occurrences.</p>
+<pre><code class="lang-php">UTF8::substr_count(<span class="hljs-string">&apos;&#x4E2D;&#x6587;&#x7A7A;&#x767D;&apos;</span>, <span class="hljs-string">&apos;&#x6587;&#x7A7A;&apos;</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>); <span class="hljs-comment">// 1</span>
+</code></pre>
+<h5 id="substrleftstring-haystack-string-needle--string">substr_left(string $haystack, string $needle) : string</h5>
+<p>Removes an prefix ($needle) from start of the string ($haystack).</p>
+<pre><code class="lang-php">UTF8::substr_left(<span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;MiddleEnd&apos;</span>, <span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;MiddleEnd&apos;</span>
+UTF8::substr_left(<span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;MiddleEnd&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;MiddleEnd&apos;</span>
+</code></pre>
+<h5 id="substrileftstring-haystack-string-needle--string">substr_ileft(string $haystack, string $needle) : string</h5>
+<p>Removes an prefix ($needle) from start of the string ($haystack), case insensitive.</p>
+<pre><code class="lang-php">UTF8::substr_ileft(<span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;MiddleEnd&apos;</span>, <span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;MiddleEnd&apos;</span>
+UTF8::substr_ileft(<span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;MiddleEnd&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;MiddleEnd&apos;</span>
+</code></pre>
+<h5 id="substrrightstring-haystack-string-needle--string">substr_right(string $haystack, string $needle) : string</h5>
+<p>Removes an suffix ($needle) from end of the string ($haystack).</p>
+<pre><code class="lang-php">UTF8::substr_right(<span class="hljs-string">&apos;BeginMiddle&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;BeginMiddle&apos;</span>
+UTF8::substr_right(<span class="hljs-string">&apos;BeginMiddle&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;BeginMiddle&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>
+</code></pre>
+<h5 id="substrirightstring-haystack-string-needle--string">substr_iright(string $haystack, string $needle) : string</h5>
+<p>Removes an suffix ($needle) from end of the string ($haystack), case insensitive.</p>
+<pre><code class="lang-php">UTF8::substr_iright(<span class="hljs-string">&apos;BeginMiddle&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-string">&apos;&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;BeginMiddle&apos;</span>
+UTF8::substr_iright(<span class="hljs-string">&apos;BeginMiddle&#x39A;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>, <span class="hljs-string">&apos;&#x3BA;&#x1F79;&#x3C3;&#x3BC;&#x3B5;&apos;</span>); <span class="hljs-comment">// &apos;BeginMiddle&apos;</span>
+</code></pre>
+<h5 id="substrreplacestringstring-str-stringstring-replacement-intint-start-intint-length--null--stringarray">substr_replace(string|string[] $str, string|string[] $replacement, int|int[] $start, int|int[] $length = null) : string|array</h5>
+<p>Replace text within a portion of a string.</p>
+<pre><code class="lang-php">UTF8::substr_replace(<span class="hljs-keyword">array</span>(<span class="hljs-string">&apos;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>, <span class="hljs-string">&apos;foo&apos;</span>), <span class="hljs-string">&apos;&#xE6;&apos;</span>, <span class="hljs-number">1</span>); <span class="hljs-comment">// array(&apos;I&#xE6;&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;, &apos;f&#xE6;oo&apos;)</span>
+</code></pre>
+<h5 id="swapcasestring-str-string-string-encoding--utf8-bool-cleanutf8--false--string">swapCase(string $str, string string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string</h5>
+<p>Returns a case swapped version of the string.</p>
+<pre><code class="lang-php">UTF8::swapCase(<span class="hljs-string">&apos;d&#xE9;J&#xC0; &#x3C3;&#x3C3;&#x3C2; i&#x131;II&apos;</span>); <span class="hljs-comment">// &apos;D&#xC9;j&#xE0; &#x3A3;&#x3A3;&#x3A3; IIii&apos;</span>
+</code></pre>
+<h5 id="toasciistring-str-string-unknown---bool-strict--string">to_ascii(string $str, string $unknown = &apos;?&apos;, bool $strict) : string</h5>
+<p>Convert a string into ASCII.</p>
+<p>alias: UTF8::toAscii()
+alias: UTF8::str_transliterate()</p>
+<pre><code class="lang-php">UTF8::to_ascii(<span class="hljs-string">&apos;d&#xE9;j&#xE0; &#x3C3;&#x3C3;&#x3C2; i&#x131;ii&apos;</span>); <span class="hljs-comment">// &apos;deja sss iiii&apos;</span>
+</code></pre>
+<h5 id="toutf8stringstring-str-bool-decodehtmlentitytoutf8--false--stringstring">to_utf8(string|string[] $str, bool $decodeHtmlEntityToUtf8 = false) : string|string[]</h5>
+<p>This function leaves UTF-8 characters alone, while converting almost all non-UTF8 to UTF8.</p>
+<ul>
+<li>It decode UTF-8 codepoints and unicode escape sequences.</li>
+<li>It assumes that the encoding of the original string is either WINDOWS-1252 or ISO-8859-1.</li>
+<li>WARNING: It does not remove invalid UTF-8 characters, so you maybe need to use &quot;UTF8::clean()&quot; for this case.</li>
+</ul>
+<p>alias: UTF8::toUtf8()</p>
+<pre><code class="lang-php">UTF8::to_utf8(<span class="hljs-string">&quot;\u0063\u0061\u0074&quot;</span>); <span class="hljs-comment">// &apos;cat&apos;</span>
+</code></pre>
+<h5 id="toiso8859stringstring-str--stringstring">to_iso8859(string|string[] $str) : string|string[]</h5>
+<p>Convert a string into &quot;ISO-8859&quot;-encoding (Latin-1).</p>
+<p>alias: UTF8::toIso8859()
+alias: UTF8::to_latin1()
+alias: UTF8::toLatin1()</p>
+<pre><code class="lang-php">UTF8::to_utf8(UTF8::to_latin1(<span class="hljs-string">&apos;  -ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-  &apos;</span>)); <span class="hljs-comment">// &apos;  -ABC-????-  &apos;</span>
+</code></pre>
+<h5 id="ucfirststring-str-string-encoding--utf8-bool-cleanutf8--false--string">ucfirst(string $str, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string</h5>
+<p>Makes string&apos;s first char uppercase.</p>
+<p>alias: UTF8::ucword()</p>
+<pre><code class="lang-php">UTF8::ucfirst(<span class="hljs-string">&apos;&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>); <span class="hljs-comment">// &apos;&#xD1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>
+</code></pre>
+<h5 id="ucwordsstring-str-array-exceptions--array-string-charlist---string-encoding--utf8-bool-cleanutf8--false--string">ucwords(string $str, array $exceptions = array(), string $charlist = &apos;&apos;, string $encoding = &apos;UTF-8&apos;, bool $cleanUtf8 = false) : string</h5>
+<p>Uppercase for all words in the string.</p>
+<pre><code class="lang-php">UTF8::ucwords(<span class="hljs-string">&apos;i&#xF1;t &#xEB;rn &#xE2;Ti &#xF4;n&#xE0; liz &#xE6;ti &#xF8;n&apos;</span>); <span class="hljs-comment">// &apos;I&#xF1;t &#xCB;rn &#xC2;Ti &#xD4;n&#xE0; Liz &#xC6;ti &#xD8;n&apos;</span>
+</code></pre>
+<h5 id="rawurldecodestring-str--string">rawurldecode(string $str) : string</h5>
+<p>Multi decode html entity &amp; fix urlencoded-win1252-chars.</p>
+<pre><code class="lang-php">UTF8::urldecode(<span class="hljs-string">&apos;tes%20&#xF6;&#xE4;&#xFC;%20\u00edtest+test&apos;</span>); <span class="hljs-comment">// &apos;tes &#xF6;&#xE4;&#xFC; &#xED;test+test&apos;</span>
+</code></pre>
+<h5 id="urldecodestring-str--string">urldecode(string $str) : string</h5>
+<p>Multi decode html entity &amp; fix urlencoded-win1252-chars.</p>
+<pre><code class="lang-php">UTF8::urldecode(<span class="hljs-string">&apos;tes%20&#xF6;&#xE4;&#xFC;%20\u00edtest+test&apos;</span>); <span class="hljs-comment">// &apos;tes &#xF6;&#xE4;&#xFC; &#xED;test test&apos;</span>
+</code></pre>
+<h5 id="utf8decodestring-str--string">utf8_decode(string $str) : string</h5>
+<p>Decodes an UTF-8 string to ISO-8859-1.</p>
+<pre><code class="lang-php">UTF8::encode(<span class="hljs-string">&apos;UTF-8&apos;</span>, UTF8::utf8_decode(<span class="hljs-string">&apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>)); <span class="hljs-comment">// &apos;-ABC-????-&apos;</span>
+</code></pre>
+<h5 id="utf8encodestring-str--string">utf8_encode(string $str) : string</h5>
+<p>Encodes an ISO-8859-1 string to UTF-8.</p>
+<pre><code class="lang-php">UTF8::utf8_decode(UTF8::utf8_encode(<span class="hljs-string">&apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>)); <span class="hljs-comment">// &apos;-ABC-&#x4E2D;&#x6587;&#x7A7A;&#x767D;-&apos;</span>
+</code></pre>
+<h5 id="wordslimitstring-str-int-words--100-string-straddon----string">words_limit(string $str, int $words = 100, string $strAddOn = &apos;...&apos;) : string</h5>
+<p>Limit the number of words in a string.</p>
+<pre><code class="lang-php">UTF8::words_limit(<span class="hljs-string">&apos;f&#xF2;&#xF4; b&#xE0;&#x159; f&#xF2;&#xF4;&apos;</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&apos;&apos;</span>); <span class="hljs-comment">// &apos;f&#xF2;&#xF4; b&#xE0;&#x159;&apos;</span>
+</code></pre>
+<h5 id="wordwrapstring-str-int-width--75-string-break--n-bool-cut--false--string">wordwrap(string $str, int $width = 75, string $break = &quot;\n&quot;, bool $cut = false) : string</h5>
+<p>Wraps a string to a given number of characters</p>
+<pre><code class="lang-php">UTF8::wordwrap(<span class="hljs-string">&apos;I&#xF1;t&#xEB;rn&#xE2;ti&#xF4;n&#xE0;liz&#xE6;ti&#xF8;n&apos;</span>, <span class="hljs-number">2</span>, <span class="hljs-string">&apos;&lt;br&gt;&apos;</span>, <span class="hljs-keyword">true</span>)); <span class="hljs-comment">// &apos;I&#xF1;&lt;br&gt;t&#xEB;&lt;br&gt;rn&lt;br&gt;&#xE2;t&lt;br&gt;i&#xF4;&lt;br&gt;n&#xE0;&lt;br&gt;li&lt;br&gt;z&#xE6;&lt;br&gt;ti&lt;br&gt;&#xF8;n&apos;</span>
+</code></pre>
+<h2 id="unit-test">Unit Test</h2>
+<p>1) <a href="https://getcomposer.org" target="_blank">Composer</a> is a prerequisite for running the tests.</p>
+<pre><code>composer install
+</code></pre><p>2) The tests can be executed by running this command from the root directory:</p>
+<pre><code class="lang-bash">./vendor/bin/phpunit
+</code></pre>
+<h3 id="license-and-copyright">License and Copyright</h3>
+<p>&quot;Portable UTF8&quot; is free software; you can redistribute it and/or modify it under
+the terms of the (at your option):</p>
+<ul>
+<li><a href="http://apache.org/licenses/LICENSE-2.0.txt" target="_blank">Apache License v2.0</a>, or</li>
+<li><a href="http://gnu.org/licenses/gpl-2.0.txt" target="_blank">GNU General Public License v2.0</a>.</li>
+</ul>
+<p>Unicode handling requires tedious work to be implemented and maintained on the
+long run. As such, contributions such as unit tests, bug reports, comments or
+patches licensed under both licenses are really welcomed.</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        
+    </div>
+</div>
+
+        
+<script src="gitbook/app.js"></script>
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-search/lunr.min.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-search/search.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-sharing/buttons.js"></script>
+    
+
+    
+    <script src="gitbook/plugins/gitbook-plugin-fontsettings/buttons.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"highlight":{},"search":{},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
