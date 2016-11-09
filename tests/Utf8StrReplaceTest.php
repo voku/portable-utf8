@@ -15,7 +15,7 @@ class Utf8StrReplaceTest extends PHPUnit_Framework_TestCase
 
     $str = 'Привет мир';
     $replaced = 'Пока мир';
-    $this->assertSame($replaced, u::str_replace('Привет', 'Пока', $str));
+    self::assertSame($replaced, u::str_replace('Привет', 'Пока', $str));
   }
 
   public function test_replace_no_match()

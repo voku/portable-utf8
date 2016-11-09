@@ -1,6 +1,7 @@
 <?php
 
 use voku\helper\UTF8 as u;
+use voku\helper\UTF8;
 
 /**
  * Class Utf8StristrTest
@@ -95,6 +96,58 @@ class Utf8StristrTest extends PHPUnit_Framework_TestCase
 
     // UTF-8
     self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search, 0, 'UTF-8', true));
+  }
 
+  public function testSubstr()
+  {
+    $str = 'iñtërnâtiônàlizætiøn';
+    $search = 'NÂT';
+    self::assertSame(UTF8::stristr($str, $search), 'nâtiônàlizætiøn');
+  }
+
+  public function testSubstrNoMatch()
+  {
+    $str = 'iñtërnâtiônàlizætiøn';
+    $search = 'foo';
+    self::assertFalse(UTF8::stristr($str, $search));
+  }
+
+  public function testEmptySearch()
+  {
+    $str = 'iñtërnâtiônàlizætiøn';
+    $search = '';
+    self::assertSame(false, UTF8::stristr($str, $search));
+
+    $str = 'int';
+    $search = null;
+    self::assertSame(false, stristr($str, $search));
+  }
+
+  public function testEmptyStr()
+  {
+    $str = '';
+    $search = 'NÂT';
+    self::assertFalse(UTF8::stristr($str, $search));
+  }
+
+  public function testEmptyBoth()
+  {
+    $str = '';
+    $search = '';
+    self::assertSame(false, UTF8::stristr($str, $search));
+  }
+
+  public function testLinefeedStr()
+  {
+    $str = "iñt\nërnâtiônàlizætiøn";
+    $search = 'NÂT';
+    self::assertSame('nâtiônàlizætiøn', UTF8::stristr($str, $search));
+  }
+
+  public function testLinefeedBoth()
+  {
+    $str = "iñtërn\nâtiônàlizætiøn";
+    $search = "N\nÂT";
+    self::assertSame("n\nâtiônàlizætiøn", UTF8::stristr($str, $search));
   }
 }

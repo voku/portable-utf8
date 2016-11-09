@@ -1,6 +1,7 @@
 <?php
 
 use voku\helper\UTF8 as u;
+use voku\helper\UTF8;
 
 /**
  * Class Utf8StrcspnTest
@@ -68,5 +69,41 @@ class Utf8StrcspnTest extends PHPUnit_Framework_TestCase
   {
     $str = 'iñtërnâtiônàlizætiøn';
     self::assertSame(6, u::strcspn($str, 'â'));
+  }
+
+  public function testNoMatchSingleByteSearch()
+  {
+    $str = 'iñtërnâtiônàlizætiøn';
+    self::assertSame(UTF8::strcspn($str, 't'), 2);
+  }
+
+  public function testNoMatchMultiByteSearch()
+  {
+    $str = 'iñtërnâtiônàlizætiøn';
+    self::assertSame(UTF8::strcspn($str, 'â'), 6);
+  }
+
+  public function testCompareStrspn()
+  {
+    $str = 'aeioustr';
+    self::assertSame(UTF8::strcspn($str, 'tr'), strcspn($str, 'tr'));
+  }
+
+  public function testMatchAscii()
+  {
+    $str = 'internationalization';
+    self::assertSame(UTF8::strcspn($str, 'a'), strcspn($str, 'a'));
+  }
+
+  public function testLinefeed()
+  {
+    $str = "i\nñtërnâtiônàlizætiøn";
+    self::assertSame(UTF8::strcspn($str, 't'), 3);
+  }
+
+  public function testLinefeedMask()
+  {
+    $str = "i\nñtërnâtiônàlizætiøn";
+    self::assertSame(UTF8::strcspn($str, "\n"), 1);
   }
 }

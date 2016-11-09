@@ -2762,7 +2762,7 @@ final class UTF8
   public static function is_binary_file($file)
   {
     try {
-      $fp = fopen($file, 'r');
+      $fp = fopen($file, 'rb');
       $block = fread($fp, 512);
       fclose($fp);
     } catch (\Exception $e) {
@@ -4416,7 +4416,8 @@ final class UTF8
    *
    * @return string
    */
-  public static function str_replace_first($search, $replace, $subject) {
+  public static function str_replace_first($search, $replace, $subject)
+  {
     $pos = self::strpos($subject, $search);
 
     if ($pos !== false) {
@@ -6518,7 +6519,8 @@ final class UTF8
    * <ul>
    * <li>It decode UTF-8 codepoints and unicode escape sequences.</li>
    * <li>It assumes that the encoding of the original string is either WINDOWS-1252 or ISO-8859-1.</li>
-   * <li>WARNING: It does not remove invalid UTF-8 characters, so you maybe need to use "UTF8::clean()" for this case.</li>
+   * <li>WARNING: It does not remove invalid UTF-8 characters, so you maybe need to use "UTF8::clean()" for this
+   * case.</li>
    * </ul>
    *
    * @param string|string[] $str                    <p>Any string or array.</p>
