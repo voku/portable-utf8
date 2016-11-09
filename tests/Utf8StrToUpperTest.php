@@ -21,4 +21,3 @@ class Utf8StrToUpperTest extends PHPUnit_Framework_TestCase
     self::assertSame(UTF8::strtoupper($str), $upper);
   }
 }
-

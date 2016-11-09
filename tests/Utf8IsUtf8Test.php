@@ -152,7 +152,7 @@ class Utf8IsUtf8Test extends PHPUnit_Framework_TestCase
   public function testInvalidIdBetweenTwoAndThreeCleanUp()
   {
     $str = "Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn";
-    $stripped = "IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn";
+    $stripped = 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn';
     self::assertSame($stripped, UTF8::cleanup($str));
   }
 
@@ -165,14 +165,14 @@ class Utf8IsUtf8Test extends PHPUnit_Framework_TestCase
   public function testInvalidThreeOctetSequenceSecondCleanUp()
   {
     $str = "Iñtërnâtiônàlizætiøn\xe2\x28\xa1Iñtërnâtiônàlizætiøn";
-    $stripped = "Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn";
+    $stripped = 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn';
     self::assertSame($stripped, UTF8::cleanup($str));
   }
 
   public function testInvalidThreeOctetSequenceThirdCleanUp()
   {
     $str = "Iñtërnâtiônàlizætiøn\xe2\x82\x28Iñtërnâtiônàlizætiøn";
-    $stripped = "Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn";
+    $stripped = 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn';
     self::assertSame($stripped, UTF8::cleanup($str));
   }
 
@@ -185,21 +185,21 @@ class Utf8IsUtf8Test extends PHPUnit_Framework_TestCase
   public function testInvalidFourOctetSequenceCleanUp()
   {
     $str = "Iñtërnâtiônàlizætiøn\xf0\x28\x8c\xbcIñtërnâtiônàlizætiøn";
-    $stripped = "Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn";
+    $stripped = 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn';
     self::assertSame($stripped, UTF8::cleanup($str));
   }
 
   public function testInvalidFiveOctetSequenceCleanUp()
   {
     $str = "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn";
-    $stripped = "IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn";
+    $stripped = 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn';
     self::assertSame($stripped, UTF8::cleanup($str));
   }
 
   public function testInvalidSixOctetSequenceCleanUp()
   {
     $str = "Iñtërnâtiônàlizætiøn\xfc\xa1\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn";
-    $stripped = "IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn";
+    $stripped = 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn';
     self::assertSame($stripped, UTF8::cleanup($str));
   }
 }
