@@ -1,7 +1,7 @@
 <?php
 
-use voku\helper\UTF8 as u;
 use voku\helper\UTF8;
+use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8StrIreplaceTest
@@ -267,7 +267,7 @@ class Utf8StrIreplaceTest extends PHPUnit_Framework_TestCase
   public function testReplaceLinefeedSearch()
   {
     $str = "Iñtërnâtiônàli\nzætiøn";
-    $replaced = "Iñtërnâtiônàlisetiøn";
+    $replaced = 'Iñtërnâtiônàlisetiøn';
     self::assertSame($replaced, UTF8::str_ireplace("lI\nzÆ", 'lise', $str));
   }
 }
