@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xc4] = array(
+
+static $data = array(
 'sswals', 'sswalt', 'sswalp', 'sswalh', 'sswam', 'sswab', 'sswabs', 'sswas', 'sswass', 'sswang', 'sswaj', 'sswac', 'sswak', 'sswat', 'sswap', 'sswah',
 'sswae', 'sswaeg', 'sswaegg', 'sswaegs', 'sswaen', 'sswaenj', 'sswaenh', 'sswaed', 'sswael', 'sswaelg', 'sswaelm', 'sswaelb', 'sswaels', 'sswaelt', 'sswaelp', 'sswaelh',
 'sswaem', 'sswaeb', 'sswaebs', 'sswaes', 'sswaess', 'sswaeng', 'sswaej', 'sswaec', 'sswaek', 'sswaet', 'sswaep', 'sswaeh', 'ssoe', 'ssoeg', 'ssoegg', 'ssoegs',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xc4] = array(
 'ssyuls', 'ssyult', 'ssyulp', 'ssyulh', 'ssyum', 'ssyub', 'ssyubs', 'ssyus', 'ssyuss', 'ssyung', 'ssyuj', 'ssyuc', 'ssyuk', 'ssyut', 'ssyup', 'ssyuh',
 'sseu', 'sseug', 'sseugg', 'sseugs', 'sseun', 'sseunj', 'sseunh', 'sseud', 'sseul', 'sseulg', 'sseulm', 'sseulb', 'sseuls', 'sseult', 'sseulp', 'sseulh',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

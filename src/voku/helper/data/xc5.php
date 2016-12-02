@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xc5] = array(
+
+static $data = array(
 'sseum', 'sseub', 'sseubs', 'sseus', 'sseuss', 'sseung', 'sseuj', 'sseuc', 'sseuk', 'sseut', 'sseup', 'sseuh', 'ssyi', 'ssyig', 'ssyigg', 'ssyigs',
 'ssyin', 'ssyinj', 'ssyinh', 'ssyid', 'ssyil', 'ssyilg', 'ssyilm', 'ssyilb', 'ssyils', 'ssyilt', 'ssyilp', 'ssyilh', 'ssyim', 'ssyib', 'ssyibs', 'ssyis',
 'ssyiss', 'ssying', 'ssyij', 'ssyic', 'ssyik', 'ssyit', 'ssyip', 'ssyih', 'ssi', 'ssig', 'ssigg', 'ssigs', 'ssin', 'ssinj', 'ssinh', 'ssid',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xc5] = array(
 'em', 'eb', 'ebs', 'es', 'ess', 'eng', 'ej', 'ec', 'ek', 'et', 'ep', 'eh', 'yeo', 'yeog', 'yeogg', 'yeogs',
 'yeon', 'yeonj', 'yeonh', 'yeod', 'yeol', 'yeolg', 'yeolm', 'yeolb', 'yeols', 'yeolt', 'yeolp', 'yeolh', 'yeom', 'yeob', 'yeobs', 'yeos',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

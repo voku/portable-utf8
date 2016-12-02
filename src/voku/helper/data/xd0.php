@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xd0] = array(
+
+static $data = array(
 'kweon', 'kweonj', 'kweonh', 'kweod', 'kweol', 'kweolg', 'kweolm', 'kweolb', 'kweols', 'kweolt', 'kweolp', 'kweolh', 'kweom', 'kweob', 'kweobs', 'kweos',
 'kweoss', 'kweong', 'kweoj', 'kweoc', 'kweok', 'kweot', 'kweop', 'kweoh', 'kwe', 'kweg', 'kwegg', 'kwegs', 'kwen', 'kwenj', 'kwenh', 'kwed',
 'kwel', 'kwelg', 'kwelm', 'kwelb', 'kwels', 'kwelt', 'kwelp', 'kwelh', 'kwem', 'kweb', 'kwebs', 'kwes', 'kwess', 'kweng', 'kwej', 'kwec',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xd0] = array(
 'taen', 'taenj', 'taenh', 'taed', 'tael', 'taelg', 'taelm', 'taelb', 'taels', 'taelt', 'taelp', 'taelh', 'taem', 'taeb', 'taebs', 'taes',
 'taess', 'taeng', 'taej', 'taec', 'taek', 'taet', 'taep', 'taeh', 'tya', 'tyag', 'tyagg', 'tyags', 'tyan', 'tyanj', 'tyanh', 'tyad',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

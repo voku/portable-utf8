@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xb8] = array(
+
+static $data = array(
 'reoss', 'reong', 'reoj', 'reoc', 'reok', 'reot', 'reop', 'reoh', 're', 'reg', 'regg', 'regs', 'ren', 'renj', 'renh', 'red',
 'rel', 'relg', 'relm', 'relb', 'rels', 'relt', 'relp', 'relh', 'rem', 'reb', 'rebs', 'res', 'ress', 'reng', 'rej', 'rec',
 'rek', 'ret', 'rep', 'reh', 'ryeo', 'ryeog', 'ryeogg', 'ryeogs', 'ryeon', 'ryeonj', 'ryeonh', 'ryeod', 'ryeol', 'ryeolg', 'ryeolm', 'ryeolb',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xb8] = array(
 'ryoss', 'ryong', 'ryoj', 'ryoc', 'ryok', 'ryot', 'ryop', 'ryoh', 'ru', 'rug', 'rugg', 'rugs', 'run', 'runj', 'runh', 'rud',
 'rul', 'rulg', 'rulm', 'rulb', 'ruls', 'rult', 'rulp', 'rulh', 'rum', 'rub', 'rubs', 'rus', 'russ', 'rung', 'ruj', 'ruc',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

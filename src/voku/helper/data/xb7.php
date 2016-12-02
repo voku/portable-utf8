@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xb7] = array(
+
+static $data = array(
 'ddwim', 'ddwib', 'ddwibs', 'ddwis', 'ddwiss', 'ddwing', 'ddwij', 'ddwic', 'ddwik', 'ddwit', 'ddwip', 'ddwih', 'ddyu', 'ddyug', 'ddyugg', 'ddyugs',
 'ddyun', 'ddyunj', 'ddyunh', 'ddyud', 'ddyul', 'ddyulg', 'ddyulm', 'ddyulb', 'ddyuls', 'ddyult', 'ddyulp', 'ddyulh', 'ddyum', 'ddyub', 'ddyubs', 'ddyus',
 'ddyuss', 'ddyung', 'ddyuj', 'ddyuc', 'ddyuk', 'ddyut', 'ddyup', 'ddyuh', 'ddeu', 'ddeug', 'ddeugg', 'ddeugs', 'ddeun', 'ddeunj', 'ddeunh', 'ddeud',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xb7] = array(
 'ryaem', 'ryaeb', 'ryaebs', 'ryaes', 'ryaess', 'ryaeng', 'ryaej', 'ryaec', 'ryaek', 'ryaet', 'ryaep', 'ryaeh', 'reo', 'reog', 'reogg', 'reogs',
 'reon', 'reonj', 'reonh', 'reod', 'reol', 'reolg', 'reolm', 'reolb', 'reols', 'reolt', 'reolp', 'reolh', 'reom', 'reob', 'reobs', 'reos',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

@@ -595,6 +595,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testFileGetContents()
   {
+    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
+    self::assertContains('M	𝐌	𝑀	𝑴	𝖬	𝗠	𝘔	𝙈	ℳ	𝓜	𝔐	𝕸	𝙼	𝕄', $testString);
+
     $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
     self::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
 
@@ -1371,6 +1374,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '<b><b>lall</b>'           => true,
         '</b>lall</b>'             => true,
         '[b]lall[b]'               => false,
+        '<html><body class="no-js"></html>' => true,
+        '<html   f=\'\'    d="">' => true,
+
     );
 
     foreach ($testArray as $testString => $testResult) {
@@ -3448,6 +3454,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testToASCII()
   {
+    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
+    $resultString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-ascii-chart.txt');
+
+    self::assertSame($resultString, UTF8::to_ascii($testString, '?', true));
+
+    // ---
+
     $testsStrict = array();
     if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
       $testsStrict = array(
@@ -3487,7 +3500,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         -1                              => '-1',
         ' '                             => ' ',
         ''                              => '',
-        'أبز'                           => '\'bz',
+        'أبز'                           => 'abz',
         "\xe2\x80\x99"                  => '\'',
         'Ɓtest'                         => 'Btest',
         '  -ABC-中文空白-  '                => '  -ABC-Zhong Wen Kong Bai -  ',
@@ -3501,16 +3514,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "中 - &#20013; - %&? - \xc2\x80" => 'Zhong  - &#20013; - %&? - EUR',
         'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
         'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
-        'أحبك'                          => '\'Hbk',
+        'أحبك'                          => 'aHbk',
         'キャンパス'                         => 'kiyanpasu',
         'биологическом'                 => 'biologicheskom',
         '정, 병호'                         => 'jeong, byeongho',
         'ますだ, よしひこ'                     => 'masuda, yosihiko',
         'मोनिच'                         => 'monic',
         'क्षȸ'                          => 'kssdb',
-        'أحبك 😀'                       => '\'Hbk ?',
-        '∀ i ∈ ℕ'                       => '[?] i [?] ',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? \'Hbk',
+        'أحبك 😀'                       => 'aHbk ?',
+        '∀ i ∈ ℕ'                       => '[?] i [?] N',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? aHbk',
     );
 
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests

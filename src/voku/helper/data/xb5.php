@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xb5] = array(
+
+static $data = array(
 'dyil', 'dyilg', 'dyilm', 'dyilb', 'dyils', 'dyilt', 'dyilp', 'dyilh', 'dyim', 'dyib', 'dyibs', 'dyis', 'dyiss', 'dying', 'dyij', 'dyic',
 'dyik', 'dyit', 'dyip', 'dyih', 'di', 'dig', 'digg', 'digs', 'din', 'dinj', 'dinh', 'did', 'dil', 'dilg', 'dilm', 'dilb',
 'dils', 'dilt', 'dilp', 'dilh', 'dim', 'dib', 'dibs', 'dis', 'diss', 'ding', 'dij', 'dic', 'dik', 'dit', 'dip', 'dih',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xb5] = array(
 'ddyeol', 'ddyeolg', 'ddyeolm', 'ddyeolb', 'ddyeols', 'ddyeolt', 'ddyeolp', 'ddyeolh', 'ddyeom', 'ddyeob', 'ddyeobs', 'ddyeos', 'ddyeoss', 'ddyeong', 'ddyeoj', 'ddyeoc',
 'ddyeok', 'ddyeot', 'ddyeop', 'ddyeoh', 'ddye', 'ddyeg', 'ddyegg', 'ddyegs', 'ddyen', 'ddyenj', 'ddyenh', 'ddyed', 'ddyel', 'ddyelg', 'ddyelm', 'ddyelb',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

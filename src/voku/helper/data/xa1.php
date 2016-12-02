@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xa1] = array(
+
+static $data = array(
 'dit', 'dix', 'di', 'dip', 'diex', 'die', 'diep', 'dat', 'dax', 'da', 'dap', 'duox', 'duo', 'dot', 'dox', 'do',
 'dop', 'dex', 'de', 'dep', 'dut', 'dux', 'du', 'dup', 'durx', 'dur', 'tit', 'tix', 'ti', 'tip', 'tiex', 'tie',
 'tiep', 'tat', 'tax', 'ta', 'tap', 'tuot', 'tuox', 'tuo', 'tuop', 'tot', 'tox', 'to', 'top', 'tex', 'te', 'tep',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xa1] = array(
 'gie', 'giep', 'gat', 'gax', 'ga', 'gap', 'guot', 'guox', 'guo', 'guop', 'got', 'gox', 'go', 'gop', 'get', 'gex',
 'ge', 'gep', 'gut', 'gux', 'gu', 'gup', 'gurx', 'gur', 'kit', 'kix', 'ki', 'kip', 'kiex', 'kie', 'kiep', 'kat',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

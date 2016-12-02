@@ -1447,7 +1447,7 @@ final class UTF8
       );
     }
 
-    if (is_int($maxlen)) {
+    if (is_int($maxlen) === true) {
       $data = file_get_contents($filename, $flags, $context, $offset, $maxlen);
     } else {
       $data = file_get_contents($filename, $flags, $context, $offset);
@@ -2810,7 +2810,7 @@ final class UTF8
     // init
     $matches = array();
 
-    preg_match("/<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/", $str, $matches);
+    preg_match("/<\/?\w+(?:(?:\s+\w+(?:\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/", $str, $matches);
 
     if (count($matches) == 0) {
       return false;
@@ -6376,6 +6376,14 @@ final class UTF8
       }
 
       if (self::$support['intl'] === true && Bootup::is_php('5.4')) {
+
+        // HACK for issue from "transliterator_transliterate()"
+        $str = str_replace(
+            'ℌ',
+            'H',
+            $str
+        );
+
         $str = transliterator_transliterate('Any-Latin; Latin-ASCII;', $str);
 
         // check again, if we only have ASCII, now ...
@@ -6437,7 +6445,7 @@ final class UTF8
         }
       }
 
-      if ($ordC0 >= 254 && $ordC0 <= 255) {
+      if ($ordC0 == 254 || $ordC0 == 255) {
         $c = $unknown;
         continue;
       }
@@ -6448,20 +6456,39 @@ final class UTF8
       }
 
       $bank = $ord >> 8;
-      if (!array_key_exists($bank, (array)$UTF8_TO_ASCII)) {
-        $bankfile = __DIR__ . '/data/' . sprintf('x%02x', $bank) . '.php';
-        if (file_exists($bankfile)) {
-          /** @noinspection PhpIncludeInspection */
-          require $bankfile;
-        } else {
+      if (!isset($UTF8_TO_ASCII[$bank])) {
+        $UTF8_TO_ASCII[$bank] = self::getData(sprintf('x%02x', $bank));
+        if ($UTF8_TO_ASCII[$bank] === false) {
           $UTF8_TO_ASCII[$bank] = array();
         }
       }
 
       $newchar = $ord & 255;
-      if (array_key_exists($newchar, $UTF8_TO_ASCII[$bank])) {
+
+      if (isset($UTF8_TO_ASCII[$bank], $UTF8_TO_ASCII[$bank][$newchar])) {
+
+        // keep for debugging
+        /*
+        echo "file: " . sprintf('x%02x', $bank) . "\n";
+        echo "char: " . $c . "\n";
+        echo "ord: " . $ord . "\n";
+        echo "newchar: " . $newchar . "\n";
+        echo "ascii: " . $UTF8_TO_ASCII[$bank][$newchar] . "\n";
+        echo "bank:" . $bank . "\n\n";
+        */
+
         $c = $UTF8_TO_ASCII[$bank][$newchar];
       } else {
+
+        // keep for debugging missing chars
+        /*
+        echo "file: " . sprintf('x%02x', $bank) . "\n";
+        echo "char: " . $c . "\n";
+        echo "ord: " . $ord . "\n";
+        echo "newchar: " . $newchar . "\n";
+        echo "bank:" . $bank . "\n\n";
+        */
+
         $c = $unknown;
       }
     }

@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xcf] = array(
+
+static $data = array(
 'ke', 'keg', 'kegg', 'kegs', 'ken', 'kenj', 'kenh', 'ked', 'kel', 'kelg', 'kelm', 'kelb', 'kels', 'kelt', 'kelp', 'kelh',
 'kem', 'keb', 'kebs', 'kes', 'kess', 'keng', 'kej', 'kec', 'kek', 'ket', 'kep', 'keh', 'kyeo', 'kyeog', 'kyeogg', 'kyeogs',
 'kyeon', 'kyeonj', 'kyeonh', 'kyeod', 'kyeol', 'kyeolg', 'kyeolm', 'kyeolb', 'kyeols', 'kyeolt', 'kyeolp', 'kyeolh', 'kyeom', 'kyeob', 'kyeobs', 'kyeos',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xcf] = array(
 'ku', 'kug', 'kugg', 'kugs', 'kun', 'kunj', 'kunh', 'kud', 'kul', 'kulg', 'kulm', 'kulb', 'kuls', 'kult', 'kulp', 'kulh',
 'kum', 'kub', 'kubs', 'kus', 'kuss', 'kung', 'kuj', 'kuc', 'kuk', 'kut', 'kup', 'kuh', 'kweo', 'kweog', 'kweogg', 'kweogs',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

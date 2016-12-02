@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xc7] = array(
+
+static $data = array(
 'wek', 'wet', 'wep', 'weh', 'wi', 'wig', 'wigg', 'wigs', 'win', 'winj', 'winh', 'wid', 'wil', 'wilg', 'wilm', 'wilb',
 'wils', 'wilt', 'wilp', 'wilh', 'wim', 'wib', 'wibs', 'wis', 'wiss', 'wing', 'wij', 'wic', 'wik', 'wit', 'wip', 'wih',
 'yu', 'yug', 'yugg', 'yugs', 'yun', 'yunj', 'yunh', 'yud', 'yul', 'yulg', 'yulm', 'yulb', 'yuls', 'yult', 'yulp', 'yulh',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xc7] = array(
 'jyak', 'jyat', 'jyap', 'jyah', 'jyae', 'jyaeg', 'jyaegg', 'jyaegs', 'jyaen', 'jyaenj', 'jyaenh', 'jyaed', 'jyael', 'jyaelg', 'jyaelm', 'jyaelb',
 'jyaels', 'jyaelt', 'jyaelp', 'jyaelh', 'jyaem', 'jyaeb', 'jyaebs', 'jyaes', 'jyaess', 'jyaeng', 'jyaej', 'jyaec', 'jyaek', 'jyaet', 'jyaep', 'jyaeh',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

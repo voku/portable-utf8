@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xb0] = array(
+
+static $data = array(
 'ggwem', 'ggweb', 'ggwebs', 'ggwes', 'ggwess', 'ggweng', 'ggwej', 'ggwec', 'ggwek', 'ggwet', 'ggwep', 'ggweh', 'ggwi', 'ggwig', 'ggwigg', 'ggwigs',
 'ggwin', 'ggwinj', 'ggwinh', 'ggwid', 'ggwil', 'ggwilg', 'ggwilm', 'ggwilb', 'ggwils', 'ggwilt', 'ggwilp', 'ggwilh', 'ggwim', 'ggwib', 'ggwibs', 'ggwis',
 'ggwiss', 'ggwing', 'ggwij', 'ggwic', 'ggwik', 'ggwit', 'ggwip', 'ggwih', 'ggyu', 'ggyug', 'ggyugg', 'ggyugs', 'ggyun', 'ggyunj', 'ggyunh', 'ggyud',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xb0] = array(
 'nyam', 'nyab', 'nyabs', 'nyas', 'nyass', 'nyang', 'nyaj', 'nyac', 'nyak', 'nyat', 'nyap', 'nyah', 'nyae', 'nyaeg', 'nyaegg', 'nyaegs',
 'nyaen', 'nyaenj', 'nyaenh', 'nyaed', 'nyael', 'nyaelg', 'nyaelm', 'nyaelb', 'nyaels', 'nyaelt', 'nyaelp', 'nyaelh', 'nyaem', 'nyaeb', 'nyaebs', 'nyaes',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xa4] = array(
+
+static $data = array(
 'qiet', 'qiex', 'qie', 'qiep', 'quot', 'quox', 'quo', 'quop', 'qot', 'qox', 'qo', 'qop', 'qut', 'qux', 'qu', 'qup',
 'qurx', 'qur', 'qyt', 'qyx', 'qy', 'qyp', 'qyrx', 'qyr', 'jjit', 'jjix', 'jji', 'jjip', 'jjiet', 'jjiex', 'jjie', 'jjiep',
 'jjuox', 'jjuo', 'jjuop', 'jjot', 'jjox', 'jjo', 'jjop', 'jjut', 'jjux', 'jju', 'jjup', 'jjurx', 'jjur', 'jjyt', 'jjyx', 'jjy',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xa4] = array(
 '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]',
 '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

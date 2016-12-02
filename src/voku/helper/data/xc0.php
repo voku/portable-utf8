@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xc0] = array(
+
+static $data = array(
 'bbweok', 'bbweot', 'bbweop', 'bbweoh', 'bbwe', 'bbweg', 'bbwegg', 'bbwegs', 'bbwen', 'bbwenj', 'bbwenh', 'bbwed', 'bbwel', 'bbwelg', 'bbwelm', 'bbwelb',
 'bbwels', 'bbwelt', 'bbwelp', 'bbwelh', 'bbwem', 'bbweb', 'bbwebs', 'bbwes', 'bbwess', 'bbweng', 'bbwej', 'bbwec', 'bbwek', 'bbwet', 'bbwep', 'bbweh',
 'bbwi', 'bbwig', 'bbwigg', 'bbwigs', 'bbwin', 'bbwinj', 'bbwinh', 'bbwid', 'bbwil', 'bbwilg', 'bbwilm', 'bbwilb', 'bbwils', 'bbwilt', 'bbwilp', 'bbwilh',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xc0] = array(
 'saek', 'saet', 'saep', 'saeh', 'sya', 'syag', 'syagg', 'syags', 'syan', 'syanj', 'syanh', 'syad', 'syal', 'syalg', 'syalm', 'syalb',
 'syals', 'syalt', 'syalp', 'syalh', 'syam', 'syab', 'syabs', 'syas', 'syass', 'syang', 'syaj', 'syac', 'syak', 'syat', 'syap', 'syah',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xb1] = array(
+
+static $data = array(
 'nyaess', 'nyaeng', 'nyaej', 'nyaec', 'nyaek', 'nyaet', 'nyaep', 'nyaeh', 'neo', 'neog', 'neogg', 'neogs', 'neon', 'neonj', 'neonh', 'neod',
 'neol', 'neolg', 'neolm', 'neolb', 'neols', 'neolt', 'neolp', 'neolh', 'neom', 'neob', 'neobs', 'neos', 'neoss', 'neong', 'neoj', 'neoc',
 'neok', 'neot', 'neop', 'neoh', 'ne', 'neg', 'negg', 'negs', 'nen', 'nenj', 'nenh', 'ned', 'nel', 'nelg', 'nelm', 'nelb',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xb1] = array(
 'noess', 'noeng', 'noej', 'noec', 'noek', 'noet', 'noep', 'noeh', 'nyo', 'nyog', 'nyogg', 'nyogs', 'nyon', 'nyonj', 'nyonh', 'nyod',
 'nyol', 'nyolg', 'nyolm', 'nyolb', 'nyols', 'nyolt', 'nyolp', 'nyolh', 'nyom', 'nyob', 'nyobs', 'nyos', 'nyoss', 'nyong', 'nyoj', 'nyoc',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

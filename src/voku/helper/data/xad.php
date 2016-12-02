@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xad] = array(
+
+static $data = array(
 'gwan', 'gwanj', 'gwanh', 'gwad', 'gwal', 'gwalg', 'gwalm', 'gwalb', 'gwals', 'gwalt', 'gwalp', 'gwalh', 'gwam', 'gwab', 'gwabs', 'gwas',
 'gwass', 'gwang', 'gwaj', 'gwac', 'gwak', 'gwat', 'gwap', 'gwah', 'gwae', 'gwaeg', 'gwaegg', 'gwaegs', 'gwaen', 'gwaenj', 'gwaenh', 'gwaed',
 'gwael', 'gwaelg', 'gwaelm', 'gwaelb', 'gwaels', 'gwaelt', 'gwaelp', 'gwaelh', 'gwaem', 'gwaeb', 'gwaebs', 'gwaes', 'gwaess', 'gwaeng', 'gwaej', 'gwaec',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xad] = array(
 'gyun', 'gyunj', 'gyunh', 'gyud', 'gyul', 'gyulg', 'gyulm', 'gyulb', 'gyuls', 'gyult', 'gyulp', 'gyulh', 'gyum', 'gyub', 'gyubs', 'gyus',
 'gyuss', 'gyung', 'gyuj', 'gyuc', 'gyuk', 'gyut', 'gyup', 'gyuh', 'geu', 'geug', 'geugg', 'geugs', 'geun', 'geunj', 'geunh', 'geud',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

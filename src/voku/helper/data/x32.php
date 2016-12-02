@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0x32] = array(
+
+static $data = array(
 '(g)', '(n)', '(d)', '(r)', '(m)', '(b)', '(s)', '()', '(j)', '(c)', '(k)', '(t)', '(p)', '(h)', '(ga)', '(na)',
 '(da)', '(ra)', '(ma)', '(ba)', '(sa)', '(a)', '(ja)', '(ca)', '(ka)', '(ta)', '(pa)', '(ha)', '(ju)', '[?]', '[?]', '[?]',
 '(1) ', '(2) ', '(3) ', '(4) ', '(5) ', '(6) ', '(7) ', '(8) ', '(9) ', '(10) ', '(Yue) ', '(Huo) ', '(Shui) ', '(Mu) ', '(Jin) ', '(Tu) ',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0x32] = array(
 'ti', 'tu', 'te', 'to', 'na', 'ni', 'nu', 'ne', 'no', 'ha', 'hi', 'hu', 'he', 'ho', 'ma', 'mi',
 'mu', 'me', 'mo', 'ya', 'yu', 'yo', 'ra', 'ri', 'ru', 're', 'ro', 'wa', 'wi', 'we', 'wo',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

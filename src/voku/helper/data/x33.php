@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0x33] = array(
+
+static $data = array(
 'apartment', 'alpha', 'ampere', 'are', 'inning', 'inch', 'won', 'escudo', 'acre', 'ounce', 'ohm', 'kai-ri', 'carat', 'calorie', 'gallon', 'gamma',
 'giga', 'guinea', 'curie', 'guilder', 'kilo', 'kilogram', 'kilometer', 'kilowatt', 'gram', 'gram ton', 'cruzeiro', 'krone', 'case', 'koruna', 'co-op', 'cycle',
 'centime', 'shilling', 'centi', 'cent', 'dozen', 'desi', 'dollar', 'ton', 'nano', 'knot', 'heights', 'percent', 'parts', 'barrel', 'piaster', 'picul',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0x33] = array(
 '1d', '2d', '3d', '4d', '5d', '6d', '7d', '8d', '9d', '10d', '11d', '12d', '13d', '14d', '15d', '16d',
 '17d', '18d', '19d', '20d', '21d', '22d', '23d', '24d', '25d', '26d', '27d', '28d', '29d', '30d', '31d',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

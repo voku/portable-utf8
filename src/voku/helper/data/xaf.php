@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xaf] = array(
+
+static $data = array(
 'ggyeols', 'ggyeolt', 'ggyeolp', 'ggyeolh', 'ggyeom', 'ggyeob', 'ggyeobs', 'ggyeos', 'ggyeoss', 'ggyeong', 'ggyeoj', 'ggyeoc', 'ggyeok', 'ggyeot', 'ggyeop', 'ggyeoh',
 'ggye', 'ggyeg', 'ggyegg', 'ggyegs', 'ggyen', 'ggyenj', 'ggyenh', 'ggyed', 'ggyel', 'ggyelg', 'ggyelm', 'ggyelb', 'ggyels', 'ggyelt', 'ggyelp', 'ggyelh',
 'ggyem', 'ggyeb', 'ggyebs', 'ggyes', 'ggyess', 'ggyeng', 'ggyej', 'ggyec', 'ggyek', 'ggyet', 'ggyep', 'ggyeh', 'ggo', 'ggog', 'ggogg', 'ggogs',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xaf] = array(
 'ggweols', 'ggweolt', 'ggweolp', 'ggweolh', 'ggweom', 'ggweob', 'ggweobs', 'ggweos', 'ggweoss', 'ggweong', 'ggweoj', 'ggweoc', 'ggweok', 'ggweot', 'ggweop', 'ggweoh',
 'ggwe', 'ggweg', 'ggwegg', 'ggwegs', 'ggwen', 'ggwenj', 'ggwenh', 'ggwed', 'ggwel', 'ggwelg', 'ggwelm', 'ggwelb', 'ggwels', 'ggwelt', 'ggwelp', 'ggwelh',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

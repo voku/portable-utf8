@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xcb] = array(
+
+static $data = array(
 'jjwaels', 'jjwaelt', 'jjwaelp', 'jjwaelh', 'jjwaem', 'jjwaeb', 'jjwaebs', 'jjwaes', 'jjwaess', 'jjwaeng', 'jjwaej', 'jjwaec', 'jjwaek', 'jjwaet', 'jjwaep', 'jjwaeh',
 'jjoe', 'jjoeg', 'jjoegg', 'jjoegs', 'jjoen', 'jjoenj', 'jjoenh', 'jjoed', 'jjoel', 'jjoelg', 'jjoelm', 'jjoelb', 'jjoels', 'jjoelt', 'jjoelp', 'jjoelh',
 'jjoem', 'jjoeb', 'jjoebs', 'jjoes', 'jjoess', 'jjoeng', 'jjoej', 'jjoec', 'jjoek', 'jjoet', 'jjoep', 'jjoeh', 'jjyo', 'jjyog', 'jjyogg', 'jjyogs',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xcb] = array(
 'jjeuls', 'jjeult', 'jjeulp', 'jjeulh', 'jjeum', 'jjeub', 'jjeubs', 'jjeus', 'jjeuss', 'jjeung', 'jjeuj', 'jjeuc', 'jjeuk', 'jjeut', 'jjeup', 'jjeuh',
 'jjyi', 'jjyig', 'jjyigg', 'jjyigs', 'jjyin', 'jjyinj', 'jjyinh', 'jjyid', 'jjyil', 'jjyilg', 'jjyilm', 'jjyilb', 'jjyils', 'jjyilt', 'jjyilp', 'jjyilh',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

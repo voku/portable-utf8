@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xc8] = array(
+
+static $data = array(
 'jeo', 'jeog', 'jeogg', 'jeogs', 'jeon', 'jeonj', 'jeonh', 'jeod', 'jeol', 'jeolg', 'jeolm', 'jeolb', 'jeols', 'jeolt', 'jeolp', 'jeolh',
 'jeom', 'jeob', 'jeobs', 'jeos', 'jeoss', 'jeong', 'jeoj', 'jeoc', 'jeok', 'jeot', 'jeop', 'jeoh', 'je', 'jeg', 'jegg', 'jegs',
 'jen', 'jenj', 'jenh', 'jed', 'jel', 'jelg', 'jelm', 'jelb', 'jels', 'jelt', 'jelp', 'jelh', 'jem', 'jeb', 'jebs', 'jes',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xc8] = array(
 'jyo', 'jyog', 'jyogg', 'jyogs', 'jyon', 'jyonj', 'jyonh', 'jyod', 'jyol', 'jyolg', 'jyolm', 'jyolb', 'jyols', 'jyolt', 'jyolp', 'jyolh',
 'jyom', 'jyob', 'jyobs', 'jyos', 'jyoss', 'jyong', 'jyoj', 'jyoc', 'jyok', 'jyot', 'jyop', 'jyoh', 'ju', 'jug', 'jugg', 'jugs',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

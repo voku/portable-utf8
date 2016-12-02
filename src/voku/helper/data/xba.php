@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xba] = array(
+
+static $data = array(
 'mya', 'myag', 'myagg', 'myags', 'myan', 'myanj', 'myanh', 'myad', 'myal', 'myalg', 'myalm', 'myalb', 'myals', 'myalt', 'myalp', 'myalh',
 'myam', 'myab', 'myabs', 'myas', 'myass', 'myang', 'myaj', 'myac', 'myak', 'myat', 'myap', 'myah', 'myae', 'myaeg', 'myaegg', 'myaegs',
 'myaen', 'myaenj', 'myaenh', 'myaed', 'myael', 'myaelg', 'myaelm', 'myaelb', 'myaels', 'myaelt', 'myaelp', 'myaelh', 'myaem', 'myaeb', 'myaebs', 'myaes',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xba] = array(
 'mwae', 'mwaeg', 'mwaegg', 'mwaegs', 'mwaen', 'mwaenj', 'mwaenh', 'mwaed', 'mwael', 'mwaelg', 'mwaelm', 'mwaelb', 'mwaels', 'mwaelt', 'mwaelp', 'mwaelh',
 'mwaem', 'mwaeb', 'mwaebs', 'mwaes', 'mwaess', 'mwaeng', 'mwaej', 'mwaec', 'mwaek', 'mwaet', 'mwaep', 'mwaeh', 'moe', 'moeg', 'moegg', 'moegs',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

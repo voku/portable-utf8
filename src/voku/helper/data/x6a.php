@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0x6a] = array(
+
+static $data = array(
 'Di ', 'Zhuang ', 'Le ', 'Lang ', 'Chen ', 'Cong ', 'Li ', 'Xiu ', 'Qing ', 'Shuang ', 'Fan ', 'Tong ', 'Guan ', 'Ji ', 'Suo ', 'Lei ',
 'Lu ', 'Liang ', 'Mi ', 'Lou ', 'Chao ', 'Su ', 'Ke ', 'Shu ', 'Tang ', 'Biao ', 'Lu ', 'Jiu ', 'Shu ', 'Zha ', 'Shu ', 'Zhang ',
 'Men ', 'Mo ', 'Niao ', 'Yang ', 'Tiao ', 'Peng ', 'Zhu ', 'Sha ', 'Xi ', 'Quan ', 'Heng ', 'Jian ', 'Cong ', '[?]', 'Hokuso ', 'Qiang ',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0x6a] = array(
 'Fei ', 'Zhuo ', 'Sou ', 'Lian ', 'Tamo ', 'Chu ', '[?]', 'Zhu ', 'Lu ', 'Yan ', 'Li ', 'Zhu ', 'Chen ', 'Jie ', 'E ', 'Su ',
 'Huai ', 'Nie ', 'Yu ', 'Long ', 'Lai ', '[?]', 'Xian ', 'Kwi ', 'Ju ', 'Xiao ', 'Ling ', 'Ying ', 'Jian ', 'Yin ', 'You ', 'Ying ',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

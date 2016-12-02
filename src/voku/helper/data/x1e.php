@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0x1e] = array(
+
+static $data = array(
 'A', 'a', 'B', 'b', 'B', 'b', 'B', 'b', 'C', 'c', 'D', 'd', 'D', 'd', 'D', 'd',
 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'F', 'f',
 'G', 'g', 'H', 'h', 'H', 'h', 'H', 'h', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i',
@@ -17,3 +18,7 @@ $UTF8_TO_ASCII[0x1e] = array(
 'O', 'o', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u',
 'U', 'u', 'Y', 'y', 'Y', 'y', 'Y', 'y', 'Y', 'y', '[?]', '[?]', '[?]', '[?]', '[?]',
 );
+
+$result =& $data;
+unset($data);
+return $result;

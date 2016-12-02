@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xbe] = array(
+
+static $data = array(
 'byum', 'byub', 'byubs', 'byus', 'byuss', 'byung', 'byuj', 'byuc', 'byuk', 'byut', 'byup', 'byuh', 'beu', 'beug', 'beugg', 'beugs',
 'beun', 'beunj', 'beunh', 'beud', 'beul', 'beulg', 'beulm', 'beulb', 'beuls', 'beult', 'beulp', 'beulh', 'beum', 'beub', 'beubs', 'beus',
 'beuss', 'beung', 'beuj', 'beuc', 'beuk', 'beut', 'beup', 'beuh', 'byi', 'byig', 'byigg', 'byigs', 'byin', 'byinj', 'byinh', 'byid',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xbe] = array(
 'bbeom', 'bbeob', 'bbeobs', 'bbeos', 'bbeoss', 'bbeong', 'bbeoj', 'bbeoc', 'bbeok', 'bbeot', 'bbeop', 'bbeoh', 'bbe', 'bbeg', 'bbegg', 'bbegs',
 'bben', 'bbenj', 'bbenh', 'bbed', 'bbel', 'bbelg', 'bbelm', 'bbelb', 'bbels', 'bbelt', 'bbelp', 'bbelh', 'bbem', 'bbeb', 'bbebs', 'bbes',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

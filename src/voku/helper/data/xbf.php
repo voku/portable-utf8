@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xbf] = array(
+
+static $data = array(
 'bbess', 'bbeng', 'bbej', 'bbec', 'bbek', 'bbet', 'bbep', 'bbeh', 'bbyeo', 'bbyeog', 'bbyeogg', 'bbyeogs', 'bbyeon', 'bbyeonj', 'bbyeonh', 'bbyeod',
 'bbyeol', 'bbyeolg', 'bbyeolm', 'bbyeolb', 'bbyeols', 'bbyeolt', 'bbyeolp', 'bbyeolh', 'bbyeom', 'bbyeob', 'bbyeobs', 'bbyeos', 'bbyeoss', 'bbyeong', 'bbyeoj', 'bbyeoc',
 'bbyeok', 'bbyeot', 'bbyeop', 'bbyeoh', 'bbye', 'bbyeg', 'bbyegg', 'bbyegs', 'bbyen', 'bbyenj', 'bbyenh', 'bbyed', 'bbyel', 'bbyelg', 'bbyelm', 'bbyelb',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xbf] = array(
 'bbuss', 'bbung', 'bbuj', 'bbuc', 'bbuk', 'bbut', 'bbup', 'bbuh', 'bbweo', 'bbweog', 'bbweogg', 'bbweogs', 'bbweon', 'bbweonj', 'bbweonh', 'bbweod',
 'bbweol', 'bbweolg', 'bbweolm', 'bbweolb', 'bbweols', 'bbweolt', 'bbweolp', 'bbweolh', 'bbweom', 'bbweob', 'bbweobs', 'bbweos', 'bbweoss', 'bbweong', 'bbweoj', 'bbweoc',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

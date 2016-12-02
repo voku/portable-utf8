@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xd2] = array(
+
+static $data = array(
 'toels', 'toelt', 'toelp', 'toelh', 'toem', 'toeb', 'toebs', 'toes', 'toess', 'toeng', 'toej', 'toec', 'toek', 'toet', 'toep', 'toeh',
 'tyo', 'tyog', 'tyogg', 'tyogs', 'tyon', 'tyonj', 'tyonh', 'tyod', 'tyol', 'tyolg', 'tyolm', 'tyolb', 'tyols', 'tyolt', 'tyolp', 'tyolh',
 'tyom', 'tyob', 'tyobs', 'tyos', 'tyoss', 'tyong', 'tyoj', 'tyoc', 'tyok', 'tyot', 'tyop', 'tyoh', 'tu', 'tug', 'tugg', 'tugs',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xd2] = array(
 'tyils', 'tyilt', 'tyilp', 'tyilh', 'tyim', 'tyib', 'tyibs', 'tyis', 'tyiss', 'tying', 'tyij', 'tyic', 'tyik', 'tyit', 'tyip', 'tyih',
 'ti', 'tig', 'tigg', 'tigs', 'tin', 'tinj', 'tinh', 'tid', 'til', 'tilg', 'tilm', 'tilb', 'tils', 'tilt', 'tilp', 'tilh',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

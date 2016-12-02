@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xcc] = array(
+
+static $data = array(
 'jjyim', 'jjyib', 'jjyibs', 'jjyis', 'jjyiss', 'jjying', 'jjyij', 'jjyic', 'jjyik', 'jjyit', 'jjyip', 'jjyih', 'jji', 'jjig', 'jjigg', 'jjigs',
 'jjin', 'jjinj', 'jjinh', 'jjid', 'jjil', 'jjilg', 'jjilm', 'jjilb', 'jjils', 'jjilt', 'jjilp', 'jjilh', 'jjim', 'jjib', 'jjibs', 'jjis',
 'jjiss', 'jjing', 'jjij', 'jjic', 'jjik', 'jjit', 'jjip', 'jjih', 'ca', 'cag', 'cagg', 'cags', 'can', 'canj', 'canh', 'cad',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xcc] = array(
 'cyeom', 'cyeob', 'cyeobs', 'cyeos', 'cyeoss', 'cyeong', 'cyeoj', 'cyeoc', 'cyeok', 'cyeot', 'cyeop', 'cyeoh', 'cye', 'cyeg', 'cyegg', 'cyegs',
 'cyen', 'cyenj', 'cyenh', 'cyed', 'cyel', 'cyelg', 'cyelm', 'cyelb', 'cyels', 'cyelt', 'cyelp', 'cyelh', 'cyem', 'cyeb', 'cyebs', 'cyes',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+

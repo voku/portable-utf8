@@ -1,5 +1,6 @@
 <?php
-$UTF8_TO_ASCII[0xb9] = array(
+
+static $data = array(
 'ruk', 'rut', 'rup', 'ruh', 'rweo', 'rweog', 'rweogg', 'rweogs', 'rweon', 'rweonj', 'rweonh', 'rweod', 'rweol', 'rweolg', 'rweolm', 'rweolb',
 'rweols', 'rweolt', 'rweolp', 'rweolh', 'rweom', 'rweob', 'rweobs', 'rweos', 'rweoss', 'rweong', 'rweoj', 'rweoc', 'rweok', 'rweot', 'rweop', 'rweoh',
 'rwe', 'rweg', 'rwegg', 'rwegs', 'rwen', 'rwenj', 'rwenh', 'rwed', 'rwel', 'rwelg', 'rwelm', 'rwelb', 'rwels', 'rwelt', 'rwelp', 'rwelh',
@@ -17,3 +18,8 @@ $UTF8_TO_ASCII[0xb9] = array(
 'mak', 'mat', 'map', 'mah', 'mae', 'maeg', 'maegg', 'maegs', 'maen', 'maenj', 'maenh', 'maed', 'mael', 'maelg', 'maelm', 'maelb',
 'maels', 'maelt', 'maelp', 'maelh', 'maem', 'maeb', 'maebs', 'maes', 'maess', 'maeng', 'maej', 'maec', 'maek', 'maet', 'maep', 'maeh',
 );
+
+$result =& $data;
+unset($data);
+return $result;
+
