@@ -76,4 +76,3 @@ $data[233] = '(z)';
 $result =& $data;
 unset($data);
 return $result;
-
