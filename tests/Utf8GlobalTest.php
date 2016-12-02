@@ -3454,15 +3454,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testToASCII()
   {
-    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
-    $resultString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-ascii-chart.txt');
-
-    self::assertSame($resultString, UTF8::to_ascii($testString, '?', true));
-
-    // ---
-
     $testsStrict = array();
     if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
+
+      // ---
+
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
+      $resultString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-ascii-chart.txt');
+
+      self::assertSame($resultString, UTF8::to_ascii($testString, '?', true));
+
+      // ---
+
       $testsStrict = array(
           1                               => '1',
           -1                              => '-1',
