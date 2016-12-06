@@ -1350,11 +1350,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testIsBom()
   {
     $testArray = array(
-        "\xef\xbb\xbf" => true,
-        '  þÿ'         => true,
-        'foo'          => false,
-        ''             => false,
-        ' '            => false,
+        "\xef\xbb\xbf"    => true,
+        '  þÿ'            => true,
+        "foo\xef\xbb\xbf" => false,
+        '   þÿ'           => false,
+        'foo'             => false,
+        ''                => false,
+        ' '               => false,
     );
 
     foreach ($testArray as $test => $expected) {
@@ -1366,20 +1368,29 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testIsHtml()
   {
     $testArray = array(
-        '<h1>test</h1>'            => true,
-        'test'                     => false,
-        '<b>lall</b>'              => true,
-        'öäü<strong>lall</strong>' => true,
-        ' <b>lall</b>'             => true,
-        '<b><b>lall</b>'           => true,
-        '</b>lall</b>'             => true,
-        '[b]lall[b]'               => false,
+        '<h1>test</h1>'                     => true,
         '<html><body class="no-js"></html>' => true,
-        '<html   f=\'\'    d="">' => true,
-
+        '<html   f=\'\'    d="">'           => true,
+        '<b>lall</b>'                       => true,
+        'öäü<strong>lall</strong>'          => true,
+        ' <b>lall</b>'                      => true,
+        '<b><b>lall</b>'                    => true,
+        '</b>lall</b>'                      => true,
+        '<html><foo></html>'                => true,
+        '<html><html>'                      => true,
+        '<html>'                            => true,
+        '</html>'                           => true,
+        '<img src="#" alt="#" />'           => true,
+        ''                                  => false,
+        ' '                                 => false,
+        'test'                              => false,
+        '[b]lall[b]'                        => false,
+        '<img src="" ...'                   => false, // non closed tag
+        'html>'                             => false, // non opened tag
     );
 
     foreach ($testArray as $testString => $testResult) {
+      self::assertSame($testResult, UTF8::is_html($testString), 'tested: ' . $testString);
       self::assertSame($testResult, UTF8::isHtml($testString), 'tested: ' . $testString);
     }
   }
@@ -2093,15 +2104,24 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     $tests = array(
-        "Iñtërnâtiôn\xe9àlizætiøn" => 'Iñtërnâtiônàlizætiøn', // invalid UTF-8 string
-        "Iñtërnâtiônàlizætiøn\xfc\xa1\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn" => 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn', // invalid six octet sequence
-        "Iñtërnâtiônàlizætiøn\xf0\x28\x8c\xbcIñtërnâtiônàlizætiøn" => 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn', // invalid four octet sequence
-        "Iñtërnâtiônàlizætiøn \xc3\x28 Iñtërnâtiônàlizætiøn" => 'Iñtërnâtiônàlizætiøn ( Iñtërnâtiônàlizætiøn', // invalid two octet sequence
-        "this is an invalid char '\xe9' here" => "this is an invalid char '' here", // invalid ASCII string
-        "Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn" => 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn', // invalid id between two and three
-        "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn" => 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn', //  invalid five octet sequence
-        "Iñtërnâtiônàlizætiøn\xe2\x82\x28Iñtërnâtiônàlizætiøn" => 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn', // invalid three octet sequence third
-        "Iñtërnâtiônàlizætiøn\xe2\x28\xa1Iñtërnâtiônàlizætiøn" => 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn', // invalid three octet sequence second
+        "Iñtërnâtiôn\xe9àlizætiøn"                                         => 'Iñtërnâtiônàlizætiøn',
+        // invalid UTF-8 string
+        "Iñtërnâtiônàlizætiøn\xfc\xa1\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn" => 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn',
+        // invalid six octet sequence
+        "Iñtërnâtiônàlizætiøn\xf0\x28\x8c\xbcIñtërnâtiônàlizætiøn"         => 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn',
+        // invalid four octet sequence
+        "Iñtërnâtiônàlizætiøn \xc3\x28 Iñtërnâtiônàlizætiøn"               => 'Iñtërnâtiônàlizætiøn ( Iñtërnâtiônàlizætiøn',
+        // invalid two octet sequence
+        "this is an invalid char '\xe9' here"                              => "this is an invalid char '' here",
+        // invalid ASCII string
+        "Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn"                 => 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn',
+        // invalid id between two and three
+        "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn"     => 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn',
+        //  invalid five octet sequence
+        "Iñtërnâtiônàlizætiøn\xe2\x82\x28Iñtërnâtiônàlizætiøn"             => 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn',
+        // invalid three octet sequence third
+        "Iñtërnâtiônàlizætiøn\xe2\x28\xa1Iñtërnâtiônàlizætiøn"             => 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn',
+        // invalid three octet sequence second
     );
 
     $counter = 0;
@@ -3870,21 +3890,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testToUtf8_v2()
   {
     $testArray = array(
-        'Düsseldorf'                   => 'Düsseldorf',
-        'Ã'                            => 'Ã',
-        'foobar  || 😃'                => 'foobar  || 😃',
-        ' '                            => ' ',
-        ''                             => '',
-        "\n"                           => "\n",
-        'test'                         => 'test',
-        'Here&#39;s some quoted text.' => 'Here&#39;s some quoted text.',
-        '&#39;'                        => '&#39;',
-        "\u0063\u0061\u0074"           => 'cat',
-        "\u0039&#39;\u0039"            => '9&#39;9',
-        '&#35;&#8419;'                 => '&#35;&#8419;',
-        "\xcf\x80"                     => 'π',
+        'Düsseldorf'                                                                                => 'Düsseldorf',
+        'Ã'                                                                                         => 'Ã',
+        'foobar  || 😃'                                                                             => 'foobar  || 😃',
+        ' '                                                                                         => ' ',
+        ''                                                                                          => '',
+        "\n"                                                                                        => "\n",
+        'test'                                                                                      => 'test',
+        'Here&#39;s some quoted text.'                                                              => 'Here&#39;s some quoted text.',
+        '&#39;'                                                                                     => '&#39;',
+        "\u0063\u0061\u0074"                                                                        => 'cat',
+        "\u0039&#39;\u0039"                                                                         => '9&#39;9',
+        '&#35;&#8419;'                                                                              => '&#35;&#8419;',
+        "\xcf\x80"                                                                                  => 'π',
         'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
-        '%ABREPRESENT%C9%BB. «REPRESENTÉ»' => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
+        '%ABREPRESENT%C9%BB. «REPRESENTÉ»'                                                          => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
     );
 
     foreach ($testArray as $before => $after) {
@@ -3894,21 +3914,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     $testArray = array(
-        'Düsseldorf'                   => 'Düsseldorf',
-        'Ã'                            => 'Ã',
-        'foobar  || 😃'                => 'foobar  || 😃',
-        ' '                            => ' ',
-        ''                             => '',
-        "\n"                           => "\n",
-        'test'                         => 'test',
-        'Here&#39;s some quoted text.' => 'Here\'s some quoted text.',
-        '&#39;'                        => '\'',
-        "\u0063\u0061\u0074"           => 'cat',
-        "\u0039&#39;\u0039"            => '9\'9',
-        '&#35;&#8419;'                 => '#⃣',
-        "\xcf\x80"                     => 'π',
+        'Düsseldorf'                                                                                => 'Düsseldorf',
+        'Ã'                                                                                         => 'Ã',
+        'foobar  || 😃'                                                                             => 'foobar  || 😃',
+        ' '                                                                                         => ' ',
+        ''                                                                                          => '',
+        "\n"                                                                                        => "\n",
+        'test'                                                                                      => 'test',
+        'Here&#39;s some quoted text.'                                                              => 'Here\'s some quoted text.',
+        '&#39;'                                                                                     => '\'',
+        "\u0063\u0061\u0074"                                                                        => 'cat',
+        "\u0039&#39;\u0039"                                                                         => '9\'9',
+        '&#35;&#8419;'                                                                              => '#⃣',
+        "\xcf\x80"                                                                                  => 'π',
         'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
-        '%ABREPRESENT%C9%BB. «REPRESENTÉ»' => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
+        '%ABREPRESENT%C9%BB. «REPRESENTÉ»'                                                          => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
     );
 
     foreach ($testArray as $before => $after) {
