@@ -2813,7 +2813,7 @@ final class UTF8
 
     preg_match("/<\/?\w+(?:(?:\s+\w+(?:\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)*+\s*|\s*)\/?>/", $str, $matches);
 
-    if (count($matches) == 0) {
+    if (count($matches) === 0) {
       return false;
     } else {
       return true;
