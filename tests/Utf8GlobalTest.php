@@ -945,6 +945,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ''                        => '',
         '�'                       => '&#65533;',
         'Test-,;:'                => '&#84;&#101;&#115;&#116;&#45;&#44;&#59;&#58;',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎' => '&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;&#32;&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;&#32;&#128054;&#32;&#128169;&#32;&#128049;&#32;&#128056;&#32;&#127744;&#32;&#10084;&#32;&#9855;&#32;&#9934;',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -972,6 +973,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ''                        => '',
         '�'                       => '&#65533;',
         'Test-,;:'                => 'Test-,;:',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎' => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084; &#128054; &#128169; &#128049; &#128056; &#127744; &#10084; &#9855; &#9934;',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -995,6 +997,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&gt;'                    => '>',
         '%ABREPRESENT%C9%BB'      => '%ABREPRESENT%C9%BB',
         'Test-,;:'                => 'Test-,;:',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -1233,6 +1236,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'öäü'                                                                                                         => '&ouml;&auml;&uuml;',
         ' '                                                                                                           => ' ',
         ''                                                                                                            => '',
+        'Test-,;:'                                                                                                    => 'Test-,;:',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎'                                                     => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084; &#128054; &#128169; &#128049; &#128056; &#127744; &#10084; &#9855; &#9934;',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -1277,11 +1282,29 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'öäü'                       => 'öäü',
         ' '                         => ' ',
         ''                          => '',
+        'Test-,;:'                  => 'Test-,;:',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &amp;#x267F; &amp;#x26CE;',
     );
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::htmlspecialchars($actual));
       self::assertSame($expected, UTF8::htmlspecialchars($actual, ENT_COMPAT, 'UTF8'));
+    }
+
+    // ---
+
+    $testArray = array(
+        "<a href='κόσμε'>κόσμε</a>" => "&lt;a href=&#039;κόσμε&#039;&gt;κόσμε&lt;/a&gt;",
+        '<白>'                       => '&lt;白&gt;',
+        'öäü'                       => 'öäü',
+        ' '                         => ' ',
+        ''                          => '',
+        'Test-,;:'                  => 'Test-,;:',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &amp;#x267F; &amp;#x26CE;',
+    );
+
+    foreach ($testArray as $actual => $expected) {
+      self::assertSame($expected, UTF8::htmlspecialchars($actual, ENT_QUOTES, 'UTF8'));
     }
   }
 
