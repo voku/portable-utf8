@@ -1294,7 +1294,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     $testArray = array(
-        "<a href='κόσμε'>κόσμε</a>" => "&lt;a href=&#039;κόσμε&#039;&gt;κόσμε&lt;/a&gt;",
+        "<a href='κόσμε'>κόσμε</a>" => '&lt;a href=&#039;κόσμε&#039;&gt;κόσμε&lt;/a&gt;',
         '<白>'                       => '&lt;白&gt;',
         'öäü'                       => 'öäü',
         ' '                         => ' ',
