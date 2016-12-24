@@ -1365,8 +1365,20 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'öäü'          => false,
         ''             => false,
         '1'            => false,
+        '01010101'     => true,
         decbin(324546) => true,
         01             => true,
+        1020304        => false,
+        01020304       => false,
+        11020304       => false,
+        '1010101'      => true,
+        11111111       => true,
+        00000000       => true,
+        "\x00\x01"     => true,
+        "\x01\x00"     => true,
+        "\x01\x02"     => false,
+        "\x01\x00ab"   => false, // <= 30% binary
+        "\x01\x00a"    => true, // >= 30% binary
     );
 
     foreach ($tests as $before => $after) {

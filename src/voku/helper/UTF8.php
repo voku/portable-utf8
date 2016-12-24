@@ -2737,20 +2737,16 @@ final class UTF8
    */
   public static function is_binary($input)
   {
+    if (preg_match('~^[01]+$~', $input)) {
+      return true;
+    }
 
     $testLength = strlen($input);
-
-    if (
-        preg_match('~^[01]+$~', $input)
-        ||
-        substr_count($input, "\x00") > 0
-        ||
-        ($testLength ? substr_count($input, '^ -~') / $testLength > 0.3 : 1 === 0)
-    ) {
+    if (substr_count($input, "\x0") / $testLength > 0.3) {
       return true;
-    } else {
-      return false;
     }
+
+    return false;
   }
 
   /**
