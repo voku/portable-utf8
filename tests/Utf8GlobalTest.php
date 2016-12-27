@@ -1377,7 +1377,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "\x00\x01"     => true,
         "\x01\x00"     => true,
         "\x01\x02"     => false,
-        "\x01\x00ab"   => false, // <= 30% binary
+        "\x01\x01ab"   => false,
         "\x01\x00a"    => true, // >= 30% binary
     );
 

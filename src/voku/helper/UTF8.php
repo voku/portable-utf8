@@ -2746,6 +2746,10 @@ final class UTF8
       return true;
     }
 
+    if (substr_count($input, "\x00") > 0) {
+      return true;
+    }
+
     return false;
   }
 
