@@ -686,6 +686,18 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // text: do not convert to utf-8 + timeout
     $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', null, $context, null, 10, 10, false);
     self::assertContains('Hírek', $testString);
+  }
+
+  public function testFileGetContentsBinary()
+  {
+    $context = stream_context_create(
+        array(
+            'http' =>
+                array(
+                    'timeout' => 10,
+                ),
+        )
+    );
 
     // image: do not convert to utf-8 + timeout
     $image = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', null, $context, null, null, 10, false);
@@ -1378,6 +1390,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "\x01\x00"     => true,
         "\x01\x02"     => false,
         "\x01\x01ab"   => false,
+        "\x01\x01b"    => false,
         "\x01\x00a"    => true, // >= 30% binary
     );
 

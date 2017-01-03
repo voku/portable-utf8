@@ -2742,7 +2742,7 @@ final class UTF8
     }
 
     $testLength = strlen($input);
-    if (substr_count($input, "\x0") / $testLength > 0.3) {
+    if ($testLength && substr_count($input, "\x0") / $testLength > 0.3) {
       return true;
     }
 
