@@ -1668,7 +1668,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
+    // add more tests
     $testArray['{"array":[1,2,3],,...}}'] = false;
+    $testArray['{"test": 123}'] = true;
+    $testArray['[{"test": 123}]'] = true;
+
     foreach ($testArray as $before => $after) {
       self::assertSame(
           ($after === false ? false : true),

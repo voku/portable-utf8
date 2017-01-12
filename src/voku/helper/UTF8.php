@@ -2835,8 +2835,14 @@ final class UTF8
       return false;
     }
 
+    $json = self::json_decode($str);
+
     if (
-        is_object(self::json_decode($str))
+        (
+          is_object($json)
+          ||
+          is_array($json)
+        )
         &&
         json_last_error() === JSON_ERROR_NONE
     ) {
