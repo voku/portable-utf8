@@ -15,7 +15,7 @@ final class UTF8
   /**
    * @var array
    */
-  private static $win1252ToUtf8 = array(
+  private static $WIN1252_TO_UTF8 = array(
       128 => "\xe2\x82\xac", // EURO SIGN
       130 => "\xe2\x80\x9a", // SINGLE LOW-9 QUOTATION MARK
       131 => "\xc6\x92", // LATIN SMALL LETTER F WITH HOOK
@@ -48,7 +48,7 @@ final class UTF8
   /**
    * @var array
    */
-  private static $cp1252ToUtf8 = array(
+  private static $CP1252_TO_UTF8 = array(
       '' => '€',
       '' => '‚',
       '' => 'ƒ',
@@ -85,7 +85,7 @@ final class UTF8
    *
    * @var array
    */
-  private static $bom = array(
+  private static $BOM = array(
       "\xef\xbb\xbf"     => 3, // UTF-8 BOM
       'ï»¿'              => 6, // UTF-8 BOM as "WINDOWS-1252" (one char has [maybe] more then one byte ...)
       "\x00\x00\xfe\xff" => 4, // UTF-32 (BE) BOM
@@ -105,7 +105,7 @@ final class UTF8
    *
    * @var array
    */
-  private static $whitespace = array(
+  private static $WHITESPACE = array(
     // NUL Byte
     0     => "\x0",
     // Tab
@@ -161,7 +161,7 @@ final class UTF8
   /**
    * @var array
    */
-  private static $whitespaceTable = array(
+  private static $WHITESPACE_TABLE = array(
       'SPACE'                     => "\x20",
       'NO-BREAK SPACE'            => "\xc2\xa0",
       'OGHAM SPACE MARK'          => "\xe1\x9a\x80",
@@ -191,7 +191,7 @@ final class UTF8
    *
    * @var array
    */
-  private static $bidiUniCodeControlsTable = array(
+  private static $BIDI_UNI_CODE_CONTROLS_TABLE = array(
     // LEFT-TO-RIGHT EMBEDDING (use -> dir = "ltr")
     8234 => "\xE2\x80\xAA",
     // RIGHT-TO-LEFT EMBEDDING (use -> dir = "rtl")
@@ -215,7 +215,7 @@ final class UTF8
   /**
    * @var array
    */
-  private static $commonCaseFold = array(
+  private static $COMMON_CASE_FOLD = array(
       'ſ'            => 's',
       "\xCD\x85"     => 'ι',
       'ς'            => 'σ',
@@ -233,7 +233,7 @@ final class UTF8
   /**
    * @var array
    */
-  private static $brokenUtf8ToUtf8 = array(
+  private static $BROKEN_UTF8_FIX = array(
       "\xc2\x80" => "\xe2\x82\xac", // EURO SIGN
       "\xc2\x82" => "\xe2\x80\x9a", // SINGLE LOW-9 QUOTATION MARK
       "\xc2\x83" => "\xc6\x92", // LATIN SMALL LETTER F WITH HOOK
@@ -325,7 +325,7 @@ final class UTF8
   /**
    * @var array
    */
-  private static $utf8ToWin1252 = array(
+  private static $UTF8_TO_WIN1252 = array(
       "\xe2\x82\xac" => "\x80", // EURO SIGN
       "\xe2\x80\x9a" => "\x82", // SINGLE LOW-9 QUOTATION MARK
       "\xc6\x92"     => "\x83", // LATIN SMALL LETTER F WITH HOOK
@@ -358,7 +358,7 @@ final class UTF8
   /**
    * @var array
    */
-  private static $utf8MSWord = array(
+  private static $UTF8_MSWORD = array(
       "\xc2\xab"     => '"', // « (U+00AB) in UTF-8
       "\xc2\xbb"     => '"', // » (U+00BB) in UTF-8
       "\xe2\x80\x98" => "'", // ‘ (U+2018) in UTF-8
@@ -379,7 +379,7 @@ final class UTF8
   /**
    * @var array
    */
-  private static $iconvEncoding = array(
+  private static $ICONV_ENCODING = array(
       'ANSI_X3.4-1968',
       'ANSI_X3.4-1986',
       'ASCII',
@@ -805,7 +805,7 @@ final class UTF8
   /**
    * @var array
    */
-  private static $support = array();
+  private static $SUPPORT = array();
 
   /**
    * __construct()
@@ -907,24 +907,24 @@ final class UTF8
    */
   public static function checkForSupport()
   {
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
 
-      self::$support['already_checked_via_portable_utf8'] = true;
+      self::$SUPPORT['already_checked_via_portable_utf8'] = true;
 
       // http://php.net/manual/en/book.mbstring.php
-      self::$support['mbstring'] = self::mbstring_loaded();
+      self::$SUPPORT['mbstring'] = self::mbstring_loaded();
 
       // http://php.net/manual/en/book.iconv.php
-      self::$support['iconv'] = self::iconv_loaded();
+      self::$SUPPORT['iconv'] = self::iconv_loaded();
 
       // http://php.net/manual/en/book.intl.php
-      self::$support['intl'] = self::intl_loaded();
+      self::$SUPPORT['intl'] = self::intl_loaded();
 
       // http://php.net/manual/en/class.intlchar.php
-      self::$support['intlChar'] = self::intlChar_loaded();
+      self::$SUPPORT['intlChar'] = self::intlChar_loaded();
 
       // http://php.net/manual/en/book.pcre.php
-      self::$support['pcre_utf8'] = self::pcre_utf8_support();
+      self::$SUPPORT['pcre_utf8'] = self::pcre_utf8_support();
     }
   }
 
@@ -945,21 +945,21 @@ final class UTF8
       return null;
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding);
-    } elseif (self::$support['intlChar'] === true) {
+    } elseif (self::$SUPPORT['intlChar'] === true) {
       return \IntlChar::chr($code_point);
     }
 
-    // use static cache, if there is no support for "IntlChar"
-    static $cache = array();
+    // use static cache, if there is no support for "\IntlChar"
+    static $CHAR_CACHE = array();
     $cacheKey = $code_point . $encoding;
-    if (isset($cache[$cacheKey]) === true) {
-      return $cache[$cacheKey];
+    if (isset($CHAR_CACHE[$cacheKey]) === true) {
+      return $CHAR_CACHE[$cacheKey];
     }
 
     if (0x80 > $code_point %= 0x200000) {
@@ -983,7 +983,7 @@ final class UTF8
     }
 
     // add into static cache
-    $cache[$cacheKey] = $str;
+    $CHAR_CACHE[$cacheKey] = $str;
 
     return $str;
   }
@@ -1284,7 +1284,7 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
@@ -1330,7 +1330,7 @@ final class UTF8
           &&
           $encoding !== 'WINDOWS-1252'
           &&
-          self::$support['mbstring'] === false
+          self::$SUPPORT['mbstring'] === false
       ) {
         trigger_error('UTF8::encode() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
       }
@@ -1784,8 +1784,8 @@ final class UTF8
     static $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = null;
 
     if ($BROKEN_UTF8_TO_UTF8_KEYS_CACHE === null) {
-      $BROKEN_UTF8_TO_UTF8_KEYS_CACHE = array_keys(self::$brokenUtf8ToUtf8);
-      $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = array_values(self::$brokenUtf8ToUtf8);
+      $BROKEN_UTF8_TO_UTF8_KEYS_CACHE = array_keys(self::$BROKEN_UTF8_FIX);
+      $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = array_values(self::$BROKEN_UTF8_FIX);
     }
 
     return str_replace($BROKEN_UTF8_TO_UTF8_KEYS_CACHE, $BROKEN_UTF8_TO_UTF8_VALUES_CACHE, $str);
@@ -1832,11 +1832,11 @@ final class UTF8
    */
   public static function getCharDirection($char)
   {
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
-    if (self::$support['intlChar'] === true) {
+    if (self::$SUPPORT['intlChar'] === true) {
       $tmpReturn = \IntlChar::charDirection($char);
 
       // from "IntlChar"-Class
@@ -2784,7 +2784,7 @@ final class UTF8
    */
   public static function is_bom($str)
   {
-    foreach (self::$bom as $bomString => $bomByteLength) {
+    foreach (self::$BOM as $bomString => $bomByteLength) {
       if ($str === $bomString) {
         return true;
       }
@@ -2839,9 +2839,9 @@ final class UTF8
 
     if (
         (
-          is_object($json)
-          ||
-          is_array($json)
+            is_object($json)
+            ||
+            is_array($json)
         )
         &&
         json_last_error() === JSON_ERROR_NONE
@@ -3342,7 +3342,7 @@ final class UTF8
    */
   public static function normalize_encoding($encoding)
   {
-    static $staticNormalizeEncodingCache = array();
+    static $STATIC_NORMALIZE_ENCODING_CACHE = array();
 
     if (!$encoding) {
       return false;
@@ -3352,12 +3352,12 @@ final class UTF8
       return $encoding;
     }
 
-    if (in_array($encoding, self::$iconvEncoding, true)) {
+    if (in_array($encoding, self::$ICONV_ENCODING, true)) {
       return $encoding;
     }
 
-    if (isset($staticNormalizeEncodingCache[$encoding])) {
-      return $staticNormalizeEncodingCache[$encoding];
+    if (isset($STATIC_NORMALIZE_ENCODING_CACHE[$encoding])) {
+      return $STATIC_NORMALIZE_ENCODING_CACHE[$encoding];
     }
 
     $encodingOrig = $encoding;
@@ -3385,7 +3385,7 @@ final class UTF8
       $encoding = $equivalences[$encodingUpperHelper];
     }
 
-    $staticNormalizeEncodingCache[$encodingOrig] = $encoding;
+    $STATIC_NORMALIZE_ENCODING_CACHE[$encodingOrig] = $encoding;
 
     return $encoding;
   }
@@ -3410,8 +3410,8 @@ final class UTF8
     static $UTF8_MSWORD_VALUES_CACHE = null;
 
     if ($UTF8_MSWORD_KEYS_CACHE === null) {
-      $UTF8_MSWORD_KEYS_CACHE = array_keys(self::$utf8MSWord);
-      $UTF8_MSWORD_VALUES_CACHE = array_values(self::$utf8MSWord);
+      $UTF8_MSWORD_KEYS_CACHE = array_keys(self::$UTF8_MSWORD);
+      $UTF8_MSWORD_VALUES_CACHE = array_values(self::$UTF8_MSWORD);
     }
 
     return str_replace($UTF8_MSWORD_KEYS_CACHE, $UTF8_MSWORD_VALUES_CACHE, $str);
@@ -3441,7 +3441,7 @@ final class UTF8
 
     if (!isset($WHITESPACE_CACHE[$cacheKey])) {
 
-      $WHITESPACE_CACHE[$cacheKey] = self::$whitespaceTable;
+      $WHITESPACE_CACHE[$cacheKey] = self::$WHITESPACE_TABLE;
 
       if ($keepNonBreakingSpace === true) {
         /** @noinspection OffsetOperationsInspection */
@@ -3455,7 +3455,7 @@ final class UTF8
       static $BIDI_UNICODE_CONTROLS_CACHE = null;
 
       if ($BIDI_UNICODE_CONTROLS_CACHE === null) {
-        $BIDI_UNICODE_CONTROLS_CACHE = array_values(self::$bidiUniCodeControlsTable);
+        $BIDI_UNICODE_CONTROLS_CACHE = array_values(self::$BIDI_UNI_CODE_CONTROLS_TABLE);
       }
 
       $str = str_replace($BIDI_UNICODE_CONTROLS_CACHE, '', $str);
@@ -3526,21 +3526,21 @@ final class UTF8
       $chr = (string)\mb_convert_encoding($chr, 'UTF-8', $encoding);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
-    if (self::$support['intlChar'] === true) {
+    if (self::$SUPPORT['intlChar'] === true) {
       $tmpReturn = \IntlChar::ord($chr);
       if ($tmpReturn) {
         return $tmpReturn;
       }
     }
 
-    // use static cache, if there is no support for "IntlChar"
-    static $cache = array();
-    if (isset($cache[$chr]) === true) {
-      return $cache[$chr];
+    // use static cache, if there is no support for "\IntlChar"
+    static $CHAR_CACHE = array();
+    if (isset($CHAR_CACHE[$chr]) === true) {
+      return $CHAR_CACHE[$chr];
     }
 
     $chr_orig = $chr;
@@ -3549,18 +3549,18 @@ final class UTF8
     $code = $chr ? $chr[1] : 0;
 
     if (0xF0 <= $code && isset($chr[4])) {
-      return $cache[$chr_orig] = (($code - 0xF0) << 18) + (($chr[2] - 0x80) << 12) + (($chr[3] - 0x80) << 6) + $chr[4] - 0x80;
+      return $CHAR_CACHE[$chr_orig] = (($code - 0xF0) << 18) + (($chr[2] - 0x80) << 12) + (($chr[3] - 0x80) << 6) + $chr[4] - 0x80;
     }
 
     if (0xE0 <= $code && isset($chr[3])) {
-      return $cache[$chr_orig] = (($code - 0xE0) << 12) + (($chr[2] - 0x80) << 6) + $chr[3] - 0x80;
+      return $CHAR_CACHE[$chr_orig] = (($code - 0xE0) << 12) + (($chr[2] - 0x80) << 6) + $chr[3] - 0x80;
     }
 
     if (0xC0 <= $code && isset($chr[2])) {
-      return $cache[$chr_orig] = (($code - 0xC0) << 6) + $chr[2] - 0x80;
+      return $CHAR_CACHE[$chr_orig] = (($code - 0xC0) << 6) + $chr[2] - 0x80;
     }
 
-    return $cache[$chr_orig] = $code;
+    return $CHAR_CACHE[$chr_orig] = $code;
   }
 
   /**
@@ -3725,7 +3725,7 @@ final class UTF8
    */
   public static function remove_bom($str)
   {
-    foreach (self::$bom as $bomString => $bomByteLength) {
+    foreach (self::$BOM as $bomString => $bomByteLength) {
       if (0 === strpos($str, $bomString)) {
         $str = substr($str, $bomByteLength);
       }
@@ -3815,11 +3815,11 @@ final class UTF8
         $replacementCharHelper = 'none';
       }
 
-      if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
         self::checkForSupport();
       }
 
-      if (self::$support['mbstring'] === false) {
+      if (self::$SUPPORT['mbstring'] === false) {
         trigger_error('UTF8::replace_diamond_question_mark() without mbstring cannot handle all chars correctly', E_USER_WARNING);
       }
 
@@ -3877,12 +3877,12 @@ final class UTF8
    */
   private static function rxClass($s, $class = '')
   {
-    static $rxClassCache = array();
+    static $RX_CLASSS_CACHE = array();
 
     $cacheKey = $s . $class;
 
-    if (isset($rxClassCache[$cacheKey])) {
-      return $rxClassCache[$cacheKey];
+    if (isset($RX_CLASSS_CACHE[$cacheKey])) {
+      return $RX_CLASSS_CACHE[$cacheKey];
     }
 
     /** @noinspection CallableParameterUseCaseInTypeContextInspection */
@@ -3911,7 +3911,7 @@ final class UTF8
       $return = '(?:' . implode('|', $class) . ')';
     }
 
-    $rxClassCache[$cacheKey] = $return;
+    $RX_CLASSS_CACHE[$cacheKey] = $return;
 
     return $return;
   }
@@ -3921,11 +3921,11 @@ final class UTF8
    */
   public static function showSupport()
   {
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
-    foreach (self::$support as $utf8Support) {
+    foreach (self::$SUPPORT as $utf8Support) {
       echo $utf8Support . "\n<br>";
     }
   }
@@ -3984,11 +3984,11 @@ final class UTF8
     $str = (string)$str;
     $ret = array();
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
-    if (self::$support['pcre_utf8'] === true) {
+    if (self::$SUPPORT['pcre_utf8'] === true) {
 
       if ($cleanUtf8 === true) {
         $str = self::clean($str);
@@ -4132,7 +4132,7 @@ final class UTF8
     //
 
     $md5 = md5($str);
-    foreach (self::$iconvEncoding as $encodingTmp) {
+    foreach (self::$ICONV_ENCODING as $encodingTmp) {
       # INFO: //IGNORE and //TRANSLIT still throw notice
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
       if (md5(@\iconv($encodingTmp, $encodingTmp . '//IGNORE', $str)) === $md5) {
@@ -4783,7 +4783,7 @@ final class UTF8
    */
   public static function string_has_bom($str)
   {
-    foreach (self::$bom as $bomString => $bomByteLength) {
+    foreach (self::$BOM as $bomString => $bomByteLength) {
       if (0 === strpos($str, $bomString)) {
         return true;
       }
@@ -4871,14 +4871,14 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (
         $encoding == 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
-        self::$support['intl'] === true
+        self::$SUPPORT['intl'] === true
         &&
         Bootup::is_php('5.4')
     ) {
@@ -4923,23 +4923,23 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (
         $encoding !== 'UTF-8'
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
     ) {
       trigger_error('UTF8::stristr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (self::$support['mbstring'] === true) {
+    if (self::$SUPPORT['mbstring'] === true) {
       return \mb_stristr($haystack, $needle, $before_needle, $encoding);
     }
 
-    if (self::$support['intl'] === true) {
+    if (self::$SUPPORT['intl'] === true) {
       return \grapheme_stristr($haystack, $needle, $before_needle);
     }
 
@@ -4996,16 +4996,16 @@ final class UTF8
       $str = self::clean($str);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (
         $encoding !== 'UTF-8'
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
         &&
-        self::$support['iconv'] === false
+        self::$SUPPORT['iconv'] === false
     ) {
       trigger_error('UTF8::strlen() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
@@ -5013,9 +5013,9 @@ final class UTF8
     if (
         $encoding !== 'UTF-8'
         &&
-        self::$support['iconv'] === true
+        self::$SUPPORT['iconv'] === true
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
     ) {
       $returnTmp = \iconv_strlen($str, $encoding);
       if ($returnTmp !== false) {
@@ -5023,11 +5023,11 @@ final class UTF8
       }
     }
 
-    if (self::$support['mbstring'] === true) {
+    if (self::$SUPPORT['mbstring'] === true) {
       return \mb_strlen($str, $encoding);
     }
 
-    if (self::$support['intl'] === true) {
+    if (self::$SUPPORT['intl'] === true) {
       $str = self::clean($str);
       $returnTmp = \grapheme_strlen($str);
       if ($returnTmp !== null) {
@@ -5035,7 +5035,7 @@ final class UTF8
       }
     }
 
-    if (self::$support['iconv'] === true) {
+    if (self::$SUPPORT['iconv'] === true) {
       $returnTmp = \iconv_strlen($str, $encoding);
       if ($returnTmp !== false) {
         return $returnTmp;
@@ -5205,16 +5205,16 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (
         $encoding !== 'UTF-8'
         &
-        self::$support['iconv'] === true
+        self::$SUPPORT['iconv'] === true
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
     ) {
       trigger_error('UTF8::strpos() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
@@ -5224,20 +5224,20 @@ final class UTF8
         &&
         $encoding !== 'UTF-8'
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
         &&
-        self::$support['iconv'] === true
+        self::$SUPPORT['iconv'] === true
     ) {
       // ignore invalid negative offset to keep compatibility
       // with php < 5.5.35, < 5.6.21, < 7.0.6
       return \iconv_strpos($haystack, $needle, $offset > 0 ? $offset : 0, $encoding);
     }
 
-    if (self::$support['mbstring'] === true) {
+    if (self::$SUPPORT['mbstring'] === true) {
       return \mb_strpos($haystack, $needle, $offset, $encoding);
     }
 
-    if (self::$support['intl'] === true) {
+    if (self::$SUPPORT['intl'] === true) {
       $returnTmp = \grapheme_strpos($haystack, $needle, $offset);
       if ($returnTmp !== false) {
         return $returnTmp;
@@ -5247,7 +5247,7 @@ final class UTF8
     if (
         $offset >= 0 // iconv_strpos() can't handle negative offset
         &&
-        self::$support['iconv'] === true
+        self::$SUPPORT['iconv'] === true
     ) {
       // ignore invalid negative offset to keep compatibility
       // with php < 5.5.35, < 5.6.21, < 7.0.6
@@ -5423,23 +5423,23 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (
         $encoding !== 'UTF-8'
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
     ) {
       trigger_error('UTF8::strripos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (self::$support['mbstring'] === true) {
+    if (self::$SUPPORT['mbstring'] === true) {
       return \mb_strripos($haystack, $needle, $offset, $encoding);
     }
 
-    if (self::$support['intl'] === true) {
+    if (self::$SUPPORT['intl'] === true) {
       $returnTmp = \grapheme_strripos($haystack, $needle, $offset);
       if ($returnTmp !== false) {
         return $returnTmp;
@@ -5503,26 +5503,26 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (
         $encoding !== 'UTF-8'
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
     ) {
       trigger_error('UTF8::strrpos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (self::$support['mbstring'] === true) {
+    if (self::$SUPPORT['mbstring'] === true) {
       $returnTmp = \mb_strrpos($haystack, $needle, $offset, $encoding);
       if ($returnTmp !== false) {
         return $returnTmp;
       }
     }
 
-    if (self::$support['intl'] === true) {
+    if (self::$SUPPORT['intl'] === true) {
       $returnTmp = \grapheme_strrpos($haystack, $needle, $offset);
       if ($returnTmp !== false) {
         return $returnTmp;
@@ -5609,26 +5609,26 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (
         $encoding !== 'UTF-8'
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
     ) {
       trigger_error('UTF8::strstr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (self::$support['mbstring'] === true) {
+    if (self::$SUPPORT['mbstring'] === true) {
       $returnTmp = \mb_strstr($haystack, $needle, $before_needle, $encoding);
       if ($returnTmp !== false) {
         return $returnTmp;
       }
     }
 
-    if (self::$support['intl'] === true) {
+    if (self::$SUPPORT['intl'] === true) {
       $returnTmp = \grapheme_strstr($haystack, $needle, $before_needle);
       if ($returnTmp !== false) {
         return $returnTmp;
@@ -5675,22 +5675,22 @@ final class UTF8
     static $COMMAN_CASE_FOLD_VALUES_CACHE = null;
 
     if ($COMMON_CASE_FOLD_KEYS_CACHE === null) {
-      $COMMON_CASE_FOLD_KEYS_CACHE = array_keys(self::$commonCaseFold);
-      $COMMAN_CASE_FOLD_VALUES_CACHE = array_values(self::$commonCaseFold);
+      $COMMON_CASE_FOLD_KEYS_CACHE = array_keys(self::$COMMON_CASE_FOLD);
+      $COMMAN_CASE_FOLD_VALUES_CACHE = array_values(self::$COMMON_CASE_FOLD);
     }
 
     $str = str_replace($COMMON_CASE_FOLD_KEYS_CACHE, $COMMAN_CASE_FOLD_VALUES_CACHE, $str);
 
     if ($full) {
 
-      static $fullCaseFold = null;
+      static $FULL_CASE_FOLD = null;
 
-      if ($fullCaseFold === null) {
-        $fullCaseFold = self::getData('caseFolding_full');
+      if ($FULL_CASE_FOLD === null) {
+        $FULL_CASE_FOLD = self::getData('caseFolding_full');
       }
 
       /** @noinspection OffsetOperationsInspection */
-      $str = str_replace($fullCaseFold[0], $fullCaseFold[1], $str);
+      $str = str_replace($FULL_CASE_FOLD[0], $FULL_CASE_FOLD[1], $str);
     }
 
     if ($cleanUtf8 === true) {
@@ -5890,31 +5890,31 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (
         $encoding !== 'UTF-8'
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
     ) {
       trigger_error('UTF8::substr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (self::$support['mbstring'] === true) {
+    if (self::$SUPPORT['mbstring'] === true) {
       return \mb_substr($str, $start, $length, $encoding);
     }
 
     if (
         $length >= 0 // "iconv_substr()" can't handle negative length
         &&
-        self::$support['iconv'] === true
+        self::$SUPPORT['iconv'] === true
     ) {
       return \iconv_substr($str, $start, $length);
     }
 
-    if (self::$support['intl'] === true) {
+    if (self::$SUPPORT['intl'] === true) {
       return \grapheme_substr($str, $start, $length);
     }
 
@@ -6003,19 +6003,19 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (
         $encoding !== 'UTF-8'
         &&
-        self::$support['mbstring'] === false
+        self::$SUPPORT['mbstring'] === false
     ) {
       trigger_error('UTF8::substr_count() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (self::$support['mbstring'] === true) {
+    if (self::$SUPPORT['mbstring'] === true) {
       return \mb_substr_count($haystack, $needle, $encoding);
     }
 
@@ -6378,11 +6378,11 @@ final class UTF8
     }
 
     if ($strict === true) {
-      if (!isset(self::$support['already_checked_via_portable_utf8'])) {
+      if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
         self::checkForSupport();
       }
 
-      if (self::$support['intl'] === true && Bootup::is_php('5.4')) {
+      if (self::$SUPPORT['intl'] === true && Bootup::is_php('5.4')) {
 
         // HACK for issue from "transliterator_transliterate()"
         $str = str_replace(
@@ -6635,8 +6635,8 @@ final class UTF8
       } elseif (($c1 & "\xc0") === "\x80") { // needs conversion
 
         $ordC1 = ord($c1);
-        if (isset(self::$win1252ToUtf8[$ordC1])) { // found in Windows-1252 special cases
-          $buf .= self::$win1252ToUtf8[$ordC1];
+        if (isset(self::$WIN1252_TO_UTF8[$ordC1])) { // found in Windows-1252 special cases
+          $buf .= self::$WIN1252_TO_UTF8[$ordC1];
         } else {
           $cc1 = (chr($ordC1 / 64) | "\xc0");
           $cc2 = (($c1 & "\x3f") | "\x80");
@@ -6834,7 +6834,7 @@ final class UTF8
    */
   public static function urldecode_fix_win1252_chars()
   {
-    static $array = array(
+    return array(
         '%20' => ' ',
         '%21' => '!',
         '%22' => '"',
@@ -7060,8 +7060,6 @@ final class UTF8
         '%FE' => 'þ',
         '%FF' => 'ÿ',
     );
-
-    return $array;
   }
 
   /**
@@ -7086,8 +7084,8 @@ final class UTF8
     static $UTF8_TO_WIN1252_VALUES_CACHE = null;
 
     if ($UTF8_TO_WIN1252_KEYS_CACHE === null) {
-      $UTF8_TO_WIN1252_KEYS_CACHE = array_keys(self::$utf8ToWin1252);
-      $UTF8_TO_WIN1252_VALUES_CACHE = array_values(self::$utf8ToWin1252);
+      $UTF8_TO_WIN1252_KEYS_CACHE = array_keys(self::$UTF8_TO_WIN1252);
+      $UTF8_TO_WIN1252_VALUES_CACHE = array_values(self::$UTF8_TO_WIN1252);
     }
 
     /** @noinspection PhpInternalEntityUsedInspection */
@@ -7120,8 +7118,8 @@ final class UTF8
       static $CP1252_TO_UTF8_VALUES_CACHE = null;
 
       if ($CP1252_TO_UTF8_KEYS_CACHE === null) {
-        $CP1252_TO_UTF8_KEYS_CACHE = array_keys(self::$cp1252ToUtf8);
-        $CP1252_TO_UTF8_VALUES_CACHE = array_values(self::$cp1252ToUtf8);
+        $CP1252_TO_UTF8_KEYS_CACHE = array_keys(self::$CP1252_TO_UTF8);
+        $CP1252_TO_UTF8_VALUES_CACHE = array_values(self::$CP1252_TO_UTF8);
       }
 
       return str_replace($CP1252_TO_UTF8_KEYS_CACHE, $CP1252_TO_UTF8_VALUES_CACHE, $str);
@@ -7156,7 +7154,7 @@ final class UTF8
    */
   public static function whitespace_table()
   {
-    return self::$whitespaceTable;
+    return self::$WHITESPACE_TABLE;
   }
 
   /**
@@ -7270,7 +7268,7 @@ final class UTF8
    */
   public static function ws()
   {
-    return self::$whitespace;
+    return self::$WHITESPACE;
   }
 
 }

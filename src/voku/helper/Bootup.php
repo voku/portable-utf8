@@ -176,20 +176,20 @@ class Bootup
   /**
    * Determines if the current version of PHP is equal to or greater than the supplied value.
    *
-   * @param        string
    * @param string $version
    *
    * @return bool <p>Return <strong>true</strong> if the current version is $version or higher</p>
    */
   public static function is_php($version)
   {
-    static $_is_php;
+    static $_IS_PHP;
 
     $version = (string)$version;
-    if (!isset($_is_php[$version])) {
-      $_is_php[$version] = version_compare(PHP_VERSION, $version, '>=');
+
+    if (!isset($_IS_PHP[$version])) {
+      $_IS_PHP[$version] = version_compare(PHP_VERSION, $version, '>=');
     }
 
-    return $_is_php[$version];
+    return $_IS_PHP[$version];
   }
 }
