@@ -194,8 +194,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     $tests = array(
         ''  => 'U+0000',
-        0   => 'U+0000',
         ' ' => 'U+0020',
+        0   => 'U+0030',
         'a' => 'U+0061',
         'ä' => 'U+00e4',
         'ό' => 'U+1f79',
@@ -712,6 +712,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testFilter()
   {
+    self::assertSame('é', UTF8::filter("\xE9"));
+
+    // ---
+
     $c = 'à';
     $d = \Normalizer::normalize($c, \Normalizer::NFD);
     $a = array(
@@ -1887,8 +1891,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('1.23', UTF8::number_format('1.234567', 2, '.', ''));
     self::assertSame('1,3', UTF8::number_format('1.298765', 1, ',', ''));
     self::assertSame('1,0', UTF8::number_format('1', 1, ',', ''));
-    self::assertSame(null, UTF8::number_format('foo', 1, ',', ''));
-    self::assertSame(null, UTF8::number_format(''));
+    self::assertSame('0,0', UTF8::number_format('foo', 1, ',', ''));
+    self::assertSame('0', UTF8::number_format(''));
   }
 
   public function testOrd()
