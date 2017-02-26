@@ -4,9 +4,6 @@ declare(strict_types=0);
 
 namespace voku\helper;
 
-use Symfony\Polyfill\Intl\Grapheme\Grapheme;
-use Symfony\Polyfill\Xml\Xml;
-
 /**
  * UTF8-Helper-Class
  *
