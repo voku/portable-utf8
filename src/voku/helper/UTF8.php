@@ -952,6 +952,12 @@ final class UTF8
       return \IntlChar::chr($code_point);
     }
 
+    // check type of code_point, only if there is no support for "\IntlChar"
+    $i = (int)$code_point;
+    if ($i !== $code_point) {
+      return null;
+    }
+
     // use static cache, only if there is no support for "\IntlChar"
     static $CHAR_CACHE = array();
     $cacheKey = $code_point . $encoding;
