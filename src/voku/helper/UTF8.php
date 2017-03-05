@@ -966,19 +966,19 @@ final class UTF8
     }
 
     if (0x80 > $code_point %= 0x200000) {
-      $str = UTF8NonStrict::chr($code_point);
+      $str = self::chr_and_parse_int($code_point);
     } elseif (0x800 > $code_point) {
-      $str = UTF8NonStrict::chr(0xC0 | $code_point >> 6) .
-             UTF8NonStrict::chr(0x80 | $code_point & 0x3F);
+      $str = self::chr_and_parse_int(0xC0 | $code_point >> 6) .
+             self::chr_and_parse_int(0x80 | $code_point & 0x3F);
     } elseif (0x10000 > $code_point) {
-      $str = UTF8NonStrict::chr(0xE0 | $code_point >> 12) .
-             UTF8NonStrict::chr(0x80 | $code_point >> 6 & 0x3F) .
-             UTF8NonStrict::chr(0x80 | $code_point & 0x3F);
+      $str = self::chr_and_parse_int(0xE0 | $code_point >> 12) .
+             self::chr_and_parse_int(0x80 | $code_point >> 6 & 0x3F) .
+             self::chr_and_parse_int(0x80 | $code_point & 0x3F);
     } else {
-      $str = UTF8NonStrict::chr(0xF0 | $code_point >> 18) .
-             UTF8NonStrict::chr(0x80 | $code_point >> 12 & 0x3F) .
-             UTF8NonStrict::chr(0x80 | $code_point >> 6 & 0x3F) .
-             UTF8NonStrict::chr(0x80 | $code_point & 0x3F);
+      $str = self::chr_and_parse_int(0xF0 | $code_point >> 18) .
+             self::chr_and_parse_int(0x80 | $code_point >> 12 & 0x3F) .
+             self::chr_and_parse_int(0x80 | $code_point >> 6 & 0x3F) .
+             self::chr_and_parse_int(0x80 | $code_point & 0x3F);
     }
 
     if ($encoding !== 'UTF-8') {
@@ -989,6 +989,16 @@ final class UTF8
     $CHAR_CACHE[$cacheKey] = $str;
 
     return $str;
+  }
+
+  /**
+   * @param int $int
+   *
+   * @return string
+   */
+  private static function chr_and_parse_int($int)
+  {
+    return chr((int)$int);
   }
 
   /**
@@ -6681,7 +6691,7 @@ final class UTF8
             $i++;
           } else { // not valid UTF8 - convert it
             $cc1tmp = ord($c1) / 64;
-            $cc1 = UTF8NonStrict::chr($cc1tmp) | "\xC0";
+            $cc1 = self::chr_and_parse_int($cc1tmp) | "\xC0";
             $cc2 = ($c1 & "\x3F") | "\x80";
             $buf .= $cc1 . $cc2;
           }
@@ -6696,7 +6706,7 @@ final class UTF8
             $i += 2;
           } else { // not valid UTF8 - convert it
             $cc1tmp = ord($c1) / 64;
-            $cc1 = UTF8NonStrict::chr($cc1tmp) | "\xC0";
+            $cc1 = self::chr_and_parse_int($cc1tmp) | "\xC0";
             $cc2 = ($c1 & "\x3F") | "\x80";
             $buf .= $cc1 . $cc2;
           }
@@ -6712,14 +6722,14 @@ final class UTF8
             $i += 3;
           } else { // not valid UTF8 - convert it
             $cc1tmp = ord($c1) / 64;
-            $cc1 = UTF8NonStrict::chr($cc1tmp) | "\xC0";
+            $cc1 = self::chr_and_parse_int($cc1tmp) | "\xC0";
             $cc2 = ($c1 & "\x3F") | "\x80";
             $buf .= $cc1 . $cc2;
           }
 
         } else { // doesn't look like UTF8, but should be converted
           $cc1tmp = ord($c1) / 64;
-          $cc1 = UTF8NonStrict::chr($cc1tmp) | "\xC0";
+          $cc1 = self::chr_and_parse_int($cc1tmp) | "\xC0";
           $cc2 = ($c1 & "\x3F") | "\x80";
           $buf .= $cc1 . $cc2;
         }
@@ -6730,7 +6740,7 @@ final class UTF8
         if (isset(self::$WIN1252_TO_UTF8[$ordC1])) { // found in Windows-1252 special cases
           $buf .= self::$WIN1252_TO_UTF8[$ordC1];
         } else {
-          $cc1 = UTF8NonStrict::chr($ordC1 / 64) | "\xC0";
+          $cc1 = self::chr_and_parse_int($ordC1 / 64) | "\xC0";
           $cc2 = ($c1 & "\x3F") | "\x80";
           $buf .= $cc1 . $cc2;
         }
@@ -6834,7 +6844,7 @@ final class UTF8
     }
 
     $words = self::str_to_words($str, $charlist);
-    $newwords = array();
+    $newWords = array();
 
     if (count($exceptions) > 0) {
       $useExceptions = true;
@@ -6860,10 +6870,10 @@ final class UTF8
         $word = self::ucfirst($word, $encoding, $cleanUtf8);
       }
 
-      $newwords[] = $word;
+      $newWords[] = $word;
     }
 
-    return implode('', $newwords);
+    return implode('', $newWords);
   }
 
   /**
