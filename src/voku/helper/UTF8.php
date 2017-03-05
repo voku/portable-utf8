@@ -1262,7 +1262,7 @@ final class UTF8
   /**
    * Converts a int-value into an UTF-8 character.
    *
-   * @param int $int
+   * @param mixed $int
    *
    * @return string
    */
@@ -2519,7 +2519,7 @@ final class UTF8
    *
    * @see UTF8::decimal_to_chr()
    *
-   * @param int $int
+   * @param mixed $int
    *
    * @return string
    */

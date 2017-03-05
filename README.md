@@ -382,7 +382,7 @@ Returns count of characters used in a string.
 UTF8::count_chars('κaκbκc'); // array('κ' => 3, 'a' => 1, 'b' => 1, 'c' => 1)
 ```
 
-##### decimal_to_chr(int $int) : string
+##### decimal_to_chr(mixed $int) : string
 
 Converts a int-value into an UTF-8 character.
 
