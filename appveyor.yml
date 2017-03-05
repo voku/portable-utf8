@@ -12,9 +12,9 @@ install:
   - cinst -y OpenSSL.Light
   - SET PATH=C:\Program Files\OpenSSL;%PATH%
   - cinst -y php --version "7.0.16"
-  - cd C:\tools\php\ext
+  - cd C:\tools\php70\ext
   - curl -O https://xdebug.org/files/php_xdebug-2.4.1-7.0-vc14-nts-x86_64.dll
-  - cd C:\tools\php
+  - cd C:\tools\php70
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
   - echo extension_dir=ext >> php.ini
@@ -22,7 +22,7 @@ install:
   - echo extension=php_curl.dll >> php.ini
   - echo extension=php_mbstring.dll >> php.ini
   - echo zend_extension_ts=php_xdebug-2.4.1-7.0-vc14-nts-x86_64.dll >> php.ini
-  - SET PATH=C:\tools\php;%PATH%
+  - SET PATH=C:\tools\php70;%PATH%
   - cd C:\projects\utf8
   - mkdir build\logs
   - php -r "readfile('http://getcomposer.org/installer');" | php
