@@ -6672,7 +6672,8 @@ final class UTF8
       return $str;
     }
 
-    $max = strlen($str);
+    $max = mb_strlen($str, '8bit');
+    
     $buf = '';
 
     /** @noinspection ForeachInvariantsInspection */
