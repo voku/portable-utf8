@@ -2724,7 +2724,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // string with UTF-16 (LE) BOM + valid UTF-8 && invalid UTF-8
     $string = "\xFF\xFE" . 'string <strong>with utf-8 chars åèä</strong>' . "\xa0\xa1" . ' - doo-bee doo-bee dooh';
 
-    self::assertSame(74, strlen($string));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(71, strlen($string));
+    } else {
+      self::assertSame(74, strlen($string));
+    }
+
     self::assertSame(74, UTF8::strlen($string, '8bit'));
     self::assertSame(67, UTF8::strlen($string, 'UTF-8', true));
 
@@ -2736,7 +2741,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $string_test1 = strip_tags($string);
     $string_test2 = UTF8::strip_tags($string);
 
-    self::assertSame(57, strlen($string_test1));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(54, strlen($string_test1));
+    } else {
+      self::assertSame(57, strlen($string_test1)); // not correct
+    }
+
     self::assertSame(54, UTF8::strlen($string_test2, 'UTF-8', false));
     self::assertSame(50, UTF8::strlen($string_test2, 'UTF-8', true));
 
@@ -2919,11 +2929,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
       // UTF-8 tests
 
-      self::assertSame(17, strpos('der Straße nach Paris', 'Paris')); // not correct
+      if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+        self::assertSame(16, strpos('der Straße nach Paris', 'Paris'));
+      } else {
+        self::assertSame(17, strpos('der Straße nach Paris', 'Paris')); // not correct
+      }
+
       self::assertSame(17, UTF8::strpos('der Straße nach Paris', 'Paris', 0, '8bit')); // not correct
       self::assertSame(16, UTF8::strpos('der Straße nach Paris', 'Paris'));
 
-      self::assertSame(3, strpos('한국어', '국')); // not correct
+      if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+        self::assertSame(1, strpos('한국어', '국'));
+      } else {
+        self::assertSame(3, strpos('한국어', '국')); // not correct
+      }
+
       self::assertSame(1, UTF8::strpos('한국어', '국'));
 
       self::assertSame(0, UTF8::strpos('κόσμε-κόσμε-κόσμε', 'κ'));
@@ -2953,10 +2973,20 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
         // ISO
 
-        self::assertSame(17, strpos('der Straße nach Paris', 'Paris', 0)); // not correct
+        if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+          self::assertSame(16, strpos('der Straße nach Paris', 'Paris', 0));
+        } else {
+          self::assertSame(17, strpos('der Straße nach Paris', 'Paris', 0)); // not correct
+        }
+
         self::assertSame(17, UTF8::strpos('der Straße nach Paris', 'Paris', 0, 'ISO')); // not correct
 
-        self::assertSame(3, strpos('한국어', '국', 0)); // not correct
+        if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+          self::assertSame(1, strpos('한국어', '국', 0));
+        } else {
+          self::assertSame(3, strpos('한국어', '국', 0)); // not correct
+        }
+
         self::assertSame(3, UTF8::strpos('한국어', '국', 0, 'ISO')); // not correct
       }
     }
@@ -3052,7 +3082,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrrpos()
   {
-    self::assertSame(3, strrpos('한국어', '국'));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(1, strrpos('한국어', '국'));
+    } else {
+      self::assertSame(3, strrpos('한국어', '국')); // not correct
+    }
 
     // bug is reported: https://github.com/facebook/hhvm/issues/7318
     if (defined('HHVM_VERSION') === true) {
@@ -3316,42 +3350,93 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(false, substr_count('', '', 1));
     self::assertSame(false, UTF8::substr_count('', '', 1));
 
-    self::assertSame(false, substr_count('', '', 1, 1));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count('', '', 1, 1));
+    } else {
+      self::assertSame(false, substr_count('', '', 1, 1));
+    }
+
     self::assertSame(false, UTF8::substr_count('', '', 1, 1));
 
-    self::assertSame(false, substr_count('', 'test', 1, 1));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count('', 'test', 1, 1));
+    } else {
+      self::assertSame(false, substr_count('', 'test', 1, 1));
+    }
+
     self::assertSame(false, UTF8::substr_count('', 'test', 1, 1));
 
-    self::assertSame(false, substr_count('test', '', 1, 1));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count('test', '', 1, 1));
+    } else {
+      self::assertSame(false, substr_count('test', '', 1, 1));
+    }
+
     self::assertSame(false, UTF8::substr_count('test', '', 1, 1));
 
-    self::assertSame(0, substr_count('test', 'test', 1, 1));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count('test', 'test', 1, 1));
+    } else {
+      self::assertSame(0, substr_count('test', 'test', 1, 1));
+    }
+
     self::assertSame(0, UTF8::substr_count('test', 'test', 1, 1));
 
-    self::assertSame(1, substr_count(12345, 23, 1, 2));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count(12345, 23, 1, 2));
+    } else {
+      self::assertSame(1, substr_count(12345, 23, 1, 2));
+    }
+
     self::assertSame(1, UTF8::substr_count(12345, 23, 1, 2));
 
     self::assertSame(2, substr_count('abcdebc', 'bc'));
     self::assertSame(2, UTF8::substr_count('abcdebc', 'bc'));
 
     if (Bootup::is_php('7.1') === false) {
-      self::assertSame(false, substr_count('abcde', 'de', -2, 2));
+
+      if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+        self::assertSame(null, substr_count('abcde', 'de', -2, 2));
+      } else {
+        self::assertSame(false, substr_count('abcde', 'de', -2, 2));
+      }
+
       self::assertSame(false, UTF8::substr_count('abcde', 'de', -2, 2));
     } else {
       self::assertSame(1, substr_count('abcde', 'de', -2, 2));
       self::assertSame(1, UTF8::substr_count('abcde', 'de', -2, 2));
     }
 
-    self::assertSame(0, substr_count('abcde', 'bcg', 1, 2));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count('abcde', 'bcg', 1, 2));
+    } else {
+      self::assertSame(0, substr_count('abcde', 'bcg', 1, 2));
+    }
+
     self::assertSame(0, UTF8::substr_count('abcde', 'bcg', 1, 2));
 
-    self::assertSame(0, substr_count('abcde', 'BC', 1, 2));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count('abcde', 'BC', 1, 2));
+    } else {
+      self::assertSame(0, substr_count('abcde', 'BC', 1, 2));
+    }
+
     self::assertSame(0, UTF8::substr_count('abcde', 'BC', 1, 2));
 
-    self::assertSame(1, substr_count('abcde', 'bc', 1, 3));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count('abcde', 'bc', 1, 3));
+    } else {
+      self::assertSame(1, substr_count('abcde', 'bc', 1, 3));
+    }
+
     self::assertSame(1, UTF8::substr_count('abcde', 'bc', 1, 3));
 
-    self::assertSame(0, substr_count('abcde', 'cd', 1, 2));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count('abcde', 'cd', 1, 2));
+    } else {
+      self::assertSame(0, substr_count('abcde', 'cd', 1, 2));
+    }
+
     self::assertSame(0, UTF8::substr_count('abcde', 'cd', 1, 2));
 
     // UTF-8 tests
@@ -3983,6 +4068,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "\xcf\x80"                                                                                  => 'π',
         'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
         '%ABREPRESENT%C9%BB. «REPRESENTÉ»'                                                          => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
+        'éæ'                                                                                        => 'éæ',
     );
 
     foreach ($testArray as $before => $after) {
