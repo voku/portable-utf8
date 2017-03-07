@@ -294,6 +294,20 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testStrReplaceFirst()
+  {
+    $testArray = array(
+        '' => array('', '', ''),
+        ' lall lall' => array('lall', '', 'lall lall lall'),
+        'ö a l l ' => array('l', 'ö', 'l a l l '),
+        "κöäüσμε ό" => array('ό', 'öäü', "κόσμε\xc2\xa0ό", ),
+    );
+
+    foreach ($testArray as $after => $test) {
+      self::assertSame($after, UTF8::str_replace_first($test[0], $test[1], $test[2]));
+    }
+  }
+
   public function testCleanup()
   {
     $examples = array(
