@@ -1073,7 +1073,7 @@ final class UTF8
 
     return array_map(
         function ($data) {
-          return UTF8::strlen($data, '8bit');
+          return UTF8::strlen($data, '8BIT');
         },
         self::split($str)
     );
@@ -3102,7 +3102,7 @@ final class UTF8
       }
 
       if (self::$SUPPORT['mbstring_func_overload'] === true) {
-        $len = \mb_strlen($str, '8bit');
+        $len = \mb_strlen($str, '8BIT');
       } else {
         $len = strlen($str);
       }
@@ -3641,7 +3641,7 @@ final class UTF8
 
     $chr_orig = $chr;
     /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-    $chr = unpack('C*', self::substr($chr, 0, 4, '8bit'));
+    $chr = unpack('C*', self::substr($chr, 0, 4, '8BIT'));
     $code = $chr ? $chr[1] : 0;
 
     if (0xF0 <= $code && isset($chr[4])) {
@@ -3828,8 +3828,8 @@ final class UTF8
     }
 
     foreach (self::$BOM as $bomString => $bomByteLength) {
-      if (0 === self::strpos($str, $bomString, 0, '8bit')) {
-        $str = self::substr($str, $bomByteLength, null, '8bit');
+      if (0 === self::strpos($str, $bomString, 0, '8BIT')) {
+        $str = self::substr($str, $bomByteLength, null, '8BIT');
       }
     }
 
@@ -4110,7 +4110,7 @@ final class UTF8
       }
 
       if (self::$SUPPORT['mbstring_func_overload'] === true) {
-        $len = \mb_strlen($str, '8bit');
+        $len = \mb_strlen($str, '8BIT');
       } else {
         $len = strlen($str);
       }
@@ -5137,8 +5137,15 @@ final class UTF8
     switch ($encoding) {
       case 'ASCII':
       case 'CP850':
-      case '8BIT':
-        return \mb_strlen($str, '8bit');
+        if (
+            $encoding === 'CP850'
+            &&
+            self::$SUPPORT['mbstring_func_overload'] === false
+        ) {
+          return strlen($str);
+        } else {
+          return \mb_strlen($str, '8BIT');
+        }
     }
 
     if ($cleanUtf8 === true) {
@@ -5176,17 +5183,17 @@ final class UTF8
       return \mb_strlen($str, $encoding);
     }
 
-    if (self::$SUPPORT['intl'] === true) {
-      $str = self::clean($str);
-      $returnTmp = \grapheme_strlen($str);
-      if ($returnTmp !== null) {
+    if (self::$SUPPORT['iconv'] === true) {
+      $returnTmp = \iconv_strlen($str, $encoding);
+      if ($returnTmp !== false) {
         return $returnTmp;
       }
     }
 
-    if (self::$SUPPORT['iconv'] === true) {
-      $returnTmp = \iconv_strlen($str, $encoding);
-      if ($returnTmp !== false) {
+    if (self::$SUPPORT['intl'] === true) {
+      $str = self::clean($str);
+      $returnTmp = \grapheme_strlen($str);
+      if ($returnTmp !== null) {
         return $returnTmp;
       }
     }
@@ -5356,6 +5363,14 @@ final class UTF8
 
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
+    }
+
+    if (
+        $encoding === 'CP850'
+        &&
+        self::$SUPPORT['mbstring_func_overload'] === false
+    ) {
+      return strpos($haystack, $needle, $offset);
     }
 
     if (
@@ -6041,6 +6056,14 @@ final class UTF8
 
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
+    }
+
+    if (
+        $encoding === 'CP850'
+        &&
+        self::$SUPPORT['mbstring_func_overload'] === false
+    ) {
+      return substr($str, $start, $length === null ? $str_length : $length);
     }
 
     if (
@@ -6741,7 +6764,7 @@ final class UTF8
     }
 
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
-      $max = \mb_strlen($str, '8bit');
+      $max = \mb_strlen($str, '8BIT');
     } else {
       $max = strlen($str);
     }
@@ -7271,7 +7294,7 @@ final class UTF8
     }
 
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
-      $len = \mb_strlen($str, '8bit');
+      $len = \mb_strlen($str, '8BIT');
     } else {
       $len = strlen($str);
     }
@@ -7296,7 +7319,7 @@ final class UTF8
       }
     }
 
-    return self::substr($str, 0, $j, '8bit');
+    return self::substr($str, 0, $j, '8BIT');
   }
 
   /**
