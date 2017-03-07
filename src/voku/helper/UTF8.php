@@ -5023,7 +5023,7 @@ final class UTF8
     }
 
     if (
-        $encoding == 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
         &&
@@ -5087,7 +5087,13 @@ final class UTF8
       return \mb_stristr($haystack, $needle, $before_needle, $encoding);
     }
 
-    if (self::$SUPPORT['intl'] === true) {
+    if (
+        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        &&
+        self::$SUPPORT['intl'] === true
+        &&
+        Bootup::is_php('5.4') === true
+    ) {
       return \grapheme_stristr($haystack, $needle, $before_needle);
     }
 
@@ -5149,6 +5155,8 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
+      // "\mb_strlen" and "\iconv_strlen" returns wrong length,
+      // if invalid characters are found in $str
       $str = self::clean($str);
     }
 
@@ -5173,10 +5181,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      $returnTmp = \iconv_strlen($str, $encoding);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
+      return \iconv_strlen($str, $encoding);
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
@@ -5184,18 +5189,17 @@ final class UTF8
     }
 
     if (self::$SUPPORT['iconv'] === true) {
-      $returnTmp = \iconv_strlen($str, $encoding);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
+      return \iconv_strlen($str, $encoding);
     }
 
-    if (self::$SUPPORT['intl'] === true) {
-      $str = self::clean($str);
-      $returnTmp = \grapheme_strlen($str);
-      if ($returnTmp !== null) {
-        return $returnTmp;
-      }
+    if (
+        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        &&
+        self::$SUPPORT['intl'] === true
+        &&
+        Bootup::is_php('5.4') === true
+    ) {
+      return \grapheme_strlen($str);
     }
 
     // fallback via vanilla php
@@ -5401,11 +5405,14 @@ final class UTF8
       return \mb_strpos($haystack, $needle, $offset, $encoding);
     }
 
-    if (self::$SUPPORT['intl'] === true) {
-      $returnTmp = \grapheme_strpos($haystack, $needle, $offset);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
+    if (
+        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        &&
+        self::$SUPPORT['intl'] === true
+        &&
+        Bootup::is_php('5.4') === true
+    ) {
+      return \grapheme_strpos($haystack, $needle, $offset);
     }
 
     if (
@@ -5603,16 +5610,19 @@ final class UTF8
       return \mb_strripos($haystack, $needle, $offset, $encoding);
     }
 
-    if (self::$SUPPORT['intl'] === true) {
-      $returnTmp = \grapheme_strripos($haystack, $needle, $offset);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
+    if (
+        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        &&
+        self::$SUPPORT['intl'] === true
+        &&
+        Bootup::is_php('5.4') === true
+    ) {
+      return \grapheme_strripos($haystack, $needle, $offset);
     }
 
     // fallback via vanilla php
 
-    return self::strrpos(self::strtonatfold($haystack), self::strtonatfold($needle), $offset, $encoding, $cleanUtf8);
+    return self::strrpos(self::strtoupper($haystack), self::strtoupper($needle), $offset, $encoding, $cleanUtf8);
   }
 
   /**
@@ -5680,17 +5690,17 @@ final class UTF8
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
-      $returnTmp = \mb_strrpos($haystack, $needle, $offset, $encoding);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
+      return \mb_strrpos($haystack, $needle, $offset, $encoding);
     }
 
-    if (self::$SUPPORT['intl'] === true) {
-      $returnTmp = \grapheme_strrpos($haystack, $needle, $offset);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
+    if (
+        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        &&
+        self::$SUPPORT['intl'] === true
+        &&
+        Bootup::is_php('5.4') === true
+    ) {
+      return \grapheme_strrpos($haystack, $needle, $offset);
     }
 
     // fallback via vanilla php
@@ -5786,17 +5796,17 @@ final class UTF8
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
-      $returnTmp = \mb_strstr($haystack, $needle, $before_needle, $encoding);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
+      return \mb_strstr($haystack, $needle, $before_needle, $encoding);
     }
 
-    if (self::$SUPPORT['intl'] === true) {
-      $returnTmp = \grapheme_strstr($haystack, $needle, $before_needle);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
+    if (
+        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        &&
+        self::$SUPPORT['intl'] === true
+        &&
+        Bootup::is_php('5.4') === true
+    ) {
+      return \grapheme_strstr($haystack, $needle, $before_needle);
     }
 
     preg_match('/^(.*?)' . preg_quote($needle, '/') . '/us', $haystack, $match);
@@ -6039,7 +6049,7 @@ final class UTF8
     }
 
     if ($length === null) {
-      $length = null;
+      $length = $str_length;
     } else {
       $length = (int)$length;
     }
@@ -6078,14 +6088,14 @@ final class UTF8
       return \mb_substr($str, $start, $length, $encoding);
     }
 
-    if (self::$SUPPORT['intl'] === true) {
+    if (
+        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        &&
+        self::$SUPPORT['intl'] === true
+        &&
+        Bootup::is_php('5.4') === true
+    ) {
       return \grapheme_substr($str, $start, $length);
-    }
-
-    if ($length === null) {
-      $length = $str_length;
-    } else {
-      $length = (int)$length;
     }
 
     if (

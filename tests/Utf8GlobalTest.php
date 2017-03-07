@@ -2747,7 +2747,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame(57, strlen($string_test1)); // not correct
     }
 
-    self::assertSame(54, UTF8::strlen($string_test2, 'UTF-8', false));
+    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+      self::assertSame(54, UTF8::strlen($string_test2, 'UTF-8', false));
+    }
+    
     self::assertSame(50, UTF8::strlen($string_test2, 'UTF-8', true));
 
     $testArray = array(
