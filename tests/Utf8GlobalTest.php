@@ -300,7 +300,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '' => array('', '', ''),
         ' lall lall' => array('lall', '', 'lall lall lall'),
         'ö a l l ' => array('l', 'ö', 'l a l l '),
-        "κöäüσμε ό" => array('ό', 'öäü', "κόσμε\xc2\xa0ό", ),
+        'κöäüσμε ό' => array('ό', 'öäü', "κόσμε\xc2\xa0ό", ),
     );
 
     foreach ($testArray as $after => $test) {
