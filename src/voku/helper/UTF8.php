@@ -7314,8 +7314,8 @@ final class UTF8
       switch ($str[$i] & "\xF0") {
         case "\xC0":
         case "\xD0":
-          $c = (self::ord($str[$i] & "\x1F") << 6) | self::ord($str[++$i] & "\x3F");
-          $str[$j] = $c < 256 ? chr($c) : '?';
+          $c = (ord($str[$i] & "\x1F") << 6) | ord($str[++$i] & "\x3F");
+          $str[$j] = $c < 256 ? self::chr_and_parse_int($c) : '?';
           break;
 
         case "\xF0": ++$i;
