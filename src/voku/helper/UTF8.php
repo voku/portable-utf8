@@ -940,32 +940,6 @@ final class UTF8
   }
 
   /**
-   * Check for php-support.
-   *
-   * @param string|null $key
-   *
-   * @return bool[]|bool|null return the full support-array, if $key === null<br />
-   *                          return bool-value, if $key is used and available<br />
-   *                          otherwise return null
-   */
-  public static function getSupportInfo($key = null)
-  {
-    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
-    }
-
-    if ($key === null) {
-      return self::$SUPPORT;
-    }
-
-    if (!isset(self::$SUPPORT[$key])) {
-      return null;
-    }
-
-    return self::$SUPPORT[$key];
-  }
-
-  /**
    * Generates a UTF-8 encoded character from the given code point.
    *
    * INFO: opposite to UTF8::ord()
@@ -2028,6 +2002,32 @@ final class UTF8
     } else {
       return false;
     }
+  }
+
+  /**
+   * Check for php-support.
+   *
+   * @param string|null $key
+   *
+   * @return bool[]|bool|null return the full support-array, if $key === null<br />
+   *                          return bool-value, if $key is used and available<br />
+   *                          otherwise return null
+   */
+  public static function getSupportInfo($key = null)
+  {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if ($key === null) {
+      return self::$SUPPORT;
+    }
+
+    if (!isset(self::$SUPPORT[$key])) {
+      return null;
+    }
+
+    return self::$SUPPORT[$key];
   }
 
   /**
@@ -3679,6 +3679,7 @@ final class UTF8
       $str = self::clean($str);
     }
 
+    /** @noinspection PhpVoidFunctionResultUsedInspection */
     $return = \mb_parse_str($str, $result);
     if ($return === false || empty($result)) {
       return false;
@@ -7318,7 +7319,8 @@ final class UTF8
           $str[$j] = $c < 256 ? self::chr_and_parse_int($c) : '?';
           break;
 
-        case "\xF0": ++$i;
+        case "\xF0":
+          ++$i;
         case "\xE0":
           $str[$j] = '?';
           $i += 2;
