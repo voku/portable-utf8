@@ -4790,4 +4790,38 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ),
     );
   }
+
+  /**
+   * @dataProvider stripWhitespaceProvider()
+   *
+   * @param string $expected
+   * @param string $str
+   */
+  public function testStripWhitespace($expected, $str)
+  {
+    $result = UTF8::strip_whitespace($str);
+
+    self::assertSame($expected, $result);
+  }
+
+  /**
+   * @return array
+   */
+  public function stripWhitespaceProvider()
+  {
+    return array(
+        array('foobar', '  foo   bar  '),
+        array('teststring', 'test string'),
+        array('Οσυγγραφέας', '   Ο     συγγραφέας  '),
+        array('123', ' 123 '),
+        array('', ' ', 'UTF-8'), // no-break space (U+00A0)
+        array('', '           ', 'UTF-8'), // spaces U+2000 to U+200A
+        array('', ' ', 'UTF-8'), // narrow no-break space (U+202F)
+        array('', ' ', 'UTF-8'), // medium mathematical space (U+205F)
+        array('', '　', 'UTF-8'), // ideographic space (U+3000)
+        array('123', '  1  2  3　　', 'UTF-8'),
+        array('', ' '),
+        array('', ''),
+    );
+  }
 }

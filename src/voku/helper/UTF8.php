@@ -3556,6 +3556,27 @@ final class UTF8
   }
 
   /**
+   * Strip all whitespace characters. This includes tabs and newline
+   * characters, as well as multibyte whitespace such as the thin space
+   * and ideographic space.
+   *
+   * @param string $str
+   *
+   * @return string
+   */
+  public static function strip_whitespace($str)
+  {
+    // init
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    return (string)preg_replace('/[[:space:]]+/u', '', $str);
+  }
+
+  /**
    * Format a number with grouped thousands.
    *
    * @param float  $number
