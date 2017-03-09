@@ -1109,6 +1109,15 @@ Strip HTML and PHP tags from a string + clean invalid UTF-8.
 UTF8::strip_tags("<span>κόσμε\xa0\xa1</span>"); // 'κόσμε'
 ```
 
+##### strip_whitespace(string $str)
+
+Strip all whitespace characters. This includes tabs and newline characters, 
+as well as multibyte whitespace such as the thin space and ideographic space.
+
+```php
+UTF8::strip_whitespace('   Ο     συγγραφέας  '); // 'Οσυγγραφέας'
+```
+
 ##### strlen(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false) : int
 
 Get the string length, not the byte-length!
