@@ -882,8 +882,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'test'         => 'test',
     );
 
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::fix_simple_utf8($before), 'tested: ' . $before);
+    for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+      foreach ($testArray as $before => $after) {
+        self::assertSame($after, UTF8::fix_simple_utf8($before), 'tested: ' . $before);
+      }
     }
   }
 
