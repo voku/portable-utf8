@@ -3218,7 +3218,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         &&
         Bootup::is_php('5.4')
         &&
-        in_array('tr', $support['intl__transliterator_list_ids'], true)
+        in_array('tr-Lower', $support['intl__transliterator_list_ids'], true)
     ) {
       $tests = array(
           1               => '1',
@@ -3314,7 +3314,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         &&
         Bootup::is_php('5.4')
         &&
-        in_array('tr', $support['intl__transliterator_list_ids'], true)
+        in_array('tr-Upper', $support['intl__transliterator_list_ids'], true)
     ) {
       $tests = array(
           1               => '1',
@@ -3334,7 +3334,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
           'DİNÇ'          => 'DİNÇ',
           'DINÇ'          => 'DINÇ',
           'dinç'          => 'DİNÇ',
-          'dınç'          => 'DINÇ',
+          'dınç'          => 'DIÇ',
       );
 
       foreach ($tests as $before => $after) {

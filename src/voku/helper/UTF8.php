@@ -928,7 +928,14 @@ final class UTF8
 
       // http://php.net/manual/en/book.intl.php
       self::$SUPPORT['intl'] = self::intl_loaded();
-      self::$SUPPORT['intl__transliterator_list_ids'] = transliterator_list_ids();
+      self::$SUPPORT['intl__transliterator_list_ids'] = array();
+      if (
+          self::$SUPPORT['intl'] === true
+          &&
+          function_exists('transliterator_list_ids') === true
+      ) {
+        self::$SUPPORT['intl__transliterator_list_ids'] = transliterator_list_ids();
+      }
 
       // http://php.net/manual/en/class.intlchar.php
       self::$SUPPORT['intlChar'] = self::intlChar_loaded();
