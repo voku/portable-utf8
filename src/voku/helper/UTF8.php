@@ -928,6 +928,7 @@ final class UTF8
 
       // http://php.net/manual/en/book.intl.php
       self::$SUPPORT['intl'] = self::intl_loaded();
+      self::$SUPPORT['intl__transliterator_list_ids'] = transliterator_list_ids();
 
       // http://php.net/manual/en/class.intlchar.php
       self::$SUPPORT['intlChar'] = self::intlChar_loaded();
@@ -5910,10 +5911,11 @@ final class UTF8
    * @param string  $str       <p>The string being lowercased.</p>
    * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
    * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string|null $lang  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
    *
    * @return string str with all alphabetic characters converted to lowercase.
    */
-  public static function strtolower($str, $encoding = 'UTF-8', $cleanUtf8 = false)
+  public static function strtolower($str, $encoding = 'UTF-8', $cleanUtf8 = false, $lang = null)
   {
     // init
     $str = (string)$str;
@@ -5930,6 +5932,28 @@ final class UTF8
 
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
+    }
+
+    if ($lang !== null) {
+      if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+        self::checkForSupport();
+      }
+
+      if (
+          self::$SUPPORT['intl'] === true
+          &&
+          Bootup::is_php('5.4') === true
+      ) {
+
+        $langCode = $lang . '-Lower';
+        if (!in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
+           $langCode = 'Any-Lower';
+        }
+
+        return transliterator_transliterate($langCode, $str);
+      }
+
+      trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "strict"-parameter', E_USER_WARNING);
     }
 
     return \mb_strtolower($str, $encoding);
@@ -5956,10 +5980,11 @@ final class UTF8
    * @param string  $str       <p>The string being uppercased.</p>
    * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
    * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string|null $lang  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
    *
    * @return string str with all alphabetic characters converted to uppercase.
    */
-  public static function strtoupper($str, $encoding = 'UTF-8', $cleanUtf8 = false)
+  public static function strtoupper($str, $encoding = 'UTF-8', $cleanUtf8 = false, $lang = null)
   {
     $str = (string)$str;
 
@@ -5975,6 +6000,28 @@ final class UTF8
 
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
+    }
+
+    if ($lang !== null) {
+      if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+        self::checkForSupport();
+      }
+
+      if (
+          self::$SUPPORT['intl'] === true
+          &&
+          Bootup::is_php('5.4') === true
+      ) {
+
+        $langCode = $lang . '-Upper';
+        if (!in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
+          $langCode = 'Any-Upper';
+        }
+
+        return transliterator_transliterate($langCode, $str);
+      }
+
+      trigger_error('UTF8::strtoupper() without intl + PHP >= 5.4 cannot handle the "strict"-parameter', E_USER_WARNING);
     }
 
     return \mb_strtoupper($str, $encoding);

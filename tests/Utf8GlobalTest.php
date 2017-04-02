@@ -3180,10 +3180,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ㅎㄹ..-Daebak'   => 'ㅎㄹ..-daebak',
         'ㅈㅅ-Sorry'      => 'ㅈㅅ-sorry',
         'ㅡㅡ-WTF'        => 'ㅡㅡ-wtf',
-        'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii',
-        'ABC-ΣΣ'        => 'abc-σσ',
+        'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii', // result for language === "tr" --> "déjà σσς ııii"
+        'ABC-ΣΣ'        => 'abc-σσ', // result for language === "tr" --> "abc-σς"
         'Å/å, Æ/æ, Ø/ø' => 'å/å, æ/æ, ø/ø',
-        'ΣΣΣ'           => 'σσσ',
+        'ΣΣΣ'           => 'σσσ', // result for language === "tr" --> "σσς"
+        'DİNÇ'          => 'dinç',
+        'DINÇ'          => 'dinç', // result for language === "tr" --> "dınç"
     );
 
     foreach ($tests as $before => $after) {
@@ -3192,8 +3194,45 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
+    // ISO (non utf-8 encoding)
     self::assertNotSame('déjà σσς iıii', UTF8::strtolower('DÉJÀ Σσς Iıİi', 'ISO'));
     self::assertNotSame('öäü', UTF8::strtolower('ÖÄÜ', 'ISO'));
+
+    // ---
+
+    // invalid utf-8
+    self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+    self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
+
+    // ---
+
+    // language === "tr"
+    if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
+      $tests = array(
+          1               => '1',
+          -1              => '-1',
+          'ABC-中文空白'      => 'abc-中文空白',
+          'ÖÄÜ'           => 'öäü',
+          'öäü'           => 'öäü',
+          'κόσμε'         => 'κόσμε',
+          'Κόσμε'         => 'κόσμε',
+          'ㅋㅋ-Lol'        => 'ㅋㅋ-lol',
+          'ㅎㄹ..-Daebak'   => 'ㅎㄹ..-daebak',
+          'ㅈㅅ-Sorry'      => 'ㅈㅅ-sorry',
+          'ㅡㅡ-WTF'        => 'ㅡㅡ-wtf',
+          'DÉJÀ Σσς Iıİi' => 'déjà σσς ııii',
+          'ABC-ΣΣ'        => 'abc-σς',
+          'Å/å, Æ/æ, Ø/ø' => 'å/å, æ/æ, ø/ø',
+          'ΣΣΣ'           => 'σσς',
+          'DİNÇ'          => 'dinç',
+          'DINÇ'          => 'dınç',
+      );
+
+      foreach ($tests as $before => $after) {
+        self::assertSame($after, UTF8::strtolower($before, 'UTF8', false, 'tr'), 'tested: ' . $before);
+      }
+    }
   }
 
   public function testStrtonatfold()
@@ -3219,10 +3258,17 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'öäü test öäü'  => 'ÖÄÜ TEST ÖÄÜ',
         'ÖÄÜ'           => 'ÖÄÜ',
         '中文空白'          => '中文空白',
-        'Déjà Σσς Iıİi' => 'DÉJÀ ΣΣΣ IIİI',
+        'Déjà Σσς Iıİi' => 'DÉJÀ ΣΣΣ IIİI', // result for language === "tr" --> "DÉJÀ ΣΣΣ IIİİ"
+        'DÉJÀ Σσς Iıİi' => 'DÉJÀ ΣΣΣ IIİI', // result for language === "tr" --> "DÉJÀ ΣΣΣ IIİİ"
+        'abc-σς'        => 'ABC-ΣΣ',
+        'abc-σσ'        => 'ABC-ΣΣ',
         'Å/å, Æ/æ, Ø/ø' => 'Å/Å, Æ/Æ, Ø/Ø',
         'σσς'           => 'ΣΣΣ',
         'σσσ'           => 'ΣΣΣ',
+        'DİNÇ'          => 'DİNÇ',
+        'DINÇ'          => 'DINÇ',
+        'dinç'          => 'DINÇ', // result for language === "tr" --> "DİNÇ"
+        'dınç'          => 'DINÇ',
     );
 
     foreach ($tests as $before => $after) {
@@ -3231,8 +3277,46 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
+    // ISO (non utf-8 encoding)
     self::assertNotSame('DÉJÀ ΣΣΣ IIİI', UTF8::strtoupper('Déjà Σσς Iıİi', 'ISO'));
     self::assertSame('ABC TEST', UTF8::strtoupper('abc test', 'ISO'));
+
+    // ---
+
+    // invalid utf-8
+    self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn"));
+    self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+    self::assertSame('IÑTËRNÂTIÔNÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
+
+    // ---
+
+    // language === "tr"
+    if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
+      $tests = array(
+          1               => '1',
+          -1              => '-1',
+          'abc-中文空白'      => 'ABC-中文空白',
+          'öäü'           => 'ÖÄÜ',
+          'öäü test öäü'  => 'ÖÄÜ TEST ÖÄÜ',
+          'ÖÄÜ'           => 'ÖÄÜ',
+          '中文空白'          => '中文空白',
+          'Déjà Σσς Iıİi' => 'DÉJÀ ΣΣΣ IIİİ',
+          'DÉJÀ Σσς Iıİi' => 'DÉJÀ ΣΣΣ IIİİ',
+          'abc-σς'        => 'ABC-ΣΣ',
+          'abc-σσ'        => 'ABC-ΣΣ',
+          'Å/å, Æ/æ, Ø/ø' => 'Å/Å, Æ/Æ, Ø/Ø',
+          'σσς'           => 'ΣΣΣ',
+          'σσσ'           => 'ΣΣΣ',
+          'DİNÇ'          => 'DİNÇ',
+          'DINÇ'          => 'DINÇ',
+          'dinç'          => 'DİNÇ',
+          'dınç'          => 'DINÇ',
+      );
+
+      foreach ($tests as $before => $after) {
+        self::assertSame($after, UTF8::strtoupper($before, 'UTF8', false, 'tr'), 'tested: ' . $before);
+      }
+    }
   }
 
   public function testStrtr()
