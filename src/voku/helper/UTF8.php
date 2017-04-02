@@ -5947,7 +5947,9 @@ final class UTF8
 
         $langCode = $lang . '-Lower';
         if (!in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
-           $langCode = 'Any-Lower';
+          trigger_error('UTF8::strtolower() without intl for special language: ' . $lang, E_USER_WARNING);
+
+          $langCode = 'Any-Lower';
         }
 
         return transliterator_transliterate($langCode, $str);
@@ -6015,6 +6017,8 @@ final class UTF8
 
         $langCode = $lang . '-Upper';
         if (!in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
+          trigger_error('UTF8::strtoupper() without intl for special language: ' . $lang, E_USER_WARNING);
+
           $langCode = 'Any-Upper';
         }
 

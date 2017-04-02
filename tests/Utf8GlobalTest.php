@@ -2768,7 +2768,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
       self::assertSame(54, UTF8::strlen($string_test2, 'UTF-8', false));
     }
-    
+
     self::assertSame(50, UTF8::strlen($string_test2, 'UTF-8', true));
 
     $testArray = array(
@@ -3209,8 +3209,17 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
+    UTF8::checkForSupport();
+    $support = UTF8::getSupportInfo();
+
     // language === "tr"
-    if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
+    if (
+        UTF8::intl_loaded() === true
+        &&
+        Bootup::is_php('5.4')
+        &&
+        in_array('tr', $support['intl__transliterator_list_ids'], true)
+    ) {
       $tests = array(
           1               => '1',
           -1              => '-1',
@@ -3233,7 +3242,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
       // DEBUG (for travis ci)
       /** @noinspection ForgottenDebugOutputInspection */
-      var_dump(transliterator_list_ids());
+      //var_dump(transliterator_list_ids());
 
       foreach ($tests as $before => $after) {
         self::assertSame($after, UTF8::strtolower($before, 'UTF8', false, 'tr'), 'tested: ' . $before);
@@ -3296,8 +3305,17 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
+    UTF8::checkForSupport();
+    $support = UTF8::getSupportInfo();
+
     // language === "tr"
-    if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
+    if (
+        UTF8::intl_loaded() === true
+        &&
+        Bootup::is_php('5.4')
+        &&
+        in_array('tr', $support['intl__transliterator_list_ids'], true)
+    ) {
       $tests = array(
           1               => '1',
           -1              => '-1',
