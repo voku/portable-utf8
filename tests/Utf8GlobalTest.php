@@ -2261,26 +2261,28 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testSplit()
   {
-    self::assertSame(
-        array(
-            '中',
-            '文',
-            '空',
-            '白',
-        ),
-        UTF8::split('中文空白')
-    );
-    self::assertSame(
-        array(
-            '中文',
-            '空白',
-        ),
-        UTF8::split('中文空白', 2)
-    );
-    self::assertSame(array('中文空白'), UTF8::split('中文空白', 4));
-    self::assertSame(array('中文空白'), UTF8::split('中文空白', 8));
+    for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+      self::assertSame(
+          array(
+              '中',
+              '文',
+              '空',
+              '白',
+          ),
+          UTF8::split('中文空白')
+      );
+      self::assertSame(
+          array(
+              '中文',
+              '空白',
+          ),
+          UTF8::split('中文空白', 2)
+      );
+      self::assertSame(array('中文空白'), UTF8::split('中文空白', 4));
+      self::assertSame(array('中文空白'), UTF8::split('中文空白', 8));
 
-    self::assertSame(array('1234'), UTF8::split(1234, 8));
+      self::assertSame(array('1234'), UTF8::split(1234, 8));
+    }
   }
 
   public function testStrDetectEncoding()
@@ -3228,6 +3230,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
           'DİNÇ'          => 'dinç',
           'DINÇ'          => 'dınç',
       );
+
+      // DEBUG (for travis ci)
+      /** @noinspection ForgottenDebugOutputInspection */
+      var_dump(transliterator_list_ids());
 
       foreach ($tests as $before => $after) {
         self::assertSame($after, UTF8::strtolower($before, 'UTF8', false, 'tr'), 'tested: ' . $before);

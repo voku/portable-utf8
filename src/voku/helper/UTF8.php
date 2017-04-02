@@ -2985,9 +2985,9 @@ final class UTF8
       if ($maybeUTF16BE !== $maybeUTF16LE) {
         if ($maybeUTF16LE > $maybeUTF16BE) {
           return 1;
-        } else {
-          return 2;
         }
+
+        return 2;
       }
 
     }
@@ -3045,9 +3045,9 @@ final class UTF8
       if ($maybeUTF32BE !== $maybeUTF32LE) {
         if ($maybeUTF32LE > $maybeUTF32BE) {
           return 1;
-        } else {
-          return 2;
         }
+
+        return 2;
       }
 
     }
@@ -4110,11 +4110,11 @@ final class UTF8
       self::checkForSupport();
     }
 
-    if (self::$SUPPORT['pcre_utf8'] === true) {
+    if ($cleanUtf8 === true) {
+      $str = self::clean($str);
+    }
 
-      if ($cleanUtf8 === true) {
-        $str = self::clean($str);
-      }
+    if (self::$SUPPORT['pcre_utf8'] === true) {
 
       preg_match_all('/./us', $str, $retArray);
       if (isset($retArray[0])) {
@@ -5953,7 +5953,7 @@ final class UTF8
         return transliterator_transliterate($langCode, $str);
       }
 
-      trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "strict"-parameter', E_USER_WARNING);
+      trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "lang"-parameter: ' . $lang, E_USER_WARNING);
     }
 
     return \mb_strtolower($str, $encoding);
@@ -6021,7 +6021,7 @@ final class UTF8
         return transliterator_transliterate($langCode, $str);
       }
 
-      trigger_error('UTF8::strtoupper() without intl + PHP >= 5.4 cannot handle the "strict"-parameter', E_USER_WARNING);
+      trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "lang"-parameter: ' . $lang, E_USER_WARNING);
     }
 
     return \mb_strtoupper($str, $encoding);
