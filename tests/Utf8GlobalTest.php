@@ -3203,8 +3203,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     // invalid utf-8
-    self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn"));
-    self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+      if (Bootup::is_php('5.4')) { // invalid UTF-8 + PHP 5.3 = 20 => error
+        self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn"));
+        self::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+      }
+    }
+
     self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
 
     // ---
@@ -3300,9 +3305,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // invalid utf-8
 
-    if (Bootup::is_php('5.4')) {
-      self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn"));
-      self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+      if (Bootup::is_php('5.4')) { // invalid UTF-8 + PHP 5.3 = 20 => error
+        self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn"));
+        self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+      }
     }
 
     self::assertSame('IÑTËRNÂTIÔNÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
