@@ -3299,8 +3299,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     // invalid utf-8
-    self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn"));
-    self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+
+    if (Bootup::is_php('5.4')) {
+      self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn"));
+      self::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+    }
+
     self::assertSame('IÑTËRNÂTIÔNÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
 
     // ---
@@ -3334,7 +3338,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
           'DİNÇ'          => 'DİNÇ',
           'DINÇ'          => 'DINÇ',
           'dinç'          => 'DİNÇ',
-          'dınç'          => 'DIÇ',
+          'dınç'          => 'DINÇ',
       );
 
       foreach ($tests as $before => $after) {
