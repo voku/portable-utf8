@@ -2561,6 +2561,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrToWords()
   {
+    self::assertSame(array('iñt', 'ërn'), UTF8::str_to_words('iñt ërn I', '', false, 1));
+    self::assertSame(array('iñt', 'ërn', 'I'), UTF8::str_to_words('iñt ërn I', '', true));
     self::assertSame(array('', 'iñt', ' ', 'ërn', '',), UTF8::str_to_words('iñt ërn'));
     self::assertSame(array('', 'âti', "\n ", 'ônà', ''), UTF8::str_to_words("âti\n ônà"));
     self::assertSame(array('', '中文空白', ' ', 'oöäü#s', ''), UTF8::str_to_words('中文空白 oöäü#s', '#'));

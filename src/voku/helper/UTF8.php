@@ -4740,22 +4740,64 @@ final class UTF8
   /**
    * Convert a string into an array of words.
    *
-   * @param string $str
-   * @param string $charlist
+   * @param string   $str
+   * @param string   $charlist
+   * @param bool     $removeEmptyValues
+   * @param null|int $removeShortValues
    *
    * @return array
    */
-  public static function str_to_words($str, $charlist = '')
+  public static function str_to_words($str, $charlist = '', $removeEmptyValues = false, $removeShortValues = null)
   {
+    // init
     $str = (string)$str;
 
+    if ($removeShortValues !== null) {
+      $removeShortValues = (int)$removeShortValues;
+    }
+
     if (!isset($str[0])) {
+      if ($removeEmptyValues === true) {
+        return array();
+      }
+
       return array('');
     }
 
     $charlist = self::rxClass($charlist, '\pL');
 
-    return \preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $return = \preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+    if (
+        $removeShortValues === null
+        &&
+        $removeEmptyValues === false
+    ) {
+      return $return;
+    }
+
+    $tmpReturn = array();
+    foreach ($return as $returnValue) {
+      if (
+          $removeShortValues !== null
+          &&
+          self::strlen($returnValue) <= $removeShortValues
+      ) {
+        continue;
+      }
+
+      if (
+          $removeEmptyValues === true
+          &&
+          trim($returnValue) === ''
+      ) {
+        continue;
+      }
+
+      $tmpReturn[] = $returnValue;
+    }
+
+    return $tmpReturn;
   }
 
   /**
