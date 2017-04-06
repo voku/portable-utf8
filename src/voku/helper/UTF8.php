@@ -6335,7 +6335,12 @@ final class UTF8
       return false;
     }
 
-    if ($offset || $length) {
+    if ($offset || $length !== null) {
+
+      if ($length === null) {
+        $length = (int)self::strlen($haystack);
+      }
+
       $offset = (int)$offset;
       $length = (int)$length;
 
