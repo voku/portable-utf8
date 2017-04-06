@@ -3858,7 +3858,11 @@ final class UTF8
 
     foreach (self::$BOM as $bomString => $bomByteLength) {
       if (0 === self::strpos($str, $bomString, 0, '8BIT')) {
-        $str = self::substr($str, $bomByteLength, null, '8BIT');
+        $strTmp = self::substr($str, $bomByteLength, null, '8BIT');
+        if ($strTmp === false) {
+          $strTmp = '';
+        }
+        $str = (string)$strTmp;
       }
     }
 
@@ -4460,10 +4464,10 @@ final class UTF8
     }
 
     if (self::substr($str, $length - 1, 1) === ' ') {
-      return self::substr($str, 0, $length - 1) . $strAddOn;
+      return (string)self::substr($str, 0, $length - 1) . $strAddOn;
     }
 
-    $str = self::substr($str, 0, $length);
+    $str = (string)self::substr($str, 0, $length);
     $array = explode(' ', $str);
     array_pop($array);
     $new_str = implode(' ', $array);
@@ -5361,8 +5365,8 @@ final class UTF8
    */
   public static function strncmp($str1, $str2, $len)
   {
-    $str1 = self::substr($str1, 0, $len);
-    $str2 = self::substr($str2, 0, $len);
+    $str1 = (string)self::substr($str1, 0, $len);
+    $str2 = (string)self::substr($str2, 0, $len);
 
     return self::strcmp($str1, $str2);
   }
@@ -5506,7 +5510,11 @@ final class UTF8
 
     // fallback via vanilla php
 
-    $haystack = self::substr($haystack, $offset);
+    $haystackTmp = self::substr($haystack, $offset);
+    if ($haystackTmp === false) {
+      $haystackTmp = '';
+    }
+    $haystack = (string)$haystackTmp;
 
     if ($offset < 0) {
       $offset = 0;
@@ -5784,11 +5792,19 @@ final class UTF8
 
     // fallback via vanilla php
 
+    $haystackTmp = null;
     if ($offset > 0) {
-      $haystack = self::substr($haystack, $offset);
+      $haystackTmp = self::substr($haystack, $offset);
     } elseif ($offset < 0) {
-      $haystack = self::substr($haystack, 0, $offset);
+      $haystackTmp = self::substr($haystack, 0, $offset);
       $offset = 0;
+    }
+
+    if ($haystackTmp !== null) {
+      if ($haystackTmp === false) {
+        $haystackTmp = '';
+      }
+      $haystack = (string)$haystackTmp;
     }
 
     $pos = strrpos($haystack, $needle);
@@ -5813,7 +5829,11 @@ final class UTF8
   public static function strspn($str, $mask, $offset = 0, $length = null)
   {
     if ($offset || $length !== null) {
-      $str = self::substr($str, $offset, $length);
+      $strTmp = self::substr($str, $offset, $length);
+      if ($strTmp === false) {
+        $strTmp = '';
+      }
+      $str = (string)$strTmp;
     }
 
     $str = (string)$str;
@@ -5928,7 +5948,7 @@ final class UTF8
       $COMMAN_CASE_FOLD_VALUES_CACHE = array_values(self::$COMMON_CASE_FOLD);
     }
 
-    $str = str_replace($COMMON_CASE_FOLD_KEYS_CACHE, $COMMAN_CASE_FOLD_VALUES_CACHE, $str);
+    $str = (string)str_replace($COMMON_CASE_FOLD_KEYS_CACHE, $COMMAN_CASE_FOLD_VALUES_CACHE, $str);
 
     if ($full) {
 
@@ -5939,7 +5959,7 @@ final class UTF8
       }
 
       /** @noinspection OffsetOperationsInspection */
-      $str = str_replace($FULL_CASE_FOLD[0], $FULL_CASE_FOLD[1], $str);
+      $str = (string)str_replace($FULL_CASE_FOLD[0], $FULL_CASE_FOLD[1], $str);
     }
 
     if ($cleanUtf8 === true) {
@@ -6147,7 +6167,9 @@ final class UTF8
    * @param string  $encoding  [optional] <p>Default is UTF-8</p>
    * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
-   * @return string <p>Returns a sub-string specified by the start and length parameters.</p>
+   * @return string|false <p>The portion of <i>str</i> specified by the <i>offset</i> and
+   *                      <i>length</i> parameters.</p><p>If <i>str</i> is shorter than <i>offset</i>
+   *                      characters long, <b>FALSE</b> will be returned.</p>
    */
   public static function substr($str, $offset = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
@@ -6228,10 +6250,7 @@ final class UTF8
         &&
         self::$SUPPORT['iconv'] === true
     ) {
-      $tmpReturn = \iconv_substr($str, $offset, $length);
-      if ($tmpReturn !== false) {
-        return $tmpReturn;
-      }
+      return \iconv_substr($str, $offset, $length);
     }
 
     // fallback via vanilla php
@@ -6268,8 +6287,17 @@ final class UTF8
         ||
         $length !== null
     ) {
-      $str1 = self::substr($str1, $offset, $length);
-      $str2 = self::substr($str2, 0, self::strlen($str1));
+      $str1Tmp = self::substr($str1, $offset, $length);
+      if ($str1Tmp === false) {
+        $str1Tmp = '';
+      }
+      $str1 = (string)$str1Tmp;
+
+      $str2Tmp = self::substr($str2, 0, self::strlen($str1));
+      if ($str2Tmp === false) {
+        $str2Tmp = '';
+      }
+      $str2 = (string)$str2Tmp;
     }
 
     if ($case_insensitivity === true) {
@@ -6319,7 +6347,11 @@ final class UTF8
         return false;
       }
 
-      $haystack = self::substr($haystack, $offset, $length, $encoding);
+      $haystackTmp = self::substr($haystack, $offset, $length, $encoding);
+      if ($haystackTmp === false) {
+        $haystackTmp = '';
+      }
+      $haystack = (string)$haystackTmp;
     }
 
     if ($encoding !== 'UTF-8') {
@@ -6377,7 +6409,11 @@ final class UTF8
     }
 
     if (self::str_istarts_with($haystack, $needle) === true) {
-      $haystack = self::substr($haystack, self::strlen($needle));
+      $haystackTmp = self::substr($haystack, self::strlen($needle));
+      if ($haystackTmp === false) {
+        $haystackTmp = '';
+      }
+      $haystack = (string)$haystackTmp;
     }
 
     return $haystack;
@@ -6406,7 +6442,11 @@ final class UTF8
     }
 
     if (self::str_iends_with($haystack, $needle) === true) {
-      $haystack = self::substr($haystack, 0, self::strlen($haystack) - self::strlen($needle));
+      $haystackTmp = self::substr($haystack, 0, self::strlen($haystack) - self::strlen($needle));
+      if ($haystackTmp === false) {
+        $haystackTmp = '';
+      }
+      $haystack = (string)$haystackTmp;
     }
 
     return $haystack;
@@ -6435,7 +6475,11 @@ final class UTF8
     }
 
     if (self::str_starts_with($haystack, $needle) === true) {
-      $haystack = self::substr($haystack, self::strlen($needle));
+      $haystackTmp = self::substr($haystack, self::strlen($needle));
+      if ($haystackTmp === false) {
+        $haystackTmp = '';
+      }
+      $haystack = (string)$haystackTmp;
     }
 
     return $haystack;
@@ -6560,7 +6604,11 @@ final class UTF8
     }
 
     if (self::str_ends_with($haystack, $needle) === true) {
-      $haystack = self::substr($haystack, 0, self::strlen($haystack) - self::strlen($needle));
+      $haystackTmp = self::substr($haystack, 0, self::strlen($haystack) - self::strlen($needle));
+      if ($haystackTmp === false) {
+        $haystackTmp = '';
+      }
+      $haystack = (string)$haystackTmp;
     }
 
     return $haystack;
