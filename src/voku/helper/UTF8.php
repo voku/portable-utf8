@@ -2018,9 +2018,9 @@ final class UTF8
    *
    * @param string|null $key
    *
-   * @return bool[]|bool|null return the full support-array, if $key === null<br />
-   *                          return bool-value, if $key is used and available<br />
-   *                          otherwise return null
+   * @return mixed <p>Return the full support-"array", if $key === null<br />
+   *               return bool-value, if $key is used and available<br />
+   *               otherwise return null</p>
    */
   public static function getSupportInfo($key = null)
   {
