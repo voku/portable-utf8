@@ -3009,7 +3009,7 @@ final class UTF8
    * @param string $str
    *
    * @return int|false <p>
-   *                   <strong>false</strong> if is't not UTF-16,<br />
+   *                   <strong>false</strong> if is't not UTF-32,<br />
    *                   <strong>1</strong> for UTF-32LE,<br />
    *                   <strong>2</strong> for UTF-32BE.
    *                   </p>
