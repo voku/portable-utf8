@@ -3471,12 +3471,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // UTF-8 tests
 
-    self::assertSame(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2, false));
-    self::assertSame(-1, UTF8::substr_compare("○●◎\r", '●◎'));
-    self::assertSame(-1, UTF8::substr_compare("○●◎\r", '●◎', -1));
-    self::assertSame(-1, UTF8::substr_compare("○●◎\r", '●◎', -1, 2));
-    self::assertSame(-1, UTF8::substr_compare("○●◎\r", '●◎', 0, 2));
+    self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎') < 0);
+    self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎', -1) < 0);
+    self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎', -1, 2) < 0);
+    self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎', 0, 2) < 0);
+
     self::assertSame(1, UTF8::substr_compare("○●◎\r", '◎●', 1, 2));
+
+    self::assertSame(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2, false));
     self::assertSame(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2));
     self::assertSame(0, UTF8::substr_compare('中文空白', '文空', 1, 2, true));
     self::assertSame(0, UTF8::substr_compare('中文空白', '文空', 1, 2));
