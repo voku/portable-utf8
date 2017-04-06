@@ -4928,13 +4928,13 @@ final class UTF8
    *
    * @return int|null
    */
-  public static function strcspn($str, $charList, $offset = 0, $length = PHP_INT_MAX)
+  public static function strcspn($str, $charList, $offset = 0, $length = null)
   {
     if ('' === $charList .= '') {
       return null;
     }
 
-    if ($offset || PHP_INT_MAX !== $length) {
+    if ($offset || $length !== null) {
       $str = (string)self::substr($str, $offset, $length);
     }
 
@@ -5809,13 +5809,9 @@ final class UTF8
    *
    * @return int
    */
-  public static function strspn($str, $mask, $offset = 0, $length = PHP_INT_MAX)
+  public static function strspn($str, $mask, $offset = 0, $length = null)
   {
-    // init
-    $length = (int)$length;
-    $offset = (int)$offset;
-
-    if ($offset || PHP_INT_MAX !== $length) {
+    if ($offset || $length !== null) {
       $str = self::substr($str, $offset, $length);
     }
 
@@ -6145,14 +6141,14 @@ final class UTF8
    * @link http://php.net/manual/en/function.mb-substr.php
    *
    * @param string  $str       <p>The string being checked.</p>
-   * @param int     $start     <p>The first position used in str.</p>
+   * @param int     $offset    <p>The first position used in str.</p>
    * @param int     $length    [optional] <p>The maximum length of the returned string.</p>
    * @param string  $encoding  [optional] <p>Default is UTF-8</p>
    * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string <p>Returns a sub-string specified by the start and length parameters.</p>
    */
-  public static function substr($str, $start = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
+  public static function substr($str, $offset = 0, $length = null, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
     // init
     $str = (string)$str;
@@ -6168,11 +6164,11 @@ final class UTF8
     }
 
     $str_length = 0;
-    if ($start || $length === null) {
+    if ($offset || $length === null) {
       $str_length = (int)self::strlen($str, $encoding);
     }
 
-    if ($start && $start > $str_length) {
+    if ($offset && $offset > $str_length) {
       return false;
     }
 
@@ -6201,7 +6197,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring_func_overload'] === false
     ) {
-      return substr($str, $start, $length === null ? $str_length : $length);
+      return substr($str, $offset, $length === null ? $str_length : $length);
     }
 
     if (
@@ -6213,7 +6209,7 @@ final class UTF8
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
-      return \mb_substr($str, $start, $length, $encoding);
+      return \mb_substr($str, $offset, $length, $encoding);
     }
 
     if (
@@ -6223,7 +6219,7 @@ final class UTF8
         &&
         Bootup::is_php('5.4') === true
     ) {
-      return \grapheme_substr($str, $start, $length);
+      return \grapheme_substr($str, $offset, $length);
     }
 
     if (
@@ -6231,7 +6227,7 @@ final class UTF8
         &&
         self::$SUPPORT['iconv'] === true
     ) {
-      return \iconv_substr($str, $start, $length);
+      return \iconv_substr($str, $offset, $length);
     }
 
     // fallback via vanilla php
@@ -6240,7 +6236,7 @@ final class UTF8
     $array = self::split($str);
 
     // extract relevant part, and join to make sting again
-    return implode('', array_slice($array, $start, $length));
+    return implode('', array_slice($array, $offset, $length));
   }
 
   /**
@@ -6261,12 +6257,12 @@ final class UTF8
    *             <strong>0</strong> if they are equal.
    *             </p>
    */
-  public static function substr_compare($str1, $str2, $offset = 0, $length = PHP_INT_MAX, $case_insensitivity = false)
+  public static function substr_compare($str1, $str2, $offset = 0, $length = null, $case_insensitivity = false)
   {
     if (
         $offset !== 0
         ||
-        $length !== PHP_INT_MAX
+        $length !== null
     ) {
       $str1 = self::substr($str1, $offset, $length);
       $str2 = self::substr($str2, 0, self::strlen($str1));
@@ -6448,7 +6444,7 @@ final class UTF8
    *
    * @param string|string[] $str              <p>The input string or an array of stings.</p>
    * @param string|string[] $replacement      <p>The replacement string or an array of stings.</p>
-   * @param int|int[]       $start            <p>
+   * @param int|int[]       $offset           <p>
    *                                          If start is positive, the replacing will begin at the start'th offset
    *                                          into string.
    *                                          <br /><br />
@@ -6465,30 +6461,30 @@ final class UTF8
    *
    * @return string|string[] <p>The result string is returned. If string is an array then array is returned.</p>
    */
-  public static function substr_replace($str, $replacement, $start, $length = null)
+  public static function substr_replace($str, $replacement, $offset, $length = null)
   {
     if (is_array($str) === true) {
       $num = count($str);
 
-      // $replacement
+      // the replacement
       if (is_array($replacement) === true) {
         $replacement = array_slice($replacement, 0, $num);
       } else {
         $replacement = array_pad(array($replacement), $num, $replacement);
       }
 
-      // $start
-      if (is_array($start) === true) {
-        $start = array_slice($start, 0, $num);
-        foreach ($start as &$valueTmp) {
+      // the offset
+      if (is_array($offset) === true) {
+        $offset = array_slice($offset, 0, $num);
+        foreach ($offset as &$valueTmp) {
           $valueTmp = (int)$valueTmp === $valueTmp ? $valueTmp : 0;
         }
         unset($valueTmp);
       } else {
-        $start = array_pad(array($start), $num, $start);
+        $offset = array_pad(array($offset), $num, $offset);
       }
 
-      // $length
+      // the length
       if (!isset($length)) {
         $length = array_fill(0, $num, 0);
       } elseif (is_array($length) === true) {
@@ -6505,8 +6501,8 @@ final class UTF8
         $length = array_pad(array($length), $num, $length);
       }
 
-      // Recursive call
-      return array_map(array('\\voku\\helper\\UTF8', 'substr_replace'), $str, $replacement, $start, $length);
+      // recursive call
+      return array_map(array('\\voku\\helper\\UTF8', 'substr_replace'), $str, $replacement, $offset, $length);
 
     }
 
@@ -6533,7 +6529,7 @@ final class UTF8
       $length = (int)self::strlen($str);
     }
 
-    array_splice($smatches[0], $start, $length, $rmatches[0]);
+    array_splice($smatches[0], $offset, $length, $rmatches[0]);
 
     return implode('', $smatches[0]);
   }
