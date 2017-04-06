@@ -4928,13 +4928,13 @@ final class UTF8
    *
    * @return int|null
    */
-  public static function strcspn($str, $charList, $offset = 0, $length = 2147483647)
+  public static function strcspn($str, $charList, $offset = 0, $length = PHP_INT_MAX)
   {
     if ('' === $charList .= '') {
       return null;
     }
 
-    if ($offset || 2147483647 !== $length) {
+    if ($offset || PHP_INT_MAX !== $length) {
       $str = (string)self::substr($str, $offset, $length);
     }
 
@@ -5809,13 +5809,13 @@ final class UTF8
    *
    * @return int
    */
-  public static function strspn($str, $mask, $offset = 0, $length = 2147483647)
+  public static function strspn($str, $mask, $offset = 0, $length = PHP_INT_MAX)
   {
     // init
     $length = (int)$length;
     $offset = (int)$offset;
 
-    if ($offset || 2147483647 !== $length) {
+    if ($offset || PHP_INT_MAX !== $length) {
       $str = self::substr($str, $offset, $length);
     }
 
