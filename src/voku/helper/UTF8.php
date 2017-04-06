@@ -5957,10 +5957,10 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strtolower.php
    *
-   * @param string  $str       <p>The string being lowercased.</p>
-   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
-   * @param string|null $lang  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param string      $str       <p>The string being lowercased.</p>
+   * @param string      $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param boolean     $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string|null $lang      [optional] <p>Set the language for special cases: az, el, lt, tr</p>
    *
    * @return string str with all alphabetic characters converted to lowercase.
    */
@@ -6028,10 +6028,10 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strtoupper.php
    *
-   * @param string  $str       <p>The string being uppercased.</p>
-   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
-   * @param string|null $lang  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param string      $str       <p>The string being uppercased.</p>
+   * @param string      $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param boolean     $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string|null $lang      [optional] <p>Set the language for special cases: az, el, lt, tr</p>
    *
    * @return string str with all alphabetic characters converted to uppercase.
    */
@@ -6246,23 +6246,37 @@ final class UTF8
   /**
    * Binary safe comparison of two strings from an offset, up to length characters.
    *
-   * @param string  $main_str           <p>The main string being compared.</p>
-   * @param string  $str                <p>The secondary string being compared.</p>
-   * @param int     $offset             <p>The start position for the comparison. If negative, it starts counting from
-   *                                    the end of the string.</p>
+   * @param string  $str1               <p>The main string being compared.</p>
+   * @param string  $str2               <p>The secondary string being compared.</p>
+   * @param int     $offset             [optional] <p>The start position for the comparison. If negative, it starts
+   *                                    counting from the end of the string.</p>
    * @param int     $length             [optional] <p>The length of the comparison. The default value is the largest of
    *                                    the length of the str compared to the length of main_str less the offset.</p>
    * @param boolean $case_insensitivity [optional] <p>If case_insensitivity is TRUE, comparison is case
    *                                    insensitive.</p>
    *
-   * @return int
+   * @return int <p>
+   *             <strong>&lt; 0</strong> if str1 is less than str2;<br />
+   *             <strong>&gt; 0</strong> if str1 is greater than str2,<br />
+   *             <strong>0</strong> if they are equal.
+   *             </p>
    */
-  public static function substr_compare($main_str, $str, $offset, $length = 2147483647, $case_insensitivity = false)
+  public static function substr_compare($str1, $str2, $offset = 0, $length = PHP_INT_MAX, $case_insensitivity = false)
   {
-    $main_str = self::substr($main_str, $offset, $length);
-    $str = self::substr($str, 0, self::strlen($main_str));
+    if (
+        $offset !== 0
+        ||
+        $length !== PHP_INT_MAX
+    ) {
+      $str1 = self::substr($str1, $offset, $length);
+      $str2 = self::substr($str2, 0, self::strlen($str1));
+    }
 
-    return $case_insensitivity === true ? self::strcasecmp($main_str, $str) : self::strcmp($main_str, $str);
+    if ($case_insensitivity === true) {
+      return self::strcasecmp($str1, $str2);
+    }
+
+    return self::strcmp($str1, $str2);
   }
 
   /**
@@ -7476,8 +7490,12 @@ final class UTF8
       return '';
     }
 
-    $str = \utf8_encode($str);
+    $strTmp = \utf8_encode($str);
+    if ($strTmp === false) {
+      return '';
+    }
 
+    $str = (string)$strTmp;
     if (false === strpos($str, "\xC2")) {
       return $str;
     }

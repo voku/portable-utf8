@@ -3472,7 +3472,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // UTF-8 tests
 
     self::assertSame(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2, false));
-    //self::assertSame(-4, UTF8::substr_compare("○●◎\r", '●◎', 0, 2)); // TODO: need some more work for HHVM??
+    self::assertSame(-1, UTF8::substr_compare("○●◎\r", '●◎'));
+    self::assertSame(-1, UTF8::substr_compare("○●◎\r", '●◎', -1));
+    self::assertSame(-1, UTF8::substr_compare("○●◎\r", '●◎', -1, 2));
+    self::assertSame(-1, UTF8::substr_compare("○●◎\r", '●◎', 0, 2));
     self::assertSame(1, UTF8::substr_compare("○●◎\r", '◎●', 1, 2));
     self::assertSame(0, UTF8::substr_compare("○●◎\r", '●◎', 1, 2));
     self::assertSame(0, UTF8::substr_compare('中文空白', '文空', 1, 2, true));
@@ -4468,11 +4471,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testUtf8DecodeUtf8Encode()
   {
     $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => 'öäü',
-        ''               => '',
-        'foobar'         => 'foobar',
+        '  -ABC-中文空白-  '  => '  -ABC-????-  ',
+        '      - ÖÄÜ- '     => '      - ÖÄÜ- ',
+        'öäü'               => 'öäü',
+        ''                  => '',
+        false               => '0',
+        null                => '',
+        "\xe2\x28\xa1"      => 'â(¡',
+        "\xa0\xa1"          => ' ¡',
+        "κόσμε\xa0\xa1-öäü" => '????? ¡-öäü',
+        'foobar'            => 'foobar',
     );
 
     foreach ($tests as $before => $after) {
