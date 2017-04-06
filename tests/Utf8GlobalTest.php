@@ -1725,6 +1725,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testLcfirst()
   {
+    self::assertSame('', UTF8::lcfirst(''));
+    self::assertSame('ö', UTF8::lcfirst('Ö'));
     self::assertSame('öäü', UTF8::lcfirst('Öäü'));
     self::assertSame('κόσμε', UTF8::lcfirst('Κόσμε'));
     self::assertSame('aBC-ÖÄÜ-中文空白', UTF8::lcfirst('ABC-ÖÄÜ-中文空白'));
@@ -1739,6 +1741,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('σσς', UTF8::lcfirst('Σσς'));
     self::assertSame('dEJa', UTF8::lcfirst('dEJa'));
     self::assertSame('σσΣ', UTF8::lcfirst('σσΣ'));
+
+    // alias
+    self::assertSame('deja', UTF8::lcword('Deja'));
   }
 
   public function testLtrim()
@@ -2327,6 +2332,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     $tests = array(
         'Κόσμε' => true,
         'κόσμε' => false,
+        null    => false,
         ''      => false,
         ' '     => false,
         false   => false,
@@ -4356,6 +4362,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testUcfirst()
   {
+    self::assertSame('', UTF8::ucfirst(''));
+    self::assertSame('Ä', UTF8::ucfirst('ä'));
     self::assertSame('Öäü', UTF8::ucfirst('Öäü'));
     self::assertSame('Öäü', UTF8::ucfirst('öäü'));
     self::assertSame('Κόσμε', UTF8::ucfirst('κόσμε'));
@@ -4376,6 +4384,27 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // alias
     self::assertSame('Öäü', UTF8::ucword('öäü'));
+  }
+
+
+  public function testLcWords()
+  {
+    self::assertSame('iñt ërn âTi ônà liz æti øn', UTF8::lcwords('Iñt ërn âTi ônà liz æti øn'));
+    self::assertSame("iñt ërn âti\n ônà liz æti  øn", UTF8::lcwords("Iñt Ërn Âti\n Ônà Liz Æti  Øn"));
+    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', array('foo'), '#'));
+    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', array('foo'), ''));
+    self::assertSame('', UTF8::lcwords(''));
+    self::assertSame('ñ', UTF8::lcwords('Ñ'));
+    self::assertSame("iñt ërN âti\n ônà liz æti øn", UTF8::lcwords("Iñt ËrN Âti\n Ônà Liz Æti Øn"));
+    self::assertSame('ñtërnâtiônàlizætIøN', UTF8::lcwords('ÑtërnâtiônàlizætIøN'));
+    self::assertSame('ñtërnâtiônàlizætIøN test câse', UTF8::lcwords('ÑtërnâtiônàlizætIøN Test câse', array('câse')));
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ'));
+
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', array('de')));
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', array('d', 'e')));
+
+    self::assertSame('DejA σσς dEJa σσΣ', UTF8::lcwords('DejA σσς dEJa σσΣ', array('DejA')));
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('deja σσς dEJa σσΣ', array('deja', 'σσΣ')));
   }
 
   public function testUrldecode()

@@ -835,7 +835,7 @@ final class UTF8
       return '';
     }
 
-    return self::substr($str, $pos, 1);
+    return (string)self::substr($str, $pos, 1);
   }
 
   /**
@@ -3317,12 +3317,91 @@ final class UTF8
    * Makes string's first char lowercase.
    *
    * @param string $str <p>The input string</p>
+   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
    *
    * @return string <p>The resulting string</p>
    */
-  public static function lcfirst($str)
+  public static function lcfirst($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    return self::strtolower(self::substr($str, 0, 1)) . self::substr($str, 1);
+    $strPartTwo = self::substr($str, 1, null, $encoding, $cleanUtf8);
+    if ($strPartTwo === false) {
+      $strPartTwo = '';
+    }
+
+    $strPartOne = self::strtolower(
+        (string)self::substr($str, 0, 1, $encoding, $cleanUtf8),
+        $encoding,
+        $cleanUtf8
+    );
+
+    return $strPartOne . $strPartTwo;
+  }
+
+  /**
+   * alias for "UTF8::lcfirst()"
+   *
+   * @see UTF8::lcfirst()
+   *
+   * @param string  $word
+   * @param string  $encoding
+   * @param boolean $cleanUtf8
+   *
+   * @return string
+   */
+  public static function lcword($word, $encoding = 'UTF-8', $cleanUtf8 = false)
+  {
+    return self::lcfirst($word, $encoding, $cleanUtf8);
+  }
+
+  /**
+   * Lowercase for all words in the string.
+   *
+   * @param string   $str        <p>The input string.</p>
+   * @param string[] $exceptions [optional] <p>Exclusion for some words.</p>
+   * @param string   $charlist   [optional] <p>Additional chars that contains to words and do not start a new word.</p>
+   * @param string   $encoding   [optional] <p>Set the charset for e.g. "\mb_" function.</p>
+   * @param boolean  $cleanUtf8  [optional] <p>Clean non UTF-8 chars from the string.</p>
+   *
+   * @return string
+   */
+  public static function lcwords($str, $exceptions = array(), $charlist = '', $encoding = 'UTF-8', $cleanUtf8 = false)
+  {
+    if (!$str) {
+      return '';
+    }
+
+    $words = self::str_to_words($str, $charlist);
+    $newWords = array();
+
+    if (count($exceptions) > 0) {
+      $useExceptions = true;
+    } else {
+      $useExceptions = false;
+    }
+
+    foreach ($words as $word) {
+
+      if (!$word) {
+        continue;
+      }
+
+      if (
+          $useExceptions === false
+          ||
+          (
+              $useExceptions === true
+              &&
+              !in_array($word, $exceptions, true)
+          )
+      ) {
+        $word = self::lcfirst($word, $encoding, $cleanUtf8);
+      }
+
+      $newWords[] = $word;
+    }
+
+    return implode('', $newWords);
   }
 
   /**
@@ -3669,7 +3748,7 @@ final class UTF8
 
     $chr_orig = $chr;
     /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-    $chr = unpack('C*', self::substr($chr, 0, 4, '8BIT'));
+    $chr = unpack('C*', (string)self::substr($chr, 0, 4, '8BIT'));
     $code = $chr ? $chr[1] : 0;
 
     if (0xF0 <= $code && isset($chr[4])) {
@@ -4341,7 +4420,12 @@ final class UTF8
       return false;
     }
 
-    if ($needle === self::substr($haystack, -self::strlen($needle))) {
+    $haystackSub = self::substr($haystack, -self::strlen($needle));
+    if ($haystackSub === false) {
+      return false;
+    }
+
+    if ($needle === $haystackSub) {
       return true;
     }
 
@@ -4473,7 +4557,7 @@ final class UTF8
     $new_str = implode(' ', $array);
 
     if ($new_str === '') {
-      $str = self::substr($str, 0, $length - 1) . $strAddOn;
+      $str = (string)self::substr($str, 0, $length - 1) . $strAddOn;
     } else {
       $str = $new_str . $strAddOn;
     }
@@ -4512,21 +4596,21 @@ final class UTF8
       switch ($pad_type) {
         case STR_PAD_LEFT:
           $pre = str_repeat($pad_string, (int)ceil($diff / $ps_length));
-          $pre = self::substr($pre, 0, $diff);
+          $pre = (string)self::substr($pre, 0, $diff);
           $post = '';
           break;
 
         case STR_PAD_BOTH:
           $pre = str_repeat($pad_string, (int)ceil($diff / $ps_length / 2));
-          $pre = self::substr($pre, 0, (int)$diff / 2);
+          $pre = (string)self::substr($pre, 0, (int)$diff / 2);
           $post = str_repeat($pad_string, (int)ceil($diff / $ps_length / 2));
-          $post = self::substr($post, 0, (int)ceil($diff / 2));
+          $post = (string)self::substr($post, 0, (int)ceil($diff / 2));
           break;
 
         case STR_PAD_RIGHT:
         default:
           $post = str_repeat($pad_string, (int)ceil($diff / $ps_length));
-          $post = self::substr($post, 0, $diff);
+          $post = (string)self::substr($post, 0, $diff);
           $pre = '';
       }
 
@@ -4940,7 +5024,11 @@ final class UTF8
     }
 
     if ($offset || $length !== null) {
-      $str = (string)self::substr($str, $offset, $length);
+      $strTmp = self::substr($str, $offset, $length);
+      if ($strTmp === false) {
+        return null;
+      }
+      $str = $strTmp;
     }
 
     $str = (string)$str;
@@ -7107,7 +7195,18 @@ final class UTF8
    */
   public static function ucfirst($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    return self::strtoupper(self::substr($str, 0, 1, $encoding, $cleanUtf8), $encoding, $cleanUtf8) . self::substr($str, 1, null, $encoding, $cleanUtf8);
+    $strPartTwo = self::substr($str, 1, null, $encoding, $cleanUtf8);
+    if ($strPartTwo === false) {
+      $strPartTwo = '';
+    }
+
+    $strPartOne = self::strtoupper(
+        (string)self::substr($str, 0, 1, $encoding, $cleanUtf8),
+        $encoding,
+        $cleanUtf8
+    );
+
+    return $strPartOne . $strPartTwo;
   }
 
   /**
@@ -7159,7 +7258,7 @@ final class UTF8
       }
 
       if (
-          ($useExceptions === false)
+          $useExceptions === false
           ||
           (
               $useExceptions === true
@@ -7524,7 +7623,7 @@ final class UTF8
       }
     }
 
-    return self::substr($str, 0, $j, '8BIT');
+    return (string)self::substr($str, 0, $j, '8BIT');
   }
 
   /**
