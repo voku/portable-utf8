@@ -1330,7 +1330,7 @@ final class UTF8
     $encodingDetected = self::str_detect_encoding($str);
 
     if (
-        $encodingDetected
+        $encodingDetected !== false
         &&
         (
             $force === true
@@ -1845,7 +1845,8 @@ final class UTF8
    *
    * @param string|string[] $str <p>You can use a string or an array of strings.</p>
    *
-   * @return mixed
+   * @return string|string[] <p>Will return the fixed input-"array" or
+   *                         the fixed input-"string".</p>
    */
   public static function fix_utf8($str)
   {
