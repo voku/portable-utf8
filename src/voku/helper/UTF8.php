@@ -6201,6 +6201,16 @@ final class UTF8
    */
   public static function strtr($str, $from, $to = INF)
   {
+    $str = (string)$str;
+
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    if ($from === $to) {
+      return $str;
+    }
+
     if (INF !== $to) {
       $from = self::str_split($from);
       $to = self::str_split($to);
@@ -6214,6 +6224,10 @@ final class UTF8
       }
 
       $from = array_combine($from, $to);
+    }
+
+    if (is_string($from)) {
+      return str_replace($from, '', $str);
     }
 
     return strtr($str, $from);

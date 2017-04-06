@@ -3382,7 +3382,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('○●◎ earth', UTF8::strtr('Hello 中文空白', $arr));
 
     self::assertSame('○●◎◎o wor◎d', UTF8::strtr('Hello world', 'Hello', '○●◎'));
+    self::assertSame(' world', UTF8::strtr('Hello world', 'Hello'));
+    self::assertSame('test world', UTF8::strtr('Hello world', array('Hello' => 'test')));
     self::assertSame('Hello world H●◎', UTF8::strtr('Hello world ○●◎', '○', 'Hello'));
+    self::assertSame('Hello world ○●◎', UTF8::strtr('Hello world ○●◎', array('○'), array('Hello')));
   }
 
   public function testStrwidth()
