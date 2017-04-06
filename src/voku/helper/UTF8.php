@@ -6228,7 +6228,10 @@ final class UTF8
         &&
         self::$SUPPORT['iconv'] === true
     ) {
-      return \iconv_substr($str, $offset, $length);
+      $tmpReturn = \iconv_substr($str, $offset, $length);
+      if ($tmpReturn !== false) {
+        return $tmpReturn;
+      }
     }
 
     // fallback via vanilla php
