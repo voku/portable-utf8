@@ -3441,6 +3441,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // UTF-8
     self::assertSame('文空', UTF8::substr('中文空白', 1, 2));
+    self::assertSame('空白', UTF8::substr('中文空白', -2, 2));
+    self::assertSame('空白', UTF8::substr('中文空白', -2));
     self::assertSame('Я можу', UTF8::substr('Я можу їсти скло', 0, 6));
   }
 
@@ -3472,8 +3474,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // UTF-8 tests
 
     self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎') < 0);
-    //self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎', -1) < 0);
-    //self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎', -1, 2) < 0);
+    self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎', -1) < 0);
+    self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎', -1, 2) < 0);
     self::assertTrue(UTF8::substr_compare("○●◎\r", '●◎', 0, 2) < 0);
 
     self::assertSame(1, UTF8::substr_compare("○●◎\r", '◎●', 1, 2));
