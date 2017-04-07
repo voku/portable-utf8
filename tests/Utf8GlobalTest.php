@@ -3549,19 +3549,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(2, substr_count('abcdebc', 'bc'));
     self::assertSame(2, UTF8::substr_count('abcdebc', 'bc'));
 
-    if (Bootup::is_php('7.1') === false) {
-
-      if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-        self::assertSame(null, substr_count('abcde', 'de', -2, 2));
-      } else {
-        self::assertSame(false, substr_count('abcde', 'de', -2, 2));
-      }
-
-      self::assertSame(false, UTF8::substr_count('abcde', 'de', -2, 2));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertSame(null, substr_count('abcde', 'de', -2, 2));
     } else {
-      self::assertSame(1, substr_count('abcde', 'de', -2, 2));
-      self::assertSame(1, UTF8::substr_count('abcde', 'de', -2, 2));
+      self::assertSame(false, substr_count('abcde', 'de', -2, 2));
     }
+
+    self::assertSame(false, UTF8::substr_count('abcde', 'de', -2, 2));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
       self::assertSame(null, substr_count('abcde', 'bcg', 1, 2));
@@ -3597,19 +3591,19 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // UTF-8 tests
 
-    self::assertSame(false, UTF8::substr_count('中文空白', '文空', 0, 0));
     self::assertSame(false, UTF8::substr_count('', '文空'));
     self::assertSame(false, UTF8::substr_count('中文空白', ''));
     self::assertSame(false, UTF8::substr_count('', ''));
+    self::assertSame(false, UTF8::substr_count('中文空白', '文空', 0, 0));
 
-    self::assertSame(2, UTF8::substr_count('Можам да јадам стакло, а не ме штета.', 'д'));
-    self::assertSame(2, UTF8::substr_count("○●◎\r◎", '◎'));
+    self::assertSame(0, UTF8::substr_count('中文空白', '文空', 0, 1));
     self::assertSame(1, UTF8::substr_count("○●◎\r", '●◎', 1, 2));
     self::assertSame(1, UTF8::substr_count('中文空白', '文空', 1, 2));
-    self::assertSame(0, UTF8::substr_count('中文空白', '文空', 0, 1));
     self::assertSame(1, UTF8::substr_count('中文空白', '文空', 1));
-    self::assertSame(3, UTF8::substr_count('中文空白 文空 文空', '文空', 1));
+    self::assertSame(2, UTF8::substr_count('Можам да јадам стакло, а не ме штета.', 'д'));
+    self::assertSame(2, UTF8::substr_count("○●◎\r◎", '◎'));
     self::assertSame(2, UTF8::substr_count('中文空白 文空 文空', '文空', 0, 7));
+    self::assertSame(3, UTF8::substr_count('中文空白 文空 文空', '文空', 1));
 
     // ISO
 
