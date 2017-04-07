@@ -6447,6 +6447,12 @@ final class UTF8
       $length = (int)$length;
 
       if (
+          (
+            $length !== 0
+            &&
+            $offset !== 0
+          )
+          &&
           $length + $offset <= 0
           &&
           Bootup::is_php('7.1') === false // output from "substr_count()" have changed in PHP 7.1

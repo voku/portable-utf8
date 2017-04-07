@@ -3600,7 +3600,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(false, UTF8::substr_count('', '文空'));
     self::assertSame(false, UTF8::substr_count('中文空白', ''));
     self::assertSame(false, UTF8::substr_count('', ''));
-    self::assertSame(false, UTF8::substr_count('中文空白', '文空', 0, 0));
+
+    self::assertSame(0, UTF8::substr_count('中文空白', '文空', 0, 0));
 
     self::assertSame(0, UTF8::substr_count('中文空白', '文空', 0, 1));
     self::assertSame(1, UTF8::substr_count("○●◎\r", '●◎', 1, 2));
