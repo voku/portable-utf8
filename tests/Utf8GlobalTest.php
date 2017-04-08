@@ -297,10 +297,10 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testStrReplaceFirst()
   {
     $testArray = array(
-        '' => array('', '', ''),
+        ''           => array('', '', ''),
         ' lall lall' => array('lall', '', 'lall lall lall'),
-        'ö a l l ' => array('l', 'ö', 'l a l l '),
-        'κöäüσμε ό' => array('ό', 'öäü', "κόσμε\xc2\xa0ό", ),
+        'ö a l l '   => array('l', 'ö', 'l a l l '),
+        'κöäüσμε ό'  => array('ό', 'öäü', "κόσμε\xc2\xa0ό",),
     );
 
     foreach ($testArray as $after => $test) {
@@ -967,16 +967,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testHtmlEncode()
   {
     $testArray = array(
-        '{-test'                  => '&#123;&#45;&#116;&#101;&#115;&#116;',
-        '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
-        'Dänisch (Å/å, Æ/æ, Ø/ø)' => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;&#32;&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;',
-        'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
-        'öäü'                     => '&#246;&#228;&#252;',
-        ' '                       => '&#32;',
-        ''                        => '',
-        '�'                       => '&#65533;',
-        'Test-,;:'                => '&#84;&#101;&#115;&#116;&#45;&#44;&#59;&#58;',
+        '{-test'                                     => '&#123;&#45;&#116;&#101;&#115;&#116;',
+        '中文空白'                                       => '&#20013;&#25991;&#31354;&#30333;',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)'                    => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'                      => '&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;&#32;&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;',
+        'κόσμε'                                      => '&#954;&#8057;&#963;&#956;&#949;',
+        'öäü'                                        => '&#246;&#228;&#252;',
+        ' '                                          => '&#32;',
+        ''                                           => '',
+        '�'                                          => '&#65533;',
+        'Test-,;:'                                   => '&#84;&#101;&#115;&#116;&#45;&#44;&#59;&#58;',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎' => '&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;&#32;&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;&#32;&#128054;&#32;&#128169;&#32;&#128049;&#32;&#128056;&#32;&#127744;&#32;&#10084;&#32;&#9855;&#32;&#9934;',
     );
 
@@ -995,16 +995,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     $testArray = array(
-        '{-test'                  => '{-test',
-        '中文空白'                    => '&#20013;&#25991;&#31354;&#30333;',
-        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'D&#228;nisch (&#197;/&#229;, &#198;/&#230;, &#216;/&#248;)',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084;',
-        'κόσμε'                   => '&#954;&#8057;&#963;&#956;&#949;',
-        'öäü'                     => '&#246;&#228;&#252;',
-        ' '                       => ' ',
-        ''                        => '',
-        '�'                       => '&#65533;',
-        'Test-,;:'                => 'Test-,;:',
+        '{-test'                                     => '{-test',
+        '中文空白'                                       => '&#20013;&#25991;&#31354;&#30333;',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)'                    => 'D&#228;nisch (&#197;/&#229;, &#198;/&#230;, &#216;/&#248;)',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'                      => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084;',
+        'κόσμε'                                      => '&#954;&#8057;&#963;&#956;&#949;',
+        'öäü'                                        => '&#246;&#228;&#252;',
+        ' '                                          => ' ',
+        ''                                           => '',
+        '�'                                          => '&#65533;',
+        'Test-,;:'                                   => 'Test-,;:',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎' => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084; &#128054; &#128169; &#128049; &#128056; &#127744; &#10084; &#9855; &#9934;',
     );
 
@@ -1016,19 +1016,19 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     $testArray = array(
-        '{-test'                  => '{-test',
-        '中文空白'                    => '中文空白',
-        'κόσμε'                   => 'κόσμε',
-        'öäü'                     => 'öäü',
-        'Dänisch (Å/å, Æ/æ, Ø/ø)' => 'Dänisch (Å/å, Æ/æ, Ø/ø)',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤'   => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
-        ' '                       => ' ',
-        ''                        => '',
-        '&#d;'                    => '&#d;',
-        '&d;'                     => '&d;',
-        '&gt;'                    => '>',
-        '%ABREPRESENT%C9%BB'      => '%ABREPRESENT%C9%BB',
-        'Test-,;:'                => 'Test-,;:',
+        '{-test'                                     => '{-test',
+        '中文空白'                                       => '中文空白',
+        'κόσμε'                                      => 'κόσμε',
+        'öäü'                                        => 'öäü',
+        'Dänisch (Å/å, Æ/æ, Ø/ø)'                    => 'Dänisch (Å/å, Æ/æ, Ø/ø)',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤'                      => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
+        ' '                                          => ' ',
+        ''                                           => '',
+        '&#d;'                                       => '&#d;',
+        '&d;'                                        => '&d;',
+        '&gt;'                                       => '>',
+        '%ABREPRESENT%C9%BB'                         => '%ABREPRESENT%C9%BB',
+        'Test-,;:'                                   => 'Test-,;:',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎',
     );
 
@@ -1051,14 +1051,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
 
     $testArray = array(
-        '{-test' => '{-test',
-        'abc'    => 'abc',
-        ' '      => ' ',
-        ''       => '',
-        '&#d;'   => '&#d;',
-        '&d;'    => '&d;',
-        '&gt;'   => '>',
-        '&#39;'  => '\'',
+        '{-test'   => '{-test',
+        'abc'      => 'abc',
+        ' '        => ' ',
+        ''         => '',
+        '&#d;'     => '&#d;',
+        '&d;'      => '&d;',
+        '&gt;'     => '>',
+        '&#39;'    => '\'',
         'Test-,;:' => 'Test-,;:',
     );
 
@@ -1269,7 +1269,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ' '                                                                                                           => ' ',
         ''                                                                                                            => '',
         'Test-,;:'                                                                                                    => 'Test-,;:',
-        '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎'                                                     => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084; &#128054; &#128169; &#128049; &#128056; &#127744; &#10084; &#9855; &#9934;',
+        '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎'                                                                  => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084; &#128054; &#128169; &#128049; &#128056; &#127744; &#10084; &#9855; &#9934;',
     );
 
     foreach ($testArray as $actual => $expected) {
@@ -1309,12 +1309,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testHtmlspecialchars()
   {
     $testArray = array(
-        "<a href='κόσμε'>κόσμε</a>" => "&lt;a href='κόσμε'&gt;κόσμε&lt;/a&gt;",
-        '<白>'                       => '&lt;白&gt;',
-        'öäü'                       => 'öäü',
-        ' '                         => ' ',
-        ''                          => '',
-        'Test-,;:'                  => 'Test-,;:',
+        "<a href='κόσμε'>κόσμε</a>"                                => "&lt;a href='κόσμε'&gt;κόσμε&lt;/a&gt;",
+        '<白>'                                                      => '&lt;白&gt;',
+        'öäü'                                                      => 'öäü',
+        ' '                                                        => ' ',
+        ''                                                         => '',
+        'Test-,;:'                                                 => 'Test-,;:',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &amp;#x267F; &amp;#x26CE;',
     );
 
@@ -1326,12 +1326,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     $testArray = array(
-        "<a href='κόσμε'>κόσμε</a>" => '&lt;a href=&#039;κόσμε&#039;&gt;κόσμε&lt;/a&gt;',
-        '<白>'                       => '&lt;白&gt;',
-        'öäü'                       => 'öäü',
-        ' '                         => ' ',
-        ''                          => '',
-        'Test-,;:'                  => 'Test-,;:',
+        "<a href='κόσμε'>κόσμε</a>"                                => '&lt;a href=&#039;κόσμε&#039;&gt;κόσμε&lt;/a&gt;',
+        '<白>'                                                      => '&lt;白&gt;',
+        'öäü'                                                      => 'öäü',
+        ' '                                                        => ' ',
+        ''                                                         => '',
+        'Test-,;:'                                                 => 'Test-,;:',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &amp;#x267F; &amp;#x26CE;',
     );
 
@@ -2089,7 +2089,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         '&#23470;&#23822;&#12288;&#39423;' => '宮崎　駿',
         'https://foo.bar/tpl_preview.php?pid=122&json=%7B%22recipe_id%22%3A-1%2C%22recipe_created%22%3A%22%22%2C%22recipe_title%22%3A%22vxcvxc%22%2C%22recipe_description%22%3A%22%22%2C%22recipe_yield%22%3A0%2C%22recipe_prepare_time%22%3A0%2C%22recipe_image%22%3A%22%22%2C%22recipe_legal%22%3A0%2C%22recipe_live%22%3A0%2C%22recipe_user_guid%22%3A%22%22%2C%22recipe_category_id%22%3A%5B%5D%2C%22recipe_category_name%22%3A%5B%5D%2C%22recipe_variety_id%22%3A%5B%5D%2C%22recipe_variety_name%22%3A%5B%5D%2C%22recipe_tag_id%22%3A%5B%5D%2C%22recipe_tag_name%22%3A%5B%5D%2C%22recipe_instruction_id%22%3A%5B%5D%2C%22recipe_instruction_text%22%3A%5B%5D%2C%22recipe_ingredient_id%22%3A%5B%5D%2C%22recipe_ingredient_name%22%3A%5B%5D%2C%22recipe_ingredient_amount%22%3A%5B%5D%2C%22recipe_ingredient_unit%22%3A%5B%5D%2C%22formMatchingArray%22%3A%7B%22unites%22%3A%5B%22Becher%22%2C%22Beete%22%2C%22Beutel%22%2C%22Blatt%22%2C%22Bl%5Cu00e4tter%22%2C%22Bund%22%2C%22B%5Cu00fcndel%22%2C%22cl%22%2C%22cm%22%2C%22dicke%22%2C%22dl%22%2C%22Dose%22%2C%22Dose%5C%2Fn%22%2C%22d%5Cu00fcnne%22%2C%22Ecke%28n%29%22%2C%22Eimer%22%2C%22einige%22%2C%22einige+Stiele%22%2C%22EL%22%2C%22EL%2C+geh%5Cu00e4uft%22%2C%22EL%2C+gestr.%22%2C%22etwas%22%2C%22evtl.%22%2C%22extra%22%2C%22Fl%5Cu00e4schchen%22%2C%22Flasche%22%2C%22Flaschen%22%2C%22g%22%2C%22Glas%22%2C%22Gl%5Cu00e4ser%22%2C%22gr.+Dose%5C%2Fn%22%2C%22gr.+Fl.%22%2C%22gro%5Cu00dfe%22%2C%22gro%5Cu00dfen%22%2C%22gro%5Cu00dfer%22%2C%22gro%5Cu00dfes%22%2C%22halbe%22%2C%22Halm%28e%29%22%2C%22Handvoll%22%2C%22K%5Cu00e4stchen%22%2C%22kg%22%2C%22kl.+Bund%22%2C%22kl.+Dose%5C%2Fn%22%2C%22kl.+Glas%22%2C%22kl.+Kopf%22%2C%22kl.+Scheibe%28n%29%22%2C%22kl.+St%5Cu00fcck%28e%29%22%2C%22kl.Flasche%5C%2Fn%22%2C%22kleine%22%2C%22kleinen%22%2C%22kleiner%22%2C%22kleines%22%2C%22Knolle%5C%2Fn%22%2C%22Kopf%22%2C%22K%5Cu00f6pfe%22%2C%22K%5Cu00f6rner%22%2C%22Kugel%22%2C%22Kugel%5C%2Fn%22%2C%22Kugeln%22%2C%22Liter%22%2C%22m.-gro%5Cu00dfe%22%2C%22m.-gro%5Cu00dfer%22%2C%22m.-gro%5Cu00dfes%22%2C%22mehr%22%2C%22mg%22%2C%22ml%22%2C%22Msp.%22%2C%22n.+B.%22%2C%22Paar%22%2C%22Paket%22%2C%22Pck.%22%2C%22Pkt.%22%2C%22Platte%5C%2Fn%22%2C%22Port.%22%2C%22Prise%28n%29%22%2C%22Prisen%22%2C%22Prozent+%25%22%2C%22Riegel%22%2C%22Ring%5C%2Fe%22%2C%22Rippe%5C%2Fn%22%2C%22Rolle%28n%29%22%2C%22Sch%5Cu00e4lchen%22%2C%22Scheibe%5C%2Fn%22%2C%22Schuss%22%2C%22Spritzer%22%2C%22Stange%5C%2Fn%22%2C%22St%5Cu00e4ngel%22%2C%22Stiel%5C%2Fe%22%2C%22Stiele%22%2C%22St%5Cu00fcck%28e%29%22%2C%22Tafel%22%2C%22Tafeln%22%2C%22Tasse%22%2C%22Tasse%5C%2Fn%22%2C%22Teil%5C%2Fe%22%2C%22TL%22%2C%22TL+%28geh%5Cu00e4uft%29%22%2C%22TL+%28gestr.%29%22%2C%22Topf%22%2C%22Tropfen%22%2C%22Tube%5C%2Fn%22%2C%22T%5Cu00fcte%5C%2Fn%22%2C%22viel%22%2C%22wenig%22%2C%22W%5Cu00fcrfel%22%2C%22Wurzel%22%2C%22Wurzel%5C%2Fn%22%2C%22Zehe%5C%2Fn%22%2C%22Zweig%5C%2Fe%22%5D%2C%22yield%22%3A%7B%221%22%3A%221+Portion%22%2C%222%22%3A%222+Portionen%22%2C%223%22%3A%223+Portionen%22%2C%224%22%3A%224+Portionen%22%2C%225%22%3A%225+Portionen%22%2C%226%22%3A%226+Portionen%22%2C%227%22%3A%227+Portionen%22%2C%228%22%3A%228+Portionen%22%2C%229%22%3A%229+Portionen%22%2C%2210%22%3A%2210+Portionen%22%2C%2211%22%3A%2211+Portionen%22%2C%2212%22%3A%2212+Portionen%22%7D%2C%22prepare_time%22%3A%7B%221%22%3A%22schnell%22%2C%222%22%3A%22mittel%22%2C%223%22%3A%22aufwendig%22%7D%2C%22category%22%3A%7B%221%22%3A%22Vorspeise%22%2C%222%22%3A%22Suppe%22%2C%223%22%3A%22Salat%22%2C%224%22%3A%22Hauptspeise%22%2C%225%22%3A%22Beilage%22%2C%226%22%3A%22Nachtisch%5C%2FDessert%22%2C%227%22%3A%22Getr%5Cu00e4nke%22%2C%228%22%3A%22B%5Cu00fcffet%22%2C%229%22%3A%22Fr%5Cu00fchst%5Cu00fcck%5C%2FBrunch%22%7D%2C%22variety%22%3A%7B%221%22%3A%22Basmati+Reis%22%2C%222%22%3A%22Basmati+%26amp%3B+Wild+Reis%22%2C%223%22%3A%22R%5Cu00e4ucherreis%22%2C%224%22%3A%22Jasmin+Reis%22%2C%225%22%3A%221121+Basmati+Wunderreis%22%2C%226%22%3A%22Spitzen+Langkorn+Reis%22%2C%227%22%3A%22Wildreis%22%2C%228%22%3A%22Naturreis%22%2C%229%22%3A%22Sushi+Reis%22%7D%2C%22tag--ingredient%22%3A%7B%221%22%3A%22Eier%22%2C%222%22%3A%22Gem%5Cu00fcse%22%2C%223%22%3A%22Getreide%22%2C%224%22%3A%22Fisch%22%2C%225%22%3A%22Fleisch%22%2C%226%22%3A%22Meeresfr%5Cu00fcchte%22%2C%227%22%3A%22Milchprodukte%22%2C%228%22%3A%22Obst%22%2C%229%22%3A%22Salat%22%7D%2C%22tag--preparation%22%3A%7B%2210%22%3A%22Backen%22%2C%2211%22%3A%22Blanchieren%22%2C%2212%22%3A%22Braten%5C%2FSchmoren%22%2C%2213%22%3A%22D%5Cu00e4mpfen%5C%2FD%5Cu00fcnsten%22%2C%2214%22%3A%22Einmachen%22%2C%2215%22%3A%22Frittieren%22%2C%2216%22%3A%22Gratinieren%5C%2F%5Cu00dcberbacken%22%2C%2217%22%3A%22Grillen%22%2C%2218%22%3A%22Kochen%22%7D%2C%22tag--kitchen%22%3A%7B%2219%22%3A%22Afrikanisch%22%2C%2220%22%3A%22Alpenk%5Cu00fcche%22%2C%2221%22%3A%22Asiatisch%22%2C%2222%22%3A%22Deutsch+%28regional%29%22%2C%2223%22%3A%22Franz%5Cu00f6sisch%22%2C%2224%22%3A%22Mediterran%22%2C%2225%22%3A%22Orientalisch%22%2C%2226%22%3A%22Osteurop%5Cu00e4isch%22%2C%2227%22%3A%22Skandinavisch%22%2C%2228%22%3A%22S%5Cu00fcdamerikanisch%22%2C%2229%22%3A%22US-Amerikanisch%22%2C%2230%22%3A%22%22%7D%2C%22tag--difficulty%22%3A%7B%2231%22%3A%22Einfach%22%2C%2232%22%3A%22Mittelschwer%22%2C%2233%22%3A%22Anspruchsvoll%22%7D%2C%22tag--feature%22%3A%7B%2234%22%3A%22Gut+vorzubereiten%22%2C%2235%22%3A%22Kalorienarm+%5C%2F+leicht%22%2C%2236%22%3A%22Klassiker%22%2C%2237%22%3A%22Preiswert%22%2C%2238%22%3A%22Raffiniert%22%2C%2239%22%3A%22Vegetarisch+%5C%2F+Vegan%22%2C%2240%22%3A%22Vitaminreich%22%2C%2241%22%3A%22Vollwert%22%2C%2242%22%3A%22%22%7D%2C%22tag%22%3A%7B%221%22%3A%22Eier%22%2C%222%22%3A%22Gem%5Cu00fcse%22%2C%223%22%3A%22Getreide%22%2C%224%22%3A%22Fisch%22%2C%225%22%3A%22Fleisch%22%2C%226%22%3A%22Meeresfr%5Cu00fcchte%22%2C%227%22%3A%22Milchprodukte%22%2C%228%22%3A%22Obst%22%2C%229%22%3A%22Salat%22%2C%2210%22%3A%22Backen%22%2C%2211%22%3A%22Blanchieren%22%2C%2212%22%3A%22Braten%5C%2FSchmoren%22%2C%2213%22%3A%22D%5Cu00e4mpfen%5C%2FD%5Cu00fcnsten%22%2C%2214%22%3A%22Einmachen%22%2C%2215%22%3A%22Frittieren%22%2C%2216%22%3A%22Gratinieren%5C%2F%5Cu00dcberbacken%22%2C%2217%22%3A%22Grillen%22%2C%2218%22%3A%22Kochen%22%2C%2219%22%3A%22Afrikanisch%22%2C%2220%22%3A%22Alpenk%5Cu00fcche%22%2C%2221%22%3A%22Asiatisch%22%2C%2222%22%3A%22Deutsch+%28regional%29%22%2C%2223%22%3A%22Franz%5Cu00f6sisch%22%2C%2224%22%3A%22Mediterran%22%2C%2225%22%3A%22Orientalisch%22%2C%2226%22%3A%22Osteurop%5Cu00e4isch%22%2C%2227%22%3A%22Skandinavisch%22%2C%2228%22%3A%22S%5Cu00fcdamerikanisch%22%2C%2229%22%3A%22US-Amerikanisch%22%2C%2230%22%3A%22%22%2C%2231%22%3A%22Einfach%22%2C%2232%22%3A%22Mittelschwer%22%2C%2233%22%3A%22Anspruchsvoll%22%2C%2234%22%3A%22Gut+vorzubereiten%22%2C%2235%22%3A%22Kalorienarm+%5C%2F+leicht%22%2C%2236%22%3A%22Klassiker%22%2C%2237%22%3A%22Preiswert%22%2C%2238%22%3A%22Raffiniert%22%2C%2239%22%3A%22Vegetarisch+%5C%2F+Vegan%22%2C%2240%22%3A%22Vitaminreich%22%2C%2241%22%3A%22Vollwert%22%2C%2242%22%3A%22%22%7D%7D%2C%22errorArray%22%3A%7B%22recipe_prepare_time%22%3A%22error%22%2C%22recipe_yield%22%3A%22error%22%2C%22recipe_category_name%22%3A%22error%22%2C%22recipe_tag_name%22%3A%22error%22%2C%22recipe_instruction_text%22%3A%22error%22%2C%22recipe_ingredient_name%22%3A%22error%22%7D%2C%22errorMessage%22%3A%22Bitte+f%5Cu00fclle+die+rot+markierten+Felder+korrekt+aus.%22%2C%22db%22%3A%7B%22query_count%22%3A20%7D%7D' => 'https://foo.bar/tpl_preview.php?pid=122&json={"recipe_id":-1,"recipe_created":"","recipe_title":"vxcvxc","recipe_description":"","recipe_yield":0,"recipe_prepare_time":0,"recipe_image":"","recipe_legal":0,"recipe_live":0,"recipe_user_guid":"","recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"formMatchingArray":{"unites":["Becher","Beete","Beutel","Blatt","Blätter","Bund","Bündel","cl","cm","dicke","dl","Dose","Dose\/n","dünne","Ecke(n)","Eimer","einige","einige+Stiele","EL","EL,+gehäuft","EL,+gestr.","etwas","evtl.","extra","Fläschchen","Flasche","Flaschen","g","Glas","Gläser","gr.+Dose\/n","gr.+Fl.","große","großen","großer","großes","halbe","Halm(e)","Handvoll","Kästchen","kg","kl.+Bund","kl.+Dose\/n","kl.+Glas","kl.+Kopf","kl.+Scheibe(n)","kl.+Stück(e)","kl.Flasche\/n","kleine","kleinen","kleiner","kleines","Knolle\/n","Kopf","Köpfe","Körner","Kugel","Kugel\/n","Kugeln","Liter","m.-große","m.-großer","m.-großes","mehr","mg","ml","Msp.","n.+B.","Paar","Paket","Pck.","Pkt.","Platte\/n","Port.","Prise(n)","Prisen","Prozent+%","Riegel","Ring\/e","Rippe\/n","Rolle(n)","Schälchen","Scheibe\/n","Schuss","Spritzer","Stange\/n","Stängel","Stiel\/e","Stiele","Stück(e)","Tafel","Tafeln","Tasse","Tasse\/n","Teil\/e","TL","TL+(gehäuft)","TL+(gestr.)","Topf","Tropfen","Tube\/n","Tüte\/n","viel","wenig","Würfel","Wurzel","Wurzel\/n","Zehe\/n","Zweig\/e"],"yield":{"1":"1+Portion","2":"2+Portionen","3":"3+Portionen","4":"4+Portionen","5":"5+Portionen","6":"6+Portionen","7":"7+Portionen","8":"8+Portionen","9":"9+Portionen","10":"10+Portionen","11":"11+Portionen","12":"12+Portionen"},"prepare_time":{"1":"schnell","2":"mittel","3":"aufwendig"},"category":{"1":"Vorspeise","2":"Suppe","3":"Salat","4":"Hauptspeise","5":"Beilage","6":"Nachtisch\/Dessert","7":"Getränke","8":"Büffet","9":"Frühstück\/Brunch"},"variety":{"1":"Basmati+Reis","2":"Basmati+&+Wild+Reis","3":"Räucherreis","4":"Jasmin+Reis","5":"1121+Basmati+Wunderreis","6":"Spitzen+Langkorn+Reis","7":"Wildreis","8":"Naturreis","9":"Sushi+Reis"},"tag--ingredient":{"1":"Eier","2":"Gemüse","3":"Getreide","4":"Fisch","5":"Fleisch","6":"Meeresfrüchte","7":"Milchprodukte","8":"Obst","9":"Salat"},"tag--preparation":{"10":"Backen","11":"Blanchieren","12":"Braten\/Schmoren","13":"Dämpfen\/Dünsten","14":"Einmachen","15":"Frittieren","16":"Gratinieren\/Überbacken","17":"Grillen","18":"Kochen"},"tag--kitchen":{"19":"Afrikanisch","20":"Alpenküche","21":"Asiatisch","22":"Deutsch+(regional)","23":"Französisch","24":"Mediterran","25":"Orientalisch","26":"Osteuropäisch","27":"Skandinavisch","28":"Südamerikanisch","29":"US-Amerikanisch","30":""},"tag--difficulty":{"31":"Einfach","32":"Mittelschwer","33":"Anspruchsvoll"},"tag--feature":{"34":"Gut+vorzubereiten","35":"Kalorienarm+\/+leicht","36":"Klassiker","37":"Preiswert","38":"Raffiniert","39":"Vegetarisch+\/+Vegan","40":"Vitaminreich","41":"Vollwert","42":""},"tag":{"1":"Eier","2":"Gemüse","3":"Getreide","4":"Fisch","5":"Fleisch","6":"Meeresfrüchte","7":"Milchprodukte","8":"Obst","9":"Salat","10":"Backen","11":"Blanchieren","12":"Braten\/Schmoren","13":"Dämpfen\/Dünsten","14":"Einmachen","15":"Frittieren","16":"Gratinieren\/Überbacken","17":"Grillen","18":"Kochen","19":"Afrikanisch","20":"Alpenküche","21":"Asiatisch","22":"Deutsch+(regional)","23":"Französisch","24":"Mediterran","25":"Orientalisch","26":"Osteuropäisch","27":"Skandinavisch","28":"Südamerikanisch","29":"US-Amerikanisch","30":"","31":"Einfach","32":"Mittelschwer","33":"Anspruchsvoll","34":"Gut+vorzubereiten","35":"Kalorienarm+\/+leicht","36":"Klassiker","37":"Preiswert","38":"Raffiniert","39":"Vegetarisch+\/+Vegan","40":"Vitaminreich","41":"Vollwert","42":""}},"errorArray":{"recipe_prepare_time":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_name":"error"},"errorMessage":"Bitte+fülle+die+rot+markierten+Felder+korrekt+aus.","db":{"query_count":20}}',
         '<a href="&#38&#35&#49&#48&#54&#38&#35&#57&#55&#38&#35&#49&#49&#56&#38&#35&#57&#55&#38&#35&#49&#49&#53&#38&#35&#57&#57&#38&#35&#49&#49&#52&#38&#35&#49&#48&#53&#38&#35&#49&#49&#50&#38&#35&#49&#49&#54&#38&#35&#53&#56&#38&#35&#57&#57&#38&#35&#49&#49&#49&#38&#35&#49&#49&#48&#38&#35&#49&#48&#50&#38&#35&#49&#48&#53&#38&#35&#49&#49&#52&#38&#35&#49&#48&#57&#38&#35&#52&#48&#38&#35&#52&#57&#38&#35&#52&#49">Clickhere</a>' => '<a href="javascript:confirm(1)">Clickhere</a>',
-        '🐶 | 💩 | 🐱 | 🐸 | 🌀 | ❤ | &#x267F; | &#x26CE; | ' => '🐶 | 💩 | 🐱 | 🐸 | 🌀 | ❤ | ♿ | ⛎ | ', // view-source:https://twitter.github.io/twemoji/preview.html
+        '🐶 | 💩 | 🐱 | 🐸 | 🌀 | ❤ | &#x267F; | &#x26CE; | ' => '🐶 | 💩 | 🐱 | 🐸 | 🌀 | ❤ | ♿ | ⛎ | ',
+        // view-source:https://twitter.github.io/twemoji/preview.html
     );
 
     foreach ($testArray as $before => $after) {
@@ -3176,6 +3177,57 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true, true));
   }
 
+  public function testChangeKeyCase()
+  {
+    // upper
+
+    $array = array(
+        'foo'   => 'a',
+        1       => 'b',
+        0       => 'c',
+        'Foo'   => 'd',
+        'FOO'   => 'e',
+        'ΣΣΣ'   => 'f',
+        'Κόσμε' => 'g',
+    );
+
+    $result = UTF8::array_change_key_case($array, CASE_UPPER);
+
+    $expected = array(
+        'FOO'   => 'e',
+        1       => 'b',
+        0       => 'c',
+        'ΣΣΣ'   => 'f',
+        'ΚΌΣΜΕ' => 'g',
+    );
+
+    self::assertSame($expected, $result);
+
+    // lower
+
+    $array = array(
+        'foo'   => 'a',
+        1       => 'b',
+        0       => 'c',
+        'Foo'   => 'd',
+        'FOO'   => 'e',
+        'ΣΣΣ'   => 'f',
+        'Κόσμε' => 'g',
+    );
+
+    $result = UTF8::array_change_key_case($array, CASE_LOWER);
+
+    $expected = array(
+        'foo'   => 'e',
+        1       => 'b',
+        0       => 'c',
+        'σσσ'   => 'f',
+        'κόσμε' => 'g',
+    );
+
+    self::assertSame($expected, $result);
+  }
+
   public function testStrtolower()
   {
     $tests = array(
@@ -3800,49 +3852,49 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // ---
 
       $testsStrict = array(
-          1                               => '1',
-          -1                              => '-1',
-          ' '                             => ' ',
-          ''                              => '',
-          'أبز'                           => 'abz',
-          "\xe2\x80\x99"                  => '\'',
-          'Ɓtest'                         => 'Btest',
-          '  -ABC-中文空白-  '                => '  -ABC-zhong wen kong bai-  ',
-          "      - abc- \xc2\x87"         => '      - abc- ++',
-          'abc'                           => 'abc',
-          'deja vu'                       => 'deja vu',
-          'déjà vu'                       => 'deja vu',
-          'déjà σσς iıii'                 => 'deja sss iiii',
-          "test\x80-\xBFöäü"              => 'test-oau',
-          'Internationalizaetion'         => 'Internationalizaetion',
-          "中 - &#20013; - %&? - \xc2\x80" => 'zhong - &#20013; - %&? - EUR',
-          'Un été brûlant sur la côte'    => 'Un ete brulant sur la cote',
-          'Αυτή είναι μια δοκιμή'         => 'Aute einai mia dokime',
-          'أحبك'                          => 'ahbk',
-          'キャンパス'                         => 'kyanhasu',
-          'биологическом'                 => 'biologiceskom',
-          '정, 병호'                         => 'jeong, byeongho',
-          'ますだ, よしひこ'                     => 'masuta, yoshihiko',
-          'मोनिच'                         => 'monica',
-          'क्षȸ'                          => 'kasadb',
-          'أحبك 😀'                       => 'ahbk ?',
-          'ذرزسشصضطظعغػؼؽؾؿ 5.99€'       => 'dhrzsshsdtz\'gh[?][?][?][?][?] 5.99EUR',
-          'ذرزسشصضطظعغػؼؽؾؿ £5.99'       => 'dhrzsshsdtz\'gh[?][?][?][?][?] PS5.99',
-          '׆אבגדהוזחטיךכלםמן $5.99'      => '[?]\'bgdhwzhtykklmmn $5.99',
-          '日一国会人年大十二本中長出三同 ¥5990' => 'ri yi guo hui ren nian da shi er ben zhong zhang chu san tong Y=5990',
-          '5.99€ 日一国会人年大十 $5.99'    => '5.99EUR ri yi guo hui ren nian da shi $5.99',
-          'בגדה@ضطظعغػ.com'              => 'bgdh@dtz\'gh[?].com',
-          '年大十@ضطظعغػ'                 => 'nian da shi@dtz\'gh[?]',
-          'בגדה & 年大十'                 => 'bgdh & nian da shi',
-          '国&ם at ضطظعغػ.הוז'           => 'guo&m at dtz\'gh[?].hwz',
-          'my username is @בגדה'         => 'my username is @bgdh',
-          'The review gave 5* to ظعغػ'   => 'The review gave 5* to z\'gh[?]',
+          1                                          => '1',
+          -1                                         => '-1',
+          ' '                                        => ' ',
+          ''                                         => '',
+          'أبز'                                      => 'abz',
+          "\xe2\x80\x99"                             => '\'',
+          'Ɓtest'                                    => 'Btest',
+          '  -ABC-中文空白-  '                           => '  -ABC-zhong wen kong bai-  ',
+          "      - abc- \xc2\x87"                    => '      - abc- ++',
+          'abc'                                      => 'abc',
+          'deja vu'                                  => 'deja vu',
+          'déjà vu'                                  => 'deja vu',
+          'déjà σσς iıii'                            => 'deja sss iiii',
+          "test\x80-\xBFöäü"                         => 'test-oau',
+          'Internationalizaetion'                    => 'Internationalizaetion',
+          "中 - &#20013; - %&? - \xc2\x80"            => 'zhong - &#20013; - %&? - EUR',
+          'Un été brûlant sur la côte'               => 'Un ete brulant sur la cote',
+          'Αυτή είναι μια δοκιμή'                    => 'Aute einai mia dokime',
+          'أحبك'                                     => 'ahbk',
+          'キャンパス'                                    => 'kyanhasu',
+          'биологическом'                            => 'biologiceskom',
+          '정, 병호'                                    => 'jeong, byeongho',
+          'ますだ, よしひこ'                                => 'masuta, yoshihiko',
+          'मोनिच'                                    => 'monica',
+          'क्षȸ'                                     => 'kasadb',
+          'أحبك 😀'                                  => 'ahbk ?',
+          'ذرزسشصضطظعغػؼؽؾؿ 5.99€'                   => 'dhrzsshsdtz\'gh[?][?][?][?][?] 5.99EUR',
+          'ذرزسشصضطظعغػؼؽؾؿ £5.99'                   => 'dhrzsshsdtz\'gh[?][?][?][?][?] PS5.99',
+          '׆אבגדהוזחטיךכלםמן $5.99'                  => '[?]\'bgdhwzhtykklmmn $5.99',
+          '日一国会人年大十二本中長出三同 ¥5990'                    => 'ri yi guo hui ren nian da shi er ben zhong zhang chu san tong Y=5990',
+          '5.99€ 日一国会人年大十 $5.99'                     => '5.99EUR ri yi guo hui ren nian da shi $5.99',
+          'בגדה@ضطظعغػ.com'                          => 'bgdh@dtz\'gh[?].com',
+          '年大十@ضطظعغػ'                               => 'nian da shi@dtz\'gh[?]',
+          'בגדה & 年大十'                               => 'bgdh & nian da shi',
+          '国&ם at ضطظعغػ.הוז'                        => 'guo&m at dtz\'gh[?].hwz',
+          'my username is @בגדה'                     => 'my username is @bgdh',
+          'The review gave 5* to ظعغػ'               => 'The review gave 5* to z\'gh[?]',
           'use 年大十@ضطظعغػ.הוז to get a 10% discount' => 'use nian da shi@dtz\'gh[?].hwz to get a 10% discount',
-          '日 = הط^2'                    => 'ri = ht^2',
-          'ךכלם 国会 غػؼؽ 9.81 m/s2'     => 'kklm guo hui gh[?][?][?] 9.81 m/s2',
-          'The #会 comment at @בגדה = 10% of *&*' => 'The #hui comment at @bgdh = 10% of *&*',
-          '∀ i ∈ ℕ'                       => '[?] i [?] N',
-          '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? ahbk',
+          '日 = הط^2'                                 => 'ri = ht^2',
+          'ךכלם 国会 غػؼؽ 9.81 m/s2'                   => 'kklm guo hui gh[?][?][?] 9.81 m/s2',
+          'The #会 comment at @בגדה = 10% of *&*'     => 'The #hui comment at @bgdh = 10% of *&*',
+          '∀ i ∈ ℕ'                                  => '[?] i [?] N',
+          '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'                => '? ? ?  ? ? ? ahbk',
       );
     }
 
@@ -3858,7 +3910,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         "      - abc- \xc2\x87"         => '      - abc- ++',
         'abc'                           => 'abc',
         'deja vu'                       => 'deja vu',
-        'déjà vu '                       => 'deja vu ',
+        'déjà vu '                      => 'deja vu ',
         'déjà σσς iıii'                 => 'deja sss iiii',
         'κόσμε'                         => 'kosme',
         "test\x80-\xBFöäü"              => 'test-oau',
@@ -3922,7 +3974,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       // Valid UTF-8 + Invalid Chars
       "κόσμε\xa0\xa1-öäü-‽‽‽"                                                => array('κόσμε-öäü-‽‽‽' => 'κόσμε-öäü-‽‽‽'),
       // Valid emoji (non-UTF-8)
-      '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'              => array('👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'),
+      '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'             => array('👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'),
       // Valid ASCII
       'a'                                                                    => array('a' => 'a'),
       // Valid ASCII + Invalid Chars
@@ -4517,7 +4569,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testUtf8DecodeUtf8Encode()
   {
     $tests = array(
-        '  -ABC-中文空白-  '  => '  -ABC-????-  ',
+        '  -ABC-中文空白-  '    => '  -ABC-????-  ',
         '      - ÖÄÜ- '     => '      - ÖÄÜ- ',
         'öäü'               => 'öäü',
         ''                  => '',

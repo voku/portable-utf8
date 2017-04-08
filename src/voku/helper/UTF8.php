@@ -6259,6 +6259,44 @@ final class UTF8
   }
 
   /**
+   * Changes all keys in an array.
+   *
+   * @param array $array <p>The array to work on</p>
+   * @param int $case [optional] <p> Either <strong>CASE_UPPER</strong><br />
+   *                  or <strong>CASE_LOWER</strong> (default)</p>
+   *
+   * @return array|false <p>An array with its keys lower or uppercased, or false if
+   *                     input is not an array.</p>
+   */
+  public static function array_change_key_case($array, $case = CASE_LOWER)
+  {
+    if (!is_array($array)) {
+      return false;
+    }
+
+    if (
+        $case !== CASE_LOWER
+        &&
+        $case !== CASE_UPPER
+    ) {
+      $case = CASE_UPPER;
+    }
+
+    $return = array();
+    foreach ($array as $key => $value) {
+      if ($case  === CASE_LOWER) {
+        $key = self::strtolower($key);
+      } else {
+        $key = self::strtoupper($key);
+      }
+
+      $return[$key] = $value;
+    }
+
+    return $return;
+  }
+
+  /**
    * Get part of a string.
    *
    * @link http://php.net/manual/en/function.mb-substr.php
