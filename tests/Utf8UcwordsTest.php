@@ -1,6 +1,7 @@
 <?php
 
 use voku\helper\UTF8 as u;
+use voku\helper\UTF8;
 
 /**
  * Class Utf8UcwordsTest
@@ -47,5 +48,25 @@ class Utf8UcwordsTest extends PHPUnit_Framework_TestCase
     $str = "iñt ërn âti\n ônà liz æti øn";
     $ucwords = "Iñt Ërn Âti\n Ônà Liz Æti Øn";
     self::assertSame($ucwords, u::ucwords($str));
+  }
+
+  public function testUcWords()
+  {
+    self::assertSame('Iñt Ërn ÂTi Ônà Liz Æti Øn', UTF8::ucwords('iñt ërn âTi ônà liz æti øn'));
+    self::assertSame("Iñt Ërn Âti\n Ônà Liz Æti  Øn", UTF8::ucwords("iñt ërn âti\n ônà liz æti  øn"));
+    self::assertSame('中文空白 foo Oo Oöäü#s', UTF8::ucwords('中文空白 foo oo oöäü#s', array('foo'), '#'));
+    self::assertSame('中文空白 foo Oo Oöäü#S', UTF8::ucwords('中文空白 foo oo oöäü#s', array('foo'), ''));
+    self::assertSame('', UTF8::ucwords(''));
+    self::assertSame('Ñ', UTF8::ucwords('ñ'));
+    self::assertSame("Iñt ËrN Âti\n Ônà Liz Æti Øn", UTF8::ucwords("iñt ërN âti\n ônà liz æti øn"));
+    self::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucwords('ñtërnâtiônàlizætIøN'));
+    self::assertSame('ÑtërnâtiônàlizætIøN Test câse', UTF8::ucwords('ñtërnâtiônàlizætIøN test câse', array('câse')));
+    self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ'));
+
+    self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('de')));
+    self::assertSame('Deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('d', 'e')));
+
+    self::assertSame('deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('deja')));
+    self::assertSame('deja Σσς DEJa σσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('deja', 'σσΣ')));
   }
 }
