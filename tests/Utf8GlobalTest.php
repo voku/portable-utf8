@@ -55,6 +55,27 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     error_reporting(E_STRICT);
   }
 
+  /**
+   * @return array
+   */
+  public function stripWhitespaceProvider()
+  {
+    return array(
+        array('foobar', '  foo   bar  '),
+        array('teststring', 'test string'),
+        array('Οσυγγραφέας', '   Ο     συγγραφέας  '),
+        array('123', ' 123 '),
+        array('', ' ', 'UTF-8'), // no-break space (U+00A0)
+        array('', '           ', 'UTF-8'), // spaces U+2000 to U+200A
+        array('', ' ', 'UTF-8'), // narrow no-break space (U+202F)
+        array('', ' ', 'UTF-8'), // medium mathematical space (U+205F)
+        array('', '　', 'UTF-8'), // ideographic space (U+3000)
+        array('123', '  1  2  3　　', 'UTF-8'),
+        array('', ' '),
+        array('', ''),
+    );
+  }
+
   public function testAccess()
   {
     $testArray = array(
@@ -92,6 +113,57 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ü',
     );
     self::assertSame($expected, $actual);
+  }
+
+  public function testChangeKeyCase()
+  {
+    // upper
+
+    $array = array(
+        'foo'   => 'a',
+        1       => 'b',
+        0       => 'c',
+        'Foo'   => 'd',
+        'FOO'   => 'e',
+        'ΣΣΣ'   => 'f',
+        'Κόσμε' => 'g',
+    );
+
+    $result = UTF8::array_change_key_case($array, CASE_UPPER);
+
+    $expected = array(
+        'FOO'   => 'e',
+        1       => 'b',
+        0       => 'c',
+        'ΣΣΣ'   => 'f',
+        'ΚΌΣΜΕ' => 'g',
+    );
+
+    self::assertSame($expected, $result);
+
+    // lower
+
+    $array = array(
+        'foo'   => 'a',
+        1       => 'b',
+        0       => 'c',
+        'Foo'   => 'd',
+        'FOO'   => 'e',
+        'ΣΣΣ'   => 'f',
+        'Κόσμε' => 'g',
+    );
+
+    $result = UTF8::array_change_key_case($array, CASE_LOWER);
+
+    $expected = array(
+        'foo'   => 'e',
+        1       => 'b',
+        0       => 'c',
+        'σσσ'   => 'f',
+        'κόσμε' => 'g',
+    );
+
+    self::assertSame($expected, $result);
   }
 
   public function testChar()
@@ -291,20 +363,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         self::assertSame($after, UTF8::cleanup($testString), $counter);
       }
       $counter++;
-    }
-  }
-
-  public function testStrReplaceFirst()
-  {
-    $testArray = array(
-        ''           => array('', '', ''),
-        ' lall lall' => array('lall', '', 'lall lall lall'),
-        'ö a l l '   => array('l', 'ö', 'l a l l '),
-        'κöäüσμε ό'  => array('ό', 'öäü', "κόσμε\xc2\xa0ό",),
-    );
-
-    foreach ($testArray as $after => $test) {
-      self::assertSame($after, UTF8::str_replace_first($test[0], $test[1], $test[2]));
     }
   }
 
@@ -1723,6 +1781,26 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertEquals('[1,"\u00a5","\u00e4"]', UTF8::json_encode(array(1, '¥', 'ä')));
   }
 
+  public function testLcWords()
+  {
+    self::assertSame('iñt ërn âTi ônà liz æti øn', UTF8::lcwords('Iñt ërn âTi ônà liz æti øn'));
+    self::assertSame("iñt ërn âti\n ônà liz æti  øn", UTF8::lcwords("Iñt Ërn Âti\n Ônà Liz Æti  Øn"));
+    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', array('foo'), '#'));
+    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', array('foo'), ''));
+    self::assertSame('', UTF8::lcwords(''));
+    self::assertSame('ñ', UTF8::lcwords('Ñ'));
+    self::assertSame("iñt ërN âti\n ônà liz æti øn", UTF8::lcwords("Iñt ËrN Âti\n Ônà Liz Æti Øn"));
+    self::assertSame('ñtërnâtiônàlizætIøN', UTF8::lcwords('ÑtërnâtiônàlizætIøN'));
+    self::assertSame('ñtërnâtiônàlizætIøN test câse', UTF8::lcwords('ÑtërnâtiônàlizætIøN Test câse', array('câse')));
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ'));
+
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', array('de')));
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', array('d', 'e')));
+
+    self::assertSame('DejA σσς dEJa σσΣ', UTF8::lcwords('DejA σσς dEJa σσΣ', array('DejA')));
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('deja σσς dEJa σσΣ', array('deja', 'σσΣ')));
+  }
+
   public function testLcfirst()
   {
     self::assertSame('', UTF8::lcfirst(''));
@@ -2461,6 +2539,20 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testStrReplaceFirst()
+  {
+    $testArray = array(
+        ''           => array('', '', ''),
+        ' lall lall' => array('lall', '', 'lall lall lall'),
+        'ö a l l '   => array('l', 'ö', 'l a l l '),
+        'κöäüσμε ό'  => array('ό', 'öäü', "κόσμε\xc2\xa0ό",),
+    );
+
+    foreach ($testArray as $after => $test) {
+      self::assertSame($after, UTF8::str_replace_first($test[0], $test[1], $test[2]));
+    }
+  }
+
   public function testStrShuffle()
   {
     $testArray = array(
@@ -2568,13 +2660,39 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testStrToWords()
   {
-    self::assertSame(array('iñt', 'ërn'), UTF8::str_to_words('iñt ërn I', '', false, 1));
+    self::assertSame(array('', 'iñt', ' ', 'ërn', ' ', 'I', ''), UTF8::str_to_words('iñt ërn I'));
     self::assertSame(array('iñt', 'ërn', 'I'), UTF8::str_to_words('iñt ërn I', '', true));
-    self::assertSame(array('', 'iñt', ' ', 'ërn', '',), UTF8::str_to_words('iñt ërn'));
+    self::assertSame(array('iñt', 'ërn'), UTF8::str_to_words('iñt ërn I', '', false, 1));
+
+    // ---
+
     self::assertSame(array('', 'âti', "\n ", 'ônà', ''), UTF8::str_to_words("âti\n ônà"));
     self::assertSame(array('', '中文空白', ' ', 'oöäü#s', ''), UTF8::str_to_words('中文空白 oöäü#s', '#'));
     self::assertSame(array('', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''), UTF8::str_to_words('foo oo oöäü#s', ''));
     self::assertSame(array(''), UTF8::str_to_words(''));
+
+    $testArray = array(
+        'Düsseldorf'                                                                                => 'Düsseldorf',
+        'Ã'                                                                                         => 'Ã',
+        'foobar  || 😃'                                                                             => 'foobar  || 😃',
+        ' '                                                                                         => ' ',
+        ''                                                                                          => '',
+        "\n"                                                                                        => "\n",
+        'test'                                                                                      => 'test',
+        'Here&#39;s some quoted text.'                                                              => 'Here&#39;s some quoted text.',
+        '&#39;'                                                                                     => '&#39;',
+        "\u0063\u0061\u0074"                                                                        => 'cat',
+        "\u0039&#39;\u0039"                                                                         => '9&#39;9',
+        '&#35;&#8419;'                                                                              => '&#35;&#8419;',
+        "\xcf\x80"                                                                                  => 'π',
+        'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
+        '%ABREPRESENT%C9%BB. «REPRESENTÉ»'                                                          => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
+        'éæ'                                                                                        => 'éæ',
+    );
+
+    foreach ($testArray as $test => $unused) {
+      self::assertSame($test, implode(UTF8::str_to_words($test)), '');
+    }
   }
 
   public function testStr_split()
@@ -2700,6 +2818,19 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  /**
+   * @dataProvider stripWhitespaceProvider()
+   *
+   * @param string $expected
+   * @param string $str
+   */
+  public function testStripWhitespace($expected, $str)
+  {
+    $result = UTF8::strip_whitespace($str);
+
+    self::assertSame($expected, $result);
+  }
+
   public function testStripos()
   {
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
@@ -2774,8 +2905,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame(57, strlen($string_test1)); // not correct
     }
 
-    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+    // only "mbstring" can handle broken UTF-8 by default
+    if (UTF8::mbstring_loaded() === true) {
       self::assertSame(54, UTF8::strlen($string_test2, 'UTF-8', false));
+    } else {
+      self::assertFalse(UTF8::strlen($string_test2, 'UTF-8', false));
     }
 
     self::assertSame(50, UTF8::strlen($string_test2, 'UTF-8', true));
@@ -2855,11 +2989,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($tests as $before => $after) {
       if ($after < 0) {
-        self::assertSame(true, UTF8::strncasecmp($before, 'ü', 10) < 0, 'tested: ' . $before);
+        self::assertTrue(UTF8::strncasecmp($before, 'ü', 10) < 0, 'tested: ' . $before);
       } elseif ($after > 0) {
-        self::assertSame(true, UTF8::strncasecmp($before, 'ü', 10) > 0, 'tested: ' . $before);
+        self::assertTrue(UTF8::strncasecmp($before, 'ü', 10) > 0, 'tested: ' . $before);
       } else {
-        self::assertSame(true, UTF8::strncasecmp($before, 'ü', 10) === 0, 'tested: ' . $before);
+        self::assertTrue(UTF8::strncasecmp($before, 'ü', 10) === 0, 'tested: ' . $before);
       }
 
     }
@@ -2884,11 +3018,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     foreach ($tests as $before => $after) {
       if ($after < 0) {
-        self::assertSame(true, UTF8::strncmp($before, 'ü', 10) < 0, 'tested: ' . $before);
+        self::assertTrue(UTF8::strncmp($before, 'ü', 10) < 0, 'tested: ' . $before);
       } elseif ($after > 0) {
-        self::assertSame(true, UTF8::strncmp($before, 'ü', 10) > 0, 'tested: ' . $before);
+        self::assertTrue(UTF8::strncmp($before, 'ü', 10) > 0, 'tested: ' . $before);
       } else {
-        self::assertSame(true, UTF8::strncmp($before, 'ü', 10) === 0, 'tested: ' . $before);
+        self::assertTrue(UTF8::strncmp($before, 'ü', 10) === 0, 'tested: ' . $before);
       }
     }
   }
@@ -3175,57 +3309,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
 
     self::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true, true));
-  }
-
-  public function testChangeKeyCase()
-  {
-    // upper
-
-    $array = array(
-        'foo'   => 'a',
-        1       => 'b',
-        0       => 'c',
-        'Foo'   => 'd',
-        'FOO'   => 'e',
-        'ΣΣΣ'   => 'f',
-        'Κόσμε' => 'g',
-    );
-
-    $result = UTF8::array_change_key_case($array, CASE_UPPER);
-
-    $expected = array(
-        'FOO'   => 'e',
-        1       => 'b',
-        0       => 'c',
-        'ΣΣΣ'   => 'f',
-        'ΚΌΣΜΕ' => 'g',
-    );
-
-    self::assertSame($expected, $result);
-
-    // lower
-
-    $array = array(
-        'foo'   => 'a',
-        1       => 'b',
-        0       => 'c',
-        'Foo'   => 'd',
-        'FOO'   => 'e',
-        'ΣΣΣ'   => 'f',
-        'Κόσμε' => 'g',
-    );
-
-    $result = UTF8::array_change_key_case($array, CASE_LOWER);
-
-    $expected = array(
-        'foo'   => 'e',
-        1       => 'b',
-        0       => 'c',
-        'σσσ'   => 'f',
-        'κόσμε' => 'g',
-    );
-
-    self::assertSame($expected, $result);
   }
 
   public function testStrtolower()
@@ -4442,27 +4525,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('Öäü', UTF8::ucword('öäü'));
   }
 
-
-  public function testLcWords()
-  {
-    self::assertSame('iñt ërn âTi ônà liz æti øn', UTF8::lcwords('Iñt ërn âTi ônà liz æti øn'));
-    self::assertSame("iñt ërn âti\n ônà liz æti  øn", UTF8::lcwords("Iñt Ërn Âti\n Ônà Liz Æti  Øn"));
-    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', array('foo'), '#'));
-    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', array('foo'), ''));
-    self::assertSame('', UTF8::lcwords(''));
-    self::assertSame('ñ', UTF8::lcwords('Ñ'));
-    self::assertSame("iñt ërN âti\n ônà liz æti øn", UTF8::lcwords("Iñt ËrN Âti\n Ônà Liz Æti Øn"));
-    self::assertSame('ñtërnâtiônàlizætIøN', UTF8::lcwords('ÑtërnâtiônàlizætIøN'));
-    self::assertSame('ñtërnâtiônàlizætIøN test câse', UTF8::lcwords('ÑtërnâtiônàlizætIøN Test câse', array('câse')));
-    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ'));
-
-    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', array('de')));
-    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', array('d', 'e')));
-
-    self::assertSame('DejA σσς dEJa σσΣ', UTF8::lcwords('DejA σσς dEJa σσΣ', array('DejA')));
-    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('deja σσς dEJa σσΣ', array('deja', 'σσΣ')));
-  }
-
   public function testUrldecode()
   {
     $testArray = array(
@@ -5017,40 +5079,6 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
             'do not go gentle into that good night',
             'do not go gentle into that good night',
         ),
-    );
-  }
-
-  /**
-   * @dataProvider stripWhitespaceProvider()
-   *
-   * @param string $expected
-   * @param string $str
-   */
-  public function testStripWhitespace($expected, $str)
-  {
-    $result = UTF8::strip_whitespace($str);
-
-    self::assertSame($expected, $result);
-  }
-
-  /**
-   * @return array
-   */
-  public function stripWhitespaceProvider()
-  {
-    return array(
-        array('foobar', '  foo   bar  '),
-        array('teststring', 'test string'),
-        array('Οσυγγραφέας', '   Ο     συγγραφέας  '),
-        array('123', ' 123 '),
-        array('', ' ', 'UTF-8'), // no-break space (U+00A0)
-        array('', '           ', 'UTF-8'), // spaces U+2000 to U+200A
-        array('', ' ', 'UTF-8'), // narrow no-break space (U+202F)
-        array('', ' ', 'UTF-8'), // medium mathematical space (U+205F)
-        array('', '　', 'UTF-8'), // ideographic space (U+3000)
-        array('123', '  1  2  3　　', 'UTF-8'),
-        array('', ' '),
-        array('', ''),
     );
   }
 }

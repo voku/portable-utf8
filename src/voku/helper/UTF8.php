@@ -825,11 +825,12 @@ final class UTF8
   public static function access($str, $pos)
   {
     $str = (string)$str;
-    $pos = (int)$pos;
 
     if (!isset($str[0])) {
       return '';
     }
+
+    $pos = (int)$pos;
 
     if ($pos < 0) {
       return '';
@@ -2072,19 +2073,19 @@ final class UTF8
    *
    * INFO: opposite to UTF8::int_to_hex()
    *
-   * @param string $hexdec <p>The hexadecimal code point representation.</p>
+   * @param string $hexDec <p>The hexadecimal code point representation.</p>
    *
    * @return int|false <p>The code point, or false on failure.</p>
    */
-  public static function hex_to_int($hexdec)
+  public static function hex_to_int($hexDec)
   {
-    $hexdec = (string)$hexdec;
+    $hexDec = (string)$hexDec;
 
-    if (!isset($hexdec[0])) {
+    if (!isset($hexDec[0])) {
       return false;
     }
 
-    if (preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $hexdec, $match)) {
+    if (preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $hexDec, $match)) {
       return intval($match[1], 16);
     }
 
@@ -3578,7 +3579,6 @@ final class UTF8
    */
   public static function normalize_msword($str)
   {
-    // init
     $str = (string)$str;
 
     if (!isset($str[0])) {
@@ -3608,7 +3608,6 @@ final class UTF8
    */
   public static function normalize_whitespace($str, $keepNonBreakingSpace = false, $keepBidiUnicodeControls = false)
   {
-    // init
     $str = (string)$str;
 
     if (!isset($str[0])) {
@@ -3654,7 +3653,6 @@ final class UTF8
    */
   public static function strip_whitespace($str)
   {
-    // init
     $str = (string)$str;
 
     if (!isset($str[0])) {
@@ -4033,10 +4031,6 @@ final class UTF8
         self::checkForSupport();
       }
 
-      if (self::$SUPPORT['mbstring'] === false) {
-        trigger_error('UTF8::replace_diamond_question_mark() without mbstring cannot handle all chars correctly', E_USER_WARNING);
-      }
-
       $save = \mb_substitute_character();
       \mb_substitute_character($replacementCharHelper);
       /** @noinspection CallableParameterUseCaseInTypeContextInspection */
@@ -4131,7 +4125,7 @@ final class UTF8
   }
 
   /**
-   * WARNING: Echo native UTF8-Support libs, e.g. for debugging.
+   * WARNING: Print native UTF-8 support (libs), e.g. for debugging.
    */
   public static function showSupport()
   {
@@ -4155,7 +4149,6 @@ final class UTF8
    */
   public static function single_chr_html_encode($char, $keepAsciiChars = false, $encoding = 'UTF-8')
   {
-    // init
     $char = (string)$char;
 
     if (!isset($char[0])) {
@@ -4751,13 +4744,13 @@ final class UTF8
    */
   public static function str_split($str, $len = 1)
   {
-    // init
-    $len = (int)$len;
     $str = (string)$str;
 
     if (!isset($str[0])) {
       return array();
     }
+
+    $len = (int)$len;
 
     if ($len < 1) {
       return str_split($str, $len);
@@ -4830,15 +4823,14 @@ final class UTF8
    * Convert a string into an array of words.
    *
    * @param string   $str
-   * @param string   $charlist
-   * @param bool     $removeEmptyValues
+   * @param string   $charList <p>Additional chars for the definition of "words".</p>
+   * @param bool     $removeEmptyValues <p>Remove empty values. WARNING: you need this if you </p>
    * @param null|int $removeShortValues
    *
    * @return array
    */
-  public static function str_to_words($str, $charlist = '', $removeEmptyValues = false, $removeShortValues = null)
+  public static function str_to_words($str, $charList = '', $removeEmptyValues = false, $removeShortValues = null)
   {
-    // init
     $str = (string)$str;
 
     if ($removeShortValues !== null) {
@@ -4853,9 +4845,9 @@ final class UTF8
       return array('');
     }
 
-    $charlist = self::rxClass($charlist, '\pL');
+    $charList = self::rxClass($charList, '\pL');
 
-    $return = \preg_split("/({$charlist}+(?:[\p{Pd}’']{$charlist}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $return = \preg_split("/({$charList}+(?:[\p{Pd}’']{$charList}+)*)/u", $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 
     if (
         $removeShortValues === null
@@ -5131,7 +5123,7 @@ final class UTF8
       return '';
     }
 
-    if ($cleanUtf8) {
+    if ($cleanUtf8 === true) {
       $str = self::clean($str);
     }
 
@@ -7756,12 +7748,12 @@ final class UTF8
    * Limit the number of words in a string.
    *
    * @param string $str      <p>The input string.</p>
-   * @param int    $words    <p>The limit of words as integer.</p>
+   * @param int    $limit    <p>The limit of words as integer.</p>
    * @param string $strAddOn <p>Replacement for the striped string.</p>
    *
    * @return string
    */
-  public static function words_limit($str, $words = 100, $strAddOn = '...')
+  public static function words_limit($str, $limit = 100, $strAddOn = '...')
   {
     $str = (string)$str;
 
@@ -7769,13 +7761,14 @@ final class UTF8
       return '';
     }
 
-    $words = (int)$words;
+    // init
+    $limit = (int)$limit;
 
-    if ($words < 1) {
+    if ($limit < 1) {
       return '';
     }
 
-    preg_match('/^\s*+(?:\S++\s*+){1,' . $words . '}/u', $str, $matches);
+    preg_match('/^\s*+(?:\S++\s*+){1,' . $limit . '}/u', $str, $matches);
 
     if (
         !isset($matches[0])
