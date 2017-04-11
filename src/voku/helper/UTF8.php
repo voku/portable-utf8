@@ -1270,7 +1270,7 @@ final class UTF8
    * Returns count of characters used in a string.
    *
    * @param string $str       <p>The input string.</p>
-   * @param bool   $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return array <p>An associative array of Character as keys and
    *               their count as values.</p>
@@ -3318,8 +3318,8 @@ final class UTF8
    * Makes string's first char lowercase.
    *
    * @param string $str <p>The input string</p>
-   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string  $encoding  [optional] <p>Set the charset.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string <p>The resulting string</p>
    */
@@ -3361,8 +3361,8 @@ final class UTF8
    * @param string   $str        <p>The input string.</p>
    * @param string[] $exceptions [optional] <p>Exclusion for some words.</p>
    * @param string   $charlist   [optional] <p>Additional chars that contains to words and do not start a new word.</p>
-   * @param string   $encoding   [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean  $cleanUtf8  [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string   $encoding   [optional] <p>Set the charset.</p>
+   * @param boolean  $cleanUtf8  [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string
    */
@@ -3774,7 +3774,7 @@ final class UTF8
    *
    * @param string  $str       <p>The input string.</p>
    * @param array   $result    <p>The result will be returned into this reference parameter.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return bool <p>Will return <strong>false</strong> if php can't parse the string and we haven't any $result.</p>
    */
@@ -4175,7 +4175,7 @@ final class UTF8
    *
    * @param string  $str       <p>The string to split into array.</p>
    * @param int     $length    [optional] <p>Max character length of each array element.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string[] <p>An array containing chunks of the string.</p>
    */
@@ -4824,7 +4824,7 @@ final class UTF8
    *
    * @param string   $str
    * @param string   $charList <p>Additional chars for the definition of "words".</p>
-   * @param bool     $removeEmptyValues <p>Remove empty values. WARNING: you need this if you </p>
+   * @param bool     $removeEmptyValues <p>Remove empty values.</p>
    * @param null|int $removeShortValues
    *
    * @return array
@@ -5111,7 +5111,7 @@ final class UTF8
    *                                HTML comments and PHP tags are also stripped. This is hardcoded and
    *                                can not be changed with allowable_tags.
    *                                </p>
-   * @param boolean $cleanUtf8      [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean $cleanUtf8      [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string <p>The stripped string.</p>
    */
@@ -5135,19 +5135,11 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-stripos.php
    *
-   * @param string  $haystack  <p>
-   *                           The string from which to get the position of the first occurrence
-   *                           of needle
-   *                           </p>
-   * @param string  $needle    <p>
-   *                           The string to find in haystack
-   *                           </p>
-   * @param int     $offset    [optional] <p>
-   *                           The position in haystack
-   *                           to start searching
-   *                           </p>
-   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string  $haystack  <p>The string from which to get the position of the first occurrence of needle.</p>
+   * @param string  $needle    <p>The string to find in haystack.</p>
+   * @param int     $offset    [optional] <p>The position in haystack to start searching.</p>
+   * @param string  $encoding  [optional] <p>Set the charset.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int|false <p>
    *                   Return the numeric position of the first occurrence of needle in the haystack string,<br />
@@ -5209,7 +5201,7 @@ final class UTF8
    *                               haystack before the first occurrence of the needle (excluding the needle).
    *                               </p>
    * @param string  $encoding      [optional] <p>Set the charset for e.g. "\mb_" function</p>
-   * @param boolean $cleanUtf8     [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean $cleanUtf8     [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return false|string A sub-string,<br />or <strong>false</strong> if needle is not found.
    */
@@ -5279,8 +5271,8 @@ final class UTF8
    * @link     http://php.net/manual/en/function.mb-strlen.php
    *
    * @param string  $str       <p>The string being checked for length.</p>
-   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string  $encoding  [optional] <p>Set the charset.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int <p>The number of characters in the string $str having character encoding $encoding. (One multi-byte
    *             character counted as +1)</p>
@@ -5482,11 +5474,11 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strpos.php
    *
-   * @param string  $haystack  <p>The string being checked.</p>
-   * @param string  $needle    <p>The position counted from the beginning of haystack.</p>
+   * @param string  $haystack  <p>The string from which to get the position of the first occurrence of needle.</p>
+   * @param string  $needle    <p>The string to find in haystack.</p>
    * @param int     $offset    [optional] <p>The search offset. If it is not specified, 0 is used.</p>
-   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string  $encoding  [optional] <p>Set the charset.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int|false <p>
    *                   The numeric position of the first occurrence of needle in the haystack string.<br />
@@ -5633,7 +5625,7 @@ final class UTF8
    *                              Character encoding name to use.
    *                              If it is omitted, internal character encoding is used.
    *                              </p>
-   * @param bool   $cleanUtf8     [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param bool   $cleanUtf8     [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string|false The portion of haystack or false if needle is not found.
    */
@@ -5691,7 +5683,7 @@ final class UTF8
    *                               Character encoding name to use.
    *                               If it is omitted, internal character encoding is used.
    *                               </p>
-   * @param boolean $cleanUtf8     [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean $cleanUtf8     [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string|false <p>The portion of haystack or<br />false if needle is not found.</p>
    */
@@ -5717,8 +5709,8 @@ final class UTF8
    * @param string  $haystack  <p>The string to look in.</p>
    * @param string  $needle    <p>The string to look for.</p>
    * @param int     $offset    [optional] <p>Number of characters to ignore in the beginning or end.</p>
-   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string  $encoding  [optional] <p>Set the charset.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int|false <p>
    *                   The numeric position of the last occurrence of needle in the haystack string.<br />If needle is
@@ -5803,8 +5795,8 @@ final class UTF8
    *                              into the string. Negative values will stop searching at an arbitrary point prior to
    *                              the end of the string.
    *                              </p>
-   * @param string     $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean    $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string     $encoding  [optional] <p>Set the charset.</p>
+   * @param boolean    $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int|false <p>The numeric position of the last occurrence of needle in the haystack string.<br />If needle
    *                   is not found, it returns false.</p>
@@ -5933,8 +5925,8 @@ final class UTF8
    *                               If <b>TRUE</b>, strstr() returns the part of the
    *                               haystack before the first occurrence of the needle (excluding the needle).
    *                               </p>
-   * @param string  $encoding      [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean $cleanUtf8     [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string  $encoding      [optional] <p>Set the charset.</p>
+   * @param boolean $cleanUtf8     [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string|false A sub-string,<br />or <strong>false</strong> if needle is not found.
    */
@@ -6007,7 +5999,7 @@ final class UTF8
    *                           <b>true</b>, replace full case folding chars (default)<br />
    *                           <b>false</b>, use only limited static array [UTF8::$commonCaseFold]
    *                           </p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string
    */
@@ -6056,7 +6048,7 @@ final class UTF8
    *
    * @param string      $str       <p>The string being lowercased.</p>
    * @param string      $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
-   * @param boolean     $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean     $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    * @param string|null $lang      [optional] <p>Set the language for special cases: az, el, lt, tr</p>
    *
    * @return string str with all alphabetic characters converted to lowercase.
@@ -6126,8 +6118,8 @@ final class UTF8
    * @link http://php.net/manual/en/function.mb-strtoupper.php
    *
    * @param string      $str       <p>The string being uppercased.</p>
-   * @param string      $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean     $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string      $encoding  [optional] <p>Set the charset.</p>
+   * @param boolean     $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    * @param string|null $lang      [optional] <p>Set the language for special cases: az, el, lt, tr</p>
    *
    * @return string str with all alphabetic characters converted to uppercase.
@@ -6230,7 +6222,7 @@ final class UTF8
    *
    * @param string  $str       <p>The input string.</p>
    * @param string  $encoding  [optional] <p>Default is UTF-8</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int
    */
@@ -6297,7 +6289,7 @@ final class UTF8
    * @param int     $offset    <p>The first position used in str.</p>
    * @param int     $length    [optional] <p>The maximum length of the returned string.</p>
    * @param string  $encoding  [optional] <p>Default is UTF-8</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string|false <p>The portion of <i>str</i> specified by the <i>offset</i> and
    *                      <i>length</i> parameters.</p><p>If <i>str</i> is shorter than <i>offset</i>
@@ -6452,8 +6444,8 @@ final class UTF8
    *                           substring. It outputs a warning if the offset plus the length is
    *                           greater than the haystack length.
    *                           </p>
-   * @param string  $encoding  <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string  $encoding  <p>Set the charset.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int|false <p>This functions returns an integer or false if there isn't a string.</p>
    */
@@ -6762,7 +6754,7 @@ final class UTF8
    *
    * @param string  $str       <p>The input string.</p>
    * @param string  $encoding  [optional] <p>Default is UTF-8</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string <p>Each character's case swapped.</p>
    */
@@ -7238,8 +7230,8 @@ final class UTF8
    * Makes string's first char uppercase.
    *
    * @param string  $str       <p>The input string.</p>
-   * @param string  $encoding  [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean $cleanUtf8 [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string  $encoding  [optional] <p>Set the charset.</p>
+   * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string <p>The resulting string</p>
    */
@@ -7281,8 +7273,8 @@ final class UTF8
    * @param string   $str        <p>The input string.</p>
    * @param string[] $exceptions [optional] <p>Exclusion for some words.</p>
    * @param string   $charlist   [optional] <p>Additional chars that contains to words and do not start a new word.</p>
-   * @param string   $encoding   [optional] <p>Set the charset for e.g. "\mb_" function.</p>
-   * @param boolean  $cleanUtf8  [optional] <p>Clean non UTF-8 chars from the string.</p>
+   * @param string   $encoding   [optional] <p>Set the charset.</p>
+   * @param boolean  $cleanUtf8  [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string
    */
