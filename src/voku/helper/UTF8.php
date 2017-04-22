@@ -7102,7 +7102,7 @@ final class UTF8
     } else {
       $max = strlen($str);
     }
-
+    
     $buf = '';
 
     /** @noinspection ForeachInvariantsInspection */
