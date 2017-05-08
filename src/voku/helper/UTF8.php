@@ -981,20 +981,20 @@ final class UTF8
       return $CHAR_CACHE[$cacheKey];
     }
 
-    if (0x80 > $code_point %= 0x200000) {
+    if ($code_point <= 0x7F) {
       $str = self::chr_and_parse_int($code_point);
-    } elseif (0x800 > $code_point) {
-      $str = self::chr_and_parse_int(0xC0 | $code_point >> 6) .
-             self::chr_and_parse_int(0x80 | $code_point & 0x3F);
-    } elseif (0x10000 > $code_point) {
-      $str = self::chr_and_parse_int(0xE0 | $code_point >> 12) .
-             self::chr_and_parse_int(0x80 | $code_point >> 6 & 0x3F) .
-             self::chr_and_parse_int(0x80 | $code_point & 0x3F);
+    } else if ($code_point <= 0x7FF) {
+      $str = self::chr_and_parse_int(($code_point >> 6) + 0xC0) .
+             self::chr_and_parse_int(($code_point & 0x3F) + 0x80);
+    } else if ($code_point <= 0xFFFF) {
+      $str = self::chr_and_parse_int(($code_point >> 12) + 0xE0) .
+             self::chr_and_parse_int((($code_point >> 6) & 0x3F) + 0x80) .
+             self::chr_and_parse_int(($code_point & 0x3F) + 0x80);
     } else {
-      $str = self::chr_and_parse_int(0xF0 | $code_point >> 18) .
-             self::chr_and_parse_int(0x80 | $code_point >> 12 & 0x3F) .
-             self::chr_and_parse_int(0x80 | $code_point >> 6 & 0x3F) .
-             self::chr_and_parse_int(0x80 | $code_point & 0x3F);
+      $str = self::chr_and_parse_int(($code_point >> 18) + 0xF0) .
+             self::chr_and_parse_int((($code_point >> 12) & 0x3F) + 0x80) .
+             self::chr_and_parse_int((($code_point >> 6) & 0x3F) + 0x80) .
+             self::chr_and_parse_int(($code_point & 0x3F) + 0x80);
     }
 
     if ($encoding !== 'UTF-8') {
@@ -1457,21 +1457,21 @@ final class UTF8
    *                                     stream_context_create. If you don't need to use a
    *                                     custom context, you can skip this parameter by &null;.
    *                                     </p>
-   * @param int|null      $offset        [optional] <p>
+   * @param int|null $offset             [optional] <p>
    *                                     The offset where the reading starts.
    *                                     </p>
-   * @param int|null      $maxlen        [optional] <p>
+   * @param int|null $maxLength          [optional] <p>
    *                                     Maximum length of data read. The default is to read until end
    *                                     of file is reached.
    *                                     </p>
-   * @param int           $timeout       <p>The time in seconds for the timeout.</p>
+   * @param int      $timeout            <p>The time in seconds for the timeout.</p>
    *
-   * @param boolean       $convertToUtf8 <strong>WARNING!!!</strong> <p>Maybe you can't use this option for e.g. images
+   * @param boolean  $convertToUtf8      <strong>WARNING!!!</strong> <p>Maybe you can't use this option for e.g. images
    *                                     or pdf, because they used non default utf-8 chars</p>
    *
    * @return string <p>The function returns the read data or false on failure.</p>
    */
-  public static function file_get_contents($filename, $flags = null, $context = null, $offset = null, $maxlen = null, $timeout = 10, $convertToUtf8 = true)
+  public static function file_get_contents($filename, $flags = null, $context = null, $offset = null, $maxLength = null, $timeout = 10, $convertToUtf8 = true)
   {
     // init
     $timeout = (int)$timeout;
@@ -1496,8 +1496,8 @@ final class UTF8
       $offset = 0;
     }
 
-    if (is_int($maxlen) === true) {
-      $data = file_get_contents($filename, $flags, $context, $offset, $maxlen);
+    if (is_int($maxLength) === true) {
+      $data = file_get_contents($filename, $flags, $context, $offset, $maxLength);
     } else {
       $data = file_get_contents($filename, $flags, $context, $offset);
     }
@@ -3801,6 +3801,7 @@ final class UTF8
   public static function pcre_utf8_support()
   {
     /** @noinspection PhpUsageOfSilenceOperatorInspection */
+    /** @noinspection UsageOfSilenceOperatorInspection */
     return (bool)@preg_match('//u', '');
   }
 
@@ -5020,7 +5021,7 @@ final class UTF8
       if ($strTmp === false) {
         return null;
       }
-      $str = $strTmp;
+      $str = (string)$strTmp;
     }
 
     $str = (string)$str;
@@ -7653,6 +7654,7 @@ final class UTF8
           $str[$j] = $c < 256 ? self::chr_and_parse_int($c) : '?';
           break;
 
+        /** @noinspection PhpMissingBreakStatementInspection */
         case "\xF0":
           ++$i;
         case "\xE0":
