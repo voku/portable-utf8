@@ -983,10 +983,10 @@ final class UTF8
 
     if ($code_point <= 0x7F) {
       $str = self::chr_and_parse_int($code_point);
-    } else if ($code_point <= 0x7FF) {
+    } elseif ($code_point <= 0x7FF) {
       $str = self::chr_and_parse_int(($code_point >> 6) + 0xC0) .
              self::chr_and_parse_int(($code_point & 0x3F) + 0x80);
-    } else if ($code_point <= 0xFFFF) {
+    } elseif ($code_point <= 0xFFFF) {
       $str = self::chr_and_parse_int(($code_point >> 12) + 0xE0) .
              self::chr_and_parse_int((($code_point >> 6) & 0x3F) + 0x80) .
              self::chr_and_parse_int(($code_point & 0x3F) + 0x80);
