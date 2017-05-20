@@ -31,6 +31,18 @@ class Utf8AsciiTest extends PHPUnit_Framework_TestCase
     self::assertTrue(UTF8::is_ascii($str));
   }
 
+  public function testNewLine()
+  {
+    $str = "a\nb\nc";
+    self::assertTrue(UTF8::is_ascii($str));
+  }
+
+  public function testTab()
+  {
+    $str = "a\tb\tc";
+    self::assertTrue(UTF8::is_ascii($str));
+  }
+
   public function testUtf8ToAscii()
   {
     $str = 'testiñg';
@@ -65,5 +77,17 @@ class Utf8AsciiTest extends PHPUnit_Framework_TestCase
   {
     $str = "a\x00b\x00c";
     self::assertEquals('abc', UTF8::to_ascii($str));
+  }
+
+  public function testNewLineToAscii()
+  {
+    $str = "a\nb\nc";
+    self::assertEquals("a\nb\nc", UTF8::to_ascii($str));
+  }
+
+  public function testTabToAscii()
+  {
+    $str = "a\tb\tc";
+    self::assertEquals("a\tb\tc", UTF8::to_ascii($str));
   }
 }
