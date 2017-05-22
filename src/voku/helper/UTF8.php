@@ -2788,7 +2788,7 @@ final class UTF8
       return true;
     }
 
-    return (bool)!preg_match('/[\x80-\xFF]/', $str);
+    return (bool)!preg_match('/[^\x09\x10\x13\x0A\x0D\x20-\x7E]/', $str);
   }
 
   /**
@@ -6881,9 +6881,14 @@ final class UTF8
       return '';
     }
 
+    // check if we only have ASCII, first (better performance)
+    if (self::is_ascii($str) === true) {
+      return $str;
+    }
+
     $str = self::clean($str, true, true, true);
 
-    // check if we only have ASCII
+    // check again, if we only have ASCII, now ...
     if (self::is_ascii($str) === true) {
       return $str;
     }
