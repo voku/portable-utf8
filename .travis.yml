@@ -3,7 +3,6 @@ language: php
 sudo: false
 
 php:
-  - hhvm
   - nightly
 
 os:
@@ -24,51 +23,7 @@ matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
-    - php: hhvm-3.3
-    - php: hhvm-3.6
-    - php: hhvm-3.9
-    - php: hhvm-3.12
   include:
-    - php: hhvm-3.3
-      env: extension=true
-      sudo: required
-      dist: trusty
-      group: edge
-    - php: hhvm-3.3
-      env: extension=false
-      sudo: required
-      dist: trusty
-      group: edge
-    - php: hhvm-3.6
-      env: extension=true
-      sudo: required
-      dist: trusty
-      group: edge
-    - php: hhvm-3.6
-      env: extension=false
-      sudo: required
-      dist: trusty
-      group: edge
-    - php: hhvm-3.9
-      env: extension=true
-      sudo: required
-      dist: trusty
-      group: edge
-    - php: hhvm-3.9
-      env: extension=false
-      sudo: required
-      dist: trusty
-      group: edge
-    - php: hhvm-3.12
-      env: extension=true
-      sudo: required
-      dist: trusty
-      group: edge
-    - php: hhvm-3.12
-      env: extension=false
-      sudo: required
-      dist: trusty
-      group: edge
     - php: 5.3
       env: extension=true
     - php: 5.3
