@@ -16,7 +16,7 @@ static $data = array(
 't', 'p', 'h', 'gl', 'gsg', 'ng', 'nd', 'ns', 'nZ', 'nt', 'dg', 'tl', 'lgs', 'ln', 'ld', 'lth',
 'll', 'lmg', 'lms', 'lbs', 'lbh', 'rNp', 'lss', 'lZ', 'lk', 'lQ', 'mg', 'ml', 'mb', 'ms', 'mss', 'mZ',
 'mc', 'mh', 'mN', 'bl', 'bp', 'ph', 'pN', 'sg', 'sd', 'sl', 'sb', 'Z', 'g', 'ss', '', 'kh',
-'N', 'Ns', 'NZ', 'pb', 'pN', 'hn', 'hl', 'hm', 'hb', 'Q', '[?]', '[?]', '[?]', '[?]', '[?]',
+'N', 'Ns', 'NZ', 'pb', 'pN', 'hn', 'hl', 'hm', 'hb', 'Q', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]',
 );
 
 $result =& $data;

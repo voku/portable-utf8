@@ -1,6 +1,6 @@
 <?php
 
-use Symfony\Polyfill\Xml\Xml as p;
+use Symfony\Polyfill\Php72\Php72 as p;
 
 /**
  * Class ShimXmlTest

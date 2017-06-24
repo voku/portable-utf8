@@ -34,18 +34,19 @@ class Bootup
     );
 
     /** @noinspection ReferenceMismatchInspection */
+    /** @noinspection ForeachSourceInspection */
     foreach ($a[0] as &$r) {
       $a[] = array(
           &$r['name'],
           &$r['type'],
       );
     }
-    unset($r);
-    unset($a[0]);
+    unset($r, $a[0]);
 
     $len = count($a) + 1;
     for ($i = 1; $i < $len; ++$i) {
       /** @noinspection ReferenceMismatchInspection */
+      /** @noinspection ForeachSourceInspection */
       foreach ($a[$i] as &$r) {
         /** @noinspection ReferenceMismatchInspection */
         $s = $r; // $r is a reference, $s a copy
@@ -55,8 +56,7 @@ class Bootup
           $r = self::filterString($s, $normalization_form, $leading_combining);
         }
       }
-      unset($r);
-      unset($a[$i]);
+      unset($r, $a[$i]);
     }
   }
 
@@ -71,11 +71,12 @@ class Bootup
   public static function filterRequestUri($uri = null, $exit = true)
   {
     if (!isset($uri)) {
+
       if (!isset($_SERVER['REQUEST_URI'])) {
         return false;
-      } else {
-        $uri = $_SERVER['REQUEST_URI'];
       }
+
+      $uri = $_SERVER['REQUEST_URI'];
     }
 
     $uriOrig = $uri;
