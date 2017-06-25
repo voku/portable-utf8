@@ -7117,32 +7117,9 @@ final class UTF8
 
     /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $max; $i++) {
-
       $c1 = $str[$i];
-      $c2 = $i + 1 >= $max ? "\x00" : $text{$i + 1};
-      $c3 = $i + 2 >= $max ? "\x00" : $text{$i + 2};
-      $c4 = $i + 3 >= $max ? "\x00" : $text{$i + 3};
-      $c5 = $i + 4 >= $max ? "\x00" : $text{$i + 4};
 
-      if ($c1 === "\x61" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
-        $buf .= "\xc3\xa1"; // á
-        $i += 4;
-      } else if ($c1 === "\x65" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
-        $buf .= "\xc3\xa9"; // é
-        $i += 4;
-      } else if ($c1 === "\x69" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
-        $buf .= "\xc3\xad"; // í
-        $i += 4;
-      } else if ($c1 === "\x6F" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
-        $buf .= "\xc3\xb3"; // ó
-        $i += 4;
-      } else if ($c1 === "\x75" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
-        $buf .= "\xc3\xba"; // ú
-        $i += 4;
-      } else if ($c1 === "\x6e" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
-        $buf .= "\xc3\xb1"; // ñ
-        $i += 4;
-      } else if ($c1 >= "\xC0") { // should be converted to UTF8, if it's not UTF8 already
+      if ($c1 >= "\xC0") { // should be converted to UTF8, if it's not UTF8 already
 
         if ($c1 <= "\xDF") { // looks like 2 bytes UTF8
 
@@ -7152,10 +7129,7 @@ final class UTF8
             $buf .= $c1 . $c2;
             $i++;
           } else { // not valid UTF8 - convert it
-            $cc1tmp = ord($c1) / 64;
-            $cc1 = self::chr_and_parse_int($cc1tmp) | "\xC0";
-            $cc2 = ($c1 & "\x3F") | "\x80";
-            $buf .= $cc1 . $cc2;
+            $buf .= self::to_utf8_convert($c1);
           }
 
         } elseif ($c1 >= "\xE0" && $c1 <= "\xEF") { // looks like 3 bytes UTF8
@@ -7167,10 +7141,7 @@ final class UTF8
             $buf .= $c1 . $c2 . $c3;
             $i += 2;
           } else { // not valid UTF8 - convert it
-            $cc1tmp = ord($c1) / 64;
-            $cc1 = self::chr_and_parse_int($cc1tmp) | "\xC0";
-            $cc2 = ($c1 & "\x3F") | "\x80";
-            $buf .= $cc1 . $cc2;
+            $buf .= self::to_utf8_convert($c1);
           }
 
         } elseif ($c1 >= "\xF0" && $c1 <= "\xF7") { // looks like 4 bytes UTF8
@@ -7183,29 +7154,16 @@ final class UTF8
             $buf .= $c1 . $c2 . $c3 . $c4;
             $i += 3;
           } else { // not valid UTF8 - convert it
-            $cc1tmp = ord($c1) / 64;
-            $cc1 = self::chr_and_parse_int($cc1tmp) | "\xC0";
-            $cc2 = ($c1 & "\x3F") | "\x80";
-            $buf .= $cc1 . $cc2;
+            $buf .= self::to_utf8_convert($c1);
           }
 
         } else { // doesn't look like UTF8, but should be converted
-          $cc1tmp = ord($c1) / 64;
-          $cc1 = self::chr_and_parse_int($cc1tmp) | "\xC0";
-          $cc2 = ($c1 & "\x3F") | "\x80";
-          $buf .= $cc1 . $cc2;
+          $buf .= self::to_utf8_convert($c1);
         }
 
       } elseif (($c1 & "\xC0") === "\x80") { // needs conversion
 
-        $ordC1 = ord($c1);
-        if (isset(self::$WIN1252_TO_UTF8[$ordC1])) { // found in Windows-1252 special cases
-          $buf .= self::$WIN1252_TO_UTF8[$ordC1];
-        } else {
-          $cc1 = self::chr_and_parse_int($ordC1 / 64) | "\xC0";
-          $cc2 = ($c1 & "\x3F") | "\x80";
-          $buf .= $cc1 . $cc2;
-        }
+        $buf .= self::to_utf8_convert($c1);
 
       } else { // it doesn't need conversion
         $buf .= $c1;
@@ -7224,6 +7182,27 @@ final class UTF8
     // decode UTF-8 codepoints
     if ($decodeHtmlEntityToUtf8 === true) {
       $buf = self::html_entity_decode($buf);
+    }
+
+    return $buf;
+  }
+
+  /**
+   * @param int $int
+   *
+   * @return string
+   */
+  private static function to_utf8_convert($int)
+  {
+    $buf = '';
+
+    $ordC1 = ord($int);
+    if (isset(self::$WIN1252_TO_UTF8[$ordC1])) { // found in Windows-1252 special cases
+      $buf .= self::$WIN1252_TO_UTF8[$ordC1];
+    } else {
+      $cc1 = self::chr_and_parse_int($ordC1 / 64) | "\xC0";
+      $cc2 = ($int & "\x3F") | "\x80";
+      $buf .= $cc1 . $cc2;
     }
 
     return $buf;
