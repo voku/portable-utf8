@@ -7127,22 +7127,22 @@ final class UTF8
       if ($c1 === "\x61" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
         $buf .= "\xc3\xa1"; // á
         $i += 4;
-      } else if ($c1 === "\x65" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+      } elseif ($c1 === "\x65" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
         $buf .= "\xc3\xa9"; // é
         $i += 4;
-      } else if ($c1 === "\x69" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+      } elseif ($c1 === "\x69" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
         $buf .= "\xc3\xad"; // í
         $i += 4;
-      } else if ($c1 === "\x6F" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+      } elseif ($c1 === "\x6F" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
         $buf .= "\xc3\xb3"; // ó
         $i += 4;
-      } else if ($c1 === "\x75" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+      } elseif ($c1 === "\x75" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
         $buf .= "\xc3\xba"; // ú
         $i += 4;
-      } else if ($c1 === "\x6e" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+      } elseif ($c1 === "\x6e" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
         $buf .= "\xc3\xb1"; // ñ
         $i += 4;
-      } else if ($c1 >= "\xC0") { // should be converted to UTF8, if it's not UTF8 already
+      } elseif ($c1 >= "\xC0") { // should be converted to UTF8, if it's not UTF8 already
 
         if ($c1 <= "\xDF") { // looks like 2 bytes UTF8
 
