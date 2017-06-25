@@ -44,6 +44,8 @@ final class UTF8
       156 => "\xc5\x93", // LATIN SMALL LIGATURE OE
       158 => "\xc5\xbe", // LATIN SMALL LETTER Z WITH CARON
       159 => "\xc5\xb8", // LATIN CAPITAL LETTER Y WITH DIAERESIS
+      164 => "\xc3\xb1", // ñ
+      165 => "\xc3\x91", // Ñ
   );
 
   /**
@@ -7117,8 +7119,30 @@ final class UTF8
     for ($i = 0; $i < $max; $i++) {
 
       $c1 = $str[$i];
+      $c2 = $i + 1 >= $max ? "\x00" : $text{$i + 1};
+      $c3 = $i + 2 >= $max ? "\x00" : $text{$i + 2};
+      $c4 = $i + 3 >= $max ? "\x00" : $text{$i + 3};
+      $c5 = $i + 4 >= $max ? "\x00" : $text{$i + 4};
 
-      if ($c1 >= "\xC0") { // should be converted to UTF8, if it's not UTF8 already
+      if ($c1 === "\x61" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+        $buf .= "\xc3\xa1"; // á
+        $i += 4;
+      } else if ($c1 === "\x65" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+        $buf .= "\xc3\xa9"; // é
+        $i += 4;
+      } else if ($c1 === "\x69" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+        $buf .= "\xc3\xad"; // í
+        $i += 4;
+      } else if ($c1 === "\x6F" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+        $buf .= "\xc3\xb3"; // ó
+        $i += 4;
+      } else if ($c1 === "\x75" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+        $buf .= "\xc3\xba"; // ú
+        $i += 4;
+      } else if ($c1 === "\x6e" && $c2 === "\xc3" && $c3 === "\x8c" && $c4 >= "\xc0") {
+        $buf .= "\xc3\xb1"; // ñ
+        $i += 4;
+      } else if ($c1 >= "\xC0") { // should be converted to UTF8, if it's not UTF8 already
 
         if ($c1 <= "\xDF") { // looks like 2 bytes UTF8
 
