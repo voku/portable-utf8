@@ -71,6 +71,10 @@ class Utf8SubstrReplaceTest extends PHPUnit_Framework_TestCase
     $replaced = substr_replace($str, 'foo', -2, -2);
     self::assertSame($replaced, u::substr_replace($str, 'foo', -2, -2));
 
+    $str = array('foo', 'lall');
+    $replaced = substr_replace($str, 'Iñtërnâtiônàlizætiøn', -2, -2);
+    self::assertSame($replaced, u::substr_replace($str, 'Iñtërnâtiônàlizætiøn', -2, -2));
+
     $str = array('Iñtërnâtiônàlizætiøn', 'foo');
     //$replaced = substr_replace($str, 'foo', -2, -2); // INFO: this isn't multibyte ready
     self::assertSame(array('Iñtërnâtiônàlizætifooøn', 'ffoooo'), u::substr_replace($str, 'foo', -2, -2));

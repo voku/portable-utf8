@@ -5241,6 +5241,10 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
+    if (!$needle) {
+      return $haystack;
+    }
+
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
@@ -5265,6 +5269,10 @@ final class UTF8
         Bootup::is_php('5.4') === true
     ) {
       return \grapheme_stristr($haystack, $needle, $before_needle);
+    }
+
+    if (self::is_ascii($haystack) && self::is_ascii($needle)) {
+      return stristr($str, $search);
     }
 
     preg_match('/^(.*?)' . preg_quote($needle, '/') . '/usi', $haystack, $match);
@@ -5370,6 +5378,10 @@ final class UTF8
         Bootup::is_php('5.4') === true
     ) {
       return \grapheme_strlen($str);
+    }
+
+    if (self::is_ascii($str)) {
+      return strlen($str);
     }
 
     // fallback via vanilla php
@@ -5595,9 +5607,18 @@ final class UTF8
       return \iconv_strpos($haystack, $needle, $offset > 0 ? $offset : 0, $encoding);
     }
 
+    $haystackIsAscii = self::is_ascii($haystack);
+    if ($haystackIsAscii && self::is_ascii($needle)) {
+      return strpos($haystack, $needle, $offset);
+    }
+
     // fallback via vanilla php
 
-    $haystackTmp = self::substr($haystack, $offset);
+    if ($haystackIsAscii) {
+      $haystackTmp = substr($haystack, $offset);
+    } else {
+      $haystackTmp = self::substr($haystack, $offset);
+    }
     if ($haystackTmp === false) {
       $haystackTmp = '';
     }
@@ -6319,10 +6340,20 @@ final class UTF8
       return '';
     }
 
+    // Empty string
+    if ($length === 0) {
+      return '';
+    }
+
     if ($cleanUtf8 === true) {
       // iconv and mbstring are not tolerant to invalid encoding
       // further, their behaviour is inconsistent with that of PHP's substr
       $str = self::clean($str);
+    }
+
+    // Whole string
+    if (!$offset && $length === null) {
+      return $str;
     }
 
     $str_length = 0;
@@ -6330,6 +6361,7 @@ final class UTF8
       $str_length = (int)self::strlen($str, $encoding);
     }
 
+    // Impossible
     if ($offset && $offset > $str_length) {
       return false;
     }
@@ -6390,6 +6422,12 @@ final class UTF8
         self::$SUPPORT['iconv'] === true
     ) {
       return \iconv_substr($str, $offset, $length);
+    }
+
+    if (self::is_ascii($str)) {
+      return ($length === null) ?
+          substr($str, $offset) :
+          substr($str, $offset, $length);
     }
 
     // fallback via vanilla php
@@ -6701,7 +6739,6 @@ final class UTF8
 
       // recursive call
       return array_map(array('\\voku\\helper\\UTF8', 'substr_replace'), $str, $replacement, $offset, $length);
-
     }
 
     if (is_array($replacement) === true) {
@@ -6718,6 +6755,12 @@ final class UTF8
 
     if (!isset($str[0])) {
       return $replacement;
+    }
+
+    if (self::is_ascii($str)) {
+      return ($length === null) ?
+          substr_replace($str, $replacement, $offset) :
+          substr_replace($str, $replacement, $offset, $length);
     }
 
     preg_match_all('/./us', $str, $smatches);
@@ -7258,13 +7301,19 @@ final class UTF8
    */
   public static function ucfirst($str, $encoding = 'UTF-8', $cleanUtf8 = false)
   {
-    $strPartTwo = self::substr($str, 1, null, $encoding, $cleanUtf8);
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $str = self::clean($str);
+    }
+
+    $strPartTwo = self::substr($str, 1, null, $encoding);
     if ($strPartTwo === false) {
       $strPartTwo = '';
     }
 
     $strPartOne = self::strtoupper(
-        (string)self::substr($str, 0, 1, $encoding, $cleanUtf8),
+        (string)self::substr($str, 0, 1, $encoding),
         $encoding,
         $cleanUtf8
     );
@@ -7305,6 +7354,25 @@ final class UTF8
       return '';
     }
 
+    // INFO: mb_convert_case($str, MB_CASE_TITLE);
+    // -> MB_CASE_TITLE didn't only uppercase the first letter, it also lowercase all other letters
+
+    if ($cleanUtf8 === true) {
+      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // if invalid characters are found in $haystack before $needle
+      $str = self::clean($str);
+    }
+
+    $usePhpDefaultFunctions = !(bool)($charlist . implode('', $exceptions));
+
+    if (
+        $usePhpDefaultFunctions === true
+        &&
+        self::is_ascii($str) === true
+    ) {
+      return ucwords($str);
+    }
+
     $words = self::str_to_words($str, $charlist);
     $newWords = array();
 
@@ -7329,7 +7397,7 @@ final class UTF8
               !in_array($word, $exceptions, true)
           )
       ) {
-        $word = self::ucfirst($word, $encoding, $cleanUtf8);
+        $word = self::ucfirst($word, $encoding);
       }
 
       $newWords[] = $word;
