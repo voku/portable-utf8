@@ -2408,6 +2408,16 @@ final class UTF8
 
     $str = htmlentities($str, $flags, $encoding, $double_encode);
 
+    /**
+     * PHP doesn't replace a backslash to its html entity since this is something
+     * that's mostly used to escape characters when inserting in a database. Since
+     * we're using a decent database layer, we don't need this shit and we're replacing
+     * the double backslashes by its' html entity equivalent.
+     *
+     * https://github.com/forkcms/library/blob/master/spoon/filter/filter.php#L303
+     */
+    $str = str_replace('\\', '&#92;', $str);
+
     if ($encoding !== 'UTF-8') {
       return $str;
     }
