@@ -5318,6 +5318,10 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     switch ($encoding) {
       case 'ASCII':
       case 'CP850':
@@ -5336,10 +5340,6 @@ final class UTF8
       // "\mb_strlen" and "\iconv_strlen" returns wrong length,
       // if invalid characters are found in $str
       $str = self::clean($str);
-    }
-
-    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
     }
 
     if (
