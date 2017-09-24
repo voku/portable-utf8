@@ -1946,11 +1946,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ISO'          => 'ISO-8859-1',
         'UTF8'         => 'UTF-8',
         'WINDOWS-1251' => 'WINDOWS-1251',
-        ''             => 'UTF-8',
+        ''             => false,
         'Utf-8'        => 'UTF-8',
         'UTF-8'        => 'UTF-8',
         'ISO-8859-5'   => 'ISO-8859-5',
-        false          => 'UTF-8',
+        false          => false,
     );
 
     foreach ($tests as $before => $after) {

@@ -1372,7 +1372,6 @@ final class UTF8
               || $encodingDetected === 'UTF-8'
               || $encodingDetected === 'WINDOWS-1252'
               || $encodingDetected === 'ISO-8859-1'
-
           )
       ) {
         return self::to_utf8($str);
@@ -1482,16 +1481,16 @@ final class UTF8
    *                                     stream_context_create. If you don't need to use a
    *                                     custom context, you can skip this parameter by &null;.
    *                                     </p>
-   * @param int|null      $offset        [optional] <p>
+   * @param int|null $offset             [optional] <p>
    *                                     The offset where the reading starts.
    *                                     </p>
-   * @param int|null      $maxLength     [optional] <p>
+   * @param int|null $maxLength          [optional] <p>
    *                                     Maximum length of data read. The default is to read until end
    *                                     of file is reached.
    *                                     </p>
-   * @param int           $timeout       <p>The time in seconds for the timeout.</p>
+   * @param int      $timeout            <p>The time in seconds for the timeout.</p>
    *
-   * @param boolean       $convertToUtf8 <strong>WARNING!!!</strong> <p>Maybe you can't use this option for e.g. images
+   * @param boolean  $convertToUtf8      <strong>WARNING!!!</strong> <p>Maybe you can't use this option for e.g. images
    *                                     or pdf, because they used non default utf-8 chars</p>
    *
    * @return string <p>The function returns the read data or false on failure.</p>
@@ -3362,7 +3361,7 @@ final class UTF8
   /**
    * Makes string's first char lowercase.
    *
-   * @param string  $str       <p>The input string</p>
+   * @param string $str <p>The input string</p>
    * @param string  $encoding  [optional] <p>Set the charset.</p>
    * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
@@ -3569,15 +3568,8 @@ final class UTF8
   {
     static $STATIC_NORMALIZE_ENCODING_CACHE = array();
 
-    // init
-    $encoding = trim((string)$encoding);
-
-    // fallback
-    if (!$encoding && $fallback) {
-      return $fallback;
-    }
     if (!$encoding) {
-      return 'UTF-8';
+      return $fallback;
     }
 
     if ('UTF-8' === $encoding) {
@@ -3594,7 +3586,7 @@ final class UTF8
 
     $encodingOrig = $encoding;
     $encoding = strtoupper($encoding);
-    $encodingUpperHelper = preg_replace('/[^A-Z0-9\s]/', '', $encoding);
+    $encodingUpperHelper = preg_replace('/[^a-zA-Z0-9\s]/', '', $encoding);
 
     $equivalences = array(
         'ISO8859'     => 'ISO-8859-1',
@@ -3821,32 +3813,32 @@ final class UTF8
     static $CHAR_CACHE = array();
     $encoding = (string)$encoding;
 
+    // save the original string
+    $chr_orig = $chr;
+
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
 
       // check again, if it's still not UTF-8
       /** @noinspection NotOptimalIfConditionsInspection */
       if ($encoding !== 'UTF-8') {
-        $chr = \mb_convert_encoding($chr, 'UTF-8', $encoding);
+        $chr = (string)\mb_convert_encoding($chr, 'UTF-8', $encoding);
       }
     }
 
-    if (isset($CHAR_CACHE[$chr]) === true) {
-      return $CHAR_CACHE[$chr];
+    $cacheKey = $chr_orig . $encoding;
+    if (isset($CHAR_CACHE[$cacheKey]) === true) {
+      return $CHAR_CACHE[$cacheKey];
     }
 
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
-    // save the original string
-    $chr_orig = $chr;
-
     if (self::$SUPPORT['intlChar'] === true) {
       $code = \IntlChar::ord($chr);
       if ($code) {
-        $CHAR_CACHE[$chr_orig] = $code;
-        return $code;
+        return $CHAR_CACHE[$cacheKey] = $code;
       }
     }
 
@@ -3855,18 +3847,18 @@ final class UTF8
     $code = $chr ? $chr[1] : 0;
 
     if (0xF0 <= $code && isset($chr[4])) {
-      return $CHAR_CACHE[$chr_orig] = (($code - 0xF0) << 18) + (($chr[2] - 0x80) << 12) + (($chr[3] - 0x80) << 6) + $chr[4] - 0x80;
+      return $CHAR_CACHE[$cacheKey] = (($code - 0xF0) << 18) + (($chr[2] - 0x80) << 12) + (($chr[3] - 0x80) << 6) + $chr[4] - 0x80;
     }
 
     if (0xE0 <= $code && isset($chr[3])) {
-      return $CHAR_CACHE[$chr_orig] = (($code - 0xE0) << 12) + (($chr[2] - 0x80) << 6) + $chr[3] - 0x80;
+      return $CHAR_CACHE[$cacheKey] = (($code - 0xE0) << 12) + (($chr[2] - 0x80) << 6) + $chr[3] - 0x80;
     }
 
     if (0xC0 <= $code && isset($chr[2])) {
-      return $CHAR_CACHE[$chr_orig] = (($code - 0xC0) << 6) + $chr[2] - 0x80;
+      return $CHAR_CACHE[$cacheKey] = (($code - 0xC0) << 6) + $chr[2] - 0x80;
     }
 
-    return $CHAR_CACHE[$chr_orig] = $code;
+    return $CHAR_CACHE[$cacheKey] = $code;
   }
 
   /**
@@ -4926,7 +4918,7 @@ final class UTF8
    * Convert a string into an array of words.
    *
    * @param string   $str
-   * @param string   $charList          <p>Additional chars for the definition of "words".</p>
+   * @param string   $charList <p>Additional chars for the definition of "words".</p>
    * @param bool     $removeEmptyValues <p>Remove empty values.</p>
    * @param null|int $removeShortValues
    *
@@ -5360,7 +5352,7 @@ final class UTF8
     }
 
     if (self::is_ascii($haystack) && self::is_ascii($needle)) {
-      return stristr($haystack, $needle);
+      return stristr($haystack, $needle, $before_needle);
     }
 
     preg_match('/^(.*?)' . preg_quote($needle, '/') . '/usi', $haystack, $match);
@@ -6372,7 +6364,7 @@ final class UTF8
    *
    * @param array $array <p>The array to work on</p>
    * @param int   $case  [optional] <p> Either <strong>CASE_UPPER</strong><br>
-   *                     or <strong>CASE_LOWER</strong> (default)</p>
+   *                  or <strong>CASE_LOWER</strong> (default)</p>
    *
    * @return array|false <p>An array with its keys lower or uppercased, or false if
    *                     input is not an array.</p>
@@ -6393,7 +6385,7 @@ final class UTF8
 
     $return = array();
     foreach ($array as $key => $value) {
-      if ($case === CASE_LOWER) {
+      if ($case  === CASE_LOWER) {
         $key = self::strtolower($key);
       } else {
         $key = self::strtoupper($key);
@@ -6802,9 +6794,7 @@ final class UTF8
       if (is_array($offset) === true) {
         $offset = array_slice($offset, 0, $num);
         foreach ($offset as &$valueTmp) {
-          if (!$valueTmp || (int)$valueTmp !== $valueTmp) {
-            $valueTmp = 0;
-          }
+          $valueTmp = (int)$valueTmp === $valueTmp ? $valueTmp : 0;
         }
         unset($valueTmp);
       } else {
@@ -6812,17 +6802,15 @@ final class UTF8
       }
 
       // the length
-      if (null === $length) {
+      if (!isset($length)) {
         $length = array_fill(0, $num, 0);
       } elseif (is_array($length) === true) {
         $length = array_slice($length, 0, $num);
         foreach ($length as &$valueTmpV2) {
-          if (!$valueTmpV2) {
-            $valueTmpV2 = 0;
+          if (isset($valueTmpV2)) {
+            $valueTmpV2 = (int)$valueTmpV2 === $valueTmpV2 ? $valueTmpV2 : $num;
           } else {
-            if ((int)$valueTmpV2 !== $valueTmpV2) {
-              $valueTmpV2 = $num;
-            }
+            $valueTmpV2 = 0;
           }
         }
         unset($valueTmpV2);
@@ -7073,7 +7061,6 @@ final class UTF8
 
     preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
     $chars = $ar[0];
-    $ord = null;
     foreach ($chars as &$c) {
 
       $ordC0 = ord($c[0]);
@@ -7126,7 +7113,7 @@ final class UTF8
         continue;
       }
 
-      if (null === $ord) {
+      if (!isset($ord)) {
         $c = $unknown;
         continue;
       }
