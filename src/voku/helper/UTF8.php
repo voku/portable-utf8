@@ -5410,6 +5410,7 @@ final class UTF8
     switch ($encoding) {
       case 'ASCII':
       case 'CP850':
+      case '8BIT':
         if (
             $encoding === 'CP850'
             &&
