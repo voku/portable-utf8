@@ -166,6 +166,25 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame($expected, $result);
   }
 
+  public function testCharOtherEncoding()
+  {
+    $testArray = array(
+        '39'   => '\'',
+        '40'   => '(',
+        '41'   => ')',
+        '42'   => '*',
+        '160'  => ' ',
+        0x666  => '٦',
+        0x165  => 'ť',
+        0x8469 => '葩',
+        0x2603 => '☃',
+    );
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::chr($before, ''), 'tested: ' . $before);
+    }
+  }
+
   public function testChar()
   {
     $testArray = array(
@@ -1927,11 +1946,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'ISO'          => 'ISO-8859-1',
         'UTF8'         => 'UTF-8',
         'WINDOWS-1251' => 'WINDOWS-1251',
-        ''             => false,
+        ''             => 'UTF-8',
         'Utf-8'        => 'UTF-8',
         'UTF-8'        => 'UTF-8',
         'ISO-8859-5'   => 'ISO-8859-5',
-        false          => false,
+        false          => 'UTF-8',
     );
 
     foreach ($tests as $before => $after) {

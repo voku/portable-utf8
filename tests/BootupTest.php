@@ -98,8 +98,15 @@ class BootupTest extends PHPUnit_Framework_TestCase
     $uriB = '/' . urlencode(utf8_decode('bàr'));
     $uriC = '/' . utf8_decode('bàr');
     $uriD = '/' . 'bàr';
+    $uriE = '/' . rawurlencode('bàr');
+    $uriF = '/' . rawurlencode(utf8_decode('bàr'));
+    $uriG = '/' . 'bar';
+    $uriH = '/' . urldecode('bàr');
+    $uriI = '/' . urldecode(utf8_decode('bàr'));
+    $uriJ = '/' . rawurldecode('bàr');
+    $uriK = '/' . rawurldecode(utf8_decode('bàr'));
 
-    // ---
+    // --
 
     $u = Bootup::filterRequestUri(null, false);
     self::assertSame(false, $u);
@@ -122,6 +129,27 @@ class BootupTest extends PHPUnit_Framework_TestCase
 
     $u = Bootup::filterRequestUri($uriD, false);
     self::assertSame($uriD, $u);
+
+    $u = Bootup::filterRequestUri($uriE, false);
+    self::assertSame($uriE, $u);
+
+    $u = Bootup::filterRequestUri($uriF, false);
+    self::assertSame($uriA, $u);
+
+    $u = Bootup::filterRequestUri($uriG, false);
+    self::assertSame($uriG, $u);
+
+    $u = Bootup::filterRequestUri($uriH, false);
+    self::assertSame($uriH, $u);
+
+    $u = Bootup::filterRequestUri($uriI, false);
+    self::assertSame($uriA, $u);
+
+    $u = Bootup::filterRequestUri($uriJ, false);
+    self::assertSame($uriJ, $u);
+
+    $u = Bootup::filterRequestUri($uriK, false);
+    self::assertSame($uriA, $u);
   }
 
   public function testGetRandomBytes()

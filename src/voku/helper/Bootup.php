@@ -85,7 +85,7 @@ class Bootup
     // Ensures the URL is well formed UTF-8
     //
 
-    if (preg_match('//u', urldecode($uri))) {
+    if (UTF8::is_utf8(rawurldecode($uri)) === true) {
       return $uri;
     }
 
@@ -96,7 +96,7 @@ class Bootup
     $uri = preg_replace_callback(
         '/[\x80-\xFF]+/',
         function ($m) {
-          return urlencode($m[0]);
+          return rawurlencode($m[0]);
         },
         $uri
     );
@@ -104,7 +104,7 @@ class Bootup
     $uri = preg_replace_callback(
         '/(?:%[89A-F][0-9A-F])+/i',
         function ($m) {
-          return urlencode(UTF8::encode('UTF-8', urldecode($m[0])));
+          return rawurlencode(UTF8::rawurldecode($m[0]));
         },
         $uri
     );
