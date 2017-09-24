@@ -5360,7 +5360,7 @@ final class UTF8
     }
 
     if (self::is_ascii($haystack) && self::is_ascii($needle)) {
-      return stristr($haystack, $needle);
+      return stristr($haystack, $needle, $before_needle);
     }
 
     preg_match('/^(.*?)' . preg_quote($needle, '/') . '/usi', $haystack, $match);
@@ -6802,9 +6802,7 @@ final class UTF8
       if (is_array($offset) === true) {
         $offset = array_slice($offset, 0, $num);
         foreach ($offset as &$valueTmp) {
-          if (!$valueTmp || (int)$valueTmp !== $valueTmp) {
-            $valueTmp = 0;
-          }
+          $valueTmp = (int)$valueTmp === $valueTmp ? $valueTmp : 0;
         }
         unset($valueTmp);
       } else {
@@ -6812,17 +6810,15 @@ final class UTF8
       }
 
       // the length
-      if (null === $length) {
+      if (!isset($length)) {
         $length = array_fill(0, $num, 0);
       } elseif (is_array($length) === true) {
         $length = array_slice($length, 0, $num);
         foreach ($length as &$valueTmpV2) {
-          if (!$valueTmpV2) {
-            $valueTmpV2 = 0;
+          if (isset($valueTmpV2)) {
+            $valueTmpV2 = (int)$valueTmpV2 === $valueTmpV2 ? $valueTmpV2 : $num;
           } else {
-            if ((int)$valueTmpV2 !== $valueTmpV2) {
-              $valueTmpV2 = $num;
-            }
+            $valueTmpV2 = 0;
           }
         }
         unset($valueTmpV2);
