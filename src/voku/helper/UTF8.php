@@ -962,47 +962,27 @@ final class UTF8
    */
   public static function chr($code_point, $encoding = 'UTF-8')
   {
-    // init
-    static $CHAR_CACHE = array();
-
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
-    }
-
-    if (
-        $encoding !== 'UTF-8'
-        &&
-        $encoding !== 'WINDOWS-1252'
-        &&
-        self::$SUPPORT['mbstring'] === false
-    ) {
-      trigger_error('UTF8::chr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
-    }
-
-    $cacheKey = $code_point . $encoding;
-    if (isset($CHAR_CACHE[$cacheKey]) === true) {
-      return $CHAR_CACHE[$cacheKey];
-    }
-
-    if (self::$SUPPORT['intlChar'] === true) {
-      $str = \IntlChar::chr($code_point);
-
-      if ($encoding !== 'UTF-8') {
-        $str = \mb_convert_encoding($str, $encoding, 'UTF-8');
-      }
-
-      $CHAR_CACHE[$cacheKey] = $str;
-      return $str;
+    } elseif (self::$SUPPORT['intlChar'] === true) {
+      return \IntlChar::chr($code_point);
     }
 
     // check type of code_point, only if there is no support for "\IntlChar"
-    if ((int)$code_point !== $code_point) {
-      $CHAR_CACHE[$cacheKey] = null;
+    $i = (int)$code_point;
+    if ($i !== $code_point) {
       return null;
+    }
+
+    // use static cache, only if there is no support for "\IntlChar"
+    static $CHAR_CACHE = array();
+    $cacheKey = $code_point . $encoding;
+    if (isset($CHAR_CACHE[$cacheKey]) === true) {
+      return $CHAR_CACHE[$cacheKey];
     }
 
     if ($code_point <= 0x7F) {
@@ -1020,14 +1000,11 @@ final class UTF8
              self::chr_and_parse_int((($code_point >> 6) & 0x3F) + 0x80) .
              self::chr_and_parse_int(($code_point & 0x3F) + 0x80);
     }
-
     if ($encoding !== 'UTF-8') {
       $str = \mb_convert_encoding($str, $encoding, 'UTF-8');
     }
-
     // add into static cache
     $CHAR_CACHE[$cacheKey] = $str;
-
     return $str;
   }
 
@@ -3804,19 +3781,12 @@ final class UTF8
    * @param string|null $encoding [optional] <p>Default is UTF-8</p>
    *
    * @return int <p>
-   *             Unicode code point of the given character,<br>
+   *             Unicode code point of the given character,<br />
    *             0 on invalid UTF-8 byte sequence.
    *             </p>
    */
   public static function ord($chr, $encoding = 'UTF-8')
   {
-    // init
-    static $CHAR_CACHE = array();
-    $encoding = (string)$encoding;
-
-    // save the original string
-    $chr_orig = $chr;
-
     if ($encoding !== 'UTF-8') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
 
@@ -3827,39 +3797,41 @@ final class UTF8
       }
     }
 
-    $cacheKey = $chr_orig . $encoding;
-    if (isset($CHAR_CACHE[$cacheKey]) === true) {
-      return $CHAR_CACHE[$cacheKey];
-    }
-
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (self::$SUPPORT['intlChar'] === true) {
-      $code = \IntlChar::ord($chr);
-      if ($code) {
-        return $CHAR_CACHE[$cacheKey] = $code;
+      $tmpReturn = \IntlChar::ord($chr);
+      if ($tmpReturn) {
+        return $tmpReturn;
       }
     }
+
+    // use static cache, if there is no support for "\IntlChar"
+    static $CHAR_CACHE = array();
+    if (isset($CHAR_CACHE[$chr]) === true) {
+      return $CHAR_CACHE[$chr];
+    }
+
+    $chr_orig = $chr;
 
     /** @noinspection CallableParameterUseCaseInTypeContextInspection */
     $chr = unpack('C*', (string)self::substr($chr, 0, 4, '8BIT'));
     $code = $chr ? $chr[1] : 0;
-
     if (0xF0 <= $code && isset($chr[4])) {
-      return $CHAR_CACHE[$cacheKey] = (($code - 0xF0) << 18) + (($chr[2] - 0x80) << 12) + (($chr[3] - 0x80) << 6) + $chr[4] - 0x80;
+      return $CHAR_CACHE[$chr_orig] = (($code - 0xF0) << 18) + (($chr[2] - 0x80) << 12) + (($chr[3] - 0x80) << 6) + $chr[4] - 0x80;
     }
 
     if (0xE0 <= $code && isset($chr[3])) {
-      return $CHAR_CACHE[$cacheKey] = (($code - 0xE0) << 12) + (($chr[2] - 0x80) << 6) + $chr[3] - 0x80;
+      return $CHAR_CACHE[$chr_orig] = (($code - 0xE0) << 12) + (($chr[2] - 0x80) << 6) + $chr[3] - 0x80;
     }
 
     if (0xC0 <= $code && isset($chr[2])) {
-      return $CHAR_CACHE[$cacheKey] = (($code - 0xC0) << 6) + $chr[2] - 0x80;
+      return $CHAR_CACHE[$chr_orig] = (($code - 0xC0) << 6) + $chr[2] - 0x80;
     }
 
-    return $CHAR_CACHE[$cacheKey] = $code;
+    return $CHAR_CACHE[$chr_orig] = $code;
   }
 
   /**
