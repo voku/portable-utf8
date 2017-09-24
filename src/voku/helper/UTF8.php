@@ -1370,6 +1370,9 @@ final class UTF8
           (
               $force === true
               || $encodingDetected === 'UTF-8'
+              || $encodingDetected === 'WINDOWS-1252'
+              || $encodingDetected === 'ISO-8859-1'
+
           )
       ) {
         return self::to_utf8($str);
@@ -1381,6 +1384,7 @@ final class UTF8
           (
               $force === true
               || $encodingDetected === 'ISO-8859-1'
+              || $encodingDetected === 'UTF-8'
           )
       ) {
         return self::to_iso8859($str);
@@ -3823,7 +3827,7 @@ final class UTF8
       // check again, if it's still not UTF-8
       /** @noinspection NotOptimalIfConditionsInspection */
       if ($encoding !== 'UTF-8') {
-        $chr = \mb_convert_encoding($chr, 'UTF-8', $encoding);
+        $chr = (string)\mb_convert_encoding($chr, 'UTF-8', $encoding);
       }
     }
 
