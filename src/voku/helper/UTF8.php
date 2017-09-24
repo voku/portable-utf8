@@ -1383,6 +1383,7 @@ final class UTF8
           (
               $force === true
               || $encodingDetected === 'ISO-8859-1'
+              || $encodingDetected === 'WINDOWS-1252'
               || $encodingDetected === 'UTF-8'
           )
       ) {
@@ -3589,13 +3590,62 @@ final class UTF8
     $encodingUpperHelper = preg_replace('/[^a-zA-Z0-9\s]/', '', $encoding);
 
     $equivalences = array(
-        'ISO88591'    => 'ISO-8859-1',
         'ISO8859'     => 'ISO-8859-1',
+        'ISO88591'    => 'ISO-8859-1',
         'ISO'         => 'ISO-8859-1',
-        'LATIN1'      => 'ISO-8859-1',
         'LATIN'       => 'ISO-8859-1',
-        'WIN1252'     => 'ISO-8859-1',
-        'WINDOWS1252' => 'ISO-8859-1',
+        'LATIN1'      => 'ISO-8859-1', // Western European
+        'ISO88592'    => 'ISO-8859-2',
+        'LATIN2'      => 'ISO-8859-2', // Central European
+        'ISO88593'    => 'ISO-8859-3',
+        'LATIN3'      => 'ISO-8859-3', // Southern European
+        'ISO88594'    => 'ISO-8859-4',
+        'LATIN4'      => 'ISO-8859-4', // Northern European
+        'ISO88595'    => 'ISO-8859-5',
+        'ISO88596'    => 'ISO-8859-6', // Greek
+        'ISO88597'    => 'ISO-8859-7',
+        'ISO88598'    => 'ISO-8859-8', // Hebrew
+        'ISO88599'    => 'ISO-8859-9',
+        'LATIN5'      => 'ISO-8859-9', // Turkish
+        'ISO885911'   => 'ISO-8859-11',
+        'TIS620'      => 'ISO-8859-11', // Thai
+        'ISO885910'   => 'ISO-8859-10',
+        'LATIN6'      => 'ISO-8859-10', // Nordic
+        'ISO885913'   => 'ISO-8859-13',
+        'LATIN7'      => 'ISO-8859-13', // Baltic
+        'ISO885914'   => 'ISO-8859-14',
+        'LATIN8'      => 'ISO-8859-14', // Celtic
+        'ISO885915'   => 'ISO-8859-15',
+        'LATIN9'      => 'ISO-8859-15', // Western European (with some extra chars e.g. €)
+        'ISO885916'   => 'ISO-8859-16',
+        'LATIN10'     => 'ISO-8859-16', // Southeast European
+        'CP1250'      => 'WINDOWS-1250',
+        'WIN1250'     => 'WINDOWS-1250',
+        'WINDOWS1250' => 'WINDOWS-1250',
+        'CP1251'      => 'WINDOWS-1251',
+        'WIN1251'     => 'WINDOWS-1251',
+        'WINDOWS1251' => 'WINDOWS-1251',
+        'CP1252'      => 'WINDOWS-1252',
+        'WIN1252'     => 'WINDOWS-1252',
+        'WINDOWS1252' => 'WINDOWS-1252',
+        'CP1253'      => 'WINDOWS-1253',
+        'WIN1253'     => 'WINDOWS-1253',
+        'WINDOWS1253' => 'WINDOWS-1253',
+        'CP1254'      => 'WINDOWS-1254',
+        'WIN1254'     => 'WINDOWS-1254',
+        'WINDOWS1254' => 'WINDOWS-1254',
+        'CP1255'      => 'WINDOWS-1255',
+        'WIN1255'     => 'WINDOWS-1255',
+        'WINDOWS1255' => 'WINDOWS-1255',
+        'CP1256'      => 'WINDOWS-1256',
+        'WIN1256'     => 'WINDOWS-1256',
+        'WINDOWS1256' => 'WINDOWS-1256',
+        'CP1257'      => 'WINDOWS-1257',
+        'WIN1257'     => 'WINDOWS-1257',
+        'WINDOWS1257' => 'WINDOWS-1257',
+        'CP1258'      => 'WINDOWS-1258',
+        'WIN1258'     => 'WINDOWS-1258',
+        'WINDOWS1258' => 'WINDOWS-1258',
         'UTF16'       => 'UTF-16',
         'UTF32'       => 'UTF-32',
         'UTF8'        => 'UTF-8',
