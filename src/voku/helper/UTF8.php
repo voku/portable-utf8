@@ -1078,7 +1078,7 @@ final class UTF8
 
     return array_map(
         function ($data) {
-          return self::strlen($data, '8BIT');
+          return UTF8::strlen($data, '8BIT');
         },
         self::split($str)
     );
@@ -2176,7 +2176,7 @@ final class UTF8
         '',
         array_map(
             function ($data) use ($keepAsciiChars, $encoding) {
-              return self::single_chr_html_encode($data, $keepAsciiChars, $encoding);
+              return UTF8::single_chr_html_encode($data, $keepAsciiChars, $encoding);
             },
             self::split($str)
         )
@@ -5352,10 +5352,9 @@ final class UTF8
       return \grapheme_stristr($haystack, $needle, $before_needle);
     }
 
-    // TODO: testing
-    //if (self::is_ascii($haystack) && self::is_ascii($needle)) {
-    //  return stristr($haystack, $needle, $before_needle);
-    //}
+    if (self::is_ascii($needle) && self::is_ascii($haystack)) {
+      return stristr($haystack, $needle, $before_needle);
+    }
 
     preg_match('/^(.*?)' . preg_quote($needle, '/') . '/usi', $haystack, $match);
 
@@ -6920,10 +6919,10 @@ final class UTF8
     $strSwappedCase = preg_replace_callback(
         '/[\S]/u',
         function ($match) use ($encoding) {
-          $marchToUpper = self::strtoupper($match[0], $encoding);
+          $marchToUpper = UTF8::strtoupper($match[0], $encoding);
 
           if ($match[0] === $marchToUpper) {
-            return self::strtolower($match[0], $encoding);
+            return UTF8::strtolower($match[0], $encoding);
           }
 
           return $marchToUpper;
