@@ -4387,7 +4387,6 @@ final class UTF8
       );
     }
 
-    /** @noinspection OffsetOperationsInspection */
     if (isset($ret[0]) && $ret[0] === '') {
       return array();
     }
