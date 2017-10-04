@@ -3926,6 +3926,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         'BonJour & au revoir'           => 'bONjOUR & AU REVOIR',
         'Déjà'                          => 'dÉJÀ',
         'това е тестово заглавие'       => 'ТОВА Е ТЕСТОВО ЗАГЛАВИЕ',
+        'це є тестовий заголовок з ґ, є, ї, і' => 'ЦЕ Є ТЕСТОВИЙ ЗАГОЛОВОК З Ґ, Є, Ї, І',
         'это тестовый заголовок'        => 'ЭТО ТЕСТОВЫЙ ЗАГОЛОВОК',
         'führen Aktivitäten Haglöfs'    => 'FÜHREN aKTIVITÄTEN hAGLÖFS',
     );
