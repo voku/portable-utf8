@@ -4509,12 +4509,7 @@ final class UTF8
       return false;
     }
 
-    $haystackSub = self::substr($haystack, -self::strlen($needle));
-    if ($haystackSub === false) {
-      return false;
-    }
-
-    if ($needle === $haystackSub) {
+    if (substr($haystack, -strlen($needle)) === $needle) {
       return true;
     }
 
@@ -4538,7 +4533,7 @@ final class UTF8
       return false;
     }
 
-    if (self::strcasecmp(self::substr($haystack, -self::strlen($needle)), $needle) === 0) {
+    if (self::strcasecmp(substr($haystack, -strlen($needle)), $needle) === 0) {
       return true;
     }
 
@@ -4892,7 +4887,7 @@ final class UTF8
       return false;
     }
 
-    if (self::strpos($haystack, $needle) === 0) {
+    if (strpos($haystack, $needle) === 0) {
       return true;
     }
 
