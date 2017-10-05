@@ -2,6 +2,7 @@
 
 use Normalizer as n;
 use Symfony\Polyfill\Intl\Grapheme\Grapheme as p;
+use voku\helper\UTF8;
 
 /**
  * Class ShimIntlTest
@@ -29,8 +30,10 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
     self::assertSame(grapheme_extract('', 0), p::grapheme_extract('', 0));
     self::assertSame(grapheme_extract('abc', 0), p::grapheme_extract('abc', 0));
 
-    self::assertSame('국어', p::grapheme_extract('한국어', 2, GRAPHEME_EXTR_COUNT, 3, $next));
-    self::assertSame(9, $next);
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame('국어', p::grapheme_extract('한국어', 2, GRAPHEME_EXTR_COUNT, 3, $next));
+      self::assertSame(9, $next);
+    }
 
     self::assertSame('국어', grapheme_extract('한국어', 2, GRAPHEME_EXTR_COUNT, 3, $next));
     self::assertSame(9, $next);
@@ -43,7 +46,10 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
 
     self::assertSame(str_repeat('-', 69000), p::grapheme_extract(str_repeat('-', 70000), 69000, GRAPHEME_EXTR_COUNT));
 
-    self::assertSame('d', p::grapheme_extract('déjà', 2, GRAPHEME_EXTR_MAXBYTES));
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame('d', p::grapheme_extract('déjà', 2, GRAPHEME_EXTR_MAXBYTES));
+    }
+
     self::assertSame('dé', p::grapheme_extract('déjà', 2, GRAPHEME_EXTR_MAXCHARS));
 
     /** @noinspection PhpUsageOfSilenceOperatorInspection */

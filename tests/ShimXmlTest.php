@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Polyfill\Php72\Php72 as p;
+use voku\helper\UTF8;
 
 /**
  * Class ShimXmlTest
@@ -13,10 +14,12 @@ class ShimXmlTest extends PHPUnit_Framework_TestCase
     $s = implode('', $s);
     $e = p::utf8_encode($s);
 
-    self::assertSame(utf8_encode($s), p::utf8_encode($s));
-    self::assertSame(utf8_decode($e), p::utf8_decode($e));
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame(utf8_encode($s), p::utf8_encode($s));
+      self::assertSame(utf8_decode($e), p::utf8_decode($e));
 
-    self::assertSame('??', p::utf8_decode('Σ어'));
+      self::assertSame('??', p::utf8_decode('Σ어'));
+    }
 
     $s = 444;
 

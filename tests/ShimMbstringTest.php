@@ -2,6 +2,7 @@
 
 use Normalizer as n;
 use Symfony\Polyfill\Mbstring\Mbstring as p;
+use voku\helper\UTF8;
 
 /**
  * Class ShimMbstringTest
@@ -39,9 +40,11 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
 
   public function testStrCase()
   {
-    self::assertSame('déjà σσς iiıi', p::mb_strtolower('DÉJÀ Σσς İIıi'));
-    self::assertSame('DÉJÀ ΣΣΣ İIII', p::mb_strtoupper('Déjà Σσς İIıi'));
-    self::assertSame('Déjà Σσσ Iı Ii İi', p::mb_convert_case('DÉJÀ ΣΣΣ ıı iI İİ', MB_CASE_TITLE));
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame('déjà σσς iiıi', p::mb_strtolower('DÉJÀ Σσς İIıi'));
+      self::assertSame('DÉJÀ ΣΣΣ İIII', p::mb_strtoupper('Déjà Σσς İIıi'));
+      self::assertSame('Déjà Σσσ Iı Ii İi', p::mb_convert_case('DÉJÀ ΣΣΣ ıı iI İİ', MB_CASE_TITLE));
+    }
   }
 
   public function testmb_strlen()
@@ -68,7 +71,10 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     self::assertSame('', mb_substr($c, 1, -4));
     self::assertSame('j', mb_substr($c, -2, -1));
     self::assertSame('', mb_substr($c, -2, -2));
-    self::assertSame('', mb_substr($c, 5, 0));
+
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame('', mb_substr($c, 5, 0));
+    }
     self::assertSame('', mb_substr($c, -5, 0));
 
     self::assertSame('jà', p::mb_substr($c, 2, null));
@@ -107,12 +113,17 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
     self::assertSame(false, p::mb_strpos('abc', 'd'));
     self::assertSame(false, p::mb_strpos('abc', 'a', 3));
     self::assertSame(1, p::mb_strpos('한국어', '국'));
-    self::assertSame(3, p::mb_stripos('DÉJÀ', 'à'));
+
     self::assertSame(false, p::mb_strrpos('한국어', ''));
     self::assertSame(1, p::mb_strrpos('한국어', '국'));
-    self::assertSame(3, p::mb_strripos('DÉJÀ', 'à'));
-    self::assertSame(1, p::mb_stripos('aςσb', 'ΣΣ'));
-    self::assertSame(1, p::mb_strripos('aςσb', 'ΣΣ'));
+
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame(3, p::mb_stripos('DÉJÀ', 'à'));
+      self::assertSame(3, p::mb_strripos('DÉJÀ', 'à'));
+      self::assertSame(1, p::mb_stripos('aςσb', 'ΣΣ'));
+      self::assertSame(1, p::mb_strripos('aςσb', 'ΣΣ'));
+    }
+
     self::assertSame(3, p::mb_strrpos('ababab', 'b', -2));
   }
 
@@ -153,23 +164,27 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
   public function testmb_strstr()
   {
     self::assertSame('국어', mb_strstr('한국어', '국'));
-    self::assertSame('ÉJÀ', mb_stristr('DÉJÀ', 'é'));
+
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame('ÉJÀ', mb_stristr('DÉJÀ', 'é'));
+      self::assertSame('ÉJÀ', p::mb_stristr('DÉJÀ', 'é'));
+      self::assertSame('ÉJÀDÉJÀ', p::mb_stristr('DÉJÀDÉJÀ', 'é'));
+      self::assertSame('D', p::mb_stristr('DÉJÀDÉJÀ', 'é', true));
+      self::assertSame('DÉJÀD', p::mb_strrichr('DÉJÀDÉJÀ', 'é', true));
+      self::assertSame('ςσb', p::mb_stristr('aςσb', 'ΣΣ'));
+      self::assertSame('a', p::mb_stristr('aςσb', 'ΣΣ', true));
+      self::assertSame('Paris', p::mb_stristr('der Straße nach Paris', 'Paris'));
+
+      self::assertSame('ÉJÀ', p::mb_strrichr('DÉJÀDÉJÀ', 'é'));
+    }
 
     self::assertSame('국어', p::mb_strstr('한국어', '국'));
-    self::assertSame('ÉJÀ', p::mb_stristr('DÉJÀ', 'é'));
 
     self::assertSame('éjàdéjà', p::mb_strstr('déjàdéjà', 'é'));
-    self::assertSame('ÉJÀDÉJÀ', p::mb_stristr('DÉJÀDÉJÀ', 'é'));
-    self::assertSame('ςσb', p::mb_stristr('aςσb', 'ΣΣ'));
     self::assertSame('éjà', p::mb_strrchr('déjàdéjà', 'é'));
-    self::assertSame('ÉJÀ', p::mb_strrichr('DÉJÀDÉJÀ', 'é'));
 
     self::assertSame('d', p::mb_strstr('déjàdéjà', 'é', true));
-    self::assertSame('D', p::mb_stristr('DÉJÀDÉJÀ', 'é', true));
-    self::assertSame('a', p::mb_stristr('aςσb', 'ΣΣ', true));
     self::assertSame('déjàd', p::mb_strrchr('déjàdéjà', 'é', true));
-    self::assertSame('DÉJÀD', p::mb_strrichr('DÉJÀDÉJÀ', 'é', true));
-    self::assertSame('Paris', p::mb_stristr('der Straße nach Paris', 'Paris'));
   }
 
   public function testmb_check_encoding()

@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Polyfill\Iconv\Iconv as p;
+use voku\helper\UTF8;
 
 /**
  * Class ShimIconvTest
@@ -26,12 +27,12 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
       self::assertSame('nud', iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
     } elseif (PHP_VERSION_ID >= 50400) {
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      self::assertSame(false, @iconv('UTF-8', 'ISO-8859-1', 'nœud'));
+      self::assertFalse(@iconv('UTF-8', 'ISO-8859-1', 'nœud'));
 
       // need testing
       if (PHP_VERSION_ID < 70000) {
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        self::assertSame(false, @iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
+        self::assertFalse(@iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
       } else {
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
         self::assertSame('nud', @iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
@@ -55,11 +56,13 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
 
     // The recent Windows behavior is the most useful
     self::assertFalse(p::iconv('UTF-8', 'ISO-8859-1', 'nœud'));
-    self::assertSame('nud', p::iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
 
-    self::assertSame(utf8_decode('déjà'), p::iconv('CP1252', 'ISO-8859-1', utf8_decode('déjà')));
-    self::assertSame('déjà', p::iconv('UTF-8', 'utf8', 'déjà'));
-    self::assertSame('deja noeud', p::iconv('UTF-8', 'US-ASCII//TRANSLIT', 'déjà nœud'));
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame('nud', p::iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
+      self::assertSame(utf8_decode('déjà'), p::iconv('CP1252', 'ISO-8859-1', utf8_decode('déjà')));
+      self::assertSame('déjà', p::iconv('UTF-8', 'utf8', 'déjà'));
+      self::assertSame('deja noeud', p::iconv('UTF-8', 'US-ASCII//TRANSLIT', 'déjà nœud'));
+    }
 
     self::assertSame('4', p::iconv('UTF-8', 'UTF-8', 4));
   }
@@ -144,25 +147,33 @@ HEADERS;
   {
     self::assertSame(1, p::iconv_strpos('11--', '1-', 0, 'UTF-8'));
     self::assertSame(2, p::iconv_strpos('-11--', '1-', 0, 'UTF-8'));
-    self::assertSame(false, p::iconv_strrpos('한국어', '', 'UTF-8'));
+    self::assertFalse(p::iconv_strrpos('한국어', '', 'UTF-8'));
     self::assertSame(1, p::iconv_strrpos('한국어', '국', 'UTF-8'));
-    self::assertSame(false, p::iconv_strrpos('한국어', ''));
+
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertFalse(p::iconv_strrpos('한국어', ''));
+      self::assertSame(9, p::iconv_strrpos('中文空白-ÖÄÜ-中文空白', '中'));
+    }
+
     self::assertSame(1, p::iconv_strrpos('한국어', '국'));
     self::assertSame(6, p::iconv_strrpos('κόσμε-κόσμε', 'κ'));
     self::assertSame(13, p::iconv_strrpos('test κόσμε κόσμε test', 'σ'));
-    self::assertSame(9, p::iconv_strrpos('中文空白-ÖÄÜ-中文空白', '中'));
   }
 
   public function testIconvStrlen()
   {
-    self::assertSame(4, p::iconv_strlen('déjà'));
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame(4, p::iconv_strlen('déjà'));
+    }
     self::assertSame(3, p::iconv_strlen('한국어'));
 
-    self::assertSame(4, p::strlen1('déjà'));
-    self::assertSame(3, p::strlen2('한국어'));
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      self::assertSame(4, p::strlen1('déjà'));
+      self::assertSame(3, p::strlen2('한국어'));
 
-    self::assertSame(4, p::strlen1('déjà'));
-    self::assertSame(3, p::strlen2('한국어'));
+      self::assertSame(4, p::strlen1('déjà'));
+      self::assertSame(3, p::strlen2('한국어'));
+    }
   }
 
   public function testIconvSubstr()

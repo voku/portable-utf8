@@ -1,6 +1,7 @@
 <?php
 
 use voku\helper\UTF8 as u;
+use voku\helper\UTF8;
 
 /**
  * Class Utf8StrrposTest
@@ -41,11 +42,17 @@ class Utf8StrrposTest extends PHPUnit_Framework_TestCase
   {
     $str = 'ABC 123 ABC';
     self::assertSame(strrpos($str, 'B'), u::strrpos($str, 'B'));
-    self::assertSame(strrpos($str, 1), u::strrpos($str, 1));
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      // strrpos() is not working as expected with overload ...
+      self::assertSame(strrpos($str, 1), u::strrpos($str, 1));
+    }
 
     $str = 'ABC * ABC';
     self::assertSame(strrpos($str, 'B'), u::strrpos($str, 'B'));
-    self::assertSame(strrpos($str, 42), u::strrpos($str, 42));
+    if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
+      // strrpos() is not working as expected with overload ...
+      self::assertSame(strrpos($str, 42), u::strrpos($str, 42));
+    }
   }
 
   public function test_empty_str()
