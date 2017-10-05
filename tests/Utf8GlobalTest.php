@@ -2895,6 +2895,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame(7, UTF8::strripos('中文空白-ÖÄÜ-中文空白', 'ü'));
     self::assertSame(11, UTF8::strripos('test κόσμε κόσμε test', 'Κ'));
     self::assertSame(13, UTF8::strripos('ABC-ÖÄÜ-中文空白-中文空白', '中'));
+
+    self::assertSame(6, UTF8::strripos('κόσμε-κόσμε' . "\xa0\xa1", 'Κ', -2, 'UTF8', false));
+    self::assertSame(6, UTF8::strripos('κόσμε-κόσμε' . "\xa0\xa1", 'Κ', 2, 'UTF8', false));
+
+    self::assertSame(6, UTF8::strripos('κόσμε-κόσμε' . "\xa0\xa1", 'Κ', -2, 'UTF8', true));
+    self::assertSame(6, UTF8::strripos('κόσμε-κόσμε' . "\xa0\xa1", 'Κ', 2, 'UTF8', true));
   }
 
   public function testStrlen()
