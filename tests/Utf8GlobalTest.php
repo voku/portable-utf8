@@ -3259,6 +3259,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8'));
     self::assertSame('äö', UTF8::strrichr('äöü-abc', 'ü', true, 'UTF-8'));
 
+    self::assertSame('', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8', true));
+    self::assertSame('äö', UTF8::strrichr('äöü-abc', 'ü', true, 'UTF-8', true));
+
     // --- ISO
 
     if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
