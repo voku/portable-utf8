@@ -3204,8 +3204,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('κόσμε-äöü', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε', false, 'UTF-8'));
     self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε', false, 'UTF-8'));
 
-    self::assertSame('κόσμε', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε', true, 'UTF-8'));
-    self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8'));
+    self::assertSame('κόσμε', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε', true, 'UTF-8', false));
+    self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8', false));
+
+    self::assertSame('κόσμε', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε', true, 'UTF-8', true));
+    self::assertSame(false, UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8', true));
 
     // --- ISO
 
@@ -3256,8 +3259,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     self::assertSame('Aκόσμεκόσμε-äöü', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', false, 'UTF-8'));
     self::assertSame('ü-abc', UTF8::strrichr('äöü-abc', 'ü', false, 'UTF-8'));
 
-    self::assertSame('', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8'));
-    self::assertSame('äö', UTF8::strrichr('äöü-abc', 'ü', true, 'UTF-8'));
+    self::assertSame('', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8', false));
+    self::assertSame('äö', UTF8::strrichr('äöü-abc', 'ü', true, 'UTF-8', false));
 
     self::assertSame('', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', true, 'UTF-8', true));
     self::assertSame('äö', UTF8::strrichr('äöü-abc', 'ü', true, 'UTF-8', true));
