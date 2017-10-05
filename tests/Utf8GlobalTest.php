@@ -3726,7 +3726,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
       self::assertSame(false, UTF8::substr_count('abcde', 'de', -2, 2));
     } else {
-      self::assertSame(1, substr_count('abcde', 'de', -2, 2));
+
+      if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+        self::assertSame(null, substr_count('abcde', 'de', -2, 2));
+      } else {
+        self::assertSame(1, substr_count('abcde', 'de', -2, 2));
+      }
+
       self::assertSame(1, UTF8::substr_count('abcde', 'de', -2, 2));
     }
 
