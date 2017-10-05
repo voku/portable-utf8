@@ -7852,6 +7852,8 @@ final class UTF8
     }
 
     $strTmp = \utf8_encode($str);
+
+    // the polyfill maybe return false
     if ($strTmp === false) {
       return '';
     }
