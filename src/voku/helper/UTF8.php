@@ -874,7 +874,12 @@ final class UTF8
       return '';
     }
 
-    return pack('H*', base_convert($bin, 2, 16));
+    $convert = base_convert($bin, 2, 16);
+    if ($convert === '0') {
+      return '';
+    }
+
+    return pack('H*', $convert);
   }
 
   /**
@@ -4230,9 +4235,11 @@ final class UTF8
       self::checkForSupport();
     }
 
-    foreach (self::$SUPPORT as $utf8Support) {
-      echo $utf8Support . "\n<br>";
+    echo '<pre>';
+    foreach (self::$SUPPORT as $key => $value) {
+      echo $key . ' - ' . print_r($value, true) . "\n<br>";
     }
+    echo '</pre>';
   }
 
   /**

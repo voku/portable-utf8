@@ -83,7 +83,7 @@ class Utf8StristrTest extends PHPUnit_Framework_TestCase
     // UTF-8
     self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search, 0, 'UTF-8', false));
 
-    if (u::mbstring_loaded() === true) { // only with "mbstring"
+    if (u::getSupportInfo('mbstring') === true) { // only with "mbstring"
       // UTF-7
       self::assertSame("n\n??ti??n??liz??ti??n", u::stristr($str, $search, 0, 'UTF-7', false));
     }

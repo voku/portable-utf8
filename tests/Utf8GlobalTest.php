@@ -8,6 +8,10 @@ use voku\helper\UTF8;
  */
 class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 {
+  /**
+   * @var array
+   */
+  private $oldSupportArray;
 
   /**
    * helper-function for test -> "testCombineSomeUtf8Functions()"
@@ -79,6 +83,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testAccess()
   {
     $testArray = array(
+        '-1'          => array(-1 => ''),
         ''          => array(1 => ''),
         '中文空白'      => array(2 => '空'),
         '中文空白-test' => array(3 => '白'),
@@ -204,6 +209,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
 
     for ($i = 0; $i < 200; $i++) { // keep this loop for simple performance tests
+
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
       foreach ($testArray as $before => $after) {
         self::assertSame($after, UTF8::chr(UTF8::ord(UTF8::chr($before))), 'tested: ' . $before);
       }
@@ -704,18 +716,21 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ---
 
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
     $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
     self::assertContains(
         '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
         $testString
     );
 
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
     $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
     self::assertContains(
         '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
         $testString
     );
 
+    self::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
     $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
     self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
@@ -960,6 +975,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
       foreach ($testArray as $before => $after) {
         self::assertSame($after, UTF8::fix_simple_utf8($before), 'tested: ' . $before);
       }
@@ -1767,6 +1789,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     // add more tests
+    $testArray[''] = false;
     $testArray['{"array":[1,2,3],,...}}'] = false;
     $testArray['{"test": 123}'] = true;
     $testArray['[{"test": 123}]'] = true;
@@ -1788,6 +1811,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ----
 
     self::assertEquals(array(1, '¥', 'ä'), UTF8::json_decode('[1,"\u00a5","\u00e4"]'));
+  }
+
+  public function testShowSupport()
+  {
+    ob_start();
+    UTF8::showSupport();
+    $support = ob_get_contents();
+    ob_end_clean();
+
+    self::assertContains('mbstring_func_overload', $support);
   }
 
   public function testJsonEncode()
@@ -1990,6 +2023,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
       foreach ($tests as $before => $after) {
         self::assertSame($after, UTF8::normalize_whitespace($before));
       }
@@ -2034,6 +2074,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
       foreach ($testArray as $actual => $expected) {
         self::assertSame($expected, UTF8::ord($actual));
       }
@@ -2361,11 +2408,58 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     }
 
     self::assertSame('a', UTF8::single_chr_html_encode('a', true));
+
+    self::assertSame('&#195;', UTF8::single_chr_html_encode('ö', false, 'ISO'));
+    self::assertSame('&#246;', UTF8::single_chr_html_encode('ö', false, 'UTF8'));
+  }
+
+  protected function reactivateNativeUtf8Support()
+  {
+    if ($this->oldSupportArray === null) {
+      return;
+    }
+
+    $refObject = new ReflectionObject(new UTF8());
+    $refProperty = $refObject->getProperty('SUPPORT');
+    $refProperty->setAccessible(true);
+
+    $refProperty->setValue(null, $this->oldSupportArray);
+  }
+
+  protected function disableNativeUtf8Support()
+  {
+    $refObject = new ReflectionObject(new UTF8());
+    $refProperty = $refObject->getProperty('SUPPORT');
+    $refProperty->setAccessible(true);
+
+    if ($this->oldSupportArray === null) {
+      $this->oldSupportArray = $refProperty->getValue(null);
+    }
+
+    $testArray = array(
+        'already_checked_via_portable_utf8' => true,
+        'mbstring'                          => false,
+        'mbstring_func_overload'            => false,
+        'iconv'                             => false,
+        'intl'                              => false,
+        'intl__transliterator_list_ids'     => array(),
+        'intlChar'                          => false,
+        'pcre_utf8'                         => false,
+    );
+    $refProperty->setValue(null, $testArray);
   }
 
   public function testSplit()
   {
+    $oldSupportArray = null;
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
       self::assertSame(
           array(
               '中',
@@ -2409,6 +2503,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
       foreach ($tests as $before => $after) {
         self::assertSame($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
       }
@@ -2660,7 +2761,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testStrToBinary()
   {
     $tests = array(
-        0    => '110000',
+        ''   => '0',
+        '0'  => '110000',
         '1'  => '110001',
         '~'  => '1111110',
         '§'  => '1100001010100111',
@@ -2854,6 +2956,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testStripos()
   {
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
       self::assertSame(false, UTF8::stripos('DÉJÀ', 'ä'));
       self::assertSame(false, UTF8::stripos('DÉJÀ', ' '));
       self::assertSame(false, UTF8::stripos('DÉJÀ', ''));
@@ -2951,8 +3060,17 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         -1                          => 2,
     );
 
-    foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, UTF8::strlen($actual), $actual);
+    for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
+      foreach ($testArray as $actual => $expected) {
+        self::assertSame($expected, UTF8::strlen($actual), $actual);
+      }
     }
 
     $testArray = array(
@@ -3094,6 +3212,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   {
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
 
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
       // php compatible tests
 
       self::assertSame(false, strpos('abc', ''));
@@ -3142,7 +3266,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
       // --- invalid UTF-8
 
-      if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+      if (UTF8::getSupportInfo('mbstring') === true) { // only with "mbstring"
         self::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
 
         if (Bootup::is_php('7.1') === false) {
@@ -3291,7 +3415,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       self::assertSame(1, UTF8::strrpos('한국어', '국', 0, '', true));
     } else {
 
-      if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+      if (UTF8::getSupportInfo('mbstring') === true) { // only with "mbstring"
         self::assertSame(3, UTF8::strrpos('한국어', '국', 0, '8bit', false));
         self::assertSame(3, UTF8::strrpos('한국어', '국', 0, 'ISO', false));
       }
@@ -3390,7 +3514,12 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     // ---
 
     UTF8::checkForSupport();
+
+    $supportNull = UTF8::getSupportInfo('foo');
+    self::assertTrue(is_null($supportNull));
+
     $support = UTF8::getSupportInfo();
+    self::assertTrue(is_array($support));
 
     // language === "tr"
     if (
@@ -3590,7 +3719,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ISO
 
-    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+    if (UTF8::getSupportInfo('mbstring') === true) { // only with "mbstring"
       self::assertSame(28, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'ISO', false));
       self::assertSame(27, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'ISO', true));
     }
@@ -3787,7 +3916,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
     // ISO
 
-    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+    if (UTF8::getSupportInfo('mbstring') === true) { // only with "mbstring"
       self::assertSame(0, UTF8::substr_count('中文空白', '文空', 1, 2, 'ISO'));
       self::assertSame(1, UTF8::substr_count('abcde', 'bc', 1, 2, 'ISO'));
     }
@@ -4386,6 +4515,13 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testTrim($input, $output)
   {
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+
+      if ($i === 0) {
+        $this->disableNativeUtf8Support();
+      } elseif ($i > 0) {
+        $this->reactivateNativeUtf8Support();
+      }
+
       self::assertSame($output, UTF8::trim($input));
     }
   }

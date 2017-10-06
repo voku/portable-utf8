@@ -68,5 +68,7 @@ class Utf8UcwordsTest extends PHPUnit_Framework_TestCase
 
     self::assertSame('deja Σσς DEJa ΣσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('deja')));
     self::assertSame('deja Σσς DEJa σσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('deja', 'σσΣ')));
+    self::assertSame('Deja σσς dEJa σσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', array('deja', 'σσΣ'), ' '));
+    self::assertSame('deja Σσς DEJa σσΣ', UTF8::ucwords('deja σσς dEJa σσΣ' . "\x01\x02", array('deja', 'σσΣ'), '', 'UTF-8', true));
   }
 }

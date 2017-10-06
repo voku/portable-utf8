@@ -70,6 +70,7 @@ class Utf8UcfirstTest extends PHPUnit_Framework_TestCase
     self::assertSame('Σσς', UTF8::ucfirst('σσς'));
     self::assertSame('DEJa', UTF8::ucfirst('dEJa'));
     self::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
+    self::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ' . "\x01\x02", 'UTF8', true));
 
     // alias
     self::assertSame('Öäü', UTF8::ucword('öäü'));
