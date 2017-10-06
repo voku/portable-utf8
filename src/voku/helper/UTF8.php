@@ -922,16 +922,7 @@ final class UTF8
 
       // http://php.net/manual/en/book.mbstring.php
       self::$SUPPORT['mbstring'] = self::mbstring_loaded();
-
-      if (
-          defined('MB_OVERLOAD_STRING')
-          &&
-          ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING
-      ) {
-        self::$SUPPORT['mbstring_func_overload'] = true;
-      } else {
-        self::$SUPPORT['mbstring_func_overload'] = false;
-      }
+      self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();
 
       // http://php.net/manual/en/book.iconv.php
       self::$SUPPORT['iconv'] = self::iconv_loaded();
@@ -3527,6 +3518,19 @@ final class UTF8
     }
 
     return $return;
+  }
+
+  private static function mbstring_overloaded()
+  {
+    if (
+        defined('MB_OVERLOAD_STRING')
+        &&
+        ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   /**

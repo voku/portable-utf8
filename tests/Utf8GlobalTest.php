@@ -2436,6 +2436,11 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
       $this->oldSupportArray = $refProperty->getValue(null);
     }
 
+    // skip this if we already have different results from "mbstring_func_overload"
+    if ($this->oldSupportArray['mbstring_func_overload'] === true) {
+      return;
+    }
+
     $testArray = array(
         'already_checked_via_portable_utf8' => true,
         'mbstring'                          => false,
