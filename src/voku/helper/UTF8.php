@@ -811,6 +811,16 @@ final class UTF8
   private static $SUPPORT = array();
 
   /**
+   * @var null|array
+   */
+  private static $ORD = null;
+
+  /**
+   * @var null|array
+   */
+  private static $CHR = null;
+
+  /**
    * __construct()
    */
   public function __construct()
@@ -991,6 +1001,7 @@ final class UTF8
         $str = \mb_convert_encoding($str, $encoding, 'UTF-8');
       }
 
+      // add into static cache
       $CHAR_CACHE[$cacheKey] = $str;
       return $str;
     }
@@ -1001,20 +1012,24 @@ final class UTF8
       return null;
     }
 
+    if (self::$CHR === null) {
+      self::$CHR = self::getData('chr');
+    }
+
     if ($code_point <= 0x7F) {
-      $str = self::chr_and_parse_int($code_point);
+      $str = self::$CHR[$code_point];
     } elseif ($code_point <= 0x7FF) {
-      $str = self::chr_and_parse_int(($code_point >> 6) + 0xC0) .
-             self::chr_and_parse_int(($code_point & 0x3F) + 0x80);
+      $str = self::$CHR[($code_point >> 6) + 0xC0] .
+             self::$CHR[($code_point & 0x3F) + 0x80];
     } elseif ($code_point <= 0xFFFF) {
-      $str = self::chr_and_parse_int(($code_point >> 12) + 0xE0) .
-             self::chr_and_parse_int((($code_point >> 6) & 0x3F) + 0x80) .
-             self::chr_and_parse_int(($code_point & 0x3F) + 0x80);
+      $str = self::$CHR[($code_point >> 12) + 0xE0] .
+             self::$CHR[(($code_point >> 6) & 0x3F) + 0x80] .
+             self::$CHR[($code_point & 0x3F) + 0x80];
     } else {
-      $str = self::chr_and_parse_int(($code_point >> 18) + 0xF0) .
-             self::chr_and_parse_int((($code_point >> 12) & 0x3F) + 0x80) .
-             self::chr_and_parse_int((($code_point >> 6) & 0x3F) + 0x80) .
-             self::chr_and_parse_int(($code_point & 0x3F) + 0x80);
+      $str = self::$CHR[($code_point >> 18) + 0xF0] .
+             self::$CHR[(($code_point >> 12) & 0x3F) + 0x80] .
+             self::$CHR[(($code_point >> 6) & 0x3F) + 0x80] .
+             self::$CHR[($code_point & 0x3F) + 0x80];
     }
 
     if ($encoding !== 'UTF-8') {
@@ -1025,16 +1040,6 @@ final class UTF8
     $CHAR_CACHE[$cacheKey] = $str;
 
     return $str;
-  }
-
-  /**
-   * @param int $int
-   *
-   * @return string
-   */
-  private static function chr_and_parse_int($int)
-  {
-    return chr((int)$int);
   }
 
   /**
@@ -3154,12 +3159,16 @@ final class UTF8
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
       $len = \mb_strlen($str, '8BIT');
     } else {
-      $len = strlen($str);
+      $len = \strlen($str);
+    }
+
+    if (self::$ORD === null) {
+      self::$ORD = self::getData('ord');
     }
 
     /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $len; $i++) {
-      $in = ord($str[$i]);
+      $in = self::$ORD[$str[$i]];
       if ($mState === 0) {
         // When mState is zero we expect either a US-ASCII character or a
         // multi-octet sequence.
@@ -3696,7 +3705,7 @@ final class UTF8
       $UTF8_MSWORD_VALUES_CACHE = array_values(self::$UTF8_MSWORD);
     }
 
-    return str_replace($UTF8_MSWORD_KEYS_CACHE, $UTF8_MSWORD_VALUES_CACHE, $str);
+    return \str_replace($UTF8_MSWORD_KEYS_CACHE, $UTF8_MSWORD_VALUES_CACHE, $str);
   }
 
   /**
@@ -6149,7 +6158,6 @@ final class UTF8
     if ($full) {
 
       static $FULL_CASE_FOLD = null;
-
       if ($FULL_CASE_FOLD === null) {
         $FULL_CASE_FOLD = self::getData('caseFolding_full');
       }
@@ -7066,17 +7074,21 @@ final class UTF8
       }
     }
 
+    if (self::$ORD === null) {
+      self::$ORD = self::getData('ord');
+    }
+
     preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
     $chars = $ar[0];
     foreach ($chars as &$c) {
 
-      $ordC0 = ord($c[0]);
+      $ordC0 = self::$ORD[$c[0]];
 
       if ($ordC0 >= 0 && $ordC0 <= 127) {
         continue;
       }
 
-      $ordC1 = ord($c[1]);
+      $ordC1 = self::$ORD[$c[1]];
 
       // ASCII - next please
       if ($ordC0 >= 192 && $ordC0 <= 223) {
@@ -7084,28 +7096,28 @@ final class UTF8
       }
 
       if ($ordC0 >= 224) {
-        $ordC2 = ord($c[2]);
+        $ordC2 = self::$ORD[$c[2]];
 
         if ($ordC0 <= 239) {
           $ord = ($ordC0 - 224) * 4096 + ($ordC1 - 128) * 64 + ($ordC2 - 128);
         }
 
         if ($ordC0 >= 240) {
-          $ordC3 = ord($c[3]);
+          $ordC3 = self::$ORD[$c[3]];
 
           if ($ordC0 <= 247) {
             $ord = ($ordC0 - 240) * 262144 + ($ordC1 - 128) * 4096 + ($ordC2 - 128) * 64 + ($ordC3 - 128);
           }
 
           if ($ordC0 >= 248) {
-            $ordC4 = ord($c[4]);
+            $ordC4 = self::$ORD[$c[4]];
 
             if ($ordC0 <= 251) {
               $ord = ($ordC0 - 248) * 16777216 + ($ordC1 - 128) * 262144 + ($ordC2 - 128) * 4096 + ($ordC3 - 128) * 64 + ($ordC4 - 128);
             }
 
             if ($ordC0 >= 252) {
-              $ordC5 = ord($c[5]);
+              $ordC5 = self::$ORD[$c[5]];
 
               if ($ordC0 <= 253) {
                 $ord = ($ordC0 - 252) * 1073741824 + ($ordC1 - 128) * 16777216 + ($ordC2 - 128) * 262144 + ($ordC3 - 128) * 4096 + ($ordC4 - 128) * 64 + ($ordC5 - 128);
@@ -7335,13 +7347,22 @@ final class UTF8
    */
   private static function to_utf8_convert($int)
   {
+    // init
     $buf = '';
 
-    $ordC1 = ord($int);
+    if (self::$ORD === null) {
+      self::$ORD = self::getData('ord');
+    }
+
+    if (self::$CHR === null) {
+      self::$CHR = self::getData('chr');
+    }
+
+    $ordC1 = self::$ORD[$int];
     if (isset(self::$WIN1252_TO_UTF8[$ordC1])) { // found in Windows-1252 special cases
       $buf .= self::$WIN1252_TO_UTF8[$ordC1];
     } else {
-      $cc1 = self::chr_and_parse_int($ordC1 / 64) | "\xC0";
+      $cc1 = self::$CHR[$ordC1 / 64] | "\xC0";
       $cc2 = ($int & "\x3F") | "\x80";
       $buf .= $cc1 . $cc2;
     }
@@ -7805,12 +7826,12 @@ final class UTF8
     static $UTF8_TO_WIN1252_VALUES_CACHE = null;
 
     if ($UTF8_TO_WIN1252_KEYS_CACHE === null) {
-      $UTF8_TO_WIN1252_KEYS_CACHE = array_keys(self::$UTF8_TO_WIN1252);
-      $UTF8_TO_WIN1252_VALUES_CACHE = array_values(self::$UTF8_TO_WIN1252);
+      $UTF8_TO_WIN1252_KEYS_CACHE = \array_keys(self::$UTF8_TO_WIN1252);
+      $UTF8_TO_WIN1252_VALUES_CACHE = \array_values(self::$UTF8_TO_WIN1252);
     }
 
     /** @noinspection PhpInternalEntityUsedInspection */
-    $str = str_replace($UTF8_TO_WIN1252_KEYS_CACHE, $UTF8_TO_WIN1252_VALUES_CACHE, $str);
+    $str = \str_replace($UTF8_TO_WIN1252_KEYS_CACHE, $UTF8_TO_WIN1252_VALUES_CACHE, $str);
 
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
@@ -7822,7 +7843,15 @@ final class UTF8
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
       $len = \mb_strlen($str, '8BIT');
     } else {
-      $len = strlen($str);
+      $len = \strlen($str);
+    }
+
+    if (self::$ORD === null) {
+      self::$ORD = self::getData('ord');
+    }
+
+    if (self::$CHR === null) {
+      self::$CHR = self::getData('chr');
     }
 
     $noCharFound = '?';
@@ -7831,8 +7860,8 @@ final class UTF8
       switch ($str[$i] & "\xF0") {
         case "\xC0":
         case "\xD0":
-          $c = (ord($str[$i] & "\x1F") << 6) | ord($str[++$i] & "\x3F");
-          $str[$j] = $c < 256 ? self::chr_and_parse_int($c) : $noCharFound;
+          $c = (self::$ORD[$str[$i] & "\x1F"] << 6) | self::$ORD[$str[++$i] & "\x3F"];
+          $str[$j] = $c < 256 ? self::$CHR[$c] : $noCharFound;
           break;
 
         /** @noinspection PhpMissingBreakStatementInspection */
