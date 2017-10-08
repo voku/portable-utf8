@@ -934,12 +934,14 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testFixBrokenUtf8()
   {
     $testArray = array(
+        'ا (Alif) · ب (Bāʾ) · ت (Tāʾ) · ث (Ṯāʾ) · ج (Ǧīm) · ح (Ḥāʾ) · خ (Ḫāʾ) · د (Dāl) · ذ (Ḏāl) · ر (Rāʾ) · ز (Zāy) · س (Sīn) · ش (Šīn) · ص (Ṣād) · ض (Ḍād) · ط (Ṭāʾ) · ظ (Ẓāʾ) · ع (ʿAin) · غ (Ġain) · ف (Fāʾ) · ق (Qāf) · ك (Kāf) · ل (Lām) · م (Mīm) · ن (Nūn) · ه (Hāʾ) · و (Wāw) · ي (Yāʾ)' => 'ا (Alif) · ب (Bāʾ) · ت (Tāʾ) · ث (Ṯāʾ) · ج (Ǧīm) · ح (Ḥāʾ) · خ (Ḫāʾ) · د (Dāl) · ذ (Ḏāl) · ر (Rāʾ) · ز (Zāy) · س (Sīn) · ش (Šīn) · ص (Ṣād) · ض (Ḍād) · ط (Ṭāʾ) · ظ (Ẓāʾ) · ع (ʿAin) · غ (Ġain) · ف (Fāʾ) · ق (Qāf) · ك (Kāf) · ل (Lām) · م (Mīm) · ن (Nūn) · ه (Hāʾ) · و (Wāw) · ي (Yāʾ)',
+        'строка на русском'                               => 'строка на русском',
         'Düsseldorf'                                      => 'Düsseldorf',
         'Ã'                                               => 'Ã',
         ' '                                               => ' ',
         ''                                                => '',
         "\n"                                              => "\n",
-        "test\xc2\x88"                                    => 'testˆ',
+        "test\xc2\x88"                                    => 'test',
         'DÃ¼sseldorf'                                     => 'Düsseldorf',
         'Ã¤'                                              => 'ä',
         'test'                                            => 'test',
@@ -954,7 +956,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
     );
 
     foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::fix_utf8($before));
+      self::assertSame($after, UTF8::fix_utf8($before), 'tested: ' . $before);
     }
 
     self::assertSame(array('Düsseldorf', 'Fédération'), UTF8::fix_utf8(array('DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration')));
@@ -4707,11 +4709,16 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testUtf8EncodeUtf8Decode()
   {
     $tests = array(
+        'ا (Alif) · ب (Bāʾ) · ت (Tāʾ) · ث (Ṯāʾ) · ج (Ǧīm) · ح (Ḥāʾ) · خ (Ḫāʾ) · د (Dāl) · ذ (Ḏāl) · ر (Rāʾ) · ز (Zāy) · س (Sīn) · ش (Šīn) · ص (Ṣād) · ض (Ḍād) · ط (Ṭāʾ) · ظ (Ẓāʾ) · ع (ʿAin) · غ (Ġain) · ف (Fāʾ) · ق (Qāf) · ك (Kāf) · ل (Lām) · م (Mīm) · ن (Nūn) · ه (Hāʾ) · و (Wāw) · ي (Yāʾ)' => 'ا (Alif) · ب (Bāʾ) · ت (Tāʾ) · ث (Ṯāʾ) · ج (Ǧīm) · ح (Ḥāʾ) · خ (Ḫāʾ) · د (Dāl) · ذ (Ḏāl) · ر (Rāʾ) · ز (Zāy) · س (Sīn) · ش (Šīn) · ص (Ṣād) · ض (Ḍād) · ط (Ṭāʾ) · ظ (Ẓāʾ) · ع (ʿAin) · غ (Ġain) · ف (Fāʾ) · ق (Qāf) · ك (Kāf) · ل (Lām) · م (Mīm) · ن (Nūn) · ه (Hāʾ) · و (Wāw) · ي (Yāʾ)',
+        'строка на русском' => 'строка на русском',
         '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
         'foobar'         => 'foobar',
+        123              => '123',
+        "κόσμε\xc2\xa0" => "κόσμε\xc2\xa0",
+        "\xd1\xd2"       => "\xd1\xd2",
     );
 
     foreach ($tests as $before => $after) {

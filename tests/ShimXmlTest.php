@@ -21,8 +21,9 @@ class ShimXmlTest extends PHPUnit_Framework_TestCase
       self::assertSame('??', p::utf8_decode('Σ어'));
     }
 
-    $s = 444;
+    // ---
 
+    $s = 444;
     self::assertSame(utf8_encode($s), p::utf8_encode($s));
     self::assertSame(utf8_decode($s), p::utf8_decode($s));
   }

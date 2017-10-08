@@ -1888,7 +1888,7 @@ final class UTF8
     while ($last !== $str) {
       $last = $str;
       $str = self::to_utf8(
-          self::utf8_decode($str)
+          self::utf8_decode($str, true)
       );
     }
 
@@ -7786,10 +7786,11 @@ final class UTF8
    * Decodes an UTF-8 string to ISO-8859-1.
    *
    * @param string $str <p>The input string.</p>
+   * @param bool   $keepUtf8Chars
    *
    * @return string
    */
-  public static function utf8_decode($str)
+  public static function utf8_decode($str, $keepUtf8Chars = false)
   {
     // init
     $str = (string)$str;
@@ -7815,26 +7816,30 @@ final class UTF8
       self::checkForSupport();
     }
 
+    // save for later comparision
+    $str_backup = $str;
+
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
       $len = \mb_strlen($str, '8BIT');
     } else {
       $len = strlen($str);
     }
 
+    $noCharFound = '?';
     /** @noinspection ForeachInvariantsInspection */
     for ($i = 0, $j = 0; $i < $len; ++$i, ++$j) {
       switch ($str[$i] & "\xF0") {
         case "\xC0":
         case "\xD0":
           $c = (ord($str[$i] & "\x1F") << 6) | ord($str[++$i] & "\x3F");
-          $str[$j] = $c < 256 ? self::chr_and_parse_int($c) : '?';
+          $str[$j] = $c < 256 ? self::chr_and_parse_int($c) : $noCharFound;
           break;
 
         /** @noinspection PhpMissingBreakStatementInspection */
         case "\xF0":
           ++$i;
         case "\xE0":
-          $str[$j] = '?';
+          $str[$j] = $noCharFound;
           $i += 2;
           break;
 
@@ -7843,7 +7848,17 @@ final class UTF8
       }
     }
 
-    return (string)self::substr($str, 0, $j, '8BIT');
+    $return = (string)self::substr($str, 0, $j, '8BIT');
+
+    if (
+        $keepUtf8Chars === true
+        &&
+        self::strlen($return) >= self::strlen($str_backup)
+    ) {
+      return $str_backup;
+    }
+
+    return $return;
   }
 
   /**
