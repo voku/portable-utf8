@@ -2545,16 +2545,11 @@ final class UTF8
       self::checkForSupport();
     }
 
-    if (self::$SUPPORT['mbstring_func_overload'] === true) {
-      $len = \mb_strlen($str, '8BIT');
-    } else {
-      $len = \strlen($str);
-    }
-
     if (self::$ORD === null) {
       self::$ORD = self::getData('ord');
     }
 
+    $len = self::strlen_in_byte($str);
     /** @noinspection ForeachInvariantsInspection */
     for ($i = 0; $i < $len; $i++) {
       $in = self::$ORD[$str[$i]];
@@ -3730,11 +3725,7 @@ final class UTF8
         self::checkForSupport();
       }
 
-      if (self::$SUPPORT['mbstring_func_overload'] === true) {
-        $len = \mb_strlen($str, '8BIT');
-      } else {
-        $len = strlen($str);
-      }
+      $len = self::strlen_in_byte($str);
 
       /** @noinspection ForeachInvariantsInspection */
       for ($i = 0; $i < $len; $i++) {
@@ -4896,6 +4887,24 @@ final class UTF8
   }
 
   /**
+   * Get string length in byte.
+   *
+   * @param string $str
+   *
+   * @return int
+   */
+  public static function strlen_in_byte($str)
+  {
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      $len = \mb_strlen($str, '8BIT');
+    } else {
+      $len = \strlen($str);
+    }
+
+    return $len;
+  }
+
+  /**
    * Case insensitive string comparisons using a "natural order" algorithm.
    *
    * INFO: natural order version of UTF8::strcasecmp()
@@ -5061,8 +5070,8 @@ final class UTF8
 
     if (
         $encoding !== 'UTF-8'
-        &
-        self::$SUPPORT['iconv'] === true
+        &&
+        self::$SUPPORT['iconv'] === false
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
@@ -6663,12 +6672,7 @@ final class UTF8
       self::checkForSupport();
     }
 
-    if (self::$SUPPORT['mbstring_func_overload'] === true) {
-      $max = \mb_strlen($str, '8BIT');
-    } else {
-      $max = strlen($str);
-    }
-
+    $max = self::strlen_in_byte($str);
     $buf = '';
 
     /** @noinspection ForeachInvariantsInspection */
@@ -7249,12 +7253,7 @@ final class UTF8
 
     // save for later comparision
     $str_backup = $str;
-
-    if (self::$SUPPORT['mbstring_func_overload'] === true) {
-      $len = \mb_strlen($str, '8BIT');
-    } else {
-      $len = \strlen($str);
-    }
+    $len = self::strlen_in_byte($str);
 
     if (self::$ORD === null) {
       self::$ORD = self::getData('ord');
