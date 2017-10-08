@@ -14,74 +14,6 @@ final class UTF8
   const GRAPHEME_CLUSTER_RX = '(?:\r\n|(?:[ -~\x{200C}\x{200D}]|[ᆨ-ᇹ]+|[ᄀ-ᅟ]*(?:[가개갸걔거게겨계고과괘괴교구궈궤귀규그긔기까깨꺄꺠꺼께껴꼐꼬꽈꽤꾀꾜꾸꿔꿰뀌뀨끄끠끼나내냐냬너네녀녜노놔놰뇌뇨누눠눼뉘뉴느늬니다대댜댸더데뎌뎨도돠돼되됴두둬뒈뒤듀드듸디따때땨떄떠떼뗘뗴또똬뙈뙤뚀뚜뚸뛔뛰뜌뜨띄띠라래랴럐러레려례로롸뢔뢰료루뤄뤠뤼류르릐리마매먀먜머메며몌모뫄뫠뫼묘무뭐뭬뮈뮤므믜미바배뱌뱨버베벼볘보봐봬뵈뵤부붜붸뷔뷰브븨비빠빼뺘뺴뻐뻬뼈뼤뽀뽜뽸뾔뾰뿌뿨쀄쀠쀼쁘쁴삐사새샤섀서세셔셰소솨쇄쇠쇼수숴쉐쉬슈스싀시싸쌔쌰썌써쎄쎠쎼쏘쏴쐐쐬쑈쑤쒀쒜쒸쓔쓰씌씨아애야얘어에여예오와왜외요우워웨위유으의이자재쟈쟤저제져졔조좌좨죄죠주줘줴쥐쥬즈즤지짜째쨔쨰쩌쩨쪄쪠쪼쫘쫴쬐쬬쭈쭤쮀쮜쮸쯔쯰찌차채챠챼처체쳐쳬초촤쵀최쵸추춰췌취츄츠츼치카캐캬컈커케켜켸코콰쾌쾨쿄쿠쿼퀘퀴큐크킈키타태탸턔터테텨톄토톼퇘퇴툐투퉈퉤튀튜트틔티파패퍄퍠퍼페펴폐포퐈퐤푀표푸풔풰퓌퓨프픠피하해햐햬허헤혀혜호화홰회효후훠훼휘휴흐희히]?[ᅠ-ᆢ]+|[가-힣])[ᆨ-ᇹ]*|[ᄀ-ᅟ]+|[^\p{Cc}\p{Cf}\p{Zl}\p{Zp}])[\p{Mn}\p{Me}\x{09BE}\x{09D7}\x{0B3E}\x{0B57}\x{0BBE}\x{0BD7}\x{0CC2}\x{0CD5}\x{0CD6}\x{0D3E}\x{0D57}\x{0DCF}\x{0DDF}\x{200C}\x{200D}\x{1D165}\x{1D16E}-\x{1D172}]*|[\p{Cc}\p{Cf}\p{Zl}\p{Zp}])';
 
   /**
-   * @var array
-   */
-  private static $WIN1252_TO_UTF8 = array(
-      128 => "\xe2\x82\xac", // EURO SIGN
-      130 => "\xe2\x80\x9a", // SINGLE LOW-9 QUOTATION MARK
-      131 => "\xc6\x92", // LATIN SMALL LETTER F WITH HOOK
-      132 => "\xe2\x80\x9e", // DOUBLE LOW-9 QUOTATION MARK
-      133 => "\xe2\x80\xa6", // HORIZONTAL ELLIPSIS
-      134 => "\xe2\x80\xa0", // DAGGER
-      135 => "\xe2\x80\xa1", // DOUBLE DAGGER
-      136 => "\xcb\x86", // MODIFIER LETTER CIRCUMFLEX ACCENT
-      137 => "\xe2\x80\xb0", // PER MILLE SIGN
-      138 => "\xc5\xa0", // LATIN CAPITAL LETTER S WITH CARON
-      139 => "\xe2\x80\xb9", // SINGLE LEFT-POINTING ANGLE QUOTE
-      140 => "\xc5\x92", // LATIN CAPITAL LIGATURE OE
-      142 => "\xc5\xbd", // LATIN CAPITAL LETTER Z WITH CARON
-      145 => "\xe2\x80\x98", // LEFT SINGLE QUOTATION MARK
-      146 => "\xe2\x80\x99", // RIGHT SINGLE QUOTATION MARK
-      147 => "\xe2\x80\x9c", // LEFT DOUBLE QUOTATION MARK
-      148 => "\xe2\x80\x9d", // RIGHT DOUBLE QUOTATION MARK
-      149 => "\xe2\x80\xa2", // BULLET
-      150 => "\xe2\x80\x93", // EN DASH
-      151 => "\xe2\x80\x94", // EM DASH
-      152 => "\xcb\x9c", // SMALL TILDE
-      153 => "\xe2\x84\xa2", // TRADE MARK SIGN
-      154 => "\xc5\xa1", // LATIN SMALL LETTER S WITH CARON
-      155 => "\xe2\x80\xba", // SINGLE RIGHT-POINTING ANGLE QUOTE
-      156 => "\xc5\x93", // LATIN SMALL LIGATURE OE
-      158 => "\xc5\xbe", // LATIN SMALL LETTER Z WITH CARON
-      159 => "\xc5\xb8", // LATIN CAPITAL LETTER Y WITH DIAERESIS
-      164 => "\xc3\xb1", // ñ
-      165 => "\xc3\x91", // Ñ
-  );
-
-  /**
-   * @var array
-   */
-  private static $CP1252_TO_UTF8 = array(
-      '' => '€',
-      '' => '‚',
-      '' => 'ƒ',
-      '' => '„',
-      '' => '…',
-      '' => '†',
-      '' => '‡',
-      '' => 'ˆ',
-      '' => '‰',
-      '' => 'Š',
-      '' => '‹',
-      '' => 'Œ',
-      '' => 'Ž',
-      '' => '‘',
-      '' => '’',
-      '' => '“',
-      '' => '”',
-      '' => '•',
-      '' => '–',
-      '' => '—',
-      '' => '˜',
-      '' => '™',
-      '' => 'š',
-      '' => '›',
-      '' => 'œ',
-      '' => 'ž',
-      '' => 'Ÿ',
-  );
-
-  /**
    * Bom => Byte-Length
    *
    * INFO: https://en.wikipedia.org/wiki/Byte_order_mark
@@ -236,579 +168,27 @@ final class UTF8
   /**
    * @var array
    */
-  private static $BROKEN_UTF8_FIX = array(
-      "\xc2\x80" => "\xe2\x82\xac", // EURO SIGN
-      "\xc2\x82" => "\xe2\x80\x9a", // SINGLE LOW-9 QUOTATION MARK
-      "\xc2\x83" => "\xc6\x92", // LATIN SMALL LETTER F WITH HOOK
-      "\xc2\x84" => "\xe2\x80\x9e", // DOUBLE LOW-9 QUOTATION MARK
-      "\xc2\x85" => "\xe2\x80\xa6", // HORIZONTAL ELLIPSIS
-      "\xc2\x86" => "\xe2\x80\xa0", // DAGGER
-      "\xc2\x87" => "\xe2\x80\xa1", // DOUBLE DAGGER
-      "\xc2\x88" => "\xcb\x86", // MODIFIER LETTER CIRCUMFLEX ACCENT
-      "\xc2\x89" => "\xe2\x80\xb0", // PER MILLE SIGN
-      "\xc2\x8a" => "\xc5\xa0", // LATIN CAPITAL LETTER S WITH CARON
-      "\xc2\x8b" => "\xe2\x80\xb9", // SINGLE LEFT-POINTING ANGLE QUOTE
-      "\xc2\x8c" => "\xc5\x92", // LATIN CAPITAL LIGATURE OE
-      "\xc2\x8e" => "\xc5\xbd", // LATIN CAPITAL LETTER Z WITH CARON
-      "\xc2\x91" => "\xe2\x80\x98", // LEFT SINGLE QUOTATION MARK
-      "\xc2\x92" => "\xe2\x80\x99", // RIGHT SINGLE QUOTATION MARK
-      "\xc2\x93" => "\xe2\x80\x9c", // LEFT DOUBLE QUOTATION MARK
-      "\xc2\x94" => "\xe2\x80\x9d", // RIGHT DOUBLE QUOTATION MARK
-      "\xc2\x95" => "\xe2\x80\xa2", // BULLET
-      "\xc2\x96" => "\xe2\x80\x93", // EN DASH
-      "\xc2\x97" => "\xe2\x80\x94", // EM DASH
-      "\xc2\x98" => "\xcb\x9c", // SMALL TILDE
-      "\xc2\x99" => "\xe2\x84\xa2", // TRADE MARK SIGN
-      "\xc2\x9a" => "\xc5\xa1", // LATIN SMALL LETTER S WITH CARON
-      "\xc2\x9b" => "\xe2\x80\xba", // SINGLE RIGHT-POINTING ANGLE QUOTE
-      "\xc2\x9c" => "\xc5\x93", // LATIN SMALL LIGATURE OE
-      "\xc2\x9e" => "\xc5\xbe", // LATIN SMALL LETTER Z WITH CARON
-      "\xc2\x9f" => "\xc5\xb8", // LATIN CAPITAL LETTER Y WITH DIAERESIS
-      'Ã¼'       => 'ü',
-      'Ã¤'       => 'ä',
-      'Ã¶'       => 'ö',
-      'Ã–'       => 'Ö',
-      'ÃŸ'       => 'ß',
-      'Ã '       => 'à',
-      'Ã¡'       => 'á',
-      'Ã¢'       => 'â',
-      'Ã£'       => 'ã',
-      'Ã¹'       => 'ù',
-      'Ãº'       => 'ú',
-      'Ã»'       => 'û',
-      'Ã™'       => 'Ù',
-      'Ãš'       => 'Ú',
-      'Ã›'       => 'Û',
-      'Ãœ'       => 'Ü',
-      'Ã²'       => 'ò',
-      'Ã³'       => 'ó',
-      'Ã´'       => 'ô',
-      'Ã¨'       => 'è',
-      'Ã©'       => 'é',
-      'Ãª'       => 'ê',
-      'Ã«'       => 'ë',
-      'Ã€'       => 'À',
-      'Ã'       => 'Á',
-      'Ã‚'       => 'Â',
-      'Ãƒ'       => 'Ã',
-      'Ã„'       => 'Ä',
-      'Ã…'       => 'Å',
-      'Ã‡'       => 'Ç',
-      'Ãˆ'       => 'È',
-      'Ã‰'       => 'É',
-      'ÃŠ'       => 'Ê',
-      'Ã‹'       => 'Ë',
-      'ÃŒ'       => 'Ì',
-      'Ã'       => 'Í',
-      'ÃŽ'       => 'Î',
-      'Ã'       => 'Ï',
-      'Ã‘'       => 'Ñ',
-      'Ã’'       => 'Ò',
-      'Ã“'       => 'Ó',
-      'Ã”'       => 'Ô',
-      'Ã•'       => 'Õ',
-      'Ã˜'       => 'Ø',
-      'Ã¥'       => 'å',
-      'Ã¦'       => 'æ',
-      'Ã§'       => 'ç',
-      'Ã¬'       => 'ì',
-      'Ã­'       => 'í',
-      'Ã®'       => 'î',
-      'Ã¯'       => 'ï',
-      'Ã°'       => 'ð',
-      'Ã±'       => 'ñ',
-      'Ãµ'       => 'õ',
-      'Ã¸'       => 'ø',
-      'Ã½'       => 'ý',
-      'Ã¿'       => 'ÿ',
-      'â‚¬'      => '€',
-      'â€™'      => '’',
-  );
-
-  /**
-   * @var array
-   */
-  private static $UTF8_TO_WIN1252 = array(
-      "\xe2\x82\xac" => "\x80", // EURO SIGN
-      "\xe2\x80\x9a" => "\x82", // SINGLE LOW-9 QUOTATION MARK
-      "\xc6\x92"     => "\x83", // LATIN SMALL LETTER F WITH HOOK
-      "\xe2\x80\x9e" => "\x84", // DOUBLE LOW-9 QUOTATION MARK
-      "\xe2\x80\xa6" => "\x85", // HORIZONTAL ELLIPSIS
-      "\xe2\x80\xa0" => "\x86", // DAGGER
-      "\xe2\x80\xa1" => "\x87", // DOUBLE DAGGER
-      "\xcb\x86"     => "\x88", // MODIFIER LETTER CIRCUMFLEX ACCENT
-      "\xe2\x80\xb0" => "\x89", // PER MILLE SIGN
-      "\xc5\xa0"     => "\x8a", // LATIN CAPITAL LETTER S WITH CARON
-      "\xe2\x80\xb9" => "\x8b", // SINGLE LEFT-POINTING ANGLE QUOTE
-      "\xc5\x92"     => "\x8c", // LATIN CAPITAL LIGATURE OE
-      "\xc5\xbd"     => "\x8e", // LATIN CAPITAL LETTER Z WITH CARON
-      "\xe2\x80\x98" => "\x91", // LEFT SINGLE QUOTATION MARK
-      "\xe2\x80\x99" => "\x92", // RIGHT SINGLE QUOTATION MARK
-      "\xe2\x80\x9c" => "\x93", // LEFT DOUBLE QUOTATION MARK
-      "\xe2\x80\x9d" => "\x94", // RIGHT DOUBLE QUOTATION MARK
-      "\xe2\x80\xa2" => "\x95", // BULLET
-      "\xe2\x80\x93" => "\x96", // EN DASH
-      "\xe2\x80\x94" => "\x97", // EM DASH
-      "\xcb\x9c"     => "\x98", // SMALL TILDE
-      "\xe2\x84\xa2" => "\x99", // TRADE MARK SIGN
-      "\xc5\xa1"     => "\x9a", // LATIN SMALL LETTER S WITH CARON
-      "\xe2\x80\xba" => "\x9b", // SINGLE RIGHT-POINTING ANGLE QUOTE
-      "\xc5\x93"     => "\x9c", // LATIN SMALL LIGATURE OE
-      "\xc5\xbe"     => "\x9e", // LATIN SMALL LETTER Z WITH CARON
-      "\xc5\xb8"     => "\x9f", // LATIN CAPITAL LETTER Y WITH DIAERESIS
-  );
-
-  /**
-   * @var array
-   */
-  private static $UTF8_MSWORD = array(
-      "\xc2\xab"     => '"', // « (U+00AB) in UTF-8
-      "\xc2\xbb"     => '"', // » (U+00BB) in UTF-8
-      "\xe2\x80\x98" => "'", // ‘ (U+2018) in UTF-8
-      "\xe2\x80\x99" => "'", // ’ (U+2019) in UTF-8
-      "\xe2\x80\x9a" => "'", // ‚ (U+201A) in UTF-8
-      "\xe2\x80\x9b" => "'", // ‛ (U+201B) in UTF-8
-      "\xe2\x80\x9c" => '"', // “ (U+201C) in UTF-8
-      "\xe2\x80\x9d" => '"', // ” (U+201D) in UTF-8
-      "\xe2\x80\x9e" => '"', // „ (U+201E) in UTF-8
-      "\xe2\x80\x9f" => '"', // ‟ (U+201F) in UTF-8
-      "\xe2\x80\xb9" => "'", // ‹ (U+2039) in UTF-8
-      "\xe2\x80\xba" => "'", // › (U+203A) in UTF-8
-      "\xe2\x80\x93" => '-', // – (U+2013) in UTF-8
-      "\xe2\x80\x94" => '-', // — (U+2014) in UTF-8
-      "\xe2\x80\xa6" => '...' // … (U+2026) in UTF-8
-  );
-
-  /**
-   * @var array
-   */
-  private static $ICONV_ENCODING = array(
-      'ANSI_X3.4-1968',
-      'ANSI_X3.4-1986',
-      'ASCII',
-      'CP367',
-      'IBM367',
-      'ISO-IR-6',
-      'ISO646-US',
-      'ISO_646.IRV:1991',
-      'US',
-      'US-ASCII',
-      'CSASCII',
-      'UTF-8',
-      'ISO-10646-UCS-2',
-      'UCS-2',
-      'CSUNICODE',
-      'UCS-2BE',
-      'UNICODE-1-1',
-      'UNICODEBIG',
-      'CSUNICODE11',
-      'UCS-2LE',
-      'UNICODELITTLE',
-      'ISO-10646-UCS-4',
-      'UCS-4',
-      'CSUCS4',
-      'UCS-4BE',
-      'UCS-4LE',
-      'UTF-16',
-      'UTF-16BE',
-      'UTF-16LE',
-      'UTF-32',
-      'UTF-32BE',
-      'UTF-32LE',
-      'UNICODE-1-1-UTF-7',
-      'UTF-7',
-      'CSUNICODE11UTF7',
-      'UCS-2-INTERNAL',
-      'UCS-2-SWAPPED',
-      'UCS-4-INTERNAL',
-      'UCS-4-SWAPPED',
-      'C99',
-      'JAVA',
-      'CP819',
-      'IBM819',
-      'ISO-8859-1',
-      'ISO-IR-100',
-      'ISO8859-1',
-      'ISO_8859-1',
-      'ISO_8859-1:1987',
-      'L1',
-      'LATIN1',
-      'CSISOLATIN1',
-      'ISO-8859-2',
-      'ISO-IR-101',
-      'ISO8859-2',
-      'ISO_8859-2',
-      'ISO_8859-2:1987',
-      'L2',
-      'LATIN2',
-      'CSISOLATIN2',
-      'ISO-8859-3',
-      'ISO-IR-109',
-      'ISO8859-3',
-      'ISO_8859-3',
-      'ISO_8859-3:1988',
-      'L3',
-      'LATIN3',
-      'CSISOLATIN3',
-      'ISO-8859-4',
-      'ISO-IR-110',
-      'ISO8859-4',
-      'ISO_8859-4',
-      'ISO_8859-4:1988',
-      'L4',
-      'LATIN4',
-      'CSISOLATIN4',
-      'CYRILLIC',
-      'ISO-8859-5',
-      'ISO-IR-144',
-      'ISO8859-5',
-      'ISO_8859-5',
-      'ISO_8859-5:1988',
-      'CSISOLATINCYRILLIC',
-      'ARABIC',
-      'ASMO-708',
-      'ECMA-114',
-      'ISO-8859-6',
-      'ISO-IR-127',
-      'ISO8859-6',
-      'ISO_8859-6',
-      'ISO_8859-6:1987',
-      'CSISOLATINARABIC',
-      'ECMA-118',
-      'ELOT_928',
-      'GREEK',
-      'GREEK8',
-      'ISO-8859-7',
-      'ISO-IR-126',
-      'ISO8859-7',
-      'ISO_8859-7',
-      'ISO_8859-7:1987',
-      'ISO_8859-7:2003',
-      'CSISOLATINGREEK',
-      'HEBREW',
-      'ISO-8859-8',
-      'ISO-IR-138',
-      'ISO8859-8',
-      'ISO_8859-8',
-      'ISO_8859-8:1988',
-      'CSISOLATINHEBREW',
-      'ISO-8859-9',
-      'ISO-IR-148',
-      'ISO8859-9',
-      'ISO_8859-9',
-      'ISO_8859-9:1989',
-      'L5',
-      'LATIN5',
-      'CSISOLATIN5',
-      'ISO-8859-10',
-      'ISO-IR-157',
-      'ISO8859-10',
-      'ISO_8859-10',
-      'ISO_8859-10:1992',
-      'L6',
-      'LATIN6',
-      'CSISOLATIN6',
-      'ISO-8859-11',
-      'ISO8859-11',
-      'ISO_8859-11',
-      'ISO-8859-13',
-      'ISO-IR-179',
-      'ISO8859-13',
-      'ISO_8859-13',
-      'L7',
-      'LATIN7',
-      'ISO-8859-14',
-      'ISO-CELTIC',
-      'ISO-IR-199',
-      'ISO8859-14',
-      'ISO_8859-14',
-      'ISO_8859-14:1998',
-      'L8',
-      'LATIN8',
-      'ISO-8859-15',
-      'ISO-IR-203',
-      'ISO8859-15',
-      'ISO_8859-15',
-      'ISO_8859-15:1998',
-      'LATIN-9',
-      'ISO-8859-16',
-      'ISO-IR-226',
-      'ISO8859-16',
-      'ISO_8859-16',
-      'ISO_8859-16:2001',
-      'L10',
-      'LATIN10',
-      'KOI8-R',
-      'CSKOI8R',
-      'KOI8-U',
-      'KOI8-RU',
-      'CP1250',
-      'MS-EE',
-      'WINDOWS-1250',
-      'CP1251',
-      'MS-CYRL',
-      'WINDOWS-1251',
-      'CP1252',
-      'MS-ANSI',
-      'WINDOWS-1252',
-      'CP1253',
-      'MS-GREEK',
-      'WINDOWS-1253',
-      'CP1254',
-      'MS-TURK',
-      'WINDOWS-1254',
-      'CP1255',
-      'MS-HEBR',
-      'WINDOWS-1255',
-      'CP1256',
-      'MS-ARAB',
-      'WINDOWS-1256',
-      'CP1257',
-      'WINBALTRIM',
-      'WINDOWS-1257',
-      'CP1258',
-      'WINDOWS-1258',
-      '850',
-      'CP850',
-      'IBM850',
-      'CSPC850MULTILINGUAL',
-      '862',
-      'CP862',
-      'IBM862',
-      'CSPC862LATINHEBREW',
-      '866',
-      'CP866',
-      'IBM866',
-      'CSIBM866',
-      'MAC',
-      'MACINTOSH',
-      'MACROMAN',
-      'CSMACINTOSH',
-      'MACCENTRALEUROPE',
-      'MACICELAND',
-      'MACCROATIAN',
-      'MACROMANIA',
-      'MACCYRILLIC',
-      'MACUKRAINE',
-      'MACGREEK',
-      'MACTURKISH',
-      'MACHEBREW',
-      'MACARABIC',
-      'MACTHAI',
-      'HP-ROMAN8',
-      'R8',
-      'ROMAN8',
-      'CSHPROMAN8',
-      'NEXTSTEP',
-      'ARMSCII-8',
-      'GEORGIAN-ACADEMY',
-      'GEORGIAN-PS',
-      'KOI8-T',
-      'CP154',
-      'CYRILLIC-ASIAN',
-      'PT154',
-      'PTCP154',
-      'CSPTCP154',
-      'KZ-1048',
-      'RK1048',
-      'STRK1048-2002',
-      'CSKZ1048',
-      'MULELAO-1',
-      'CP1133',
-      'IBM-CP1133',
-      'ISO-IR-166',
-      'TIS-620',
-      'TIS620',
-      'TIS620-0',
-      'TIS620.2529-1',
-      'TIS620.2533-0',
-      'TIS620.2533-1',
-      'CP874',
-      'WINDOWS-874',
-      'VISCII',
-      'VISCII1.1-1',
-      'CSVISCII',
-      'TCVN',
-      'TCVN-5712',
-      'TCVN5712-1',
-      'TCVN5712-1:1993',
-      'ISO-IR-14',
-      'ISO646-JP',
-      'JIS_C6220-1969-RO',
-      'JP',
-      'CSISO14JISC6220RO',
-      'JISX0201-1976',
-      'JIS_X0201',
-      'X0201',
-      'CSHALFWIDTHKATAKANA',
-      'ISO-IR-87',
-      'JIS0208',
-      'JIS_C6226-1983',
-      'JIS_X0208',
-      'JIS_X0208-1983',
-      'JIS_X0208-1990',
-      'X0208',
-      'CSISO87JISX0208',
-      'ISO-IR-159',
-      'JIS_X0212',
-      'JIS_X0212-1990',
-      'JIS_X0212.1990-0',
-      'X0212',
-      'CSISO159JISX02121990',
-      'CN',
-      'GB_1988-80',
-      'ISO-IR-57',
-      'ISO646-CN',
-      'CSISO57GB1988',
-      'CHINESE',
-      'GB_2312-80',
-      'ISO-IR-58',
-      'CSISO58GB231280',
-      'CN-GB-ISOIR165',
-      'ISO-IR-165',
-      'ISO-IR-149',
-      'KOREAN',
-      'KSC_5601',
-      'KS_C_5601-1987',
-      'KS_C_5601-1989',
-      'CSKSC56011987',
-      'EUC-JP',
-      'EUCJP',
-      'EXTENDED_UNIX_CODE_PACKED_FORMAT_FOR_JAPANESE',
-      'CSEUCPKDFMTJAPANESE',
-      'MS_KANJI',
-      'SHIFT-JIS',
-      'SHIFT_JIS',
-      'SJIS',
-      'CSSHIFTJIS',
-      'CP932',
-      'ISO-2022-JP',
-      'CSISO2022JP',
-      'ISO-2022-JP-1',
-      'ISO-2022-JP-2',
-      'CSISO2022JP2',
-      'CN-GB',
-      'EUC-CN',
-      'EUCCN',
-      'GB2312',
-      'CSGB2312',
-      'GBK',
-      'CP936',
-      'MS936',
-      'WINDOWS-936',
-      'GB18030',
-      'ISO-2022-CN',
-      'CSISO2022CN',
-      'ISO-2022-CN-EXT',
-      'HZ',
-      'HZ-GB-2312',
-      'EUC-TW',
-      'EUCTW',
-      'CSEUCTW',
-      'BIG-5',
-      'BIG-FIVE',
-      'BIG5',
-      'BIGFIVE',
-      'CN-BIG5',
-      'CSBIG5',
-      'CP950',
-      'BIG5-HKSCS:1999',
-      'BIG5-HKSCS:2001',
-      'BIG5-HKSCS',
-      'BIG5-HKSCS:2004',
-      'BIG5HKSCS',
-      'EUC-KR',
-      'EUCKR',
-      'CSEUCKR',
-      'CP949',
-      'UHC',
-      'CP1361',
-      'JOHAB',
-      'ISO-2022-KR',
-      'CSISO2022KR',
-      'CP856',
-      'CP922',
-      'CP943',
-      'CP1046',
-      'CP1124',
-      'CP1129',
-      'CP1161',
-      'IBM-1161',
-      'IBM1161',
-      'CSIBM1161',
-      'CP1162',
-      'IBM-1162',
-      'IBM1162',
-      'CSIBM1162',
-      'CP1163',
-      'IBM-1163',
-      'IBM1163',
-      'CSIBM1163',
-      'DEC-KANJI',
-      'DEC-HANYU',
-      '437',
-      'CP437',
-      'IBM437',
-      'CSPC8CODEPAGE437',
-      'CP737',
-      'CP775',
-      'IBM775',
-      'CSPC775BALTIC',
-      '852',
-      'CP852',
-      'IBM852',
-      'CSPCP852',
-      'CP853',
-      '855',
-      'CP855',
-      'IBM855',
-      'CSIBM855',
-      '857',
-      'CP857',
-      'IBM857',
-      'CSIBM857',
-      'CP858',
-      '860',
-      'CP860',
-      'IBM860',
-      'CSIBM860',
-      '861',
-      'CP-IS',
-      'CP861',
-      'IBM861',
-      'CSIBM861',
-      '863',
-      'CP863',
-      'IBM863',
-      'CSIBM863',
-      'CP864',
-      'IBM864',
-      'CSIBM864',
-      '865',
-      'CP865',
-      'IBM865',
-      'CSIBM865',
-      '869',
-      'CP-GR',
-      'CP869',
-      'IBM869',
-      'CSIBM869',
-      'CP1125',
-      'EUC-JISX0213',
-      'SHIFT_JISX0213',
-      'ISO-2022-JP-3',
-      'BIG5-2003',
-      'ISO-IR-230',
-      'TDS565',
-      'ATARI',
-      'ATARIST',
-      'RISCOS-LATIN1',
-  );
-
-  /**
-   * @var array
-   */
   private static $SUPPORT = array();
+
+  /**
+   * @var null|array
+   */
+  private static $UTF8_MSWORD = null;
+
+  /**
+   * @var null|array
+   */
+  private static $BROKEN_UTF8_FIX = null;
+
+  /**
+   * @var null|array
+   */
+  private static $WIN1252_TO_UTF8 = null;
+
+  /**
+   * @var null|array
+   */
+  private static $ENCODINGS = null;
 
   /**
    * @var null|array
@@ -994,22 +374,29 @@ final class UTF8
       return $CHAR_CACHE[$cacheKey];
     }
 
-    if (self::$SUPPORT['intlChar'] === true) {
-      $str = \IntlChar::chr($code_point);
+    if ($code_point <= 127) { // use "simple"-char only until "\x80"
 
-      if ($encoding !== 'UTF-8') {
-        $str = \mb_convert_encoding($str, $encoding, 'UTF-8');
+      if (self::$CHR === null) {
+        self::$CHR = self::getData('chr');
       }
 
-      // add into static cache
-      $CHAR_CACHE[$cacheKey] = $str;
-      return $str;
+      $chr = self::$CHR[$code_point];
+
+      if ($encoding !== 'UTF-8') {
+        $chr = \mb_convert_encoding($chr, $encoding, 'UTF-8');
+      }
+
+      return $CHAR_CACHE[$cacheKey] = $chr;
     }
 
-    // check type of code_point, only if there is no support for "\IntlChar"
-    if ((int)$code_point !== $code_point) {
-      $CHAR_CACHE[$cacheKey] = null;
-      return null;
+    if (self::$SUPPORT['intlChar'] === true) {
+      $chr = \IntlChar::chr($code_point);
+
+      if ($encoding !== 'UTF-8') {
+        $chr = \mb_convert_encoding($chr, $encoding, 'UTF-8');
+      }
+
+      return $CHAR_CACHE[$cacheKey] = $chr;
     }
 
     if (self::$CHR === null) {
@@ -1017,29 +404,26 @@ final class UTF8
     }
 
     if ($code_point <= 0x7F) {
-      $str = self::$CHR[$code_point];
+      $chr = self::$CHR[$code_point];
     } elseif ($code_point <= 0x7FF) {
-      $str = self::$CHR[($code_point >> 6) + 0xC0] .
+      $chr = self::$CHR[($code_point >> 6) + 0xC0] .
              self::$CHR[($code_point & 0x3F) + 0x80];
     } elseif ($code_point <= 0xFFFF) {
-      $str = self::$CHR[($code_point >> 12) + 0xE0] .
+      $chr = self::$CHR[($code_point >> 12) + 0xE0] .
              self::$CHR[(($code_point >> 6) & 0x3F) + 0x80] .
              self::$CHR[($code_point & 0x3F) + 0x80];
     } else {
-      $str = self::$CHR[($code_point >> 18) + 0xF0] .
+      $chr = self::$CHR[($code_point >> 18) + 0xF0] .
              self::$CHR[(($code_point >> 12) & 0x3F) + 0x80] .
              self::$CHR[(($code_point >> 6) & 0x3F) + 0x80] .
              self::$CHR[($code_point & 0x3F) + 0x80];
     }
 
     if ($encoding !== 'UTF-8') {
-      $str = \mb_convert_encoding($str, $encoding, 'UTF-8');
+      $chr = \mb_convert_encoding($chr, $encoding, 'UTF-8');
     }
 
-    // add into static cache
-    $CHAR_CACHE[$cacheKey] = $str;
-
-    return $str;
+    return $CHAR_CACHE[$cacheKey] = $chr;
   }
 
   /**
@@ -1483,16 +867,16 @@ final class UTF8
    *                                     stream_context_create. If you don't need to use a
    *                                     custom context, you can skip this parameter by &null;.
    *                                     </p>
-   * @param int|null $offset             [optional] <p>
+   * @param int|null      $offset        [optional] <p>
    *                                     The offset where the reading starts.
    *                                     </p>
-   * @param int|null $maxLength          [optional] <p>
+   * @param int|null      $maxLength     [optional] <p>
    *                                     Maximum length of data read. The default is to read until end
    *                                     of file is reached.
    *                                     </p>
-   * @param int      $timeout            <p>The time in seconds for the timeout.</p>
+   * @param int           $timeout       <p>The time in seconds for the timeout.</p>
    *
-   * @param boolean  $convertToUtf8      <strong>WARNING!!!</strong> <p>Maybe you can't use this option for e.g. images
+   * @param boolean       $convertToUtf8 <strong>WARNING!!!</strong> <p>Maybe you can't use this option for e.g. images
    *                                     or pdf, because they used non default utf-8 chars</p>
    *
    * @return string <p>The function returns the read data or false on failure.</p>
@@ -1860,6 +1244,11 @@ final class UTF8
     static $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = null;
 
     if ($BROKEN_UTF8_TO_UTF8_KEYS_CACHE === null) {
+
+      if (self::$BROKEN_UTF8_FIX === null) {
+        self::$BROKEN_UTF8_FIX = self::getData('utf8_fix');
+      }
+
       $BROKEN_UTF8_TO_UTF8_KEYS_CACHE = array_keys(self::$BROKEN_UTF8_FIX);
       $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = array_values(self::$BROKEN_UTF8_FIX);
     }
@@ -2069,7 +1458,7 @@ final class UTF8
   /**
    * alias for "UTF8::string_has_bom()"
    *
-   * @see UTF8::string_has_bom()
+   * @see        UTF8::string_has_bom()
    *
    * @param string $str
    *
@@ -2674,7 +2063,7 @@ final class UTF8
   /**
    * alias for "UTF8::is_ascii()"
    *
-   * @see UTF8::is_ascii()
+   * @see        UTF8::is_ascii()
    *
    * @param string $str
    *
@@ -2690,7 +2079,7 @@ final class UTF8
   /**
    * alias for "UTF8::is_base64()"
    *
-   * @see UTF8::is_base64()
+   * @see        UTF8::is_base64()
    *
    * @param string $str
    *
@@ -2706,7 +2095,7 @@ final class UTF8
   /**
    * alias for "UTF8::is_binary()"
    *
-   * @see UTF8::is_binary()
+   * @see        UTF8::is_binary()
    *
    * @param string $str
    *
@@ -2722,7 +2111,7 @@ final class UTF8
   /**
    * alias for "UTF8::is_bom()"
    *
-   * @see UTF8::is_bom()
+   * @see        UTF8::is_bom()
    *
    * @param string $utf8_chr
    *
@@ -2738,7 +2127,7 @@ final class UTF8
   /**
    * alias for "UTF8::is_html()"
    *
-   * @see UTF8::is_html()
+   * @see        UTF8::is_html()
    *
    * @param string $str
    *
@@ -2754,7 +2143,7 @@ final class UTF8
   /**
    * alias for "UTF8::is_json()"
    *
-   * @see UTF8::is_json()
+   * @see        UTF8::is_json()
    *
    * @param string $str
    *
@@ -2770,7 +2159,7 @@ final class UTF8
   /**
    * alias for "UTF8::is_utf16()"
    *
-   * @see UTF8::is_utf16()
+   * @see        UTF8::is_utf16()
    *
    * @param string $str
    *
@@ -2786,7 +2175,7 @@ final class UTF8
   /**
    * alias for "UTF8::is_utf32()"
    *
-   * @see UTF8::is_utf32()
+   * @see        UTF8::is_utf32()
    *
    * @param string $str
    *
@@ -2802,7 +2191,7 @@ final class UTF8
   /**
    * alias for "UTF8::is_utf8()"
    *
-   * @see UTF8::is_utf8()
+   * @see        UTF8::is_utf8()
    *
    * @param string $str
    * @param bool   $strict
@@ -3367,7 +2756,7 @@ final class UTF8
   /**
    * Makes string's first char lowercase.
    *
-   * @param string $str <p>The input string</p>
+   * @param string  $str       <p>The input string</p>
    * @param string  $encoding  [optional] <p>Set the charset.</p>
    * @param boolean $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
@@ -3561,7 +2950,7 @@ final class UTF8
   /**
    * alias for "UTF8::normalize_encoding()"
    *
-   * @see UTF8::normalize_encoding()
+   * @see        UTF8::normalize_encoding()
    *
    * @param string $encoding
    * @param mixed  $fallback
@@ -3595,7 +2984,11 @@ final class UTF8
       return $encoding;
     }
 
-    if (in_array($encoding, self::$ICONV_ENCODING, true)) {
+    if (self::$ENCODINGS === null) {
+      self::$ENCODINGS = self::getData('encodings');
+    }
+
+    if (in_array($encoding, self::$ENCODINGS, true)) {
       return $encoding;
     }
 
@@ -3701,6 +3094,12 @@ final class UTF8
     static $UTF8_MSWORD_VALUES_CACHE = null;
 
     if ($UTF8_MSWORD_KEYS_CACHE === null) {
+
+
+      if (self::$UTF8_MSWORD === null) {
+        self::$UTF8_MSWORD = self::getData('utf8_msword');
+      }
+
       $UTF8_MSWORD_KEYS_CACHE = array_keys(self::$UTF8_MSWORD);
       $UTF8_MSWORD_VALUES_CACHE = array_values(self::$UTF8_MSWORD);
     }
@@ -4021,7 +3420,7 @@ final class UTF8
   /**
    * alias for "UTF8::remove_bom()"
    *
-   * @see UTF8::remove_bom()
+   * @see        UTF8::remove_bom()
    *
    * @param string $str
    *
@@ -4500,8 +3899,12 @@ final class UTF8
     // 5.) check via "iconv()"
     //
 
+    if (self::$ENCODINGS === null) {
+      self::$ENCODINGS = self::getData('encodings');
+    }
+
     $md5 = md5($str);
-    foreach (self::$ICONV_ENCODING as $encodingTmp) {
+    foreach (self::$ENCODINGS as $encodingTmp) {
       # INFO: //IGNORE and //TRANSLIT still throw notice
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
       if (md5(@\iconv($encodingTmp, $encodingTmp . '//IGNORE', $str)) === $md5) {
@@ -4934,7 +4337,7 @@ final class UTF8
    * Convert a string into an array of words.
    *
    * @param string   $str
-   * @param string   $charList <p>Additional chars for the definition of "words".</p>
+   * @param string   $charList          <p>Additional chars for the definition of "words".</p>
    * @param bool     $removeEmptyValues <p>Remove empty values.</p>
    * @param null|int $removeShortValues
    *
@@ -6379,7 +5782,7 @@ final class UTF8
    *
    * @param array $array <p>The array to work on</p>
    * @param int   $case  [optional] <p> Either <strong>CASE_UPPER</strong><br>
-   *                  or <strong>CASE_LOWER</strong> (default)</p>
+   *                     or <strong>CASE_LOWER</strong> (default)</p>
    *
    * @return array|false <p>An array with its keys lower or uppercased, or false if
    *                     input is not an array.</p>
@@ -6400,7 +5803,7 @@ final class UTF8
 
     $return = array();
     foreach ($array as $key => $value) {
-      if ($case  === CASE_LOWER) {
+      if ($case === CASE_LOWER) {
         $key = self::strtolower($key);
       } else {
         $key = self::strtoupper($key);
@@ -6950,7 +6353,7 @@ final class UTF8
   /**
    * alias for "UTF8::to_ascii()"
    *
-   * @see UTF8::to_ascii()
+   * @see        UTF8::to_ascii()
    *
    * @param string $s
    * @param string $subst_chr
@@ -6968,7 +6371,7 @@ final class UTF8
   /**
    * alias for "UTF8::to_iso8859()"
    *
-   * @see UTF8::to_iso8859()
+   * @see        UTF8::to_iso8859()
    *
    * @param string $str
    *
@@ -6984,7 +6387,7 @@ final class UTF8
   /**
    * alias for "UTF8::to_latin1()"
    *
-   * @see UTF8::to_latin1()
+   * @see        UTF8::to_latin1()
    *
    * @param $str
    *
@@ -7000,7 +6403,7 @@ final class UTF8
   /**
    * alias for "UTF8::to_utf8()"
    *
-   * @see UTF8::to_utf8()
+   * @see        UTF8::to_utf8()
    *
    * @param string $str
    *
@@ -7356,6 +6759,10 @@ final class UTF8
 
     if (self::$CHR === null) {
       self::$CHR = self::getData('chr');
+    }
+
+    if (self::$WIN1252_TO_UTF8 === null) {
+      self::$WIN1252_TO_UTF8 = self::getData('win1252_to_utf8');
     }
 
     $ordC1 = self::$ORD[$int];
@@ -7820,14 +7227,17 @@ final class UTF8
       return '';
     }
 
-    $str = (string)self::to_utf8($str);
-
     static $UTF8_TO_WIN1252_KEYS_CACHE = null;
     static $UTF8_TO_WIN1252_VALUES_CACHE = null;
 
     if ($UTF8_TO_WIN1252_KEYS_CACHE === null) {
-      $UTF8_TO_WIN1252_KEYS_CACHE = \array_keys(self::$UTF8_TO_WIN1252);
-      $UTF8_TO_WIN1252_VALUES_CACHE = \array_values(self::$UTF8_TO_WIN1252);
+
+      if (self::$WIN1252_TO_UTF8 === null) {
+        self::$WIN1252_TO_UTF8 = self::getData('win1252_to_utf8');
+      }
+
+      $UTF8_TO_WIN1252_KEYS_CACHE = \array_keys(self::$WIN1252_TO_UTF8);
+      $UTF8_TO_WIN1252_VALUES_CACHE = \array_values(self::$WIN1252_TO_UTF8);
     }
 
     /** @noinspection PhpInternalEntityUsedInspection */
@@ -7918,15 +7328,20 @@ final class UTF8
       return $str;
     }
 
-    static $CP1252_TO_UTF8_KEYS_CACHE = null;
-    static $CP1252_TO_UTF8_VALUES_CACHE = null;
+    static $WIN1252_TO_UTF8_KEYS_CACHE = null;
+    static $WIN1252_TO_UTF8_VALUES_CACHE = null;
 
-    if ($CP1252_TO_UTF8_KEYS_CACHE === null) {
-      $CP1252_TO_UTF8_KEYS_CACHE = array_keys(self::$CP1252_TO_UTF8);
-      $CP1252_TO_UTF8_VALUES_CACHE = array_values(self::$CP1252_TO_UTF8);
+    if ($WIN1252_TO_UTF8_KEYS_CACHE === null) {
+
+      if (self::$WIN1252_TO_UTF8 === null) {
+        self::$WIN1252_TO_UTF8 = self::getData('win1252_to_utf8');
+      }
+
+      $WIN1252_TO_UTF8_KEYS_CACHE = \array_keys(self::$WIN1252_TO_UTF8);
+      $WIN1252_TO_UTF8_VALUES_CACHE = \array_values(self::$WIN1252_TO_UTF8);
     }
 
-    return str_replace($CP1252_TO_UTF8_KEYS_CACHE, $CP1252_TO_UTF8_VALUES_CACHE, $str);
+    return str_replace($WIN1252_TO_UTF8_KEYS_CACHE, $WIN1252_TO_UTF8_VALUES_CACHE, $str);
   }
 
   /**

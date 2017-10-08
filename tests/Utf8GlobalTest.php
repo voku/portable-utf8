@@ -685,8 +685,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testEncodeUtf8Utf8Encode()
   {
     $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æ–‡ç©ºç™½-  ',
-        '      - ÖÄÜ- '  => '      - Ã–Ã„Ãœ- ',
+        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æç©ºç½-  ',
+        '      - ÖÄÜ- '  => '      - ÃÃÃ- ',
         'öäü'            => 'Ã¶Ã¤Ã¼',
         ''               => '',
     );
@@ -4667,7 +4667,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
         ''                  => '',
         false               => '0',
         null                => '',
-        "\xe2\x28\xa1"      => 'â(¡',
+        "\xe2\x28\xa1"      => '?',
         "\xa0\xa1"          => ' ¡',
         "κόσμε\xa0\xa1-öäü" => '????? ¡-öäü',
         'foobar'            => 'foobar',
@@ -4681,8 +4681,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testUtf8Encode()
   {
     $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æ–‡ç©ºç™½-  ',
-        '      - ÖÄÜ- '  => '      - Ã–Ã„Ãœ- ',
+        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æç©ºç½-  ',
+        '      - ÖÄÜ- '  => '      - ÃÃÃ- ',
         'öäü'            => 'Ã¶Ã¤Ã¼',
         ''               => '',
     );
@@ -4695,8 +4695,8 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testUtf8EncodeEncodeUtf8()
   {
     $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æ–‡ç©ºç™½-  ',
-        '      - ÖÄÜ- '  => '      - Ã–Ã„Ãœ- ',
+        '  -ABC-中文空白-  ' => '  -ABC-ä¸­æç©ºç½-  ',
+        '      - ÖÄÜ- '  => '      - ÃÃÃ- ',
         'öäü'            => 'Ã¶Ã¤Ã¼',
         ''               => '',
     );
@@ -4729,9 +4729,9 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
   public function testUtf8EncodeUtf8Encode()
   {
     $tests = array(
-        '  -ABC-中文空白-  ' => '  -ABC-Ã¤Â¸Â­Ã¦â€“â€¡Ã§Â©ÂºÃ§â„¢Â½-  ',
-        '      - ÖÄÜ- '  => '      - Ãƒâ€“Ãƒâ€žÃƒÅ“- ',
-        'öäü'            => 'ÃƒÂ¶ÃƒÂ¤ÃƒÂ¼',
+        '  -ABC-中文空白-  ' => '  -ABC-Ã¤Â¸Â­Ã¦ÂÂÃ§Â©ÂºÃ§ÂÂ½-  ',
+        '      - ÖÄÜ- '  => '      - ÃÂÃÂÃÂ- ',
+        'öäü'            => 'ÃÂ¶ÃÂ¤ÃÂ¼',
         ''               => '',
     );
 
