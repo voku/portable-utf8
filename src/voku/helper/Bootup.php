@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace voku\helper;
 
 /**
@@ -23,7 +25,7 @@ class Bootup
    */
   public static function filterRequestInputs($normalization_form = 4 /* n::NFC */, $leading_combining = '◌')
   {
-    $a = array(
+    $a = [
         &$_FILES,
         &$_ENV,
         &$_GET,
@@ -31,26 +33,26 @@ class Bootup
         &$_COOKIE,
         &$_SERVER,
         &$_REQUEST,
-    );
+    ];
 
     /** @noinspection ReferenceMismatchInspection */
     /** @noinspection ForeachSourceInspection */
     foreach ($a[0] as &$r) {
-      $a[] = array(
+      $a[] = [
           &$r['name'],
           &$r['type'],
-      );
+      ];
     }
     unset($r, $a[0]);
 
-    $len = count($a) + 1;
+    $len = \count($a) + 1;
     for ($i = 1; $i < $len; ++$i) {
       /** @noinspection ReferenceMismatchInspection */
       /** @noinspection ForeachSourceInspection */
       foreach ($a[$i] as &$r) {
         /** @noinspection ReferenceMismatchInspection */
         $s = $r; // $r is a reference, $s a copy
-        if (is_array($s)) {
+        if (\is_array($s)) {
           $a[$len++] = &$r;
         } else {
           $r = self::filterString($s, $normalization_form, $leading_combining);
@@ -70,7 +72,7 @@ class Bootup
    */
   public static function filterRequestUri($uri = null, $exit = true)
   {
-    if (!isset($uri)) {
+    if (null === $uri) {
 
       if (!isset($_SERVER['REQUEST_URI'])) {
         return false;
@@ -117,7 +119,7 @@ class Bootup
         headers_sent() === false
     ) {
       // Use ob_start() to buffer content and avoid problem of headers already sent...
-      $severProtocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
+      $severProtocol = ($_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1');
       header($severProtocol . ' 301 Moved Permanently');
       header('Location: ' . $uri);
       exit();
@@ -129,15 +131,15 @@ class Bootup
   /**
    * Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
    *
-   * @param string $s
+   * @param mixed  $input
    * @param int    $normalization_form
    * @param string $leading_combining
    *
-   * @return string
+   * @return mixed
    */
-  public static function filterString($s, $normalization_form = 4 /* n::NFC */, $leading_combining = '◌')
+  public static function filterString($input, int $normalization_form = 4 /* n::NFC */, string $leading_combining = '◌')
   {
-    return UTF8::filter($s, $normalization_form, $leading_combining);
+    return UTF8::filter($input, $normalization_form, $leading_combining);
   }
 
   /**
@@ -181,7 +183,7 @@ class Bootup
    *
    * @return bool <p>Return <strong>true</strong> if the current version is $version or higher</p>
    */
-  public static function is_php($version)
+  public static function is_php($version): bool
   {
     static $_IS_PHP;
 

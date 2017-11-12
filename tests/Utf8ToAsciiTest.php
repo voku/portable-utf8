@@ -48,7 +48,7 @@ class Utf8ToAsciiTest extends PHPUnit_Framework_TestCase
   public function testToASCII()
   {
     $testsStrict = array();
-    if (UTF8::intl_loaded() === true && Bootup::is_php('5.4')) {
+    if (UTF8::intl_loaded() === true) {
 
       // ---
 
