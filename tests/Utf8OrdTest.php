@@ -6,7 +6,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8OrdTest
  */
-class Utf8OrdTest extends PHPUnit_Framework_TestCase
+class Utf8OrdTest extends \PHPUnit\Framework\TestCase
 {
   public function test_empty_str()
   {

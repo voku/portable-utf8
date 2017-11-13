@@ -4,7 +4,7 @@ use voku\helper\UTF8;
 /**
  * Class Utf8AccessTest
  */
-class Utf8AccessTest extends PHPUnit_Framework_TestCase
+class Utf8AccessTest extends \PHPUnit\Framework\TestCase
 {
   // tests for utf8_locate_current_chr & utf8_locate_next_chr
   public function test_singlebyte()

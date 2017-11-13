@@ -7,7 +7,7 @@ use voku\helper\UTF8;
 /**
  * Class ShimIntlTest
  */
-class ShimIntlTest extends PHPUnit_Framework_TestCase
+class ShimIntlTest extends \PHPUnit\Framework\TestCase
 {
   public function testGrapheme_extract_arrayError()
   {
@@ -15,10 +15,10 @@ class ShimIntlTest extends PHPUnit_Framework_TestCase
       p::grapheme_extract(array(), 0);
       self::fail('Warning or notice expected');
     }
-    catch (\PHPUnit_Framework_Error_Warning $e) {
+    catch (\PHPUnit\Framework\Error\Warning $e) {
       self::assertTrue(true, 'Regular PHP throws a warning');
     }
-    catch (\PHPUnit_Framework_Error_Notice $e) {
+    catch (\PHPUnit\Framework\Error\Notice $e) {
       self::assertTrue(true, 'HHVM throws a notice');
     }
   }

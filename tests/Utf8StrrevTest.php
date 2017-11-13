@@ -5,7 +5,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8StrrevTest
  */
-class Utf8StrrevTest extends PHPUnit_Framework_TestCase
+class Utf8StrrevTest extends \PHPUnit\Framework\TestCase
 {
   public function test_reverse()
   {

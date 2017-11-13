@@ -5,7 +5,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8LcfirstTest
  */
-class Utf8LcfirstTest extends PHPUnit_Framework_TestCase
+class Utf8LcfirstTest extends \PHPUnit\Framework\TestCase
 {
   public function test_lcfirst()
   {

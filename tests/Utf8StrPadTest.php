@@ -5,7 +5,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8StrPadTest
  */
-class Utf8StrPadTest extends PHPUnit_Framework_TestCase
+class Utf8StrPadTest extends \PHPUnit\Framework\TestCase
 {
   public function test_str_pad()
   {

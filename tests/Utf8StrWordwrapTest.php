@@ -5,7 +5,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8StrWordwrapTest
  */
-class Utf8StrWordwrapTest extends PHPUnit_Framework_TestCase
+class Utf8StrWordwrapTest extends \PHPUnit\Framework\TestCase
 {
   public function test_orig()
   {

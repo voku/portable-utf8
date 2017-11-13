@@ -7,10 +7,10 @@ use voku\helper\UTF8;
 /**
  * Class ShimMbstringTest
  */
-class ShimMbstringTest extends PHPUnit_Framework_TestCase
+class ShimMbstringTest extends \PHPUnit\Framework\TestCase
 {
   /**
-   * @expectedException PHPUnit_Framework_Error_Warning
+   * @expectedException \PHPUnit\Framework\Error\Error
    */
   public function testmb_stubs()
   {
@@ -128,7 +128,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException PHPUnit_Framework_Error_Warning
+   * @expectedException \PHPUnit\Framework\Error\Warning
    */
   public function testmb_strpos_empty_delimiter()
   {
@@ -136,7 +136,7 @@ class ShimMbstringTest extends PHPUnit_Framework_TestCase
       mb_strpos('abc', '');
       self::assertFalse(true, 'The previous line should trigger a warning (Empty delimiter)');
     }
-    catch (\PHPUnit_Framework_Error_Warning $e) {
+    catch (\PHPUnit\Framework\Error\Warning $e) {
       p::mb_strpos('abc', '');
       self::assertFalse(true, 'The previous line should trigger a warning (Empty delimiter)');
     }

@@ -4,7 +4,7 @@ use voku\helper\UTF8;
 /**
  * Class Utf8StrtToLowerTest
  */
-class Utf8StrtToLowerTest extends PHPUnit_Framework_TestCase
+class Utf8StrtToLowerTest extends \PHPUnit\Framework\TestCase
 {
   public function testLower()
   {

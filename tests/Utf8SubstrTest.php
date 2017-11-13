@@ -5,7 +5,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8SubstrTest
  */
-class Utf8SubstrTest extends PHPUnit_Framework_TestCase
+class Utf8SubstrTest extends \PHPUnit\Framework\TestCase
 {
   public function test_utf8()
   {

@@ -6,7 +6,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8UcfirstTest
  */
-class Utf8UcfirstTest extends PHPUnit_Framework_TestCase
+class Utf8UcfirstTest extends \PHPUnit\Framework\TestCase
 {
   public function test_ucfirst()
   {

@@ -4,7 +4,7 @@ use voku\helper\UTF8;
 /**
  * Class Utf8AsciiTest
  */
-class Utf8AsciiTest extends PHPUnit_Framework_TestCase
+class Utf8AsciiTest extends \PHPUnit\Framework\TestCase
 {
 
   public function testUtf8()

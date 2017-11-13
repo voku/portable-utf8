@@ -6,7 +6,7 @@ use voku\helper\UTF8;
 /**
  * Class ShimIconvTest
  */
-class ShimIconvTest extends PHPUnit_Framework_TestCase
+class ShimIconvTest extends \PHPUnit\Framework\TestCase
 {
   public function testIconv()
   {
@@ -86,7 +86,7 @@ class ShimIconvTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException PHPUnit_Framework_ExpectationFailedException
+   * @expectedException \PHPUnit\Framework\ExpectationFailedException
    */
   public function testIconvMimeDecode()
   {

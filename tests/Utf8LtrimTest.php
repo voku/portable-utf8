@@ -5,7 +5,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8LtrimTest
  */
-class Utf8LtrimTest extends PHPUnit_Framework_TestCase
+class Utf8LtrimTest extends \PHPUnit\Framework\TestCase
 {
   public function test_trim()
   {

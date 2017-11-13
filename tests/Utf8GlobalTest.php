@@ -6,7 +6,7 @@ use voku\helper\UTF8;
 /**
  * Class Utf8GlobalTest
  */
-class Utf8GlobalTest extends PHPUnit_Framework_TestCase
+class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 {
   /**
    * @var array
@@ -4799,7 +4799,7 @@ class Utf8GlobalTest extends PHPUnit_Framework_TestCase
 
   public function testValidCharsViaUtf8Encode()
   {
-    $tests = UTF8::json_decode(UTF8::file_get_contents(__DIR__ . '/valid.json'), true);
+    $tests = UTF8::json_decode(UTF8::file_get_contents(__DIR__ . '/fixtures/valid.json'), true);
 
     foreach ($tests as $test) {
       self::assertSame($test, UTF8::encode('UTF-8', $test));

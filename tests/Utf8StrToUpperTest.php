@@ -5,7 +5,7 @@ use voku\helper\UTF8;
 /**
  * Class Utf8StrToUpperTest
  */
-class Utf8StrToUpperTest extends PHPUnit_Framework_TestCase
+class Utf8StrToUpperTest extends \PHPUnit\Framework\TestCase
 {
   public function testUpper()
   {

@@ -6,7 +6,7 @@ use Symfony\Polyfill\Intl\Normalizer\Normalizer as n;
 /**
  * Class ZNormalizationTest
  */
-class ZNormalizationTest extends \PHPUnit_Framework_TestCase
+class ZNormalizationTest extends \PHPUnit\Framework\TestCase
 {
   public $unicodeVersion = 70;
 

@@ -5,7 +5,7 @@ use voku\helper\UTF8;
 /**
  * Class Utf8CodePointsTest
  */
-class Utf8CodePointsTest extends PHPUnit_Framework_TestCase
+class Utf8CodePointsTest extends \PHPUnit\Framework\TestCase
 {
 
   public function testEmptyString()

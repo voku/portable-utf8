@@ -6,7 +6,7 @@ use voku\helper\UTF8;
 /**
  * Class BootupTest
  */
-class BootupTest extends PHPUnit_Framework_TestCase
+class BootupTest extends \PHPUnit\Framework\TestCase
 {
   public function testInitAll()
   {

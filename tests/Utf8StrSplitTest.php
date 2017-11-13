@@ -5,7 +5,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8StrSplitTest
  */
-class Utf8StrSplitTest extends PHPUnit_Framework_TestCase
+class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
 {
   public function test_split_one_char()
   {

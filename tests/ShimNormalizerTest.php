@@ -6,7 +6,7 @@ use Symfony\Polyfill\Intl\Normalizer\Normalizer as pn;
 /**
  * Class ShimNormalizerTest
  */
-class ShimNormalizerTest extends PHPUnit_Framework_TestCase
+class ShimNormalizerTest extends \PHPUnit\Framework\TestCase
 {
   public function testConstants()
   {

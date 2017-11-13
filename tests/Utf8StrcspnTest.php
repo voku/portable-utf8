@@ -6,7 +6,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8StrcspnTest
  */
-class Utf8StrcspnTest extends PHPUnit_Framework_TestCase
+class Utf8StrcspnTest extends \PHPUnit\Framework\TestCase
 {
   public function test_no_charlist()
   {

@@ -6,7 +6,7 @@ use voku\helper\UTF8;
 /**
  * Class ShimXmlTest
  */
-class ShimXmlTest extends PHPUnit_Framework_TestCase
+class ShimXmlTest extends \PHPUnit\Framework\TestCase
 {
   public function testUtf8Encode()
   {

@@ -5,7 +5,7 @@ use voku\helper\UTF8 as u;
 /**
  * Class Utf8StrcasecmpTest
  */
-class Utf8StrcasecmpTest extends PHPUnit_Framework_TestCase
+class Utf8StrcasecmpTest extends \PHPUnit\Framework\TestCase
 {
   public function test_compare_equal()
   {
