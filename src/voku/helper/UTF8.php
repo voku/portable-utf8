@@ -262,12 +262,12 @@ final class UTF8
       return '';
     }
 
-    $convert = base_convert($bin, 2, 16);
+    $convert = \base_convert($bin, 2, 16);
     if ($convert === '0') {
       return '';
     }
 
-    return pack('H*', $convert);
+    return \pack('H*', $convert);
   }
 
   /**
@@ -550,7 +550,7 @@ final class UTF8
    */
   public static function chunk_split(string $body, int $chunklen = 76, string $end = "\r\n"): string
   {
-    return implode($end, self::split($body, $chunklen));
+    return \implode($end, self::split($body, $chunklen));
   }
 
   /**
@@ -582,7 +582,7 @@ final class UTF8
     | ( [\x80-\xBF] )                 # invalid byte in range 10000000 - 10111111
     | ( [\xC0-\xFF] )                 # invalid byte in range 11000000 - 11111111
     /x';
-    $str = preg_replace($regx, '$1', $str);
+    $str = \preg_replace($regx, '$1', $str);
 
     $str = self::replace_diamond_question_mark($str, '');
     $str = self::remove_invisible_characters($str);
@@ -677,7 +677,7 @@ final class UTF8
    */
   public static function count_chars(string $str, bool $cleanUtf8 = false): array
   {
-    return array_count_values(self::split($str, 1, $cleanUtf8));
+    return \array_count_values(self::split($str, 1, $cleanUtf8));
   }
 
   /**
@@ -689,13 +689,7 @@ final class UTF8
    */
   public static function decimal_to_chr($int): string
   {
-    if (Bootup::is_php('5.4') === true) {
-      $flags = ENT_QUOTES | ENT_HTML5;
-    } else {
-      $flags = ENT_QUOTES;
-    }
-
-    return self::html_entity_decode('&#' . $int . ';', $flags);
+    return self::html_entity_decode('&#' . $int . ';', ENT_QUOTES | ENT_HTML5);
   }
 
   /**
@@ -826,10 +820,10 @@ final class UTF8
   public static function file_get_contents(string $filename, bool $use_include_path = false, $context = null, int $offset = null, int $maxLength = null, int $timeout = 10, bool $convertToUtf8 = true)
   {
     // init
-    $filename = filter_var($filename, FILTER_SANITIZE_STRING);
+    $filename = \filter_var($filename, FILTER_SANITIZE_STRING);
 
     if ($timeout && $context === null) {
-      $context = stream_context_create(
+      $context = \stream_context_create(
           [
               'http' =>
                   [
@@ -844,9 +838,9 @@ final class UTF8
     }
 
     if (\is_int($maxLength) === true) {
-      $data = file_get_contents($filename, $use_include_path, $context, $offset, $maxLength);
+      $data = \file_get_contents($filename, $use_include_path, $context, $offset, $maxLength);
     } else {
-      $data = file_get_contents($filename, $use_include_path, $context, $offset);
+      $data = \file_get_contents($filename, $use_include_path, $context, $offset);
     }
 
     // return false on error
@@ -871,7 +865,7 @@ final class UTF8
    */
   public static function file_has_bom(string $file_path): bool
   {
-    return self::string_has_bom(file_get_contents($file_path));
+    return self::string_has_bom(\file_get_contents($file_path));
   }
 
   /**
@@ -899,9 +893,9 @@ final class UTF8
         break;
       case 'string':
 
-        if (false !== strpos($var, "\r")) {
+        if (false !== \strpos($var, "\r")) {
           // Workaround https://bugs.php.net/65732
-          $var = str_replace(["\r\n", "\r"], "\n", $var);
+          $var = \str_replace(["\r\n", "\r"], "\n", $var);
         }
 
         if (self::is_ascii($var) === false) {
@@ -924,7 +918,7 @@ final class UTF8
               &&
               isset($n[0], $leading_combining[0])
               &&
-              preg_match('/^\p{Mn}/u', $var)
+              \preg_match('/^\p{Mn}/u', $var)
           ) {
             // Prevent leading combining chars
             // for NFC-safe concatenations.
@@ -971,9 +965,9 @@ final class UTF8
   public static function filter_input(int $type, string $variable_name, int $filter = FILTER_DEFAULT, $options = null)
   {
     if (4 > \func_num_args()) {
-      $var = filter_input($type, $variable_name, $filter);
+      $var = \filter_input($type, $variable_name, $filter);
     } else {
-      $var = filter_input($type, $variable_name, $filter, $options);
+      $var = \filter_input($type, $variable_name, $filter, $options);
     }
 
     return self::filter($var);
@@ -1019,9 +1013,9 @@ final class UTF8
   public static function filter_input_array(int $type, $definition = null, bool $add_empty = true)
   {
     if (2 > \func_num_args()) {
-      $a = filter_input_array($type);
+      $a = \filter_input_array($type);
     } else {
-      $a = filter_input_array($type, $definition, $add_empty);
+      $a = \filter_input_array($type, $definition, $add_empty);
     }
 
     return self::filter($a);
@@ -1089,9 +1083,9 @@ final class UTF8
   public static function filter_var($variable, int $filter = FILTER_DEFAULT, $options = null)
   {
     if (3 > \func_num_args()) {
-      $variable = filter_var($variable, $filter);
+      $variable = \filter_var($variable, $filter);
     } else {
-      $variable = filter_var($variable, $filter, $options);
+      $variable = \filter_var($variable, $filter, $options);
     }
 
     return self::filter($variable);
@@ -1134,9 +1128,9 @@ final class UTF8
   public static function filter_var_array(array $data, $definition = null, bool $add_empty = true)
   {
     if (2 > \func_num_args()) {
-      $a = filter_var_array($data);
+      $a = \filter_var_array($data);
     } else {
-      $a = filter_var_array($data, $definition, $add_empty);
+      $a = \filter_var_array($data, $definition, $add_empty);
     }
 
     return self::filter($a);
@@ -1183,11 +1177,11 @@ final class UTF8
         self::$BROKEN_UTF8_FIX = self::getData('utf8_fix');
       }
 
-      $BROKEN_UTF8_TO_UTF8_KEYS_CACHE = array_keys(self::$BROKEN_UTF8_FIX);
-      $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = array_values(self::$BROKEN_UTF8_FIX);
+      $BROKEN_UTF8_TO_UTF8_KEYS_CACHE = \array_keys(self::$BROKEN_UTF8_FIX);
+      $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = \array_values(self::$BROKEN_UTF8_FIX);
     }
 
-    return str_replace($BROKEN_UTF8_TO_UTF8_KEYS_CACHE, $BROKEN_UTF8_TO_UTF8_VALUES_CACHE, $str);
+    return \str_replace($BROKEN_UTF8_TO_UTF8_KEYS_CACHE, $BROKEN_UTF8_TO_UTF8_VALUES_CACHE, $str);
   }
 
   /**
@@ -1351,7 +1345,7 @@ final class UTF8
   private static function getData(string $file)
   {
     $file = __DIR__ . '/data/' . $file . '.php';
-    if (file_exists($file)) {
+    if (\file_exists($file)) {
       /** @noinspection PhpIncludeInspection */
       return require $file;
     }
@@ -1410,7 +1404,7 @@ final class UTF8
    */
   public static function hex_to_chr(string $hexdec)
   {
-    return self::decimal_to_chr(hexdec($hexdec));
+    return self::decimal_to_chr(\hexdec($hexdec));
   }
 
   /**
@@ -1428,7 +1422,7 @@ final class UTF8
       return false;
     }
 
-    if (preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $hexDec, $match)) {
+    if (\preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $hexDec, $match)) {
       return \intval($match[1], 16);
     }
 
@@ -1480,7 +1474,7 @@ final class UTF8
         $startCode = 0x80;
       }
 
-      return mb_encode_numericentity(
+      return \mb_encode_numericentity(
           $str,
           [$startCode, 0xfffff, 0, 0xfffff, 0],
           $encoding
@@ -1578,12 +1572,12 @@ final class UTF8
     }
 
     if (
-        strpos($str, '&') === false
+        \strpos($str, '&') === false
         ||
         (
-            strpos($str, '&#') === false
+            \strpos($str, '&#') === false
             &&
-            strpos($str, ';') === false
+            \strpos($str, ';') === false
         )
     ) {
       return $str;
@@ -1614,7 +1608,7 @@ final class UTF8
     do {
       $str_compare = $str;
 
-      $str = preg_replace_callback(
+      $str = \preg_replace_callback(
           "/&#\d{2,6};/",
           function ($matches) use ($encoding) {
             $returnTmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
@@ -1629,8 +1623,8 @@ final class UTF8
       );
 
       // decode numeric & UTF16 two byte entities
-      $str = html_entity_decode(
-          preg_replace('/(&#(?:x0*[0-9a-f]{2,6}(?![0-9a-f;])|(?:0*\d{2,6}(?![0-9;]))))/iS', '$1;', $str),
+      $str = \html_entity_decode(
+          \preg_replace('/(&#(?:x0*[0-9a-f]{2,6}(?![0-9a-f;])|(?:0*\d{2,6}(?![0-9;]))))/iS', '$1;', $str),
           $flags,
           $encoding
       );
@@ -1749,7 +1743,7 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
-    $str = htmlentities($str, $flags, $encoding, $double_encode);
+    $str = \htmlentities($str, $flags, $encoding, $double_encode);
 
     /**
      * PHP doesn't replace a backslash to its html entity since this is something
@@ -1759,7 +1753,7 @@ final class UTF8
      *
      * https://github.com/forkcms/library/blob/master/spoon/filter/filter.php#L303
      */
-    $str = str_replace('\\', '&#92;', $str);
+    $str = \str_replace('\\', '&#92;', $str);
 
     if ($encoding !== 'UTF-8') {
       return $str;
@@ -1779,7 +1773,7 @@ final class UTF8
       }
     }
 
-    return str_replace($search, $replacements, $str);
+    return \str_replace($search, $replacements, $str);
   }
 
   /**
@@ -1897,7 +1891,7 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
-    return htmlspecialchars($str, $flags, $encoding, $double_encode);
+    return \htmlspecialchars($str, $flags, $encoding, $double_encode);
   }
 
   /**
@@ -1907,18 +1901,7 @@ final class UTF8
    */
   public static function iconv_loaded(): bool
   {
-    $return = \extension_loaded('iconv') ? true : false;
-
-    // INFO: "default_charset" is already set by the "Bootup"-class
-
-    if (Bootup::is_php('5.6') === false) {
-      // INFO: "iconv_set_encoding" is deprecated since PHP >= 5.6
-      iconv_set_encoding('input_encoding', 'UTF-8');
-      iconv_set_encoding('output_encoding', 'UTF-8');
-      iconv_set_encoding('internal_encoding', 'UTF-8');
-    }
-
-    return $return;
+    return \extension_loaded('iconv') ? true : false;
   }
 
   /**
@@ -1947,9 +1930,9 @@ final class UTF8
    */
   public static function int_to_hex(int $int, string $pfix = 'U+'): string
   {
-    $hex = dechex($int);
+    $hex = \dechex($int);
 
-    $hex = (\strlen($hex) < 4 ? substr('0000' . $hex, -4) : $hex);
+    $hex = (\strlen($hex) < 4 ? \substr('0000' . $hex, -4) : $hex);
 
     return $pfix . $hex;
   }
@@ -1961,11 +1944,7 @@ final class UTF8
    */
   public static function intlChar_loaded(): bool
   {
-    return (
-        Bootup::is_php('7.0') === true
-        &&
-        class_exists('IntlChar') === true
-    );
+    return \class_exists('IntlChar');
   }
 
   /**
@@ -1975,7 +1954,7 @@ final class UTF8
    */
   public static function intl_loaded(): bool
   {
-    return \extension_loaded('intl') ? true : false;
+    return \extension_loaded('intl');
   }
 
   /**
@@ -2139,7 +2118,7 @@ final class UTF8
       return true;
     }
 
-    return !preg_match('/[^\x09\x10\x13\x0A\x0D\x20-\x7E]/', $str);
+    return !\preg_match('/[^\x09\x10\x13\x0A\x0D\x20-\x7E]/', $str);
   }
 
   /**
@@ -2151,9 +2130,9 @@ final class UTF8
    */
   public static function is_base64(string $str): bool
   {
-    $base64String = (string)base64_decode($str, true);
+    $base64String = (string)\base64_decode($str, true);
 
-    return $base64String && base64_encode($base64String) === $str;
+    return $base64String && \base64_encode($base64String) === $str;
   }
 
   /**
@@ -2433,7 +2412,7 @@ final class UTF8
       // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
       // invalid, nothing at all will match, even if the string contains
       // some valid sequences
-      return (preg_match('/^.{1}/us', $str, $ar) === 1);
+      return (\preg_match('/^.{1}/us', $str, $ar) === 1);
     }
 
     $mState = 0; // cached expected number of octets after the current octet
@@ -2586,15 +2565,11 @@ final class UTF8
    * <i>json</i> cannot be decoded or if the encoded
    * data is deeper than the recursion limit.
    */
-  public static function json_decode($json, $assoc = false, $depth = 512, $options = 0)
+  public static function json_decode(string $json, bool $assoc = false, int $depth = 512, int $options = 0)
   {
-    $json = (string)self::filter($json);
+    $json = self::filter($json);
 
-    if (Bootup::is_php('5.4') === true) {
-      $json = json_decode($json, $assoc, $depth, $options);
-    } else {
-      $json = json_decode($json, $assoc, $depth);
-    }
+    $json = \json_decode($json, $assoc, $depth, $options);
 
     return $json;
   }
@@ -2639,11 +2614,7 @@ final class UTF8
   {
     $value = self::filter($value);
 
-    if (Bootup::is_php('5.5') === true) {
-      $json = json_encode($value, $options, $depth);
-    } else {
-      $json = json_encode($value, $options);
-    }
+    $json = \json_encode($value, $options, $depth);
 
     return $json;
   }
@@ -2736,7 +2707,7 @@ final class UTF8
       $newWords[] = $word;
     }
 
-    return implode('', $newWords);
+    return \implode('', $newWords);
   }
 
   /**
@@ -2755,10 +2726,10 @@ final class UTF8
 
     // Info: http://nadeausoftware.com/articles/2007/9/php_tip_how_strip_punctuation_characters_web_page#Unicodecharactercategories
     if ($chars === INF || !$chars) {
-      return preg_replace('/^[\pZ\pC]+/u', '', $str);
+      return \preg_replace('/^[\pZ\pC]+/u', '', $str);
     }
 
-    return preg_replace('/^' . self::rxClass($chars) . '+/u', '', $str);
+    return \preg_replace('/^' . self::rxClass($chars) . '+/u', '', $str);
   }
 
   /**
@@ -2815,7 +2786,7 @@ final class UTF8
   {
     return \defined('MB_OVERLOAD_STRING')
            &&
-           ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING;
+           \ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING;
   }
 
   /**
@@ -2828,10 +2799,10 @@ final class UTF8
   public static function min($arg): string
   {
     if (\is_array($arg) === true) {
-      $arg = implode('', $arg);
+      $arg = \implode('', $arg);
     }
 
-    return self::chr(min(self::codepoints($arg)));
+    return self::chr(\min(self::codepoints($arg)));
   }
 
   /**
@@ -2992,8 +2963,8 @@ final class UTF8
         self::$UTF8_MSWORD = self::getData('utf8_msword');
       }
 
-      $UTF8_MSWORD_KEYS_CACHE = array_keys(self::$UTF8_MSWORD);
-      $UTF8_MSWORD_VALUES_CACHE = array_values(self::$UTF8_MSWORD);
+      $UTF8_MSWORD_KEYS_CACHE = \array_keys(self::$UTF8_MSWORD);
+      $UTF8_MSWORD_VALUES_CACHE = \array_values(self::$UTF8_MSWORD);
     }
 
     return \str_replace($UTF8_MSWORD_KEYS_CACHE, $UTF8_MSWORD_VALUES_CACHE, $str);
@@ -3026,20 +2997,20 @@ final class UTF8
         unset($WHITESPACE_CACHE[$cacheKey]['NO-BREAK SPACE']);
       }
 
-      $WHITESPACE_CACHE[$cacheKey] = array_values($WHITESPACE_CACHE[$cacheKey]);
+      $WHITESPACE_CACHE[$cacheKey] = \array_values($WHITESPACE_CACHE[$cacheKey]);
     }
 
     if ($keepBidiUnicodeControls === false) {
       static $BIDI_UNICODE_CONTROLS_CACHE = null;
 
       if ($BIDI_UNICODE_CONTROLS_CACHE === null) {
-        $BIDI_UNICODE_CONTROLS_CACHE = array_values(self::$BIDI_UNI_CODE_CONTROLS_TABLE);
+        $BIDI_UNICODE_CONTROLS_CACHE = \array_values(self::$BIDI_UNI_CODE_CONTROLS_TABLE);
       }
 
-      $str = str_replace($BIDI_UNICODE_CONTROLS_CACHE, '', $str);
+      $str = \str_replace($BIDI_UNICODE_CONTROLS_CACHE, '', $str);
     }
 
-    return str_replace($WHITESPACE_CACHE[$cacheKey], ' ', $str);
+    return \str_replace($WHITESPACE_CACHE[$cacheKey], ' ', $str);
   }
 
   /**
@@ -3057,7 +3028,7 @@ final class UTF8
       return '';
     }
 
-    return (string)preg_replace('/[[:space:]]+/u', '', $str);
+    return (string)\preg_replace('/[[:space:]]+/u', '', $str);
   }
 
   /**
@@ -3108,7 +3079,7 @@ final class UTF8
     }
 
     /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-    $chr = unpack('C*', (string)self::substr($chr, 0, 4, '8BIT'));
+    $chr = \unpack('C*', (string)self::substr($chr, 0, 4, '8BIT'));
     $code = $chr ? $chr[1] : 0;
 
     if (0xF0 <= $code && isset($chr[4])) {
@@ -3160,7 +3131,7 @@ final class UTF8
   public static function pcre_utf8_support(): bool
   {
     /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    return (bool)@preg_match('//u', '');
+    return (bool)@\preg_match('//u', '');
   }
 
   /**
@@ -3177,9 +3148,9 @@ final class UTF8
       return [];
     }
 
-    if (ctype_digit((string)$var1)) {
+    if (\ctype_digit((string)$var1)) {
       $start = (int)$var1;
-    } elseif (ctype_xdigit($var1)) {
+    } elseif (\ctype_xdigit($var1)) {
       $start = (int)self::hex_to_int($var1);
     } else {
       $start = self::ord($var1);
@@ -3189,9 +3160,9 @@ final class UTF8
       return [];
     }
 
-    if (ctype_digit((string)$var2)) {
+    if (\ctype_digit((string)$var2)) {
       $end = (int)$var2;
-    } elseif (ctype_xdigit($var2)) {
+    } elseif (\ctype_xdigit($var2)) {
       $end = (int)self::hex_to_int($var2);
     } else {
       $end = self::ord($var2);
@@ -3236,17 +3207,17 @@ final class UTF8
     }
 
     $pattern = '/%u([0-9a-f]{3,4})/i';
-    if (preg_match($pattern, $str)) {
-      $str = preg_replace($pattern, '&#x\\1;', rawurldecode($str));
+    if (\preg_match($pattern, $str)) {
+      $str = \preg_replace($pattern, '&#x\\1;', \rawurldecode($str));
     }
 
-    $flags = Bootup::is_php('5.4') === true ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
+    $flags = ENT_QUOTES | ENT_HTML5;
 
     do {
       $str_compare = $str;
 
       $str = self::fix_simple_utf8(
-          rawurldecode(
+          \rawurldecode(
               self::html_entity_decode(
                   self::to_utf8($str),
                   $flags
@@ -3318,7 +3289,7 @@ final class UTF8
     if (\is_array($what) === true) {
       /** @noinspection ForeachSourceInspection */
       foreach ($what as $item) {
-        $str = preg_replace('/(' . preg_quote($item, '/') . ')+/', $item, $str);
+        $str = \preg_replace('/(' . \preg_quote($item, '/') . ')+/', $item, $str);
       }
     }
 
@@ -3353,7 +3324,7 @@ final class UTF8
     $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S'; // 00-08, 11, 12, 14-31, 127
 
     do {
-      $str = preg_replace($non_displayables, $replacement, $str, -1, $count);
+      $str = \preg_replace($non_displayables, $replacement, $str, -1, $count);
     } while ($count !== 0);
 
     return $str;
@@ -3425,10 +3396,10 @@ final class UTF8
 
     // Info: http://nadeausoftware.com/articles/2007/9/php_tip_how_strip_punctuation_characters_web_page#Unicodecharactercategories
     if ($chars === INF || !$chars) {
-      return preg_replace('/[\pZ\pC]+$/u', '', $str);
+      return \preg_replace('/[\pZ\pC]+$/u', '', $str);
     }
 
-    return preg_replace('/' . self::rxClass($chars) . '+$/u', '', $str);
+    return \preg_replace('/' . self::rxClass($chars) . '+$/u', '', $str);
   }
 
   /**
@@ -3457,7 +3428,7 @@ final class UTF8
       if ('-' === $s) {
         $class[0] = '-' . $class[0];
       } elseif (!isset($s[2])) {
-        $class[0] .= preg_quote($s, '/');
+        $class[0] .= \preg_quote($s, '/');
       } elseif (1 === self::strlen($s)) {
         $class[0] .= $s;
       } else {
@@ -3472,7 +3443,7 @@ final class UTF8
     if (1 === \count($class)) {
       $return = $class[0];
     } else {
-      $return = '(?:' . implode('|', $class) . ')';
+      $return = '(?:' . \implode('|', $class) . ')';
     }
 
     $RX_CLASSS_CACHE[$cacheKey] = $return;
@@ -3491,7 +3462,7 @@ final class UTF8
 
     echo '<pre>';
     foreach (self::$SUPPORT as $key => $value) {
-      echo $key . ' - ' . print_r($value, true) . "\n<br>";
+      echo $key . ' - ' . \print_r($value, true) . "\n<br>";
     }
     echo '</pre>';
   }
@@ -3554,7 +3525,7 @@ final class UTF8
 
     if (self::$SUPPORT['pcre_utf8'] === true) {
 
-      preg_match_all('/./us', $str, $retArray);
+      \preg_match_all('/./us', $str, $retArray);
       if (isset($retArray[0])) {
         $ret = $retArray[0];
       }
@@ -3737,11 +3708,11 @@ final class UTF8
       self::$ENCODINGS = self::getData('encodings');
     }
 
-    $md5 = md5($str);
+    $md5 = \md5($str);
     foreach (self::$ENCODINGS as $encodingTmp) {
       # INFO: //IGNORE and //TRANSLIT still throw notice
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (md5(@\iconv($encodingTmp, $encodingTmp . '//IGNORE', $str)) === $md5) {
+      if (\md5(@\iconv($encodingTmp, $encodingTmp . '//IGNORE', $str)) === $md5) {
         return $encodingTmp;
       }
     }
@@ -3825,11 +3796,11 @@ final class UTF8
       if ('' === $s .= '') {
         $s = '/^(?<=.)$/';
       } else {
-        $s = '/' . preg_quote($s, '/') . '/ui';
+        $s = '/' . \preg_quote($s, '/') . '/ui';
       }
     }
 
-    $subject = preg_replace($search, $replace, $subject, -1, $replace);
+    $subject = \preg_replace($search, $replace, $subject, -1, $replace);
     $count = $replace; // used as reference parameter
 
     return $subject;
@@ -3880,9 +3851,9 @@ final class UTF8
     }
 
     $str = (string)self::substr($str, 0, $length);
-    $array = explode(' ', $str);
-    array_pop($array);
-    $new_str = implode(' ', $array);
+    $array = \explode(' ', $str);
+    \array_pop($array);
+    $new_str = \implode(' ', $array);
 
     if ($new_str === '') {
       $str = (string)self::substr($str, 0, $length - 1) . $strAddOn;
@@ -4057,13 +4028,13 @@ final class UTF8
     $array = self::codepoints($str);
 
     if ($unique) {
-      $array = array_flip(array_flip($array));
+      $array = \array_flip(\array_flip($array));
     }
 
     if ($desc) {
-      arsort($array);
+      \arsort($array);
     } else {
-      asort($array);
+      \asort($array);
     }
 
     return self::string($array);
@@ -4092,11 +4063,11 @@ final class UTF8
     }
 
     if ($len < 1) {
-      return str_split($str, $len);
+      return \str_split($str, $len);
     }
 
     /** @noinspection PhpInternalEntityUsedInspection */
-    preg_match_all('/' . self::GRAPHEME_CLUSTER_RX . '/u', $str, $a);
+    \preg_match_all('/' . self::GRAPHEME_CLUSTER_RX . '/u', $str, $a);
     $a = $a[0];
 
     if ($len === 1) {
@@ -4132,7 +4103,7 @@ final class UTF8
       return false;
     }
 
-    if (strpos($haystack, $needle) === 0) {
+    if (\strpos($haystack, $needle) === 0) {
       return true;
     }
 
@@ -4148,9 +4119,9 @@ final class UTF8
    */
   public static function str_to_binary(string $str): string
   {
-    $value = unpack('H*', $str);
+    $value = \unpack('H*', $str);
 
-    return base_convert($value[1], 16, 2);
+    return \base_convert($value[1], 16, 2);
   }
 
   /**
@@ -4198,7 +4169,7 @@ final class UTF8
       if (
           $removeEmptyValues === true
           &&
-          trim($returnValue) === ''
+          \trim($returnValue) === ''
       ) {
         continue;
       }
@@ -4321,7 +4292,7 @@ final class UTF8
   public static function strcmp(string $str1, string $str2): int
   {
     /** @noinspection PhpUndefinedClassInspection */
-    return $str1 . '' === $str2 . '' ? 0 : strcmp(
+    return $str1 . '' === $str2 . '' ? 0 : \strcmp(
         \Normalizer::normalize($str1, \Normalizer::NFD),
         \Normalizer::normalize($str2, \Normalizer::NFD)
     );
@@ -4413,7 +4384,7 @@ final class UTF8
   public static function string_has_bom(string $str): bool
   {
     foreach (self::$BOM as $bomString => $bomByteLength) {
-      if (0 === strpos($str, $bomString)) {
+      if (0 === \strpos($str, $bomString)) {
         return true;
       }
     }
@@ -4495,8 +4466,6 @@ final class UTF8
         $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
-        &&
-        Bootup::is_php('5.4') === true
     ) {
       return \grapheme_stripos($haystack, $needle, $offset);
     }
@@ -4560,17 +4529,15 @@ final class UTF8
         $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
-        &&
-        Bootup::is_php('5.4') === true
     ) {
       return \grapheme_stristr($haystack, $needle, $before_needle);
     }
 
     if (self::is_ascii($needle) && self::is_ascii($haystack)) {
-      return stristr($haystack, $needle, $before_needle);
+      return \stristr($haystack, $needle, $before_needle);
     }
 
-    preg_match('/^(.*?)' . preg_quote($needle, '/') . '/usi', $haystack, $match);
+    \preg_match('/^(.*?)' . \preg_quote($needle, '/') . '/usi', $haystack, $match);
 
     if (!isset($match[1])) {
       return false;
@@ -4671,8 +4638,6 @@ final class UTF8
         $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
-        &&
-        Bootup::is_php('5.4') === true
     ) {
       return \grapheme_strlen($str);
     }
@@ -4801,8 +4766,8 @@ final class UTF8
       return false;
     }
 
-    if (preg_match('/' . self::rxClass($char_list) . '/us', $haystack, $m)) {
-      return substr($haystack, strpos($haystack, $m[0]));
+    if (\preg_match('/' . self::rxClass($char_list) . '/us', $haystack, $m)) {
+      return \substr($haystack, \strpos($haystack, $m[0]));
     }
 
     return false;
@@ -4855,7 +4820,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring_func_overload'] === false
     ) {
-      return strpos($haystack, $needle, $offset);
+      return \strpos($haystack, $needle, $offset);
     }
 
     if (
@@ -4896,8 +4861,6 @@ final class UTF8
         $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
-        &&
-        Bootup::is_php('5.4') === true
     ) {
       return \grapheme_strpos($haystack, $needle, $offset);
     }
@@ -4917,13 +4880,13 @@ final class UTF8
 
     $haystackIsAscii = self::is_ascii($haystack);
     if ($haystackIsAscii && self::is_ascii($needle)) {
-      return strpos($haystack, $needle, $offset);
+      return \strpos($haystack, $needle, $offset);
     }
 
     // fallback via vanilla php
 
     if ($haystackIsAscii) {
-      $haystackTmp = substr($haystack, $offset);
+      $haystackTmp = \substr($haystack, $offset);
     } else {
       $haystackTmp = self::substr($haystack, $offset);
     }
@@ -4936,12 +4899,12 @@ final class UTF8
       $offset = 0;
     }
 
-    $pos = strpos($haystack, $needle);
+    $pos = \strpos($haystack, $needle);
     if ($pos === false) {
       return false;
     }
 
-    $returnTmp = $offset + self::strlen(substr($haystack, 0, $pos));
+    $returnTmp = $offset + self::strlen(\substr($haystack, 0, $pos));
     if ($returnTmp !== false) {
       return $returnTmp;
     }
@@ -5003,7 +4966,7 @@ final class UTF8
       return '';
     }
 
-    return implode('', array_reverse(self::split($str)));
+    return \implode('', \array_reverse(self::split($str)));
   }
 
   /**
@@ -5099,8 +5062,6 @@ final class UTF8
         $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
-        &&
-        Bootup::is_php('5.4') === true
     ) {
       return \grapheme_strripos($haystack, $needle, $offset);
     }
@@ -5172,8 +5133,6 @@ final class UTF8
         $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
-        &&
-        Bootup::is_php('5.4') === true
     ) {
       return \grapheme_strrpos($haystack, $needle, $offset);
     }
@@ -5195,12 +5154,12 @@ final class UTF8
       $haystack = (string)$haystackTmp;
     }
 
-    $pos = strrpos($haystack, $needle);
+    $pos = \strrpos($haystack, $needle);
     if ($pos === false) {
       return false;
     }
 
-    return $offset + self::strlen(substr($haystack, 0, $pos));
+    return $offset + self::strlen(\substr($haystack, 0, $pos));
   }
 
   /**
@@ -5228,7 +5187,7 @@ final class UTF8
       return 0;
     }
 
-    return preg_match('/^' . self::rxClass($mask) . '+/u', $str, $str) ? self::strlen($str[0]) : 0;
+    return \preg_match('/^' . self::rxClass($mask) . '+/u', $str, $str) ? self::strlen($str[0]) : 0;
   }
 
   /**
@@ -5282,13 +5241,11 @@ final class UTF8
         $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
-        &&
-        Bootup::is_php('5.4') === true
     ) {
       return \grapheme_strstr($haystack, $needle, $before_needle);
     }
 
-    preg_match('/^(.*?)' . preg_quote($needle, '/') . '/us', $haystack, $match);
+    \preg_match('/^(.*?)' . \preg_quote($needle, '/') . '/us', $haystack, $match);
 
     if (!isset($match[1])) {
       return false;
@@ -5325,11 +5282,11 @@ final class UTF8
     static $COMMAN_CASE_FOLD_VALUES_CACHE = null;
 
     if ($COMMON_CASE_FOLD_KEYS_CACHE === null) {
-      $COMMON_CASE_FOLD_KEYS_CACHE = array_keys(self::$COMMON_CASE_FOLD);
-      $COMMAN_CASE_FOLD_VALUES_CACHE = array_values(self::$COMMON_CASE_FOLD);
+      $COMMON_CASE_FOLD_KEYS_CACHE = \array_keys(self::$COMMON_CASE_FOLD);
+      $COMMAN_CASE_FOLD_VALUES_CACHE = \array_values(self::$COMMON_CASE_FOLD);
     }
 
-    $str = (string)str_replace($COMMON_CASE_FOLD_KEYS_CACHE, $COMMAN_CASE_FOLD_VALUES_CACHE, $str);
+    $str = (string)\str_replace($COMMON_CASE_FOLD_KEYS_CACHE, $COMMAN_CASE_FOLD_VALUES_CACHE, $str);
 
     if ($full) {
 
@@ -5338,7 +5295,7 @@ final class UTF8
         $FULL_CASE_FOLD = self::getData('caseFolding_full');
       }
 
-      $str = (string)str_replace($FULL_CASE_FOLD[0], $FULL_CASE_FOLD[1], $str);
+      $str = (string)\str_replace($FULL_CASE_FOLD[0], $FULL_CASE_FOLD[1], $str);
     }
 
     if ($cleanUtf8 === true) {
@@ -5383,11 +5340,7 @@ final class UTF8
         self::checkForSupport();
       }
 
-      if (
-          self::$SUPPORT['intl'] === true
-          &&
-          Bootup::is_php('5.4') === true
-      ) {
+      if (self::$SUPPORT['intl'] === true) {
 
         $langCode = $lang . '-Lower';
         if (!\in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
@@ -5452,11 +5405,7 @@ final class UTF8
         self::checkForSupport();
       }
 
-      if (
-          self::$SUPPORT['intl'] === true
-          &&
-          Bootup::is_php('5.4') === true
-      ) {
+      if (self::$SUPPORT['intl'] === true) {
 
         $langCode = $lang . '-Upper';
         if (!\in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
@@ -5644,7 +5593,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring_func_overload'] === false
     ) {
-      return substr($str, $offset, $length ?? $str_length);
+      return \substr($str, $offset, $length ?? $str_length);
     }
 
     if (
@@ -5663,8 +5612,6 @@ final class UTF8
         $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
-        &&
-        Bootup::is_php('5.4') === true
     ) {
       return \grapheme_substr($str, $offset, $length);
     }
@@ -5996,20 +5943,20 @@ final class UTF8
 
     if (self::is_ascii($str)) {
       return ($length === null) ?
-          substr_replace($str, $replacement, $offset) :
-          substr_replace($str, $replacement, $offset, $length);
+          \substr_replace($str, $replacement, $offset) :
+          \substr_replace($str, $replacement, $offset, $length);
     }
 
-    preg_match_all('/./us', $str, $smatches);
-    preg_match_all('/./us', $replacement, $rmatches);
+    \preg_match_all('/./us', $str, $smatches);
+    \preg_match_all('/./us', $replacement, $rmatches);
 
     if ($length === null) {
       $length = self::strlen($str);
     }
 
-    array_splice($smatches[0], $offset, $length, $rmatches[0]);
+    \array_splice($smatches[0], $offset, $length, $rmatches[0]);
 
-    return implode('', $smatches[0]);
+    return \implode('', $smatches[0]);
   }
 
   /**
@@ -6066,7 +6013,7 @@ final class UTF8
       $str = self::clean($str);
     }
 
-    $strSwappedCase = preg_replace_callback(
+    $strSwappedCase = \preg_replace_callback(
         '/[\S]/u',
         function ($match) use ($encoding) {
           $marchToUpper = UTF8::strtoupper($match[0], $encoding);
@@ -6184,14 +6131,10 @@ final class UTF8
         self::checkForSupport();
       }
 
-      if (
-          self::$SUPPORT['intl'] === true
-          &&
-          Bootup::is_php('5.4') === true
-      ) {
+      if (self::$SUPPORT['intl'] === true) {
 
         // HACK for issue from "transliterator_transliterate()"
-        $str = str_replace(
+        $str = \str_replace(
             'ℌ',
             'H',
             $str
@@ -6211,7 +6154,7 @@ final class UTF8
       self::$ORD = self::getData('ord');
     }
 
-    preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
+    \preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
     $chars = $ar[0];
     foreach ($chars as &$c) {
 
@@ -6272,7 +6215,7 @@ final class UTF8
 
       $bank = $ord >> 8;
       if (!isset($UTF8_TO_ASCII[$bank])) {
-        $UTF8_TO_ASCII[$bank] = self::getData(sprintf('x%02x', $bank));
+        $UTF8_TO_ASCII[$bank] = self::getData(\sprintf('x%02x', $bank));
         if ($UTF8_TO_ASCII[$bank] === false) {
           $UTF8_TO_ASCII[$bank] = [];
         }
@@ -6308,7 +6251,7 @@ final class UTF8
       }
     }
 
-    return implode('', $chars);
+    return \implode('', $chars);
   }
 
   /**
@@ -6443,7 +6386,7 @@ final class UTF8
     }
 
     // decode unicode escape sequences
-    $buf = preg_replace_callback(
+    $buf = \preg_replace_callback(
         '/\\\\u([0-9a-f]{4})/i',
         function ($match) {
           return \mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
@@ -6514,7 +6457,7 @@ final class UTF8
 
     // Info: http://nadeausoftware.com/articles/2007/9/php_tip_how_strip_punctuation_characters_web_page#Unicodecharactercategories
     if ($chars === INF || !$chars) {
-      return preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $str);
+      return \preg_replace('/^[\pZ\pC]+|[\pZ\pC]+$/u', '', $str);
     }
 
     return self::rtrim(self::ltrim($str, $chars), $chars);
@@ -6633,7 +6576,7 @@ final class UTF8
       $newWords[] = $word;
     }
 
-    return implode('', $newWords);
+    return \implode('', $newWords);
   }
 
   /**
@@ -6662,17 +6605,17 @@ final class UTF8
     }
 
     $pattern = '/%u([0-9a-f]{3,4})/i';
-    if (preg_match($pattern, $str)) {
-      $str = preg_replace($pattern, '&#x\\1;', urldecode($str));
+    if (\preg_match($pattern, $str)) {
+      $str = \preg_replace($pattern, '&#x\\1;', \urldecode($str));
     }
 
-    $flags = Bootup::is_php('5.4') === true ? ENT_QUOTES | ENT_HTML5 : ENT_QUOTES;
+    $flags = ENT_QUOTES | ENT_HTML5;
 
     do {
       $str_compare = $str;
 
       $str = self::fix_simple_utf8(
-          urldecode(
+          \urldecode(
               self::html_entity_decode(
                   self::to_utf8($str),
                   $flags
@@ -7155,7 +7098,7 @@ final class UTF8
     $strReturn = '';
     $j = 0;
     $b = $i = -1;
-    $w = wordwrap($w, $width, '#', $cut);
+    $w = \wordwrap($w, $width, '#', $cut);
 
     while (false !== $b = self::strpos($w, '#', $b + 1)) {
       for (++$i; $i < $b; ++$i) {
@@ -7170,7 +7113,7 @@ final class UTF8
       $strReturn .= $break;
     }
 
-    return $strReturn . implode('', $chars);
+    return $strReturn . \implode('', $chars);
   }
 
   /**
