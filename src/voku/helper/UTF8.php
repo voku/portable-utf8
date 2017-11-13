@@ -647,7 +647,7 @@ final class UTF8
 
     $arg = \array_map(
         [
-            UTF8::class,
+            self::class,
             'ord',
         ],
         $arg
@@ -656,7 +656,7 @@ final class UTF8
     if ($u_style) {
       $arg = \array_map(
           [
-              UTF8::class,
+              self::class,
               'int_to_hex',
           ],
           $arg
@@ -3174,7 +3174,7 @@ final class UTF8
 
     return \array_map(
         [
-            UTF8::class,
+            self::class,
             'chr',
         ],
         \range($start, $end)
@@ -4366,7 +4366,7 @@ final class UTF8
         '',
         \array_map(
             [
-                UTF8::class,
+                self::class,
                 'chr',
             ],
             $array
@@ -5922,7 +5922,7 @@ final class UTF8
       }
 
       // recursive call
-      return \array_map([UTF8::class, 'substr_replace'], $str, $replacement, $offset, $length);
+      return \array_map([self::class, 'substr_replace'], $str, $replacement, $offset, $length);
     }
 
     if (\is_array($replacement) === true) {
