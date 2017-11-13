@@ -1,5 +1,8 @@
 # Changelog
 
+### 4.0.1 (2017-11-13)
+- [*]: update php-unit to 6.x
+
 ### 4.0.0 (2017-11-13)
 - [!]: "php": ">=7.0"
   * drop support for PHP < 7.0
