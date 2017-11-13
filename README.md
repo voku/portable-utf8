@@ -15,7 +15,7 @@
 
 ## Description
 
-It is written in PHP (PHP 5.3+, PHP 7) and can work without "mbstring", "iconv" or any other extra encoding php-extension on your server. 
+It is written in PHP (PHP 7+) and can work without "mbstring", "iconv" or any other extra encoding php-extension on your server. 
 
 The benefit of Portable UTF-8 is that it is easy to use, easy to bundle. This library will also 
 auto-detect your server environment and will use the installed php-extensions if they are available, 
