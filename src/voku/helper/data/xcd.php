@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'cyess', 'cyeng', 'cyej', 'cyec', 'cyek', 'cyet', 'cyep', 'cyeh', 'co', 'cog', 'cogg', 'cogs', 'con', 'conj', 'conh', 'cod',
 'col', 'colg', 'colm', 'colb', 'cols', 'colt', 'colp', 'colh', 'com', 'cob', 'cobs', 'cos', 'coss', 'cong', 'coj', 'coc',
 'cok', 'cot', 'cop', 'coh', 'cwa', 'cwag', 'cwagg', 'cwags', 'cwan', 'cwanj', 'cwanh', 'cwad', 'cwal', 'cwalg', 'cwalm', 'cwalb',
@@ -17,7 +17,7 @@ static $data = array(
 'cwen', 'cwenj', 'cwenh', 'cwed', 'cwel', 'cwelg', 'cwelm', 'cwelb', 'cwels', 'cwelt', 'cwelp', 'cwelh', 'cwem', 'cweb', 'cwebs', 'cwes',
 'cwess', 'cweng', 'cwej', 'cwec', 'cwek', 'cwet', 'cwep', 'cweh', 'cwi', 'cwig', 'cwigg', 'cwigs', 'cwin', 'cwinj', 'cwinh', 'cwid',
 'cwil', 'cwilg', 'cwilm', 'cwilb', 'cwils', 'cwilt', 'cwilp', 'cwilh', 'cwim', 'cwib', 'cwibs', 'cwis', 'cwiss', 'cwing', 'cwij', 'cwic',
-);
+];
 
 $result =& $data;
 unset($data);

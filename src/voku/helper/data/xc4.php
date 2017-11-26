@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'sswals', 'sswalt', 'sswalp', 'sswalh', 'sswam', 'sswab', 'sswabs', 'sswas', 'sswass', 'sswang', 'sswaj', 'sswac', 'sswak', 'sswat', 'sswap', 'sswah',
 'sswae', 'sswaeg', 'sswaegg', 'sswaegs', 'sswaen', 'sswaenj', 'sswaenh', 'sswaed', 'sswael', 'sswaelg', 'sswaelm', 'sswaelb', 'sswaels', 'sswaelt', 'sswaelp', 'sswaelh',
 'sswaem', 'sswaeb', 'sswaebs', 'sswaes', 'sswaess', 'sswaeng', 'sswaej', 'sswaec', 'sswaek', 'sswaet', 'sswaep', 'sswaeh', 'ssoe', 'ssoeg', 'ssoegg', 'ssoegs',
@@ -17,7 +17,7 @@ static $data = array(
 'sswik', 'sswit', 'sswip', 'sswih', 'ssyu', 'ssyug', 'ssyugg', 'ssyugs', 'ssyun', 'ssyunj', 'ssyunh', 'ssyud', 'ssyul', 'ssyulg', 'ssyulm', 'ssyulb',
 'ssyuls', 'ssyult', 'ssyulp', 'ssyulh', 'ssyum', 'ssyub', 'ssyubs', 'ssyus', 'ssyuss', 'ssyung', 'ssyuj', 'ssyuc', 'ssyuk', 'ssyut', 'ssyup', 'ssyuh',
 'sseu', 'sseug', 'sseugg', 'sseugs', 'sseun', 'sseunj', 'sseunh', 'sseud', 'sseul', 'sseulg', 'sseulm', 'sseulb', 'sseuls', 'sseult', 'sseulp', 'sseulh',
-);
+];
 
 $result =& $data;
 unset($data);

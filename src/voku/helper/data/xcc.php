@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'jjyim', 'jjyib', 'jjyibs', 'jjyis', 'jjyiss', 'jjying', 'jjyij', 'jjyic', 'jjyik', 'jjyit', 'jjyip', 'jjyih', 'jji', 'jjig', 'jjigg', 'jjigs',
 'jjin', 'jjinj', 'jjinh', 'jjid', 'jjil', 'jjilg', 'jjilm', 'jjilb', 'jjils', 'jjilt', 'jjilp', 'jjilh', 'jjim', 'jjib', 'jjibs', 'jjis',
 'jjiss', 'jjing', 'jjij', 'jjic', 'jjik', 'jjit', 'jjip', 'jjih', 'ca', 'cag', 'cagg', 'cags', 'can', 'canj', 'canh', 'cad',
@@ -17,7 +17,7 @@ static $data = array(
 'cyeo', 'cyeog', 'cyeogg', 'cyeogs', 'cyeon', 'cyeonj', 'cyeonh', 'cyeod', 'cyeol', 'cyeolg', 'cyeolm', 'cyeolb', 'cyeols', 'cyeolt', 'cyeolp', 'cyeolh',
 'cyeom', 'cyeob', 'cyeobs', 'cyeos', 'cyeoss', 'cyeong', 'cyeoj', 'cyeoc', 'cyeok', 'cyeot', 'cyeop', 'cyeoh', 'cye', 'cyeg', 'cyegg', 'cyegs',
 'cyen', 'cyenj', 'cyenh', 'cyed', 'cyel', 'cyelg', 'cyelm', 'cyelb', 'cyels', 'cyelt', 'cyelp', 'cyelh', 'cyem', 'cyeb', 'cyebs', 'cyes',
-);
+];
 
 $result =& $data;
 unset($data);

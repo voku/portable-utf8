@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'ggyeols', 'ggyeolt', 'ggyeolp', 'ggyeolh', 'ggyeom', 'ggyeob', 'ggyeobs', 'ggyeos', 'ggyeoss', 'ggyeong', 'ggyeoj', 'ggyeoc', 'ggyeok', 'ggyeot', 'ggyeop', 'ggyeoh',
 'ggye', 'ggyeg', 'ggyegg', 'ggyegs', 'ggyen', 'ggyenj', 'ggyenh', 'ggyed', 'ggyel', 'ggyelg', 'ggyelm', 'ggyelb', 'ggyels', 'ggyelt', 'ggyelp', 'ggyelh',
 'ggyem', 'ggyeb', 'ggyebs', 'ggyes', 'ggyess', 'ggyeng', 'ggyej', 'ggyec', 'ggyek', 'ggyet', 'ggyep', 'ggyeh', 'ggo', 'ggog', 'ggogg', 'ggogs',
@@ -17,7 +17,7 @@ static $data = array(
 'gguk', 'ggut', 'ggup', 'gguh', 'ggweo', 'ggweog', 'ggweogg', 'ggweogs', 'ggweon', 'ggweonj', 'ggweonh', 'ggweod', 'ggweol', 'ggweolg', 'ggweolm', 'ggweolb',
 'ggweols', 'ggweolt', 'ggweolp', 'ggweolh', 'ggweom', 'ggweob', 'ggweobs', 'ggweos', 'ggweoss', 'ggweong', 'ggweoj', 'ggweoc', 'ggweok', 'ggweot', 'ggweop', 'ggweoh',
 'ggwe', 'ggweg', 'ggwegg', 'ggwegs', 'ggwen', 'ggwenj', 'ggwenh', 'ggwed', 'ggwel', 'ggwelg', 'ggwelm', 'ggwelb', 'ggwels', 'ggwelt', 'ggwelp', 'ggwelh',
-);
+];
 
 $result =& $data;
 unset($data);

@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'qiet', 'qiex', 'qie', 'qiep', 'quot', 'quox', 'quo', 'quop', 'qot', 'qox', 'qo', 'qop', 'qut', 'qux', 'qu', 'qup',
 'qurx', 'qur', 'qyt', 'qyx', 'qy', 'qyp', 'qyrx', 'qyr', 'jjit', 'jjix', 'jji', 'jjip', 'jjiet', 'jjiex', 'jjie', 'jjiep',
 'jjuox', 'jjuo', 'jjuop', 'jjot', 'jjox', 'jjo', 'jjop', 'jjut', 'jjux', 'jju', 'jjup', 'jjurx', 'jjur', 'jjyt', 'jjyx', 'jjy',
@@ -17,7 +17,7 @@ static $data = array(
 '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]',
 '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]',
 '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]', '[?]',
-);
+];
 
 $result =& $data;
 unset($data);

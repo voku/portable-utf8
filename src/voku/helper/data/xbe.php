@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'byum', 'byub', 'byubs', 'byus', 'byuss', 'byung', 'byuj', 'byuc', 'byuk', 'byut', 'byup', 'byuh', 'beu', 'beug', 'beugg', 'beugs',
 'beun', 'beunj', 'beunh', 'beud', 'beul', 'beulg', 'beulm', 'beulb', 'beuls', 'beult', 'beulp', 'beulh', 'beum', 'beub', 'beubs', 'beus',
 'beuss', 'beung', 'beuj', 'beuc', 'beuk', 'beut', 'beup', 'beuh', 'byi', 'byig', 'byigg', 'byigs', 'byin', 'byinj', 'byinh', 'byid',
@@ -17,7 +17,7 @@ static $data = array(
 'bbeo', 'bbeog', 'bbeogg', 'bbeogs', 'bbeon', 'bbeonj', 'bbeonh', 'bbeod', 'bbeol', 'bbeolg', 'bbeolm', 'bbeolb', 'bbeols', 'bbeolt', 'bbeolp', 'bbeolh',
 'bbeom', 'bbeob', 'bbeobs', 'bbeos', 'bbeoss', 'bbeong', 'bbeoj', 'bbeoc', 'bbeok', 'bbeot', 'bbeop', 'bbeoh', 'bbe', 'bbeg', 'bbegg', 'bbegs',
 'bben', 'bbenj', 'bbenh', 'bbed', 'bbel', 'bbelg', 'bbelm', 'bbelb', 'bbels', 'bbelt', 'bbelp', 'bbelh', 'bbem', 'bbeb', 'bbebs', 'bbes',
-);
+];
 
 $result =& $data;
 unset($data);

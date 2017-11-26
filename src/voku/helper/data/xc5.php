@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'sseum', 'sseub', 'sseubs', 'sseus', 'sseuss', 'sseung', 'sseuj', 'sseuc', 'sseuk', 'sseut', 'sseup', 'sseuh', 'ssyi', 'ssyig', 'ssyigg', 'ssyigs',
 'ssyin', 'ssyinj', 'ssyinh', 'ssyid', 'ssyil', 'ssyilg', 'ssyilm', 'ssyilb', 'ssyils', 'ssyilt', 'ssyilp', 'ssyilh', 'ssyim', 'ssyib', 'ssyibs', 'ssyis',
 'ssyiss', 'ssying', 'ssyij', 'ssyic', 'ssyik', 'ssyit', 'ssyip', 'ssyih', 'ssi', 'ssig', 'ssigg', 'ssigs', 'ssin', 'ssinj', 'ssinh', 'ssid',
@@ -17,7 +17,7 @@ static $data = array(
 'e', 'eg', 'egg', 'egs', 'en', 'enj', 'enh', 'ed', 'el', 'elg', 'elm', 'elb', 'els', 'elt', 'elp', 'elh',
 'em', 'eb', 'ebs', 'es', 'ess', 'eng', 'ej', 'ec', 'ek', 'et', 'ep', 'eh', 'yeo', 'yeog', 'yeogg', 'yeogs',
 'yeon', 'yeonj', 'yeonh', 'yeod', 'yeol', 'yeolg', 'yeolm', 'yeolb', 'yeols', 'yeolt', 'yeolp', 'yeolh', 'yeom', 'yeob', 'yeobs', 'yeos',
-);
+];
 
 $result =& $data;
 unset($data);

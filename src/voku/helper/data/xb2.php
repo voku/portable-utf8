@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'nyok', 'nyot', 'nyop', 'nyoh', 'nu', 'nug', 'nugg', 'nugs', 'nun', 'nunj', 'nunh', 'nud', 'nul', 'nulg', 'nulm', 'nulb',
 'nuls', 'nult', 'nulp', 'nulh', 'num', 'nub', 'nubs', 'nus', 'nuss', 'nung', 'nuj', 'nuc', 'nuk', 'nut', 'nup', 'nuh',
 'nweo', 'nweog', 'nweogg', 'nweogs', 'nweon', 'nweonj', 'nweonh', 'nweod', 'nweol', 'nweolg', 'nweolm', 'nweolb', 'nweols', 'nweolt', 'nweolp', 'nweolh',
@@ -17,7 +17,7 @@ static $data = array(
 'nil', 'nilg', 'nilm', 'nilb', 'nils', 'nilt', 'nilp', 'nilh', 'nim', 'nib', 'nibs', 'nis', 'niss', 'ning', 'nij', 'nic',
 'nik', 'nit', 'nip', 'nih', 'da', 'dag', 'dagg', 'dags', 'dan', 'danj', 'danh', 'dad', 'dal', 'dalg', 'dalm', 'dalb',
 'dals', 'dalt', 'dalp', 'dalh', 'dam', 'dab', 'dabs', 'das', 'dass', 'dang', 'daj', 'dac', 'dak', 'dat', 'dap', 'dah',
-);
+];
 
 $result =& $data;
 unset($data);

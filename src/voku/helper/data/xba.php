@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'mya', 'myag', 'myagg', 'myags', 'myan', 'myanj', 'myanh', 'myad', 'myal', 'myalg', 'myalm', 'myalb', 'myals', 'myalt', 'myalp', 'myalh',
 'myam', 'myab', 'myabs', 'myas', 'myass', 'myang', 'myaj', 'myac', 'myak', 'myat', 'myap', 'myah', 'myae', 'myaeg', 'myaegg', 'myaegs',
 'myaen', 'myaenj', 'myaenh', 'myaed', 'myael', 'myaelg', 'myaelm', 'myaelb', 'myaels', 'myaelt', 'myaelp', 'myaelh', 'myaem', 'myaeb', 'myaebs', 'myaes',
@@ -17,7 +17,7 @@ static $data = array(
 'mwals', 'mwalt', 'mwalp', 'mwalh', 'mwam', 'mwab', 'mwabs', 'mwas', 'mwass', 'mwang', 'mwaj', 'mwac', 'mwak', 'mwat', 'mwap', 'mwah',
 'mwae', 'mwaeg', 'mwaegg', 'mwaegs', 'mwaen', 'mwaenj', 'mwaenh', 'mwaed', 'mwael', 'mwaelg', 'mwaelm', 'mwaelb', 'mwaels', 'mwaelt', 'mwaelp', 'mwaelh',
 'mwaem', 'mwaeb', 'mwaebs', 'mwaes', 'mwaess', 'mwaeng', 'mwaej', 'mwaec', 'mwaek', 'mwaet', 'mwaep', 'mwaeh', 'moe', 'moeg', 'moegg', 'moegs',
-);
+];
 
 $result =& $data;
 unset($data);

@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'poss', 'pong', 'poj', 'poc', 'pok', 'pot', 'pop', 'poh', 'pwa', 'pwag', 'pwagg', 'pwags', 'pwan', 'pwanj', 'pwanh', 'pwad',
 'pwal', 'pwalg', 'pwalm', 'pwalb', 'pwals', 'pwalt', 'pwalp', 'pwalh', 'pwam', 'pwab', 'pwabs', 'pwas', 'pwass', 'pwang', 'pwaj', 'pwac',
 'pwak', 'pwat', 'pwap', 'pwah', 'pwae', 'pwaeg', 'pwaegg', 'pwaegs', 'pwaen', 'pwaenj', 'pwaenh', 'pwaed', 'pwael', 'pwaelg', 'pwaelm', 'pwaelb',
@@ -17,7 +17,7 @@ static $data = array(
 'pwin', 'pwinj', 'pwinh', 'pwid', 'pwil', 'pwilg', 'pwilm', 'pwilb', 'pwils', 'pwilt', 'pwilp', 'pwilh', 'pwim', 'pwib', 'pwibs', 'pwis',
 'pwiss', 'pwing', 'pwij', 'pwic', 'pwik', 'pwit', 'pwip', 'pwih', 'pyu', 'pyug', 'pyugg', 'pyugs', 'pyun', 'pyunj', 'pyunh', 'pyud',
 'pyul', 'pyulg', 'pyulm', 'pyulb', 'pyuls', 'pyult', 'pyulp', 'pyulh', 'pyum', 'pyub', 'pyubs', 'pyus', 'pyuss', 'pyung', 'pyuj', 'pyuc',
-);
+];
 
 $result =& $data;
 unset($data);

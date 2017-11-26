@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'Ze ', 'Xi ', 'Guo ', 'Yi ', 'Hu ', 'Chan ', 'Kou ', 'Cu ', 'Ping ', 'Chou ', 'Ji ', 'Gui ', 'Su ', 'Lou ', 'Zha ', 'Lu ',
 'Nian ', 'Suo ', 'Cuan ', 'Sasara ', 'Suo ', 'Le ', 'Duan ', 'Yana ', 'Xiao ', 'Bo ', 'Mi ', 'Si ', 'Dang ', 'Liao ', 'Dan ', 'Dian ',
 'Fu ', 'Jian ', 'Min ', 'Kui ', 'Dai ', 'Qiao ', 'Deng ', 'Huang ', 'Sun ', 'Lao ', 'Zan ', 'Xiao ', 'Du ', 'Shi ', 'Zan ', '[?]',
@@ -17,7 +17,7 @@ static $data = array(
 'Fu ', 'Ni ', 'Bei ', 'Gu ', 'Xiu ', 'Gao ', 'Tang ', 'Qiu ', 'Sukumo ', 'Cao ', 'Zhuang ', 'Tang ', 'Mi ', 'San ', 'Fen ', 'Zao ',
 'Kang ', 'Jiang ', 'Mo ', 'San ', 'San ', 'Nuo ', 'Xi ', 'Liang ', 'Jiang ', 'Kuai ', 'Bo ', 'Huan ', '[?]', 'Zong ', 'Xian ', 'Nuo ',
 'Tuan ', 'Nie ', 'Li ', 'Zuo ', 'Di ', 'Nie ', 'Tiao ', 'Lan ', 'Mi ', 'Jiao ', 'Jiu ', 'Xi ', 'Gong ', 'Zheng ', 'Jiu ', 'You ',
-);
+];
 
 $result =& $data;
 unset($data);

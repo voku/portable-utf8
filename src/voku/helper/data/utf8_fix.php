@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
     "\xc2\x80" => "\xe2\x82\xac", // EURO SIGN
     "\xc2\x82" => "\xe2\x80\x9a", // SINGLE LOW-9 QUOTATION MARK
     "\xc2\x83" => "\xc6\x92", // LATIN SMALL LETTER F WITH HOOK
@@ -87,7 +87,7 @@ static $data = array(
     'Ã¿'       => 'ÿ',
     'â‚¬'      => '€',
     'â€™'      => '’',
-);
+];
 
 $result =& $data;
 unset($data);

@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
     0x80 => "\xe2\x82\xac", # €
     0x82 => "\xe2\x80\x9a", # ‚
     0x83 => "\xc6\x92",     # ƒ
@@ -123,7 +123,7 @@ static $data = array(
     0xfc => "\xc3\xbc",     # ü
     0xfd => "\xc3\xbd",     # ý
     0xfe => "\xc3\xbe",     # þ
-);
+];
 
 $result =& $data;
 unset($data);

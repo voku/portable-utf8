@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'reoss', 'reong', 'reoj', 'reoc', 'reok', 'reot', 'reop', 'reoh', 're', 'reg', 'regg', 'regs', 'ren', 'renj', 'renh', 'red',
 'rel', 'relg', 'relm', 'relb', 'rels', 'relt', 'relp', 'relh', 'rem', 'reb', 'rebs', 'res', 'ress', 'reng', 'rej', 'rec',
 'rek', 'ret', 'rep', 'reh', 'ryeo', 'ryeog', 'ryeogg', 'ryeogs', 'ryeon', 'ryeonj', 'ryeonh', 'ryeod', 'ryeol', 'ryeolg', 'ryeolm', 'ryeolb',
@@ -17,7 +17,7 @@ static $data = array(
 'ryon', 'ryonj', 'ryonh', 'ryod', 'ryol', 'ryolg', 'ryolm', 'ryolb', 'ryols', 'ryolt', 'ryolp', 'ryolh', 'ryom', 'ryob', 'ryobs', 'ryos',
 'ryoss', 'ryong', 'ryoj', 'ryoc', 'ryok', 'ryot', 'ryop', 'ryoh', 'ru', 'rug', 'rugg', 'rugs', 'run', 'runj', 'runh', 'rud',
 'rul', 'rulg', 'rulm', 'rulb', 'ruls', 'rult', 'rulp', 'rulh', 'rum', 'rub', 'rubs', 'rus', 'russ', 'rung', 'ruj', 'ruc',
-);
+];
 
 $result =& $data;
 unset($data);

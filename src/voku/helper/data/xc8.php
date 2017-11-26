@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'jeo', 'jeog', 'jeogg', 'jeogs', 'jeon', 'jeonj', 'jeonh', 'jeod', 'jeol', 'jeolg', 'jeolm', 'jeolb', 'jeols', 'jeolt', 'jeolp', 'jeolh',
 'jeom', 'jeob', 'jeobs', 'jeos', 'jeoss', 'jeong', 'jeoj', 'jeoc', 'jeok', 'jeot', 'jeop', 'jeoh', 'je', 'jeg', 'jegg', 'jegs',
 'jen', 'jenj', 'jenh', 'jed', 'jel', 'jelg', 'jelm', 'jelb', 'jels', 'jelt', 'jelp', 'jelh', 'jem', 'jeb', 'jebs', 'jes',
@@ -17,7 +17,7 @@ static $data = array(
 'joels', 'joelt', 'joelp', 'joelh', 'joem', 'joeb', 'joebs', 'joes', 'joess', 'joeng', 'joej', 'joec', 'joek', 'joet', 'joep', 'joeh',
 'jyo', 'jyog', 'jyogg', 'jyogs', 'jyon', 'jyonj', 'jyonh', 'jyod', 'jyol', 'jyolg', 'jyolm', 'jyolb', 'jyols', 'jyolt', 'jyolp', 'jyolh',
 'jyom', 'jyob', 'jyobs', 'jyos', 'jyoss', 'jyong', 'jyoj', 'jyoc', 'jyok', 'jyot', 'jyop', 'jyoh', 'ju', 'jug', 'jugg', 'jugs',
-);
+];
 
 $result =& $data;
 unset($data);

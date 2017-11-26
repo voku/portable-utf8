@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'nyaess', 'nyaeng', 'nyaej', 'nyaec', 'nyaek', 'nyaet', 'nyaep', 'nyaeh', 'neo', 'neog', 'neogg', 'neogs', 'neon', 'neonj', 'neonh', 'neod',
 'neol', 'neolg', 'neolm', 'neolb', 'neols', 'neolt', 'neolp', 'neolh', 'neom', 'neob', 'neobs', 'neos', 'neoss', 'neong', 'neoj', 'neoc',
 'neok', 'neot', 'neop', 'neoh', 'ne', 'neg', 'negg', 'negs', 'nen', 'nenj', 'nenh', 'ned', 'nel', 'nelg', 'nelm', 'nelb',
@@ -17,7 +17,7 @@ static $data = array(
 'noen', 'noenj', 'noenh', 'noed', 'noel', 'noelg', 'noelm', 'noelb', 'noels', 'noelt', 'noelp', 'noelh', 'noem', 'noeb', 'noebs', 'noes',
 'noess', 'noeng', 'noej', 'noec', 'noek', 'noet', 'noep', 'noeh', 'nyo', 'nyog', 'nyogg', 'nyogs', 'nyon', 'nyonj', 'nyonh', 'nyod',
 'nyol', 'nyolg', 'nyolm', 'nyolb', 'nyols', 'nyolt', 'nyolp', 'nyolh', 'nyom', 'nyob', 'nyobs', 'nyos', 'nyoss', 'nyong', 'nyoj', 'nyoc',
-);
+];
 
 $result =& $data;
 unset($data);

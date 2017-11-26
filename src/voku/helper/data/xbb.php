@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'moen', 'moenj', 'moenh', 'moed', 'moel', 'moelg', 'moelm', 'moelb', 'moels', 'moelt', 'moelp', 'moelh', 'moem', 'moeb', 'moebs', 'moes',
 'moess', 'moeng', 'moej', 'moec', 'moek', 'moet', 'moep', 'moeh', 'myo', 'myog', 'myogg', 'myogs', 'myon', 'myonj', 'myonh', 'myod',
 'myol', 'myolg', 'myolm', 'myolb', 'myols', 'myolt', 'myolp', 'myolh', 'myom', 'myob', 'myobs', 'myos', 'myoss', 'myong', 'myoj', 'myoc',
@@ -17,7 +17,7 @@ static $data = array(
 'meum', 'meub', 'meubs', 'meus', 'meuss', 'meung', 'meuj', 'meuc', 'meuk', 'meut', 'meup', 'meuh', 'myi', 'myig', 'myigg', 'myigs',
 'myin', 'myinj', 'myinh', 'myid', 'myil', 'myilg', 'myilm', 'myilb', 'myils', 'myilt', 'myilp', 'myilh', 'myim', 'myib', 'myibs', 'myis',
 'myiss', 'mying', 'myij', 'myic', 'myik', 'myit', 'myip', 'myih', 'mi', 'mig', 'migg', 'migs', 'min', 'minj', 'minh', 'mid',
-);
+];
 
 $result =& $data;
 unset($data);

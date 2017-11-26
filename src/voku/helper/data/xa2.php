@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'kax', 'ka', 'kap', 'kuox', 'kuo', 'kuop', 'kot', 'kox', 'ko', 'kop', 'ket', 'kex', 'ke', 'kep', 'kut', 'kux',
 'ku', 'kup', 'kurx', 'kur', 'ggit', 'ggix', 'ggi', 'ggiex', 'ggie', 'ggiep', 'ggat', 'ggax', 'gga', 'ggap', 'gguot', 'gguox',
 'gguo', 'gguop', 'ggot', 'ggox', 'ggo', 'ggop', 'gget', 'ggex', 'gge', 'ggep', 'ggut', 'ggux', 'ggu', 'ggup', 'ggurx', 'ggur',
@@ -17,7 +17,7 @@ static $data = array(
 'zzit', 'zzix', 'zzi', 'zzip', 'zziet', 'zziex', 'zzie', 'zziep', 'zzat', 'zzax', 'zza', 'zzap', 'zzox', 'zzo', 'zzop', 'zzex',
 'zze', 'zzep', 'zzux', 'zzu', 'zzup', 'zzurx', 'zzur', 'zzyt', 'zzyx', 'zzy', 'zzyp', 'zzyrx', 'zzyr', 'nzit', 'nzix', 'nzi',
 'nzip', 'nziex', 'nzie', 'nziep', 'nzat', 'nzax', 'nza', 'nzap', 'nzuox', 'nzuo', 'nzox', 'nzop', 'nzex', 'nze', 'nzux', 'nzu',
-);
+];
 
 $result =& $data;
 unset($data);

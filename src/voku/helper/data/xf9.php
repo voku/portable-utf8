@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'Kay ', 'Kayng ', 'Ke ', 'Ko ', 'Kol ', 'Koc ', 'Kwi ', 'Kwi ', 'Kyun ', 'Kul ', 'Kum ', 'Na ', 'Na ', 'Na ', 'La ', 'Na ',
 'Na ', 'Na ', 'Na ', 'Na ', 'Nak ', 'Nak ', 'Nak ', 'Nak ', 'Nak ', 'Nak ', 'Nak ', 'Nan ', 'Nan ', 'Nan ', 'Nan ', 'Nan ',
 'Nan ', 'Nam ', 'Nam ', 'Nam ', 'Nam ', 'Nap ', 'Nap ', 'Nap ', 'Nang ', 'Nang ', 'Nang ', 'Nang ', 'Nang ', 'Nay ', 'Nayng ', 'No ',
@@ -17,7 +17,7 @@ static $data = array(
 'Yu ', 'Yuk ', 'Yuk ', 'Yuk ', 'Yun ', 'Yun ', 'Yun ', 'Yun ', 'Yul ', 'Yul ', 'Yul ', 'Yul ', 'Yung ', 'I ', 'I ', 'I ',
 'I ', 'I ', 'I ', 'I ', 'I ', 'I ', 'I ', 'I ', 'I ', 'I ', 'I ', 'Ik ', 'Ik ', 'In ', 'In ', 'In ',
 'In ', 'In ', 'In ', 'In ', 'Im ', 'Im ', 'Im ', 'Ip ', 'Ip ', 'Ip ', 'Cang ', 'Cek ', 'Ci ', 'Cip ', 'Cha ', 'Chek ',
-);
+];
 
 $result =& $data;
 unset($data);

@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'yeoss', 'yeong', 'yeoj', 'yeoc', 'yeok', 'yeot', 'yeop', 'yeoh', 'ye', 'yeg', 'yegg', 'yegs', 'yen', 'yenj', 'yenh', 'yed',
 'yel', 'yelg', 'yelm', 'yelb', 'yels', 'yelt', 'yelp', 'yelh', 'yem', 'yeb', 'yebs', 'yes', 'yess', 'yeng', 'yej', 'yec',
 'yek', 'yet', 'yep', 'yeh', 'o', 'og', 'ogg', 'ogs', 'on', 'onj', 'onh', 'od', 'ol', 'olg', 'olm', 'olb',
@@ -17,7 +17,7 @@ static $data = array(
 'weon', 'weonj', 'weonh', 'weod', 'weol', 'weolg', 'weolm', 'weolb', 'weols', 'weolt', 'weolp', 'weolh', 'weom', 'weob', 'weobs', 'weos',
 'weoss', 'weong', 'weoj', 'weoc', 'weok', 'weot', 'weop', 'weoh', 'we', 'weg', 'wegg', 'wegs', 'wen', 'wenj', 'wenh', 'wed',
 'wel', 'welg', 'welm', 'welb', 'wels', 'welt', 'welp', 'welh', 'wem', 'web', 'webs', 'wes', 'wess', 'weng', 'wej', 'wec',
-);
+];
 
 $result =& $data;
 unset($data);

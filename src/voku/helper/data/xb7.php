@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'ddwim', 'ddwib', 'ddwibs', 'ddwis', 'ddwiss', 'ddwing', 'ddwij', 'ddwic', 'ddwik', 'ddwit', 'ddwip', 'ddwih', 'ddyu', 'ddyug', 'ddyugg', 'ddyugs',
 'ddyun', 'ddyunj', 'ddyunh', 'ddyud', 'ddyul', 'ddyulg', 'ddyulm', 'ddyulb', 'ddyuls', 'ddyult', 'ddyulp', 'ddyulh', 'ddyum', 'ddyub', 'ddyubs', 'ddyus',
 'ddyuss', 'ddyung', 'ddyuj', 'ddyuc', 'ddyuk', 'ddyut', 'ddyup', 'ddyuh', 'ddeu', 'ddeug', 'ddeugg', 'ddeugs', 'ddeun', 'ddeunj', 'ddeunh', 'ddeud',
@@ -17,7 +17,7 @@ static $data = array(
 'ryae', 'ryaeg', 'ryaegg', 'ryaegs', 'ryaen', 'ryaenj', 'ryaenh', 'ryaed', 'ryael', 'ryaelg', 'ryaelm', 'ryaelb', 'ryaels', 'ryaelt', 'ryaelp', 'ryaelh',
 'ryaem', 'ryaeb', 'ryaebs', 'ryaes', 'ryaess', 'ryaeng', 'ryaej', 'ryaec', 'ryaek', 'ryaet', 'ryaep', 'ryaeh', 'reo', 'reog', 'reogg', 'reogs',
 'reon', 'reonj', 'reonh', 'reod', 'reol', 'reolg', 'reolm', 'reolb', 'reols', 'reolt', 'reolp', 'reolh', 'reom', 'reob', 'reobs', 'reos',
-);
+];
 
 $result =& $data;
 unset($data);

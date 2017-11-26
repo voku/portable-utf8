@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
     'ANSI_X3.4-1968',
     'ANSI_X3.4-1986',
     'ASCII',
@@ -421,7 +421,7 @@ static $data = array(
     'ATARI',
     'ATARIST',
     'RISCOS-LATIN1',
-);
+];
 
 $result =& $data;
 unset($data);

@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'dae', 'daeg', 'daegg', 'daegs', 'daen', 'daenj', 'daenh', 'daed', 'dael', 'daelg', 'daelm', 'daelb', 'daels', 'daelt', 'daelp', 'daelh',
 'daem', 'daeb', 'daebs', 'daes', 'daess', 'daeng', 'daej', 'daec', 'daek', 'daet', 'daep', 'daeh', 'dya', 'dyag', 'dyagg', 'dyags',
 'dyan', 'dyanj', 'dyanh', 'dyad', 'dyal', 'dyalg', 'dyalm', 'dyalb', 'dyals', 'dyalt', 'dyalp', 'dyalh', 'dyam', 'dyab', 'dyabs', 'dyas',
@@ -17,7 +17,7 @@ static $data = array(
 'dols', 'dolt', 'dolp', 'dolh', 'dom', 'dob', 'dobs', 'dos', 'doss', 'dong', 'doj', 'doc', 'dok', 'dot', 'dop', 'doh',
 'dwa', 'dwag', 'dwagg', 'dwags', 'dwan', 'dwanj', 'dwanh', 'dwad', 'dwal', 'dwalg', 'dwalm', 'dwalb', 'dwals', 'dwalt', 'dwalp', 'dwalh',
 'dwam', 'dwab', 'dwabs', 'dwas', 'dwass', 'dwang', 'dwaj', 'dwac', 'dwak', 'dwat', 'dwap', 'dwah', 'dwae', 'dwaeg', 'dwaegg', 'dwaegs',
-);
+];
 
 $result =& $data;
 unset($data);

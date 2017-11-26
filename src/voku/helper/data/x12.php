@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'ha', 'hu', 'hi', 'haa', 'hee', 'he', 'ho', '[?]', 'la', 'lu', 'li', 'laa', 'lee', 'le', 'lo', 'lwa',
 'hha', 'hhu', 'hhi', 'hhaa', 'hhee', 'hhe', 'hho', 'hhwa', 'ma', 'mu', 'mi', 'maa', 'mee', 'me', 'mo', 'mwa',
 'sza', 'szu', 'szi', 'szaa', 'szee', 'sze', 'szo', 'szwa', 'ra', 'ru', 'ri', 'raa', 'ree', 're', 'ro', 'rwa',
@@ -17,7 +17,7 @@ static $data = array(
 '`a', '`u', '`i', '`aa', '`ee', '`e', '`o', '[?]', 'za', 'zu', 'zi', 'zaa', 'zee', 'ze', 'zo', 'zwa',
 'zha', 'zhu', 'zhi', 'zhaa', 'zhee', 'zhe', 'zho', 'zhwa', 'ya', 'yu', 'yi', 'yaa', 'yee', 'ye', 'yo', '[?]',
 'da', 'du', 'di', 'daa', 'dee', 'de', 'do', 'dwa', 'dda', 'ddu', 'ddi', 'ddaa', 'ddee', 'dde', 'ddo', 'ddwa',
-);
+];
 
 $result =& $data;
 unset($data);

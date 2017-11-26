@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'A', 'a', 'B', 'b', 'B', 'b', 'B', 'b', 'C', 'c', 'D', 'd', 'D', 'd', 'D', 'd',
 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'F', 'f',
 'G', 'g', 'H', 'h', 'H', 'h', 'H', 'h', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i',
@@ -17,7 +17,7 @@ static $data = array(
 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o', 'O', 'o',
 'O', 'o', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u',
 'U', 'u', 'Y', 'y', 'Y', 'y', 'Y', 'y', 'Y', 'y', 'LL', 'll', 'V', 'v', 'Y', 'y',
-);
+];
 
 $result =& $data;
 unset($data);

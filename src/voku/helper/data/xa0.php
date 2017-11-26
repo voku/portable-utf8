@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'it', 'ix', 'i', 'ip', 'iet', 'iex', 'ie', 'iep', 'at', 'ax', 'a', 'ap', 'uox', 'uo', 'uop', 'ot',
 'ox', 'o', 'op', 'ex', 'e', 'wu', 'bit', 'bix', 'bi', 'bip', 'biet', 'biex', 'bie', 'biep', 'bat', 'bax',
 'ba', 'bap', 'buox', 'buo', 'buop', 'bot', 'box', 'bo', 'bop', 'bex', 'be', 'bep', 'but', 'bux', 'bu', 'bup',
@@ -17,7 +17,7 @@ static $data = array(
 'fip', 'fat', 'fax', 'fa', 'fap', 'fox', 'fo', 'fop', 'fut', 'fux', 'fu', 'fup', 'furx', 'fur', 'fyt', 'fyx',
 'fy', 'fyp', 'vit', 'vix', 'vi', 'vip', 'viet', 'viex', 'vie', 'viep', 'vat', 'vax', 'va', 'vap', 'vot', 'vox',
 'vo', 'vop', 'vex', 'vep', 'vut', 'vux', 'vu', 'vup', 'vurx', 'vur', 'vyt', 'vyx', 'vy', 'vyp', 'vyrx', 'vyr',
-);
+];
 
 $result =& $data;
 unset($data);

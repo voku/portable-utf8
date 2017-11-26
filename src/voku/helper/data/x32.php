@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 '(g)', '(n)', '(d)', '(r)', '(m)', '(b)', '(s)', '()', '(j)', '(c)', '(k)', '(t)', '(p)', '(h)', '(ga)', '(na)',
 '(da)', '(ra)', '(ma)', '(ba)', '(sa)', '(a)', '(ja)', '(ca)', '(ka)', '(ta)', '(pa)', '(ha)', '(ju)', '[?]', '[?]', '[?]',
 '(1) ', '(2) ', '(3) ', '(4) ', '(5) ', '(6) ', '(7) ', '(8) ', '(9) ', '(10) ', '(Yue) ', '(Huo) ', '(Shui) ', '(Mu) ', '(Jin) ', '(Tu) ',
@@ -17,7 +17,7 @@ static $data = array(
 'a', 'i', 'u', 'u', 'o', 'ka', 'ki', 'ku', 'ke', 'ko', 'sa', 'si', 'su', 'se', 'so', 'ta',
 'ti', 'tu', 'te', 'to', 'na', 'ni', 'nu', 'ne', 'no', 'ha', 'hi', 'hu', 'he', 'ho', 'ma', 'mi',
 'mu', 'me', 'mo', 'ya', 'yu', 'yo', 'ra', 'ri', 'ru', 're', 'ro', 'wa', 'wi', 'we', 'wo',
-);
+];
 
 $result =& $data;
 unset($data);

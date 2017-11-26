@@ -1,6 +1,6 @@
 <?php
 
-static $data = array(
+static $data = [
 'geul', 'geulg', 'geulm', 'geulb', 'geuls', 'geult', 'geulp', 'geulh', 'geum', 'geub', 'geubs', 'geus', 'geuss', 'geung', 'geuj', 'geuc',
 'geuk', 'geut', 'geup', 'geuh', 'gyi', 'gyig', 'gyigg', 'gyigs', 'gyin', 'gyinj', 'gyinh', 'gyid', 'gyil', 'gyilg', 'gyilm', 'gyilb',
 'gyils', 'gyilt', 'gyilp', 'gyilh', 'gyim', 'gyib', 'gyibs', 'gyis', 'gyiss', 'gying', 'gyij', 'gyic', 'gyik', 'gyit', 'gyip', 'gyih',
@@ -17,7 +17,7 @@ static $data = array(
 'ggeoss', 'ggeong', 'ggeoj', 'ggeoc', 'ggeok', 'ggeot', 'ggeop', 'ggeoh', 'gge', 'ggeg', 'ggegg', 'ggegs', 'ggen', 'ggenj', 'ggenh', 'gged',
 'ggel', 'ggelg', 'ggelm', 'ggelb', 'ggels', 'ggelt', 'ggelp', 'ggelh', 'ggem', 'ggeb', 'ggebs', 'gges', 'ggess', 'ggeng', 'ggej', 'ggec',
 'ggek', 'gget', 'ggep', 'ggeh', 'ggyeo', 'ggyeog', 'ggyeogg', 'ggyeogs', 'ggyeon', 'ggyeonj', 'ggyeonh', 'ggyeod', 'ggyeol', 'ggyeolg', 'ggyeolm', 'ggyeolb',
-);
+];
 
 $result =& $data;
 unset($data);
