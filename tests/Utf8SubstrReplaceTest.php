@@ -35,69 +35,69 @@ class Utf8SubstrReplaceTest extends \PHPUnit\Framework\TestCase
     $replaced = substr_replace($str, 'foo', -2, -2);
     self::assertSame($replaced, u::substr_replace($str, 'foo', -2, -2));
 
-    $str = array('testing');
+    $str = ['testing'];
     $replaced = substr_replace($str, 'foo', -2, -2);
     self::assertSame($replaced, u::substr_replace($str, 'foo', -2, -2));
 
     $str = 'testing';
-    $replaced = substr_replace($str, array('foo'), -2, -2);
-    self::assertSame($replaced, u::substr_replace($str, array('foo'), -2, -2));
+    $replaced = substr_replace($str, ['foo'], -2, -2);
+    self::assertSame($replaced, u::substr_replace($str, ['foo'], -2, -2));
 
     $str = 'testing';
-    $replaced = substr_replace($str, array(), -2, -2);
-    self::assertSame($replaced, u::substr_replace($str, array(), -2, -2));
+    $replaced = substr_replace($str, [], -2, -2);
+    self::assertSame($replaced, u::substr_replace($str, [], -2, -2));
 
-    $str = array('testing', 'testingV2');
-    $replaced = substr_replace($str, array('foo', 'fooV2'), -2, -2);
-    self::assertSame($replaced, u::substr_replace($str, array('foo', 'fooV2'), -2, -2));
+    $str = ['testing', 'testingV2'];
+    $replaced = substr_replace($str, ['foo', 'fooV2'], -2, -2);
+    self::assertSame($replaced, u::substr_replace($str, ['foo', 'fooV2'], -2, -2));
 
-    $str = array('testing', 'testingV2');
-    $replaced = substr_replace($str, array('foo', 'fooV2'), array(1, 2), array(-1, 1));
-    self::assertSame($replaced, u::substr_replace($str, array('foo', 'fooV2'), array(1, 2), array(-1, 1)));
+    $str = ['testing', 'testingV2'];
+    $replaced = substr_replace($str, ['foo', 'fooV2'], [1, 2], [-1, 1]);
+    self::assertSame($replaced, u::substr_replace($str, ['foo', 'fooV2'], [1, 2], [-1, 1]));
 
-    $str = array('testing', 'testingV2');
-    $replaced = substr_replace($str, array('foo', 'fooV2'), -2, array(-1, 1));
-    self::assertSame($replaced, u::substr_replace($str, array('foo', 'fooV2'), -2, array(-1, 1)));
+    $str = ['testing', 'testingV2'];
+    $replaced = substr_replace($str, ['foo', 'fooV2'], -2, [-1, 1]);
+    self::assertSame($replaced, u::substr_replace($str, ['foo', 'fooV2'], -2, [-1, 1]));
 
-    $str = array('testing', 'testingV2');
-    $replaced = substr_replace($str, array('foo', 'fooV2'), array(1, 2), -1);
-    self::assertSame($replaced, u::substr_replace($str, array('foo', 'fooV2'), array(1, 2), -1));
+    $str = ['testing', 'testingV2'];
+    $replaced = substr_replace($str, ['foo', 'fooV2'], [1, 2], -1);
+    self::assertSame($replaced, u::substr_replace($str, ['foo', 'fooV2'], [1, 2], -1));
 
     $str = 'testing';
-    $replaced = substr_replace($str, array(), -2, -2);
-    self::assertSame($replaced, u::substr_replace($str, array(), -2, -2));
+    $replaced = substr_replace($str, [], -2, -2);
+    self::assertSame($replaced, u::substr_replace($str, [], -2, -2));
 
-    $str = array('testing', 'lall');
+    $str = ['testing', 'lall'];
     $replaced = substr_replace($str, 'foo', -2, -2);
     self::assertSame($replaced, u::substr_replace($str, 'foo', -2, -2));
 
-    $str = array('foo', 'lall');
+    $str = ['foo', 'lall'];
     $replaced = substr_replace($str, 'Iñtërnâtiônàlizætiøn', -2, -2);
     self::assertSame($replaced, u::substr_replace($str, 'Iñtërnâtiônàlizætiøn', -2, -2));
 
-    $str = array('Iñtërnâtiônàlizætiøn', 'foo');
+    $str = ['Iñtërnâtiônàlizætiøn', 'foo'];
     //$replaced = substr_replace($str, 'foo', -2, -2); // INFO: this isn't multibyte ready
-    self::assertSame(array('Iñtërnâtiônàlizætifooøn', 'ffoooo'), u::substr_replace($str, 'foo', -2, -2));
+    self::assertSame(['Iñtërnâtiônàlizætifooøn', 'ffoooo'], u::substr_replace($str, 'foo', -2, -2));
 
 
-    $str = array('Iñtërnâtiônàlizætiøn', 'foo');
+    $str = ['Iñtërnâtiônàlizætiøn', 'foo'];
     //$replaced = substr_replace($str, 'æ', 1); // INFO: this isn't multibyte ready
 
-    self::assertSame(array('XIñtërnâtiônàlizætiøn', 'Xfoo'), u::substr_replace($str, 'X', 0));
-    self::assertSame(array('IXñtërnâtiônàlizætiøn', 'fXoo'), u::substr_replace($str, 'X', 1));
-    self::assertSame(array('IñtërnâtiôXnàlizætiøn', 'fooX'), u::substr_replace($str, 'X', 10));
+    self::assertSame(['XIñtërnâtiônàlizætiøn', 'Xfoo'], u::substr_replace($str, 'X', 0));
+    self::assertSame(['IXñtërnâtiônàlizætiøn', 'fXoo'], u::substr_replace($str, 'X', 1));
+    self::assertSame(['IñtërnâtiôXnàlizætiøn', 'fooX'], u::substr_replace($str, 'X', 10));
 
-    self::assertSame(array('XIñtërnâtiônàlizætiøn', 'Xfoo'), u::substr_replace($str, 'X', array(0, 0)));
-    self::assertSame(array('IXñtërnâtiônàlizætiøn', 'fXoo'), u::substr_replace($str, 'X', array(1, 1)));
-    self::assertSame(array('IñtërnâtiôXnàlizætiøn', 'fooX'), u::substr_replace($str, 'X', array(10, 10)));
+    self::assertSame(['XIñtërnâtiônàlizætiøn', 'Xfoo'], u::substr_replace($str, 'X', [0, 0]));
+    self::assertSame(['IXñtërnâtiônàlizætiøn', 'fXoo'], u::substr_replace($str, 'X', [1, 1]));
+    self::assertSame(['IñtërnâtiôXnàlizætiøn', 'fooX'], u::substr_replace($str, 'X', [10, 10]));
 
-    self::assertSame(array('æIñtërnâtiônàlizætiøn', 'æfoo'), u::substr_replace($str, 'æ', 0));
-    self::assertSame(array('Iæñtërnâtiônàlizætiøn', 'fæoo'), u::substr_replace($str, 'æ', 1));
-    self::assertSame(array('Iñtërnâtiôænàlizætiøn', 'fooæ'), u::substr_replace($str, 'æ', 10));
+    self::assertSame(['æIñtërnâtiônàlizætiøn', 'æfoo'], u::substr_replace($str, 'æ', 0));
+    self::assertSame(['Iæñtërnâtiônàlizætiøn', 'fæoo'], u::substr_replace($str, 'æ', 1));
+    self::assertSame(['Iñtërnâtiôænàlizætiøn', 'fooæ'], u::substr_replace($str, 'æ', 10));
 
-    self::assertSame(array('Iñtërnâtiôænàlizætiøn', 'fooæ'), u::substr_replace($str, 'æ', 10, 0));
-    self::assertSame(array('Iñtërnâtiôæàlizætiøn', 'fooæ'), u::substr_replace($str, 'æ', 10, 1));
-    self::assertSame(array('Iñtërnâtiôæ', 'fooæ'), u::substr_replace($str, 'æ', 10, 10));
+    self::assertSame(['Iñtërnâtiôænàlizætiøn', 'fooæ'], u::substr_replace($str, 'æ', 10, 0));
+    self::assertSame(['Iñtërnâtiôæàlizætiøn', 'fooæ'], u::substr_replace($str, 'æ', 10, 1));
+    self::assertSame(['Iñtërnâtiôæ', 'fooæ'], u::substr_replace($str, 'æ', 10, 10));
   }
 
   public function test_zero()

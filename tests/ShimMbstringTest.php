@@ -35,7 +35,16 @@ class ShimMbstringTest extends \PHPUnit\Framework\TestCase
     self::assertSame('déjà', p::mb_convert_encoding(base64_encode('déjà'), 'Utf-8', 'Base64'));
     self::assertSame('déjà', p::mb_convert_encoding('d&eacute;j&#224;', 'Utf-8', 'Html-entities'));
     self::assertSame('déjà', p::mb_convert_encoding(utf8_decode('déjà'), 'Utf-8', 'ASCII,ISO-2022-JP,UTF-8,ISO-8859-1'));
-    self::assertSame('déjà', p::mb_convert_encoding(utf8_decode('déjà'), 'Utf-8', array('ASCII', 'ISO-2022-JP', 'UTF-8', 'ISO-8859-1')));
+    self::assertSame(
+        'déjà', p::mb_convert_encoding(
+        utf8_decode('déjà'), 'Utf-8', [
+        'ASCII',
+        'ISO-2022-JP',
+        'UTF-8',
+        'ISO-8859-1',
+    ]
+    )
+    );
   }
 
   public function testStrCase()
@@ -135,8 +144,7 @@ class ShimMbstringTest extends \PHPUnit\Framework\TestCase
     try {
       mb_strpos('abc', '');
       self::assertFalse(true, 'The previous line should trigger a warning (Empty delimiter)');
-    }
-    catch (\PHPUnit\Framework\Error\Warning $e) {
+    } catch (\PHPUnit\Framework\Error\Warning $e) {
       p::mb_strpos('abc', '');
       self::assertFalse(true, 'The previous line should trigger a warning (Empty delimiter)');
     }
@@ -202,11 +210,11 @@ class ShimMbstringTest extends \PHPUnit\Framework\TestCase
         'ISO-8859-1',
         p::mb_detect_encoding(
             "\x9D",
-            array(
+            [
                 'UTF-8',
                 'ASCII',
                 'ISO-8859-1',
-            )
+            ]
         )
     );
   }
@@ -214,18 +222,18 @@ class ShimMbstringTest extends \PHPUnit\Framework\TestCase
   public function testmb_detect_order()
   {
     self::assertSame(
-        array(
+        [
             'ASCII',
             'UTF-8',
-        ),
+        ],
         p::mb_detect_order()
     );
     self::assertTrue(p::mb_detect_order('UTF-8, ASCII'));
     self::assertSame(
-        array(
+        [
             'UTF-8',
             'ASCII',
-        ),
+        ],
         p::mb_detect_order()
     );
   }
@@ -240,7 +248,7 @@ class ShimMbstringTest extends \PHPUnit\Framework\TestCase
 
   public function testmb_encoding_aliases()
   {
-    self::assertSame(array('utf8'), p::mb_encoding_aliases('UTF-8'));
+    self::assertSame(['utf8'], p::mb_encoding_aliases('UTF-8'));
     self::assertFalse(p::mb_encoding_aliases('ASCII'));
   }
 

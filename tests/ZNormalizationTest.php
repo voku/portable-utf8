@@ -13,7 +13,7 @@ class ZNormalizationTest extends \PHPUnit\Framework\TestCase
   public function testNormalize()
   {
     $t = file(__DIR__ . '/fixtures/ZNormalizationTest.' . $this->unicodeVersion . '.txt');
-    $c = array();
+    $c = [];
 
     foreach ($t as $s) {
       $t = explode('#', $s);

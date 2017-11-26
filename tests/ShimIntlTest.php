@@ -12,13 +12,11 @@ class ShimIntlTest extends \PHPUnit\Framework\TestCase
   public function testGrapheme_extract_arrayError()
   {
     try {
-      p::grapheme_extract(array(), 0);
+      p::grapheme_extract([], 0);
       self::fail('Warning or notice expected');
-    }
-    catch (\PHPUnit\Framework\Error\Warning $e) {
+    } catch (\PHPUnit\Framework\Error\Warning $e) {
       self::assertTrue(true, 'Regular PHP throws a warning');
-    }
-    catch (\PHPUnit\Framework\Error\Notice $e) {
+    } catch (\PHPUnit\Framework\Error\Notice $e) {
       self::assertTrue(true, 'HHVM throws a notice');
     }
   }
@@ -53,9 +51,9 @@ class ShimIntlTest extends \PHPUnit\Framework\TestCase
     self::assertSame('dé', p::grapheme_extract('déjà', 2, GRAPHEME_EXTR_MAXCHARS));
 
     /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    self::assertFalse(@p::grapheme_extract(array(), 0));
+    self::assertFalse(@p::grapheme_extract([], 0));
     /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    self::assertFalse(@grapheme_extract(array(), 0));
+    self::assertFalse(@grapheme_extract([], 0));
   }
 
   public function testGrapheme_strlen()

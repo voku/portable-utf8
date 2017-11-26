@@ -14,8 +14,8 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
     $replaced = 'Iñtërnâtiônàlisetiøn';
     self::assertSame($replaced, u::str_ireplace('lIzÆ', 'lise', $str));
 
-    $str = array('Iñtërnâtiônàlizætiøn', 'Iñtërnâtiônàlisetiøn', 'foobar', '', "\0", ' ');
-    $replaced = array('Iñtërnâtiônàlisetiøn', 'Iñtërnâtiônàlisetiøn', 'foobar', '', "\0", ' ');
+    $str = ['Iñtërnâtiônàlizætiøn', 'Iñtërnâtiônàlisetiøn', 'foobar', '', "\0", ' '];
+    $replaced = ['Iñtërnâtiônàlisetiøn', 'Iñtërnâtiônàlisetiøn', 'foobar', '', "\0", ' '];
     self::assertSame($replaced, u::str_ireplace('lIzÆ', 'lise', $str));
   }
 
@@ -62,14 +62,14 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
     self::assertSame(
         $replaced,
         u::str_ireplace(
-            array(
+            [
                 'n',
                 't',
-            ),
-            array(
+            ],
+            [
                 'x',
                 'y',
-            ),
+            ],
             $str
         )
     );
@@ -81,18 +81,18 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
     $replaced = 'I?tërnâti??nàliz????ti???n';
     self::assertSame(
         u::str_ireplace(
-            array(
+            [
                 'Ñ',
                 'ô',
                 'ø',
                 'Æ',
-            ),
-            array(
+            ],
+            [
                 '?',
                 '??',
                 '???',
                 '????',
-            ),
+            ],
             $str
         ),
         $replaced
@@ -106,12 +106,12 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
     self::assertSame(
         $replaced,
         u::str_ireplace(
-            array(
+            [
                 'Ñ',
                 'ô',
                 'ø',
                 'Æ',
-            ),
+            ],
             '?',
             $str
         )
@@ -124,13 +124,13 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
     $replaced = 'I?tërnâtinàliztin';
     self::assertSame(
         u::str_ireplace(
-            array(
+            [
                 'Ñ',
                 'ô',
                 'ø',
                 'Æ',
-            ),
-            array('?'),
+            ],
+            ['?'],
             $str
         ),
         $replaced
@@ -148,7 +148,7 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
   {
     $str = "Iñtërnâti\nônàlizætiøn";
     $replaced = "Iñtërnâti\n\nônàlisetiøn";
-    self::assertSame($replaced, u::str_ireplace(array('lIzÆ', "\n"), array('lise', "\n\n"), $str));
+    self::assertSame($replaced, u::str_ireplace(['lIzÆ', "\n"], ['lise', "\n\n"], $str));
   }
 
   public function test_replace_linefeed_search()
@@ -208,8 +208,8 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
     self::assertSame(
         $replaced,
         UTF8::str_ireplace(
-            array('n', 't'),
-            array('x', 'y'),
+            ['n', 't'],
+            ['x', 'y'],
             $str
         )
     );
@@ -222,8 +222,8 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
     self::assertSame(
         $replaced,
         UTF8::str_ireplace(
-            array('Ñ', 'ô', 'ø', 'Æ'),
-            array('?', '??', '???', '????'),
+            ['Ñ', 'ô', 'ø', 'Æ'],
+            ['?', '??', '???', '????'],
             $str
         )
     );
@@ -236,7 +236,7 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
     self::assertSame(
         $replaced,
         UTF8::str_ireplace(
-            array('Ñ', 'ô', 'ø', 'Æ'),
+            ['Ñ', 'ô', 'ø', 'Æ'],
             '?',
             $str
         )
@@ -250,8 +250,8 @@ class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
     self::assertSame(
         $replaced,
         UTF8::str_ireplace(
-            array('Ñ', 'ô', 'ø', 'Æ'),
-            array('?'),
+            ['Ñ', 'ô', 'ø', 'Æ'],
+            ['?'],
             $str
         )
     );

@@ -46,7 +46,7 @@ class Utf8ToAsciiTest extends \PHPUnit\Framework\TestCase
 
   public function testToASCII()
   {
-    $testsStrict = array();
+    $testsStrict = [];
     if (UTF8::intl_loaded() === true) {
 
       // ---
@@ -58,7 +58,7 @@ class Utf8ToAsciiTest extends \PHPUnit\Framework\TestCase
 
       // ---
 
-      $testsStrict = array(
+      $testsStrict = [
           1                                          => '1',
           -1                                         => '-1',
           ' '                                        => ' ',
@@ -102,10 +102,10 @@ class Utf8ToAsciiTest extends \PHPUnit\Framework\TestCase
           'The #会 comment at @בגדה = 10% of *&*'     => 'The #hui comment at @bgdh = 10% of *&*',
           '∀ i ∈ ℕ'                                  => '[?] i [?] N',
           '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'                => '? ? ?  ? ? ? ahbk',
-      );
+      ];
     }
 
-    $tests = array(
+    $tests = [
         1                               => '1',
         -1                              => '-1',
         ' '                             => ' ',
@@ -135,7 +135,7 @@ class Utf8ToAsciiTest extends \PHPUnit\Framework\TestCase
         'أحبك 😀'                       => 'aHbk ?',
         '∀ i ∈ ℕ'                       => '[?] i [?] N',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'     => '? ? ?  ? ? ? aHbk',
-    );
+    ];
 
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
       foreach ($tests as $before => $after) {

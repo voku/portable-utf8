@@ -22,7 +22,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
    */
   public function cleanString($comment)
   {
-    foreach (array('fuck', 'foo', 'bar') as $value) {
+    foreach (['fuck', 'foo', 'bar'] as $value) {
       $value = UTF8::trim($value);
 
       if (UTF8::stripos($comment, $value) !== false) {
@@ -45,7 +45,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
    *
    * @return mixed Method return.
    */
-  public function invokeMethod(&$object, $methodName, array $parameters = array())
+  public function invokeMethod(&$object, $methodName, array $parameters = [])
   {
     $reflection = new \ReflectionClass(get_class($object));
     $method = $reflection->getMethod($methodName);
@@ -64,31 +64,31 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
    */
   public function stripWhitespaceProvider()
   {
-    return array(
-        array('foobar', '  foo   bar  '),
-        array('teststring', 'test string'),
-        array('Οσυγγραφέας', '   Ο     συγγραφέας  '),
-        array('123', ' 123 '),
-        array('', ' ', 'UTF-8'), // no-break space (U+00A0)
-        array('', '           ', 'UTF-8'), // spaces U+2000 to U+200A
-        array('', ' ', 'UTF-8'), // narrow no-break space (U+202F)
-        array('', ' ', 'UTF-8'), // medium mathematical space (U+205F)
-        array('', '　', 'UTF-8'), // ideographic space (U+3000)
-        array('123', '  1  2  3　　', 'UTF-8'),
-        array('', ' '),
-        array('', ''),
-    );
+    return [
+        ['foobar', '  foo   bar  '],
+        ['teststring', 'test string'],
+        ['Οσυγγραφέας', '   Ο     συγγραφέας  '],
+        ['123', ' 123 '],
+        ['', ' ', 'UTF-8'], // no-break space (U+00A0)
+        ['', '           ', 'UTF-8'], // spaces U+2000 to U+200A
+        ['', ' ', 'UTF-8'], // narrow no-break space (U+202F)
+        ['', ' ', 'UTF-8'], // medium mathematical space (U+205F)
+        ['', '　', 'UTF-8'], // ideographic space (U+3000)
+        ['123', '  1  2  3　　', 'UTF-8'],
+        ['', ' '],
+        ['', ''],
+    ];
   }
 
   public function testAccess()
   {
-    $testArray = array(
-        '-1'          => array(-1 => ''),
-        ''          => array(1 => ''),
-        '中文空白'      => array(2 => '空'),
-        '中文空白-test' => array(3 => '白'),
-        'fòô'       => array(1 => 'ò'),
-    );
+    $testArray = [
+        '-1'        => [-1 => ''],
+        ''          => [1 => ''],
+        '中文空白'      => [2 => '空'],
+        '中文空白-test' => [3 => '白'],
+        'fòô'       => [1 => 'ò'],
+    ];
 
     foreach ($testArray as $actualString => $testDataArray) {
       foreach ($testDataArray as $stringPos => $expectedString) {
@@ -100,13 +100,13 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testCallback()
   {
     $actual = UTF8::callback(
-        array(
+        [
             'voku\helper\UTF8',
             'strtolower',
-        ),
+        ],
         'Κόσμε-ÖÄÜ'
     );
-    $expected = array(
+    $expected = [
         'κ',
         'ό',
         'σ',
@@ -116,7 +116,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ö',
         'ä',
         'ü',
-    );
+    ];
     self::assertSame($expected, $actual);
   }
 
@@ -124,7 +124,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     // upper
 
-    $array = array(
+    $array = [
         'foo'   => 'a',
         1       => 'b',
         0       => 'c',
@@ -132,23 +132,23 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'FOO'   => 'e',
         'ΣΣΣ'   => 'f',
         'Κόσμε' => 'g',
-    );
+    ];
 
     $result = UTF8::array_change_key_case($array, CASE_UPPER);
 
-    $expected = array(
+    $expected = [
         'FOO'   => 'e',
         1       => 'b',
         0       => 'c',
         'ΣΣΣ'   => 'f',
         'ΚΌΣΜΕ' => 'g',
-    );
+    ];
 
     self::assertSame($result, $expected);
 
     // lower
 
-    $array = array(
+    $array = [
         'foo'   => 'a',
         1       => 'b',
         0       => 'c',
@@ -156,24 +156,24 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'FOO'   => 'e',
         'ΣΣΣ'   => 'f',
         'Κόσμε' => 'g',
-    );
+    ];
 
     $result = UTF8::array_change_key_case($array, CASE_LOWER);
 
-    $expected = array(
+    $expected = [
         'foo'   => 'e',
         1       => 'b',
         0       => 'c',
         'σσσ'   => 'f',
         'κόσμε' => 'g',
-    );
+    ];
 
     self::assertSame($result, $expected);
   }
 
   public function testCharOtherEncoding()
   {
-    $testArray = array(
+    $testArray = [
         '39'   => '\'',
         '40'   => '(',
         '41'   => ')',
@@ -183,7 +183,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         0x165  => 'ť',
         0x8469 => '葩',
         0x2603 => '☃',
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::chr($before, ''), 'tested: ' . $before);
@@ -192,7 +192,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testChar()
   {
-    $testArray = array(
+    $testArray = [
         '39'   => '\'',
         '40'   => '(',
         '41'   => ')',
@@ -202,7 +202,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         0x165  => 'ť',
         0x8469 => '葩',
         0x2603 => '☃',
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
@@ -228,12 +228,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // --
 
-    $testArrayFail = array(
+    $testArrayFail = [
         null  => null, // fail
         ''    => null, // fail
         'foo' => null, // fail
         'fòô' => null, // fail
-    );
+    ];
 
     foreach ($testArrayFail as $before => $after) {
       self::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
@@ -242,26 +242,26 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testChrSizeList()
   {
-    $testArray = array(
-        "中文空白\xF0\x90\x8C\xBC" => array(
+    $testArray = [
+        "中文空白\xF0\x90\x8C\xBC" => [
             3,
             3,
             3,
             3,
             4,
-        ),
-        'öäü'                  => array(
+        ],
+        'öäü'                  => [
             2,
             2,
             2,
-        ),
-        'abc'                  => array(
+        ],
+        'abc'                  => [
             1,
             1,
             1,
-        ),
-        ''                     => array(),
-        '中文空白-test'            => array(
+        ],
+        ''                     => [],
+        '中文空白-test'            => [
             3,
             3,
             3,
@@ -271,8 +271,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             1,
             1,
             1,
-        ),
-    );
+        ],
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::chr_size_list($actual));
@@ -281,11 +281,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testChrToDecimal()
   {
-    $tests = array(
+    $tests = [
         '~' => 0x7e,
         '§' => 0xa7,
         'ሇ' => 0x1207,
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::chr_to_decimal($before));
@@ -295,7 +295,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testChrToHex()
   {
-    $tests = array(
+    $tests = [
         ''  => 'U+0000',
         ' ' => 'U+0020',
         0   => 'U+0030',
@@ -303,7 +303,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ä' => 'U+00e4',
         'ό' => 'U+1f79',
         '❤' => 'U+2764',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::chr_to_hex(UTF8::hex_to_chr(UTF8::chr_to_hex($before))), 'tested: ' . $before);
@@ -330,61 +330,61 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testClean()
   {
-    $examples = array(
+    $examples = [
       // Valid defaults
-      ''                                                                                     => array('' => ''),
-      ' '                                                                                    => array(' ' => ' '),
-      null                                                                                   => array(null => ''),
-      1                                                                                      => array(1 => '1'),
-      '2'                                                                                    => array('2' => '2'),
-      '+1'                                                                                   => array('+1' => '+1'),
+      ''                                                                                     => ['' => ''],
+      ' '                                                                                    => [' ' => ' '],
+      null                                                                                   => [null => ''],
+      1                                                                                      => [1 => '1'],
+      '2'                                                                                    => ['2' => '2'],
+      '+1'                                                                                   => ['+1' => '+1'],
       // Valid UTF-8
-      '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强'                                                                => array('纳达尔绝境下大反击拒绝冷门逆转晋级中网四强' => '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强'),
-      'κόσμε'                                                                                => array('κόσμε' => 'κόσμε'),
-      '中'                                                                                    => array('中' => '中'),
-      '«foobar»'                                                                             => array('«foobar»' => '«foobar»'),
+      '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强'                                                                => ['纳达尔绝境下大反击拒绝冷门逆转晋级中网四强' => '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强'],
+      'κόσμε'                                                                                => ['κόσμε' => 'κόσμε'],
+      '中'                                                                                    => ['中' => '中'],
+      '«foobar»'                                                                             => ['«foobar»' => '«foobar»'],
       // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-      "κόσμε\xc2\xa0"                                                                        => array("κόσμε\xc2\xa0" => "κόσμε\xc2\xa0"),
+      "κόσμε\xc2\xa0"                                                                        => ["κόσμε\xc2\xa0" => "κόσμε\xc2\xa0"],
       // Valid UTF-8 + Invalid Chars
-      "κόσμε\xa0\xa1-öäü"                                                                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
+      "κόσμε\xa0\xa1-öäü"                                                                    => ['κόσμε-öäü' => 'κόσμε-öäü'],
       // Valid UTF-8 + ISO-Errors
-      'DÃ¼sseldorf'                                                                          => array('Düsseldorf' => 'Düsseldorf'),
+      'DÃ¼sseldorf'                                                                          => ['Düsseldorf' => 'Düsseldorf'],
       // Valid ASCII
-      'a'                                                                                    => array('a' => 'a'),
+      'a'                                                                                    => ['a' => 'a'],
       // Valid emoji (non-UTF-8)
-      '😃'                                                                                   => array('😃' => '😃'),
-      '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => array('🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧'),
+      '😃'                                                                                   => ['😃' => '😃'],
+      '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => ['🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧'],
       // Valid ASCII + Invalid Chars
-      "a\xa0\xa1-öäü"                                                                        => array('a-öäü' => 'a-öäü'),
+      "a\xa0\xa1-öäü"                                                                        => ['a-öäü' => 'a-öäü'],
       // Valid 2 Octet Sequence
-      "\xc3\xb1"                                                                             => array('ñ' => 'ñ'),
+      "\xc3\xb1"                                                                             => ['ñ' => 'ñ'],
       // Invalid 2 Octet Sequence
-      "\xc3\x28"                                                                             => array('�(' => '('),
+      "\xc3\x28"                                                                             => ['�(' => '('],
       // Invalid
-      "\x00"                                                                                 => array('�' => ''),
+      "\x00"                                                                                 => ['�' => ''],
       // Invalid Sequence Identifier
-      "\xa0\xa1"                                                                             => array('��' => ''),
+      "\xa0\xa1"                                                                             => ['��' => ''],
       // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"                                                                         => array('₡' => '₡'),
+      "\xe2\x82\xa1"                                                                         => ['₡' => '₡'],
       // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"                                                                         => array('�(�' => '('),
+      "\xe2\x28\xa1"                                                                         => ['�(�' => '('],
       // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"                                                                         => array('�(' => '('),
+      "\xe2\x82\x28"                                                                         => ['�(' => '('],
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"                                                                     => array('𐌼' => '𐌼'),
+      "\xf0\x90\x8c\xbc"                                                                     => ['𐌼' => '𐌼'],
       // Invalid 4 Octet Sequence (in 2nd Invalid 4 Octet Sequence (in 2ndOctet)
-      "\xf0\x28\x8c\xbc"                                                                     => array('�(��' => '('),
+      "\xf0\x28\x8c\xbc"                                                                     => ['�(��' => '('],
       // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"                                                                     => array('�(�' => '('),
+      "\xf0\x90\x28\xbc"                                                                     => ['�(�' => '('],
       // Invalid 4 Octet Sequence (in 4th Octet)
-      "\xf0\x28\x8c\x28"                                                                     => array('�(�(' => '(('),
+      "\xf0\x28\x8c\x28"                                                                     => ['�(�(' => '(('],
       // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"                                                                 => array('�' => ''),
+      "\xf8\xa1\xa1\xa1\xa1"                                                                 => ['�' => ''],
       // Valid 6 Octet Sequence (but not Unicode!)
-      "\xfc\xa1\xa1\xa1\xa1\xa1"                                                             => array('�' => ''),
+      "\xfc\xa1\xa1\xa1\xa1\xa1"                                                             => ['�' => ''],
       // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
-      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82"                                                 => array('�' => ' '),
-    );
+      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82"                                                 => ['�' => ' '],
+    ];
 
     // <<<<--- \"this comment is only a helper for PHPStorm and non UTF-8 chars
 
@@ -399,52 +399,52 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testCleanup()
   {
-    $examples = array(
+    $examples = [
       // Valid defaults
-      ''                                     => array('' => ''),
-      ' '                                    => array(' ' => ' '),
-      null                                   => array(null => ''),
-      1                                      => array(1 => '1'),
-      '2'                                    => array('2' => '2'),
-      '+1'                                   => array('+1' => '+1'),
+      ''                                     => ['' => ''],
+      ' '                                    => [' ' => ' '],
+      null                                   => [null => ''],
+      1                                      => [1 => '1'],
+      '2'                                    => ['2' => '2'],
+      '+1'                                   => ['+1' => '+1'],
       // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-      "κόσμε\xc2\xa0"                        => array('κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"),
+      "κόσμε\xc2\xa0"                        => ['κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"],
       // Valid UTF-8
-      '中'                                    => array('中' => '中'),
+      '中'                                    => ['中' => '中'],
       // Valid UTF-8 + ISO-Error
-      'DÃ¼sseldorf'                          => array('Düsseldorf' => 'Düsseldorf'),
+      'DÃ¼sseldorf'                          => ['Düsseldorf' => 'Düsseldorf'],
       // Valid UTF-8 + Invalid Chars
-      "κόσμε\xa0\xa1-öäü"                    => array('κόσμε-öäü' => 'κόσμε-öäü'),
+      "κόσμε\xa0\xa1-öäü"                    => ['κόσμε-öäü' => 'κόσμε-öäü'],
       // Valid ASCII
-      'a'                                    => array('a' => 'a'),
+      'a'                                    => ['a' => 'a'],
       // Valid ASCII + Invalid Chars
-      "a\xa0\xa1-öäü"                        => array('a-öäü' => 'a-öäü'),
+      "a\xa0\xa1-öäü"                        => ['a-öäü' => 'a-öäü'],
       // Valid 2 Octet Sequence
-      "\xc3\xb1"                             => array('ñ' => 'ñ'),
+      "\xc3\xb1"                             => ['ñ' => 'ñ'],
       // Invalid
-      "\x00"                                 => array('�' => ''),
+      "\x00"                                 => ['�' => ''],
       // Invalid 2 Octet Sequence
-      "\xc3\x28"                             => array('�(' => '('),
+      "\xc3\x28"                             => ['�(' => '('],
       // Invalid Sequence Identifier
-      "\xa0\xa1"                             => array('��' => ''),
+      "\xa0\xa1"                             => ['��' => ''],
       // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"                         => array('₡' => '₡'),
+      "\xe2\x82\xa1"                         => ['₡' => '₡'],
       // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"                         => array('�(�' => '('),
+      "\xe2\x28\xa1"                         => ['�(�' => '('],
       // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"                         => array('�(' => '('),
+      "\xe2\x82\x28"                         => ['�(' => '('],
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"                     => array('𐌼' => '𐌼'),
+      "\xf0\x90\x8c\xbc"                     => ['𐌼' => '𐌼'],
       // Invalid 4 Octet Sequence (in 2nd Octet)
-      "\xf0\x28\x8c\xbc"                     => array('�(��' => '('),
+      "\xf0\x28\x8c\xbc"                     => ['�(��' => '('],
       // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"                     => array('�(�' => '('),
+      "\xf0\x90\x28\xbc"                     => ['�(�' => '('],
       // Invalid 4 Octet Sequence (in 4th Octet)
-      " \xf0\x28\x8c\x28"                    => array('�(�(' => ' (('),
+      " \xf0\x28\x8c\x28"                    => ['�(�(' => ' (('],
       // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"                 => array('�' => ''),
+      "\xf8\xa1\xa1\xa1\xa1"                 => ['�' => ''],
       // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
-      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => array('�' => ' '),
+      "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => ['�' => ' '],
       // test for database-insert
       '
         <h1>«DÃ¼sseldorf» &ndash; &lt;Köln&gt;</h1>
@@ -453,7 +453,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 <p>
           &nbsp;�&foo;❤&nbsp;
         </p>
-        '                              => array(
+        '                              => [
           '' => '
         <h1>«Düsseldorf» &ndash; &lt;Köln&gt;</h1>
         <br /><br />
@@ -462,8 +462,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
           &nbsp;&foo;❤&nbsp;
         </p>
         ',
-      ),
-    );
+      ],
+    ];
 
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
@@ -475,34 +475,34 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testCodepoints()
   {
-    $testArray = array(
-        "\xF0\x90\x8C\xBC---" => array(
+    $testArray = [
+        "\xF0\x90\x8C\xBC---" => [
             0 => 66364,
             1 => 45,
             2 => 45,
             3 => 45,
-        ),
-        '中-abc'               => array(
+        ],
+        '中-abc'               => [
             0 => 20013,
             1 => 45,
             2 => 97,
             3 => 98,
             4 => 99,
-        ),
-        '₧{abc}'              => array(
+        ],
+        '₧{abc}'              => [
             0 => 8359,
             1 => 123,
             2 => 97,
             3 => 98,
             4 => 99,
             5 => 125,
-        ),
-        'κöñ'                 => array(
+        ],
+        'κöñ'                 => [
             0 => 954,
             1 => 246,
             2 => 241,
-        ),
-    );
+        ],
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::codepoints($actual));
@@ -510,21 +510,21 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // --- U+xxxx format
 
-    self::assertSame(array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints('κöñ', true));
+    self::assertSame([0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'], UTF8::codepoints('κöñ', true));
     self::assertSame(
-        array(0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'), UTF8::codepoints(
-        array(
+        [0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'], UTF8::codepoints(
+        [
             'κ',
             'ö',
             'ñ',
-        ), true
+        ], true
     )
     );
   }
 
   public function testCombineSomeUtf8Functions()
   {
-    $testArray = array(
+    $testArray = [
         "<h1>test\n</h1>"               => 'test',
         "test\n\nöfuckäü"               => "test\n\nö*****äü",
         "<b>FUCK\n</b>"                 => '*****',
@@ -536,7 +536,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '</br>'                         => '',
         ''                              => '',
         ' '                             => '',
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       self::assertSame($testResult, $this->cleanString($testString));
@@ -545,36 +545,36 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testCountChars()
   {
-    $testArray = array(
-        'κaκbκc' => array(
+    $testArray = [
+        'κaκbκc' => [
             'κ' => 3,
             'a' => 1,
             'b' => 1,
             'c' => 1,
-        ),
-        'cba'    => array(
+        ],
+        'cba'    => [
             'c' => 1,
             'b' => 1,
             'a' => 1,
-        ),
-        'abcöäü' => array(
+        ],
+        'abcöäü' => [
             'a' => 1,
             'b' => 1,
             'c' => 1,
             'ö' => 1,
             'ä' => 1,
             'ü' => 1,
-        ),
-        '白白'     => array('白' => 2),
-        ''       => array(),
-    );
+        ],
+        '白白'     => ['白' => 2],
+        ''       => [],
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame(true, $expected === UTF8::count_chars($actual), 'error by ' . $actual);
     }
 
     // added invalid UTF-8
-    $testArray['白' . "\xa0\xa1" . '白'] = array('白' => 2);
+    $testArray['白' . "\xa0\xa1" . '白'] = ['白' => 2];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame(true, $expected === UTF8::count_chars($actual, true), 'error by ' . $actual);
@@ -583,11 +583,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testDecimalToChr()
   {
-    $tests = array(
+    $tests = [
         0x7e   => '~',
         0xa7   => '§',
         0x1207 => 'ሇ',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::decimal_to_chr($before));
@@ -596,40 +596,40 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testEncode()
   {
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
         'abc'            => 'abc',
         'Berbée'         => 'Berbée',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::encode('', $before), 'tested: ' . $before); // do nothing
     }
 
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
         'abc'            => 'abc',
         'Berbée'         => 'Berbée',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::encode('UTF8', $before), 'tested: ' . $before); // UTF-8
     }
 
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-????-  ',
         '      - ÖÄÜ- '  => '      - ???- ',
         'öäü'            => '???',
         ''               => '',
         'abc'            => 'abc',
         'Berbée'         => 'Berb?e',
-    );
+    ];
 
     if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
       foreach ($tests as $before => $after) {
@@ -637,27 +637,27 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
       }
     }
 
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-????-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
         'abc'            => 'abc',
         'Berbée'         => 'Berbée',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::filter(UTF8::encode('ISo88591', $before)), 'tested: ' . $before); // ISO-8859-1
     }
 
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-????-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
         'abc'            => 'abc',
         'Berbée'         => 'Berbée',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before)))); // ISO-8859-15
@@ -670,12 +670,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testEncodeUtf8EncodeUtf8()
   {
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::encode('UTF-8', UTF8::encode('UTF-8', $before)));
@@ -684,12 +684,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testEncodeUtf8Utf8Encode()
   {
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-ä¸­æç©ºç½-  ',
         '      - ÖÄÜ- '  => '      - ÃÃÃ- ',
         'öäü'            => 'Ã¶Ã¤Ã¼',
         ''               => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::utf8_encode(UTF8::encode('UTF-8', $before)));
@@ -773,12 +773,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertContains('Hírek', $testString);
 
     $context = stream_context_create(
-        array(
+        [
             'http' =>
-                array(
+                [
                     'timeout' => 10,
-                ),
-        )
+                ],
+        ]
     );
 
     // text: with max-length + timeout
@@ -797,12 +797,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testFileGetContentsBinary()
   {
     $context = stream_context_create(
-        array(
+        [
             'http' =>
-                array(
+                [
                     'timeout' => 10,
-                ),
-        )
+                ],
+        ]
     );
 
     // image: do not convert to utf-8 + timeout
@@ -824,47 +824,47 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     $c = 'à';
     $d = \Normalizer::normalize($c, \Normalizer::NFD);
-    $a = array(
+    $a = [
         'n' => 4,
         'a' => "\xE9",
         'b' => substr($d, 1),
         'c' => $c,
         'd' => $d,
         'e' => "\n\r\n\r",
-    );
+    ];
     $a['f'] = (object)$a;
     $b = UTF8::filter($a);
     $b['f'] = (array)$a['f'];
 
-    $expect = array(
+    $expect = [
         'n' => 4,
         'a' => 'é',
         'b' => '◌' . substr($d, 1),
         'c' => $c,
         'd' => $c,
         'e' => "\n\n\n",
-    );
+    ];
     $expect['f'] = $expect;
 
     self::assertSame($expect, $b);
 
     // -----
 
-    $result = UTF8::filter(array("\xE9", 'à', 'a', "\xe2\x80\xa8"), \Normalizer::FORM_D);
+    $result = UTF8::filter(["\xE9", 'à', 'a', "\xe2\x80\xa8"], \Normalizer::FORM_D);
 
-    self::assertSame(array(0 => 'é', 1 => 'à', 2 => 'a', 3 => "\xe2\x80\xa8"), $result);
+    self::assertSame([0 => 'é', 1 => 'à', 2 => 'a', 3 => "\xe2\x80\xa8"], $result);
   }
 
   public function testFilterVar()
   {
-    $options = array(
-        'options' => array(
+    $options = [
+        'options' => [
             'default'   => -1,
             // value to return if the filter fails
             'min_range' => 90,
             'max_range' => 99,
-        ),
-    );
+        ],
+    ];
 
     self::assertSame('  -ABC-中文空白-  ', UTF8::filter_var('  -ABC-中文空白-  ', FILTER_DEFAULT));
     self::assertFalse(UTF8::filter_var('  -ABC-中文空白-  ', FILTER_VALIDATE_URL));
@@ -876,53 +876,53 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testFilterVarArray()
   {
-    $filters = array(
-        'name'  => array(
+    $filters = [
+        'name'  => [
             'filter'  => FILTER_CALLBACK,
-            'options' => array('voku\helper\UTF8', 'ucwords'),
-        ),
-        'age'   => array(
+            'options' => ['voku\helper\UTF8', 'ucwords'],
+        ],
+        'age'   => [
             'filter'  => FILTER_VALIDATE_INT,
-            'options' => array(
+            'options' => [
                 'min_range' => 1,
                 'max_range' => 120,
-            ),
-        ),
+            ],
+        ],
         'email' => FILTER_VALIDATE_EMAIL,
-    );
+    ];
 
     $data['name'] = 'κόσμε';
     $data['age'] = '18';
     $data['email'] = 'foo@bar.de';
 
     self::assertSame(
-        array(
+        [
             'name'  => 'Κόσμε',
             'age'   => 18,
             'email' => 'foo@bar.de',
-        ),
+        ],
         UTF8::filter_var_array($data, $filters, true)
     );
 
     self::assertSame(
-        array(
+        [
             'name'  => 'κόσμε',
             'age'   => '18',
             'email' => 'foo@bar.de',
-        ),
+        ],
         UTF8::filter_var_array($data)
     );
   }
 
   public function testFitsInside()
   {
-    $testArray = array(
-        'κόσμε'  => array(5 => true),
-        'test'   => array(4 => true),
-        ''       => array(0 => true),
-        ' '      => array(0 => false),
-        'abcöäü' => array(2 => false),
-    );
+    $testArray = [
+        'κόσμε'  => [5 => true],
+        'test'   => [4 => true],
+        ''       => [0 => true],
+        ' '      => [0 => false],
+        'abcöäü' => [2 => false],
+    ];
 
     foreach ($testArray as $actual => $data) {
       foreach ($data as $size => $expected) {
@@ -933,38 +933,38 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testFixBrokenUtf8()
   {
-    $testArray = array(
+    $testArray = [
         'ا (Alif) · ب (Bāʾ) · ت (Tāʾ) · ث (Ṯāʾ) · ج (Ǧīm) · ح (Ḥāʾ) · خ (Ḫāʾ) · د (Dāl) · ذ (Ḏāl) · ر (Rāʾ) · ز (Zāy) · س (Sīn) · ش (Šīn) · ص (Ṣād) · ض (Ḍād) · ط (Ṭāʾ) · ظ (Ẓāʾ) · ع (ʿAin) · غ (Ġain) · ف (Fāʾ) · ق (Qāf) · ك (Kāf) · ل (Lām) · م (Mīm) · ن (Nūn) · ه (Hāʾ) · و (Wāw) · ي (Yāʾ)' => 'ا (Alif) · ب (Bāʾ) · ت (Tāʾ) · ث (Ṯāʾ) · ج (Ǧīm) · ح (Ḥāʾ) · خ (Ḫāʾ) · د (Dāl) · ذ (Ḏāl) · ر (Rāʾ) · ز (Zāy) · س (Sīn) · ش (Šīn) · ص (Ṣād) · ض (Ḍād) · ط (Ṭāʾ) · ظ (Ẓāʾ) · ع (ʿAin) · غ (Ġain) · ف (Fāʾ) · ق (Qāf) · ك (Kāf) · ل (Lām) · م (Mīm) · ن (Nūn) · ه (Hāʾ) · و (Wāw) · ي (Yāʾ)',
-        'строка на русском'                               => 'строка на русском',
-        'Düsseldorf'                                      => 'Düsseldorf',
-        'Ã'                                               => 'Ã',
-        ' '                                               => ' ',
-        ''                                                => '',
-        "\n"                                              => "\n",
-        "test\xc2\x88"                                    => 'test',
-        'DÃ¼sseldorf'                                     => 'Düsseldorf',
-        'Ã¤'                                              => 'ä',
-        'test'                                            => 'test',
-        'FÃÂ©dération Camerounaise de Football'           => 'Fédération Camerounaise de Football',
-        "FÃÂ©dération Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
-        'FÃ©dÃ©ration Camerounaise de Football'           => 'Fédération Camerounaise de Football',
-        "FÃ©dÃ©ration Camerounaise de Football\n"         => "Fédération Camerounaise de Football\n",
-        'FÃÂ©dÃÂ©ration Camerounaise de Football'         => 'Fédération Camerounaise de Football',
-        "FÃÂ©dÃÂ©ration Camerounaise de Football\n"       => "Fédération Camerounaise de Football\n",
-        'FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football'   => 'Fédération Camerounaise de Football',
-        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football\n" => "Fédération Camerounaise de Football\n",
-    );
+        'строка на русском'                                                                                                                                                                                                                                                                        => 'строка на русском',
+        'Düsseldorf'                                                                                                                                                                                                                                                                               => 'Düsseldorf',
+        'Ã'                                                                                                                                                                                                                                                                                        => 'Ã',
+        ' '                                                                                                                                                                                                                                                                                        => ' ',
+        ''                                                                                                                                                                                                                                                                                         => '',
+        "\n"                                                                                                                                                                                                                                                                                       => "\n",
+        "test\xc2\x88"                                                                                                                                                                                                                                                                             => 'test',
+        'DÃ¼sseldorf'                                                                                                                                                                                                                                                                              => 'Düsseldorf',
+        'Ã¤'                                                                                                                                                                                                                                                                                       => 'ä',
+        'test'                                                                                                                                                                                                                                                                                     => 'test',
+        'FÃÂ©dération Camerounaise de Football'                                                                                                                                                                                                                                                    => 'Fédération Camerounaise de Football',
+        "FÃÂ©dération Camerounaise de Football\n"                                                                                                                                                                                                                                                  => "Fédération Camerounaise de Football\n",
+        'FÃ©dÃ©ration Camerounaise de Football'                                                                                                                                                                                                                                                    => 'Fédération Camerounaise de Football',
+        "FÃ©dÃ©ration Camerounaise de Football\n"                                                                                                                                                                                                                                                  => "Fédération Camerounaise de Football\n",
+        'FÃÂ©dÃÂ©ration Camerounaise de Football'                                                                                                                                                                                                                                                  => 'Fédération Camerounaise de Football',
+        "FÃÂ©dÃÂ©ration Camerounaise de Football\n"                                                                                                                                                                                                                                                => "Fédération Camerounaise de Football\n",
+        'FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football'                                                                                                                                                                                                                                            => 'Fédération Camerounaise de Football',
+        "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football\n"                                                                                                                                                                                                                                          => "Fédération Camerounaise de Football\n",
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::fix_utf8($before), 'tested: ' . $before);
     }
 
-    self::assertSame(array('Düsseldorf', 'Fédération'), UTF8::fix_utf8(array('DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration')));
+    self::assertSame(['Düsseldorf', 'Fédération'], UTF8::fix_utf8(['DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration']));
   }
 
   public function testFixSimpleUtf8()
   {
-    $testArray = array(
+    $testArray = [
         'Düsseldorf'   => 'Düsseldorf',
         'Ã'            => 'Ã',
         ' '            => ' ',
@@ -974,7 +974,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'DÃ¼sseldorf'  => 'Düsseldorf',
         'Ã¤'           => 'ä',
         'test'         => 'test',
-    );
+    ];
 
     for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
 
@@ -992,7 +992,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testGetCharDirection()
   {
-    $testArray = array(
+    $testArray = [
         'ا'                                                                                => 'RTL',
         'أحبك'                                                                             => 'RTL',
         'זאת השפה העברית.א'                                                                => 'RTL',
@@ -1014,7 +1014,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '𐭠 𐭡 𐭢 𐭣 𐭤 𐭥 𐭦 𐭧 𐭨 𐭩 𐭪 𐭫 𐭬 𐭭 𐭮 𐭯 𐭰 𐭱 𐭲 𐭸 𐭹 𐭺 𐭻 𐭼 𐭽 𐭾 𐭿' => 'RTL',
         // http://www.sonderzeichen.de/Inscriptional_Pahlavi/Unicode-10B7F.html
 
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::getCharDirection($actual), 'error by ' . $actual);
@@ -1023,15 +1023,15 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testHexToIntAndIntToHex()
   {
-    $tests = array(
+    $tests = [
         'U+2026' => 8230,
         'U+03ba' => 954,
         'U+00f6' => 246,
         'U+00f1' => 241,
         'U+0000' => 0,
-    );
+    ];
 
-    $testsForHexToInt = array(
+    $testsForHexToInt = [
         '\u2026' => 8230,
         '\u03ba' => 954,
         '\u00f6' => 246,
@@ -1043,7 +1043,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '00f6'   => 246,
         '00f1'   => 241,
         '0000'   => 0,
-    );
+    ];
 
     foreach (array_replace($testsForHexToInt, $tests) as $before => $after) {
       self::assertSame($after, UTF8::hex_to_int($before), 'tested: ' . $before);
@@ -1061,7 +1061,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testHtmlEncode()
   {
-    $testArray = array(
+    $testArray = [
         '{-test'                                     => '&#123;&#45;&#116;&#101;&#115;&#116;',
         '中文空白'                                       => '&#20013;&#25991;&#31354;&#30333;',
         'Dänisch (Å/å, Æ/æ, Ø/ø)'                    => '&#68;&#228;&#110;&#105;&#115;&#99;&#104;&#32;&#40;&#197;&#47;&#229;&#44;&#32;&#198;&#47;&#230;&#44;&#32;&#216;&#47;&#248;&#41;',
@@ -1073,7 +1073,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '�'                                          => '&#65533;',
         'Test-,;:'                                   => '&#84;&#101;&#115;&#116;&#45;&#44;&#59;&#58;',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎' => '&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;&#32;&#128077;&#32;&#128169;&#32;&#128516;&#32;&#10084;&#32;&#128054;&#32;&#128169;&#32;&#128049;&#32;&#128056;&#32;&#127744;&#32;&#10084;&#32;&#9855;&#32;&#9934;',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::html_encode($actual), 'tested:' . $actual);
@@ -1089,7 +1089,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $testArray = array(
+    $testArray = [
         '{-test'                                     => '{-test',
         '中文空白'                                       => '&#20013;&#25991;&#31354;&#30333;',
         'Dänisch (Å/å, Æ/æ, Ø/ø)'                    => 'D&#228;nisch (&#197;/&#229;, &#198;/&#230;, &#216;/&#248;)',
@@ -1101,7 +1101,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '�'                                          => '&#65533;',
         'Test-,;:'                                   => 'Test-,;:',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎' => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084; &#128054; &#128169; &#128049; &#128056; &#127744; &#10084; &#9855; &#9934;',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
@@ -1110,7 +1110,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $testArray = array(
+    $testArray = [
         '{-test'                                     => '{-test',
         '中文空白'                                       => '中文空白',
         'κόσμε'                                      => 'κόσμε',
@@ -1125,7 +1125,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '%ABREPRESENT%C9%BB'                         => '%ABREPRESENT%C9%BB',
         'Test-,;:'                                   => 'Test-,;:',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
@@ -1133,19 +1133,19 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // --- ISO
 
-    $testArray = array(
+    $testArray = [
         '中文空白'                  => '中文空白',
         'κόσμε'                 => 'κόσμε',
         'öäü'                   => 'öäü',
         '(Å/å, Æ/æ, Ø/ø, Σ/σ)'  => '(Å/å, Æ/æ, Ø/ø, Σ/σ)',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertNotSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO')), 'tested:' . $actual);
     }
 
-    $testArray = array(
+    $testArray = [
         '{-test'   => '{-test',
         'abc'      => 'abc',
         ' '        => ' ',
@@ -1155,7 +1155,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '&gt;'     => '>',
         '&#39;'    => '\'',
         'Test-,;:' => 'Test-,;:',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO'), ENT_QUOTES), 'tested:' . $actual);
@@ -1165,12 +1165,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
-      $testArray = array(
+      $testArray = [
           '&#d;'  => '&#d;',
           '&d;'   => '&d;',
           '&gt;'  => '>',
           '&#39;' => '&#39;',
-      );
+      ];
 
       foreach ($testArray as $actual => $expected) {
         self::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO'), ENT_COMPAT), 'tested:' . $actual);
@@ -1180,7 +1180,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testHtmlEntityDecode()
   {
-    $testArray = array(
+    $testArray = [
         'κόσμε'                                                                                     => 'κόσμε',
         'Κόσμε'                                                                                     => 'Κόσμε',
         'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
@@ -1195,11 +1195,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
         '&#20013;&#25991;&#31354;&#30333;'                                                          => '中文空白',
-    );
+    ];
 
     // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
-      $tmpTestArray = array(
+      $tmpTestArray = [
           'who&#039;s online'                  => 'who&#039;s online',
           'who&amp;#039;s online'              => 'who&#039;s online',
           'who&#039;s online-'                 => 'who&#039;s online-',
@@ -1207,7 +1207,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
           'Who&amp;#039;s Online'              => 'Who&#039;s Online',
           'Who&amp;amp;#039;s Online &#20013;' => 'Who&#039;s Online 中',
           'who\'s online&colon;'               => 'who\'s online&colon;',
-      );
+      ];
 
       $testArray = array_merge($testArray, $tmpTestArray);
     }
@@ -1219,7 +1219,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testHtmlEntityDecodeWithEntNoQuotes()
   {
-    $testArray = array(
+    $testArray = [
         'κόσμε'                                                                                     => 'κόσμε',
         'Κόσμε'                                                                                     => 'Κόσμε',
         'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
@@ -1232,11 +1232,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert(&quot;foo&quot;);</script>, <marquee>test</marquee>',
         '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert(&quot;XSS&quot;)</script>',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
-    );
+    ];
 
     // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
-      $tmpTestArray = array(
+      $tmpTestArray = [
           'who&#039;s online'                  => 'who&#039;s online',
           'who&amp;#039;s online'              => 'who&#039;s online',
           'who&#039;s online-'                 => 'who&#039;s online-',
@@ -1244,7 +1244,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
           'Who&amp;#039;s Online'              => 'Who&#039;s Online',
           'Who&amp;amp;#039;s Online &#20013;' => 'Who&#039;s Online 中',
           'who\'s online&colon;'               => 'who\'s online&colon;',
-      );
+      ];
 
       $testArray = array_merge($testArray, $tmpTestArray);
     }
@@ -1256,7 +1256,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testHtmlEntityDecodeWithEntQuotes()
   {
-    $testArray = array(
+    $testArray = [
         'κόσμε'                                                                                     => 'κόσμε',
         'Κόσμε'                                                                                     => 'Κόσμε',
         'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
@@ -1276,13 +1276,13 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
         "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
-    );
+    ];
 
     // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
-      $tmpTestArray = array(
+      $tmpTestArray = [
           'who\'s online&colon;' => 'who\'s online&colon;',
-      );
+      ];
 
       $testArray = array_merge($testArray, $tmpTestArray);
     }
@@ -1293,7 +1293,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $testArray = array(
+    $testArray = [
         'κόσμε'                     => 'κόσμε',
         'who&#039;s online'         => 'who\'s online',
         'who&amp;#039;s online'     => 'who\'s online',
@@ -1301,7 +1301,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'Who&#039;s Online'         => 'Who\'s Online',
         'Who&amp;amp;#039;s Online' => 'Who\'s Online',
         "Who\'s Online&#x0003A;"    => 'Who\\\'s Online:',
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::html_entity_decode($before, ENT_QUOTES, 'ISO'), 'error by ' . $before); // 'ISO-8859-1'
@@ -1316,7 +1316,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testHtmlEntityDecodeWithHtml5()
   {
-    $testArray = array(
+    $testArray = [
         'κόσμε'                                                                                     => 'κόσμε',
         'Κόσμε'                                                                                     => 'Κόσμε',
         'öäü-κόσμεκόσμε-äöü'                                                                        => 'öäü-κόσμεκόσμε-äöü',
@@ -1336,13 +1336,13 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'Who&amp;amp;#039;s Online'                                                                 => 'Who\'s Online',
         "Who\'s Online&#x0003A;"                                                                    => 'Who\\\'s Online:',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
-    );
+    ];
 
     // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
     if (defined('HHVM_VERSION') === false) {
-      $tmpTestArray = array(
+      $tmpTestArray = [
           'who\'s online&colon;' => 'who\'s online:',
-      );
+      ];
 
       $testArray = array_merge($testArray, $tmpTestArray);
     }
@@ -1354,8 +1354,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testHtmlentities()
   {
-    $testArray = array(
-        '<\\\'öäü>' => '&lt;&#92;\'&ouml;&auml;&uuml;&gt;',
+    $testArray = [
+        '<\\\'öäü>'                                                                                                   => '&lt;&#92;\'&ouml;&auml;&uuml;&gt;',
         '<白>'                                                                                                         => '&lt;&#30333;&gt;',
         '<白-öäü>'                                                                                                     => '&lt;&#30333;-&ouml;&auml;&uuml;&gt;',
         'dies ist ein test „Goldenen Regeln und Checklisten“.<br /><br /><br />' . UTF8::html_entity_decode('&nbsp;') => 'dies ist ein test &bdquo;Goldenen Regeln und Checklisten&ldquo;.&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&nbsp;',
@@ -1364,7 +1364,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         ''                                                                                                            => '',
         'Test-,;:'                                                                                                    => 'Test-,;:',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ ♿ ⛎'                                                                  => '&#128077; &#128169; &#128516; &#10084; &#128077; &#128169; &#128516; &#10084; &#128054; &#128169; &#128049; &#128056; &#127744; &#10084; &#9855; &#9934;',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::htmlentities($actual));
@@ -1379,12 +1379,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $testArray = array(
+    $testArray = [
         'abc' => 'abc',
         'öäü' => '&Atilde;&para;&Atilde;&curren;&Atilde;&frac14;',
         ' '   => ' ',
         ''    => '',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::htmlentities($actual, ENT_COMPAT, 'ISO-8859-1', false));
@@ -1402,7 +1402,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testHtmlspecialchars()
   {
-    $testArray = array(
+    $testArray = [
         "<a href='κόσμε'>κόσμε</a>"                                => "&lt;a href='κόσμε'&gt;κόσμε&lt;/a&gt;",
         '<白>'                                                      => '&lt;白&gt;',
         'öäü'                                                      => 'öäü',
@@ -1410,7 +1410,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         ''                                                         => '',
         'Test-,;:'                                                 => 'Test-,;:',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &amp;#x267F; &amp;#x26CE;',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::htmlspecialchars($actual));
@@ -1419,7 +1419,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $testArray = array(
+    $testArray = [
         "<a href='κόσμε'>κόσμε</a>"                                => '&lt;a href=&#039;κόσμε&#039;&gt;κόσμε&lt;/a&gt;',
         '<白>'                                                      => '&lt;白&gt;',
         'öäü'                                                      => 'öäü',
@@ -1427,7 +1427,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         ''                                                         => '',
         'Test-,;:'                                                 => 'Test-,;:',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &amp;#x267F; &amp;#x26CE;',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::htmlspecialchars($actual, ENT_QUOTES, 'UTF8'));
@@ -1436,7 +1436,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsAscii()
   {
-    $testArray = array(
+    $testArray = [
         'κ'      => false,
         'abc'    => true,
         'abcöäü' => false,
@@ -1445,7 +1445,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         ''       => true,
         '!!!'    => true,
         '§§§'    => false,
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
@@ -1458,7 +1458,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsBase64()
   {
-    $tests = array(
+    $tests = [
         0                                          => false,
         1                                          => false,
         -1                                         => false,
@@ -1478,7 +1478,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'क्षȸ'                                     => false,
         base64_encode('👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك') => true,
         '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'                => false,
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::isBase64($before), $before);
@@ -1487,7 +1487,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsBinary()
   {
-    $tests = array(
+    $tests = [
         'öäü'          => false,
         ''             => false,
         '1'            => false,
@@ -1506,7 +1506,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "\x01\x01ab"   => false,
         "\x01\x01b"    => false,
         "\x01\x00a"    => true, // >= 30% binary
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::isBinary($before), 'value: ' . $before);
@@ -1516,7 +1516,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsBom()
   {
-    $testArray = array(
+    $testArray = [
         "\xef\xbb\xbf"    => true,
         '  þÿ'            => true,
         "foo\xef\xbb\xbf" => false,
@@ -1524,7 +1524,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'foo'             => false,
         ''                => false,
         ' '               => false,
-    );
+    ];
 
     foreach ($testArray as $test => $expected) {
       self::assertSame($expected, UTF8::isBom($test), 'tested: ' . $test);
@@ -1534,7 +1534,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsHtml()
   {
-    $testArray = array(
+    $testArray = [
         '<h1>test</h1>'                     => true,
         '<html><body class="no-js"></html>' => true,
         '<html   f=\'\'    d="">'           => true,
@@ -1554,7 +1554,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '[b]lall[b]'                        => false,
         '<img src="" ...'                   => false, // non closed tag
         'html>'                             => false, // non opened tag
-    );
+    ];
 
     foreach ($testArray as $testString => $testResult) {
       self::assertSame($testResult, UTF8::is_html($testString), 'tested: ' . $testString);
@@ -1564,7 +1564,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsUtf16()
   {
-    $testArray = array(
+    $testArray = [
         1                                                                  => false,
         -1                                                                 => false,
         'κ'                                                                => false,
@@ -1606,7 +1606,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "\xF0\x28\x8C\x28"                                                 => false,
         "\xF8\xA1\xA1\xA1\xA1"                                             => false,
         "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
-    );
+    ];
 
     $conter = 0;
     foreach ($testArray as $actual => $expected) {
@@ -1635,7 +1635,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsUtf32()
   {
-    $testArray = array(
+    $testArray = [
         1                                                                  => false,
         -1                                                                 => false,
         'κ'                                                                => false,
@@ -1677,7 +1677,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "\xF0\x28\x8C\x28"                                                 => false,
         "\xF8\xA1\xA1\xA1\xA1"                                             => false,
         "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
-    );
+    ];
 
     $conter = 0;
     foreach ($testArray as $actual => $expected) {
@@ -1700,7 +1700,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsUtf8()
   {
-    $testArray = array(
+    $testArray = [
         1                                                                                  => true,
         -1                                                                                 => true,
         'κ'                                                                                => true,
@@ -1749,7 +1749,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "\xF0\x28\x8C\x28"                                                                 => false,
         "\xF8\xA1\xA1\xA1\xA1"                                                             => false,
         "\xFC\xA1\xA1\xA1\xA1\xA1"                                                         => false,
-    );
+    ];
 
     self::assertFalse(UTF8::is_utf8(array_keys($testArray)));
 
@@ -1771,12 +1771,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testJsonDecode()
   {
-    $testArray = array(
+    $testArray = [
         '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte f\u00fclle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}'                            => '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte f\u00fclle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}',
         '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSκόσμε' . "\xa0\xa1" . '-öäüDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte f\u00fclle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}' => '{"recipe_id":-1,"recipe_created":"","recipe_title":"FSDFSκόσμε ¡-öäüDF","recipe_description":"","recipe_yield":0,"recipe_prepare_time":"fast","recipe_image":"","recipe_legal":0,"recipe_license":0,"recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"errorArray":{"recipe_legal":"error","recipe_license":"error","recipe_description":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_amount":"error","recipe_ingredient_unit":"error"},"errorMessage":"[[Bitte fülle die rot markierten Felder korrekt aus.]]","db":{"query_count":15}}',
         '{"array":[1,2,3],"boolean":true,"null":null,"number":123,"object":{"a":"b","c":"d","e":"f"},"string":"Hello World | öäü"}'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     => '{"array":[1,2,3],"boolean":true,"null":null,"number":123,"object":{"a":"b","c":"d","e":"f"},"string":"Hello World | öäü"}',
         '{"array":[1,"¥","ä"]}'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         => '{"array":[1,"¥","ä"]}',
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::json_decode(UTF8::json_encode($before)));
@@ -1801,12 +1801,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     // ----
 
     $expected = new stdClass();
-    $expected->array = array(1, '¥', 'ä');
+    $expected->array = [1, '¥', 'ä'];
     self::assertEquals($expected, UTF8::json_decode('{"array":[1,"¥","ä"]}'));
 
     // ----
 
-    self::assertEquals(array(1, '¥', 'ä'), UTF8::json_decode('[1,"\u00a5","\u00e4"]'));
+    self::assertEquals([1, '¥', 'ä'], UTF8::json_decode('[1,"\u00a5","\u00e4"]'));
   }
 
   public function testShowSupport()
@@ -1822,32 +1822,32 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testJsonEncode()
   {
     $test = new stdClass();
-    $test->array = array(1, '¥', 'ä');
+    $test->array = [1, '¥', 'ä'];
     self::assertEquals('{"array":[1,"\u00a5","\u00e4"]}', UTF8::json_encode($test));
 
     // ----
 
-    self::assertEquals('[1,"\u00a5","\u00e4"]', UTF8::json_encode(array(1, '¥', 'ä')));
+    self::assertEquals('[1,"\u00a5","\u00e4"]', UTF8::json_encode([1, '¥', 'ä']));
   }
 
   public function testLcWords()
   {
     self::assertSame('iñt ërn âTi ônà liz æti øn', UTF8::lcwords('Iñt ërn âTi ônà liz æti øn'));
     self::assertSame("iñt ërn âti\n ônà liz æti  øn", UTF8::lcwords("Iñt Ërn Âti\n Ônà Liz Æti  Øn"));
-    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', array('foo'), '#'));
-    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', array('foo'), ''));
+    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', ['foo'], '#'));
+    self::assertSame('中文空白 foo oo oöäü#s', UTF8::lcwords('中文空白 foo oo oöäü#s', ['foo'], ''));
     self::assertSame('', UTF8::lcwords(''));
     self::assertSame('ñ', UTF8::lcwords('Ñ'));
     self::assertSame("iñt ërN âti\n ônà liz æti øn", UTF8::lcwords("Iñt ËrN Âti\n Ônà Liz Æti Øn"));
     self::assertSame('ñtërnâtiônàlizætIøN', UTF8::lcwords('ÑtërnâtiônàlizætIøN'));
-    self::assertSame('ñtërnâtiônàlizætIøN test câse', UTF8::lcwords('ÑtërnâtiônàlizætIøN Test câse', array('câse')));
+    self::assertSame('ñtërnâtiônàlizætIøN test câse', UTF8::lcwords('ÑtërnâtiônàlizætIøN Test câse', ['câse']));
     self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ'));
 
-    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', array('de')));
-    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', array('d', 'e')));
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', ['de']));
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('Deja Σσς DEJa ΣσΣ', ['d', 'e']));
 
-    self::assertSame('DejA σσς dEJa σσΣ', UTF8::lcwords('DejA σσς dEJa σσΣ', array('DejA')));
-    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('deja σσς dEJa σσΣ', array('deja', 'σσΣ')));
+    self::assertSame('DejA σσς dEJa σσΣ', UTF8::lcwords('DejA σσς dEJa σσΣ', ['DejA']));
+    self::assertSame('deja σσς dEJa σσΣ', UTF8::lcwords('deja σσς dEJa σσΣ', ['deja', 'σσΣ']));
   }
 
   public function testLcfirst()
@@ -1875,14 +1875,14 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testLtrim()
   {
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '-ABC-中文空白-  ',
         '      - ÖÄÜ- '  => '- ÖÄÜ- ',
         'öäü'            => 'öäü',
         1                => '1',
         ''               => '',
         null             => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::ltrim($before));
@@ -1920,32 +1920,32 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testMax()
   {
-    $tests = array(
+    $tests = [
         'abc-äöü-中文空白'         => '空',
         'öäü'                  => 'ü',
         'öäü test öäü'         => 'ü',
         'ÖÄÜ'                  => 'Ü',
         '中文空白'                 => '空',
         'Intërnâtiônàlizætiøn' => 'ø',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::max($before));
     }
 
-    self::assertSame('ü', UTF8::max(array('öäü', 'test', 'abc')));
+    self::assertSame('ü', UTF8::max(['öäü', 'test', 'abc']));
   }
 
   public function testMaxChrWidth()
   {
-    $testArray = array(
+    $testArray = [
         '中文空白'                 => 3,
         'Intërnâtiônàlizætiøn' => 2,
         'öäü'                  => 2,
         'abc'                  => 1,
         ''                     => 0,
         null                   => 0,
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::max_chr_width($actual));
@@ -1954,24 +1954,24 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testMin()
   {
-    $tests = array(
+    $tests = [
         'abc-äöü-中文空白' => '-',
         'öäü'          => 'ä',
         'öäü test öäü' => ' ',
         'ÖÄÜ'          => 'Ä',
         '中文空白'         => '中',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::min($before));
     }
 
-    self::assertSame('a', UTF8::min(array('öäü', 'test', 'abc')));
+    self::assertSame('a', UTF8::min(['öäü', 'test', 'abc']));
   }
 
   public function testNormalizeEncoding()
   {
-    $tests = array(
+    $tests = [
         'ISO'          => 'ISO-8859-1',
         'UTF8'         => 'UTF-8',
         'WINDOWS-1251' => 'WINDOWS-1251',
@@ -1980,7 +1980,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'UTF-8'        => 'UTF-8',
         'ISO-8859-5'   => 'ISO-8859-5',
         false          => false,
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::normalizeEncoding($before, false), 'tested: ' . $before);
@@ -1989,7 +1989,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testNormalizeMsword()
   {
-    $tests = array(
+    $tests = [
         ''                                                                         => '',
         ' '                                                                        => ' ',
         '«foobar»'                                                                 => '"foobar"',
@@ -1997,7 +1997,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "<ㅡㅡ></ㅡㅡ><div>…</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div>...</div><input type='email' name='user[email]' /><a>wtf</a>",
         '– DÃ¼sseldorf —'                                                          => '- DÃ¼sseldorf -',
         '„Abcdef…”'                                                                => '"Abcdef..."',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::normalize_msword($before));
@@ -2006,7 +2006,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testNormalizeWhitespace()
   {
-    $tests = array(
+    $tests = [
         ''                                                                                    => '',
         ' '                                                                                   => ' ',
         ' foo ' . "\xe2\x80\xa8" . ' öäü' . "\xe2\x80\xa9"                                    => ' foo   öäü ',
@@ -2016,7 +2016,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => '– DÃ¼sseldorf —',
         "„Abcdef\xe2\x81\x9f”"                                                                => '„Abcdef ”',
         " foo\t foo "                                                                         => ' foo	 foo ',
-    );
+    ];
 
     for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
 
@@ -2045,7 +2045,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $nbsp = UTF8::html_entity_decode('&nbsp;');
 
-    $testArray = array(
+    $testArray = [
         "\xF0\x90\x8C\xBC" => 66364,
         '中'                => 20013,
         '₧'                => 8359,
@@ -2058,7 +2058,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '&'                => 38,
         ' '                => 32,
         ''                 => 0,
-    );
+    ];
 
     for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
 
@@ -2126,7 +2126,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     /** @noinspection NonSecureParseStrUsageInspection */
     parse_str($str); // <- you don't need to use the second parameter, but it is more then recommended!!!
 
-    self::assertSame($foo, array(0 => 'bar'));
+    self::assertSame($foo, [0 => 'bar']);
     self::assertSame($test, 'lall');
     self::assertSame($str, 'foo[]=bar&test=lall');
 
@@ -2159,24 +2159,24 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     // --- UTF-8 chars
 
-    $expected = array('κ', 'ι', 'θ', 'η', 'ζ',);
+    $expected = ['κ', 'ι', 'θ', 'η', 'ζ',];
     self::assertSame($expected, UTF8::range('κ', 'ζ'));
     self::assertSame(0, count(UTF8::range('κ', '')));
 
     // --- code points
 
-    $expected = array('₧', '₨', '₩');
+    $expected = ['₧', '₨', '₩'];
     self::assertSame($expected, UTF8::range(8359, 8361));
 
     // --- HEX
 
-    $expected = array(' ', '!', '"', '#');
+    $expected = [' ', '!', '"', '#'];
     self::assertSame($expected, UTF8::range("\x20", "\x23"));
   }
 
   public function testRawurldecode()
   {
-    $testArray = array(
+    $testArray = [
         'W%F6bse' => 'Wöbse',
         'Ã' => 'Ã',
         'Ã¤' => 'ä',
@@ -2223,7 +2223,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '<a href="&#38&#35&#49&#48&#54&#38&#35&#57&#55&#38&#35&#49&#49&#56&#38&#35&#57&#55&#38&#35&#49&#49&#53&#38&#35&#57&#57&#38&#35&#49&#49&#52&#38&#35&#49&#48&#53&#38&#35&#49&#49&#50&#38&#35&#49&#49&#54&#38&#35&#53&#56&#38&#35&#57&#57&#38&#35&#49&#49&#49&#38&#35&#49&#49&#48&#38&#35&#49&#48&#50&#38&#35&#49&#48&#53&#38&#35&#49&#49&#52&#38&#35&#49&#48&#57&#38&#35&#52&#48&#38&#35&#52&#57&#38&#35&#52&#49">Clickhere</a>' => '<a href="javascript:confirm(1)">Clickhere</a>',
         '🐶 | 💩 | 🐱 | 🐸 | 🌀 | ❤ | &#x267F; | &#x26CE; | ' => '🐶 | 💩 | 🐱 | 🐸 | 🌀 | ❤ | ♿ | ⛎ | ',
         // view-source:https://twitter.github.io/twemoji/preview.html
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::rawurldecode($before), 'testing: ' . $before);
@@ -2232,13 +2232,13 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testRemoveBom()
   {
-    $testBom = array(
+    $testBom = [
         "\xEF\xBB\xBFΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
         "\xFE\xFFΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
         "\xFF\xFEΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
         "\x00\x00\xFE\xFFΜπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
         "\xFF\xFE\x00\x00Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
-    );
+    ];
 
     foreach ($testBom as $count => &$test) {
 
@@ -2258,17 +2258,17 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testRemoveDuplicates()
   {
-    $testArray = array(
-        'öäü-κόσμεκόσμε-äöü'   => array(
+    $testArray = [
+        'öäü-κόσμεκόσμε-äöü'   => [
             'öäü-κόσμε-äöü' => 'κόσμε',
-        ),
-        'äöüäöüäöü-κόσμεκόσμε' => array(
-            'äöü-κόσμε' => array(
+        ],
+        'äöüäöüäöü-κόσμεκόσμε' => [
+            'äöü-κόσμε' => [
                 'äöü',
                 'κόσμε',
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     foreach ($testArray as $actual => $data) {
       foreach ($data as $expected => $filter) {
@@ -2279,7 +2279,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testRemoveInvisibleCharacters()
   {
-    $testArray = array(
+    $testArray = [
         "κόσ\0με"                                                                          => 'κόσμε',
         "Κόσμε\x20"                                                                        => 'Κόσμε ',
         "öäü-κόσμ\x0εκόσμε-äöü"                                                            => 'öäü-κόσμεκόσμε-äöü',
@@ -2288,7 +2288,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
         '  '                                                                               => '  ',
         ''                                                                                 => '',
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
@@ -2300,7 +2300,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testReplaceDiamondQuestionMark()
   {
-    $tests = array(
+    $tests = [
         ''                                                                         => '',
         ' '                                                                        => ' ',
         '�'                                                                        => '',
@@ -2309,7 +2309,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'DÃ¼�sseldorf'                                                             => 'DÃ¼sseldorf',
         'Abcdef'                                                                   => 'Abcdef',
         "\xC0\x80foo|&#65533;"                                                     => 'foo|&#65533;',
-    );
+    ];
 
     $counter = 0;
     foreach ($tests as $before => $after) {
@@ -2319,7 +2319,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $tests = array(
+    $tests = [
         "Iñtërnâtiôn\xe9àlizætiøn"                                         => 'Iñtërnâtiônàlizætiøn',
         // invalid UTF-8 string
         "Iñtërnâtiônàlizætiøn\xfc\xa1\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn" => 'IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn',
@@ -2338,7 +2338,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         // invalid three octet sequence third
         "Iñtërnâtiônàlizætiøn\xe2\x28\xa1Iñtërnâtiônàlizætiøn"             => 'Iñtërnâtiônàlizætiøn(Iñtërnâtiônàlizætiøn',
         // invalid three octet sequence second
-    );
+    ];
 
     $counter = 0;
 
@@ -2358,11 +2358,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testRtrim()
   {
-    $tests = array(
+    $tests = [
         '-ABC-中文空白-  '        => '-ABC-中文空白-',
         '- ÖÄÜ-             ' => '- ÖÄÜ-',
         'öäü'                 => 'öäü',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::rtrim($before));
@@ -2378,13 +2378,13 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testSingleChrHtmlEncode()
   {
-    $testArray = array(
+    $testArray = [
         '{' => '&#123;',
         '中' => '&#20013;',
         'κ' => '&#954;',
         'ö' => '&#246;',
         ''  => '',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::single_chr_html_encode($actual));
@@ -2424,16 +2424,16 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
       return;
     }
 
-    $testArray = array(
+    $testArray = [
         'already_checked_via_portable_utf8' => true,
         'mbstring'                          => false,
         'mbstring_func_overload'            => false,
         'iconv'                             => false,
         'intl'                              => false,
-        'intl__transliterator_list_ids'     => array(),
+        'intl__transliterator_list_ids'     => [],
         'intlChar'                          => false,
         'pcre_utf8'                         => false,
-    );
+    ];
     $refProperty->setValue(null, $testArray);
   }
 
@@ -2449,31 +2449,31 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
       }
 
       self::assertSame(
-          array(
+          [
               '中',
               '文',
               '空',
               '白',
-          ),
+          ],
           UTF8::split('中文空白')
       );
       self::assertSame(
-          array(
+          [
               '中文',
               '空白',
-          ),
+          ],
           UTF8::split('中文空白', 2)
       );
-      self::assertSame(array('中文空白'), UTF8::split('中文空白', 4));
-      self::assertSame(array('中文空白'), UTF8::split('中文空白', 8));
+      self::assertSame(['中文空白'], UTF8::split('中文空白', 4));
+      self::assertSame(['中文空白'], UTF8::split('中文空白', 8));
 
-      self::assertSame(array('1234'), UTF8::split(1234, 8));
+      self::assertSame(['1234'], UTF8::split(1234, 8));
     }
   }
 
   public function testStrDetectEncoding()
   {
-    $tests = array(
+    $tests = [
         'に対するパッチです'                     => 'UTF-8', // ISO-2022-JP, but PHP can't detect it ...
         'ASCII'                         => 'ASCII', // ASCII
         'Abc'                           => 'ASCII', // ASCII
@@ -2488,7 +2488,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '1'                             => 'ASCII', // ASCII
         decbin(324546)                  => 'ASCII', // ASCII
         01                              => 'ASCII', // ASCII
-    );
+    ];
 
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
 
@@ -2517,7 +2517,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $str = 'BeginMiddleΚόσμε';
 
-    $tests = array(
+    $tests = [
         'Κόσμε' => true,
         'κόσμε' => false,
         null    => false,
@@ -2527,7 +2527,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ε'     => true,
         'End'   => false,
         'end'   => false,
-    );
+    ];
 
     foreach ($tests as $test => $result) {
       self::assertSame($result, UTF8::str_ends_with($str, $test), 'tested: ' . $test);
@@ -2538,7 +2538,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $str = 'BeginMiddleΚόσμε';
 
-    $tests = array(
+    $tests = [
         'Κόσμε' => true,
         'κόσμε' => true,
         ''      => false,
@@ -2547,7 +2547,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ε'     => true,
         'End'   => false,
         'end'   => false,
-    );
+    ];
 
     foreach ($tests as $test => $result) {
       self::assertSame($result, UTF8::str_iends_with($str, $test), 'tested: ' . $test);
@@ -2558,7 +2558,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $str = 'ΚόσμεMiddleEnd';
 
-    $tests = array(
+    $tests = [
         'Κόσμε' => true,
         'κόσμε' => true,
         ''      => false,
@@ -2567,7 +2567,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'Κ'     => true,
         'End'   => false,
         'end'   => false,
-    );
+    ];
 
     foreach ($tests as $test => $result) {
       self::assertSame($result, UTF8::str_istarts_with($str, $test), 'tested: ' . $test);
@@ -2576,19 +2576,19 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrLimit()
   {
-    $testArray = array(
-        array('this...', 'this is a test', 5, '...'),
-        array('this is...', 'this is öäü-foo test', 8, '...'),
-        array('fòô', 'fòô bàř fòô', 6, ''),
-        array('fòô bàř', 'fòô bàř fòô', 8, ''),
-        array('fòô bàř', "fòô bàř fòô \x00", 8, ''),
-        array('', "fòô bàř \x00fòô", 0, ''),
-        array('fòô bàř', "fòô bàř \x00fòô", -1, ''),
-        array('fòô bàř白', "fòô bàř \x00fòô", 8, '白'),
-        array('白白', '白白 白白', 3, ''),
-        array('白白白', '白白白', 100, ''),
-        array('', '', 1, ''),
-    );
+    $testArray = [
+        ['this...', 'this is a test', 5, '...'],
+        ['this is...', 'this is öäü-foo test', 8, '...'],
+        ['fòô', 'fòô bàř fòô', 6, ''],
+        ['fòô bàř', 'fòô bàř fòô', 8, ''],
+        ['fòô bàř', "fòô bàř fòô \x00", 8, ''],
+        ['', "fòô bàř \x00fòô", 0, ''],
+        ['fòô bàř', "fòô bàř \x00fòô", -1, ''],
+        ['fòô bàř白', "fòô bàř \x00fòô", 8, '白'],
+        ['白白', '白白 白白', 3, ''],
+        ['白白白', '白白白', 100, ''],
+        ['', '', 1, ''],
+    ];
 
     foreach ($testArray as $test) {
       self::assertSame($test[0], UTF8::str_limit_after_word($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
@@ -2630,7 +2630,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrRepeat()
   {
-    $tests = array(
+    $tests = [
         ''                                                                         => '',
         ' '                                                                        => '                 ',
         '�'                                                                        => '�����������������',
@@ -2639,7 +2639,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'DÃ¼�sseldorf'                                                             => 'DÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorfDÃ¼�sseldorf',
         'Abcdef'                                                                   => 'AbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdefAbcdef',
         "°~\xf0\x90\x28\xbc"                                                       => '°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼°~ð(¼',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::str_repeat($before, 17));
@@ -2648,12 +2648,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrReplaceFirst()
   {
-    $testArray = array(
-        ''           => array('', '', ''),
-        ' lall lall' => array('lall', '', 'lall lall lall'),
-        'ö a l l '   => array('l', 'ö', 'l a l l '),
-        'κöäüσμε ό'  => array('ό', 'öäü', "κόσμε\xc2\xa0ό",),
-    );
+    $testArray = [
+        ''           => ['', '', ''],
+        ' lall lall' => ['lall', '', 'lall lall lall'],
+        'ö a l l '   => ['l', 'ö', 'l a l l '],
+        'κöäüσμε ό'  => ['ό', 'öäü', "κόσμε\xc2\xa0ό",],
+    ];
 
     foreach ($testArray as $after => $test) {
       self::assertSame($after, UTF8::str_replace_first($test[0], $test[1], $test[2]));
@@ -2662,15 +2662,15 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrShuffle()
   {
-    $testArray = array(
+    $testArray = [
         'this is a test',
         'this is öäü-foo test',
         'fòô bàř fòô',
-    );
+    ];
 
     foreach ($testArray as $test) {
       self::assertEquals(
-          array(),
+          [],
           array_diff(
               UTF8::str_split($test),
               UTF8::str_split(UTF8::str_shuffle($test))
@@ -2681,43 +2681,43 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrSort()
   {
-    $tests = array(
+    $tests = [
         ''               => '',
         '  -ABC-中文空白-  ' => '    ---ABC中文白空',
         '      - ÖÄÜ- '  => '        --ÄÖÜ',
         'öäü'            => 'äöü',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::str_sort($before));
     }
 
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '空白文中CBA---    ',
         '      - ÖÄÜ- '  => 'ÜÖÄ--        ',
         'öäü'            => 'üöä',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::str_sort($before, false, true));
     }
 
-    $tests = array(
+    $tests = [
         '    '           => ' ',
         '  -ABC-中文空白-  ' => ' -ABC中文白空',
         '      - ÖÄÜ- '  => ' -ÄÖÜ',
         'öäü'            => 'äöü',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::str_sort($before, true));
     }
 
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '空白文中CBA- ',
         '      - ÖÄÜ- '  => 'ÜÖÄ- ',
         'öäü'            => 'üöä',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::str_sort($before, true, true));
@@ -2728,7 +2728,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $str = 'ΚόσμεMiddleEnd';
 
-    $tests = array(
+    $tests = [
         'Κόσμε' => true,
         'κόσμε' => false,
         ''      => false,
@@ -2737,7 +2737,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'Κ'     => true,
         'End'   => false,
         'end'   => false,
-    );
+    ];
 
     foreach ($tests as $test => $result) {
       self::assertSame($result, UTF8::str_starts_with($str, $test), 'tested: ' . $test);
@@ -2746,7 +2746,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrToBinary()
   {
-    $tests = array(
+    $tests = [
         ''   => '0',
         '0'  => '110000',
         '1'  => '110001',
@@ -2755,7 +2755,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ሇ'  => '111000011000100010000111',
         '😃' => '11110000100111111001100010000011',
 
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::str_to_binary($before), 'tested: ' . $before);
@@ -2768,18 +2768,18 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrToWords()
   {
-    self::assertSame(array('', 'iñt', ' ', 'ërn', ' ', 'I', ''), UTF8::str_to_words('iñt ërn I'));
-    self::assertSame(array('iñt', 'ërn', 'I'), UTF8::str_to_words('iñt ërn I', '', true));
-    self::assertSame(array('iñt', 'ërn'), UTF8::str_to_words('iñt ërn I', '', false, 1));
+    self::assertSame(['', 'iñt', ' ', 'ërn', ' ', 'I', ''], UTF8::str_to_words('iñt ërn I'));
+    self::assertSame(['iñt', 'ërn', 'I'], UTF8::str_to_words('iñt ërn I', '', true));
+    self::assertSame(['iñt', 'ërn'], UTF8::str_to_words('iñt ërn I', '', false, 1));
 
     // ---
 
-    self::assertSame(array('', 'âti', "\n ", 'ônà', ''), UTF8::str_to_words("âti\n ônà"));
-    self::assertSame(array('', '中文空白', ' ', 'oöäü#s', ''), UTF8::str_to_words('中文空白 oöäü#s', '#'));
-    self::assertSame(array('', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''), UTF8::str_to_words('foo oo oöäü#s', ''));
-    self::assertSame(array(''), UTF8::str_to_words(''));
+    self::assertSame(['', 'âti', "\n ", 'ônà', ''], UTF8::str_to_words("âti\n ônà"));
+    self::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], UTF8::str_to_words('中文空白 oöäü#s', '#'));
+    self::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], UTF8::str_to_words('foo oo oöäü#s', ''));
+    self::assertSame([''], UTF8::str_to_words(''));
 
-    $testArray = array(
+    $testArray = [
         'Düsseldorf'                                                                                => 'Düsseldorf',
         'Ã'                                                                                         => 'Ã',
         'foobar  || 😃'                                                                             => 'foobar  || 😃',
@@ -2796,7 +2796,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
         '%ABREPRESENT%C9%BB. «REPRESENTÉ»'                                                          => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
         'éæ'                                                                                        => 'éæ',
-    );
+    ];
 
     foreach ($testArray as $test => $unused) {
       self::assertSame($test, implode(UTF8::str_to_words($test)), '');
@@ -2806,43 +2806,43 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testStr_split()
   {
     self::assertSame(
-        array(
+        [
             'd',
             'é',
             'j',
             'à',
-        ),
+        ],
         UTF8::str_split('déjà', 1)
     );
     self::assertSame(
-        array(
+        [
             'dé',
             'jà',
-        ),
+        ],
         UTF8::str_split('déjà', 2)
     );
   }
 
   public function testString()
   {
-    self::assertSame('', UTF8::string(array()));
+    self::assertSame('', UTF8::string([]));
     self::assertSame(
         'öäü',
         UTF8::string(
-            array(
+            [
                 246,
                 228,
                 252,
-            )
+            ]
         )
     );
     self::assertSame(
         'ㅡㅡ',
         UTF8::string(
-            array(
+            [
                 12641,
                 12641,
-            )
+            ]
         )
     );
     self::assertSame('中文空白', UTF8::string(UTF8::codepoints('中文空白')));
@@ -2850,7 +2850,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStringHasBom()
   {
-    $testArray = array(
+    $testArray = [
         ' '                    => false,
         ''                     => false,
         UTF8::bom() . 'κ'      => true,
@@ -2858,7 +2858,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         UTF8::bom() . 'abcöäü' => true,
         '白'                    => false,
         UTF8::bom()            => true,
-    );
+    ];
 
     $utf8_bom = file_get_contents(__DIR__ . '/fixtures/sample-utf-8-bom.txt');
     $utf8_bom_only = file_get_contents(__DIR__ . '/fixtures/sample-utf-8-bom-only.txt');
@@ -2889,7 +2889,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStripTags()
   {
-    $tests = array(
+    $tests = [
         null                                                                      => '',
         ''                                                                        => '',
         ' '                                                                       => ' ',
@@ -2900,7 +2900,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
         '<nav>中文空白 </nav>'                                                        => '中文空白 ',
         "<span>κόσμε\xa0\xa1</span>-<span>öäü</span>öäü"                          => 'κόσμε-öäüöäü',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::strip_tags($before, null, true));
@@ -2908,7 +2908,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $tests = array(
+    $tests = [
         null                                                                      => '',
         ''                                                                        => '',
         ' '                                                                       => ' ',
@@ -2919,7 +2919,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
         '<nav>中文空白 </nav>'                                                        => '中文空白 ',
         '<span>κόσμε</span>-<span>öäü</span>öäü'                                  => '<span>κόσμε</span>-<span>öäü</span>öäü',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::strip_tags($before, '<span>', false));
@@ -3035,7 +3035,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     self::assertSame(50, UTF8::strlen($string_test2, 'UTF-8', true));
 
-    $testArray = array(
+    $testArray = [
         '⠊⠀⠉⠁⠝⠀⠑⠁⠞⠀⠛⠇⠁⠎⠎⠀⠁⠝⠙⠀⠊⠞'    => 22,
         "<a href='κόσμε'>κόσμε</a>" => 25,
         '<白>'                       => 3,
@@ -3044,7 +3044,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         ''                          => 0,
         1                           => 1,
         -1                          => 2,
-    );
+    ];
 
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
 
@@ -3059,7 +3059,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
       }
     }
 
-    $testArray = array(
+    $testArray = [
         "<a href='test'>tester</a>" => 25,
         '<a>'                       => 3,
         'abc'                       => 3,
@@ -3067,7 +3067,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         ''                          => 0,
         1                           => 1,
         -1                          => 2,
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, strlen($actual), $actual);
@@ -3102,7 +3102,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrncasecmp()
   {
-    $tests = array(
+    $tests = [
         ''                                                                                    => -3,
         ' '                                                                                   => -1,
         'a'                                                                                   => -1,
@@ -3115,7 +3115,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => 1,
         "„Abcdef\xe2\x81\x9f”"                                                                => 1,
         " foo\t foo "                                                                         => -1,
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       if ($after < 0) {
@@ -3131,7 +3131,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrncmp()
   {
-    $tests = array(
+    $tests = [
         ''                                                                                    => -3,
         ' '                                                                                   => -1,
         'a'                                                                                   => -1,
@@ -3144,7 +3144,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "–\xe2\x80\x8bDÃ¼sseldorf\xe2\x80\x8b—"                                               => 1,
         "„Abcdef\xe2\x81\x9f”"                                                                => 1,
         " foo\t foo "                                                                         => -1,
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       if ($after < 0) {
@@ -3294,7 +3294,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrrchr()
   {
-    $testArray = array(
+    $testArray = [
         'κόσμε'                                                                            => 'κόσμε',
         'Κόσμε'                                                                            => false,
         'öäü-κόσμεκόσμε-äöü'                                                               => 'κόσμε-äöü',
@@ -3303,7 +3303,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
         '  '                                                                               => false,
         ''                                                                                 => false,
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::strrchr($actual, 'κόσμε'), 'error by ' . $actual);
@@ -3333,14 +3333,14 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrrev()
   {
-    $testArray = array(
+    $testArray = [
         'κ-öäü'  => 'üäö-κ',
         'abc'    => 'cba',
         'abcöäü' => 'üäöcba',
         '-白-'    => '-白-',
         ''       => '',
         ' '      => ' ',
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
@@ -3349,7 +3349,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrrichr()
   {
-    $testArray = array(
+    $testArray = [
         'κόσμε'                                                                            => 'κόσμε',
         'Κόσμε'                                                                            => 'Κόσμε',
         'öäü-κόσμεκόσμε-äöü'                                                               => 'κόσμε-äöü',
@@ -3358,7 +3358,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'κόσμε',
         '  '                                                                               => false,
         ''                                                                                 => false,
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::strrichr($actual, 'κόσμε'), 'error by ' . $actual);
@@ -3453,7 +3453,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrtolower()
   {
-    $tests = array(
+    $tests = [
         1               => '1',
         -1              => '-1',
         'ABC-中文空白'      => 'abc-中文空白',
@@ -3471,7 +3471,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ΣΣΣ'           => 'σσσ', // result for language === "tr" --> "σσς"
         'DİNÇ'          => 'dinç',
         'DINÇ'          => 'dinç', // result for language === "tr" --> "dınç"
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::strtolower($before), 'tested: ' . $before);
@@ -3509,7 +3509,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         &&
         in_array('tr-Lower', $support['intl__transliterator_list_ids'], true)
     ) {
-      $tests = array(
+      $tests = [
           1               => '1',
           -1              => '-1',
           'ABC-中文空白'      => 'abc-中文空白',
@@ -3527,7 +3527,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
           'ΣΣΣ'           => 'σσς',
           'DİNÇ'          => 'dinç',
           'DINÇ'          => 'dınç',
-      );
+      ];
 
       // DEBUG (for travis ci)
       /** @noinspection ForgottenDebugOutputInspection */
@@ -3544,17 +3544,17 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $utf8 = new UTF8();
 
     // valid utf-8
-    $string = $this->invokeMethod($utf8, 'strtonatfold', array('Hello world 中文空白'));
+    $string = $this->invokeMethod($utf8, 'strtonatfold', ['Hello world 中文空白']);
     self::assertSame('Hello world 中文空白', $string);
 
     // invalid utf-8
-    $string = $this->invokeMethod($utf8, 'strtonatfold', array("Iñtërnâtiôn\xE9àlizætiøn"));
+    $string = $this->invokeMethod($utf8, 'strtonatfold', ["Iñtërnâtiôn\xE9àlizætiøn"]);
     self::assertSame('', $string);
   }
 
   public function testStrtoupper()
   {
-    $tests = array(
+    $tests = [
         1               => '1',
         -1              => '-1',
         'abc-中文空白'      => 'ABC-中文空白',
@@ -3573,7 +3573,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'DINÇ'          => 'DINÇ',
         'dinç'          => 'DINÇ', // result for language === "tr" --> "DİNÇ"
         'dınç'          => 'DINÇ',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::strtoupper($before), 'tested: ' . $before);
@@ -3607,7 +3607,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         &&
         in_array('tr-Upper', $support['intl__transliterator_list_ids'], true)
     ) {
-      $tests = array(
+      $tests = [
           1               => '1',
           -1              => '-1',
           'abc-中文空白'      => 'ABC-中文空白',
@@ -3626,7 +3626,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
           'DINÇ'          => 'DINÇ',
           'dinç'          => 'DİNÇ',
           'dınç'          => 'DINÇ',
-      );
+      ];
 
       foreach ($tests as $before => $after) {
         self::assertSame($after, UTF8::strtoupper($before, 'UTF8', false, 'tr'), 'tested: ' . $before);
@@ -3638,31 +3638,31 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     // php compatible tests
 
-    $arr = array(
+    $arr = [
         'Hello' => 'Hi',
         'world' => 'earth',
-    );
+    ];
     self::assertSame('Hi earth', strtr('Hello world', $arr));
     self::assertSame('Hi earth', UTF8::strtr('Hello world', $arr));
 
     // UTF-8 tests
 
-    $arr = array(
+    $arr = [
         'Hello' => '○●◎',
         '中文空白'  => 'earth',
-    );
+    ];
     self::assertSame('○●◎ earth', UTF8::strtr('Hello 中文空白', $arr));
 
     self::assertSame('○●◎◎o wor◎d', UTF8::strtr('Hello world', 'Hello', '○●◎'));
     self::assertSame(' world', UTF8::strtr('Hello world', 'Hello'));
-    self::assertSame('test world', UTF8::strtr('Hello world', array('Hello' => 'test')));
+    self::assertSame('test world', UTF8::strtr('Hello world', ['Hello' => 'test']));
     self::assertSame('Hello world H●◎', UTF8::strtr('Hello world ○●◎', '○', 'Hello'));
-    self::assertSame('Hello world ○●◎', UTF8::strtr('Hello world ○●◎', array('○'), array('Hello')));
+    self::assertSame('Hello world ○●◎', UTF8::strtr('Hello world ○●◎', ['○'], ['Hello']));
   }
 
   public function testStrwidth()
   {
-    $testArray = array(
+    $testArray = [
         'testtest' => 8,
         'Ã'        => 1,
         ' '        => 1,
@@ -3671,7 +3671,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'test'     => 4,
         "ひらがな\r"   => 9,
         "○●◎\r"    => 4,
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::strwidth($before));
@@ -3900,7 +3900,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $str = 'ΚόσμεMiddleEnd';
 
-    $tests = array(
+    $tests = [
         'Κόσμε' => 'MiddleEnd',
         'κόσμε' => 'MiddleEnd',
         ''      => 'ΚόσμεMiddleEnd',
@@ -3909,7 +3909,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'Κ'     => 'όσμεMiddleEnd',
         'End'   => 'ΚόσμεMiddleEnd',
         'end'   => 'ΚόσμεMiddleEnd',
-    );
+    ];
 
     foreach ($tests as $test => $result) {
       self::assertSame($result, UTF8::substr_ileft($str, $test), 'tested: ' . $test);
@@ -3932,7 +3932,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $str = 'BeginMiddleΚόσμε';
 
-    $tests = array(
+    $tests = [
         'Κόσμε' => 'BeginMiddle',
         'κόσμε' => 'BeginMiddle',
         ''      => 'BeginMiddleΚόσμε',
@@ -3941,7 +3941,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ε'     => 'BeginMiddleΚόσμ',
         'End'   => 'BeginMiddleΚόσμε',
         'end'   => 'BeginMiddleΚόσμε',
-    );
+    ];
 
     foreach ($tests as $test => $result) {
       self::assertSame($result, UTF8::substr_iright($str, $test), 'tested: ' . $test);
@@ -3964,7 +3964,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $str = 'ΚόσμεMiddleEnd';
 
-    $tests = array(
+    $tests = [
         'Κόσμε' => 'MiddleEnd',
         'κόσμε' => 'ΚόσμεMiddleEnd',
         ''      => 'ΚόσμεMiddleEnd',
@@ -3973,7 +3973,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'Κ'     => 'όσμεMiddleEnd',
         'End'   => 'ΚόσμεMiddleEnd',
         'end'   => 'ΚόσμεMiddleEnd',
-    );
+    ];
 
     foreach ($tests as $test => $result) {
       self::assertSame($result, UTF8::substr_left($str, $test), 'tested: ' . $test);
@@ -3996,7 +3996,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $str = 'BeginMiddleΚόσμε';
 
-    $tests = array(
+    $tests = [
         'Κόσμε' => 'BeginMiddle',
         'κόσμε' => 'BeginMiddleΚόσμε',
         ''      => 'BeginMiddleΚόσμε',
@@ -4005,7 +4005,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ε'     => 'BeginMiddleΚόσμ',
         'End'   => 'BeginMiddleΚόσμε',
         'end'   => 'BeginMiddleΚόσμε',
-    );
+    ];
 
     foreach ($tests as $test => $result) {
       self::assertSame($result, UTF8::substr_right($str, $test), 'tested: ' . $test);
@@ -4026,31 +4026,31 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testSwapCase()
   {
-    $tests = array(
-        1                               => '1',
-        -1                              => '-1',
-        ' '                             => ' ',
-        ''                              => '',
-        'أبز'                           => 'أبز',
-        "\xe2\x80\x99"                  => '’',
-        'Ɓtest'                         => 'ɓTEST',
-        '  -ABC-中文空白-  '                => '  -abc-中文空白-  ',
-        "      - abc- \xc2\x87"         => '      - ABC- ',
-        'abc'                           => 'ABC',
-        'deja vu'                       => 'DEJA VU',
-        'déjà vu'                       => 'DÉJÀ VU',
-        'déJÀ σσς iıII'                 => 'DÉjà ΣΣΣ IIii',
-        "test\x80-\xBFöäü"              => 'TEST-ÖÄÜ',
-        'Internationalizaetion'         => 'iNTERNATIONALIZAETION',
-        "中 - &#20013; - %&? - \xc2\x80" => '中 - &#20013; - %&? - ',
-        'BonJour'                       => 'bONjOUR',
-        'BonJour & au revoir'           => 'bONjOUR & AU REVOIR',
-        'Déjà'                          => 'dÉJÀ',
-        'това е тестово заглавие'       => 'ТОВА Е ТЕСТОВО ЗАГЛАВИЕ',
+    $tests = [
+        1                                      => '1',
+        -1                                     => '-1',
+        ' '                                    => ' ',
+        ''                                     => '',
+        'أبز'                                  => 'أبز',
+        "\xe2\x80\x99"                         => '’',
+        'Ɓtest'                                => 'ɓTEST',
+        '  -ABC-中文空白-  '                       => '  -abc-中文空白-  ',
+        "      - abc- \xc2\x87"                => '      - ABC- ',
+        'abc'                                  => 'ABC',
+        'deja vu'                              => 'DEJA VU',
+        'déjà vu'                              => 'DÉJÀ VU',
+        'déJÀ σσς iıII'                        => 'DÉjà ΣΣΣ IIii',
+        "test\x80-\xBFöäü"                     => 'TEST-ÖÄÜ',
+        'Internationalizaetion'                => 'iNTERNATIONALIZAETION',
+        "中 - &#20013; - %&? - \xc2\x80"        => '中 - &#20013; - %&? - ',
+        'BonJour'                              => 'bONjOUR',
+        'BonJour & au revoir'                  => 'bONjOUR & AU REVOIR',
+        'Déjà'                                 => 'dÉJÀ',
+        'това е тестово заглавие'              => 'ТОВА Е ТЕСТОВО ЗАГЛАВИЕ',
         'це є тестовий заголовок з ґ, є, ї, і' => 'ЦЕ Є ТЕСТОВИЙ ЗАГОЛОВОК З Ґ, Є, Ї, І',
-        'это тестовый заголовок'        => 'ЭТО ТЕСТОВЫЙ ЗАГОЛОВОК',
-        'führen Aktivitäten Haglöfs'    => 'FÜHREN aKTIVITÄTEN hAGLÖFS',
-    );
+        'это тестовый заголовок'               => 'ЭТО ТЕСТОВЫЙ ЗАГОЛОВОК',
+        'führen Aktivitäten Haglöfs'           => 'FÜHREN aKTIVITÄTEN hAGLÖFS',
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::swapCase($before, 'UTF-8', true), $before);
@@ -4064,12 +4064,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testToLatin1Utf8()
   {
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-????-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::to_utf8(UTF8::to_latin1($before)));
@@ -4083,49 +4083,49 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testToUtf8()
   {
-    $examples = array(
+    $examples = [
       // Valid UTF-8
-      'κόσμε'                                                                => array('κόσμε' => 'κόσμε'),
-      '中'                                                                    => array('中' => '中'),
+      'κόσμε'                                                                => ['κόσμε' => 'κόσμε'],
+      '中'                                                                    => ['中' => '中'],
       // Valid UTF-8 + "win1252"-encoding
-      'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac"                          => array('Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'),
+      'Dänisch (Å/å, Æ/æ, Ø/ø) + ' . "\xe2\x82\xac"                          => ['Dänisch (Å/å, Æ/æ, Ø/ø) + €' => 'Dänisch (Å/å, Æ/æ, Ø/ø) + €'],
       // Valid UTF-8 + Invalid Chars
-      "κόσμε\xa0\xa1-öäü-‽‽‽"                                                => array('κόσμε-öäü-‽‽‽' => 'κόσμε-öäü-‽‽‽'),
+      "κόσμε\xa0\xa1-öäü-‽‽‽"                                                => ['κόσμε-öäü-‽‽‽' => 'κόσμε-öäü-‽‽‽'],
       // Valid emoji (non-UTF-8)
-      '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'             => array('👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'),
+      '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'             => ['👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'],
       // Valid ASCII
-      'a'                                                                    => array('a' => 'a'),
+      'a'                                                                    => ['a' => 'a'],
       // Valid ASCII + Invalid Chars
-      "a\xa0\xa1-öäü"                                                        => array('a-öäü' => 'a-öäü'),
+      "a\xa0\xa1-öäü"                                                        => ['a-öäü' => 'a-öäü'],
       // Valid 2 Octet Sequence
-      "\xc3\xb1"                                                             => array('ñ' => 'ñ'),
+      "\xc3\xb1"                                                             => ['ñ' => 'ñ'],
       // Invalid 2 Octet Sequence
-      "\xc3\x28"                                                             => array('�(' => '('),
+      "\xc3\x28"                                                             => ['�(' => '('],
       // Invalid Sequence Identifier
-      "\xa0\xa1"                                                             => array('��' => ''),
+      "\xa0\xa1"                                                             => ['��' => ''],
       // Valid 3 Octet Sequence
-      "\xe2\x82\xa1"                                                         => array('₡' => '₡'),
+      "\xe2\x82\xa1"                                                         => ['₡' => '₡'],
       // Invalid 3 Octet Sequence (in 2nd Octet)
-      "\xe2\x28\xa1"                                                         => array('�(�' => '('),
+      "\xe2\x28\xa1"                                                         => ['�(�' => '('],
       // Invalid 3 Octet Sequence (in 3rd Octet)
-      "\xe2\x82\x28"                                                         => array('�(' => '('),
+      "\xe2\x82\x28"                                                         => ['�(' => '('],
       // Valid 4 Octet Sequence
-      "\xf0\x90\x8c\xbc"                                                     => array('𐌼' => '𐌼'),
+      "\xf0\x90\x8c\xbc"                                                     => ['𐌼' => '𐌼'],
       // Invalid 4 Octet Sequence (in 2nd Octet)
-      "\xf0\x28\x8c\xbc"                                                     => array('�(��' => '('),
+      "\xf0\x28\x8c\xbc"                                                     => ['�(��' => '('],
       // Invalid 4 Octet Sequence (in 3rd Octet)
-      "\xf0\x90\x28\xbc"                                                     => array('�(�' => '('),
+      "\xf0\x90\x28\xbc"                                                     => ['�(�' => '('],
       // Invalid 4 Octet Sequence (in 4th Octet)
-      "\xf0\x28\x8c\x28"                                                     => array('�(�(' => '(('),
+      "\xf0\x28\x8c\x28"                                                     => ['�(�(' => '(('],
       // Valid 5 Octet Sequence (but not Unicode!)
-      "\xf8\xa1\xa1\xa1\xa1"                                                 => array('�' => ''),
+      "\xf8\xa1\xa1\xa1\xa1"                                                 => ['�' => ''],
       // Valid 6 Octet Sequence (but not Unicode!)
-      "\xfc\xa1\xa1\xa1\xa1\xa1"                                             => array('�' => ''),
+      "\xfc\xa1\xa1\xa1\xa1\xa1"                                             => ['�' => ''],
       // Valid UTF-8 string with null characters
-      "\0\0\0\0中\0 -\0\0 &#20013; - &#128077; - %&? - \xc2\x80"              => array('中 - &#20013; - &#128077; - %&? - €' => '中 - &#20013; - &#128077; - %&? - €'),
+      "\0\0\0\0中\0 -\0\0 &#20013; - &#128077; - %&? - \xc2\x80"              => ['中 - &#20013; - &#128077; - %&? - €' => '中 - &#20013; - &#128077; - %&? - €'],
       // InValid UTF-8 string with null characters + HMTL
-      "\0\0\0\0中\0 -\0\0 &#20013; - &shy; - &nbsp; - %&? - \xc2\x80\x80\x80" => array('中 - &#20013; - &shy; - &nbsp; - %&? - €' => '中 - &#20013; - &shy; - &nbsp; - %&? - €'),
-    );
+      "\0\0\0\0中\0 -\0\0 &#20013; - &shy; - &nbsp; - %&? - \xc2\x80\x80\x80" => ['中 - &#20013; - &shy; - &nbsp; - %&? - €' => '中 - &#20013; - &shy; - &nbsp; - %&? - €'],
+    ];
 
     $counter = 0;
     foreach ($examples as $testString => $testResults) {
@@ -4145,7 +4145,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     // http://www.columbia.edu/~fdc/utf8/
 
-    $testArray = array(
+    $testArray = [
         'Sanskrit: ﻿काचं शक्नोम्यत्तुम् । नोपहिनस्ति माम् ॥',
         'Sanskrit (standard transcription): kācaṃ śaknomyattum; nopahinasti mām.',
         'Classical Greek: ὕαλον ϕαγεῖν δύναμαι· τοῦτο οὔ με βλάπτει.',
@@ -4325,7 +4325,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'Gullah: (NEEDED)',
         "Lojban: mi kakne le nu citka le blaci .iku'i le se go'i na xrani mi",
         'Nórdicg: Ljœr ye caudran créneþ ý jor cẃran.',
-    );
+    ];
 
     // http://www.w3.org/2001/06/utf-8-test/UTF-8-demo.html
 
@@ -4367,7 +4367,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     $testArray[] = 'Ã ñ àáâãäåæ ç èéêë ìíîï';
 
-    $result = array();
+    $result = [];
     $i = 0;
     foreach ($testArray as $test) {
 
@@ -4388,7 +4388,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testToUtf8_v2()
   {
-    $testArray = array(
+    $testArray = [
         'Düsseldorf'                                                                                => 'Düsseldorf',
         'Ã'                                                                                         => 'Ã',
         'foobar  || 😃'                                                                             => 'foobar  || 😃',
@@ -4405,8 +4405,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
         '%ABREPRESENT%C9%BB. «REPRESENTÉ»'                                                          => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
         'éæ'                                                                                        => 'éæ',
-        "\x61\xc3\x8c\xc0" => 'aÌÀ',
-    );
+        "\x61\xc3\x8c\xc0"                                                                          => 'aÌÀ',
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::to_utf8($before));
@@ -4414,7 +4414,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $testArray = array(
+    $testArray = [
         'Düsseldorf'                                                                                => 'Düsseldorf',
         'Ã'                                                                                         => 'Ã',
         'foobar  || 😃'                                                                             => 'foobar  || 😃',
@@ -4430,7 +4430,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "\xcf\x80"                                                                                  => 'π',
         'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿' => 'ðñòó¡¡à±áâãäåæçèéêëì¡í¡îï¡¡¢£¤¥¦§¨©ª«¬­®¯ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß°±²³´µ¶•¸¹º»¼½¾¿',
         '%ABREPRESENT%C9%BB. «REPRESENTÉ»'                                                          => '%ABREPRESENT%C9%BB. «REPRESENTÉ»',
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::to_utf8($before, true));
@@ -4438,7 +4438,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $invalidTest = array(
+    $invalidTest = [
       // Min/max overlong
       "\xC0\x80a"                 => 'Overlong representation of U+0000 | 1',
       "\xE0\x80\x80a"             => 'Overlong representation of U+0000 | 2',
@@ -4457,7 +4457,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
       // Invalid bytes (these can never occur)
       "a\xFE"                     => 'Invalid FE byte | 14',
       "a\xFF"                     => 'Invalid FF byte | 15',
-    );
+    ];
 
     foreach ($invalidTest as $test => $note) {
       self::assertSame('a', UTF8::cleanup($test), $note);
@@ -4469,8 +4469,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $utf8File = file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
     $latinFile = file_get_contents(__DIR__ . '/fixtures/latin.txt');
 
-    $utf8File = explode("\n", str_replace(array("\r\n", "\r", '<br>', '<br />'), "\n", $utf8File));
-    $latinFile = explode("\n", str_replace(array("\r\n", "\r", '<br>', '<br />'), "\n", $latinFile));
+    $utf8File = explode("\n", str_replace(["\r\n", "\r", '<br>', '<br />'], "\n", $utf8File));
+    $latinFile = explode("\n", str_replace(["\r\n", "\r", '<br>', '<br />'], "\n", $latinFile));
 
     $testArray = array_combine($latinFile, $utf8File);
 
@@ -4524,7 +4524,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testUrldecode()
   {
-    $testArray = array(
+    $testArray = [
         'W%F6bse' => 'Wöbse',
         'Ã' => 'Ã',
         'Ã¤' => 'ä',
@@ -4569,7 +4569,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '&#23470;&#23822;&#12288;&#39423;' => '宮崎　駿',
         'https://foo.bar/tpl_preview.php?pid=122&json=%7B%22recipe_id%22%3A-1%2C%22recipe_created%22%3A%22%22%2C%22recipe_title%22%3A%22vxcvxc%22%2C%22recipe_description%22%3A%22%22%2C%22recipe_yield%22%3A0%2C%22recipe_prepare_time%22%3A0%2C%22recipe_image%22%3A%22%22%2C%22recipe_legal%22%3A0%2C%22recipe_live%22%3A0%2C%22recipe_user_guid%22%3A%22%22%2C%22recipe_category_id%22%3A%5B%5D%2C%22recipe_category_name%22%3A%5B%5D%2C%22recipe_variety_id%22%3A%5B%5D%2C%22recipe_variety_name%22%3A%5B%5D%2C%22recipe_tag_id%22%3A%5B%5D%2C%22recipe_tag_name%22%3A%5B%5D%2C%22recipe_instruction_id%22%3A%5B%5D%2C%22recipe_instruction_text%22%3A%5B%5D%2C%22recipe_ingredient_id%22%3A%5B%5D%2C%22recipe_ingredient_name%22%3A%5B%5D%2C%22recipe_ingredient_amount%22%3A%5B%5D%2C%22recipe_ingredient_unit%22%3A%5B%5D%2C%22formMatchingArray%22%3A%7B%22unites%22%3A%5B%22Becher%22%2C%22Beete%22%2C%22Beutel%22%2C%22Blatt%22%2C%22Bl%5Cu00e4tter%22%2C%22Bund%22%2C%22B%5Cu00fcndel%22%2C%22cl%22%2C%22cm%22%2C%22dicke%22%2C%22dl%22%2C%22Dose%22%2C%22Dose%5C%2Fn%22%2C%22d%5Cu00fcnne%22%2C%22Ecke%28n%29%22%2C%22Eimer%22%2C%22einige%22%2C%22einige+Stiele%22%2C%22EL%22%2C%22EL%2C+geh%5Cu00e4uft%22%2C%22EL%2C+gestr.%22%2C%22etwas%22%2C%22evtl.%22%2C%22extra%22%2C%22Fl%5Cu00e4schchen%22%2C%22Flasche%22%2C%22Flaschen%22%2C%22g%22%2C%22Glas%22%2C%22Gl%5Cu00e4ser%22%2C%22gr.+Dose%5C%2Fn%22%2C%22gr.+Fl.%22%2C%22gro%5Cu00dfe%22%2C%22gro%5Cu00dfen%22%2C%22gro%5Cu00dfer%22%2C%22gro%5Cu00dfes%22%2C%22halbe%22%2C%22Halm%28e%29%22%2C%22Handvoll%22%2C%22K%5Cu00e4stchen%22%2C%22kg%22%2C%22kl.+Bund%22%2C%22kl.+Dose%5C%2Fn%22%2C%22kl.+Glas%22%2C%22kl.+Kopf%22%2C%22kl.+Scheibe%28n%29%22%2C%22kl.+St%5Cu00fcck%28e%29%22%2C%22kl.Flasche%5C%2Fn%22%2C%22kleine%22%2C%22kleinen%22%2C%22kleiner%22%2C%22kleines%22%2C%22Knolle%5C%2Fn%22%2C%22Kopf%22%2C%22K%5Cu00f6pfe%22%2C%22K%5Cu00f6rner%22%2C%22Kugel%22%2C%22Kugel%5C%2Fn%22%2C%22Kugeln%22%2C%22Liter%22%2C%22m.-gro%5Cu00dfe%22%2C%22m.-gro%5Cu00dfer%22%2C%22m.-gro%5Cu00dfes%22%2C%22mehr%22%2C%22mg%22%2C%22ml%22%2C%22Msp.%22%2C%22n.+B.%22%2C%22Paar%22%2C%22Paket%22%2C%22Pck.%22%2C%22Pkt.%22%2C%22Platte%5C%2Fn%22%2C%22Port.%22%2C%22Prise%28n%29%22%2C%22Prisen%22%2C%22Prozent+%25%22%2C%22Riegel%22%2C%22Ring%5C%2Fe%22%2C%22Rippe%5C%2Fn%22%2C%22Rolle%28n%29%22%2C%22Sch%5Cu00e4lchen%22%2C%22Scheibe%5C%2Fn%22%2C%22Schuss%22%2C%22Spritzer%22%2C%22Stange%5C%2Fn%22%2C%22St%5Cu00e4ngel%22%2C%22Stiel%5C%2Fe%22%2C%22Stiele%22%2C%22St%5Cu00fcck%28e%29%22%2C%22Tafel%22%2C%22Tafeln%22%2C%22Tasse%22%2C%22Tasse%5C%2Fn%22%2C%22Teil%5C%2Fe%22%2C%22TL%22%2C%22TL+%28geh%5Cu00e4uft%29%22%2C%22TL+%28gestr.%29%22%2C%22Topf%22%2C%22Tropfen%22%2C%22Tube%5C%2Fn%22%2C%22T%5Cu00fcte%5C%2Fn%22%2C%22viel%22%2C%22wenig%22%2C%22W%5Cu00fcrfel%22%2C%22Wurzel%22%2C%22Wurzel%5C%2Fn%22%2C%22Zehe%5C%2Fn%22%2C%22Zweig%5C%2Fe%22%5D%2C%22yield%22%3A%7B%221%22%3A%221+Portion%22%2C%222%22%3A%222+Portionen%22%2C%223%22%3A%223+Portionen%22%2C%224%22%3A%224+Portionen%22%2C%225%22%3A%225+Portionen%22%2C%226%22%3A%226+Portionen%22%2C%227%22%3A%227+Portionen%22%2C%228%22%3A%228+Portionen%22%2C%229%22%3A%229+Portionen%22%2C%2210%22%3A%2210+Portionen%22%2C%2211%22%3A%2211+Portionen%22%2C%2212%22%3A%2212+Portionen%22%7D%2C%22prepare_time%22%3A%7B%221%22%3A%22schnell%22%2C%222%22%3A%22mittel%22%2C%223%22%3A%22aufwendig%22%7D%2C%22category%22%3A%7B%221%22%3A%22Vorspeise%22%2C%222%22%3A%22Suppe%22%2C%223%22%3A%22Salat%22%2C%224%22%3A%22Hauptspeise%22%2C%225%22%3A%22Beilage%22%2C%226%22%3A%22Nachtisch%5C%2FDessert%22%2C%227%22%3A%22Getr%5Cu00e4nke%22%2C%228%22%3A%22B%5Cu00fcffet%22%2C%229%22%3A%22Fr%5Cu00fchst%5Cu00fcck%5C%2FBrunch%22%7D%2C%22variety%22%3A%7B%221%22%3A%22Basmati+Reis%22%2C%222%22%3A%22Basmati+%26amp%3B+Wild+Reis%22%2C%223%22%3A%22R%5Cu00e4ucherreis%22%2C%224%22%3A%22Jasmin+Reis%22%2C%225%22%3A%221121+Basmati+Wunderreis%22%2C%226%22%3A%22Spitzen+Langkorn+Reis%22%2C%227%22%3A%22Wildreis%22%2C%228%22%3A%22Naturreis%22%2C%229%22%3A%22Sushi+Reis%22%7D%2C%22tag--ingredient%22%3A%7B%221%22%3A%22Eier%22%2C%222%22%3A%22Gem%5Cu00fcse%22%2C%223%22%3A%22Getreide%22%2C%224%22%3A%22Fisch%22%2C%225%22%3A%22Fleisch%22%2C%226%22%3A%22Meeresfr%5Cu00fcchte%22%2C%227%22%3A%22Milchprodukte%22%2C%228%22%3A%22Obst%22%2C%229%22%3A%22Salat%22%7D%2C%22tag--preparation%22%3A%7B%2210%22%3A%22Backen%22%2C%2211%22%3A%22Blanchieren%22%2C%2212%22%3A%22Braten%5C%2FSchmoren%22%2C%2213%22%3A%22D%5Cu00e4mpfen%5C%2FD%5Cu00fcnsten%22%2C%2214%22%3A%22Einmachen%22%2C%2215%22%3A%22Frittieren%22%2C%2216%22%3A%22Gratinieren%5C%2F%5Cu00dcberbacken%22%2C%2217%22%3A%22Grillen%22%2C%2218%22%3A%22Kochen%22%7D%2C%22tag--kitchen%22%3A%7B%2219%22%3A%22Afrikanisch%22%2C%2220%22%3A%22Alpenk%5Cu00fcche%22%2C%2221%22%3A%22Asiatisch%22%2C%2222%22%3A%22Deutsch+%28regional%29%22%2C%2223%22%3A%22Franz%5Cu00f6sisch%22%2C%2224%22%3A%22Mediterran%22%2C%2225%22%3A%22Orientalisch%22%2C%2226%22%3A%22Osteurop%5Cu00e4isch%22%2C%2227%22%3A%22Skandinavisch%22%2C%2228%22%3A%22S%5Cu00fcdamerikanisch%22%2C%2229%22%3A%22US-Amerikanisch%22%2C%2230%22%3A%22%22%7D%2C%22tag--difficulty%22%3A%7B%2231%22%3A%22Einfach%22%2C%2232%22%3A%22Mittelschwer%22%2C%2233%22%3A%22Anspruchsvoll%22%7D%2C%22tag--feature%22%3A%7B%2234%22%3A%22Gut+vorzubereiten%22%2C%2235%22%3A%22Kalorienarm+%5C%2F+leicht%22%2C%2236%22%3A%22Klassiker%22%2C%2237%22%3A%22Preiswert%22%2C%2238%22%3A%22Raffiniert%22%2C%2239%22%3A%22Vegetarisch+%5C%2F+Vegan%22%2C%2240%22%3A%22Vitaminreich%22%2C%2241%22%3A%22Vollwert%22%2C%2242%22%3A%22%22%7D%2C%22tag%22%3A%7B%221%22%3A%22Eier%22%2C%222%22%3A%22Gem%5Cu00fcse%22%2C%223%22%3A%22Getreide%22%2C%224%22%3A%22Fisch%22%2C%225%22%3A%22Fleisch%22%2C%226%22%3A%22Meeresfr%5Cu00fcchte%22%2C%227%22%3A%22Milchprodukte%22%2C%228%22%3A%22Obst%22%2C%229%22%3A%22Salat%22%2C%2210%22%3A%22Backen%22%2C%2211%22%3A%22Blanchieren%22%2C%2212%22%3A%22Braten%5C%2FSchmoren%22%2C%2213%22%3A%22D%5Cu00e4mpfen%5C%2FD%5Cu00fcnsten%22%2C%2214%22%3A%22Einmachen%22%2C%2215%22%3A%22Frittieren%22%2C%2216%22%3A%22Gratinieren%5C%2F%5Cu00dcberbacken%22%2C%2217%22%3A%22Grillen%22%2C%2218%22%3A%22Kochen%22%2C%2219%22%3A%22Afrikanisch%22%2C%2220%22%3A%22Alpenk%5Cu00fcche%22%2C%2221%22%3A%22Asiatisch%22%2C%2222%22%3A%22Deutsch+%28regional%29%22%2C%2223%22%3A%22Franz%5Cu00f6sisch%22%2C%2224%22%3A%22Mediterran%22%2C%2225%22%3A%22Orientalisch%22%2C%2226%22%3A%22Osteurop%5Cu00e4isch%22%2C%2227%22%3A%22Skandinavisch%22%2C%2228%22%3A%22S%5Cu00fcdamerikanisch%22%2C%2229%22%3A%22US-Amerikanisch%22%2C%2230%22%3A%22%22%2C%2231%22%3A%22Einfach%22%2C%2232%22%3A%22Mittelschwer%22%2C%2233%22%3A%22Anspruchsvoll%22%2C%2234%22%3A%22Gut+vorzubereiten%22%2C%2235%22%3A%22Kalorienarm+%5C%2F+leicht%22%2C%2236%22%3A%22Klassiker%22%2C%2237%22%3A%22Preiswert%22%2C%2238%22%3A%22Raffiniert%22%2C%2239%22%3A%22Vegetarisch+%5C%2F+Vegan%22%2C%2240%22%3A%22Vitaminreich%22%2C%2241%22%3A%22Vollwert%22%2C%2242%22%3A%22%22%7D%7D%2C%22errorArray%22%3A%7B%22recipe_prepare_time%22%3A%22error%22%2C%22recipe_yield%22%3A%22error%22%2C%22recipe_category_name%22%3A%22error%22%2C%22recipe_tag_name%22%3A%22error%22%2C%22recipe_instruction_text%22%3A%22error%22%2C%22recipe_ingredient_name%22%3A%22error%22%7D%2C%22errorMessage%22%3A%22Bitte+f%5Cu00fclle+die+rot+markierten+Felder+korrekt+aus.%22%2C%22db%22%3A%7B%22query_count%22%3A20%7D%7D' => 'https://foo.bar/tpl_preview.php?pid=122&json={"recipe_id":-1,"recipe_created":"","recipe_title":"vxcvxc","recipe_description":"","recipe_yield":0,"recipe_prepare_time":0,"recipe_image":"","recipe_legal":0,"recipe_live":0,"recipe_user_guid":"","recipe_category_id":[],"recipe_category_name":[],"recipe_variety_id":[],"recipe_variety_name":[],"recipe_tag_id":[],"recipe_tag_name":[],"recipe_instruction_id":[],"recipe_instruction_text":[],"recipe_ingredient_id":[],"recipe_ingredient_name":[],"recipe_ingredient_amount":[],"recipe_ingredient_unit":[],"formMatchingArray":{"unites":["Becher","Beete","Beutel","Blatt","Blätter","Bund","Bündel","cl","cm","dicke","dl","Dose","Dose\/n","dünne","Ecke(n)","Eimer","einige","einige Stiele","EL","EL, gehäuft","EL, gestr.","etwas","evtl.","extra","Fläschchen","Flasche","Flaschen","g","Glas","Gläser","gr. Dose\/n","gr. Fl.","große","großen","großer","großes","halbe","Halm(e)","Handvoll","Kästchen","kg","kl. Bund","kl. Dose\/n","kl. Glas","kl. Kopf","kl. Scheibe(n)","kl. Stück(e)","kl.Flasche\/n","kleine","kleinen","kleiner","kleines","Knolle\/n","Kopf","Köpfe","Körner","Kugel","Kugel\/n","Kugeln","Liter","m.-große","m.-großer","m.-großes","mehr","mg","ml","Msp.","n. B.","Paar","Paket","Pck.","Pkt.","Platte\/n","Port.","Prise(n)","Prisen","Prozent %","Riegel","Ring\/e","Rippe\/n","Rolle(n)","Schälchen","Scheibe\/n","Schuss","Spritzer","Stange\/n","Stängel","Stiel\/e","Stiele","Stück(e)","Tafel","Tafeln","Tasse","Tasse\/n","Teil\/e","TL","TL (gehäuft)","TL (gestr.)","Topf","Tropfen","Tube\/n","Tüte\/n","viel","wenig","Würfel","Wurzel","Wurzel\/n","Zehe\/n","Zweig\/e"],"yield":{"1":"1 Portion","2":"2 Portionen","3":"3 Portionen","4":"4 Portionen","5":"5 Portionen","6":"6 Portionen","7":"7 Portionen","8":"8 Portionen","9":"9 Portionen","10":"10 Portionen","11":"11 Portionen","12":"12 Portionen"},"prepare_time":{"1":"schnell","2":"mittel","3":"aufwendig"},"category":{"1":"Vorspeise","2":"Suppe","3":"Salat","4":"Hauptspeise","5":"Beilage","6":"Nachtisch\/Dessert","7":"Getränke","8":"Büffet","9":"Frühstück\/Brunch"},"variety":{"1":"Basmati Reis","2":"Basmati & Wild Reis","3":"Räucherreis","4":"Jasmin Reis","5":"1121 Basmati Wunderreis","6":"Spitzen Langkorn Reis","7":"Wildreis","8":"Naturreis","9":"Sushi Reis"},"tag--ingredient":{"1":"Eier","2":"Gemüse","3":"Getreide","4":"Fisch","5":"Fleisch","6":"Meeresfrüchte","7":"Milchprodukte","8":"Obst","9":"Salat"},"tag--preparation":{"10":"Backen","11":"Blanchieren","12":"Braten\/Schmoren","13":"Dämpfen\/Dünsten","14":"Einmachen","15":"Frittieren","16":"Gratinieren\/Überbacken","17":"Grillen","18":"Kochen"},"tag--kitchen":{"19":"Afrikanisch","20":"Alpenküche","21":"Asiatisch","22":"Deutsch (regional)","23":"Französisch","24":"Mediterran","25":"Orientalisch","26":"Osteuropäisch","27":"Skandinavisch","28":"Südamerikanisch","29":"US-Amerikanisch","30":""},"tag--difficulty":{"31":"Einfach","32":"Mittelschwer","33":"Anspruchsvoll"},"tag--feature":{"34":"Gut vorzubereiten","35":"Kalorienarm \/ leicht","36":"Klassiker","37":"Preiswert","38":"Raffiniert","39":"Vegetarisch \/ Vegan","40":"Vitaminreich","41":"Vollwert","42":""},"tag":{"1":"Eier","2":"Gemüse","3":"Getreide","4":"Fisch","5":"Fleisch","6":"Meeresfrüchte","7":"Milchprodukte","8":"Obst","9":"Salat","10":"Backen","11":"Blanchieren","12":"Braten\/Schmoren","13":"Dämpfen\/Dünsten","14":"Einmachen","15":"Frittieren","16":"Gratinieren\/Überbacken","17":"Grillen","18":"Kochen","19":"Afrikanisch","20":"Alpenküche","21":"Asiatisch","22":"Deutsch (regional)","23":"Französisch","24":"Mediterran","25":"Orientalisch","26":"Osteuropäisch","27":"Skandinavisch","28":"Südamerikanisch","29":"US-Amerikanisch","30":"","31":"Einfach","32":"Mittelschwer","33":"Anspruchsvoll","34":"Gut vorzubereiten","35":"Kalorienarm \/ leicht","36":"Klassiker","37":"Preiswert","38":"Raffiniert","39":"Vegetarisch \/ Vegan","40":"Vitaminreich","41":"Vollwert","42":""}},"errorArray":{"recipe_prepare_time":"error","recipe_yield":"error","recipe_category_name":"error","recipe_tag_name":"error","recipe_instruction_text":"error","recipe_ingredient_name":"error"},"errorMessage":"Bitte fülle die rot markierten Felder korrekt aus.","db":{"query_count":20}}',
         '<a href="&#38&#35&#49&#48&#54&#38&#35&#57&#55&#38&#35&#49&#49&#56&#38&#35&#57&#55&#38&#35&#49&#49&#53&#38&#35&#57&#57&#38&#35&#49&#49&#52&#38&#35&#49&#48&#53&#38&#35&#49&#49&#50&#38&#35&#49&#49&#54&#38&#35&#53&#56&#38&#35&#57&#57&#38&#35&#49&#49&#49&#38&#35&#49&#49&#48&#38&#35&#49&#48&#50&#38&#35&#49&#48&#53&#38&#35&#49&#49&#52&#38&#35&#49&#48&#57&#38&#35&#52&#48&#38&#35&#52&#57&#38&#35&#52&#49">Clickhere</a>' => '<a href="javascript:confirm(1)">Clickhere</a>',
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::urldecode($before), 'testing: ' . $before);
@@ -4587,12 +4587,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testUtf8DecodeEncodeUtf8()
   {
 
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::encode('UTF-8', $before));
@@ -4600,12 +4600,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-????-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)));
@@ -4613,12 +4613,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-????-  ',
         '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
         'öäü'            => 'öäü',
         ''               => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::utf8_encode(UTF8::encode('ISO-8859-1', $before, false)));
@@ -4627,7 +4627,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testUtf8DecodeUtf8Encode()
   {
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  '    => '  -ABC-????-  ',
         '      - ÖÄÜ- '     => '      - ÖÄÜ- ',
         'öäü'               => 'öäü',
@@ -4638,7 +4638,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "\xa0\xa1"          => ' ¡',
         "κόσμε\xa0\xa1-öäü" => '????? ¡-öäü',
         'foobar'            => 'foobar',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::utf8_encode((UTF8::utf8_decode($before))));
@@ -4647,12 +4647,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testUtf8Encode()
   {
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-ä¸­æç©ºç½-  ',
         '      - ÖÄÜ- '  => '      - ÃÃÃ- ',
         'öäü'            => 'Ã¶Ã¤Ã¼',
         ''               => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::utf8_encode($before));
@@ -4661,12 +4661,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testUtf8EncodeEncodeUtf8()
   {
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-ä¸­æç©ºç½-  ',
         '      - ÖÄÜ- '  => '      - ÃÃÃ- ',
         'öäü'            => 'Ã¶Ã¤Ã¼',
         ''               => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_encode($before)));
@@ -4675,18 +4675,18 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testUtf8EncodeUtf8Decode()
   {
-    $tests = array(
+    $tests = [
         'ا (Alif) · ب (Bāʾ) · ت (Tāʾ) · ث (Ṯāʾ) · ج (Ǧīm) · ح (Ḥāʾ) · خ (Ḫāʾ) · د (Dāl) · ذ (Ḏāl) · ر (Rāʾ) · ز (Zāy) · س (Sīn) · ش (Šīn) · ص (Ṣād) · ض (Ḍād) · ط (Ṭāʾ) · ظ (Ẓāʾ) · ع (ʿAin) · غ (Ġain) · ف (Fāʾ) · ق (Qāf) · ك (Kāf) · ل (Lām) · م (Mīm) · ن (Nūn) · ه (Hāʾ) · و (Wāw) · ي (Yāʾ)' => 'ا (Alif) · ب (Bāʾ) · ت (Tāʾ) · ث (Ṯāʾ) · ج (Ǧīm) · ح (Ḥāʾ) · خ (Ḫāʾ) · د (Dāl) · ذ (Ḏāl) · ر (Rāʾ) · ز (Zāy) · س (Sīn) · ش (Šīn) · ص (Ṣād) · ض (Ḍād) · ط (Ṭāʾ) · ظ (Ẓāʾ) · ع (ʿAin) · غ (Ġain) · ف (Fāʾ) · ق (Qāf) · ك (Kāf) · ل (Lām) · م (Mīm) · ن (Nūn) · ه (Hāʾ) · و (Wāw) · ي (Yāʾ)',
-        'строка на русском' => 'строка на русском',
-        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
-        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-        'öäü'            => 'öäü',
-        ''               => '',
-        'foobar'         => 'foobar',
-        123              => '123',
-        "κόσμε\xc2\xa0" => "κόσμε\xc2\xa0",
-        "\xd1\xd2"       => "\xd1\xd2",
-    );
+        'строка на русском'                                                                                                                                                                                                                                                                        => 'строка на русском',
+        '  -ABC-中文空白-  '                                                                                                                                                                                                                                                                           => '  -ABC-中文空白-  ',
+        '      - ÖÄÜ- '                                                                                                                                                                                                                                                                            => '      - ÖÄÜ- ',
+        'öäü'                                                                                                                                                                                                                                                                                      => 'öäü',
+        ''                                                                                                                                                                                                                                                                                         => '',
+        'foobar'                                                                                                                                                                                                                                                                                   => 'foobar',
+        123                                                                                                                                                                                                                                                                                        => '123',
+        "κόσμε\xc2\xa0"                                                                                                                                                                                                                                                                            => "κόσμε\xc2\xa0",
+        "\xd1\xd2"                                                                                                                                                                                                                                                                                 => "\xd1\xd2",
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::utf8_decode(UTF8::utf8_encode($before)));
@@ -4695,12 +4695,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testUtf8EncodeUtf8Encode()
   {
-    $tests = array(
+    $tests = [
         '  -ABC-中文空白-  ' => '  -ABC-Ã¤Â¸Â­Ã¦ÂÂÃ§Â©ÂºÃ§ÂÂ½-  ',
         '      - ÖÄÜ- '  => '      - ÃÂÃÂÃÂ- ',
         'öäü'            => 'ÃÂ¶ÃÂ¤ÃÂ¼',
         ''               => '',
-    );
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::utf8_encode(UTF8::utf8_encode($before)));
@@ -4718,7 +4718,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testUtf8FixWin1252Chars()
   {
-    $testArray = array(
+    $testArray = [
         'Düsseldorf'          => 'Düsseldorf',
         'Ã'                   => 'Ã',
         'ñ'                   => 'ñ',
@@ -4729,7 +4729,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "test\xc2\x88"        => 'testˆ',
         'DÃ¼sseldorf'         => 'Düsseldorf',
         'Ã¤'                  => 'ä',
-    );
+    ];
 
     foreach ($testArray as $before => $after) {
       self::assertSame($after, UTF8::utf8_fix_win1252_chars($before));
@@ -4738,28 +4738,28 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testUtf8Strstr()
   {
-    $tests = array(
-        'ABC@中文空白.com' => array(
+    $tests = [
+        'ABC@中文空白.com' => [
             'ABC',
             '@中文空白.com',
-        ),
-        ' @ - ÖÄÜ- '   => array(
+        ],
+        ' @ - ÖÄÜ- '   => [
             ' ',
             '@ - ÖÄÜ- ',
-        ),
-        'öä@ü'         => array(
+        ],
+        'öä@ü'         => [
             'öä',
             '@ü',
-        ),
-        ''             => array(
+        ],
+        ''             => [
             false,
             false,
-        ),
-        '  '           => array(
+        ],
+        '  '           => [
             false,
             false,
-        ),
-    );
+        ],
+    ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after[0], UTF8::strstr($before, '@', true), 'tested: ' . $before);
@@ -4816,13 +4816,13 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testWordCount()
   {
-    $testArray = array(
+    $testArray = [
         '中文空白 öäü abc' => 3,
         'öäü öäü öäü'  => 3,
         'abc'          => 1,
         ''             => 0,
         ' '            => 0,
-    );
+    ];
 
     foreach ($testArray as $actual => $expected) {
       self::assertSame($expected, UTF8::str_word_count($actual));
@@ -4831,41 +4831,41 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertSame(3, UTF8::str_word_count('中文空白 foo öäü'));
     self::assertSame(3, UTF8::str_word_count('中文空白 foo öäü', 0));
     self::assertSame(
-        array(
+        [
             0 => '中文空白',
             1 => 'foo',
             2 => 'öäü',
-        ),
+        ],
         UTF8::str_word_count('中文空白 foo öäü', 1)
     );
     self::assertSame(3, UTF8::str_word_count('中文空白 foo öäü#s', 0, '#'));
     self::assertSame(4, UTF8::str_word_count('中文空白 foo öäü#s', 0, ''));
     self::assertSame(
-        array(
+        [
             '中文空白',
             'foo',
             'öäü#s',
-        ),
+        ],
         UTF8::str_word_count('中文空白 foo öäü#s', 1, '#')
     );
     self::assertSame(
-        array(
+        [
             0 => '中文空白',
             5 => 'foo',
             9 => 'öäü#s',
-        ),
+        ],
         UTF8::str_word_count('中文空白 foo öäü#s', 2, '#')
     );
     self::assertSame(
-        array(
+        [
             0 => '中文空白',
             5 => 'foo',
             9 => 'öäü',
-        ),
+        ],
         UTF8::str_word_count('中文空白 foo öäü', 2)
     );
     self::assertSame(
-        array(
+        [
             'test',
             'foo',
             'test',
@@ -4875,11 +4875,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             'test\'s',
             'test’s',
             'test#s',
-        ),
+        ],
         UTF8::str_word_count('test,foo test test-test test_test test\'s test’s test#s', 1, '#')
     );
     self::assertSame(
-        array(
+        [
             'test',
             'foo',
             'test',
@@ -4890,24 +4890,24 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             'test’s',
             'test',
             's',
-        ),
+        ],
         UTF8::str_word_count('test,foo test test-test test_test test\'s test’s test#s', 1)
     );
   }
 
   public function testWordsLimit()
   {
-    $testArray = array(
-        array('this is a test', 'this is a test', 5, '...'),
-        array('this is öäü-foo test', 'this is öäü-foo test', 8, '...'),
-        array('fòô...öäü', 'fòô bàř fòô', 1, '...öäü'),
-        array('fòô', 'fòô bàř fòô', 1, ''),
-        array('fòô bàř', 'fòô bàř fòô', 2, ''),
-        array('fòô', 'fòô', 1, ''),
-        array('', 'fòô', 0, ''),
-        array('', '', 1, '...'),
-        array('', '', 0, '...'),
-    );
+    $testArray = [
+        ['this is a test', 'this is a test', 5, '...'],
+        ['this is öäü-foo test', 'this is öäü-foo test', 8, '...'],
+        ['fòô...öäü', 'fòô bàř fòô', 1, '...öäü'],
+        ['fòô', 'fòô bàř fòô', 1, ''],
+        ['fòô bàř', 'fòô bàř fòô', 2, ''],
+        ['fòô', 'fòô', 1, ''],
+        ['', 'fòô', 0, ''],
+        ['', '', 1, '...'],
+        ['', '', 0, '...'],
+    ];
 
     foreach ($testArray as $test) {
       self::assertSame($test[0], UTF8::words_limit($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
@@ -4974,32 +4974,32 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
    */
   public function trimProvider()
   {
-    return array(
-        array(
+    return [
+        [
             1,
             '1',
-        ),
-        array(
+        ],
+        [
             -1,
             '-1',
-        ),
-        array(
+        ],
+        [
             '  ',
             '',
-        ),
-        array(
+        ],
+        [
             '',
             '',
-        ),
-        array(
+        ],
+        [
             '　中文空白　 ',
             '中文空白',
-        ),
-        array(
+        ],
+        [
             'do not go gentle into that good night',
             'do not go gentle into that good night',
-        ),
-    );
+        ],
+    ];
   }
 
   /**
@@ -5007,40 +5007,40 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
    */
   public function trimProviderAdvanced()
   {
-    return array(
-        array(
+    return [
+        [
             1,
             '1',
-        ),
-        array(
+        ],
+        [
             -1,
             '-1',
-        ),
-        array(
+        ],
+        [
             '  ',
             '',
-        ),
-        array(
+        ],
+        [
             '',
             '',
-        ),
-        array(
+        ],
+        [
             ' 白 ',
             '白',
-        ),
-        array(
+        ],
+        [
             '   白白 ',
             '白白',
-        ),
-        array(
+        ],
+        [
             '　中文空白',
             '　中文空白',
-        ),
-        array(
+        ],
+        [
             'do not go gentle into that good night',
             'do not go gentle into that good night',
-        ),
-    );
+        ],
+    ];
   }
 
   /**
@@ -5048,39 +5048,39 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
    */
   public function trimProviderAdvancedWithMoreThenTwoBytes()
   {
-    return array(
-        array(
+    return [
+        [
             1,
             '1',
-        ),
-        array(
+        ],
+        [
             -1,
             '-1',
-        ),
-        array(
+        ],
+        [
             '  ',
             '  ',
-        ),
-        array(
+        ],
+        [
             '',
             '',
-        ),
-        array(
+        ],
+        [
             '白',
             '',
-        ),
-        array(
+        ],
+        [
             '白白',
             '',
-        ),
-        array(
+        ],
+        [
             '　中文空白',
             '　中文空',
-        ),
-        array(
+        ],
+        [
             'do not go gentle into that good night',
             'do not go gentle into that good night',
-        ),
-    );
+        ],
+    ];
   }
 }

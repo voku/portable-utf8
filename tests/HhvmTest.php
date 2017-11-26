@@ -8,13 +8,13 @@ class HhvmTest extends \PHPUnit\Framework\TestCase
   public function test1()
   {
     /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    self::assertFalse(@grapheme_extract(array(), 0));
+    self::assertFalse(@grapheme_extract([], 0));
   }
 
   public function test2()
   {
     // Negative offset are not allowed but native PHP silently casts them to zero
-    
+
     if (defined('HHVM_VERSION_ID') || PHP_VERSION_ID < 50535 || (50600 <= PHP_VERSION_ID && PHP_VERSION_ID < 50621) || (70000 <= PHP_VERSION_ID && PHP_VERSION_ID < 70006)) {
       self::assertSame(0, grapheme_strpos('abc', 'a', -1));
     } else {
@@ -52,6 +52,6 @@ class HhvmTest extends \PHPUnit\Framework\TestCase
   public function test8()
   {
     /** @noinspection PhpUsageOfSilenceOperatorInspection */
-    self::assertSame('', @(substr(array(), 0).''));
+    self::assertSame('', @(substr([], 0) . ''));
   }
 }

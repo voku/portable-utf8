@@ -22,68 +22,68 @@ class BootupTest extends \PHPUnit\Framework\TestCase
     $c = 'à';
     $d = Normalizer::normalize($c, Normalizer::NFD);
 
-    $bak = array(
+    $bak = [
         $_GET,
         $_POST,
         $_COOKIE,
         $_REQUEST,
         $_ENV,
         $_FILES,
-    );
+    ];
 
-    $_GET = array(
+    $_GET = [
         'n' => 4,
         'a' => "\xE9",
         'b' => substr($d, 1),
         'c' => $c,
         'd' => $d,
         'e' => "\n\r\n\r",
-    );
+    ];
 
     $_GET['f'] = $_GET;
 
-    $_FILES = array(
-        'a' => array(
+    $_FILES = [
+        'a' => [
             'name'     => '',
             'type'     => '',
             'tmp_name' => '',
             'error'    => 4,
             'size'     => 0,
-        ),
-        'b' => array(
-            'name'     => array(
+        ],
+        'b' => [
+            'name'     => [
                 '',
                 '',
-            ),
-            'type'     => array(
+            ],
+            'type'     => [
                 '',
                 '',
-            ),
-            'tmp_name' => array(
+            ],
+            'tmp_name' => [
                 '',
                 '',
-            ),
-            'error'    => array(
+            ],
+            'error'    => [
                 4,
                 4,
-            ),
-            'size'     => array(
+            ],
+            'size'     => [
                 0,
                 0,
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     Bootup::filterRequestInputs();
 
-    $expect = array(
+    $expect = [
         'n' => 4,
         'a' => 'é',
         'b' => '◌' . substr($d, 1),
         'c' => $c,
         'd' => $c,
         'e' => "\n\n\n",
-    );
+    ];
 
     $expect['f'] = $expect;
 
@@ -171,11 +171,11 @@ class BootupTest extends \PHPUnit\Framework\TestCase
     $rand = Bootup::get_random_bytes(0);
     self::assertSame(0, strlen($rand));
 
-    $bytes = array(
+    $bytes = [
         Bootup::get_random_bytes(12),
         Bootup::get_random_bytes(16),
-        Bootup::get_random_bytes(16)
-    );
+        Bootup::get_random_bytes(16),
+    ];
 
     self::assertTrue(
         strlen(bin2hex($bytes[0])) === 24

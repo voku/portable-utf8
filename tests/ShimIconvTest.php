@@ -69,11 +69,11 @@ class ShimIconvTest extends \PHPUnit\Framework\TestCase
 
   public function testIconvGetEncoding()
   {
-    $a = array(
+    $a = [
         'input_encoding'    => 'UTF-8',
         'output_encoding'   => 'UTF-8',
         'internal_encoding' => 'UTF-8',
-    );
+    ];
 
     foreach ($a as $t => $e) {
       self::assertTrue(p::iconv_set_encoding($t, $e));
@@ -114,15 +114,15 @@ X-Bar: =?cp949?B?UkU6odk=?= =?UTF-8?Q?Bar?=
 To: <test@example.com>
 HEADERS;
 
-    $result = array(
+    $result = [
         'From'    => '<foo@example.com>',
         'Subject' => '=?ks_c_5601-1987?B?UkU6odk=?= Foo',
-        'X-Bar'   => array(
+        'X-Bar'   => [
             'RE:☆ Foo',
             'RE:☆Bar',
-        ),
+        ],
         'To'      => '<test@example.com>',
-    );
+    ];
 
     self::assertSame($result, p::iconv_mime_decode_headers($headers, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8'));
   }
@@ -130,12 +130,12 @@ HEADERS;
   public function testIconvMimeEncode()
   {
     $text = "\xE3\x83\x86\xE3\x82\xB9\xE3\x83\x88\xE3\x83\x86\xE3\x82\xB9\xE3\x83\x88";
-    $options = array(
+    $options = [
         'scheme'         => 'Q',
         'input-charset'  => 'UTF-8',
         'output-charset' => 'UTF-8',
         'line-length'    => 30,
-    );
+    ];
 
     self::assertSame(
         "Subject: =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=\r\n =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=",

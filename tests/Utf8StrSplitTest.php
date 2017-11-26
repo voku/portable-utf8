@@ -10,7 +10,7 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
   public function test_split_one_char()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
-    $array = array(
+    $array = [
         'I',
         'ñ',
         't',
@@ -31,7 +31,7 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
         'i',
         'ø',
         'n',
-    );
+    ];
 
     self::assertSame($array, u::split($str));
   }
@@ -39,12 +39,12 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
   public function test_split_five_chars()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
-    $array = array(
+    $array = [
         'Iñtër',
         'nâtiô',
         'nàliz',
         'ætiøn',
-    );
+    ];
 
     self::assertSame($array, u::split($str, 5));
   }
@@ -52,12 +52,12 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
   public function test_split_six_chars()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
-    $array = array(
+    $array = [
         'Iñtërn',
         'âtiônà',
         'lizæti',
         'øn',
-    );
+    ];
 
     self::assertSame($array, u::split($str, 6));
   }
@@ -65,9 +65,9 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
   public function test_split_long()
   {
     $str = 'Iñtërnâtiônàlizætiøn';
-    $array = array(
+    $array = [
         'Iñtërnâtiônàlizætiøn',
-    );
+    ];
 
     self::assertSame($array, u::split($str, 40));
   }
@@ -75,7 +75,7 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
   public function test_split_newline()
   {
     $str = "\nIñtërn\nâtiônàl\nizætiøn\n\n";
-    $array = array(
+    $array = [
         "\n",
         'I',
         'ñ',
@@ -101,7 +101,7 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
         'n',
         "\n",
         "\n",
-    );
+    ];
 
     self::assertSame($array, u::split($str));
   }
@@ -109,12 +109,12 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
   public function test_split_zero_length()
   {
     $str = 'Iñtë';
-    $array = array(
+    $array = [
         'I',
         'ñ',
         't',
         'ë',
-    );
+    ];
 
     self::assertSame($array, u::split($str, 0));
   }

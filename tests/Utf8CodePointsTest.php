@@ -10,13 +10,13 @@ class Utf8CodePointsTest extends \PHPUnit\Framework\TestCase
 
   public function testEmptyString()
   {
-    self::assertEquals(UTF8::codepoints(''), array());
+    self::assertEquals(UTF8::codepoints(''), []);
   }
 
   public function testString()
   {
 
-    $unicode = array();
+    $unicode = [];
     $unicode[0] = 73;
     $unicode[1] = 241;
     $unicode[2] = 116;

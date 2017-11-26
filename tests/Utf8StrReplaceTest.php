@@ -61,14 +61,14 @@ class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
     self::assertSame(
         $replaced,
         u::str_replace(
-            array(
+            [
                 'n',
                 't',
-            ),
-            array(
+            ],
+            [
                 'x',
                 'y',
-            ),
+            ],
             $str
         )
     );
@@ -80,18 +80,18 @@ class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
     $replaced = 'I?tërnâti??nàliz????ti???n';
     self::assertSame(
         u::str_replace(
-            array(
+            [
                 'ñ',
                 'ô',
                 'ø',
                 'æ',
-            ),
-            array(
+            ],
+            [
                 '?',
                 '??',
                 '???',
                 '????',
-            ),
+            ],
             $str
         ),
         $replaced
@@ -105,12 +105,12 @@ class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
     self::assertSame(
         $replaced,
         u::str_replace(
-            array(
+            [
                 'ñ',
                 'ô',
                 'ø',
                 'æ',
-            ),
+            ],
             '?',
             $str
         )
@@ -123,13 +123,13 @@ class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
     $replaced = 'I?tërnâtinàliztin';
     self::assertSame(
         u::str_replace(
-            array(
+            [
                 'ñ',
                 'ô',
                 'ø',
                 'æ',
-            ),
-            array('?'),
+            ],
+            ['?'],
             $str
         ),
         $replaced
