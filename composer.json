@@ -28,7 +28,11 @@
   ],
   "require": {
     "php": ">=7.0.0",
-    "symfony/polyfill": "~1.0"
+    "symfony/polyfill-php72": "*",
+    "symfony/polyfill-iconv": "*",
+    "symfony/polyfill-intl-grapheme": "*",
+    "symfony/polyfill-intl-normalizer": "*",
+    "symfony/polyfill-mbstring": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "~6.0"
