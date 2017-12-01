@@ -364,7 +364,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      trigger_error('UTF8::chr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::chr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     $cacheKey = $code_point . $encoding;
@@ -582,7 +582,7 @@ final class UTF8
     | ( [\x80-\xBF] )                 # invalid byte in range 10000000 - 10111111
     | ( [\xC0-\xFF] )                 # invalid byte in range 11000000 - 11111111
     /x';
-    $str = \preg_replace($regx, '$1', $str);
+    $str = (string)\preg_replace($regx, '$1', $str);
 
     $str = self::replace_diamond_question_mark($str, '');
     $str = self::remove_invisible_characters($str);
@@ -764,7 +764,7 @@ final class UTF8
           &&
           self::$SUPPORT['mbstring'] === false
       ) {
-        trigger_error('UTF8::encode() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+        \trigger_error('UTF8::encode() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
       }
 
       $strEncoded = \mb_convert_encoding(
@@ -1588,11 +1588,7 @@ final class UTF8
     }
 
     if ($flags === null) {
-      if (Bootup::is_php('5.4') === true) {
-        $flags = ENT_QUOTES | ENT_HTML5;
-      } else {
-        $flags = ENT_QUOTES;
-      }
+      $flags = ENT_QUOTES | ENT_HTML5;
     }
 
     if (
@@ -1602,13 +1598,13 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      trigger_error('UTF8::html_entity_decode() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::html_entity_decode() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     do {
       $str_compare = $str;
 
-      $str = \preg_replace_callback(
+      $str = (string)\preg_replace_callback(
           "/&#\d{2,6};/",
           function ($matches) use ($encoding) {
             $returnTmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
@@ -3208,7 +3204,7 @@ final class UTF8
 
     $pattern = '/%u([0-9a-f]{3,4})/i';
     if (\preg_match($pattern, $str)) {
-      $str = \preg_replace($pattern, '&#x\\1;', \rawurldecode($str));
+      $str = (string)\preg_replace($pattern, '&#x\\1;', \rawurldecode($str));
     }
 
     $flags = ENT_QUOTES | ENT_HTML5;
@@ -3289,7 +3285,7 @@ final class UTF8
     if (\is_array($what) === true) {
       /** @noinspection ForeachSourceInspection */
       foreach ($what as $item) {
-        $str = \preg_replace('/(' . \preg_quote($item, '/') . ')+/', $item, $str);
+        $str = (string)\preg_replace('/(' . \preg_quote($item, '/') . ')+/', $item, $str);
       }
     }
 
@@ -3324,7 +3320,7 @@ final class UTF8
     $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S'; // 00-08, 11, 12, 14-31, 127
 
     do {
-      $str = \preg_replace($non_displayables, $replacement, $str, -1, $count);
+      $str = (string)\preg_replace($non_displayables, $replacement, $str, -1, $count);
     } while ($count !== 0);
 
     return $str;
@@ -4518,7 +4514,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      trigger_error('UTF8::stristr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::stristr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
@@ -4604,7 +4600,7 @@ final class UTF8
         &&
         self::$SUPPORT['iconv'] === false
     ) {
-      trigger_error('UTF8::strlen() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::strlen() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     if (
@@ -4830,7 +4826,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      trigger_error('UTF8::strpos() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::strpos() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     if (
@@ -5051,7 +5047,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      trigger_error('UTF8::strripos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::strripos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
@@ -5122,7 +5118,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      trigger_error('UTF8::strrpos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::strrpos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
@@ -5230,7 +5226,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      trigger_error('UTF8::strstr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::strstr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
@@ -5344,7 +5340,7 @@ final class UTF8
 
         $langCode = $lang . '-Lower';
         if (!\in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
-          trigger_error('UTF8::strtolower() without intl for special language: ' . $lang, E_USER_WARNING);
+          \trigger_error('UTF8::strtolower() without intl for special language: ' . $lang, E_USER_WARNING);
 
           $langCode = 'Any-Lower';
         }
@@ -5352,7 +5348,7 @@ final class UTF8
         return transliterator_transliterate($langCode, $str);
       }
 
-      trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "lang"-parameter: ' . $lang, E_USER_WARNING);
+      \trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "lang"-parameter: ' . $lang, E_USER_WARNING);
     }
 
     return \mb_strtolower($str, $encoding);
@@ -5409,7 +5405,7 @@ final class UTF8
 
         $langCode = $lang . '-Upper';
         if (!\in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
-          trigger_error('UTF8::strtoupper() without intl for special language: ' . $lang, E_USER_WARNING);
+          \trigger_error('UTF8::strtoupper() without intl for special language: ' . $lang, E_USER_WARNING);
 
           $langCode = 'Any-Upper';
         }
@@ -5417,7 +5413,7 @@ final class UTF8
         return transliterator_transliterate($langCode, $str);
       }
 
-      trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "lang"-parameter: ' . $lang, E_USER_WARNING);
+      \trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "lang"-parameter: ' . $lang, E_USER_WARNING);
     }
 
     return \mb_strtoupper($str, $encoding);
@@ -5601,7 +5597,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      trigger_error('UTF8::substr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::substr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
@@ -5724,7 +5720,7 @@ final class UTF8
               $offset !== 0
           )
           &&
-          $length + $offset <= 0
+          ($length + $offset) <= 0
           &&
           Bootup::is_php('7.1') === false // output from "substr_count()" have changed in PHP 7.1
       ) {
@@ -5758,7 +5754,7 @@ final class UTF8
         &&
         self::$SUPPORT['mbstring'] === false
     ) {
-      trigger_error('UTF8::substr_count() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+      \trigger_error('UTF8::substr_count() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
     if (self::$SUPPORT['mbstring'] === true) {
@@ -6606,7 +6602,7 @@ final class UTF8
 
     $pattern = '/%u([0-9a-f]{3,4})/i';
     if (\preg_match($pattern, $str)) {
-      $str = \preg_replace($pattern, '&#x\\1;', \urldecode($str));
+      $str = (string)\preg_replace($pattern, '&#x\\1;', \urldecode($str));
     }
 
     $flags = ENT_QUOTES | ENT_HTML5;

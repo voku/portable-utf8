@@ -87,7 +87,7 @@ class Bootup
     // Ensures the URL is well formed UTF-8
     //
 
-    if (UTF8::is_utf8(rawurldecode($uri)) === true) {
+    if (UTF8::is_utf8(\rawurldecode($uri)) === true) {
       return $uri;
     }
 
@@ -95,18 +95,18 @@ class Bootup
     // When not, assumes Windows-1252 and redirects to the corresponding UTF-8 encoded URL
     //
 
-    $uri = preg_replace_callback(
+    $uri = (string)\preg_replace_callback(
         '/[\x80-\xFF]+/',
         function ($m) {
-          return rawurlencode($m[0]);
+          return \rawurlencode($m[0]);
         },
         $uri
     );
 
-    $uri = preg_replace_callback(
+    $uri = (string)\preg_replace_callback(
         '/(?:%[89A-F][0-9A-F])+/i',
         function ($m) {
-          return rawurlencode(UTF8::rawurldecode($m[0]));
+          return \rawurlencode(UTF8::rawurldecode($m[0]));
         },
         $uri
     );
@@ -116,12 +116,12 @@ class Bootup
         &&
         $exit === true
         &&
-        headers_sent() === false
+        \headers_sent() === false
     ) {
       // Use ob_start() to buffer content and avoid problem of headers already sent...
       $severProtocol = ($_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1');
-      header($severProtocol . ' 301 Moved Permanently');
-      header('Location: ' . $uri);
+      \header($severProtocol . ' 301 Moved Permanently');
+      \header('Location: ' . $uri);
       exit();
     }
 
@@ -171,7 +171,7 @@ class Bootup
    */
   public static function initAll()
   {
-    ini_set('default_charset', 'UTF-8');
+    \ini_set('default_charset', 'UTF-8');
 
     // everything is init via composer, so we are done here ...
   }
@@ -190,7 +190,7 @@ class Bootup
     $version = (string)$version;
 
     if (!isset($_IS_PHP[$version])) {
-      $_IS_PHP[$version] = version_compare(PHP_VERSION, $version, '>=');
+      $_IS_PHP[$version] = \version_compare(PHP_VERSION, $version, '>=');
     }
 
     return $_IS_PHP[$version];

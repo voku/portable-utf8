@@ -12,19 +12,19 @@ class ZNormalizationTest extends \PHPUnit\Framework\TestCase
 
   public function testNormalize()
   {
-    $t = file(__DIR__ . '/fixtures/ZNormalizationTest.' . $this->unicodeVersion . '.txt');
+    $t = \file(__DIR__ . '/fixtures/ZNormalizationTest.' . $this->unicodeVersion . '.txt');
     $c = [];
 
     foreach ($t as $s) {
-      $t = explode('#', $s);
-      $t = explode(';', $t[0]);
+      $t = \explode('#', $s);
+      $t = \explode(';', $t[0]);
 
-      if (6 === count($t)) {
+      if (6 === \count($t)) {
         foreach ($t as $k => $s) {
-          $t = explode(' ', $s);
-          $t = array_map('hexdec', $t);
-          $t = array_map('voku\helper\UTF8::chr', $t);
-          $c[$k] = implode('', $t);
+          $t = \explode(' ', $s);
+          $t = \array_map('hexdec', $t);
+          $t = \array_map('voku\helper\UTF8::chr', $t);
+          $c[$k] = \implode('', $t);
         }
 
         self::assertSame($c[1], n::normalize($c[0], n::NFC));
