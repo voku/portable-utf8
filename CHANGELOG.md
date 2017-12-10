@@ -1,5 +1,33 @@
 # Changelog
 
+### 5.0.0 (2017-12-10)
+- [!]: "Fixed symfony/polyfill dependencies"
+
+-> this is a breaking change, because "symfony/polyfill" contains more dependencies as we use now
+
+before:
+    "symfony/polyfill-apcu": "~1.0",
+    "symfony/polyfill-php54": "~1.0",
+    "symfony/polyfill-php55": "~1.0",
+    "symfony/polyfill-php56": "~1.0",
+    "symfony/polyfill-php70": "~1.0",
+    "symfony/polyfill-php71": "~1.0",
+    "symfony/polyfill-php72": "~1.0",
+    "symfony/polyfill-iconv": "~1.0",
+    "symfony/polyfill-intl-grapheme": "~1.0",
+    "symfony/polyfill-intl-icu": "~1.0",
+    "symfony/polyfill-intl-normalizer": "~1.0",
+    "symfony/polyfill-mbstring": "~1.0",
+    "symfony/polyfill-util": "~1.0",
+    "symfony/polyfill-xml": "~1.0"
+        
+after:
+    "symfony/polyfill-php72": "~1.0",
+    "symfony/polyfill-iconv": "~1.0",
+    "symfony/polyfill-intl-grapheme": "~1.0",
+    "symfony/polyfill-intl-normalizer": "~1.0",
+    "symfony/polyfill-mbstring": "~1.0"
+
 ### 4.0.1 (2017-11-13)
 - [*]: update php-unit to 6.x
 
