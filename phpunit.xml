@@ -19,6 +19,9 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/</directory>
+            <exclude>
+                <directory>./src/voku/helper/data/</directory>
+            </exclude>
         </whitelist>
         <blacklist>
             <directory suffix=".php">./vendor</directory>

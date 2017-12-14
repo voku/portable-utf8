@@ -740,7 +740,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
     self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt', FILE_TEXT);
+    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
     self::assertContains(
         '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
         $testString
