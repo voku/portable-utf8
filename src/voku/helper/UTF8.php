@@ -5565,6 +5565,11 @@ final class UTF8
       $str_length = self::strlen($str, $encoding);
     }
 
+    // Empty string
+    if ($offset === $str_length && !$length) {
+      return '';
+    }
+
     // Impossible
     if ($offset && $offset > $str_length) {
       return false;
