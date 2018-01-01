@@ -1,7 +1,10 @@
 # Changelog
 
+### 5.0.1 (2018-01-01)
+- optimize "UTF8::is_binary()" + new tests
+
 ### 5.0.0 (2017-12-10)
-- [!]: "Fixed symfony/polyfill dependencies"
+- "Fixed symfony/polyfill dependencies"
 
 -> this is a breaking change, because "symfony/polyfill" contains more dependencies as we use now
 
@@ -29,10 +32,10 @@ after:
     "symfony/polyfill-mbstring": "~1.0"
 
 ### 4.0.1 (2017-11-13)
-- [*]: update php-unit to 6.x
+- update php-unit to 6.x
 
 ### 4.0.0 (2017-11-13)
-- [!]: "php": ">=7.0"
+- "php": ">=7.0"
   * drop support for PHP < 7.0
   * use "strict_types"
   * "UTF8::number_format()" -> removed deprecated method 
