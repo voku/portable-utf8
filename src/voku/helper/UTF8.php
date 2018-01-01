@@ -849,8 +849,20 @@ final class UTF8
     }
 
     if ($convertToUtf8 === true) {
-      $data = self::encode('UTF-8', $data, false);
-      $data = self::cleanup($data);
+      if (
+          self::is_binary($data) === true
+          &&
+          self::is_utf16($data) === false
+          &&
+          self::is_utf32($data) === false
+      ) {
+        // do nothing, it's binary and not UTF16 or UTF32
+      } else {
+
+        $data = self::encode('UTF-8', $data, false);
+        $data = self::cleanup($data);
+
+      }
     }
 
     return $data;
@@ -2150,12 +2162,18 @@ final class UTF8
     }
 
     $testLength = \strlen($input);
-    if ($testLength && \substr_count($input, "\x0") / $testLength > 0.3) {
-      return true;
+    if ($testLength) {
+      if ((\substr_count($input, "\x0") / $testLength) > 0.3) {
+        return true;
+      }
     }
 
-    if (\substr_count($input, "\x00") > 0) {
-      return true;
+    if (\class_exists('finfo')) {
+      $finfo = new \finfo(FILEINFO_MIME_ENCODING);
+      $finfo_encoding = $finfo->buffer($input);
+      if ($finfo_encoding && $finfo_encoding === 'binary') {
+        return true;
+      }
     }
 
     return false;
@@ -6224,7 +6242,7 @@ final class UTF8
 
       $newchar = $ord & 255;
 
-      if (isset($UTF8_TO_ASCII[$bank], $UTF8_TO_ASCII[$bank][$newchar])) {
+      if (isset($UTF8_TO_ASCII[$bank][$newchar])) {
 
         // keep for debugging
         /*

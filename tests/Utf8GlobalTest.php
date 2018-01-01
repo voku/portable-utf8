@@ -570,14 +570,14 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     foreach ($testArray as $actual => $expected) {
-      self::assertSame(true, $expected === UTF8::count_chars($actual), 'error by ' . $actual);
+      self::assertTrue($expected === UTF8::count_chars($actual), 'error by ' . $actual);
     }
 
     // added invalid UTF-8
     $testArray['白' . "\xa0\xa1" . '白'] = ['白' => 2];
 
     foreach ($testArray as $actual => $expected) {
-      self::assertSame(true, $expected === UTF8::count_chars($actual, true), 'error by ' . $actual);
+      self::assertTrue($expected === UTF8::count_chars($actual, true), 'error by ' . $actual);
     }
   }
 
@@ -807,13 +807,13 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // image: do not convert to utf-8 + timeout
     $image = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', false, $context, null, null, 10, false);
-    self::assertSame(true, UTF8::is_binary($image));
+    self::assertTrue(UTF8::is_binary($image));
 
     // image: convert to utf-8 + timeout (ERROR)
     $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', false, $context, null, null, 10, true);
-    self::assertFalse(UTF8::is_binary($image2));
+    self::assertTrue(UTF8::is_binary($image2));
 
-    self::assertNotEquals($image2, $image);
+    self::assertEquals($image2, $image);
   }
 
   public function testFilter()
@@ -1487,6 +1487,26 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsBinary()
   {
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.pdf'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/test.pdf');
+    self::assertTrue(UTF8::is_binary($testString1));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.pdf');
+    self::assertTrue(UTF8::is_binary($testString2));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/image.png'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/image.png');
+    self::assertTrue(UTF8::is_binary($testString1));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png');
+    self::assertTrue(UTF8::is_binary($testString2));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
     $tests = [
         'öäü'          => false,
         ''             => false,
@@ -1502,9 +1522,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         00000000       => true,
         "\x00\x01"     => true,
         "\x01\x00"     => true,
-        "\x01\x02"     => false,
-        "\x01\x01ab"   => false,
-        "\x01\x01b"    => false,
+        "\x01\x02"     => true,
+        "\x01\x01ab"   => true,
+        "\x01\x01b"    => true,
         "\x01\x00a"    => true, // >= 30% binary
     ];
 
@@ -2081,7 +2101,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     $result = UTF8::parse_str($str, $array, true);
 
-    self::assertSame(true, $result);
+    self::assertTrue($result);
 
     // bug is already reported: https://github.com/facebook/hhvm/issues/6340
     if (defined('HHVM_VERSION') === false) {
@@ -2102,7 +2122,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     $result = UTF8::parse_str($str, $array, false);
 
-    self::assertSame(true, $result);
+    self::assertTrue($result);
 
     // bug is already reported: https://github.com/facebook/hhvm/issues/6340
     if (defined('HHVM_VERSION') === false) {
@@ -2251,8 +2271,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
       );
 
       $test = UTF8::add_bom_to_string($test);
-      self::assertSame(true, UTF8::string_has_bom($test));
-      self::assertSame(true, UTF8::hasBom($test)); // alias
+      self::assertTrue(UTF8::string_has_bom($test));
+      self::assertTrue(UTF8::hasBom($test)); // alias
     }
   }
 
@@ -4593,8 +4613,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $urldecode_fix_win1252_chars = UTF8::urldecode_fix_win1252_chars();
 
-    self::assertSame(true, is_array($urldecode_fix_win1252_chars));
-    self::assertSame(true, count($urldecode_fix_win1252_chars) > 0);
+    self::assertTrue(is_array($urldecode_fix_win1252_chars));
+    self::assertTrue(count($urldecode_fix_win1252_chars) > 0);
   }
 
   public function testUtf8DecodeEncodeUtf8()
@@ -4723,7 +4743,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testUtf8FileWithBom()
   {
     $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8-bom.txt');
-    self::assertSame(true, $bom);
+    self::assertTrue($bom);
 
     $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8.txt');
     self::assertFalse($bom);
@@ -4931,8 +4951,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     $whitespace = UTF8::ws();
 
-    self::assertSame(true, is_array($whitespace));
-    self::assertSame(true, count($whitespace) > 0);
+    self::assertTrue(is_array($whitespace));
+    self::assertTrue(count($whitespace) > 0);
   }
 
   public function testcleanParameter()

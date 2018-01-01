@@ -143,13 +143,13 @@ class Bootup
   }
 
   /**
-   * Get random bytes via "random_bytes()" (+ polyfill).
+   * Get random bytes via "random_bytes()"
    *
-   * @ref https://github.com/paragonie/random_compat/
+   * @param  int $length <p>output length</p>
    *
-   * @param  int $length Output length
+   * @return  string|false <p>false on error</p>
    *
-   * @return  string|false false on error
+   * @throws \Exception <p>If it was not possible to gather sufficient entropy.</p>
    */
   public static function get_random_bytes($length)
   {
@@ -163,7 +163,7 @@ class Bootup
       return false;
     }
 
-    return random_bytes($length);
+    return \random_bytes($length);
   }
 
   /**
