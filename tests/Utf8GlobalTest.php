@@ -1602,6 +1602,10 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsBinaryStrict()
   {
+    if (\class_exists('finfo') === false) {
+      self::markTestSkipped('finfo is not supported');
+    }
+
     self::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/latin.txt'));
     $testString1 = file_get_contents(__DIR__ . '/fixtures/latin.txt');
     self::assertFalse(UTF8::is_binary($testString1, true));
