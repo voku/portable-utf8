@@ -821,6 +821,14 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png', false, $context, null, null, 10, true);
     self::assertTrue(UTF8::is_binary($image2));
 
+    // zip: do not convert to utf-8 + timeout
+    $image = UTF8::file_get_contents(__DIR__ . '/fixtures/test.zip', false, $context, null, null, 10, false);
+    self::assertTrue(UTF8::is_binary($image));
+
+    // zip: convert to utf-8 + timeout (ERROR)
+    $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.zip', false, $context, null, null, 10, true);
+    self::assertTrue(UTF8::is_binary($image2));
+
     self::assertEquals($image2, $image);
   }
 
@@ -1555,6 +1563,16 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.zip'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/test.zip');
+    self::assertTrue(UTF8::is_binary($testString1, false));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.zip');
+    self::assertTrue(UTF8::is_binary($testString2, false));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
     $tests = [
         'öäü'          => false,
         ''             => false,
@@ -1638,6 +1656,16 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $testString1 = file_get_contents(__DIR__ . '/fixtures/image_small.png');
     self::assertTrue(UTF8::is_binary($testString1, true));
     $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png');
+    self::assertTrue(UTF8::is_binary($testString2, true));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.zip'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/test.zip');
+    self::assertTrue(UTF8::is_binary($testString1, true));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.zip');
     self::assertTrue(UTF8::is_binary($testString2, true));
 
     self::assertEquals($testString1, $testString2);
@@ -2642,9 +2670,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '○●◎'                           => 'UTF-8',
         'öäü'                           => 'UTF-8', // ISO-8859-1
         ''                              => 'ASCII', // ASCII
-        '1'                             => 'ASCII', // ASCII
-        decbin(324546)                  => 'ASCII', // ASCII
-        01                              => 'ASCII', // ASCII
+        '1'                             => false, // binary
+        decbin(324546)           => false, // binary
+        01                              => false, // binary
     ];
 
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests

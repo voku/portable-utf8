@@ -775,13 +775,9 @@ final class UTF8
     $encodingDetected = self::str_detect_encoding($str);
 
     if (
-        $encodingDetected !== false
-        &&
-        (
-            $force === true
-            ||
-            $encodingDetected !== $encoding
-        )
+        $force === true
+        ||
+        $encodingDetected !== $encoding
     ) {
 
       if (
@@ -3728,6 +3724,7 @@ final class UTF8
         return 'UTF-32BE';
       }
 
+      return false;
     }
 
     //
