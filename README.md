@@ -357,7 +357,7 @@ Splits a string into smaller chunks and multiple lines, using the specified line
 UTF8::chunk_split('ABC-ÖÄÜ-中文空白-κόσμε', 3); // "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε"
 ```
 
-##### clean(string $str, bool $remove_bom = false, bool $normalize_whitespace = false, bool $normalize_msword = false, bool $keep_non_breaking_space = false) : string
+##### clean(string $str, bool $remove_bom = false, bool $normalize_whitespace = false, bool $normalize_msword = false, bool $keep_non_breaking_space = false, bool $replace_diamond_question_mark = false, bool $remove_invisible_characters = true) : string
 
 Accepts a string and removes all non-UTF-8 characters from it + extras if needed.
 
@@ -622,7 +622,7 @@ alias: UTF8::isBase64()
 UTF8::is_base64('4KSu4KWL4KSo4KS/4KSa'); // true
 ```
 
-##### is_binary(mixed $input) : bool
+##### is_binary(mixed $input, bool $strict = false) : bool
 
 Check if the input is binary... (is look like a hack).
 

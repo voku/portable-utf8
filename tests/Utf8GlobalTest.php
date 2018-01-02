@@ -813,6 +813,14 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', false, $context, null, null, 10, true);
     self::assertTrue(UTF8::is_binary($image2));
 
+    // image: do not convert to utf-8 + timeout
+    $image = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png', false, $context, null, null, 10, false);
+    self::assertTrue(UTF8::is_binary($image));
+
+    // image: convert to utf-8 + timeout (ERROR)
+    $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png', false, $context, null, null, 10, true);
+    self::assertTrue(UTF8::is_binary($image2));
+
     self::assertEquals($image2, $image);
   }
 
@@ -1485,13 +1493,43 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     }
   }
 
-  public function testIsBinary()
+  public function testIsBinaryNonStrict()
   {
+    self::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/latin.txt'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/latin.txt');
+    self::assertFalse(UTF8::is_binary($testString1, false));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
+    self::assertFalse(UTF8::is_binary($testString2, false));
+
+    self::assertEquals(UTF8::to_utf8($testString1), $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.xlsx'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/test.xlsx');
+    self::assertTrue(UTF8::is_binary($testString1, false));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.xlsx');
+    self::assertTrue(UTF8::is_binary($testString2, false));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.xls'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/test.xls');
+    self::assertTrue(UTF8::is_binary($testString1, false));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.xls');
+    self::assertTrue(UTF8::is_binary($testString2, false));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
     self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.pdf'));
     $testString1 = file_get_contents(__DIR__ . '/fixtures/test.pdf');
-    self::assertTrue(UTF8::is_binary($testString1));
+    self::assertTrue(UTF8::is_binary($testString1, false));
     $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.pdf');
-    self::assertTrue(UTF8::is_binary($testString2));
+    self::assertTrue(UTF8::is_binary($testString2, false));
 
     self::assertEquals($testString1, $testString2);
 
@@ -1499,9 +1537,108 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/image.png'));
     $testString1 = file_get_contents(__DIR__ . '/fixtures/image.png');
-    self::assertTrue(UTF8::is_binary($testString1));
+    self::assertTrue(UTF8::is_binary($testString1, false));
     $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png');
-    self::assertTrue(UTF8::is_binary($testString2));
+    self::assertTrue(UTF8::is_binary($testString2, false));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/image_small.png'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/image_small.png');
+    self::assertTrue(UTF8::is_binary($testString1, false));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png');
+    self::assertTrue(UTF8::is_binary($testString2, false));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
+    $tests = [
+        'öäü'          => false,
+        ''             => false,
+        '1'            => false,
+        '01010101'     => true,
+        decbin(324546) => true,
+        01             => true,
+        1020304        => false,
+        01020304       => false,
+        11020304       => false,
+        '1010101'      => true,
+        11111111       => true,
+        00000000       => true,
+        "\x00\x01"     => true,
+        "\x01\x00"     => true,
+        "\x01\x02"     => false,
+        "\x01\x01ab"   => false,
+        "\x01\x01b"    => false,
+        "\x01\x00a"    => true, // >= 30% binary
+    ];
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::isBinary($before, false), 'value: ' . $before);
+      self::assertSame($after, UTF8::is_binary($before, false), 'value: ' . $before);
+    }
+  }
+
+  public function testIsBinaryStrict()
+  {
+    self::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/latin.txt'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/latin.txt');
+    self::assertFalse(UTF8::is_binary($testString1, true));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
+    self::assertFalse(UTF8::is_binary($testString2, true));
+
+    self::assertEquals(UTF8::to_utf8($testString1), $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.xlsx'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/test.xlsx');
+    self::assertTrue(UTF8::is_binary($testString1, true));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.xlsx');
+    self::assertTrue(UTF8::is_binary($testString2, true));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.xls'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/test.xls');
+    self::assertTrue(UTF8::is_binary($testString1, true));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.xls');
+    self::assertTrue(UTF8::is_binary($testString2, true));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.pdf'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/test.pdf');
+    self::assertTrue(UTF8::is_binary($testString1, true));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.pdf');
+    self::assertTrue(UTF8::is_binary($testString2, true));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/image.png'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/image.png');
+    self::assertTrue(UTF8::is_binary($testString1, true));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png');
+    self::assertTrue(UTF8::is_binary($testString2, true));
+
+    self::assertEquals($testString1, $testString2);
+
+    // ---
+
+    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/image_small.png'));
+    $testString1 = file_get_contents(__DIR__ . '/fixtures/image_small.png');
+    self::assertTrue(UTF8::is_binary($testString1, true));
+    $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png');
+    self::assertTrue(UTF8::is_binary($testString2, true));
 
     self::assertEquals($testString1, $testString2);
 
@@ -1529,8 +1666,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::isBinary($before), 'value: ' . $before);
-      self::assertSame($after, UTF8::is_binary($before), 'value: ' . $before);
+      self::assertSame($after, UTF8::isBinary($before, true), 'value: ' . $before);
+      self::assertSame($after, UTF8::is_binary($before, true), 'value: ' . $before);
     }
   }
 

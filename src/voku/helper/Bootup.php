@@ -7,8 +7,6 @@ namespace voku\helper;
 /**
  * Class Bootup
  *
- * this is a bootstrap for the polyfills (iconv / intl / mbstring / normalizer / xml)
- *
  * @package voku\helper
  */
 class Bootup

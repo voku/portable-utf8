@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.0.2 (2018-01-02)
+- optimize "UTF8::is_binary()" v2
+- edit "UTF8::clean()" -> do not remote diamond question mark by default
+  -> fix for e.g. UTF8::file_get_contents() + auto encoding detection
+
 ### 5.0.1 (2018-01-01)
 - optimize "UTF8::is_binary()" + new tests
 

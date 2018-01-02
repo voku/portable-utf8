@@ -250,6 +250,39 @@ final class UTF8
   }
 
   /**
+   * Changes all keys in an array.
+   *
+   * @param array $array <p>The array to work on</p>
+   * @param int   $case  [optional] <p> Either <strong>CASE_UPPER</strong><br>
+   *                     or <strong>CASE_LOWER</strong> (default)</p>
+   *
+   * @return array <p>An array with its keys lower or uppercased.</p>
+   */
+  public static function array_change_key_case(array $array, int $case = CASE_LOWER): array
+  {
+    if (
+        $case !== CASE_LOWER
+        &&
+        $case !== CASE_UPPER
+    ) {
+      $case = CASE_LOWER;
+    }
+
+    $return = [];
+    foreach ($array as $key => $value) {
+      if ($case === CASE_LOWER) {
+        $key = self::strtolower($key);
+      } else {
+        $key = self::strtoupper($key);
+      }
+
+      $return[$key] = $value;
+    }
+
+    return $return;
+  }
+
+  /**
    * Convert binary into an string.
    *
    * @param mixed $bin 1|0
@@ -556,17 +589,24 @@ final class UTF8
   /**
    * Accepts a string and removes all non-UTF-8 characters from it + extras if needed.
    *
-   * @param string $str                     <p>The string to be sanitized.</p>
-   * @param bool   $remove_bom              [optional] <p>Set to true, if you need to remove UTF-BOM.</p>
-   * @param bool   $normalize_whitespace    [optional] <p>Set to true, if you need to normalize the whitespace.</p>
-   * @param bool   $normalize_msword        [optional] <p>Set to true, if you need to normalize MS Word chars e.g.: "…"
-   *                                        => "..."</p>
-   * @param bool   $keep_non_breaking_space [optional] <p>Set to true, to keep non-breaking-spaces, in combination with
-   *                                        $normalize_whitespace</p>
+   * @param string $str                           <p>The string to be sanitized.</p>
+   * @param bool   $remove_bom                    [optional] <p>Set to true, if you need to remove UTF-BOM.</p>
+   * @param bool   $normalize_whitespace          [optional] <p>Set to true, if you need to normalize the
+   *                                              whitespace.</p>
+   * @param bool   $normalize_msword              [optional] <p>Set to true, if you need to normalize MS Word chars
+   *                                              e.g.: "…"
+   *                                              => "..."</p>
+   * @param bool   $keep_non_breaking_space       [optional] <p>Set to true, to keep non-breaking-spaces, in
+   *                                              combination with
+   *                                              $normalize_whitespace</p>
+   * @param bool   $replace_diamond_question_mark [optional] <p>Set to true, if you need to remove diamond question
+   *                                              mark e.g.: "�"</p>
+   * @param bool   $remove_invisible_characters   [optional] <p>Set to false, if you not want to remove invisible
+   *                                              characters e.g.: "\0"</p>
    *
    * @return string <p>Clean UTF-8 encoded string.</p>
    */
-  public static function clean(string $str, bool $remove_bom = false, bool $normalize_whitespace = false, bool $normalize_msword = false, bool $keep_non_breaking_space = false): string
+  public static function clean(string $str, bool $remove_bom = false, bool $normalize_whitespace = false, bool $normalize_msword = false, bool $keep_non_breaking_space = false, bool $replace_diamond_question_mark = false, bool $remove_invisible_characters = true): string
   {
     // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
     // caused connection reset problem on larger strings
@@ -584,8 +624,13 @@ final class UTF8
     /x';
     $str = (string)\preg_replace($regx, '$1', $str);
 
-    $str = self::replace_diamond_question_mark($str, '');
-    $str = self::remove_invisible_characters($str);
+    if ($replace_diamond_question_mark === true) {
+      $str = self::replace_diamond_question_mark($str, '');
+    }
+
+    if ($remove_invisible_characters === true) {
+      $str = self::remove_invisible_characters($str);
+    }
 
     if ($normalize_whitespace === true) {
       $str = self::normalize_whitespace($str, $keep_non_breaking_space);
@@ -623,7 +668,15 @@ final class UTF8
     // && remove remove invisible characters (e.g. "\0")
     // && remove BOM
     // && normalize whitespace chars (but keep non-breaking-spaces)
-    $str = self::clean($str, true, true, false, true);
+    $str = self::clean(
+        $str,
+        true,
+        true,
+        false,
+        true,
+        true,
+        true
+    );
 
     return $str;
   }
@@ -813,7 +866,7 @@ final class UTF8
    * @param int           $timeout          <p>The time in seconds for the timeout.</p>
    *
    * @param bool          $convertToUtf8    <strong>WARNING!!!</strong> <p>Maybe you can't use this option for e.g.
-   *                                        images or pdf, because they used non default utf-8 chars</p>
+   *                                        images or pdf, because they used non default utf-8 chars.</p>
    *
    * @return string|false <p>The function returns the read data or false on failure.</p>
    */
@@ -850,7 +903,7 @@ final class UTF8
 
     if ($convertToUtf8 === true) {
       if (
-          self::is_binary($data) === true
+          self::is_binary($data, true) === true
           &&
           self::is_utf16($data) === false
           &&
@@ -2003,14 +2056,15 @@ final class UTF8
    * @see        UTF8::is_binary()
    *
    * @param mixed $str
+   * @param bool  $strict
    *
    * @return bool
    *
    * @deprecated <p>use "UTF8::is_binary()"</p>
    */
-  public static function isBinary($str): bool
+  public static function isBinary($str, $strict = false): bool
   {
-    return self::is_binary($str);
+    return self::is_binary($str, $strict);
   }
 
   /**
@@ -2147,10 +2201,11 @@ final class UTF8
    * Check if the input is binary... (is look like a hack).
    *
    * @param mixed $input
+   * @param bool  $strict
    *
    * @return bool
    */
-  public static function is_binary($input): bool
+  public static function is_binary($input, $strict = false): bool
   {
     $input = (string)$input;
     if (!isset($input[0])) {
@@ -2161,19 +2216,34 @@ final class UTF8
       return true;
     }
 
+    $testNull = 0;
     $testLength = \strlen($input);
     if ($testLength) {
-      if ((\substr_count($input, "\x0") / $testLength) > 0.3) {
+      $testNull = \substr_count($input, "\x0");
+      if (($testNull / $testLength) > 0.3) {
         return true;
       }
     }
 
-    if (\class_exists('finfo')) {
+    if (
+        $strict === true
+        &&
+        \class_exists('finfo')
+    ) {
+
       $finfo = new \finfo(FILEINFO_MIME_ENCODING);
       $finfo_encoding = $finfo->buffer($input);
       if ($finfo_encoding && $finfo_encoding === 'binary') {
         return true;
       }
+
+
+    } else {
+
+      if ($testNull > 0) {
+        return true;
+      }
+
     }
 
     return false;
@@ -2196,7 +2266,7 @@ final class UTF8
       $block = '';
     }
 
-    return self::is_binary($block);
+    return self::is_binary($block, true);
   }
 
   /**
@@ -2277,48 +2347,55 @@ final class UTF8
    */
   public static function is_utf16(string $str)
   {
+    if (self::is_binary($str) === false) {
+      return false;
+    }
+
+    // init
+    $strChars = [];
+
     $str = self::remove_bom($str);
 
-    if (self::is_binary($str) === true) {
-
-      $maybeUTF16LE = 0;
-      $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16LE');
-      if ($test) {
-        $test2 = \mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
-        $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
-        if ($test3 === $test) {
+    $maybeUTF16LE = 0;
+    $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16LE');
+    if ($test) {
+      $test2 = \mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
+      $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
+      if ($test3 === $test) {
+        if (\count($strChars) === 0) {
           $strChars = self::count_chars($str, true);
-          foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
-            if (\in_array($test3char, $strChars, true) === true) {
-              $maybeUTF16LE++;
-            }
+        }
+        foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
+          if (\in_array($test3char, $strChars, true) === true) {
+            $maybeUTF16LE++;
           }
         }
       }
+    }
 
-      $maybeUTF16BE = 0;
-      $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16BE');
-      if ($test) {
-        $test2 = \mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
-        $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
-        if ($test3 === $test) {
+    $maybeUTF16BE = 0;
+    $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16BE');
+    if ($test) {
+      $test2 = \mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
+      $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
+      if ($test3 === $test) {
+        if (\count($strChars) === 0) {
           $strChars = self::count_chars($str, true);
-          foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
-            if (\in_array($test3char, $strChars, true) === true) {
-              $maybeUTF16BE++;
-            }
+        }
+        foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
+          if (\in_array($test3char, $strChars, true) === true) {
+            $maybeUTF16BE++;
           }
         }
       }
+    }
 
-      if ($maybeUTF16BE !== $maybeUTF16LE) {
-        if ($maybeUTF16LE > $maybeUTF16BE) {
-          return 1;
-        }
-
-        return 2;
+    if ($maybeUTF16BE !== $maybeUTF16LE) {
+      if ($maybeUTF16LE > $maybeUTF16BE) {
+        return 1;
       }
 
+      return 2;
     }
 
     return false;
@@ -2337,48 +2414,55 @@ final class UTF8
    */
   public static function is_utf32(string $str)
   {
+    if (self::is_binary($str) === false) {
+      return false;
+    }
+
+    // init
+    $strChars = [];
+
     $str = self::remove_bom($str);
 
-    if (self::is_binary($str) === true) {
-
-      $maybeUTF32LE = 0;
-      $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32LE');
-      if ($test) {
-        $test2 = \mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
-        $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
-        if ($test3 === $test) {
+    $maybeUTF32LE = 0;
+    $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32LE');
+    if ($test) {
+      $test2 = \mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
+      $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
+      if ($test3 === $test) {
+        if (\count($strChars) === 0) {
           $strChars = self::count_chars($str, true);
-          foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
-            if (\in_array($test3char, $strChars, true) === true) {
-              $maybeUTF32LE++;
-            }
+        }
+        foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
+          if (\in_array($test3char, $strChars, true) === true) {
+            $maybeUTF32LE++;
           }
         }
       }
+    }
 
-      $maybeUTF32BE = 0;
-      $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32BE');
-      if ($test) {
-        $test2 = \mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
-        $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
-        if ($test3 === $test) {
+    $maybeUTF32BE = 0;
+    $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32BE');
+    if ($test) {
+      $test2 = \mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
+      $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
+      if ($test3 === $test) {
+        if (\count($strChars) === 0) {
           $strChars = self::count_chars($str, true);
-          foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
-            if (\in_array($test3char, $strChars, true) === true) {
-              $maybeUTF32BE++;
-            }
+        }
+        foreach (self::count_chars($test3, true) as $test3char => $test3charEmpty) {
+          if (\in_array($test3char, $strChars, true) === true) {
+            $maybeUTF32BE++;
           }
         }
       }
+    }
 
-      if ($maybeUTF32BE !== $maybeUTF32LE) {
-        if ($maybeUTF32LE > $maybeUTF32BE) {
-          return 1;
-        }
-
-        return 2;
+    if ($maybeUTF32BE !== $maybeUTF32LE) {
+      if ($maybeUTF32LE > $maybeUTF32BE) {
+        return 1;
       }
 
+      return 2;
     }
 
     return false;
@@ -2972,7 +3056,6 @@ final class UTF8
 
     if ($UTF8_MSWORD_KEYS_CACHE === null) {
 
-
       if (self::$UTF8_MSWORD === null) {
         self::$UTF8_MSWORD = self::getData('utf8_msword');
       }
@@ -3025,24 +3108,6 @@ final class UTF8
     }
 
     return \str_replace($WHITESPACE_CACHE[$cacheKey], ' ', $str);
-  }
-
-  /**
-   * Strip all whitespace characters. This includes tabs and newline
-   * characters, as well as multibyte whitespace such as the thin space
-   * and ideographic space.
-   *
-   * @param string $str
-   *
-   * @return string
-   */
-  public static function strip_whitespace(string $str): string
-  {
-    if (!isset($str[0])) {
-      return '';
-    }
-
-    return (string)\preg_replace('/[[:space:]]+/u', '', $str);
   }
 
   /**
@@ -3645,7 +3710,7 @@ final class UTF8
     // 1.) check binary strings (010001001...) like UTF-16 / UTF-32
     //
 
-    if (self::is_binary($str) === true) {
+    if (self::is_binary($str, true) === true) {
 
       if (self::is_utf16($str) === 1) {
         return 'UTF-16LE';
@@ -4437,6 +4502,24 @@ final class UTF8
     }
 
     return \strip_tags($str, $allowable_tags);
+  }
+
+  /**
+   * Strip all whitespace characters. This includes tabs and newline
+   * characters, as well as multibyte whitespace such as the thin space
+   * and ideographic space.
+   *
+   * @param string $str
+   *
+   * @return string
+   */
+  public static function strip_whitespace(string $str): string
+  {
+    if (!isset($str[0])) {
+      return '';
+    }
+
+    return (string)\preg_replace('/[[:space:]]+/u', '', $str);
   }
 
   /**
@@ -5509,39 +5592,6 @@ final class UTF8
   }
 
   /**
-   * Changes all keys in an array.
-   *
-   * @param array $array <p>The array to work on</p>
-   * @param int   $case  [optional] <p> Either <strong>CASE_UPPER</strong><br>
-   *                     or <strong>CASE_LOWER</strong> (default)</p>
-   *
-   * @return array <p>An array with its keys lower or uppercased.</p>
-   */
-  public static function array_change_key_case(array $array, int $case = CASE_LOWER): array
-  {
-    if (
-        $case !== CASE_LOWER
-        &&
-        $case !== CASE_UPPER
-    ) {
-      $case = CASE_LOWER;
-    }
-
-    $return = [];
-    foreach ($array as $key => $value) {
-      if ($case === CASE_LOWER) {
-        $key = self::strtolower($key);
-      } else {
-        $key = self::strtoupper($key);
-      }
-
-      $return[$key] = $value;
-    }
-
-    return $return;
-  }
-
-  /**
    * Get part of a string.
    *
    * @link http://php.net/manual/en/function.mb-substr.php
@@ -6138,7 +6188,15 @@ final class UTF8
       return $str;
     }
 
-    $str = self::clean($str, true, true, true);
+    $str = self::clean(
+        $str,
+        true,
+        true,
+        true,
+        false,
+        true,
+        true
+    );
 
     // check again, if we only have ASCII, now ...
     if (self::is_ascii($str) === true) {
