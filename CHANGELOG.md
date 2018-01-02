@@ -1,12 +1,20 @@
 # Changelog
 
+### 5.0.3 (2018-01-02)
+- fix tests without "finfo" (e.g. appveyor - windows)
+- optimize "UTF8::str_detect_encoding()"
+  -> return "false" if we detect binary data, but not for UTF-16 / UTF-32
+
+
 ### 5.0.2 (2018-01-02)
 - optimize "UTF8::is_binary()" v2
 - edit "UTF8::clean()" -> do not remote diamond question mark by default
   -> fix for e.g. UTF8::file_get_contents() + auto encoding detection
 
+
 ### 5.0.1 (2018-01-01)
 - optimize "UTF8::is_binary()" + new tests
+
 
 ### 5.0.0 (2017-12-10)
 - "Fixed symfony/polyfill dependencies"
@@ -36,8 +44,10 @@ after:
     "symfony/polyfill-intl-normalizer": "~1.0",
     "symfony/polyfill-mbstring": "~1.0"
 
+
 ### 4.0.1 (2017-11-13)
 - update php-unit to 6.x
+
 
 ### 4.0.0 (2017-11-13)
 - "php": ">=7.0"
