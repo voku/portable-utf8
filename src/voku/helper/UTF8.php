@@ -2205,7 +2205,7 @@ final class UTF8
    *
    * @return bool
    */
-  public static function is_binary($input, $strict = false): bool
+  public static function is_binary($input, bool $strict = false): bool
   {
     $input = (string)$input;
     if (!isset($input[0])) {
