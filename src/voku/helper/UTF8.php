@@ -386,12 +386,14 @@ final class UTF8
       self::checkForSupport();
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
     if (
         $encoding !== 'UTF-8'
+        &&
+        $encoding !== 'ISO-8859-1'
         &&
         $encoding !== 'WINDOWS-1252'
         &&
@@ -490,11 +492,22 @@ final class UTF8
       return [];
     }
 
+    $strSplit = self::split($str);
+
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      return \array_map(
+          function ($data) {
+            return UTF8::strlen($data, 'CP850'); // 8-BIT
+          },
+          $strSplit
+      );
+    }
+
     return \array_map(
         function ($data) {
-          return UTF8::strlen($data, '8BIT');
+          return strlen($data);
         },
-        self::split($str)
+        $strSplit
     );
   }
 
@@ -764,7 +777,7 @@ final class UTF8
       return $str;
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -808,6 +821,8 @@ final class UTF8
 
       if (
           $encoding !== 'UTF-8'
+          &&
+          $encoding !== 'ISO-8859-1'
           &&
           $encoding !== 'WINDOWS-1252'
           &&
@@ -1523,7 +1538,7 @@ final class UTF8
       return '';
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -1644,7 +1659,7 @@ final class UTF8
       return $str;
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -1654,6 +1669,8 @@ final class UTF8
 
     if (
         $encoding !== 'UTF-8'
+        &&
+        $encoding !== 'ISO-8859-1'
         &&
         $encoding !== 'WINDOWS-1252'
         &&
@@ -1796,7 +1813,7 @@ final class UTF8
    */
   public static function htmlentities(string $str, int $flags = ENT_COMPAT, string $encoding = 'UTF-8', bool $double_encode = true): string
   {
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -1812,25 +1829,7 @@ final class UTF8
      */
     $str = \str_replace('\\', '&#92;', $str);
 
-    if ($encoding !== 'UTF-8') {
-      return $str;
-    }
-
-    $byteLengths = self::chr_size_list($str);
-    $search = [];
-    $replacements = [];
-    foreach ($byteLengths as $counter => $byteLength) {
-      if ($byteLength >= 3) {
-        $char = self::access($str, $counter);
-
-        if (!isset($replacements[$char])) {
-          $search[$char] = $char;
-          $replacements[$char] = self::html_encode($char);
-        }
-      }
-    }
-
-    return \str_replace($search, $replacements, $str);
+    return self::html_encode($str, true, $encoding);
   }
 
   /**
@@ -1944,7 +1943,7 @@ final class UTF8
    */
   public static function htmlspecialchars(string $str, int $flags = ENT_COMPAT, string $encoding = 'UTF-8', bool $double_encode = true): string
   {
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -3127,7 +3126,7 @@ final class UTF8
     // save the original string
     $chr_orig = $chr;
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
 
       // check again, if it's still not UTF-8
@@ -3154,7 +3153,7 @@ final class UTF8
     }
 
     /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-    $chr = \unpack('C*', (string)self::substr($chr, 0, 4, '8BIT'));
+    $chr = \unpack('C*', (string)self::substr($chr, 0, 4, 'CP850'));
     $code = $chr ? $chr[1] : 0;
 
     if (0xF0 <= $code && isset($chr[4])) {
@@ -3335,8 +3334,8 @@ final class UTF8
     }
 
     foreach (self::$BOM as $bomString => $bomByteLength) {
-      if (0 === self::strpos($str, $bomString, 0, '8BIT')) {
-        $strTmp = self::substr($str, $bomByteLength, null, '8BIT');
+      if (0 === self::strpos($str, $bomString, 0, 'CP850')) {
+        $strTmp = self::substr($str, $bomByteLength, null, 'CP850');
         if ($strTmp === false) {
           $strTmp = '';
         }
@@ -3565,7 +3564,7 @@ final class UTF8
       return $char;
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -3697,13 +3696,13 @@ final class UTF8
    *
    * @return false|string <p>
    *                      The detected string-encoding e.g. UTF-8 or UTF-16BE,<br>
-   *                      otherwise it will return false.
+   *                      otherwise it will return false e.g. for BINARY or not detected encoding.
    *                      </p>
    */
   public static function str_detect_encoding(string $str)
   {
     //
-    // 1.) check binary strings (010001001...) like UTF-16 / UTF-32
+    // 1.) check binary strings (010001001...) like UTF-16 / UTF-32 / PDF / Images / ...
     //
 
     if (self::is_binary($str, true) === true) {
@@ -3724,6 +3723,7 @@ final class UTF8
         return 'UTF-32BE';
       }
 
+      // is binary but not "UTF-16" or "UTF-32"
       return false;
     }
 
@@ -4548,7 +4548,7 @@ final class UTF8
       $needle = self::clean($needle);
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -4588,7 +4588,7 @@ final class UTF8
       return false;
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -4662,7 +4662,7 @@ final class UTF8
       return 0;
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -4673,7 +4673,6 @@ final class UTF8
     switch ($encoding) {
       case 'ASCII':
       case 'CP850':
-      case '8BIT':
         if (
             $encoding === 'CP850'
             &&
@@ -4682,7 +4681,7 @@ final class UTF8
           return \strlen($str);
         }
 
-        return \mb_strlen($str, '8BIT');
+        return \mb_strlen($str, 'CP850'); // 8-BIT
     }
 
     if ($cleanUtf8 === true) {
@@ -4761,7 +4760,7 @@ final class UTF8
   public static function strlen_in_byte(string $str): int
   {
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
-      $len = \mb_strlen($str, '8BIT');
+      $len = \mb_strlen($str, 'CP850'); // 8-BIT
     } else {
       $len = \strlen($str);
     }
@@ -4901,7 +4900,7 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5032,7 +5031,7 @@ final class UTF8
    */
   public static function strrchr(string $haystack, string $needle, bool $before_needle = false, string $encoding = 'UTF-8', bool $cleanUtf8 = false)
   {
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5088,7 +5087,7 @@ final class UTF8
    */
   public static function strrichr(string $haystack, string $needle, bool $before_needle = false, string $encoding = 'UTF-8', bool $cleanUtf8 = false)
   {
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5132,7 +5131,7 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5203,7 +5202,7 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5311,7 +5310,7 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5425,7 +5424,7 @@ final class UTF8
       $str = self::clean($str);
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5490,7 +5489,7 @@ final class UTF8
       $str = self::clean($str);
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5574,7 +5573,7 @@ final class UTF8
    */
   public static function strwidth(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false): int
   {
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5646,7 +5645,7 @@ final class UTF8
       $length = (int)$length;
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -5804,7 +5803,7 @@ final class UTF8
       $haystack = (string)$haystackTmp;
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -6069,7 +6068,7 @@ final class UTF8
       return '';
     }
 
-    if ($encoding !== 'UTF-8') {
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
@@ -7008,7 +7007,7 @@ final class UTF8
       }
     }
 
-    $return = (string)self::substr($str, 0, $j, '8BIT');
+    $return = (string)self::substr($str, 0, $j, 'CP850'); // 8-BIT
 
     if (
         $keepUtf8Chars === true
