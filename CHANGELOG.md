@@ -1,5 +1,12 @@
 # Changelog
 
+### 5.0.4 (2018-01-07)
+- performance optimizing
+  -> use "UTF8::normalize_encoding()" if needed
+  -> use "CP850" encoding only if needed
+  -> don't use "UTF8::html_encode()" in a foreach-loop
+
+
 ### 5.0.3 (2018-01-02)
 - fix tests without "finfo" (e.g. appveyor - windows)
 - optimize "UTF8::str_detect_encoding()"
