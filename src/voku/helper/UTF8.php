@@ -505,7 +505,7 @@ final class UTF8
 
     return \array_map(
         function ($data) {
-          return strlen($data);
+          return \strlen($data);
         },
         $strSplit
     );
