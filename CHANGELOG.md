@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.0.5 (2018-02-14)
+- update -> "require-dev" -> "phpunit"
+
+
 ### 5.0.4 (2018-01-07)
 - performance optimizing
   -> use "UTF8::normalize_encoding()" if needed
