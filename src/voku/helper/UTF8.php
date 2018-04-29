@@ -3766,8 +3766,20 @@ final class UTF8
         'WINDOWS-1251',
         'WINDOWS-1252',
         'WINDOWS-1254',
+        'CP932',
+        'CP936',
+        'CP950',
+        'CP866',
+        'CP850',
+        'CP51932',
+        'CP50220',
+        'CP50221',
+        'CP50222',
         'ISO-2022-JP',
+        'ISO-2022-KR',
         'JIS',
+        'JIS-ms',
+        'EUC-CN',
         'EUC-JP',
     ];
 
@@ -6207,6 +6219,8 @@ final class UTF8
       if (self::$SUPPORT['intl'] === true) {
 
         // HACK for issue from "transliterator_transliterate()"
+        //
+        // bug is already reported: https://bugs.php.net/bug.php?id=76286
         $str = \str_replace(
             'ℌ',
             'H',
