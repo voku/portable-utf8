@@ -6227,7 +6227,7 @@ final class UTF8
             $str
         );
 
-        $str = transliterator_transliterate('NFD; [:Nonspacing Mark:] Remove; NFC; Any-Latin; Latin-ASCII;', $str);
+        $str = \transliterator_transliterate('NFD; [:Nonspacing Mark:] Remove; NFC; Any-Latin; Latin-ASCII;', $str);
 
         // check again, if we only have ASCII, now ...
         if (self::is_ascii($str) === true) {
