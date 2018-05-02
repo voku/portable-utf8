@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.0.6 (2018-05-02)
+- fix "UTF8::to_ascii()"
+
 ### 5.0.5 (2018-02-14)
 - update -> "require-dev" -> "phpunit"
 
