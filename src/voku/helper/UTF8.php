@@ -913,19 +913,16 @@ final class UTF8
     }
 
     if ($convertToUtf8 === true) {
+      // only for non binary, but also for UTF-16 or UTF-32
       if (
-          self::is_binary($data, true) === true
-          &&
-          self::is_utf16($data) === false
-          &&
-          self::is_utf32($data) === false
+          self::is_binary($data, true) !== true
+          ||
+          self::is_utf16($data) !== false
+          ||
+          self::is_utf32($data) !== false
       ) {
-        // do nothing, it's binary and not UTF16 or UTF32
-      } else {
-
         $data = self::encode('UTF-8', $data, false);
         $data = self::cleanup($data);
-
       }
     }
 
@@ -5441,6 +5438,7 @@ final class UTF8
     }
 
     if ($lang !== null) {
+
       if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
         self::checkForSupport();
       }
@@ -5506,6 +5504,7 @@ final class UTF8
     }
 
     if ($lang !== null) {
+
       if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
         self::checkForSupport();
       }
@@ -6212,22 +6211,14 @@ final class UTF8
     }
 
     if ($strict === true) {
+
       if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
         self::checkForSupport();
       }
 
       if (self::$SUPPORT['intl'] === true) {
-
-        // HACK for issue from "transliterator_transliterate()"
-        //
-        // bug is already reported: https://bugs.php.net/bug.php?id=76286
-        $str = \str_replace(
-            'ℌ',
-            'H',
-            $str
-        );
-
-        $str = \transliterator_transliterate('NFD; [:Nonspacing Mark:] Remove; NFC; Any-Latin; Latin-ASCII;', $str);
+        // INFO: https://unicode.org/cldr/utility/character.jsp?a=%E2%84%8C
+        $str = \transliterator_transliterate('NFKC; [:Nonspacing Mark:] Remove; NFKC; Any-Latin; Latin-ASCII;', $str);
 
         // check again, if we only have ASCII, now ...
         if (self::is_ascii($str) === true) {
