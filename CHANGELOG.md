@@ -2,6 +2,9 @@
 
 ### 5.0.6 (2018-05-02)
 - fix "UTF8::to_ascii()"
+- update encoding list for "UTF8::str_detect_encoding()"
+- use root namespaces for php functions
+
 
 ### 5.0.5 (2018-02-14)
 - update -> "require-dev" -> "phpunit"
