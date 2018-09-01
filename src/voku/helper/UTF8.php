@@ -2620,7 +2620,7 @@ final class UTF8
         return true;
       }
 
-    } else if ($testNull > 0) {
+    } elseif ($testNull > 0) {
 
       return true;
 
