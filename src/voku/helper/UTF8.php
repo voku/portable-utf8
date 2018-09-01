@@ -3495,9 +3495,14 @@ final class UTF8
 
   private static function mbstring_overloaded(): bool
   {
+    /**
+     * @noinspection PhpUsageOfSilenceOperatorInspection
+     *
+     * INI directive 'mbstring.func_overload' is deprecated since PHP 7.2
+     */
     return \defined('MB_OVERLOAD_STRING')
            &&
-           (\ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING);
+           (@\ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING);
   }
 
   /**
