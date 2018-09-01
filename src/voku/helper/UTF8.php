@@ -414,11 +414,21 @@ final class UTF8
           &&
           \function_exists('transliterator_list_ids') === true
       ) {
+        /** @noinspection PhpComposerExtensionStubsInspection */
         self::$SUPPORT['intl__transliterator_list_ids'] = \transliterator_list_ids();
       }
 
       // http://php.net/manual/en/class.intlchar.php
       self::$SUPPORT['intlChar'] = self::intlChar_loaded();
+
+      // http://php.net/manual/en/book.ctype.php
+      self::$SUPPORT['ctype'] = self::ctype_loaded();
+
+      // http://php.net/manual/en/class.finfo.php
+      self::$SUPPORT['finfo'] = self::finfo_loaded();
+
+      // http://php.net/manual/en/book.json.php
+      self::$SUPPORT['json'] = self::json_loaded();
 
       // http://php.net/manual/en/book.pcre.php
       self::$SUPPORT['pcre_utf8'] = self::pcre_utf8_support();
@@ -481,6 +491,7 @@ final class UTF8
     }
 
     if (self::$SUPPORT['intlChar'] === true) {
+      /** @noinspection PhpComposerExtensionStubsInspection */
       $chr = \IntlChar::chr($code_point);
 
       if ($encoding !== 'UTF-8') {
@@ -897,12 +908,12 @@ final class UTF8
     //var_dump($encoding, $encodingDetected, $str, "\n\n");
 
     if (
-        $encodingDetected !== false
-        &&
+        $force === true
+        ||
         (
-          $force === true
-          ||
-          $encodingDetected !== $encoding
+            $encodingDetected !== false
+            &&
+            $encodingDetected !== $encoding
         )
     ) {
 
@@ -947,7 +958,7 @@ final class UTF8
       $strEncoded = \mb_convert_encoding(
           $str,
           $encoding,
-          $encodingDetected
+          ($force === true ? $encoding : $encodingDetected)
       );
 
       if ($strEncoded) {
@@ -1194,7 +1205,7 @@ final class UTF8
   public static function offset_exists($offset, string $str, string $encoding = 'UTF-8'): bool
   {
     // init
-    $length = self::strlen($str, $encoding);;
+    $length = self::strlen($str, $encoding);
     $offset = (int)$offset;
 
     if ($offset >= 0) {
@@ -1593,6 +1604,7 @@ final class UTF8
     }
 
     if (self::$SUPPORT['intlChar'] === true) {
+      /** @noinspection PhpComposerExtensionStubsInspection */
       $tmpReturn = \IntlChar::charDirection($char);
 
       // from "IntlChar"-Class
@@ -2375,6 +2387,26 @@ final class UTF8
   }
 
   /**
+   * Checks whether JSON is available on the server.
+   *
+   * @return bool <p><strong>true</strong> if available, <strong>false</strong> otherwise.</p>
+   */
+  public static function json_loaded(): bool
+  {
+    return \function_exists('json_decode');
+  }
+
+  /**
+   * Checks whether finfo is available on the server.
+   *
+   * @return bool <p><strong>true</strong> if available, <strong>false</strong> otherwise.</p>
+   */
+  public static function finfo_loaded(): bool
+  {
+    return \class_exists('finfo');
+  }
+
+  /**
    * Checks whether intl is available on the server.
    *
    * @return bool <p><strong>true</strong> if available, <strong>false</strong> otherwise.</p>
@@ -2382,6 +2414,16 @@ final class UTF8
   public static function intl_loaded(): bool
   {
     return \extension_loaded('intl');
+  }
+
+  /**
+   * Checks whether ctype is available on the server.
+   *
+   * @return bool <p><strong>true</strong> if available, <strong>false</strong> otherwise.</p>
+   */
+  public static function ctype_loaded(): bool
+  {
+    return \extension_loaded('ctype');
   }
 
   /**
@@ -2615,12 +2657,17 @@ final class UTF8
       }
     }
 
-    if (
-        $strict === true
-        &&
-        \class_exists('finfo')
-    ) {
+    if ($strict === true) {
 
+      if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+        self::checkForSupport();
+      }
+
+      if (self::$SUPPORT['finfo'] === false) {
+        throw new \RuntimeException('ext-fileinfo: is not installed');
+      }
+
+      /** @noinspection PhpComposerExtensionStubsInspection */
       $finfo = new \finfo(FILEINFO_MIME_ENCODING);
       $finfo_encoding = $finfo->buffer($input);
       if ($finfo_encoding && $finfo_encoding === 'binary') {
@@ -2749,8 +2796,17 @@ final class UTF8
       return false;
     }
 
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['json'] === false) {
+      throw new \RuntimeException('ext-json: is not installed');
+    }
+
     $json = self::json_decode($str);
 
+    /** @noinspection PhpComposerExtensionStubsInspection */
     return (
                \is_object($json) === true
                ||
@@ -3140,6 +3196,15 @@ final class UTF8
   {
     $json = self::filter($json);
 
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['json'] === false) {
+      throw new \RuntimeException('ext-json: is not installed');
+    }
+
+    /** @noinspection PhpComposerExtensionStubsInspection */
     $json = \json_decode($json, $assoc, $depth, $options);
 
     return $json;
@@ -3185,6 +3250,15 @@ final class UTF8
   {
     $value = self::filter($value);
 
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['json'] === false) {
+      throw new \RuntimeException('ext-json: is not installed');
+    }
+
+    /** @noinspection PhpComposerExtensionStubsInspection */
     $json = \json_encode($value, $options, $depth);
 
     return $json;
@@ -3503,10 +3577,11 @@ final class UTF8
   private static function mbstring_overloaded(): bool
   {
     /**
-     * @noinspection PhpUsageOfSilenceOperatorInspection
-     *
      * INI directive 'mbstring.func_overload' is deprecated since PHP 7.2
      */
+
+    /** @noinspection PhpComposerExtensionStubsInspection */
+    /** @noinspection PhpUsageOfSilenceOperatorInspection */
     return \defined('MB_OVERLOAD_STRING')
            &&
            (@\ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING);
@@ -3776,6 +3851,7 @@ final class UTF8
     }
 
     if (self::$SUPPORT['intlChar'] === true) {
+      /** @noinspection PhpComposerExtensionStubsInspection */
       $code = \IntlChar::ord($chr);
       if ($code) {
         return $CHAR_CACHE[$cacheKey] = $code;
@@ -3852,9 +3928,18 @@ final class UTF8
       return [];
     }
 
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['ctype'] === false) {
+      throw new \RuntimeException('ext-ctype: is not installed');
+    }
+
+    /** @noinspection PhpComposerExtensionStubsInspection */
     if (\ctype_digit((string)$var1)) {
       $start = (int)$var1;
-    } elseif (\ctype_xdigit($var1)) {
+    } /** @noinspection PhpComposerExtensionStubsInspection */ elseif (\ctype_xdigit($var1)) {
       $start = (int)self::hex_to_int($var1);
     } else {
       $start = self::ord($var1);
@@ -3864,9 +3949,10 @@ final class UTF8
       return [];
     }
 
+    /** @noinspection PhpComposerExtensionStubsInspection */
     if (\ctype_digit((string)$var2)) {
       $end = (int)$var2;
-    } elseif (\ctype_xdigit($var2)) {
+    } /** @noinspection PhpComposerExtensionStubsInspection */ elseif (\ctype_xdigit($var2)) {
       $end = (int)self::hex_to_int($var2);
     } else {
       $end = self::ord($var2);
@@ -6184,11 +6270,7 @@ final class UTF8
       return false;
     }
 
-    if (
-        $cleanUtf8 === true
-        ||
-        $encoding === true // INFO: the "bool"-check is only a fallback for old versions
-    ) {
+    if ($cleanUtf8 === true) {
       // \mb_strrpos && iconv_strrpos is not tolerant to invalid characters
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
@@ -6430,15 +6512,16 @@ final class UTF8
 
         $langCode = $lang . '-Lower';
         if (!\in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
-          \trigger_error('UTF8::strtolower() without intl for special language: ' . $lang, E_USER_WARNING);
+          \trigger_error('UTF8::strtolower() cannot handle special language: ' . $lang, E_USER_WARNING);
 
           $langCode = 'Any-Lower';
         }
 
+        /** @noinspection PhpComposerExtensionStubsInspection */
         return transliterator_transliterate($langCode, $str);
       }
 
-      \trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "lang"-parameter: ' . $lang, E_USER_WARNING);
+      \trigger_error('UTF8::strtolower() without intl cannot handle the "lang" parameter: ' . $lang, E_USER_WARNING);
     }
 
     return \mb_strtolower($str, $encoding);
@@ -6501,6 +6584,7 @@ final class UTF8
           $langCode = 'Any-Upper';
         }
 
+        /** @noinspection PhpComposerExtensionStubsInspection */
         return transliterator_transliterate($langCode, $str);
       }
 
@@ -7235,6 +7319,7 @@ final class UTF8
 
       if (self::$SUPPORT['intl'] === true) {
         // INFO: https://unicode.org/cldr/utility/character.jsp?a=%E2%84%8C
+        /** @noinspection PhpComposerExtensionStubsInspection */
         $str = \transliterator_transliterate('NFKC; [:Nonspacing Mark:] Remove; NFKC; Any-Latin; Latin-ASCII;', $str);
 
         // check again, if we only have ASCII, now ...
@@ -7251,6 +7336,7 @@ final class UTF8
 
     \preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
     $chars = $ar[0];
+    $ord = null;
     foreach ($chars as &$c) {
 
       $ordC0 = self::$ORD[$c[0]];
@@ -7303,7 +7389,7 @@ final class UTF8
         continue;
       }
 
-      if (!isset($ord)) {
+      if ($ord === null) {
         $c = $unknown;
         continue;
       }
@@ -7374,7 +7460,8 @@ final class UTF8
       return $map[$key];
     }
 
-    if (\is_numeric($str)) {
+    if ((int)($str) === $str || (float)($str) === $str) {
+      /** @noinspection PhpWrongStringConcatenationInspection */
       return $str + 0 > 0;
     }
 

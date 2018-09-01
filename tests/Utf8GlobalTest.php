@@ -606,7 +606,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::encode('', $before), 'tested: ' . $before); // do nothing
+      self::assertSame($after, UTF8::encode('', $before, true), 'tested: ' . $before); // do nothing
     }
 
     $tests = [
@@ -619,21 +619,21 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::encode('UTF8', $before), 'tested: ' . $before); // UTF-8
+      self::assertSame($after, UTF8::encode('UTF8', $before, true), 'tested: ' . $before); // UTF-8
     }
 
     $tests = [
-        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
-        '      - ÖÄÜ- '  => '      - ???- ',
-        'öäü'            => '???',
+        '  -ABC-中文空白-  ' => '  -ABC-????????????-  ',
+        '      - ÖÄÜ- '  => '      - ??????- ',
+        'öäü'            => '??????',
         ''               => '',
         'abc'            => 'abc',
-        'Berbée'         => 'Berb?e',
+        'Berbée'         => 'Berb??e',
     ];
 
     if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
       foreach ($tests as $before => $after) {
-        self::assertSame($after, UTF8::encode('CP367', $before), 'tested: ' . $before); // CP367
+        self::assertSame($after, UTF8::encode('CP367', $before, true), 'tested: ' . $before); // CP367
       }
     }
 
@@ -647,7 +647,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::filter(UTF8::encode('ISo88591', $before)), 'tested: ' . $before); // ISO-8859-1
+      self::assertSame($after, UTF8::filter(UTF8::encode('ISo88591', $before, true)), 'tested: ' . $before); // ISO-8859-1
     }
 
     $tests = [
@@ -660,12 +660,81 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before)))); // ISO-8859-15
+      self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before, true), true))); // ISO-8859-15
     }
 
-    // ---
+    self::assertSame('éàa', UTF8::encode('UTF-8', UTF8::encode('ISO-8859-1', 'éàa', true), true));
 
-    self::assertSame('éàa', UTF8::encode('UTF-8', UTF8::encode('ISO-8859-1', 'éàa')));
+    // --- do not force the encoding ...
+
+    $tests = [
+        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    ];
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::encode('', $before, false), 'tested: ' . $before); // do nothing
+    }
+
+    $tests = [
+        '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    ];
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::encode('UTF8', $before, false), 'tested: ' . $before); // UTF-8
+    }
+
+    $tests = [
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ???- ',
+        'öäü'            => '???',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berb?e',
+    ];
+
+    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+      foreach ($tests as $before => $after) {
+        self::assertSame($after, UTF8::encode('CP367', $before, false), 'tested: ' . $before); // CP367
+      }
+    }
+
+    $tests = [
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    ];
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::filter(UTF8::encode('ISo88591', $before, false)), 'tested: ' . $before); // ISO-8859-1
+    }
+
+    $tests = [
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
+        'öäü'            => 'öäü',
+        ''               => '',
+        'abc'            => 'abc',
+        'Berbée'         => 'Berbée',
+    ];
+
+    foreach ($tests as $before => $after) {
+      self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before, false),false))); // ISO-8859-15
+    }
+
+    self::assertSame('éàa', UTF8::encode('UTF-8', UTF8::encode('ISO-8859-1', 'éàa', false), false));
   }
 
   public function testEncodeUtf8EncodeUtf8()

@@ -38,6 +38,9 @@
     "phpunit/phpunit": "~6.0|~7.0"
   },
   "suggest": {
+    "ext-json": "Use JSON for string detection",
+    "ext-ctype": "Use Ctype for e.g. hexadecimal digit detection",
+    "ext-fileinfo": "Use Fileinfo for better binary file detection",
     "ext-intl": "Use Intl for best performance",
     "ext-iconv": "Use iconv for best performance",
     "ext-mbstring": "Use Mbstring for best performance"
