@@ -177,7 +177,7 @@ class Bootup
   /**
    * Determines if the current version of PHP is equal to or greater than the supplied value.
    *
-   * @param string $version
+   * @param string $version <p>e.g. "7.1"<p>
    *
    * @return bool <p>Return <strong>true</strong> if the current version is $version or higher</p>
    */

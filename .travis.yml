@@ -28,28 +28,37 @@ matrix:
   include:
     - php: 7.0
     - php: 7.0
-      env: PHP_MBSTRING_FUNC_OVERLOAD=true
+      env:
+        - PHP_MBSTRING_FUNC_OVERLOAD=true
     - php: 7.0
-      env: PHP_EXTENSION=false
+      env:
+        - PHP_EXTENSION=false
     - php: 7.0
-      env: PHP_COMPOSER_SETUP=lowest
-      env: PHP_EXTENSION=false
+      env:
+        - PHP_COMPOSER_SETUP=lowest
+        - PHP_EXTENSION=false
     - php: 7.1
     - php: 7.1
-      env: PHP_MBSTRING_FUNC_OVERLOAD=true
+      env:
+        - PHP_MBSTRING_FUNC_OVERLOAD=true
     - php: 7.1
-      env: PHP_EXTENSION=false
+      env:
+        - PHP_EXTENSION=false
     - php: 7.1
-      env: PHP_COMPOSER_SETUP=lowest
-      env: PHP_EXTENSION=false
+      env:
+        - PHP_COMPOSER_SETUP=lowest
+        - PHP_EXTENSION=false
     - php: 7.2
     - php: 7.2
-      env: PHP_MBSTRING_FUNC_OVERLOAD=true
+      env:
+        - PHP_MBSTRING_FUNC_OVERLOAD=true
     - php: 7.2
-      env: PHP_EXTENSION=false
+      env:
+        - PHP_EXTENSION=false
     - php: 7.2
-      env: PHP_COMPOSER_SETUP=lowest
-      env: PHP_EXTENSION=false
+      env:
+        - PHP_COMPOSER_SETUP=lowest
+        - PHP_EXTENSION=false
 
 before_script:
   - stty cols 120
@@ -70,7 +79,7 @@ before_script:
   - cat $MAIN_PHP_INI_FILE
   - wget https://scrutinizer-ci.com/ocular.phar
   - travis_retry composer self-update
-  - travis_retry composer require satooshi/php-coveralls:1.0.0
+  - travis_retry composer require satooshi/php-coveralls
   - if [[ $PHP_COMPOSER_SETUP = 'basic' ]]; then travis_retry composer install --prefer-dist --no-interaction; fi
   - if [[ $PHP_COMPOSER_SETUP = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
   - composer dump-autoload -o

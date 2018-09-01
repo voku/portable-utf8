@@ -4241,7 +4241,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'abc'                                  => 'ABC',
         'deja vu'                              => 'DEJA VU',
         'déjà vu'                              => 'DÉJÀ VU',
-        'déJÀ σσς iıII'                        => 'DÉjà ΣΣΣ IIii',
+        'déJÀ σσς iıII'                        => 'DÉjà ΣΣΣ IIIi',
         "test\x80-\xBFöäü"                     => 'TEST-ÖÄÜ',
         'Internationalizaetion'                => 'iNTERNATIONALIZAETION',
         "中 - &#20013; - %&? - \xc2\x80"        => '中 - &#20013; - %&? - ',
