@@ -893,13 +893,16 @@ final class UTF8
 
     $encodingDetected = self::str_detect_encoding($str);
 
+    // DEBUG
+    //var_dump($encoding, $encodingDetected, $str, "\n\n");
+
     if (
-        $force === true
-        ||
+        $encodingDetected !== false
+        &&
         (
-            $encodingDetected !== false
-            &&
-            $encodingDetected !== $encoding
+          $force === true
+          ||
+          $encodingDetected !== $encoding
         )
     ) {
 
