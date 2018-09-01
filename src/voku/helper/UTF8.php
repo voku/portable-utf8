@@ -896,7 +896,11 @@ final class UTF8
     if (
         $force === true
         ||
-        $encodingDetected !== $encoding
+        (
+            $encodingDetected !== false
+            &&
+            $encodingDetected !== $encoding
+        )
     ) {
 
       if (

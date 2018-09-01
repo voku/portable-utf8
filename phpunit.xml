@@ -7,11 +7,8 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
          bootstrap="tests/bootstrap.php"
          verbose="true"
-         tap="true"
-         testdox="true"
 >
     <testsuite name="UTF8 Test Suite">
         <directory>tests</directory>
@@ -23,9 +20,6 @@
                 <directory>./src/voku/helper/data/</directory>
             </exclude>
         </whitelist>
-        <blacklist>
-            <directory suffix=".php">./vendor</directory>
-        </blacklist>
     </filter>
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
