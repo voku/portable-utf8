@@ -403,9 +403,9 @@ final class UTF8
    * @param int    $index    <p>Position of the character.</p>
    * @param string $encoding [optional] <p>Default is UTF-8</p>
    *
-   * @return string <p>The character at $index.</p>
+   * @return string|false <p>The character at $index or throw new "false" if no character exists at the index.</p>
    */
-  public static function char_at(string $str, int $index, string $encoding = 'UTF-8'): string
+  public static function char_at(string $str, int $index, string $encoding = 'UTF-8')
   {
     return self::substr($str, $index, 1, $encoding);
   }
@@ -5467,28 +5467,28 @@ final class UTF8
    * ArrayAccess interface, and throws an OutOfBoundsException if the index
    * does not exist.
    *
-   * @param string $str
-   * @param int    $offset   <p>The <strong>index</strong> from which to retrieve the char.</p>
+   * @param string $str      <p>The input string.</p>
+   * @param int    $index    <p>The <strong>index</strong> from which to retrieve the char.</p>
    * @param string $encoding [optional] <p>Default: UTF-8</p>
    *
    * @return string <p>The character at the specified index.</p>
    *
    * @throws \OutOfBoundsException <p>If the positive or negative offset does not exist.</p>
    */
-  public static function str_offset_get(string $str, int $offset, string $encoding = 'UTF-8'): string
+  public static function str_offset_get(string $str, int $index, string $encoding = 'UTF-8'): string
   {
     // init
     $length = self::strlen($str);
 
     if (
-        ($offset >= 0 && $length <= $offset)
+        ($index >= 0 && $length <= $index)
         ||
-        $length < \abs($offset)
+        $length < \abs($index)
     ) {
       throw new \OutOfBoundsException('No character exists at the index');
     }
 
-    return self::substr($str, $offset, 1, $encoding);
+    return self::char_at($str, $index,  $encoding);
   }
 
   /**
