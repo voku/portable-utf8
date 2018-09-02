@@ -403,11 +403,11 @@ final class UTF8
    * @param int    $index    <p>Position of the character.</p>
    * @param string $encoding [optional] <p>Default is UTF-8</p>
    *
-   * @return string|false <p>The character at $index or throw new "false" if no character exists at the index.</p>
+   * @return string <p>The character at $index.</p>
    */
-  public static function char_at(string $str, int $index, string $encoding = 'UTF-8')
+  public static function char_at(string $str, int $index, string $encoding = 'UTF-8'): string
   {
-    return self::substr($str, $index, 1, $encoding);
+    return (string)self::substr($str, $index, 1, $encoding);
   }
 
   /**
