@@ -328,6 +328,15 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertSame($expected, $result);
   }
 
+  public function testNormalizeLineEnding()
+  {
+    $resultTmp = UTF8::chunk_split("\n\r" .'ABC-ÖÄÜ-中文空白-κόσμε' . "\n", 3);
+    $expected = "\n\nA\nBC-\nÖÄÜ\n-中文\n空白-\nκόσ\nμε\n";
+
+    $result = UTF8::normalize_line_ending($resultTmp);
+    self::assertSame($expected, $result);
+  }
+
   public function testClean()
   {
     $examples = [
