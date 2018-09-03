@@ -2835,14 +2835,37 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testStrLimit()
   {
     $testArray = [
+        ['th...', 'this is a test', 5, '...'],
+        ['this ...', 'this is öäü-foo test', 8, '...'],
+        ['fòô bà', 'fòô bàř fòô', 6, ''],
+        ['fòô bàř ', 'fòô bàř fòô', 8, ''],
+        ['fòô bàř ', "fòô bàř fòô \x00", 8, ''],
+        ['', "fòô bàř \x00fòô", 0, ''],
+        ['', "fòô bàř \x00fòô", -1, ''],
+        ['fòô bàř白', "fòô bàř \x00fòô", 8, '白'],
+        ['白', '白白 白白', 1, ''],
+        ['白白 ', '白白 白白', 3, ''],
+        ['白白白', '白白白', 100, ''],
+        ['', '', 1, ''],
+    ];
+
+    foreach ($testArray as $test) {
+      self::assertSame($test[0], UTF8::str_limit($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
+    }
+  }
+
+  public function testStrLimitAfterWord()
+  {
+    $testArray = [
         ['this...', 'this is a test', 5, '...'],
         ['this is...', 'this is öäü-foo test', 8, '...'],
         ['fòô', 'fòô bàř fòô', 6, ''],
         ['fòô bàř', 'fòô bàř fòô', 8, ''],
         ['fòô bàř', "fòô bàř fòô \x00", 8, ''],
         ['', "fòô bàř \x00fòô", 0, ''],
-        ['fòô bàř', "fòô bàř \x00fòô", -1, ''],
+        ['', "fòô bàř \x00fòô", -1, ''],
         ['fòô bàř白', "fòô bàř \x00fòô", 8, '白'],
+        ['', '白白 白白', 1, ''],
         ['白白', '白白 白白', 3, ''],
         ['白白白', '白白白', 100, ''],
         ['', '', 1, ''],
@@ -2915,6 +2938,20 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     foreach ($testArray as $after => $test) {
       self::assertSame($after, UTF8::str_replace_first($test[0], $test[1], $test[2]));
+    }
+  }
+
+  public function testStrReplaceLast()
+  {
+    $testArray = [
+        ''           => ['', '', ''],
+        'lall lall ' => ['lall', '', 'lall lall lall'],
+        'l a l ö '   => ['l', 'ö', 'l a l l '],
+        'κόσμε öäü'  => ['ό', 'öäü', "κόσμε\xc2\xa0ό",],
+    ];
+
+    foreach ($testArray as $after => $test) {
+      self::assertSame($after, UTF8::str_replace_last($test[0], $test[1], $test[2]));
     }
   }
 

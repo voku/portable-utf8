@@ -850,7 +850,7 @@ final class UTF8
   public static function collapse_whitespace(string $str): string
   {
     return self::trim(
-        self::regexReplace($str, '[[:space:]]+', ' ')
+        self::regex_replace($str, '[[:space:]]+', ' ')
     );
   }
 
@@ -3429,7 +3429,7 @@ final class UTF8
       $pattern = "^[$chars]+";
     }
 
-    return self::regexReplace($str, $pattern, '', '', '/');
+    return self::regex_replace($str, $pattern, '', '', '/');
   }
 
   /**
@@ -3979,7 +3979,7 @@ final class UTF8
    *
    * @return string
    */
-  public static function regexReplace(string $str, string $pattern, string $replacement, string $options = '', string $delimiter = '/'): string
+  public static function regex_replace(string $str, string $pattern, string $replacement, string $options = '', string $delimiter = '/'): string
   {
     if ($options === 'msr') {
       $options = 'ms';
@@ -4066,6 +4066,34 @@ final class UTF8
   }
 
   /**
+   * Remove html via "strip_tags()" from the string.
+   *
+   * @param string $str
+   * @param string $allowableTags [optional] <p>You can use the optional second parameter to specify tags which should
+   *                              not be stripped. Default: null
+   *                              </p>
+   *
+   * @return string
+   */
+  public static function remove_html(string $str, string $allowableTags = null): string
+  {
+    return \strip_tags($str, $allowableTags);
+  }
+
+  /**
+   * Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
+   *
+   * @param string $str
+   * @param string $replacement [optional] <p>Default is a empty string.</p>
+   *
+   * @return string
+   */
+  public static function remove_html_breaks(string $str, string $replacement = ''): string
+  {
+    return (string)\preg_replace('#/\r\n|\r|\n|<br.*/?>#isU', $replacement, $str);
+  }
+
+  /**
    * Remove invisible characters from a string.
    *
    * e.g.: This prevents sandwiching null characters between ascii characters, like Java\0script.
@@ -4095,6 +4123,53 @@ final class UTF8
     do {
       $str = (string)\preg_replace($non_displayables, $replacement, $str, -1, $count);
     } while ($count !== 0);
+
+    return $str;
+  }
+
+  /**
+   * Returns a new string with the prefix $substring removed, if present.
+   *
+   * @param string $str
+   * @param string $substring <p>The prefix to remove.</p>
+   * @param string $encoding  [optional] <p>Default: UTF-8</p>
+   *
+   * @return string <p>string without the prefix $substring.</p>
+   */
+  public static function remove_left(string $str, string $substring, string $encoding = 'UTF-8'): string
+  {
+    if (self::str_starts_with($str, $substring)) {
+
+      return self::substr(
+          $str,
+          self::strlen($substring, $encoding),
+          null,
+          $encoding
+      );
+    }
+
+    return $str;
+  }
+
+  /**
+   * Returns a new string with the suffix $substring removed, if present.
+   *
+   * @param string $str
+   * @param string $substring <p>The suffix to remove.</p>
+   * @param string $encoding  [optional] <p>Default: UTF-8</p>
+   *
+   * @return string <p>String having a $str without the suffix $substring.</p>
+   */
+  public static function remove_right(string $str, string $substring, string $encoding = 'UTF-8'): string
+  {
+    if (self::str_ends_with($str, $substring)) {
+
+      return self::substr(
+          $str,
+          0,
+          self::strlen($str, $encoding) - self::strlen($substring, $encoding)
+      );
+    }
 
     return $str;
   }
@@ -4209,7 +4284,7 @@ final class UTF8
       $pattern = "[$chars]+\$";
     }
 
-    return self::regexReplace($str, $pattern, '', '', '/');
+    return self::regex_replace($str, $pattern, '', '', '/');
   }
 
   /**
@@ -4472,6 +4547,109 @@ final class UTF8
     );
 
     return $str;
+  }
+
+  /**
+   * Returns the string with the first letter of each word capitalized,
+   * except for when the word is a name which shouldn't be capitalized.
+   *
+   * @param string $str
+   *
+   * @return static <p>Object with $str capitalized.</p>
+   */
+  public static function str_capitalize_name(string $str): string
+  {
+    $str = self::collapse_whitespace($str);
+
+    $str = self::str_capitalize_name_helper($str, ' ');
+    $str = self::str_capitalize_name_helper($str, '-');
+
+    return $str;
+  }
+
+  /**
+   * Personal names such as "Marcus Aurelius" are sometimes typed incorrectly using lowercase ("marcus aurelius").
+   *
+   * @param string $names
+   * @param string $delimiter
+   * @param string $encoding
+   *
+   * @return string
+   */
+  private static function str_capitalize_name_helper(string $names, string $delimiter, string $encoding = 'UTF-8'): string
+  {
+    // init
+    $namesArray = \explode($delimiter, $names);
+
+    $specialCases = [
+        'names'    => [
+            'ab',
+            'af',
+            'al',
+            'and',
+            'ap',
+            'bint',
+            'binte',
+            'da',
+            'de',
+            'del',
+            'den',
+            'der',
+            'di',
+            'dit',
+            'ibn',
+            'la',
+            'mac',
+            'nic',
+            'of',
+            'ter',
+            'the',
+            'und',
+            'van',
+            'von',
+            'y',
+            'zu',
+        ],
+        'prefixes' => [
+            'al-',
+            "d'",
+            'ff',
+            "l'",
+            'mac',
+            'mc',
+            'nic',
+        ],
+    ];
+
+    foreach ($namesArray as &$name) {
+      if (\in_array($name, $specialCases['names'], true)) {
+        continue;
+      }
+
+      $continue = false;
+
+      if ($delimiter == '-') {
+        foreach ($specialCases['names'] as $beginning) {
+          if (self::strpos($name, $beginning, 0, $encoding) === 0) {
+            $continue = true;
+          }
+        }
+      }
+
+      foreach ($specialCases['prefixes'] as $beginning) {
+        if (self::strpos($name, $beginning, 0, $encoding) === 0) {
+          $continue = true;
+        }
+      }
+
+      if ($continue) {
+        continue;
+      }
+
+      $name = self::str_upper_first($name);
+    }
+
+    return \implode($delimiter, $namesArray);
   }
 
   /**
@@ -5273,10 +5451,38 @@ final class UTF8
     return self::substr($str, -$n, null, $encoding);
   }
 
+
+  /**
+   * Limit the number of characters in a string.
+   *
+   * @param string $str      <p>The input string.</p>
+   * @param int    $length   [optional] <p>Default: 100</p>
+   * @param string $strAddOn [optional] <p>Default: …</p>
+   * @param string $encoding [optional] <p>Default: UTF-8</p>
+   *
+   * @return string
+   */
+  public static function str_limit(string $str, int $length = 100, string $strAddOn = '…', string $encoding = 'UTF-8'): string
+  {
+    if ('' === $str) {
+      return '';
+    }
+
+    if ($length <= 0) {
+      return '';
+    }
+
+    if (self::strlen($str, $encoding) <= $length) {
+      return $str;
+    }
+
+    return self::substr($str, 0, $length - self::strlen($strAddOn), $encoding) . $strAddOn;
+  }
+
   /**
    * Limit the number of characters in a string, but also after the next word.
    *
-   * @param string $str
+   * @param string $str      <p>The input string.</p>
    * @param int    $length   [optional] <p>Default: 100</p>
    * @param string $strAddOn [optional] <p>Default: …</p>
    * @param string $encoding [optional] <p>Default: UTF-8</p>
@@ -5286,6 +5492,10 @@ final class UTF8
   public static function str_limit_after_word(string $str, int $length = 100, string $strAddOn = '…', string $encoding = 'UTF-8'): string
   {
     if ('' === $str) {
+      return '';
+    }
+
+    if ($length <= 0) {
       return '';
     }
 
@@ -5488,7 +5698,7 @@ final class UTF8
       throw new \OutOfBoundsException('No character exists at the index');
     }
 
-    return self::char_at($str, $index,  $encoding);
+    return self::char_at($str, $index, $encoding);
   }
 
   /**
@@ -5614,81 +5824,6 @@ final class UTF8
   }
 
   /**
-   * Remove html via "strip_tags()" from the string.
-   *
-   * @param string $str
-   * @param string $allowableTags [optional] <p>You can use the optional second parameter to specify tags which should
-   *                              not be stripped. Default: null
-   *                              </p>
-   *
-   * @return string
-   */
-  public static function str_remove_html(string $str, string $allowableTags = null): string
-  {
-    return \strip_tags($str, $allowableTags);
-  }
-
-  /**
-   * Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
-   *
-   * @param string $str
-   * @param string $replacement [optional] <p>Default is a empty string.</p>
-   *
-   * @return string
-   */
-  public static function str_remove_html_breaks(string $str, string $replacement = ''): string
-  {
-    return (string)\preg_replace('#/\r\n|\r|\n|<br.*/?>#isU', $replacement, $str);
-  }
-
-  /**
-   * Returns a new string with the prefix $substring removed, if present.
-   *
-   * @param string $str
-   * @param string $substring <p>The prefix to remove.</p>
-   * @param string $encoding  [optional] <p>Default: UTF-8</p>
-   *
-   * @return string <p>string without the prefix $substring.</p>
-   */
-  public static function str_remove_left(string $str, string $substring, string $encoding = 'UTF-8'): string
-  {
-    if (self::str_starts_with($str, $substring)) {
-
-      return self::substr(
-          $str,
-          self::strlen($substring, $encoding),
-          null,
-          $encoding
-      );
-    }
-
-    return $str;
-  }
-
-  /**
-   * Returns a new string with the suffix $substring removed, if present.
-   *
-   * @param string $str
-   * @param string $substring <p>The suffix to remove.</p>
-   * @param string $encoding  [optional] <p>Default: UTF-8</p>
-   *
-   * @return string <p>String having a $str without the suffix $substring.</p>
-   */
-  public static function str_remove_right(string $str, string $substring, string $encoding = 'UTF-8'): string
-  {
-    if (self::str_ends_with($str, $substring)) {
-
-      return self::substr(
-          $str,
-          0,
-          self::strlen($str, $encoding) - self::strlen($substring, $encoding)
-      );
-    }
-
-    return $str;
-  }
-
-  /**
    * Repeat a string.
    *
    * @param string $str        <p>
@@ -5758,7 +5893,7 @@ final class UTF8
    */
   public static function str_replace_beginning(string $str, string $search, string $replacement): string
   {
-    return self::regexReplace(
+    return self::regex_replace(
         $str,
         '^' . \preg_quote($search, '/'),
         self::str_replace('\\', '\\\\', $replacement)
@@ -5776,7 +5911,7 @@ final class UTF8
    */
   public static function str_replace_ending(string $str, string $search, string $replacement): string
   {
-    return self::regexReplace(
+    return self::regex_replace(
         $str,
         \preg_quote($search, '/') . '$',
         self::str_replace('\\', '\\\\', $replacement)
@@ -5795,6 +5930,26 @@ final class UTF8
   public static function str_replace_first(string $search, string $replace, string $subject): string
   {
     $pos = self::strpos($subject, $search);
+
+    if ($pos !== false) {
+      return self::substr_replace($subject, $replace, $pos, self::strlen($search));
+    }
+
+    return $subject;
+  }
+
+  /**
+   * Replace the last "$search"-term with the "$replace"-term.
+   *
+   * @param string $search
+   * @param string $replace
+   * @param string $subject
+   *
+   * @return string
+   */
+  public static function str_replace_last(string $search, string $replace, string $subject): string
+  {
+    $pos = self::strrpos($subject, $search);
 
     if ($pos !== false) {
       return self::substr_replace($subject, $replace, $pos, self::strlen($search));
@@ -9020,7 +9175,7 @@ final class UTF8
       $pattern = "^[$chars]+|[$chars]+\$";
     }
 
-    return self::regexReplace($str, $pattern, '', '', '/');
+    return self::regex_replace($str, $pattern, '', '', '/');
   }
 
   /**

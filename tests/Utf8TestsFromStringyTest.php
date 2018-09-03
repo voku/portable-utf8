@@ -2704,7 +2704,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
    */
   public function testRemoveHtml($expected, $str, $allowableTags = '')
   {
-    $result = UTF8::str_remove_html($str, $allowableTags);
+    $result = UTF8::remove_html($str, $allowableTags);
 
     self::assertSame($expected, $result);
   }
@@ -2718,7 +2718,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
    */
   public function testRemoveHtmlBreak($expected, $str, $replacement = '')
   {
-    $result = UTF8::str_remove_html_breaks($str, $replacement);
+    $result = UTF8::remove_html_breaks($str, $replacement);
 
     self::assertSame($expected, $result);
   }
@@ -2733,7 +2733,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
    */
   public function testRemoveLeft($expected, $str, $substring, $encoding = '')
   {
-    $result = UTF8::str_remove_left($str, $substring, $encoding);
+    $result = UTF8::remove_left($str, $substring, $encoding);
 
     self::assertSame($expected, $result);
   }
@@ -2748,7 +2748,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
    */
   public function testRemoveRight($expected, $str, $substring, $encoding = '')
   {
-    $result = UTF8::str_remove_right($str, $substring, $encoding);
+    $result = UTF8::remove_right($str, $substring, $encoding);
 
     self::assertSame($expected, $result);
   }
@@ -3586,7 +3586,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
    */
   public function testregexReplace($expected, $str, $pattern, $replacement, $options = 'msr', $delimiter = '/', $encoding = '')
   {
-    $result = UTF8::regexReplace($str, $pattern, $replacement, $options, $delimiter);
+    $result = UTF8::regex_replace($str, $pattern, $replacement, $options, $delimiter);
 
     self::assertSame($expected, $result);
   }
