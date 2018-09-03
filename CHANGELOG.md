@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.1.0 (2018-08-03)
+- merge methods from "Stringy" into "UTF8"
+- added many new tests
+
 ### 5.0.6 (2018-05-02)
 - fix "UTF8::to_ascii()"
 - update encoding list for "UTF8::str_detect_encoding()"
