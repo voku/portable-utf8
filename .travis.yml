@@ -59,6 +59,17 @@ matrix:
       env:
         - PHP_COMPOSER_SETUP=lowest
         - PHP_EXTENSION=false
+    - php: 7.3
+    - php: 7.3
+      env:
+      - PHP_MBSTRING_FUNC_OVERLOAD=true
+    - php: 7.3
+      env:
+      - PHP_EXTENSION=false
+    - php: 7.3
+      env:
+      - PHP_COMPOSER_SETUP=lowest
+      - PHP_EXTENSION=false
 
 before_script:
   - stty cols 120

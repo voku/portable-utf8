@@ -2236,10 +2236,10 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'öäü test öäü' => ' ',
         'ÖÄÜ'          => 'Ä',
         '中文空白'         => '中',
-        false                  => null,
-        null                   => null,
-        ''                     => null,
-        ' '                    => ' ',
+        false          => null,
+        null           => null,
+        ''             => null,
+        ' '            => ' ',
     ];
 
     foreach ($tests as $before => $after) {
@@ -3804,13 +3804,24 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ㅎㄹ..-Daebak'   => 'ㅎㄹ..-daebak',
         'ㅈㅅ-Sorry'      => 'ㅈㅅ-sorry',
         'ㅡㅡ-WTF'        => 'ㅡㅡ-wtf',
-        'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii', // result for language === "tr" --> "déjà σσς ııii"
         'ABC-ΣΣ'        => 'abc-σσ', // result for language === "tr" --> "abc-σς"
         'Å/å, Æ/æ, Ø/ø' => 'å/å, æ/æ, ø/ø',
         'ΣΣΣ'           => 'σσσ', // result for language === "tr" --> "σσς"
-        'DİNÇ'          => 'dinç',
         'DINÇ'          => 'dinç', // result for language === "tr" --> "dınç"
     ];
+
+    if (Bootup::is_php("7.3")) {
+      $tests += [
+              'DÉJÀ Σσς Iıİi' => 'déjà σσς iıi̇i', // result for language === "tr" --> "déjà σσς ııii"
+              'DİNÇ'          => 'di̇nç',
+          ];
+
+    } else {
+      $tests += [
+              'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii', // result for language === "tr" --> "déjà σσς ııii"
+              'DİNÇ'          => 'dinç',
+          ];
+    }
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::strtolower($before), 'tested: ' . $before);
