@@ -476,6 +476,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
   public function firstProvider(): array
   {
     return [
+        ['', '', 1],
         ['', 'foo bar', -5],
         ['', 'foo bar', 0],
         ['f', 'foo bar', 1],
@@ -922,6 +923,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         ['oo ', 'foo bar', 'boo far'],
         ['foo ba', 'foo bad', 'foo bar'],
         ['', 'foo bar', ''],
+        ['', 'foo', 'lall'],
         ['fòô', 'fòôbàř', 'fòô bàř', 'UTF-8'],
         ['fòô bàř', 'fòô bàř', 'fòô bàř', 'UTF-8'],
         [' bàř', 'fòô bàř', 'fòr bàř', 'UTF-8'],
@@ -1404,6 +1406,8 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
   public function sliceProvider(): array
   {
     return [
+        ['r', 'foobar', -1],
+        [false, 'foobar', 999],
         ['foobar', 'foobar', 0],
         ['foobar', 'foobar', 0, null],
         ['foobar', 'foobar', 0, 6],
@@ -2058,6 +2062,25 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     $result = UTF8::html_escape($str, $encoding);
 
     self::assertSame($expected, $result);
+  }
+
+  public function testStrCapitalizeName()
+  {
+    $testArray = [
+        ''                => '',
+        '<h1>test</h1>'   => '<h1>test</h1>',
+        'Test'            => 'Test',
+        'foo bar'         => 'Foo Bar',
+        '中文空白'            => '中文空白',
+        'mc donalds'      => 'mc Donalds',
+        'marcus aurelius' => 'Marcus Aurelius',
+        'marcus-aurelius' => 'Marcus-Aurelius',
+        'van der meer'    => 'van der Meer',
+    ];
+
+    foreach ($testArray as $testString => $testExpected) {
+      self::assertSame($testExpected, UTF8::str_capitalize_name($testString), 'tested: ' . $testString);
+    }
   }
 
   public function testExtractText()
@@ -2897,7 +2920,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     for ($i = 0; $i < $length; $i++) {
       $char = UTF8::substr($str, $i, 1, $encoding);
       $countBefore = UTF8::substr_count($str, $char, 0, null, $encoding);
-      $countAfter = UTF8::substr_count($result, $char, 0, null,  $encoding);
+      $countAfter = UTF8::substr_count($result, $char, 0, null, $encoding);
       self::assertSame($countBefore, $countAfter);
     }
   }

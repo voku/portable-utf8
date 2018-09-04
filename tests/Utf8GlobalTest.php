@@ -174,6 +174,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testCharOtherEncoding()
   {
     $testArray = [
+        ''     => null,
         '39'   => '\'',
         '40'   => '(',
         '41'   => ')',
@@ -330,7 +331,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testNormalizeLineEnding()
   {
-    $resultTmp = UTF8::chunk_split("\n\r" .'ABC-ÖÄÜ-中文空白-κόσμε' . "\n", 3);
+    $resultTmp = UTF8::chunk_split("\n\r" . 'ABC-ÖÄÜ-中文空白-κόσμε' . "\n", 3);
     $expected = "\n\nA\nBC-\nÖÄÜ\n-中文\n空白-\nκόσ\nμε\n";
 
     $result = UTF8::normalize_line_ending($resultTmp);
@@ -740,7 +741,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before, false),false))); // ISO-8859-15
+      self::assertSame($after, UTF8::filter(UTF8::encode('IsO-8859-15', UTF8::encode('iso-8859-1', $before, false), false))); // ISO-8859-15
     }
 
     self::assertSame('éàa', UTF8::encode('UTF-8', UTF8::encode('ISO-8859-1', 'éàa', false), false));
@@ -1049,8 +1050,10 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football\n"                                                                                                                                                                                                                                          => "Fédération Camerounaise de Football\n",
     ];
 
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::fix_utf8($before), 'tested: ' . $before);
+    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+      foreach ($testArray as $before => $after) {
+        self::assertSame($after, UTF8::fix_utf8($before), 'tested: ' . $before);
+      }
     }
 
     self::assertSame(['Düsseldorf', 'Fédération'], UTF8::fix_utf8(['DÃ¼sseldorf', 'FÃÂÂÂÂ©dÃÂÂÂÂ©ration']));
@@ -1449,6 +1452,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testHtmlentities()
   {
     $testArray = [
+        '&force_open_dashboard=0'                                                                                     => '&amp;force_open_dashboard=0',
         '<\\\'öäü>'                                                                                                   => '&lt;&#92;\'&ouml;&auml;&uuml;&gt;',
         '<白>'                                                                                                         => '&lt;&#30333;&gt;',
         '<白-öäü>'                                                                                                     => '&lt;&#30333;-&ouml;&auml;&uuml;&gt;',
@@ -1581,6 +1585,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testIsBinaryNonStrict()
   {
+    self::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/fileNotExists.txt'));
     self::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/latin.txt'));
     $testString1 = file_get_contents(__DIR__ . '/fixtures/latin.txt');
     self::assertFalse(UTF8::is_binary($testString1, false));
@@ -2194,13 +2199,17 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'ÖÄÜ'                  => 'Ü',
         '中文空白'                 => '空',
         'Intërnâtiônàlizætiøn' => 'ø',
+        false                  => null,
+        null                   => null,
+        ''                     => null,
+        ' '                    => ' ',
     ];
 
     foreach ($tests as $before => $after) {
-      self::assertSame($after, UTF8::max($before));
+      self::assertSame($after, UTF8::max($before), 'tested: "' . $before . '"');
     }
 
-    self::assertSame('ü', UTF8::max(['öäü', 'test', 'abc']));
+    self::assertSame('空', UTF8::max(['öäü', '1,2,3,4', 'test', '中 文 空 白', 'abc']));
   }
 
   public function testMaxChrWidth()
@@ -2227,13 +2236,17 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'öäü test öäü' => ' ',
         'ÖÄÜ'          => 'Ä',
         '中文空白'         => '中',
+        false                  => null,
+        null                   => null,
+        ''                     => null,
+        ' '                    => ' ',
     ];
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::min($before));
     }
 
-    self::assertSame('a', UTF8::min(['öäü', 'test', 'abc']));
+    self::assertSame(' ', UTF8::min(['öäü', '1,2,3,4', ' ', 'test', 'abc']));
   }
 
   public function testNormalizeEncoding()
@@ -2753,7 +2766,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'öäü'                           => 'UTF-8', // ISO-8859-1
         ''                              => 'ASCII', // ASCII
         '1'                             => false, // binary
-        decbin(324546)           => false, // binary
+        decbin(324546)                  => false, // binary
         01                              => false, // binary
     ];
 
@@ -2970,6 +2983,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'this is a test',
         'this is öäü-foo test',
         'fòô bàř fòô',
+        '',
+        "\t",
+        "\t\t",
     ];
 
     foreach ($testArray as $test) {
@@ -3079,6 +3095,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     // ---
 
     self::assertSame(['', 'âti', "\n ", 'ônà', ''], UTF8::str_to_words("âti\n ônà"));
+    self::assertSame(["\t\t"], UTF8::str_to_words("\t\t", "\n"));
+    self::assertSame(['', "\t\t", ''], UTF8::str_to_words("\t\t", "\t"));
     self::assertSame(['', '中文空白', ' ', 'oöäü#s', ''], UTF8::str_to_words('中文空白 oöäü#s', '#'));
     self::assertSame(['', 'foo', ' ', 'oo', ' ', 'oöäü', '#', 's', ''], UTF8::str_to_words('foo oo oöäü#s', ''));
     self::assertSame([''], UTF8::str_to_words(''));
@@ -3109,6 +3127,10 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStr_split()
   {
+    self::assertSame(
+        [],
+        UTF8::str_split('déjà', 0)
+    );
     self::assertSame(
         [
             'd',

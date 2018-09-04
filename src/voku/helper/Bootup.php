@@ -76,7 +76,7 @@ class Bootup
         return false;
       }
 
-      $uri = $_SERVER['REQUEST_URI'];
+      $uri = (string)$_SERVER['REQUEST_URI'];
     }
 
     $uriOrig = $uri;
@@ -143,11 +143,12 @@ class Bootup
   /**
    * Get random bytes via "random_bytes()"
    *
-   * @param  int $length <p>output length</p>
+   * @param int $length <p>output length</p>
    *
-   * @return  string|false <p>false on error</p>
+   * @return string|false
+   *                       <strong>false</strong> on error
    *
-   * @throws \Exception <p>If it was not possible to gather sufficient entropy.</p>
+   * @throws \Exception If it was not possible to gather sufficient entropy.
    */
   public static function get_random_bytes($length)
   {
@@ -179,7 +180,8 @@ class Bootup
    *
    * @param string $version <p>e.g. "7.1"<p>
    *
-   * @return bool <p>Return <strong>true</strong> if the current version is $version or higher</p>
+   * @return bool
+   *               Return <strong>true</strong> if the current version is $version or higher
    */
   public static function is_php($version): bool
   {

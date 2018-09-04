@@ -12,6 +12,7 @@
 /appveyor.yml export-ignore
 /book.json export-ignore
 /circle.yml export-ignore
+/phpstan.neon export-ignore
 /phpunit.xml export-ignore
 /package.json export-ignore
 /CONTRIBUTING.md export-ignore
