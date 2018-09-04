@@ -35,8 +35,7 @@
     "symfony/polyfill-mbstring": "~1.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~6.0|~7.0",
-    "phpstan/phpstan-shim": "0.10.*"
+    "phpunit/phpunit": "~6.0|~7.0"
   },
   "suggest": {
     "ext-json": "Use JSON for string detection",
