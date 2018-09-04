@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.2.0 (2018-08-05)
+- use phpstan (+ fixed many code smells)
+- added more tests
+
 ### 5.1.0 (2018-08-03)
 - merge methods from "Stringy" into "UTF8"
 - added many new tests
