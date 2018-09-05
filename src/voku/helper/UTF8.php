@@ -530,8 +530,7 @@ final class UTF8
       $chr = self::$CHR[$code_point];
 
       if ($encoding !== 'UTF-8') {
-        // always fallback via symfony polyfill
-        $chr = \mb_convert_encoding($chr, $encoding, 'UTF-8');
+        $chr = self::encode($encoding, $chr);
       }
 
       return $CHAR_CACHE[$cacheKey] = $chr;
@@ -542,8 +541,7 @@ final class UTF8
       $chr = \IntlChar::chr($code_point);
 
       if ($encoding !== 'UTF-8') {
-        // always fallback via symfony polyfill
-        $chr = \mb_convert_encoding($chr, $encoding, 'UTF-8');
+        $chr = self::encode($encoding, $chr);
       }
 
       return $CHAR_CACHE[$cacheKey] = $chr;
@@ -574,8 +572,7 @@ final class UTF8
     }
 
     if ($encoding !== 'UTF-8') {
-      // always fallback via symfony polyfill
-      $chr = \mb_convert_encoding($chr, $encoding, 'UTF-8');
+      $chr = self::encode($encoding, $chr);
     }
 
     return $CHAR_CACHE[$cacheKey] = $chr;
@@ -3867,8 +3864,7 @@ final class UTF8
 
       // check again, if it's still not UTF-8
       if ($encoding !== 'UTF-8') {
-        // always fallback via symfony polyfill
-        $chr = (string)\mb_convert_encoding($chr, 'UTF-8', $encoding);
+        $chr = self::encode($encoding, $chr);
       }
     }
 

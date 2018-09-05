@@ -2686,7 +2686,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     self::assertSame('a', UTF8::single_chr_html_encode('a', true));
 
-    self::assertSame('&#195;', UTF8::single_chr_html_encode('ö', false, 'ISO'));
+    self::assertSame('&#246;', UTF8::single_chr_html_encode('ö', false, 'ISO'));
     self::assertSame('&#246;', UTF8::single_chr_html_encode('ö', false, 'UTF8'));
   }
 
