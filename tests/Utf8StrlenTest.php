@@ -18,6 +18,8 @@ class Utf8StrlenTest extends \PHPUnit\Framework\TestCase
     if (u::mbstring_loaded() === true) { // only with "mbstring"
       $str = "Iñtërnâtiôn\xE9àlizætiøn";
       self::assertSame(20, u::strlen($str));
+    } else {
+      self::markTestSkipped('only with "mbstring"');
     }
   }
 

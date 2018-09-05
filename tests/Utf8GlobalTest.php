@@ -149,23 +149,26 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     // lower
 
     $array = [
-        'foo'   => 'a',
-        1       => 'b',
-        0       => 'c',
-        'Foo'   => 'd',
-        'FOO'   => 'e',
-        'ΣΣΣ'   => 'f',
-        'Κόσμε' => 'g',
+        'foo'    => 'a',
+        1        => 'b',
+        0        => 'c',
+        'Foo'    => 'd',
+        'FOO'    => 'e',
+        'ΣΣΣ'    => 'f',
+        'Κόσμε'  => 'g',
+        'test-ß' => 'h',
+        'TEST-ẞ' => 'i',
     ];
 
     $result = UTF8::array_change_key_case($array, CASE_LOWER);
 
     $expected = [
-        'foo'   => 'e',
-        1       => 'b',
-        0       => 'c',
-        'σσσ'   => 'f',
-        'κόσμε' => 'g',
+        'foo'    => 'e',
+        1        => 'b',
+        0        => 'c',
+        'σσσ'    => 'f',
+        'κόσμε'  => 'g',
+        'test-ß' => 'i',
     ];
 
     self::assertSame($result, $expected);
@@ -795,19 +798,23 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
-    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-    self::assertContains(
-        '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-        $testString
-    );
+    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
 
-    self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
-    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
-    self::assertContains(
-        '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-        $testString
-    );
+      self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
+
+      self::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
+
+    }
 
     self::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
     $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
@@ -819,21 +826,25 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
     self::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-    self::assertContains(
-        '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-        $testString
-    );
+    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
 
-    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
-    self::assertContains(
-        '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-        $testString
-    );
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
 
-    // text: with offset
-    $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
-    self::assertContains('There are better connections.', $testString);
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
+      self::assertContains(
+          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+          $testString
+      );
+
+      // text: with offset
+      $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
+      self::assertContains('There are better connections.', $testString);
+
+    }
 
     // text: with offset & max-length
     $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, null, 7, 11);
@@ -2621,7 +2632,6 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     $counter = 0;
-
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::replace_diamond_question_mark($before, ''), 'tested: ' . $before . ' | counter: ' . $counter);
       ++$counter;
@@ -2629,7 +2639,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     // ---
 
-    self::assertSame('Iñtërnâtiônàlizætiøn??Iñtërnâtiônàlizætiøn', UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', true));
+    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+      self::assertSame('Iñtërnâtiônàlizætiøn??Iñtërnâtiônàlizætiøn', UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', true));
+    } else {
+      self::assertSame('IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn', UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', true));
+    }
 
     // ---
 
@@ -3297,7 +3311,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     }
   }
 
-  public function testStrirpos()
+  public function testStrrirpos()
   {
     self::assertFalse(strripos('', ''));
     self::assertFalse(strripos(' ', ''));
@@ -3808,19 +3822,24 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'Å/å, Æ/æ, Ø/ø' => 'å/å, æ/æ, ø/ø',
         'ΣΣΣ'           => 'σσσ', // result for language === "tr" --> "σσς"
         'DINÇ'          => 'dinç', // result for language === "tr" --> "dınç"
+        'TeSt-ẞ'        => 'test-ß',
     ];
 
-    if (Bootup::is_php("7.3")) {
+    if (
+        Bootup::is_php("7.3")
+        &&
+        UTF8::mbstring_loaded() === true
+    ) {
       $tests += [
-              'DÉJÀ Σσς Iıİi' => 'déjà σσς iıi̇i', // result for language === "tr" --> "déjà σσς ııii"
-              'DİNÇ'          => 'di̇nç',
-          ];
+          'DÉJÀ Σσς Iıİi' => 'déjà σσς iıi̇i', // result for language === "tr" --> "déjà σσς ııii"
+          'DİNÇ'          => 'di̇nç',
+      ];
 
     } else {
       $tests += [
-              'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii', // result for language === "tr" --> "déjà σσς ııii"
-              'DİNÇ'          => 'dinç',
-          ];
+          'DÉJÀ Σσς Iıİi' => 'déjà σσς iıii', // result for language === "tr" --> "déjà σσς ııii"
+          'DİNÇ'          => 'dinç',
+      ];
     }
 
     foreach ($tests as $before => $after) {
@@ -3925,9 +3944,24 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'dınç'          => 'DINÇ',
     ];
 
+    if (
+        Bootup::is_php("7.3")
+        &&
+        UTF8::mbstring_loaded() === true
+    ) {
+      $tests += [
+          'test-ß' => 'TEST-SS',
+      ];
+    }
+
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::strtoupper($before), 'tested: ' . $before);
     }
+
+    // ---
+
+    // keep string length ...
+    self::assertSame('TEST-ẞ', UTF8::strtoupper('test-ß', 'UTF-8', false, null, true));
 
     // ---
 
@@ -4073,6 +4107,16 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertSame('空白', UTF8::substr('中文空白', -2, 2));
     self::assertSame('空白', UTF8::substr('中文空白', -2));
     self::assertSame('Я можу', UTF8::substr('Я можу їсти скло', 0, 6));
+
+    $this->disableNativeUtf8Support();
+
+    // UTF-8
+    self::assertSame('文空', UTF8::substr('中文空白', 1, 2));
+    self::assertSame('空白', UTF8::substr('中文空白', -2, 2));
+    self::assertSame('空白', UTF8::substr('中文空白', -2));
+    self::assertSame('Я можу', UTF8::substr('Я можу їсти скло', 0, 6));
+
+    $this->reactivateNativeUtf8Support();
   }
 
   public function testSubstrCompare()

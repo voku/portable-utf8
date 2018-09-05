@@ -324,7 +324,7 @@ final class UTF8
    * @param string $start    <p>Delimiter marking the start of the substring.</p>
    * @param string $end      <p>Delimiter marking the end of the substring.</p>
    * @param int    $offset   [optional] <p>Index from which to begin the search. Default: 0</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -530,6 +530,7 @@ final class UTF8
       $chr = self::$CHR[$code_point];
 
       if ($encoding !== 'UTF-8') {
+        // always fallback via symfony polyfill
         $chr = \mb_convert_encoding($chr, $encoding, 'UTF-8');
       }
 
@@ -541,6 +542,7 @@ final class UTF8
       $chr = \IntlChar::chr($code_point);
 
       if ($encoding !== 'UTF-8') {
+        // always fallback via symfony polyfill
         $chr = \mb_convert_encoding($chr, $encoding, 'UTF-8');
       }
 
@@ -572,6 +574,7 @@ final class UTF8
     }
 
     if ($encoding !== 'UTF-8') {
+      // always fallback via symfony polyfill
       $chr = \mb_convert_encoding($chr, $encoding, 'UTF-8');
     }
 
@@ -616,7 +619,7 @@ final class UTF8
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
       return \array_map(
           function ($data) {
-            return UTF8::strlen($data, 'CP850'); // 8-BIT
+            return UTF8::strlen_in_byte($data);
           },
           $strSplit
       );
@@ -1010,6 +1013,7 @@ final class UTF8
         \trigger_error('UTF8::encode() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
       }
 
+      // always fallback via symfony polyfill
       $strEncoded = \mb_convert_encoding(
           $str,
           $encoding,
@@ -1031,7 +1035,7 @@ final class UTF8
    * @param string   $search                 <p>The searched string.</p>
    * @param int|null $length                 [optional] <p>Default: null === text->length / 2</p>
    * @param string   $replacerForSkippedText [optional] <p>Default: …</p>
-   * @param string   $encoding               [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string   $encoding               [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -1535,7 +1539,7 @@ final class UTF8
    *
    * @param string $str      <p>The input string.</p>
    * @param int    $n        <p>Number of characters to retrieve from the start.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -1564,6 +1568,39 @@ final class UTF8
   public static function fits_inside(string $str, int $box_size): bool
   {
     return (self::strlen($str) <= $box_size);
+  }
+
+  /**
+   * @param string $str
+   * @param bool   $useLower <p>Use uppercase by default, otherwise use lowecase.</p>
+   *
+   * @return string
+   */
+  private static function fixStrCaseHelper(string $str, $useLower = false): string
+  {
+    $upper = [
+        'ẞ',
+    ];
+    $lower = [
+        'ß',
+    ];
+
+    if ($useLower === true) {
+      $str = \str_replace(
+          $upper,
+          $lower,
+          $str
+      );
+    } else {
+      $str = \str_replace(
+          $lower,
+          $upper,
+          $str
+      );
+    }
+
+
+    return $str;
   }
 
   /**
@@ -1803,7 +1840,7 @@ final class UTF8
   /**
    * @param int    $length        <p>Length of the random string.</p>
    * @param string $possibleChars [optional] <p>Characters string for the random selection.</p>
-   * @param string $encoding      [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -1954,7 +1991,7 @@ final class UTF8
    *
    * @param string $str            <p>The Unicode string to be encoded as numbered entities.</p>
    * @param bool   $keepAsciiChars [optional] <p>Keep ASCII chars.</p>
-   * @param string $encoding       [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding       [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string HTML numbered entities.
    */
@@ -2059,7 +2096,7 @@ final class UTF8
    *                         </tr>
    *                         </table>
    *                         </p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string The decoded string.
    */
@@ -2111,6 +2148,7 @@ final class UTF8
       $str = (string)\preg_replace_callback(
           "/&#\d{2,6};/",
           function ($matches) use ($encoding) {
+            // always fallback via symfony polyfill
             $returnTmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
 
             if ($returnTmp !== '"' && $returnTmp !== "'") {
@@ -2947,6 +2985,10 @@ final class UTF8
       return false;
     }
 
+    if (self::$SUPPORT['mbstring'] === false) {
+      \trigger_error('UTF8::is_utf16() without mbstring may did not work correctly', E_USER_WARNING);
+    }
+
     // init
     $strChars = [];
 
@@ -3011,6 +3053,10 @@ final class UTF8
   {
     if (self::is_binary($str) === false) {
       return false;
+    }
+
+    if (self::$SUPPORT['mbstring'] === false) {
+      \trigger_error('UTF8::is_utf32() without mbstring may did not work correctly', E_USER_WARNING);
     }
 
     // init
@@ -3345,7 +3391,7 @@ final class UTF8
    * Makes string's first char lowercase.
    *
    * @param string $str       <p>The input string</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string The resulting string.
@@ -3601,7 +3647,13 @@ final class UTF8
   {
     static $STATIC_NORMALIZE_ENCODING_CACHE = [];
 
-    if (!$encoding) {
+    if (
+        !$encoding
+        ||
+        $encoding === '1' // only a fallback, for non "strict_types" usage ...
+        ||
+        $encoding === '0' // only a fallback, for non "strict_types" usage ...
+    ) {
       return $fallback;
     }
 
@@ -3796,7 +3848,7 @@ final class UTF8
    * INFO: opposite to UTF8::chr()
    *
    * @param string $chr      <p>The character of which to calculate code point.<p/>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return int
    *             Unicode code point of the given character,<br>
@@ -3814,8 +3866,8 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
 
       // check again, if it's still not UTF-8
-      /** @noinspection NotOptimalIfConditionsInspection */
       if ($encoding !== 'UTF-8') {
+        // always fallback via symfony polyfill
         $chr = (string)\mb_convert_encoding($chr, 'UTF-8', $encoding);
       }
     }
@@ -3879,7 +3931,7 @@ final class UTF8
       $str = self::clean($str);
     }
 
-    /** @noinspection PhpVoidFunctionResultUsedInspection */
+    // always fallback via symfony polyfill
     $return = \mb_parse_str($str, $result);
 
     return !($return === false || empty($result));
@@ -4308,6 +4360,13 @@ final class UTF8
         self::checkForSupport();
       }
 
+      if (self::$SUPPORT['mbstring'] === false) {
+        // if there is no native support for "mbstring",
+        // then we need to clean the string before ...
+        $str = self::clean($str);
+      }
+
+      // always fallback via symfony polyfill
       $save = \mb_substitute_character();
       \mb_substitute_character($replacementCharHelper);
       $strTmp = \mb_convert_encoding($str, 'UTF-8', 'UTF-8');
@@ -4428,7 +4487,7 @@ final class UTF8
    *
    * @param string $char           <p>The Unicode character to be encoded as numbered entity.</p>
    * @param bool   $keepAsciiChars <p>Set to <strong>true</strong> to keep ASCII chars.</>
-   * @param string $encoding       [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding       [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string The HTML numbered entity.
    */
@@ -4735,7 +4794,7 @@ final class UTF8
    * @param string $haystack      <p>The input string.</p>
    * @param string $needle        <p>Substring to look for.</p>
    * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
-   * @param string $encoding      [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return bool Whether or not $haystack contains $needle.
    */
@@ -4756,7 +4815,7 @@ final class UTF8
    * @param string $haystack      <p>The input string.</p>
    * @param array  $needles       <p>SubStrings to look for.</p>
    * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
-   * @param string $encoding      [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return bool Whether or not $haystack contains $needle.
    */
@@ -4787,7 +4846,7 @@ final class UTF8
    * @param string $haystack      <p>The input string.</p>
    * @param array  $needles       <p>SubStrings to look for.</p>
    * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
-   * @param string $encoding      [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return bool
    *               Whether or not $str contains $needle.
@@ -4813,7 +4872,7 @@ final class UTF8
    * character of the string), and in place of spaces as well as underscores.
    *
    * @param string $str      <p>The input string.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -4830,7 +4889,7 @@ final class UTF8
    *
    * @param string $str       <p>The input string.</p>
    * @param string $delimiter <p>Sequence used to separate parts of the string.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -4846,7 +4905,7 @@ final class UTF8
   }
 
   /**
-   * Optimized "\mb_detect_encoding()"-function -> with support for UTF-16 and UTF-32.
+   * Optimized "mb_detect_encoding()"-function -> with support for UTF-16 and UTF-32.
    *
    * @param string $str <p>The input string.</p>
    *
@@ -4899,9 +4958,9 @@ final class UTF8
     }
 
     //
-    // 4.) check via "\mb_detect_encoding()"
+    // 4.) check via "mb_detect_encoding()"
     //
-    // INFO: UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always with "\mb_detect_encoding()"
+    // INFO: UTF-16, UTF-32, UCS2 and UCS4, encoding detection will fail always with "mb_detect_encoding()"
 
     $detectOrder = [
         'ISO-8859-1',
@@ -4938,6 +4997,7 @@ final class UTF8
         'EUC-JP',
     ];
 
+    // always fallback via symfony polyfill
     $encoding = \mb_detect_encoding($str, $detectOrder, true);
     if ($encoding) {
       return $encoding;
@@ -5211,7 +5271,7 @@ final class UTF8
    * @param string $str       <p>The input string.</p>
    * @param string $substring <p>String to be inserted.</p>
    * @param int    $index     <p>The index at which to insert the substring.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -5507,7 +5567,7 @@ final class UTF8
    *
    * @param string $str      <p>The input string.</p>
    * @param int    $n        <p>Number of characters to retrieve from the end.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -5596,7 +5656,7 @@ final class UTF8
    *
    * @param string $str      <p>The input sting.</p>
    * @param string $otherStr <p>Second string for comparison.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -5624,7 +5684,7 @@ final class UTF8
    *
    * @param string $str
    * @param string $otherStr <p>Second string for comparison.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string String with its $str being the longest common substring.
    */
@@ -5675,7 +5735,7 @@ final class UTF8
    *
    * @param string $str
    * @param string $otherStr <p>Second string for comparison.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string
    */
@@ -5721,7 +5781,7 @@ final class UTF8
    *
    * @param string $str      <p>The input string.</p>
    * @param int    $offset   <p>The index to check.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    *
    * @return bool Whether or not the index exists.
@@ -7162,7 +7222,7 @@ final class UTF8
    * @param string $haystack  <p>The string from which to get the position of the first occurrence of needle.</p>
    * @param string $needle    <p>The string to find in haystack.</p>
    * @param int    $offset    [optional] <p>The position in haystack to start searching.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int|false
@@ -7176,7 +7236,7 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $haystack = self::clean($haystack);
       $needle = self::clean($needle);
@@ -7190,16 +7250,42 @@ final class UTF8
       self::checkForSupport();
     }
 
+    if (self::$SUPPORT['mbstring'] === true) {
+      $returnTmp = \mb_stripos($haystack, $needle, $offset, $encoding);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
+    }
+
     if (
         $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
         &&
+        $offset >= 0 // grapheme_stripos() can't handle negative offset
+        &&
         self::$SUPPORT['intl'] === true
     ) {
-      return \grapheme_stripos($haystack, $needle, $offset);
+      $returnTmp = \grapheme_stripos($haystack, $needle, $offset);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
-    // fallback to "mb_"-function via polyfill
-    return \mb_stripos($haystack, $needle, $offset, $encoding);
+    // fallback for ascii only
+    if (self::is_ascii($haystack) && self::is_ascii($needle)) {
+      return \stripos($haystack, $needle, $offset);
+    }
+
+    // fallback via symfony polyfill
+    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
+      return \mb_stripos($haystack, $needle, $offset, $encoding);
+    }
+
+    // fallback via vanilla php
+
+    $haystack = self::strtoupper($haystack, $encoding, false, null, true);
+    $needle = self::strtoupper($needle, $encoding, false, null, true);
+
+    return self::strpos($haystack, $needle, $offset, $encoding);
   }
 
   /**
@@ -7208,10 +7294,10 @@ final class UTF8
    * @param string $haystack       <p>The input string. Must be valid UTF-8.</p>
    * @param string $needle         <p>The string to look for. Must be valid UTF-8.</p>
    * @param bool   $before_needle  [optional] <p>
-   *                               If <b>TRUE</b>, grapheme_strstr() returns the part of the
+   *                               If <b>TRUE</b>, it returns the part of the
    *                               haystack before the first occurrence of the needle (excluding the needle).
    *                               </p>
-   * @param string $encoding       [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding       [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8      [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return false|string A sub-string,<br>or <strong>false</strong> if needle is not found.
@@ -7227,7 +7313,7 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
@@ -7254,11 +7340,14 @@ final class UTF8
     }
 
     if (
-        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        $encoding === 'UTF-8' // INFO: "grapheme_stristr()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
     ) {
-      return \grapheme_stristr($haystack, $needle, $before_needle);
+      $returnTmp = \grapheme_stristr($haystack, $needle, $before_needle);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     if (self::is_ascii($needle) && self::is_ascii($haystack)) {
@@ -7284,13 +7373,16 @@ final class UTF8
    * @link     http://php.net/manual/en/function.mb-strlen.php
    *
    * @param string $str       <p>The string being checked for length.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
-   * @return int The number of characters in the string $str having character encoding $encoding. (One multi-byte
-   *             character counted as +1)
+   * @return int|false
+   *             The number <strong>(int)</strong> of characters in the string $str having character encoding $encoding.
+   *             (One multi-byte character counted as +1).
+   *             <br>
+   *             Can return <strong>false</strong>, if e.g. mbstring is not installed and we process invalid chars.
    */
-  public static function strlen(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false): int
+  public static function strlen(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false)
   {
     if ('' === $str) {
       return 0;
@@ -7304,22 +7396,12 @@ final class UTF8
       self::checkForSupport();
     }
 
-    switch ($encoding) {
-      case 'ASCII':
-      case 'CP850':
-        if (
-            $encoding === 'CP850'
-            &&
-            self::$SUPPORT['mbstring_func_overload'] === false
-        ) {
-          return \strlen($str);
-        }
-
-        return (int)\mb_strlen($str, 'CP850'); // 8-BIT
+    if ($encoding === 'ASCII' || $encoding === 'CP850') {
+      return self::strlen_in_byte($str);
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strlen" and "\iconv_strlen" returns wrong length,
+      // "mb_strlen" and "\iconv_strlen" returns wrong length,
       // if invalid characters are found in $str
       $str = self::clean($str);
     }
@@ -7362,11 +7444,22 @@ final class UTF8
     }
 
     if (
-        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        $encoding === 'UTF-8' // INFO: "grapheme_strlen()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
     ) {
-      return (int)\grapheme_strlen($str);
+      $returnTmp = \grapheme_strlen($str);
+      if ($returnTmp !== null) {
+        return $returnTmp;
+      }
+    }
+
+    // fallback via symfony polyfill
+    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
+      $returnTmp = \mb_strlen($str, $encoding);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     // fallback for ascii only
@@ -7374,20 +7467,15 @@ final class UTF8
       return \strlen($str);
     }
 
-    // fallback via symfony polyfill
-    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
-      return (int)\mb_strlen($str, $encoding);
-    }
-
     // fallback via vanilla php
     \preg_match_all('/./us', $str, $parts);
+
     $returnTmp = \count($parts[0]);
-    if ($returnTmp !== 0) {
-      return $returnTmp;
+    if ($returnTmp === 0 && isset($str[0])) {
+      return false;
     }
 
-    // fallback to "mb_"-function via polyfill
-    return (int)\mb_strlen($str, $encoding);
+    return $returnTmp;
   }
 
   /**
@@ -7400,12 +7488,11 @@ final class UTF8
   public static function strlen_in_byte(string $str): int
   {
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
-      $len = \mb_strlen($str, 'CP850'); // 8-BIT
-    } else {
-      $len = \strlen($str);
+      // "mb_" is available if overload is used, so use it ...
+      return \mb_strlen($str, 'CP850'); // 8-BIT
     }
 
-    return $len;
+    return \strlen($str);
   }
 
   /**
@@ -7518,7 +7605,7 @@ final class UTF8
    * @param string     $haystack  <p>The string from which to get the position of the first occurrence of needle.</p>
    * @param string|int $needle    <p>The string to find in haystack.<br>Or a code point as int.</p>
    * @param int        $offset    [optional] <p>The search offset. If it is not specified, 0 is used.</p>
-   * @param string     $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string     $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool       $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int|false
@@ -7542,7 +7629,7 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
@@ -7599,11 +7686,16 @@ final class UTF8
     }
 
     if (
-        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        $encoding === 'UTF-8' // INFO: "grapheme_strpos()" can't handle other encodings
+        &&
+        $offset >= 0 // grapheme_strpos() can't handle negative offset
         &&
         self::$SUPPORT['intl'] === true
     ) {
-      return \grapheme_strpos($haystack, $needle, $offset);
+      $returnTmp = \grapheme_strpos($haystack, $needle, $offset);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     if (
@@ -7620,8 +7712,7 @@ final class UTF8
     }
 
     // fallback for ascii only
-    $haystackIsAscii = self::is_ascii($haystack);
-    if ($haystackIsAscii && self::is_ascii($needle)) {
+    if (($haystackIsAscii = self::is_ascii($haystack)) && self::is_ascii($needle)) {
       return \strpos($haystack, $needle, $offset);
     }
 
@@ -7635,7 +7726,7 @@ final class UTF8
     if ($haystackIsAscii) {
       $haystackTmp = \substr($haystack, $offset);
     } else {
-      $haystackTmp = self::substr($haystack, $offset);
+      $haystackTmp = self::substr($haystack, $offset, null, $encoding);
     }
     if ($haystackTmp === false) {
       $haystackTmp = '';
@@ -7651,13 +7742,11 @@ final class UTF8
       return false;
     }
 
-    $returnTmp = $offset + self::strlen(\substr($haystack, 0, $pos));
-    if ($returnTmp !== false) {
-      return $returnTmp;
+    if ($pos) {
+      return ($offset + (self::strlen(substr($haystack, 0, $pos), $encoding)));
     }
 
-    // fallback to "mb_"-function via polyfill
-    return \mb_strpos($haystack, $needle, $offset, $encoding);
+    return ($offset + 0);
   }
 
   /**
@@ -7675,7 +7764,7 @@ final class UTF8
    *                              If set to false, it returns all of haystack
    *                              from the last occurrence of needle to the end,
    *                              </p>
-   * @param string $encoding      [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8     [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string|false The portion of haystack or false if needle is not found.
@@ -7687,14 +7776,59 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
     }
 
-    // fallback to "mb_"-function via polyfill
-    return \mb_strrchr($haystack, $needle, $before_needle, $encoding);
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (
+        $encoding !== 'UTF-8'
+        &&
+        self::$SUPPORT['mbstring'] === false
+    ) {
+      \trigger_error('UTF8::strrchr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
+    }
+
+    if (self::$SUPPORT['mbstring'] === true) {
+      return \mb_strrchr($haystack, $needle, $before_needle, $encoding);
+    }
+
+    if (
+        $before_needle === false
+        &&
+        ('CP850' === $encoding || 'ASCII' === $encoding)
+    ) {
+      return \strrchr($haystack, $needle);
+    }
+
+    // fallback via symfony polyfill
+    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
+      return \mb_strrchr($haystack, $needle, $before_needle, $encoding);
+    }
+
+    // fallback via vanilla php
+
+    $needleTmp = self::substr($needle, 0, 1, $encoding);
+    if ($needleTmp === false) {
+      return false;
+    }
+    $needle = (string)$needleTmp;
+
+    $pos = self::strrpos($haystack, $needle, null, $encoding);
+    if ($pos === false) {
+      return false;
+    }
+
+    if ($before_needle) {
+      return self::substr($haystack, 0, $pos, $encoding);
+    }
+
+    return self::substr($haystack, $pos, null, $encoding);
   }
 
   /**
@@ -7734,7 +7868,7 @@ final class UTF8
    *                               If set to false, it returns all of haystack
    *                               from the last occurrence of needle to the end,
    *                               </p>
-   * @param string $encoding       [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding       [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8      [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string|false The portion of haystack or<br>false if needle is not found.
@@ -7746,12 +7880,13 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
     }
 
+    // always fallback via symfony polyfill
     return \mb_strrichr($haystack, $needle, $before_needle, $encoding);
   }
 
@@ -7761,7 +7896,7 @@ final class UTF8
    * @param string     $haystack  <p>The string to look in.</p>
    * @param string|int $needle    <p>The string to look for.</p>
    * @param int        $offset    [optional] <p>Number of characters to ignore in the beginning or end.</p>
-   * @param string     $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string     $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool       $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int|false
@@ -7785,7 +7920,7 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // \mb_strripos && iconv_strripos is not tolerant to invalid characters
+      // mb_strripos() && iconv_strripos() is not tolerant to invalid characters
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
     }
@@ -7811,16 +7946,16 @@ final class UTF8
     }
 
     if (
-        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        $encoding === 'UTF-8' // INFO: "grapheme_strripos()" can't handle other encodings
+        &&
+        $offset >= 0 // grapheme_strripos() can't handle negative offset
         &&
         self::$SUPPORT['intl'] === true
     ) {
-      return \grapheme_strripos($haystack, $needle, $offset);
-    }
-
-    // fallback for ascii only
-    if (self::is_ascii($haystack) && self::is_ascii($needle)) {
-      return \strripos($haystack, $needle, $offset);
+      $returnTmp = \grapheme_strripos($haystack, $needle, $offset);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     // fallback via symfony polyfill
@@ -7828,8 +7963,17 @@ final class UTF8
       return \mb_strripos($haystack, $needle, $offset, $encoding);
     }
 
+    // fallback for ascii only
+    if (self::is_ascii($haystack) && self::is_ascii($needle)) {
+      return \strripos($haystack, $needle, $offset);
+    }
+
     // fallback via vanilla php
-    return self::strrpos(self::strtoupper($haystack), self::strtoupper($needle), $offset, $encoding, $cleanUtf8);
+
+    $haystack = self::strtoupper($haystack, $encoding, false, null, true);
+    $needle = self::strtoupper($needle, $encoding, false, null, true);
+
+    return self::strrpos($haystack, $needle, $offset, $encoding, $cleanUtf8);
   }
 
   /**
@@ -7893,21 +8037,34 @@ final class UTF8
     }
 
     if (
-        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        $offset !== null
+        &&
+        $offset >= 0 // grapheme_strrpos() can't handle negative offset
+        &&
+        $encoding === 'UTF-8' // INFO: "grapheme_strrpos()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
     ) {
-      return \grapheme_strrpos($haystack, $needle, $offset);
-    }
-
-    // fallback for ascii only
-    if (self::is_ascii($haystack) && self::is_ascii($needle)) {
-      return \strrpos($haystack, $needle, (int)$offset);
+      $returnTmp = \grapheme_strrpos($haystack, $needle, $offset);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     // fallback via symfony polyfill
     if (self::$SUPPORT['symfony_polyfill_used'] === true) {
       return \mb_strrpos($haystack, $needle, $offset, $encoding);
+    }
+
+    // fallback for ascii only
+    if (
+        $offset !== null
+        &&
+        self::is_ascii($haystack)
+        &&
+        self::is_ascii($needle)
+    ) {
+      return \strrpos($haystack, $needle, $offset);
     }
 
     // fallback via vanilla php
@@ -7972,7 +8129,7 @@ final class UTF8
    *                               If <b>TRUE</b>, strstr() returns the part of the
    *                               haystack before the first occurrence of the needle (excluding the needle).
    *                               </p>
-   * @param string $encoding       [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding       [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8      [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string|false
@@ -7985,7 +8142,7 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
@@ -8012,11 +8169,14 @@ final class UTF8
     }
 
     if (
-        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        $encoding === 'UTF-8' // INFO: "grapheme_strstr()" can't handle other encodings
         &&
         self::$SUPPORT['intl'] === true
     ) {
-      return \grapheme_strstr($haystack, $needle, $before_needle);
+      $returnTmp = \grapheme_strstr($haystack, $needle, $before_needle);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     \preg_match('/^(.*?)' . \preg_quote($needle, '/') . '/us', $haystack, $match);
@@ -8084,14 +8244,15 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strtolower.php
    *
-   * @param string      $str       <p>The string being lowercased.</p>
-   * @param string      $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
-   * @param bool        $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
-   * @param string|null $lang      [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param string      $str                   <p>The string being lowercased.</p>
+   * @param string      $encoding              [optional] <p>Set the charset for e.g. "mb_" function</p>
+   * @param bool        $cleanUtf8             [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
    *
    * @return string String with all alphabetic characters converted to lowercase.
    */
-  public static function strtolower($str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null): string
+  public static function strtolower($str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
     // init
     $str = (string)$str;
@@ -8101,13 +8262,18 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $str = self::clean($str);
     }
 
     if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
+    }
+
+    // hack for old php version or for the polyfill ...
+    if ($tryToKeepStringLength === true) {
+      $str = self::fixStrCaseHelper($str, true);
     }
 
     if ($lang !== null) {
@@ -8132,6 +8298,7 @@ final class UTF8
       \trigger_error('UTF8::strtolower() without intl cannot handle the "lang" parameter: ' . $lang, E_USER_WARNING);
     }
 
+    // always fallback via symfony polyfill
     return \mb_strtolower($str, $encoding);
   }
 
@@ -8153,14 +8320,15 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.mb-strtoupper.php
    *
-   * @param string      $str       <p>The string being uppercased.</p>
-   * @param string      $encoding  [optional] <p>Set the charset.</p>
-   * @param bool        $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
-   * @param string|null $lang      [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param string      $str                   <p>The string being uppercased.</p>
+   * @param string      $encoding              [optional] <p>Set the charset.</p>
+   * @param bool        $cleanUtf8             [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
    *
    * @return string String with all alphabetic characters converted to uppercase.
    */
-  public static function strtoupper($str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null): string
+  public static function strtoupper($str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
     // init
     $str = (string)$str;
@@ -8170,13 +8338,18 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $str = self::clean($str);
     }
 
     if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
+    }
+
+    // hack for old php version or for the polyfill ...
+    if ($tryToKeepStringLength === true) {
+      $str = self::fixStrCaseHelper($str, false);
     }
 
     if ($lang !== null) {
@@ -8201,6 +8374,7 @@ final class UTF8
       \trigger_error('UTF8::strtolower() without intl + PHP >= 5.4 cannot handle the "lang"-parameter: ' . $lang, E_USER_WARNING);
     }
 
+    // always fallback via symfony polyfill
     return \mb_strtoupper($str, $encoding);
   }
 
@@ -8253,7 +8427,7 @@ final class UTF8
    * Return the width of a string.
    *
    * @param string $str       <p>The input string.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int
@@ -8270,7 +8444,7 @@ final class UTF8
       $str = self::clean($str);
     }
 
-    // fallback to "mb_"-function via polyfill
+    // always fallback via symfony polyfill
     return \mb_strwidth($str, $encoding);
   }
 
@@ -8282,7 +8456,7 @@ final class UTF8
    * @param string $str       <p>The string being checked.</p>
    * @param int    $offset    <p>The first position used in str.</p>
    * @param int    $length    [optional] <p>The maximum length of the returned string.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string|false
@@ -8317,6 +8491,11 @@ final class UTF8
       $str_length = self::strlen($str, $encoding);
     }
 
+    // e.g.: invalid chars + mbstring not installed
+    if ($str_length === false ) {
+      return false;
+    }
+
     // Empty string
     if ($offset === $str_length && !$length) {
       return '';
@@ -8328,7 +8507,7 @@ final class UTF8
     }
 
     if ($length === null) {
-      $length = $str_length;
+      $length = (int)$str_length;
     } else {
       $length = (int)$length;
     }
@@ -8362,11 +8541,16 @@ final class UTF8
     }
 
     if (
-        $encoding === 'UTF-8' // INFO: "grapheme_stripos()" can't handle other encodings
+        $encoding === 'UTF-8' // INFO: "grapheme_substr()" can't handle other encodings
+        &&
+        $offset >= 0 // grapheme_substr() can't handle negative offset
         &&
         self::$SUPPORT['intl'] === true
     ) {
-      return \grapheme_substr($str, $offset, $length);
+      $returnTmp = \grapheme_substr($str, $offset, $length);
+      if ($returnTmp !== false) {
+        return $returnTmp;
+      }
     }
 
     if (
@@ -8427,13 +8611,13 @@ final class UTF8
       if ($str1Tmp === false) {
         $str1Tmp = '';
       }
-      $str1 = $str1Tmp;
+      $str1 = (string)$str1Tmp;
 
       $str2Tmp = self::substr($str2, 0, self::strlen($str1));
       if ($str2Tmp === false) {
         $str2Tmp = '';
       }
-      $str2 = $str2Tmp;
+      $str2 = (string)$str2Tmp;
     }
 
     if ($case_insensitivity === true) {
@@ -8456,7 +8640,7 @@ final class UTF8
    *                           substring. It outputs a warning if the offset plus the length is
    *                           greater than the haystack length.
    *                           </p>
-   * @param string $encoding   [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8  [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return int|false This functions returns an integer or false if there isn't a string.
@@ -8477,7 +8661,11 @@ final class UTF8
     if ($offset || $length !== null) {
 
       if ($length === null) {
-        $length = self::strlen($haystack);
+        $lengthTmp = self::strlen($haystack);
+        if ($lengthTmp === false) {
+          return false;
+        }
+        $length = (int)$lengthTmp;
       }
 
       if (
@@ -8506,7 +8694,7 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $needle = self::clean($needle);
       $haystack = self::clean($haystack);
@@ -8541,7 +8729,7 @@ final class UTF8
    * @param string $str           <p>The input string.</p>
    * @param string $substring     <p>The substring to search for.</p>
    * @param bool   $caseSensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
-   * @param string $encoding      [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return int
    */
@@ -8582,6 +8770,28 @@ final class UTF8
     }
 
     return $haystack;
+  }
+
+  /**
+   * Get part of a string process in bytes.
+   *
+   * @param string $str    <p>The string being checked.</p>
+   * @param int    $offset <p>The first position used in str.</p>
+   * @param int    $length [optional] <p>The maximum length of the returned string.</p>
+   *
+   * @return string|false
+   *                      The portion of <i>str</i> specified by the <i>offset</i> and
+   *                      <i>length</i> parameters.</p><p>If <i>str</i> is shorter than <i>offset</i>
+   *                      characters long, <b>FALSE</b> will be returned.
+   */
+  public static function substr_in_byte(string $str, int $offset = 0, int $length = null)
+  {
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      // "mb_" is available if overload is used, so use it ...
+      return \mb_substr($str, $offset, $length, 'CP850'); // 8-BIT
+    }
+
+    return \substr($str, $offset, $length);
   }
 
   /**
@@ -8736,7 +8946,11 @@ final class UTF8
     \preg_match_all('/./us', $replacement, $rmatches);
 
     if ($length === null) {
-      $length = self::strlen($str);
+      $lengthTmp = self::strlen($str);
+      if ($lengthTmp === false) {
+        return false;
+      }
+      $length = (int)$lengthTmp;
     }
 
     \array_splice($smatches[0], $offset, $length, $rmatches[0]);
@@ -8767,7 +8981,7 @@ final class UTF8
       if ($haystackTmp === false) {
         $haystackTmp = '';
       }
-      $haystack = $haystackTmp;
+      $haystack = (string)$haystackTmp;
     }
 
     return $haystack;
@@ -8777,7 +8991,7 @@ final class UTF8
    * Returns a case swapped version of the string.
    *
    * @param string $str       <p>The input string.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string Each character's case swapped.
@@ -8793,7 +9007,7 @@ final class UTF8
     }
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $str = self::clean($str);
     }
@@ -8841,7 +9055,7 @@ final class UTF8
    * and all other chars to lowercase.
    *
    * @param string $str      <p>The input string.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string String with all characters of $str being title-cased.
    */
@@ -8851,7 +9065,7 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
-    // "mb_convert_case()" used a polyfill if needed ...
+    // always fallback via symfony polyfill
     return \mb_convert_case($str, MB_CASE_TITLE, $encoding);
   }
 
@@ -9258,6 +9472,7 @@ final class UTF8
     $buf = \preg_replace_callback(
         '/\\\\u([0-9a-f]{4})/i',
         function ($match) {
+          // always fallback via symfony polyfill
           return \mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
         },
         $buf
@@ -9339,7 +9554,7 @@ final class UTF8
    * Makes string's first char uppercase.
    *
    * @param string $str       <p>The input string.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "\mb_" function</p>
+   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
    * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string The resulting string.
@@ -9347,7 +9562,7 @@ final class UTF8
   public static function ucfirst(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false): string
   {
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $str = self::clean($str);
     }
@@ -9403,7 +9618,7 @@ final class UTF8
     // -> MB_CASE_TITLE didn't only uppercase the first letter, it also lowercase all other letters
 
     if ($cleanUtf8 === true) {
-      // "\mb_strpos" and "\iconv_strpos" returns wrong position,
+      // "mb_strpos()" and "iconv_strpos()" returns wrong position,
       // if invalid characters are found in $haystack before $needle
       $str = self::clean($str);
     }
@@ -9806,7 +10021,10 @@ final class UTF8
       }
     }
 
-    $return = (string)self::substr($str, 0, $j, 'CP850'); // 8-BIT
+    $return = self::substr_in_byte($str, 0, $j);
+    if ($return === false) {
+      $return = '';
+    }
 
     if (
         $keepUtf8Chars === true
@@ -9835,6 +10053,7 @@ final class UTF8
     $str = \utf8_encode($str);
 
     // the polyfill maybe return false
+    /** @noinspection CallableParameterUseCaseInTypeContextInspection */
     if ($str === false) {
       return '';
     }
