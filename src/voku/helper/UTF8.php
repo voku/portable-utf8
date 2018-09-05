@@ -8492,7 +8492,7 @@ final class UTF8
     }
 
     // e.g.: invalid chars + mbstring not installed
-    if ($str_length === false ) {
+    if ($str_length === false) {
       return false;
     }
 
