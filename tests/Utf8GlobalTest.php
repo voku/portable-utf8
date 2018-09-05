@@ -3810,7 +3810,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'DINÇ'          => 'dinç', // result for language === "tr" --> "dınç"
     ];
 
-    if (Bootup::is_php("7.3")) {
+    if (Bootup::is_php('7.3')) {
       $tests += [
               'DÉJÀ Σσς Iıİi' => 'déjà σσς iıi̇i', // result for language === "tr" --> "déjà σσς ııii"
               'DİNÇ'          => 'di̇nç',
