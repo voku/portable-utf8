@@ -3598,15 +3598,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
         if (Bootup::is_php('7.1') === false) {
 
-          if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-
-            self::assertSame(3, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
-
-          } else {
-
-            self::assertFalse(UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
-
-          }
+          self::assertSame(3, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
 
         } else {
 
