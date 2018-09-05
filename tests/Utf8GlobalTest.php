@@ -3826,7 +3826,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     if (
-        Bootup::is_php("7.3")
+        Bootup::is_php('7.3')
         &&
         UTF8::mbstring_loaded() === true
     ) {
@@ -3945,7 +3945,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     if (
-        Bootup::is_php("7.3")
+        Bootup::is_php('7.3')
         &&
         UTF8::mbstring_loaded() === true
     ) {
