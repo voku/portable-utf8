@@ -5851,9 +5851,9 @@ final class UTF8
     if ($pad_type !== (int)$pad_type) {
       if ($pad_type == 'left') {
         $pad_type = STR_PAD_LEFT;
-      } else if ($pad_type == 'right') {
+      } elseif ($pad_type == 'right') {
         $pad_type = STR_PAD_RIGHT;
-      } else if ($pad_type == 'both') {
+      } elseif ($pad_type == 'both') {
         $pad_type = STR_PAD_BOTH;
       } else {
         throw new \InvalidArgumentException(
