@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.2.1 (2018-08-06)
+- add more php-warnings
+- optimize native php fallback
+- fix tests without "mbstring"-ext
+- UTF8::strlen() can return "false", if "mbstring" is not installed
+    
 ### 5.2.0 (2018-08-05)
 - use phpstan (+ fixed many code smells)
 - added more tests
