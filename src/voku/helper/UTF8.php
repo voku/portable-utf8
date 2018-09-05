@@ -8948,7 +8948,8 @@ final class UTF8
     if ($length === null) {
       $lengthTmp = self::strlen($str);
       if ($lengthTmp === false) {
-        return false;
+        // e.g.: non mbstring support + invalid chars
+        return '';
       }
       $length = (int)$lengthTmp;
     }
