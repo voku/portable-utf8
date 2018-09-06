@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.2.2 (2018-08-06)
+- use "UTF8::encode()" internal ...
+
 ### 5.2.1 (2018-08-06)
 - add more php-warnings
 - optimize native php fallback
