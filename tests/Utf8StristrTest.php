@@ -120,9 +120,21 @@ class Utf8StristrTest extends \PHPUnit\Framework\TestCase
     $search = '';
     self::assertSame(false, UTF8::stristr($str, $search));
 
+    $str = 'iñtërnâtiônàlizætiøn';
+    $search = '';
+    /** @noinspection PhpUsageOfSilenceOperatorInspection */
+    self::assertSame(false, @stristr($str, $search));
+
+    // --
+
     $str = 'int';
     $search = null;
-    self::assertSame(false, stristr($str, $search));
+    self::assertSame(false, UTF8::stristr($str, (string)$search));
+
+    $str = 'int';
+    $search = null;
+    /** @noinspection PhpUsageOfSilenceOperatorInspection */
+    self::assertSame(false, @stristr($str, (string)$search));
   }
 
   public function testEmptyStr()

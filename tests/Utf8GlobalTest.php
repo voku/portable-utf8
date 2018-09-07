@@ -4161,7 +4161,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertFalse(substr_count('', ''));
     self::assertFalse(UTF8::substr_count('', ''));
 
-    self::assertFalse(substr_count('', '', 1));
+    if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+      self::assertFalse(substr_count('', '', '1')); // offset (int) is encoding (string) :/
+    } else {
+      self::assertFalse(substr_count('', '', 1));
+    }
     self::assertFalse(UTF8::substr_count('', '', 1));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
