@@ -4169,7 +4169,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertFalse(UTF8::substr_count('', '', 1));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count('', '', 1, 1));
+      self::assertSame(null, substr_count('', '', ''));  // offset (int) is encoding (string) :/
     } else {
       self::assertFalse(substr_count('', '', 1, 1));
     }
@@ -4177,7 +4177,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertFalse(UTF8::substr_count('', '', 1, 1));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count('', 'test', 1, 1));
+      self::assertSame(null, substr_count('', 'test', '1')); // offset (int) is encoding (string) + last parameter is not available :/
     } else {
       self::assertFalse(substr_count('', 'test', 1, 1));
     }
@@ -4185,7 +4185,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertFalse(UTF8::substr_count('', 'test', 1, 1));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count('test', '', 1, 1));
+      self::assertSame(null, substr_count('test', '', '1')); // offset (int) is encoding (string) + last parameter is not available :/
     } else {
       self::assertFalse(substr_count('test', '', 1, 1));
     }
@@ -4193,7 +4193,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertFalse(UTF8::substr_count('test', '', 1, 1));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count('test', 'test', 1, 1));
+      self::assertSame(null, substr_count('test', 'test', '1')); // offset (int) is encoding (string) + last parameter is not available :/
     } else {
       self::assertSame(0, substr_count('test', 'test', 1, 1));
     }
@@ -4201,7 +4201,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertSame(0, UTF8::substr_count('test', 'test', 1, 1));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count((string)12345, (string)23, 1, 2));
+      self::assertSame(null, substr_count((string)12345, (string)23, (string)1)); // offset (int) is encoding (string) + last parameter is not available :/
     } else {
       self::assertSame(1, substr_count((string)12345, (string)23, 1, 2));
     }
@@ -4214,7 +4214,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     if (Bootup::is_php('7.1') === false) {
 
       if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-        self::assertSame(null, substr_count('abcde', 'de', -2, 2));
+        self::assertSame(null, substr_count('abcde', 'de', (string)-2)); // offset (int) is encoding (string) + last parameter is not available :/
       } else {
         self::assertFalse(substr_count('abcde', 'de', -2, 2));
       }
@@ -4223,7 +4223,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     } else {
 
       if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-        self::assertSame(null, substr_count('abcde', 'de', -2, 2));
+        self::assertSame(null, substr_count('abcde', 'de', (string)-2)); // offset (int) is encoding (string) + last parameter is not available :/
       } else {
         self::assertSame(1, substr_count('abcde', 'de', -2, 2));
       }
@@ -4232,7 +4232,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     }
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count('abcde', 'bcg', 1, 2));
+      self::assertSame(null, substr_count('abcde', 'bcg', (string)1)); // offset (int) is encoding (string) + last parameter is not available :/
     } else {
       self::assertSame(0, substr_count('abcde', 'bcg', 1, 2));
     }
@@ -4240,7 +4240,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertSame(0, UTF8::substr_count('abcde', 'bcg', 1, 2));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count('abcde', 'BC', 1, 2));
+      self::assertSame(null, substr_count('abcde', 'BC', (string)1)); // offset (int) is encoding (string) + last parameter is not available :/
     } else {
       self::assertSame(0, substr_count('abcde', 'BC', 1, 2));
     }
@@ -4248,7 +4248,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertSame(0, UTF8::substr_count('abcde', 'BC', 1, 2));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count('abcde', 'bc', 1, 3));
+      self::assertSame(null, substr_count('abcde', 'bc', (string)1)); // offset (int) is encoding (string) + last parameter is not available :/
     } else {
       self::assertSame(1, substr_count('abcde', 'bc', 1, 3));
     }
@@ -4256,7 +4256,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertSame(1, UTF8::substr_count('abcde', 'bc', 1, 3));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count('abcde', 'cd', 1, 2));
+      self::assertSame(null, substr_count('abcde', 'cd', (string)1)); // offset (int) is encoding (string) + last parameter is not available :/
     } else {
       self::assertSame(0, substr_count('abcde', 'cd', 1, 2));
     }
