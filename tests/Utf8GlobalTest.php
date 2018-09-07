@@ -94,7 +94,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     foreach ($testArray as $actualString => $testDataArray) {
       foreach ($testDataArray as $stringPos => $expectedString) {
-        self::assertSame($expectedString, UTF8::access($actualString, $stringPos),'tested: ' . $actualString);
+        self::assertSame($expectedString, UTF8::access($actualString, $stringPos), 'tested: ' . $actualString);
       }
     }
   }
