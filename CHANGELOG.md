@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.2.3 (2018-08-07)
+- fix some breaking changes from "strict_types=1"
+
 ### 5.2.2 (2018-08-06)
 - use "UTF8::encode()" internal ...
 
