@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use voku\helper\Bootup;
 use voku\helper\UTF8;
 
@@ -169,7 +171,7 @@ class BootupTest extends \PHPUnit\Framework\TestCase
     }
 
     $rand = Bootup::get_random_bytes(0);
-    self::assertSame(0, strlen($rand));
+    self::assertFalse($rand);
 
     $bytes = [
         Bootup::get_random_bytes(12),

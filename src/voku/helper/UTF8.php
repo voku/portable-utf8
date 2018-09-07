@@ -667,12 +667,12 @@ final class UTF8
   /**
    * Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.
    *
-   * @param string $char <p>The input character</p>
-   * @param string $pfix [optional]
+   * @param string|int $char <p>The input character</p>
+   * @param string     $pfix [optional]
    *
    * @return string The code point encoded as U+xxxx
    */
-  public static function chr_to_hex(string $char, string $pfix = 'U+'): string
+  public static function chr_to_hex($char, string $pfix = 'U+'): string
   {
     if ('' === $char) {
       return '';
@@ -789,8 +789,11 @@ final class UTF8
    *
    * @return string
    */
-  public static function cleanup(string $str): string
+  public static function cleanup($str): string
   {
+    // init
+    $str = (string)$str;
+
     if ('' === $str) {
       return '';
     }
@@ -1952,8 +1955,11 @@ final class UTF8
    *
    * @return int|false The code point, or false on failure.
    */
-  public static function hex_to_int(string $hexDec)
+  public static function hex_to_int($hexDec)
   {
+    // init
+    $hexDec = (string)$hexDec;
+
     if ('' === $hexDec) {
       return false;
     }
@@ -2539,7 +2545,7 @@ final class UTF8
    *
    * @deprecated <p>use "UTF8::is_base64()"</p>
    */
-  public static function isBase64(string $str): bool
+  public static function isBase64($str): bool
   {
     return self::is_base64($str);
   }
@@ -2614,7 +2620,7 @@ final class UTF8
    *
    * @see        UTF8::is_utf16()
    *
-   * @param string $str
+   * @param mixed $str
    *
    * @return int|false
    *                    <strong>false</strong> if is't not UTF16,<br>
@@ -2623,7 +2629,7 @@ final class UTF8
    *
    * @deprecated <p>use "UTF8::is_utf16()"</p>
    */
-  public static function isUtf16(string $str)
+  public static function isUtf16($str)
   {
     return self::is_utf16($str);
   }
@@ -2633,7 +2639,7 @@ final class UTF8
    *
    * @see        UTF8::is_utf32()
    *
-   * @param string $str
+   * @param mixed $str
    *
    * @return int|false
    *                   <strong>false</strong> if is't not UTF16,
@@ -2642,7 +2648,7 @@ final class UTF8
    *
    * @deprecated <p>use "UTF8::is_utf32()"</p>
    */
-  public static function isUtf32(string $str)
+  public static function isUtf32($str)
   {
     return self::is_utf32($str);
   }
@@ -2716,8 +2722,16 @@ final class UTF8
    *
    * @return bool Whether or not $str is base64 encoded.
    */
-  public static function is_base64(string $str): bool
+  public static function is_base64($str): bool
   {
+    if ('' === $str) {
+      return false;
+    }
+
+    if (is_string($str) === false) {
+      return false;
+    }
+
     $base64String = (string)\base64_decode($str, true);
 
     return $base64String && \base64_encode($base64String) === $str;
@@ -2969,15 +2983,18 @@ final class UTF8
   /**
    * Check if the string is UTF-16.
    *
-   * @param string $str <p>The input string.</p>
+   * @param mixed $str <p>The input string.</p>
    *
    * @return int|false
    *                   <strong>false</strong> if is't not UTF-16,<br>
    *                   <strong>1</strong> for UTF-16LE,<br>
    *                   <strong>2</strong> for UTF-16BE.
    */
-  public static function is_utf16(string $str)
+  public static function is_utf16($str)
   {
+    // init
+    $str = (string)$str;
+
     if (self::is_binary($str) === false) {
       return false;
     }
@@ -3039,15 +3056,18 @@ final class UTF8
   /**
    * Check if the string is UTF-32.
    *
-   * @param string $str
+   * @param mixed $str
    *
    * @return int|false
    *                   <strong>false</strong> if is't not UTF-32,<br>
    *                   <strong>1</strong> for UTF-32LE,<br>
    *                   <strong>2</strong> for UTF-32BE.
    */
-  public static function is_utf32(string $str)
+  public static function is_utf32($str)
   {
+    // init
+    $str = (string)$str;
+
     if (self::is_binary($str) === false) {
       return false;
     }
@@ -3620,14 +3640,14 @@ final class UTF8
    *
    * @see        UTF8::normalize_encoding()
    *
-   * @param string $encoding
-   * @param mixed  $fallback
+   * @param mixed $encoding
+   * @param mixed $fallback
    *
    * @return mixed
    *
    * @deprecated <p>use "UTF8::normalize_encoding()"</p>
    */
-  public static function normalizeEncoding(string $encoding, $fallback = '')
+  public static function normalizeEncoding($encoding, $fallback = '')
   {
     return self::normalize_encoding($encoding, $fallback);
   }
@@ -3635,14 +3655,17 @@ final class UTF8
   /**
    * Normalize the encoding-"name" input.
    *
-   * @param string $encoding <p>e.g.: ISO, UTF8, WINDOWS-1251 etc.</p>
-   * @param mixed  $fallback <p>e.g.: UTF-8</p>
+   * @param mixed $encoding <p>e.g.: ISO, UTF8, WINDOWS-1251 etc.</p>
+   * @param mixed $fallback <p>e.g.: UTF-8</p>
    *
    * @return mixed e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.<br>Will return a empty string as fallback (by default)
    */
-  public static function normalize_encoding(string $encoding, $fallback = '')
+  public static function normalize_encoding($encoding, $fallback = '')
   {
     static $STATIC_NORMALIZE_ENCODING_CACHE = [];
+
+    // init
+    $encoding = (string)$encoding;
 
     if (
         !$encoding
@@ -3851,9 +3874,11 @@ final class UTF8
    *             Unicode code point of the given character,<br>
    *             0 on invalid UTF-8 byte sequence.
    */
-  public static function ord(string $chr, string $encoding = 'UTF-8'): int
+  public static function ord($chr, string $encoding = 'UTF-8'): int
   {
     // init
+    $chr = (string)$chr;
+
     static $CHAR_CACHE = [];
 
     // save the original string
@@ -4522,14 +4547,17 @@ final class UTF8
   /**
    * Convert a string to an array of Unicode characters.
    *
-   * @param string $str       <p>The string to split into array.</p>
-   * @param int    $length    [optional] <p>Max character length of each array element.</p>
-   * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|int $str       <p>The string to split into array.</p>
+   * @param int        $length    [optional] <p>Max character length of each array element.</p>
+   * @param bool       $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string[] An array containing chunks of the string.
    */
-  public static function split(string $str, int $length = 1, bool $cleanUtf8 = false): array
+  public static function split($str, int $length = 1, bool $cleanUtf8 = false): array
   {
+    // init
+    $str = (string)$str;
+
     if ('' === $str) {
       return [];
     }
@@ -4794,8 +4822,17 @@ final class UTF8
    *
    * @return bool Whether or not $haystack contains $needle.
    */
-  public static function str_contains(string $haystack, string $needle, bool $caseSensitive = true, string $encoding = 'UTF-8'): bool
+  public static function str_contains(string $haystack, string $needle, $caseSensitive = true, string $encoding = 'UTF-8'): bool
   {
+    if ('' === $haystack || '' === $needle) {
+      return false;
+    }
+
+    // only a fallback to prevent BC in the api ...
+    if ($caseSensitive !== false && $caseSensitive !== true) {
+      $encoding = $caseSensitive;
+    }
+
     if ($caseSensitive) {
       return (self::strpos($haystack, $needle, 0, $encoding) !== false);
     }
@@ -4815,7 +4852,7 @@ final class UTF8
    *
    * @return bool Whether or not $haystack contains $needle.
    */
-  public static function str_contains_all(string $haystack, array $needles, bool $caseSensitive = true, string $encoding = 'UTF-8'): bool
+  public static function str_contains_all(string $haystack, array $needles, $caseSensitive = true, string $encoding = 'UTF-8'): bool
   {
     if ('' === $haystack) {
       return false;
@@ -4823,6 +4860,11 @@ final class UTF8
 
     if (empty($needles)) {
       return false;
+    }
+
+    // only a fallback to prevent BC in the api ...
+    if ($caseSensitive !== false && $caseSensitive !== true) {
+      $encoding = $caseSensitive;
     }
 
     foreach ($needles as $needle) {
@@ -4847,7 +4889,7 @@ final class UTF8
    * @return bool
    *               Whether or not $str contains $needle.
    */
-  public static function str_contains_any(string $haystack, array $needles, bool $caseSensitive = true, string $encoding = 'UTF-8'): bool
+  public static function str_contains_any(string $haystack, array $needles, $caseSensitive = true, string $encoding = 'UTF-8'): bool
   {
     if (empty($needles)) {
       return false;
@@ -4909,8 +4951,11 @@ final class UTF8
    *                      The detected string-encoding e.g. UTF-8 or UTF-16BE,<br>
    *                      otherwise it will return false e.g. for BINARY or not detected encoding.
    */
-  public static function str_detect_encoding(string $str)
+  public static function str_detect_encoding($str)
   {
+    // init
+    $str = (string)$str;
+
     //
     // 1.) check binary strings (010001001...) like UTF-16 / UTF-32 / PDF / Images / ...
     //
@@ -7225,7 +7270,7 @@ final class UTF8
    *                   Return the <strong>(int)</strong> numeric position of the first occurrence of needle in the
    *                   haystack string,<br> or <strong>false</strong> if needle is not found.
    */
-  public static function stripos(string $haystack, string $needle, int $offset = 0, string $encoding = 'UTF-8', bool $cleanUtf8 = false)
+  public static function stripos(string $haystack, string $needle, int $offset = 0, $encoding = 'UTF-8', bool $cleanUtf8 = false)
   {
     if ('' === $haystack || '' === $needle) {
       return false;
@@ -7481,8 +7526,11 @@ final class UTF8
    *
    * @return int
    */
-  public static function strlen_in_byte(string $str): int
+  public static function strlen_in_byte($str): int
   {
+    // init
+    $str = (string)$str;
+
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
       // "mb_" is available if overload is used, so use it ...
       return \mb_strlen($str, 'CP850'); // 8-BIT
@@ -7608,7 +7656,7 @@ final class UTF8
    *                   The <strong>(int)</strong> numeric position of the first occurrence of needle in the haystack
    *                   string.<br> If needle is not found it returns false.
    */
-  public static function strpos(string $haystack, $needle, int $offset = 0, string $encoding = 'UTF-8', bool $cleanUtf8 = false)
+  public static function strpos(string $haystack, $needle, int $offset = 0, $encoding = 'UTF-8', bool $cleanUtf8 = false)
   {
     if ('' === $haystack) {
       return false;
@@ -8729,8 +8777,17 @@ final class UTF8
    *
    * @return int
    */
-  public static function substr_count_simple(string $str, string $substring, bool $caseSensitive = true, string $encoding = 'UTF-8'): int
+  public static function substr_count_simple(string $str, string $substring, $caseSensitive = true, string $encoding = 'UTF-8'): int
   {
+    if ('' === $str || '' === $substring) {
+      return 0;
+    }
+
+    // only a fallback to prevent BC in the api ...
+    if ($caseSensitive !== false && $caseSensitive !== true) {
+      $encoding = $caseSensitive;
+    }
+
     if (!$caseSensitive) {
       $str = self::strtoupper($str, $encoding);
       $substring = self::strtoupper($substring, $encoding);

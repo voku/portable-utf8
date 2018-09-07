@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use voku\helper\UTF8;
 
 /**
@@ -280,7 +282,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     return [
         [true, 'Str contains foo bar', 'foo bar'],
         [true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%'],
-        [true, 'Ο συγγραφέας είπε', 'συγγραφέας', 'UTF-8'],
+        [true, 'Ο συγγραφέας είπε', 'συγγραφέας', true, 'UTF-8'],
         [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å´¥©', true, 'UTF-8'],
         [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å˚ ∆', true, 'UTF-8'],
         [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'øœ¬', true, 'UTF-8'],
@@ -3573,7 +3575,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     $counter = 0;
     foreach ($examples as $testString => $testResults) {
       foreach ($testResults as $before => $after) {
-        self::assertSame($after, UTF8::cleanup($before), $counter);
+        self::assertSame($after, UTF8::cleanup($before), 'tested: ' . $counter);
       }
       $counter++;
     }

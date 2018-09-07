@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=0);
+
 use Symfony\Polyfill\Php72\Php72 as p;
 use voku\helper\UTF8;
 

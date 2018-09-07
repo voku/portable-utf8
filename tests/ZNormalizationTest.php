@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 //use Normalizer as n;
 use Symfony\Polyfill\Intl\Normalizer\Normalizer as n;
 

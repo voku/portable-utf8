@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=0);
+
 use Normalizer as n;
 use Symfony\Polyfill\Intl\Grapheme\Grapheme as p;
 use voku\helper\UTF8;

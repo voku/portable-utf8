@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=0);
+
 use Symfony\Polyfill\Iconv\Iconv as p;
 use voku\helper\UTF8;
 

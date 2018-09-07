@@ -1,14 +1,14 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types=0);
 
 use voku\helper\Bootup;
 use voku\helper\UTF8;
 
 /**
- * Class Utf8GlobalTest
+ * Class Utf8GlobalNonStrictTest
  */
-class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
+class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
 {
   /**
    * @var array
@@ -85,8 +85,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testAccess()
   {
     $testArray = [
-        ' -1'        => [-1 => ''],
-        ' '          => [1 => ''],
+        '-1'        => [-1 => ''],
+        ''          => [1 => ''],
         '中文空白'      => [2 => '空'],
         '中文空白-test' => [3 => '白'],
         'fòô'       => [1 => 'ò'],
@@ -2164,9 +2164,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '  -ABC-中文空白-  ' => '-ABC-中文空白-  ',
         '      - ÖÄÜ- '  => '- ÖÄÜ- ',
         'öäü'            => 'öäü',
-        // 1                => '1',
-        // ''               => '',
-        // null             => '',
+        1                => '1',
+        ''               => '',
+        null             => '',
     ];
 
     foreach ($tests as $before => $after) {
@@ -2816,10 +2816,10 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $tests = [
         'Κόσμε' => true,
         'κόσμε' => false,
-        // null    => false,
+        null    => false,
         ''      => false,
         ' '     => false,
-        // false   => false,
+        false   => false,
         'ε'     => true,
         'End'   => false,
         'end'   => false,
@@ -2839,7 +2839,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'κόσμε' => true,
         ''      => false,
         ' '     => false,
-        // false   => false,
+        false   => false,
         'ε'     => true,
         'End'   => false,
         'end'   => false,
@@ -2859,7 +2859,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'κόσμε' => true,
         ''      => false,
         ' '     => false,
-        // false   => false,
+        false   => false,
         'Κ'     => true,
         'End'   => false,
         'end'   => false,
@@ -3069,7 +3069,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'κόσμε' => false,
         ''      => false,
         ' '     => false,
-        // false   => false,
+        false   => false,
         'Κ'     => true,
         'End'   => false,
         'end'   => false,
@@ -3083,9 +3083,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testStrToBinary()
   {
     $tests = [
-        // ''   => '0',
-        // '0'  => '110000',
-        // '1'  => '110001',
+        ''   => '0',
+        '0'  => '110000',
+        '1'  => '110001',
         '~'  => '1111110',
         '§'  => '1100001010100111',
         'ሇ'  => '111000011000100010000111',
@@ -3232,11 +3232,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testStripTags()
   {
     $tests = [
-        // null                                                                      => '',
-        // ''                                                                        => '',
+        null                                                                      => '',
+        ''                                                                        => '',
         ' '                                                                       => ' ',
-        // 1                                                                         => '1',
-        // '2'                                                                       => '2',
+        1                                                                         => '1',
+        '2'                                                                       => '2',
         'Abcdef'                                                                  => 'Abcdef',
         '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
         "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
@@ -3251,11 +3251,11 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     // ---
 
     $tests = [
-        // null                                                                      => '',
-        // ''                                                                        => '',
+        null                                                                      => '',
+        ''                                                                        => '',
         ' '                                                                       => ' ',
-        // 1                                                                         => '1',
-        // '2'                                                                       => '2',
+        1                                                                         => '1',
+        '2'                                                                       => '2',
         'Abcdef'                                                                  => 'Abcdef',
         '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
         "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
@@ -3383,9 +3383,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '<白>'                       => 3,
         'öäü'                       => 3,
         ' '                         => 1,
-        // ''                          => 0,
-        // 1                           => 1,
-        // -1                           => 2,
+        ''                          => 0,
+        1                           => 1,
+        -1                          => 2,
     ];
 
     for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
@@ -3397,7 +3397,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
       }
 
       foreach ($testArray as $actual => $expected) {
-        self::assertSame($expected, UTF8::strlen($actual), 'tested: ' . $actual);
+        self::assertSame($expected, UTF8::strlen($actual), $actual);
       }
     }
 
@@ -3412,7 +3412,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     ];
 
     foreach ($testArray as $actual => $expected) {
-      self::assertSame($expected, strlen((string)$actual), 'tested: ' . $actual);
+      self::assertSame($expected, strlen($actual), $actual);
     }
   }
 
@@ -4079,7 +4079,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testSubstr()
   {
-    self::assertSame('23', substr((string)1234, 1, 2));
+    self::assertSame('23', substr(1234, 1, 2));
     self::assertSame('bc', substr('abcde', 1, 2));
     self::assertSame('de', substr('abcde', -2, 2));
     self::assertSame('bc', substr('abcde', 1, 2));
@@ -4087,7 +4087,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertSame('bcd', substr('abcde', 1, 3));
     self::assertSame('bc', substr('abcde', 1, 2));
 
-    self::assertSame('23', UTF8::substr((string)1234, 1, 2));
+    self::assertSame('23', UTF8::substr(1234, 1, 2));
     self::assertSame('bc', UTF8::substr('abcde', 1, 2));
     self::assertSame('de', UTF8::substr('abcde', -2, 2));
     self::assertSame('bc', UTF8::substr('abcde', 1, 2));
@@ -4117,8 +4117,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     // php compatible tests
 
-    self::assertSame(0, substr_compare((string)12345, (string)23, 1, 2));
-    self::assertSame(0, UTF8::substr_compare((string)12345, (string)23, 1, 2));
+    self::assertSame(0, substr_compare(12345, 23, 1, 2));
+    self::assertSame(0, UTF8::substr_compare(12345, 23, 1, 2));
 
     self::assertSame(0, substr_compare('abcde', 'bc', 1, 2));
     self::assertSame(0, UTF8::substr_compare('abcde', 'bc', 1, 2));
@@ -4197,12 +4197,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     self::assertSame(0, UTF8::substr_count('test', 'test', 1, 1));
 
     if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-      self::assertSame(null, substr_count((string)12345, (string)23, 1, 2));
+      self::assertSame(null, substr_count(12345, 23, 1, 2));
     } else {
-      self::assertSame(1, substr_count((string)12345, (string)23, 1, 2));
+      self::assertSame(1, substr_count(12345, 23, 1, 2));
     }
 
-    self::assertSame(1, UTF8::substr_count((string)12345, (string)23, 1, 2));
+    self::assertSame(1, UTF8::substr_count(12345, 23, 1, 2));
 
     self::assertSame(2, substr_count('abcdebc', 'bc'));
     self::assertSame(2, UTF8::substr_count('abcdebc', 'bc'));
@@ -4291,9 +4291,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $tests = [
         'Κόσμε' => 'MiddleEnd',
         'κόσμε' => 'MiddleEnd',
-        // ''      => 'ΚόσμεMiddleEnd',
+        ''      => 'ΚόσμεMiddleEnd',
         ' '     => 'ΚόσμεMiddleEnd',
-        // false   => 'ΚόσμεMiddleEnd',
+        false   => 'ΚόσμεMiddleEnd',
         'Κ'     => 'όσμεMiddleEnd',
         'End'   => 'ΚόσμεMiddleEnd',
         'end'   => 'ΚόσμεMiddleEnd',
@@ -4323,9 +4323,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $tests = [
         'Κόσμε' => 'BeginMiddle',
         'κόσμε' => 'BeginMiddle',
-        // ''      => 'BeginMiddleΚόσμε',
+        ''      => 'BeginMiddleΚόσμε',
         ' '     => 'BeginMiddleΚόσμε',
-        // false   => 'BeginMiddleΚόσμε',
+        false   => 'BeginMiddleΚόσμε',
         'ε'     => 'BeginMiddleΚόσμ',
         'End'   => 'BeginMiddleΚόσμε',
         'end'   => 'BeginMiddleΚόσμε',
@@ -4355,9 +4355,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $tests = [
         'Κόσμε' => 'MiddleEnd',
         'κόσμε' => 'ΚόσμεMiddleEnd',
-        // ''      => 'ΚόσμεMiddleEnd',
+        ''      => 'ΚόσμεMiddleEnd',
         ' '     => 'ΚόσμεMiddleEnd',
-        // false   => 'ΚόσμεMiddleEnd',
+        false   => 'ΚόσμεMiddleEnd',
         'Κ'     => 'όσμεMiddleEnd',
         'End'   => 'ΚόσμεMiddleEnd',
         'end'   => 'ΚόσμεMiddleEnd',
@@ -4387,9 +4387,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     $tests = [
         'Κόσμε' => 'BeginMiddle',
         'κόσμε' => 'BeginMiddleΚόσμε',
-        // ''      => 'BeginMiddleΚόσμε',
+        ''      => 'BeginMiddleΚόσμε',
         ' '     => 'BeginMiddleΚόσμε',
-        // false   => 'BeginMiddleΚόσμε',
+        false   => 'BeginMiddleΚόσμε',
         'ε'     => 'BeginMiddleΚόσμ',
         'End'   => 'BeginMiddleΚόσμε',
         'end'   => 'BeginMiddleΚόσμε',
@@ -4415,10 +4415,10 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testSwapCase()
   {
     $tests = [
-        // 1                                      => '1',
-        // -1                                     => '-1',
+        1                                      => '1',
+        -1                                     => '-1',
         ' '                                    => ' ',
-        // ''                                     => '',
+        ''                                     => '',
         'أبز'                                  => 'أبز',
         "\xe2\x80\x99"                         => '’',
         'Ɓtest'                                => 'ɓTEST',
@@ -5019,9 +5019,9 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         '  -ABC-中文空白-  '    => '  -ABC-????-  ',
         '      - ÖÄÜ- '     => '      - ÖÄÜ- ',
         'öäü'               => 'öäü',
-        // ''                  => '',
-        // false               => '0',
-        // null                => '',
+        ''                  => '',
+        false               => '0',
+        null                => '',
         "\xe2\x28\xa1"      => '?',
         "\xa0\xa1"          => ' ¡',
         "κόσμε\xa0\xa1-öäü" => '????? ¡-öäü',
@@ -5071,7 +5071,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'öäü'                                                                                                                                                                                                                                                                                      => 'öäü',
         ''                                                                                                                                                                                                                                                                                         => '',
         'foobar'                                                                                                                                                                                                                                                                                   => 'foobar',
-        ' 123'                                                                                                                                                                                                                                                                                        => ' 123',
+        123                                                                                                                                                                                                                                                                                        => '123',
         "κόσμε\xc2\xa0"                                                                                                                                                                                                                                                                            => "κόσμε\xc2\xa0",
         "\xd1\xd2"                                                                                                                                                                                                                                                                                 => "\xd1\xd2",
     ];
@@ -5364,6 +5364,14 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   {
     return [
         [
+            1,
+            '1',
+        ],
+        [
+            -1,
+            '-1',
+        ],
+        [
             '  ',
             '',
         ],
@@ -5388,6 +5396,14 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function trimProviderAdvanced()
   {
     return [
+        [
+            1,
+            '1',
+        ],
+        [
+            -1,
+            '-1',
+        ],
         [
             '  ',
             '',
@@ -5421,6 +5437,14 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function trimProviderAdvancedWithMoreThenTwoBytes()
   {
     return [
+        [
+            1,
+            '1',
+        ],
+        [
+            -1,
+            '-1',
+        ],
         [
             '  ',
             '  ',

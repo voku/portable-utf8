@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use voku\helper\UTF8;
 use voku\helper\UTF8 as u;
 
@@ -81,11 +83,11 @@ class Utf8StristrTest extends \PHPUnit\Framework\TestCase
     $search = "n\nÂT";
 
     // UTF-8
-    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search, 0, 'UTF-8', false));
+    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search, false, 'UTF-8', false));
 
     if (u::getSupportInfo('mbstring') === true) { // only with "mbstring"
       // UTF-7
-      self::assertSame("n\n??ti??n??liz??ti??n", u::stristr($str, $search, 0, 'UTF-7', false));
+      self::assertSame("n\n??ti??n??liz??ti??n", u::stristr($str, $search, false, 'UTF-7', false));
     }
   }
 
@@ -95,7 +97,7 @@ class Utf8StristrTest extends \PHPUnit\Framework\TestCase
     $search = "n\nÂT";
 
     // UTF-8
-    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search, 0, 'UTF-8', true));
+    self::assertSame("n\nâtiônàlizætiøn", u::stristr($str, $search, false, 'UTF-8', true));
   }
 
   public function testSubstr()
