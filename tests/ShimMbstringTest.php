@@ -55,6 +55,8 @@ class ShimMbstringTest extends \PHPUnit\Framework\TestCase
       self::assertSame('déjà σσς iiıi', p::mb_strtolower('DÉJÀ Σσς İIıi'));
       self::assertSame('DÉJÀ ΣΣΣ İIII', p::mb_strtoupper('Déjà Σσς İIıi'));
       self::assertSame('Déjà Σσσ Iı Ii İi', p::mb_convert_case('DÉJÀ ΣΣΣ ıı iI İİ', MB_CASE_TITLE));
+    } else {
+      self::markTestSkipped('mbstring_func_overload is used ... so skip this test ...');
     }
   }
 
