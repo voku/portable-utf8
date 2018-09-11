@@ -2852,18 +2852,13 @@ final class UTF8
       return true;
     }
 
-    $testLength = \strlen($input);
+    $testLength = self::strlen_in_byte($input);
     if ($testLength) {
       if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
         self::checkForSupport();
       }
 
-      if (self::$SUPPORT['mbstring_func_overload'] === true) {
-        $testNull = \substr_count($input, "\x0"); // will use "mb_substr_count()" ...
-      } else {
-        $testNull = \substr_count($input, "\x0", 0, $testLength);
-      }
-
+      $testNull = self::substr_count_in_byte($input, "\x0", 0, $testLength);
       if (($testNull / $testLength) > 0.256) {
         return true;
       }
@@ -7611,10 +7606,11 @@ final class UTF8
    *
    * @return int
    */
-  public static function strlen_in_byte($str): int
+  public static function strlen_in_byte(string $str): int
   {
-    // init
-    $str = (string)$str;
+    if ($str === '') {
+      return 0;
+    }
 
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
@@ -7626,6 +7622,81 @@ final class UTF8
     }
 
     return \strlen($str);
+  }
+
+  /**
+   * Count the number of substring occurrences.
+   *
+   * @param string $haystack <p>
+   *                         The string being checked.
+   *                         </p>
+   * @param string $needle   <p>
+   *                         The string being found.
+   *                         </p>
+   * @param int    $offset   [optional] <p>
+   *                         The offset where to start counting
+   *                         </p>
+   * @param int    $length   [optional] <p>
+   *                         The maximum length after the specified offset to search for the
+   *                         substring. It outputs a warning if the offset plus the length is
+   *                         greater than the haystack length.
+   *                         </p>
+   *
+   * @return int|false The number of times the
+   *                   needle substring occurs in the
+   *                   haystack string.
+   */
+  public static function substr_count_in_byte(string $haystack, string $needle, int $offset = 0, int $length = null)
+  {
+    if ($haystack === '' || $needle === '') {
+      return 0;
+    }
+
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (
+        ($offset || $length !== null)
+        &&
+        self::$SUPPORT['mbstring_func_overload'] === true
+    ) {
+
+      if ($length === null) {
+        $lengthTmp = self::strlen($haystack);
+        if ($lengthTmp === false) {
+          return false;
+        }
+        $length = (int)$lengthTmp;
+      }
+
+      if (
+          (
+              $length !== 0
+              &&
+              $offset !== 0
+          )
+          &&
+          ($length + $offset) <= 0
+          &&
+          Bootup::is_php('7.1') === false // output from "substr_count()" have changed in PHP 7.1
+      ) {
+        return false;
+      }
+
+      $haystackTmp = self::substr_in_byte($haystack, $offset, $length);
+      if ($haystackTmp === false) {
+        $haystackTmp = '';
+      }
+      $haystack = (string)$haystackTmp;
+    }
+
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      // "mb_" is available if overload is used, so use it ...
+      return \mb_substr_count($haystack, $needle, 'CP850'); // 8-BIT
+    }
+
+    return \substr_count($haystack, $needle, $offset, $length);
   }
 
   /**
@@ -8928,6 +8999,46 @@ final class UTF8
    */
   public static function substr_in_byte(string $str, int $offset = 0, int $length = null)
   {
+    if ($str === '') {
+      return '';
+    }
+
+    // Empty string
+    if ($length === 0) {
+      return '';
+    }
+
+    // Whole string
+    if (!$offset && $length === null) {
+      return $str;
+    }
+
+    $str_length = 0;
+    if ($offset || $length === null) {
+      $str_length = self::strlen_in_byte($str);
+    }
+
+    // e.g.: invalid chars + mbstring not installed
+    if ($str_length === false) {
+      return false;
+    }
+
+    // Empty string
+    if ($offset === $str_length && !$length) {
+      return '';
+    }
+
+    // Impossible
+    if ($offset && $offset > $str_length) {
+      return false;
+    }
+
+    if ($length === null) {
+      $length = $str_length;
+    } else {
+      $length = (int)$length;
+    }
+
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
@@ -8941,7 +9052,7 @@ final class UTF8
   }
 
   /**
-   * Find position of first occurrence of string in a string
+   * Find position of first occurrence of string in a string.
    *
    * @param string $haystack <p>
    *                         The string being checked.
@@ -8960,6 +9071,10 @@ final class UTF8
    */
   public static function strpos_in_byte(string $haystack, string $needle, int $offset = 0)
   {
+    if ($haystack === '' || $needle === '') {
+      return false;
+    }
+
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
