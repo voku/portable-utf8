@@ -2533,19 +2533,21 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
         "\xFF\xFE\x00\x00Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα",
     ];
 
-    foreach ($testBom as $count => &$test) {
+    for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+      foreach ($testBom as $count => &$test) {
 
-      $test = UTF8::remove_bom($test);
+        $test = UTF8::remove_bom($test);
 
-      self::assertSame(
-          'Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα',
-          $test,
-          'error by ' . $count
-      );
+        self::assertSame(
+            'Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα',
+            $test,
+            'error by ' . $count
+        );
 
-      $test = UTF8::add_bom_to_string($test);
-      self::assertTrue(UTF8::string_has_bom($test));
-      self::assertTrue(UTF8::hasBom($test)); // alias
+        $test = UTF8::add_bom_to_string($test);
+        self::assertTrue(UTF8::string_has_bom($test));
+        self::assertTrue(UTF8::hasBom($test)); // alias
+      }
     }
   }
 

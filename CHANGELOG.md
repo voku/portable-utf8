@@ -1,9 +1,14 @@
 # Changelog
 
-### 5.2.3 (2018-08-07)
+### 5.2.4 (2018-09-08)
+- optimize performance for "UTF8::remove_bom()"
+- optimize performance for "UTF8::is_binary()"
+- fix tests with "mbstring_func_overload"
+
+### 5.2.3 (2018-09-07)
 - fix some breaking changes from "strict_types=1"
 
-### 5.2.2 (2018-08-06)
+### 5.2.2 (2018-09-06)
 - use "UTF8::encode()" internal ...
 
 ### 5.2.1 (2018-08-06)

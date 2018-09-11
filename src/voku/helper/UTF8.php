@@ -613,6 +613,10 @@ final class UTF8
 
     $strSplit = self::split($str);
 
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
       return \array_map(
           function ($data) {
@@ -2728,13 +2732,81 @@ final class UTF8
       return false;
     }
 
-    if (is_string($str) === false) {
+    if (\is_string($str) === false) {
       return false;
     }
 
     $base64String = (string)\base64_decode($str, true);
 
     return $base64String && \base64_encode($base64String) === $str;
+  }
+
+  /**
+   * @param string $str
+   *
+   * @return string[]
+   */
+  private static function get_file_type($str)
+  {
+    if ('' === $str) {
+      return ['ext' => '', 'type' => ''];
+    }
+
+    $str_info = substr($str, 0, 2);
+    if (strlen($str_info) !== 2) {
+      return ['ext' => '', 'type' => ''];
+    }
+
+    $str_info = \unpack("C2chars", $str_info);
+    $type_code = (int)($str_info['chars1'] . $str_info['chars2']);
+
+    // DEBUG
+    //var_dump($type_code);
+
+    switch ($type_code) {
+      case 3780:
+        $ext = 'pdf';
+        $type = 'binary';
+        break;
+      case 7790:
+        $ext = 'exe';
+        $type = 'binary';
+        break;
+      case 7784:
+        $ext = 'midi';
+        $type = 'binary';
+        break;
+      case 8075:
+        $ext = 'zip';
+        $type = 'binary';
+        break;
+      case 8297:
+        $ext = 'rar';
+        $type = 'binary';
+        break;
+      case 255216:
+        $ext = 'jpg';
+        $type = 'binary';
+        break;
+      case 7173:
+        $ext = 'gif';
+        $type = 'binary';
+        break;
+      case 6677:
+        $ext = 'bmp';
+        $type = 'binary';
+        break;
+      case 13780:
+        $ext = 'png';
+        $type = 'binary';
+        break;
+      default:
+        $ext = '???';
+        $type = '???';
+        break;
+    }
+
+    return ['ext' => $ext, 'type' => $type];
   }
 
   /**
@@ -2756,15 +2828,6 @@ final class UTF8
       return true;
     }
 
-    $testNull = 0;
-    $testLength = \strlen($input);
-    if ($testLength) {
-      $testNull = \substr_count($input, "\x0");
-      if (($testNull / $testLength) > 0.3) {
-        return true;
-      }
-    }
-
     if ($strict === true) {
 
       if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
@@ -2782,10 +2845,28 @@ final class UTF8
         return true;
       }
 
-    } elseif ($testNull > 0) {
+    }
 
+    $ext = self::get_file_type($input);
+    if ($ext['type'] === 'binary') {
       return true;
+    }
 
+    $testLength = \strlen($input);
+    if ($testLength) {
+      if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+        self::checkForSupport();
+      }
+
+      if (self::$SUPPORT['mbstring_func_overload'] === true) {
+        $testNull = \substr_count($input, "\x0"); // will use "mb_substr_count()" ...
+      } else {
+        $testNull = \substr_count($input, "\x0", 0, $testLength);
+      }
+
+      if (($testNull / $testLength) > 0.256) {
+        return true;
+      }
     }
 
     return false;
@@ -4172,12 +4253,16 @@ final class UTF8
       return '';
     }
 
+    $strLength = self::strlen_in_byte($str);
     foreach (self::$BOM as $bomString => $bomByteLength) {
-      if (0 === self::strpos($str, $bomString, 0, 'CP850')) {
-        $strTmp = self::substr($str, $bomByteLength, null, 'CP850');
+      if (0 === self::strpos_in_byte($str, $bomString, 0)) {
+        $strTmp = self::substr_in_byte($str, $bomByteLength, $strLength);
         if ($strTmp === false) {
-          $strTmp = '';
+          return '';
         }
+
+        $strLength -= $bomByteLength;
+
         $str = (string)$strTmp;
       }
     }
@@ -4830,7 +4915,7 @@ final class UTF8
 
     // only a fallback to prevent BC in the api ...
     if ($caseSensitive !== false && $caseSensitive !== true) {
-      $encoding = $caseSensitive;
+      $encoding = (string)$caseSensitive;
     }
 
     if ($caseSensitive) {
@@ -4864,7 +4949,7 @@ final class UTF8
 
     // only a fallback to prevent BC in the api ...
     if ($caseSensitive !== false && $caseSensitive !== true) {
-      $encoding = $caseSensitive;
+      $encoding = (string)$caseSensitive;
     }
 
     foreach ($needles as $needle) {
@@ -7531,6 +7616,10 @@ final class UTF8
     // init
     $str = (string)$str;
 
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
       // "mb_" is available if overload is used, so use it ...
       return \mb_strlen($str, 'CP850'); // 8-BIT
@@ -8839,12 +8928,48 @@ final class UTF8
    */
   public static function substr_in_byte(string $str, int $offset = 0, int $length = null)
   {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
       // "mb_" is available if overload is used, so use it ...
       return \mb_substr($str, $offset, $length, 'CP850'); // 8-BIT
     }
 
     return \substr($str, $offset, $length);
+  }
+
+  /**
+   * Find position of first occurrence of string in a string
+   *
+   * @param string $haystack <p>
+   *                         The string being checked.
+   *                         </p>
+   * @param string $needle   <p>
+   *                         The position counted from the beginning of haystack.
+   *                         </p>
+   * @param int    $offset   [optional] <p>
+   *                         The search offset. If it is not specified, 0 is used.
+   *                         </p>
+   *
+   * @return int|false the numeric position of
+   *                   the first occurrence of needle in the
+   *                   haystack string. If
+   *                   needle is not found, it returns false.
+   */
+  public static function strpos_in_byte(string $haystack, string $needle, int $offset = 0)
+  {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      // "mb_" is available if overload is used, so use it ...
+      return \mb_strpos($haystack, $needle, $offset, 'CP850'); // 8-BIT
+    }
+
+    return \strpos($haystack, $needle, $offset);
   }
 
   /**
