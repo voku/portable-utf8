@@ -2752,8 +2752,8 @@ final class UTF8
       return ['ext' => '', 'type' => ''];
     }
 
-    $str_info = substr($str, 0, 2);
-    if (strlen($str_info) !== 2) {
+    $str_info = self::substr_in_byte($str, 0, 2);
+    if (self::strlen_in_byte($str_info) !== 2) {
       return ['ext' => '', 'type' => ''];
     }
 
@@ -8874,7 +8874,7 @@ final class UTF8
 
     // only a fallback to prevent BC in the api ...
     if ($caseSensitive !== false && $caseSensitive !== true) {
-      $encoding = $caseSensitive;
+      $encoding = (string)$caseSensitive;
     }
 
     if (!$caseSensitive) {
