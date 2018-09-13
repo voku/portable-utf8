@@ -517,6 +517,9 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
             1 => 246,
             2 => 241,
         ],
+        ' ' => [
+            0 => 32
+        ],
     ];
 
     foreach ($testArray as $actual => $expected) {
@@ -2246,6 +2249,7 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
     $tests = [
         'abc-äöü-中文空白' => '-',
         'öäü'          => 'ä',
+        '0 123,a,A,z,Z,./\\-' => ' ',
         'öäü test öäü' => ' ',
         'ÖÄÜ'          => 'Ä',
         '中文空白'         => '中',
@@ -3171,9 +3175,10 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
   {
     self::assertSame('', UTF8::string([]));
     self::assertSame(
-        'öäü',
+        ' öäü',
         UTF8::string(
             [
+                32,
                 246,
                 228,
                 252,
