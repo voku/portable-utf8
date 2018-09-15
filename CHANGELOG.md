@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.2.7 (2018-09-15)
+- simplify "UTF8::encode()"
+
 ### 5.2.6 (2018-09-15)
 - use more vanilla php fallbacks
 - new encoding-from / -to parameter for "UTF8::encode()"

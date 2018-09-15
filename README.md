@@ -405,7 +405,7 @@ alias: UTF8::int_to_chr()
 UTF8::decimal_to_chr(931); // 'Σ'
 ```
 
-##### encode(string $encoding, string $str, bool $force = true) : string
+##### encode(string $encoding, string $str, bool $autodetectFromEncoding = true, string $fromEncoding = '') : string
 
 Encode a string with a new charset-encoding.
 
@@ -416,6 +416,10 @@ INFO:  The different to "UTF8::utf8_encode()" is that this function, try to fix 
 UTF8::encode('ISO-8859-1', '-ABC-中文空白-'); // '-ABC-????-'
 //
 UTF8::encode('UTF-8', '-ABC-中文空白-'); // '-ABC-中文空白-'
+//
+UTF8::encode('HTML', '-ABC-中文空白-'); // '-ABC-&#20013;&#25991;&#31354;&#30333;-'
+//
+UTF8::encode('BASE64', '-ABC-中文空白-'); // 'LUFCQy3kuK3mlofnqbrnmb0t'
 ```
 
 ##### file_get_contents(string $filename, int|null $flags = null, resource|null $context = null, int|null $offset = null, int|null $maxlen = null, int $timeout = 10, bool $convertToUtf8 = true) : string
