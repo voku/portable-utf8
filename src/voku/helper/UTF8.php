@@ -4837,14 +4837,26 @@ final class UTF8
   /**
    * Convert a string to an array of Unicode characters.
    *
-   * @param string|int $str       <p>The string to split into array.</p>
-   * @param int        $length    [optional] <p>Max character length of each array element.</p>
-   * @param bool       $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|int|string[]|int[] $str       <p>The string to split into array.</p>
+   * @param int                       $length    [optional] <p>Max character length of each array element.</p>
+   * @param bool                      $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
    * @return string[] An array containing chunks of the string.
    */
   public static function split($str, int $length = 1, bool $cleanUtf8 = false): array
   {
+    if ($length <= 0) {
+      return [];
+    }
+
+    if (\is_array($str) === true) {
+      foreach ($str as $k => $v) {
+        $str[$k] = self::split($v, $length);
+      }
+
+      return $str;
+    }
+
     // init
     $str = (string)$str;
 
@@ -6547,7 +6559,9 @@ final class UTF8
   }
 
   /**
-   * Split a string into an array.
+   * alias for "UTF8::split()"
+   *
+   * @see UTF8::split()
    *
    * @param string|string[] $str
    * @param int             $len
@@ -6556,43 +6570,7 @@ final class UTF8
    */
   public static function str_split($str, int $len = 1): array
   {
-    if ($len <= 0) {
-      return [];
-    }
-
-    if (\is_array($str) === true) {
-      foreach ($str as $k => $v) {
-        $str[$k] = self::str_split($v, $len);
-      }
-
-      return $str;
-    }
-
-    if ('' === $str) {
-      return [];
-    }
-
-    /** @noinspection NotOptimalRegularExpressionsInspection */
-    \preg_match_all('/' . self::GRAPHEME_CLUSTER_RX . '/u', $str, $a);
-    $a = $a[0];
-
-    if ($len === 1) {
-      return $a;
-    }
-
-    $arrayOutput = [];
-    $p = -1;
-
-    /** @noinspection PhpForeachArrayIsUsedAsValueInspection */
-    foreach ($a as $l => $a) {
-      if ($l % $len) {
-        $arrayOutput[$p] .= $a;
-      } else {
-        $arrayOutput[++$p] = $a;
-      }
-    }
-
-    return $arrayOutput;
+    return self::split($str, $len);
   }
 
   /**

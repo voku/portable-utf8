@@ -111,6 +111,14 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
   public function test_split_zero_length()
   {
     $str = 'Iñtë';
+    $array = [];
+
+    self::assertSame($array, u::split($str, 0));
+  }
+
+  public function test_split_one_length()
+  {
+    $str = 'Iñtë';
     $array = [
         'I',
         'ñ',
@@ -118,6 +126,6 @@ class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
         'ë',
     ];
 
-    self::assertSame($array, u::split($str, 0));
+    self::assertSame($array, u::split($str, 1));
   }
 }
