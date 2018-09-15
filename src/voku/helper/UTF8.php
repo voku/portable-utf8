@@ -2025,7 +2025,7 @@ final class UTF8
       return ['ext' => '', 'type' => ''];
     }
 
-    $str_info = \unpack("C2chars", $str_info);
+    $str_info = \unpack('C2chars', $str_info);
     $type_code = (int)($str_info['chars1'] . $str_info['chars2']);
 
     // DEBUG
