@@ -1315,34 +1315,35 @@ final class UTF8
    *
    * @link http://php.net/manual/en/function.file-get-contents.php
    *
-   * @param string        $filename         <p>
-   *                                        Name of the file to read.
-   *                                        </p>
-   * @param bool          $use_include_path [optional] <p>
-   *                                        Prior to PHP 5, this parameter is called
-   *                                        use_include_path and is a bool.
-   *                                        As of PHP 5 the FILE_USE_INCLUDE_PATH can be used
-   *                                        to trigger include path
-   *                                        search.
-   *                                        </p>
-   * @param resource|null $context          [optional] <p>
-   *                                        A valid context resource created with
-   *                                        stream_context_create. If you don't need to use a
-   *                                        custom context, you can skip this parameter by &null;.
-   *                                        </p>
-   * @param int|null      $offset           [optional] <p>
-   *                                        The offset where the reading starts.
-   *                                        </p>
-   * @param int|null      $maxLength        [optional] <p>
-   *                                        Maximum length of data read. The default is to read until end
-   *                                        of file is reached.
-   *                                        </p>
-   * @param int           $timeout          <p>The time in seconds for the timeout.</p>
+   * @param string        $filename             <p>
+   *                                            Name of the file to read.
+   *                                            </p>
+   * @param bool          $use_include_path     [optional] <p>
+   *                                            Prior to PHP 5, this parameter is called
+   *                                            use_include_path and is a bool.
+   *                                            As of PHP 5 the FILE_USE_INCLUDE_PATH can be used
+   *                                            to trigger include path
+   *                                            search.
+   *                                            </p>
+   * @param resource|null $context              [optional] <p>
+   *                                            A valid context resource created with
+   *                                            stream_context_create. If you don't need to use a
+   *                                            custom context, you can skip this parameter by &null;.
+   *                                            </p>
+   * @param int|null      $offset               [optional] <p>
+   *                                            The offset where the reading starts.
+   *                                            </p>
+   * @param int|null      $maxLength            [optional] <p>
+   *                                            Maximum length of data read. The default is to read until end
+   *                                            of file is reached.
+   *                                            </p>
+   * @param int           $timeout              <p>The time in seconds for the timeout.</p>
    *
-   * @param bool          $convertToUtf8    <strong>WARNING!!!</strong> <p>Maybe you can't use this option for e.g.
-   *                                        images or pdf, because they used non default utf-8 chars.</p>
-   * @param string|null   $fromEncoding     [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc. ... otherwise we
-   *                                        will autodetect the encoding</p>
+   * @param bool          $convertToUtf8        <strong>WARNING!!!</strong> <p>Maybe you can't use this option for some
+   *                                            files, because they used non default utf-8 chars. Binary files like
+   *                                            images or pdf will not be converted.</p>
+   * @param string        $fromEncoding         [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.<br>
+   *                                            A empty string will trigger the autodetect anyway.</p>
    *
    * @return string|false The function returns the read data or false on failure.
    */
