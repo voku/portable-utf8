@@ -995,17 +995,17 @@ final class UTF8
    * INFO:  The different to "UTF8::utf8_encode()" is that this function, try to fix also broken / double encoding,
    *        so you can call this function also on a UTF-8 String and you don't mess the string.
    *
-   * @param string      $toEncoding             <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.</p>
-   * @param string      $str                    <p>The input string</p>
-   * @param bool        $autodetectFromEncoding [optional] <p>Force the new encoding (we try to fix broken / double
+   * @param string $toEncoding                  <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.</p>
+   * @param string $str                         <p>The input string</p>
+   * @param bool   $autodetectFromEncoding      [optional] <p>Force the new encoding (we try to fix broken / double
    *                                            encoding for UTF-8)<br> otherwise we auto-detect the current
    *                                            string-encoding</p>
-   * @param string|null $fromEncoding           [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc. ... otherwise
-   *                                            we will autodetect the encoding anyway</p>
+   * @param string $fromEncoding                [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.<br>
+   *                                            A empty string will trigger the autodetect anyway.</p>
    *
    * @return string
    */
-  public static function encode(string $toEncoding, string $str, bool $autodetectFromEncoding = true, $fromEncoding = null): string
+  public static function encode(string $toEncoding, string $str, bool $autodetectFromEncoding = true, string $fromEncoding = ''): string
   {
     if ('' === $str || '' === $toEncoding) {
       return $str;
@@ -1039,7 +1039,7 @@ final class UTF8
     if ('HTML-ENTITIES' === $toEncoding || 'HTML' === $toEncoding) {
 
       if ('HTML-ENTITIES' === $fromEncoding || 'HTML' === $fromEncoding) {
-        $fromEncoding = null;
+        $fromEncoding = '';
       }
 
       if ('UTF-8' !== $fromEncoding) {
@@ -2272,8 +2272,8 @@ final class UTF8
     return \implode(
         '',
         \array_map(
-            function ($data) use ($keepAsciiChars, $encoding) {
-              return UTF8::single_chr_html_encode($data, $keepAsciiChars, $encoding);
+            function ($chr) use ($keepAsciiChars, $encoding) {
+              return UTF8::single_chr_html_encode($chr, $keepAsciiChars, $encoding);
             },
             self::split($str)
         )
