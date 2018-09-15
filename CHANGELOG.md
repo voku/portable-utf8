@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.2.6 (2018-09-15)
+- use more vanilla php fallbacks
+- new encoding-from / -to parameter for "UTF8::encode()"
+- optimize "mbstring_func_overload" fallbacks
+
 ### 5.2.5 (2018-09-11)
 - more fixes for "mbstring_func_overload"
 
