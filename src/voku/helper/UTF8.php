@@ -1027,31 +1027,20 @@ final class UTF8
       self::checkForSupport();
     }
 
-    if ($fromEncoding === 'BASE64') {
-      $str = base64_decode($str);
-      $fromEncoding = null;
-    }
-
     if ($toEncoding === 'BASE64') {
       return base64_encode($str);
     }
-
-    if ($toEncoding === 'HTML-ENTITIES') {
-
-      if ($fromEncoding === 'HTML-ENTITIES') {
-        $fromEncoding = 'UTF-8';
-      }
-
-      if ($fromEncoding !== 'UTF-8') {
-        $str = self::encode('UTF-8', $str, false, $fromEncoding);
-      }
-
-      return self::html_encode($str, true, 'UTF-8');
+    if ($fromEncoding === 'BASE64') {
+      $str = base64_decode($str);
+      $fromEncoding = '';
     }
 
+    if ($toEncoding === 'HTML-ENTITIES') {
+      return self::html_encode($str, true, 'UTF-8');
+    }
     if ($fromEncoding === 'HTML-ENTITIES') {
-      $str = self::html_entity_decode($str, ENT_COMPAT, 'UTF-8');
-      $fromEncoding = 'UTF-8';
+      $str = self::html_decode($str, ENT_COMPAT, 'UTF-8');
+      $fromEncoding = '';
     }
 
     $fromEncodingDetected = false;
