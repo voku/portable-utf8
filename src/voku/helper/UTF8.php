@@ -153,19 +153,40 @@ final class UTF8
    * @var array
    */
   private static $COMMON_CASE_FOLD = [
-      'ſ'            => 's',
-      "\xCD\x85"     => 'ι',
-      'ς'            => 'σ',
-      "\xCF\x90"     => 'β',
-      "\xCF\x91"     => 'θ',
-      "\xCF\x95"     => 'φ',
-      "\xCF\x96"     => 'π',
-      "\xCF\xB0"     => 'κ',
-      "\xCF\xB1"     => 'ρ',
-      "\xCF\xB5"     => 'ε',
-      "\xE1\xBA\x9B" => "\xE1\xB9\xA1",
-      "\xE1\xBE\xBE" => 'ι',
+      'upper' => [
+          'µ',
+          'ſ',
+          "\xCD\x85",
+          'ς',
+          'ẞ',
+          "\xCF\x90",
+          "\xCF\x91",
+          "\xCF\x95",
+          "\xCF\x96",
+          "\xCF\xB0",
+          "\xCF\xB1",
+          "\xCF\xB5",
+          "\xE1\xBA\x9B",
+          "\xE1\xBE\xBE",
+      ],
+      'lower' => [
+          'μ',
+          's',
+          'ι',
+          'σ',
+          'ß',
+          'β',
+          'θ',
+          'φ',
+          'π',
+          'κ',
+          'ρ',
+          'ε',
+          "\xE1\xB9\xA1",
+          'ι',
+      ],
   ];
+
 
   /**
    * @var array
@@ -938,24 +959,17 @@ final class UTF8
   }
 
   /**
-   * Encode a string with a new charset-encoding.
+   * Decodes a MIME header field
    *
-   * INFO:  The different to "UTF8::utf8_encode()" is that this function, try to fix also broken / double encoding,
-   *        so you can call this function also on a UTF-8 String and you don't mess the string.
+   * @param string $str
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
-   * @param string $encoding <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.</p>
-   * @param string $str      <p>The input string</p>
-   * @param bool   $force    [optional] <p>Force the new encoding (we try to fix broken / double encoding for
-   *                         UTF-8)<br> otherwise we auto-detect the current string-encoding</p>
-   *
-   * @return string
+   * @return string|false
+   *                      A decoded MIME field on success,
+   *                      or false if an error occurs during the decoding.
    */
-  public static function encode(string $encoding, string $str, bool $force = true): string
+  public static function decode_mimeheader($str, $encoding = 'UTF-8')
   {
-    if ('' === $str || '' === $encoding) {
-      return $str;
-    }
-
     if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
@@ -964,64 +978,155 @@ final class UTF8
       self::checkForSupport();
     }
 
-    $encodingDetected = self::str_detect_encoding($str);
+    if (self::$SUPPORT['iconv'] === true) {
+      return \iconv_mime_decode($str, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, $encoding);
+    }
+
+    if ($encoding != 'UTF-8') {
+      $str = self::encode($encoding, $str);
+    }
+
+    return \mb_decode_mimeheader($str);
+  }
+
+  /**
+   * Encode a string with a new charset-encoding.
+   *
+   * INFO:  The different to "UTF8::utf8_encode()" is that this function, try to fix also broken / double encoding,
+   *        so you can call this function also on a UTF-8 String and you don't mess the string.
+   *
+   * @param string      $toEncoding             <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.</p>
+   * @param string      $str                    <p>The input string</p>
+   * @param bool        $autodetectFromEncoding [optional] <p>Force the new encoding (we try to fix broken / double
+   *                                            encoding for UTF-8)<br> otherwise we auto-detect the current
+   *                                            string-encoding</p>
+   * @param string|null $fromEncoding           [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc. ... otherwise
+   *                                            we will autodetect the encoding anyway</p>
+   *
+   * @return string
+   */
+  public static function encode(string $toEncoding, string $str, bool $autodetectFromEncoding = true, string $fromEncoding = null): string
+  {
+    if ('' === $str || '' === $toEncoding) {
+      return $str;
+    }
+
+    if ($toEncoding !== 'UTF-8' && $toEncoding !== 'CP850') {
+      $toEncoding = self::normalize_encoding($toEncoding, 'UTF-8');
+    }
+
+    if ($fromEncoding && $fromEncoding !== 'UTF-8' && $fromEncoding !== 'CP850') {
+      $fromEncoding = self::normalize_encoding($fromEncoding, null);
+    }
+
+    if ($toEncoding && $fromEncoding && $fromEncoding === $toEncoding) {
+      return $str;
+    }
+
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if ('BASE64' === $fromEncoding) {
+      $str = base64_decode($str);
+      $fromEncoding = null;
+    }
+
+    if ('BASE64' === $toEncoding) {
+      return base64_encode($str);
+    }
+
+    if ('HTML-ENTITIES' === $toEncoding || 'HTML' === $toEncoding) {
+
+      if ('HTML-ENTITIES' === $fromEncoding || 'HTML' === $fromEncoding) {
+        $fromEncoding = null;
+      }
+
+      if ('UTF-8' !== $fromEncoding) {
+        $str = self::encode('UTF-8', $str, false, $fromEncoding);
+      }
+
+      return self::html_encode($str, true, $toEncoding);
+    }
+
+    if ('HTML-ENTITIES' === $fromEncoding) {
+      $str = self::html_entity_decode($str, ENT_COMPAT, 'UTF-8');
+      $fromEncoding = 'UTF-8';
+    }
+
+    $fromEncodingDetected = false;
+    if (
+        $autodetectFromEncoding === true
+        ||
+        !$fromEncoding
+    ) {
+      $fromEncodingDetected = self::str_detect_encoding($str);
+    }
 
     // DEBUG
-    //var_dump($encoding, $encodingDetected, $str, "\n\n");
+    //var_dump($toEncoding, $fromEncoding, $fromEncodingDetected, $str, "\n\n");
+
+    if ($fromEncodingDetected !== false) {
+      $fromEncoding = $fromEncodingDetected;
+    } elseif ($fromEncodingDetected === false && $autodetectFromEncoding === true) {
+      // fallback for the "autodetect"-mode
+      return self::to_utf8($str);
+    }
 
     if (
-        $force === true
+        !$fromEncoding
         ||
+        $fromEncoding === $toEncoding
+    ) {
+      return $str;
+    }
+
+    if (
+        $toEncoding === 'UTF-8'
+        &&
         (
-            $encodingDetected !== false
-            &&
-            $encodingDetected !== $encoding
+            $fromEncoding === 'WINDOWS-1252'
+            ||
+            $fromEncoding === 'ISO-8859-1'
         )
     ) {
+      return self::to_utf8($str);
+    }
 
-      if (
-          $encoding === 'UTF-8'
-          &&
-          (
-              $force === true
-              || $encodingDetected === 'UTF-8'
-              || $encodingDetected === 'WINDOWS-1252'
-              || $encodingDetected === 'ISO-8859-1'
-          )
-      ) {
-        return self::to_utf8($str);
-      }
+    if (
+        $toEncoding === 'ISO-8859-1'
+        &&
+        (
+            $fromEncoding === 'WINDOWS-1252'
+            ||
+            $fromEncoding === 'UTF-8'
+        )
+    ) {
+      return self::to_iso8859($str);
+    }
 
-      if (
-          $encoding === 'ISO-8859-1'
-          &&
-          (
-              $force === true
-              || $encodingDetected === 'ISO-8859-1'
-              || $encodingDetected === 'WINDOWS-1252'
-              || $encodingDetected === 'UTF-8'
-          )
-      ) {
-        return self::to_iso8859($str);
-      }
+    if (
+        $toEncoding !== 'UTF-8'
+        &&
+        $toEncoding !== 'ISO-8859-1'
+        &&
+        $toEncoding !== 'WINDOWS-1252'
+        &&
+        self::$SUPPORT['mbstring'] === false
+    ) {
+      \trigger_error('UTF8::encode() without mbstring cannot handle "' . $toEncoding . '" encoding', E_USER_WARNING);
+    }
 
-      if (
-          $encoding !== 'UTF-8'
-          &&
-          $encoding !== 'ISO-8859-1'
-          &&
-          $encoding !== 'WINDOWS-1252'
-          &&
-          self::$SUPPORT['mbstring'] === false
-      ) {
-        \trigger_error('UTF8::encode() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
-      }
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
 
-      // always fallback via symfony polyfill
+    if (self::$SUPPORT['mbstring'] === true) {
+      // info: do not use the symfony polyfill here
       $strEncoded = \mb_convert_encoding(
           $str,
-          $encoding,
-          ($force === true ? $encoding : $encodingDetected)
+          $toEncoding,
+          ($autodetectFromEncoding === true ? $toEncoding : $fromEncoding)
       );
 
       if ($strEncoded) {
@@ -1029,7 +1134,56 @@ final class UTF8
       }
     }
 
+    $return = \iconv($fromEncoding, $toEncoding . '//IGNORE', $str);
+    if ($return !== false) {
+      return $return;
+    }
+
     return $str;
+  }
+
+  /**
+   * @param string $str
+   * @param string $fromCharset      [optional] <p>Set the input charset.</p>
+   * @param string $toCharset        [optional] <p>Set the output charset.</p>
+   * @param string $transferEncoding [optional] <p>Set the transfer encoding.</p>
+   * @param string $linefeed         [optional] <p>Set the used linefeed.</p>
+   * @param int    $indent           [optional] <p>Set the max length indent.</p>
+   *
+   * @return string|false
+   *                      An encoded MIME field on success,
+   *                      or false if an error occurs during the encoding.
+   */
+  public static function encode_mimeheader(
+      $str,
+      $fromCharset = 'UTF-8',
+      $toCharset = 'UTF-8',
+      $transferEncoding = 'Q',
+      $linefeed = "\r\n",
+      $indent = 76
+  )
+  {
+    if ($fromCharset !== 'UTF-8' && $fromCharset !== 'CP850') {
+      $fromCharset = self::normalize_encoding($fromCharset, 'UTF-8');
+    }
+
+    if ($toCharset !== 'UTF-8' && $toCharset !== 'CP850') {
+      $toCharset = self::normalize_encoding($toCharset, 'UTF-8');
+    }
+
+    $output = \iconv_mime_encode(
+        '',
+        $str,
+        [
+            'scheme'           => $transferEncoding,
+            'line-length'      => $indent,
+            'input-charset'    => $fromCharset,
+            'output-charset'   => $toCharset,
+            'line-break-chars' => $linefeed,
+        ]
+    );
+
+    return $output;
   }
 
   /**
@@ -1187,6 +1341,8 @@ final class UTF8
    *
    * @param bool          $convertToUtf8    <strong>WARNING!!!</strong> <p>Maybe you can't use this option for e.g.
    *                                        images or pdf, because they used non default utf-8 chars.</p>
+   * @param string|null   $fromEncoding     [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc. ... otherwise we
+   *                                        will autodetect the encoding</p>
    *
    * @return string|false The function returns the read data or false on failure.
    */
@@ -1197,7 +1353,8 @@ final class UTF8
       int $offset = null,
       int $maxLength = null,
       int $timeout = 10,
-      bool $convertToUtf8 = true
+      bool $convertToUtf8 = true,
+      string $fromEncoding = ''
   )
   {
     // init
@@ -1238,7 +1395,7 @@ final class UTF8
           ||
           self::is_utf32($data) !== false
       ) {
-        $data = self::encode('UTF-8', $data, false);
+        $data = self::encode('UTF-8', $data, false, $fromEncoding);
         $data = self::cleanup($data);
       }
     }
@@ -1576,33 +1733,43 @@ final class UTF8
 
   /**
    * @param string $str
-   * @param bool   $useLower <p>Use uppercase by default, otherwise use lowecase.</p>
+   * @param bool   $useLower     <p>Use uppercase by default, otherwise use lowecase.</p>
+   * @param bool   $fullCaseFold <p>Convert not only common cases.</p>
    *
    * @return string
    */
-  private static function fixStrCaseHelper(string $str, $useLower = false): string
+  private static function fixStrCaseHelper(string $str, $useLower = false, $fullCaseFold = false): string
   {
-    $upper = [
-        'ẞ',
-    ];
-    $lower = [
-        'ß',
-    ];
+    $upper = self::$COMMON_CASE_FOLD['upper'];
+    $lower = self::$COMMON_CASE_FOLD['lower'];
 
     if ($useLower === true) {
-      $str = \str_replace(
+      $str = (string)\str_replace(
           $upper,
           $lower,
           $str
       );
     } else {
-      $str = \str_replace(
+      $str = (string)\str_replace(
           $lower,
           $upper,
           $str
       );
     }
 
+    if ($fullCaseFold) {
+
+      static $FULL_CASE_FOLD = null;
+      if ($FULL_CASE_FOLD === null) {
+        $FULL_CASE_FOLD = self::getData('caseFolding_full');
+      }
+
+      if ($useLower === true) {
+        $str = (string)\str_replace($FULL_CASE_FOLD[0], $FULL_CASE_FOLD[1], $str);
+      } else {
+        $str = (string)\str_replace($FULL_CASE_FOLD[1], $FULL_CASE_FOLD[0], $str);
+      }
+    }
 
     return $str;
   }
@@ -1842,6 +2009,74 @@ final class UTF8
   }
 
   /**
+   * @param string $str
+   *
+   * @return string[]
+   */
+  private static function get_file_type($str)
+  {
+    if ('' === $str) {
+      return ['ext' => '', 'type' => ''];
+    }
+
+    $str_info = self::substr_in_byte($str, 0, 2);
+    if (self::strlen_in_byte($str_info) !== 2) {
+      return ['ext' => '', 'type' => ''];
+    }
+
+    $str_info = \unpack("C2chars", $str_info);
+    $type_code = (int)($str_info['chars1'] . $str_info['chars2']);
+
+    // DEBUG
+    //var_dump($type_code);
+
+    switch ($type_code) {
+      case 3780:
+        $ext = 'pdf';
+        $type = 'binary';
+        break;
+      case 7790:
+        $ext = 'exe';
+        $type = 'binary';
+        break;
+      case 7784:
+        $ext = 'midi';
+        $type = 'binary';
+        break;
+      case 8075:
+        $ext = 'zip';
+        $type = 'binary';
+        break;
+      case 8297:
+        $ext = 'rar';
+        $type = 'binary';
+        break;
+      case 255216:
+        $ext = 'jpg';
+        $type = 'binary';
+        break;
+      case 7173:
+        $ext = 'gif';
+        $type = 'binary';
+        break;
+      case 6677:
+        $ext = 'bmp';
+        $type = 'binary';
+        break;
+      case 13780:
+        $ext = 'png';
+        $type = 'binary';
+        break;
+      default:
+        $ext = '???';
+        $type = '???';
+        break;
+    }
+
+    return ['ext' => $ext, 'type' => $type];
+  }
+
+  /**
    * @param int    $length        <p>Length of the random string.</p>
    * @param string $possibleChars [optional] <p>Characters string for the random selection.</p>
    * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
@@ -2012,9 +2247,12 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
-    # INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
-    if (\function_exists('mb_encode_numericentity')) {
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
 
+    # INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
+    if (self::$SUPPORT['mbstring'] === true) {
       $startCode = 0x00;
       if ($keepAsciiChars === true) {
         $startCode = 0x80;
@@ -2026,6 +2264,10 @@ final class UTF8
           $encoding
       );
     }
+
+    //
+    // fallback via vanilla php
+    //
 
     return \implode(
         '',
@@ -2149,23 +2391,40 @@ final class UTF8
       \trigger_error('UTF8::html_entity_decode() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
     do {
       $str_compare = $str;
 
-      $str = (string)\preg_replace_callback(
-          "/&#\d{2,6};/",
-          function ($matches) use ($encoding) {
-            // always fallback via symfony polyfill
-            $returnTmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
+      # INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
+      if (self::$SUPPORT['mbstring'] === true) {
 
-            if ($returnTmp !== '"' && $returnTmp !== "'") {
-              return $returnTmp;
-            }
+        $str = \mb_decode_numericentity(
+            $str,
+            [0x80, 0xfffff, 0, 0xfffff, 0],
+            $encoding
+        );
 
-            return $matches[0];
-          },
-          $str
-      );
+      } else {
+
+        $str = (string)\preg_replace_callback(
+            "/&#\d{2,6};/",
+            function ($matches) use ($encoding) {
+              // always fallback via symfony polyfill
+              $returnTmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
+
+              if ($returnTmp !== '"' && $returnTmp !== "'") {
+                return $returnTmp;
+              }
+
+              return $matches[0];
+            },
+            $str
+        );
+
+      }
 
       // decode numeric & UTF16 two byte entities
       $str = \html_entity_decode(
@@ -2739,74 +2998,6 @@ final class UTF8
     $base64String = (string)\base64_decode($str, true);
 
     return $base64String && \base64_encode($base64String) === $str;
-  }
-
-  /**
-   * @param string $str
-   *
-   * @return string[]
-   */
-  private static function get_file_type($str)
-  {
-    if ('' === $str) {
-      return ['ext' => '', 'type' => ''];
-    }
-
-    $str_info = self::substr_in_byte($str, 0, 2);
-    if (self::strlen_in_byte($str_info) !== 2) {
-      return ['ext' => '', 'type' => ''];
-    }
-
-    $str_info = \unpack("C2chars", $str_info);
-    $type_code = (int)($str_info['chars1'] . $str_info['chars2']);
-
-    // DEBUG
-    //var_dump($type_code);
-
-    switch ($type_code) {
-      case 3780:
-        $ext = 'pdf';
-        $type = 'binary';
-        break;
-      case 7790:
-        $ext = 'exe';
-        $type = 'binary';
-        break;
-      case 7784:
-        $ext = 'midi';
-        $type = 'binary';
-        break;
-      case 8075:
-        $ext = 'zip';
-        $type = 'binary';
-        break;
-      case 8297:
-        $ext = 'rar';
-        $type = 'binary';
-        break;
-      case 255216:
-        $ext = 'jpg';
-        $type = 'binary';
-        break;
-      case 7173:
-        $ext = 'gif';
-        $type = 'binary';
-        break;
-      case 6677:
-        $ext = 'bmp';
-        $type = 'binary';
-        break;
-      case 13780:
-        $ext = 'png';
-        $type = 'binary';
-        break;
-      default:
-        $ext = '???';
-        $type = '???';
-        break;
-    }
-
-    return ['ext' => $ext, 'type' => $type];
   }
 
   /**
@@ -3761,6 +3952,14 @@ final class UTF8
       return 'UTF-8';
     }
 
+    if (
+        '8BIT' === $encoding
+        ||
+        'BINARY' === $encoding
+    ) {
+      return 'CP850';
+    }
+
     if (isset($STATIC_NORMALIZE_ENCODING_CACHE[$encoding])) {
       return $STATIC_NORMALIZE_ENCODING_CACHE[$encoding];
     }
@@ -4020,7 +4219,8 @@ final class UTF8
    * @param array  $result    <p>The result will be returned into this reference parameter.</p>
    * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
    *
-   * @return bool Will return <strong>false</strong> if php can't parse the string and we haven't any $result.
+   * @return bool
+   *              Will return <strong>false</strong> if php can't parse the string and we haven't any $result.
    */
   public static function parse_str(string $str, &$result, bool $cleanUtf8 = false): bool
   {
@@ -4028,10 +4228,20 @@ final class UTF8
       $str = self::clean($str);
     }
 
-    // always fallback via symfony polyfill
-    $return = \mb_parse_str($str, $result);
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
 
-    return !($return === false || empty($result));
+    if (self::$SUPPORT['mbstring'] === true) {
+      $return = \mb_parse_str($str, $result);
+
+      return !($return === false || empty($result));
+    }
+
+    /** @noinspection PhpVoidFunctionResultUsedInspection */
+    \parse_str($str, $result);
+
+    return !empty($result);
   }
 
   /**
@@ -5118,10 +5328,16 @@ final class UTF8
         'EUC-JP',
     ];
 
-    // always fallback via symfony polyfill
-    $encoding = \mb_detect_encoding($str, $detectOrder, true);
-    if ($encoding) {
-      return $encoding;
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['mbstring'] === true) {
+      // info: do not use the symfony polyfill here
+      $encoding = \mb_detect_encoding($str, $detectOrder, true);
+      if ($encoding) {
+        return $encoding;
+      }
     }
 
     //
@@ -5132,11 +5348,10 @@ final class UTF8
       self::$ENCODINGS = self::getData('encodings');
     }
 
-    $md5 = \md5($str);
     foreach (self::$ENCODINGS as $encodingTmp) {
       # INFO: //IGNORE but still throw notice
       /** @noinspection PhpUsageOfSilenceOperatorInspection */
-      if (\md5((string)@\iconv($encodingTmp, $encodingTmp . '//IGNORE', $str)) === $md5) {
+      if ((string)@\iconv($encodingTmp, $encodingTmp . '//IGNORE', $str) === $str) {
         return $encodingTmp;
       }
     }
@@ -6178,7 +6393,6 @@ final class UTF8
   public static function str_replace_first(string $search, string $replace, string $subject): string
   {
     $pos = self::strpos($subject, $search);
-
     if ($pos !== false) {
       return self::substr_replace($subject, $replace, $pos, self::strlen($search));
     }
@@ -6198,7 +6412,6 @@ final class UTF8
   public static function str_replace_last(string $search, string $replace, string $subject): string
   {
     $pos = self::strrpos($subject, $search);
-
     if ($pos !== false) {
       return self::substr_replace($subject, $replace, $pos, self::strlen($search));
     }
@@ -7137,17 +7350,21 @@ final class UTF8
    *
    * INFO: Case-insensitive version of UTF8::strcmp()
    *
-   * @param string $str1
-   * @param string $str2
+   * @param string $str1     <p>The first string.</p>
+   * @param string $str2     <p>The second string.</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return int
    *             <strong>&lt; 0</strong> if str1 is less than str2;<br>
    *             <strong>&gt; 0</strong> if str1 is greater than str2,<br>
    *             <strong>0</strong> if they are equal.
    */
-  public static function strcasecmp(string $str1, string $str2): int
+  public static function strcasecmp(string $str1, string $str2, string $encoding = 'UTF-8'): int
   {
-    return self::strcmp(self::strtocasefold($str1), self::strtocasefold($str2));
+    return self::strcmp(
+        self::strtocasefold($str1, true, false, $encoding, null, false),
+        self::strtocasefold($str2, true, false, $encoding, null, false)
+    );
   }
 
   /**
@@ -7171,8 +7388,8 @@ final class UTF8
   /**
    * Case-sensitive string comparison.
    *
-   * @param string $str1
-   * @param string $str2
+   * @param string $str1 <p>The first string.</p>
+   * @param string $str2 <p>The second string.</p>
    *
    * @return int
    *              <strong>&lt; 0</strong> if str1 is less than str2<br>
@@ -7391,20 +7608,20 @@ final class UTF8
       }
     }
 
+    //
     // fallback for ascii only
+    //
+
     if (self::is_ascii($haystack) && self::is_ascii($needle)) {
       return \stripos($haystack, $needle, $offset);
     }
 
-    // fallback via symfony polyfill
-    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
-      return \mb_stripos($haystack, $needle, $offset, $encoding);
-    }
-
+    //
     // fallback via vanilla php
+    //
 
-    $haystack = self::strtoupper($haystack, $encoding, false, null, true);
-    $needle = self::strtoupper($needle, $encoding, false, null, true);
+    $haystack = self::strtocasefold($haystack, true, false, $encoding, null, false);
+    $needle = self::strtocasefold($needle, true, false, $encoding, null, false);
 
     return self::strpos($haystack, $needle, $offset, $encoding);
   }
@@ -7513,11 +7730,15 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
-    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
-    }
+    //
+    // fallback for binary || ascii only
+    //
 
-    if ($encoding === 'ASCII' || $encoding === 'CP850') {
+    if (
+        $encoding === 'CP850'
+        ||
+        $encoding === 'ASCII'
+    ) {
       return self::strlen_in_byte($str);
     }
 
@@ -7525,6 +7746,10 @@ final class UTF8
       // "mb_strlen" and "\iconv_strlen" returns wrong length,
       // if invalid characters are found in $str
       $str = self::clean($str);
+    }
+
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
     }
 
     if (
@@ -7537,18 +7762,9 @@ final class UTF8
       \trigger_error('UTF8::strlen() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (
-        $encoding !== 'UTF-8'
-        &&
-        self::$SUPPORT['iconv'] === true
-        &&
-        self::$SUPPORT['mbstring'] === false
-    ) {
-      $returnTmp = \iconv_strlen($str, $encoding);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
-    }
+    //
+    // fallback via mbstring
+    //
 
     if (self::$SUPPORT['mbstring'] === true) {
       $returnTmp = \mb_strlen($str, $encoding);
@@ -7557,12 +7773,20 @@ final class UTF8
       }
     }
 
+    //
+    // fallback via iconv
+    //
+
     if (self::$SUPPORT['iconv'] === true) {
       $returnTmp = \iconv_strlen($str, $encoding);
       if ($returnTmp !== false) {
         return $returnTmp;
       }
     }
+
+    //
+    // fallback via intl
+    //
 
     if (
         $encoding === 'UTF-8' // INFO: "grapheme_strlen()" can't handle other encodings
@@ -7575,20 +7799,18 @@ final class UTF8
       }
     }
 
-    // fallback via symfony polyfill
-    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
-      $returnTmp = \mb_strlen($str, $encoding);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
-    }
-
+    //
     // fallback for ascii only
+    //
+
     if (self::is_ascii($str)) {
       return \strlen($str);
     }
 
+    //
     // fallback via vanilla php
+    //
+
     \preg_match_all('/./us', $str, $parts);
 
     $returnTmp = \count($parts[0]);
@@ -7625,96 +7847,25 @@ final class UTF8
   }
 
   /**
-   * Count the number of substring occurrences.
-   *
-   * @param string $haystack <p>
-   *                         The string being checked.
-   *                         </p>
-   * @param string $needle   <p>
-   *                         The string being found.
-   *                         </p>
-   * @param int    $offset   [optional] <p>
-   *                         The offset where to start counting
-   *                         </p>
-   * @param int    $length   [optional] <p>
-   *                         The maximum length after the specified offset to search for the
-   *                         substring. It outputs a warning if the offset plus the length is
-   *                         greater than the haystack length.
-   *                         </p>
-   *
-   * @return int|false The number of times the
-   *                   needle substring occurs in the
-   *                   haystack string.
-   */
-  public static function substr_count_in_byte(string $haystack, string $needle, int $offset = 0, int $length = null)
-  {
-    if ($haystack === '' || $needle === '') {
-      return 0;
-    }
-
-    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
-    }
-
-    if (
-        ($offset || $length !== null)
-        &&
-        self::$SUPPORT['mbstring_func_overload'] === true
-    ) {
-
-      if ($length === null) {
-        $lengthTmp = self::strlen($haystack);
-        if ($lengthTmp === false) {
-          return false;
-        }
-        $length = (int)$lengthTmp;
-      }
-
-      if (
-          (
-              $length !== 0
-              &&
-              $offset !== 0
-          )
-          &&
-          ($length + $offset) <= 0
-          &&
-          Bootup::is_php('7.1') === false // output from "substr_count()" have changed in PHP 7.1
-      ) {
-        return false;
-      }
-
-      $haystackTmp = self::substr_in_byte($haystack, $offset, $length);
-      if ($haystackTmp === false) {
-        $haystackTmp = '';
-      }
-      $haystack = (string)$haystackTmp;
-    }
-
-    if (self::$SUPPORT['mbstring_func_overload'] === true) {
-      // "mb_" is available if overload is used, so use it ...
-      return \mb_substr_count($haystack, $needle, 'CP850'); // 8-BIT
-    }
-
-    return \substr_count($haystack, $needle, $offset, $length);
-  }
-
-  /**
    * Case insensitive string comparisons using a "natural order" algorithm.
    *
    * INFO: natural order version of UTF8::strcasecmp()
    *
-   * @param string $str1 <p>The first string.</p>
-   * @param string $str2 <p>The second string.</p>
+   * @param string $str1     <p>The first string.</p>
+   * @param string $str2     <p>The second string.</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return int
    *             <strong>&lt; 0</strong> if str1 is less than str2<br>
    *             <strong>&gt; 0</strong> if str1 is greater than str2<br>
    *             <strong>0</strong> if they are equal
    */
-  public static function strnatcasecmp(string $str1, string $str2): int
+  public static function strnatcasecmp(string $str1, string $str2, string $encoding = 'UTF-8'): int
   {
-    return self::strnatcmp(self::strtocasefold($str1), self::strtocasefold($str2));
+    return self::strnatcmp(
+        self::strtocasefold($str1, true, false, $encoding, null, false),
+        self::strtocasefold($str2, true, false, $encoding, null, false)
+    );
   }
 
   /**
@@ -7742,18 +7893,23 @@ final class UTF8
    *
    * @link  http://php.net/manual/en/function.strncasecmp.php
    *
-   * @param string $str1 <p>The first string.</p>
-   * @param string $str2 <p>The second string.</p>
-   * @param int    $len  <p>The length of strings to be used in the comparison.</p>
+   * @param string $str1     <p>The first string.</p>
+   * @param string $str2     <p>The second string.</p>
+   * @param int    $len      <p>The length of strings to be used in the comparison.</p>
+   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return int
    *             <strong>&lt; 0</strong> if <i>str1</i> is less than <i>str2</i>;<br>
    *             <strong>&gt; 0</strong> if <i>str1</i> is greater than <i>str2</i>;<br>
    *             <strong>0</strong> if they are equal
    */
-  public static function strncasecmp(string $str1, string $str2, int $len): int
+  public static function strncasecmp(string $str1, string $str2, int $len, string $encoding = 'UTF-8'): int
   {
-    return self::strncmp(self::strtocasefold($str1), self::strtocasefold($str2), $len);
+    return self::strncmp(
+        self::strtocasefold($str1, true, false, $encoding, null, false),
+        self::strtocasefold($str2, true, false, $encoding, null, false),
+        $len
+    );
   }
 
   /**
@@ -7847,12 +8003,16 @@ final class UTF8
       self::checkForSupport();
     }
 
+    //
+    // fallback for binary || ascii only
+    //
+
     if (
         $encoding === 'CP850'
-        &&
-        self::$SUPPORT['mbstring_func_overload'] === false
+        ||
+        $encoding === 'ASCII'
     ) {
-      return \strpos($haystack, $needle, $offset);
+      return self::strpos_in_byte($haystack, $needle, $offset);
     }
 
     if (
@@ -7865,22 +8025,9 @@ final class UTF8
       \trigger_error('UTF8::strpos() without mbstring / iconv cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (
-        $offset >= 0 // iconv_strpos() can't handle negative offset
-        &&
-        $encoding !== 'UTF-8'
-        &&
-        self::$SUPPORT['mbstring'] === false
-        &&
-        self::$SUPPORT['iconv'] === true
-    ) {
-      // ignore invalid negative offset to keep compatibility
-      // with php < 5.5.35, < 5.6.21, < 7.0.6
-      $returnTmp = \iconv_strpos($haystack, $needle, $offset > 0 ? $offset : 0, $encoding);
-      if ($returnTmp !== false) {
-        return $returnTmp;
-      }
-    }
+    //
+    // fallback via mbstring
+    //
 
     if (self::$SUPPORT['mbstring'] === true) {
       $returnTmp = \mb_strpos($haystack, $needle, $offset, $encoding);
@@ -7888,6 +8035,10 @@ final class UTF8
         return $returnTmp;
       }
     }
+
+    //
+    // fallback via intl
+    //
 
     if (
         $encoding === 'UTF-8' // INFO: "grapheme_strpos()" can't handle other encodings
@@ -7902,6 +8053,10 @@ final class UTF8
       }
     }
 
+    //
+    // fallback via iconv
+    //
+
     if (
         $offset >= 0 // iconv_strpos() can't handle negative offset
         &&
@@ -7915,17 +8070,17 @@ final class UTF8
       }
     }
 
+    //
     // fallback for ascii only
+    //
+
     if (($haystackIsAscii = self::is_ascii($haystack)) && self::is_ascii($needle)) {
       return \strpos($haystack, $needle, $offset);
     }
 
-    // fallback via symfony polyfill
-    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
-      return \mb_strpos($haystack, $needle, $offset, $encoding);
-    }
-
+    //
     // fallback via vanilla php
+    //
 
     if ($haystackIsAscii) {
       $haystackTmp = \substr($haystack, $offset);
@@ -7954,6 +8109,40 @@ final class UTF8
   }
 
   /**
+   * Find position of first occurrence of string in a string.
+   *
+   * @param string $haystack <p>
+   *                         The string being checked.
+   *                         </p>
+   * @param string $needle   <p>
+   *                         The position counted from the beginning of haystack.
+   *                         </p>
+   * @param int    $offset   [optional] <p>
+   *                         The search offset. If it is not specified, 0 is used.
+   *                         </p>
+   *
+   * @return int|false The numeric position of the first occurrence of needle in the
+   *                   haystack string. If needle is not found, it returns false.
+   */
+  public static function strpos_in_byte(string $haystack, string $needle, int $offset = 0)
+  {
+    if ($haystack === '' || $needle === '') {
+      return false;
+    }
+
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      // "mb_" is available if overload is used, so use it ...
+      return \mb_strpos($haystack, $needle, $offset, 'CP850'); // 8-BIT
+    }
+
+    return \strpos($haystack, $needle, $offset);
+  }
+
+  /**
    * Finds the last occurrence of a character in a string within another.
    *
    * @link http://php.net/manual/en/function.mb-strrchr.php
@@ -7975,6 +8164,10 @@ final class UTF8
    */
   public static function strrchr(string $haystack, string $needle, bool $before_needle = false, string $encoding = 'UTF-8', bool $cleanUtf8 = false)
   {
+    if ('' === $haystack || '' === $needle) {
+      return false;
+    }
+
     if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
@@ -8002,20 +8195,48 @@ final class UTF8
       return \mb_strrchr($haystack, $needle, $before_needle, $encoding);
     }
 
+    //
+    // fallback for binary || ascii only
+    //
+
     if (
         $before_needle === false
         &&
-        ('CP850' === $encoding || 'ASCII' === $encoding)
+        (
+            $encoding === 'CP850'
+            ||
+            $encoding === 'ASCII'
+        )
     ) {
       return \strrchr($haystack, $needle);
     }
 
-    // fallback via symfony polyfill
-    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
-      return \mb_strrchr($haystack, $needle, $before_needle, $encoding);
+    //
+    // fallback via iconv
+    //
+
+    if (self::$SUPPORT['iconv'] === true) {
+      $needleTmp = self::substr($needle, 0, 1, $encoding);
+      if ($needleTmp === false) {
+        return false;
+      }
+      $needle = (string)$needleTmp;
+
+      $pos = \iconv_strrpos($haystack, $needle, $encoding);
+      if (false === $pos) {
+        return false;
+      }
+
+      if ($before_needle) {
+        return self::substr($haystack, 0, $pos, $encoding);
+      }
+
+      return self::substr($haystack, $pos, null, $encoding);
     }
 
+    //
     // fallback via vanilla php
+    //
 
     $needleTmp = self::substr($needle, 0, 1, $encoding);
     if ($needleTmp === false) {
@@ -8079,6 +8300,10 @@ final class UTF8
    */
   public static function strrichr(string $haystack, string $needle, bool $before_needle = false, string $encoding = 'UTF-8', bool $cleanUtf8 = false)
   {
+    if ('' === $haystack || '' === $needle) {
+      return false;
+    }
+
     if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
@@ -8090,8 +8315,38 @@ final class UTF8
       $haystack = self::clean($haystack);
     }
 
-    // always fallback via symfony polyfill
-    return \mb_strrichr($haystack, $needle, $before_needle, $encoding);
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    //
+    // fallback via mbstring
+    //
+
+    if (self::$SUPPORT['mbstring'] === true) {
+      return \mb_strrichr($haystack, $needle, $before_needle, $encoding);
+    }
+
+    //
+    // fallback via vanilla php
+    //
+
+    $needleTmp = self::substr($needle, 0, 1, $encoding);
+    if ($needleTmp === false) {
+      return false;
+    }
+    $needle = (string)$needleTmp;
+
+    $pos = self::strripos($haystack, $needle, 0, $encoding);
+    if ($pos === false) {
+      return false;
+    }
+
+    if ($before_needle) {
+      return self::substr($haystack, 0, $pos, $encoding);
+    }
+
+    return self::substr($haystack, $pos, null, $encoding);
   }
 
   /**
@@ -8133,6 +8388,18 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
+    //
+    // fallback for binary || ascii only
+    //
+
+    if (
+        $encoding === 'CP850'
+        ||
+        $encoding === 'ASCII'
+    ) {
+      return self::strripos_in_byte($haystack, $needle, $offset);
+    }
+
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
@@ -8145,9 +8412,17 @@ final class UTF8
       \trigger_error('UTF8::strripos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
+    //
+    // fallback via mbstrig
+    //
+
     if (self::$SUPPORT['mbstring'] === true) {
       return \mb_strripos($haystack, $needle, $offset, $encoding);
     }
+
+    //
+    // fallback via intl
+    //
 
     if (
         $encoding === 'UTF-8' // INFO: "grapheme_strripos()" can't handle other encodings
@@ -8162,22 +8437,58 @@ final class UTF8
       }
     }
 
-    // fallback via symfony polyfill
-    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
-      return \mb_strripos($haystack, $needle, $offset, $encoding);
-    }
-
+    //
     // fallback for ascii only
+    //
+
     if (self::is_ascii($haystack) && self::is_ascii($needle)) {
-      return \strripos($haystack, $needle, $offset);
+      return self::strripos_in_byte($haystack, $needle, $offset);
     }
 
+    //
     // fallback via vanilla php
+    //
 
-    $haystack = self::strtoupper($haystack, $encoding, false, null, true);
-    $needle = self::strtoupper($needle, $encoding, false, null, true);
+    $haystack = self::strtocasefold($haystack, true, false, $encoding);
+    $needle = self::strtocasefold($needle, true, false, $encoding);
 
     return self::strrpos($haystack, $needle, $offset, $encoding, $cleanUtf8);
+  }
+
+  /**
+   * Finds position of last occurrence of a string within another, case insensitive.
+   *
+   * @param string $haystack <p>
+   *                         The string from which to get the position of the last occurrence
+   *                         of needle.
+   *                         </p>
+   * @param string $needle   <p>
+   *                         The string to find in haystack.
+   *                         </p>
+   * @param int    $offset   [optional] <p>
+   *                         The position in haystack
+   *                         to start searching.
+   *                         </p>
+   *
+   * @return int|false Return the numeric position of the last occurrence of needle in the
+   *                   haystack string, or false if needle is not found.
+   */
+  public static function strripos_in_byte(string $haystack, string $needle, int $offset = 0)
+  {
+    if ($haystack === '' || $needle === '') {
+      return false;
+    }
+
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      // "mb_" is available if overload is used, so use it ...
+      return \mb_strripos($haystack, $needle, $offset, 'CP850'); // 8-BIT
+    }
+
+    return \strripos($haystack, $needle, $offset);
   }
 
   /**
@@ -8224,6 +8535,18 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
+    //
+    // fallback for binary || ascii only
+    //
+
+    if (
+        $encoding === 'CP850'
+        ||
+        $encoding === 'ASCII'
+    ) {
+      return self::strrpos_in_byte($haystack, $needle, $offset);
+    }
+
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
@@ -8236,9 +8559,17 @@ final class UTF8
       \trigger_error('UTF8::strrpos() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
+    //
+    // fallback via mbstring
+    //
+
     if (self::$SUPPORT['mbstring'] === true) {
       return \mb_strrpos($haystack, $needle, $offset, $encoding);
     }
+
+    //
+    // fallback via intl
+    //
 
     if (
         $offset !== null
@@ -8255,12 +8586,10 @@ final class UTF8
       }
     }
 
-    // fallback via symfony polyfill
-    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
-      return \mb_strrpos($haystack, $needle, $offset, $encoding);
-    }
-
+    //
     // fallback for ascii only
+    //
+
     if (
         $offset !== null
         &&
@@ -8268,10 +8597,12 @@ final class UTF8
         &&
         self::is_ascii($needle)
     ) {
-      return \strrpos($haystack, $needle, $offset);
+      return self::strrpos_in_byte($haystack, $needle, $offset);
     }
 
+    //
     // fallback via vanilla php
+    //
 
     $haystackTmp = null;
     if ($offset > 0) {
@@ -8288,12 +8619,47 @@ final class UTF8
       $haystack = (string)$haystackTmp;
     }
 
-    $pos = \strrpos($haystack, $needle);
+    $pos = self::strrpos_in_byte($haystack, $needle);
     if ($pos === false) {
       return false;
     }
 
-    return $offset + self::strlen(\substr($haystack, 0, $pos));
+    return $offset + self::strlen(self::substr_in_byte($haystack, 0, $pos));
+  }
+
+  /**
+   * Find position of last occurrence of a string in a string.
+   *
+   * @param string $haystack <p>
+   *                         The string being checked, for the last occurrence
+   *                         of needle.
+   *                         </p>
+   * @param string $needle   <p>
+   *                         The string to find in haystack.
+   *                         </p>
+   * @param int    $offset   [optional] May be specified to begin searching an arbitrary number of characters into
+   *                         the string. Negative values will stop searching at an arbitrary point
+   *                         prior to the end of the string.
+   *
+   * @return int|false The numeric position of the last occurrence of needle in the
+   *                   haystack string. If needle is not found, it returns false.
+   */
+  public static function strrpos_in_byte(string $haystack, string $needle, int $offset = 0)
+  {
+    if ($haystack === '' || $needle === '') {
+      return false;
+    }
+
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      // "mb_" is available if overload is used, so use it ...
+      return \mb_strrpos($haystack, $needle, $offset, 'CP850'); // 8-BIT
+    }
+
+    return \strrpos($haystack, $needle, $offset);
   }
 
   /**
@@ -8356,6 +8722,18 @@ final class UTF8
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
+    //
+    // fallback for binary || ascii only
+    //
+
+    if (
+        $encoding === 'CP850'
+        ||
+        $encoding === 'ASCII'
+    ) {
+      return self::strstr_in_byte($haystack, $needle, $before_needle);
+    }
+
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
@@ -8368,9 +8746,17 @@ final class UTF8
       \trigger_error('UTF8::strstr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
+    //
+    // fallback via mbstring
+    //
+
     if (self::$SUPPORT['mbstring'] === true) {
       return \mb_strstr($haystack, $needle, $before_needle, $encoding);
     }
+
+    //
+    // fallback via intl
+    //
 
     if (
         $encoding === 'UTF-8' // INFO: "grapheme_strstr()" can't handle other encodings
@@ -8382,6 +8768,18 @@ final class UTF8
         return $returnTmp;
       }
     }
+
+    //
+    // fallback for ascii only
+    //
+
+    if (self::is_ascii($haystack) && self::is_ascii($needle)) {
+      return self::strstr_in_byte($haystack, $needle, $before_needle);
+    }
+
+    //
+    // fallback via vanilla php
+    //
 
     \preg_match('/^(.*?)' . \preg_quote($needle, '/') . '/us', $haystack, $match);
 
@@ -8397,50 +8795,83 @@ final class UTF8
   }
 
   /**
+   *  * Finds first occurrence of a string within another.
+   *
+   * @param string $haystack      <p>
+   *                              The string from which to get the first occurrence
+   *                              of needle.
+   *                              </p>
+   * @param string $needle        <p>
+   *                              The string to find in haystack.
+   *                              </p>
+   * @param bool   $before_needle [optional] <p>
+   *                              Determines which portion of haystack
+   *                              this function returns.
+   *                              If set to true, it returns all of haystack
+   *                              from the beginning to the first occurrence of needle.
+   *                              If set to false, it returns all of haystack
+   *                              from the first occurrence of needle to the end,
+   *                              </p>
+   *
+   * @return string|false The portion of haystack,
+   *                      or false if needle is not found.
+   */
+  public static function strstr_in_byte(string $haystack, string $needle, bool $before_needle = false)
+  {
+    if ($haystack === '' || $needle === '') {
+      return false;
+    }
+
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      // "mb_" is available if overload is used, so use it ...
+      return \mb_strstr($haystack, $needle, $before_needle, 'CP850'); // 8-BIT
+    }
+
+    return \strstr($haystack, $needle, $before_needle);
+  }
+
+  /**
    * Unicode transformation for case-less matching.
    *
    * @link http://unicode.org/reports/tr21/tr21-5.html
    *
-   * @param string $str        <p>The input string.</p>
-   * @param bool   $full       [optional] <p>
-   *                           <b>true</b>, replace full case folding chars (default)<br>
-   *                           <b>false</b>, use only limited static array [UTF8::$commonCaseFold]
-   *                           </p>
-   * @param bool   $cleanUtf8  [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string      $str       <p>The input string.</p>
+   * @param bool        $full      [optional] <p>
+   *                               <b>true</b>, replace full case folding chars (default)<br>
+   *                               <b>false</b>, use only limited static array [UTF8::$COMMON_CASE_FOLD]
+   *                               </p>
+   * @param bool        $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string      $encoding  [optional] <p>Set the charset.</p>
+   * @param string|null $lang      [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param bool        $lower     [optional] <p>Use lowercase string, otherwise use uppercase string. PS: uppercase is
+   *                               for some languages better ...</p>
    *
    * @return string
    */
-  public static function strtocasefold(string $str, bool $full = true, bool $cleanUtf8 = false): string
+  public static function strtocasefold(
+      string $str,
+      bool $full = true,
+      bool $cleanUtf8 = false,
+      string $encoding = 'UTF-8',
+      string $lang = null,
+      $lower = true
+  ): string
   {
     if ('' === $str) {
       return '';
     }
 
-    static $COMMON_CASE_FOLD_KEYS_CACHE = null;
-    static $COMMAN_CASE_FOLD_VALUES_CACHE = null;
+    $str = self::fixStrCaseHelper($str, $lower, $full);
 
-    if ($COMMON_CASE_FOLD_KEYS_CACHE === null) {
-      $COMMON_CASE_FOLD_KEYS_CACHE = \array_keys(self::$COMMON_CASE_FOLD);
-      $COMMAN_CASE_FOLD_VALUES_CACHE = \array_values(self::$COMMON_CASE_FOLD);
+    if ($lower === true) {
+      return self::strtolower($str, $encoding, $cleanUtf8, $lang);
     }
 
-    $str = (string)\str_replace($COMMON_CASE_FOLD_KEYS_CACHE, $COMMAN_CASE_FOLD_VALUES_CACHE, $str);
-
-    if ($full) {
-
-      static $FULL_CASE_FOLD = null;
-      if ($FULL_CASE_FOLD === null) {
-        $FULL_CASE_FOLD = self::getData('caseFolding_full');
-      }
-
-      $str = (string)\str_replace($FULL_CASE_FOLD[0], $FULL_CASE_FOLD[1], $str);
-    }
-
-    if ($cleanUtf8 === true) {
-      $str = self::clean($str);
-    }
-
-    return self::strtolower($str);
+    return self::strtoupper($str, $encoding, $cleanUtf8, $lang);
   }
 
   /**
@@ -8638,6 +9069,10 @@ final class UTF8
    */
   public static function strwidth(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false): int
   {
+    if ('' === $str) {
+      return 0;
+    }
+
     if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
@@ -8648,8 +9083,30 @@ final class UTF8
       $str = self::clean($str);
     }
 
-    // always fallback via symfony polyfill
-    return \mb_strwidth($str, $encoding);
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    //
+    // fallback via mbstring
+    //
+
+    if (self::$SUPPORT['mbstring'] === true) {
+      return \mb_strwidth($str, $encoding);
+    }
+
+    //
+    // fallback via vanilla php
+    //
+
+    if ('UTF-8' !== $encoding) {
+      $str = self::encode('UTF-8', $str, false, $encoding);
+    }
+
+    $wide = 0;
+    $str = (string)preg_replace('/[\x{1100}-\x{115F}\x{2329}\x{232A}\x{2E80}-\x{303E}\x{3040}-\x{A4CF}\x{AC00}-\x{D7A3}\x{F900}-\x{FAFF}\x{FE10}-\x{FE19}\x{FE30}-\x{FE6F}\x{FF00}-\x{FF60}\x{FFE0}-\x{FFE6}\x{20000}-\x{2FFFD}\x{30000}-\x{3FFFD}]/u', '', $str, -1, $wide);
+
+    return ($wide << 1) + self::strlen($str, 'UTF-8');
   }
 
   /**
@@ -8690,6 +9147,35 @@ final class UTF8
       return $str;
     }
 
+    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
+      $encoding = self::normalize_encoding($encoding, 'UTF-8');
+    }
+
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    //
+    // fallback for binary || ascii only
+    //
+
+    if (
+        $encoding === 'CP850'
+        ||
+        $encoding === 'ASCII'
+    ) {
+      return self::substr_in_byte($str, $offset, $length);
+    }
+
+    //
+    // fallback via mbstring
+    //
+
+    if (self::$SUPPORT['mbstring'] === true) {
+      return \mb_substr($str, $offset, $length ?? 2147483647, $encoding);
+    }
+
+    // otherwise we need the string-length and can't fake it via "2147483647"
     $str_length = 0;
     if ($offset || $length === null) {
       $str_length = self::strlen($str, $encoding);
@@ -8707,29 +9193,16 @@ final class UTF8
 
     // Impossible
     if ($offset && $offset > $str_length) {
-      return false;
+      // "false" is the php native return type here,
+      //  but we optimized this for performance ... see "2147483647" instead of "strlen"
+      return '';
+
     }
 
     if ($length === null) {
       $length = (int)$str_length;
     } else {
       $length = (int)$length;
-    }
-
-    if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
-      $encoding = self::normalize_encoding($encoding, 'UTF-8');
-    }
-
-    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
-    }
-
-    if (
-        $encoding === 'CP850'
-        &&
-        self::$SUPPORT['mbstring_func_overload'] === false
-    ) {
-      return \substr($str, $offset, $length ?? $str_length);
     }
 
     if (
@@ -8740,9 +9213,9 @@ final class UTF8
       \trigger_error('UTF8::substr() without mbstring cannot handle "' . $encoding . '" encoding', E_USER_WARNING);
     }
 
-    if (self::$SUPPORT['mbstring'] === true) {
-      return \mb_substr($str, $offset, $length, $encoding);
-    }
+    //
+    // fallback via intl
+    //
 
     if (
         $encoding === 'UTF-8' // INFO: "grapheme_substr()" can't handle other encodings
@@ -8757,6 +9230,10 @@ final class UTF8
       }
     }
 
+    //
+    // fallback via iconv
+    //
+
     if (
         $length >= 0 // "iconv_substr()" can't handle negative length
         &&
@@ -8768,17 +9245,17 @@ final class UTF8
       }
     }
 
+    //
     // fallback for ascii only
+    //
+
     if (self::is_ascii($str)) {
       return \substr($str, $offset, $length);
     }
 
-    // fallback via symfony polyfill
-    if (self::$SUPPORT['symfony_polyfill_used'] === true) {
-      return \mb_substr($str, $offset, $length, $encoding);
-    }
-
+    //
     // fallback via vanilla php
+    //
 
     // split to array, and remove invalid characters
     $array = self::split($str);
@@ -8926,6 +9403,81 @@ final class UTF8
   }
 
   /**
+   * Count the number of substring occurrences.
+   *
+   * @param string $haystack <p>
+   *                         The string being checked.
+   *                         </p>
+   * @param string $needle   <p>
+   *                         The string being found.
+   *                         </p>
+   * @param int    $offset   [optional] <p>
+   *                         The offset where to start counting
+   *                         </p>
+   * @param int    $length   [optional] <p>
+   *                         The maximum length after the specified offset to search for the
+   *                         substring. It outputs a warning if the offset plus the length is
+   *                         greater than the haystack length.
+   *                         </p>
+   *
+   * @return int|false The number of times the
+   *                   needle substring occurs in the
+   *                   haystack string.
+   */
+  public static function substr_count_in_byte(string $haystack, string $needle, int $offset = 0, int $length = null)
+  {
+    if ($haystack === '' || $needle === '') {
+      return 0;
+    }
+
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (
+        ($offset || $length !== null)
+        &&
+        self::$SUPPORT['mbstring_func_overload'] === true
+    ) {
+
+      if ($length === null) {
+        $lengthTmp = self::strlen($haystack);
+        if ($lengthTmp === false) {
+          return false;
+        }
+        $length = (int)$lengthTmp;
+      }
+
+      if (
+          (
+              $length !== 0
+              &&
+              $offset !== 0
+          )
+          &&
+          ($length + $offset) <= 0
+          &&
+          Bootup::is_php('7.1') === false // output from "substr_count()" have changed in PHP 7.1
+      ) {
+        return false;
+      }
+
+      $haystackTmp = self::substr_in_byte($haystack, $offset, $length);
+      if ($haystackTmp === false) {
+        $haystackTmp = '';
+      }
+      $haystack = (string)$haystackTmp;
+    }
+
+    if (self::$SUPPORT['mbstring_func_overload'] === true) {
+      // "mb_" is available if overload is used, so use it ...
+      return \mb_substr_count($haystack, $needle, 'CP850'); // 8-BIT
+    }
+
+    return \substr_count($haystack, $needle, $offset, $length);
+  }
+
+  /**
    * Returns the number of occurrences of $substring in the given string.
    * By default, the comparison is case-sensitive, but can be made insensitive
    * by setting $caseSensitive to false.
@@ -8949,8 +9501,8 @@ final class UTF8
     }
 
     if (!$caseSensitive) {
-      $str = self::strtoupper($str, $encoding);
-      $substring = self::strtoupper($substring, $encoding);
+      $str = self::strtocasefold($str, true, false, $encoding, null, false);
+      $substring = self::strtocasefold($substring, true, false, $encoding, null, false);
     }
 
     return (int)self::substr_count($str, $substring, 0, null, $encoding);
@@ -9013,78 +9565,16 @@ final class UTF8
       return $str;
     }
 
-    $str_length = 0;
-    if ($offset || $length === null) {
-      $str_length = self::strlen_in_byte($str);
-    }
-
-    // e.g.: invalid chars + mbstring not installed
-    if ($str_length === false) {
-      return false;
-    }
-
-    // Empty string
-    if ($offset === $str_length && !$length) {
-      return '';
-    }
-
-    // Impossible
-    if ($offset && $offset > $str_length) {
-      return false;
-    }
-
-    if ($length === null) {
-      $length = $str_length;
-    } else {
-      $length = (int)$length;
-    }
-
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
       self::checkForSupport();
     }
 
     if (self::$SUPPORT['mbstring_func_overload'] === true) {
       // "mb_" is available if overload is used, so use it ...
-      return \mb_substr($str, $offset, $length, 'CP850'); // 8-BIT
+      return \mb_substr($str, $offset, $length ?? 2147483647, 'CP850'); // 8-BIT
     }
 
-    return \substr($str, $offset, $length);
-  }
-
-  /**
-   * Find position of first occurrence of string in a string.
-   *
-   * @param string $haystack <p>
-   *                         The string being checked.
-   *                         </p>
-   * @param string $needle   <p>
-   *                         The position counted from the beginning of haystack.
-   *                         </p>
-   * @param int    $offset   [optional] <p>
-   *                         The search offset. If it is not specified, 0 is used.
-   *                         </p>
-   *
-   * @return int|false the numeric position of
-   *                   the first occurrence of needle in the
-   *                   haystack string. If
-   *                   needle is not found, it returns false.
-   */
-  public static function strpos_in_byte(string $haystack, string $needle, int $offset = 0)
-  {
-    if ($haystack === '' || $needle === '') {
-      return false;
-    }
-
-    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
-      self::checkForSupport();
-    }
-
-    if (self::$SUPPORT['mbstring_func_overload'] === true) {
-      // "mb_" is available if overload is used, so use it ...
-      return \mb_strpos($haystack, $needle, $offset, 'CP850'); // 8-BIT
-    }
-
-    return \strpos($haystack, $needle, $offset);
+    return \substr($str, $offset, $length ?? 2147483647);
   }
 
   /**
@@ -10539,5 +11029,6 @@ final class UTF8
   {
     return self::$WHITESPACE;
   }
+
 
 }

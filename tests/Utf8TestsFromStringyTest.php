@@ -1409,7 +1409,7 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
   {
     return [
         ['r', 'foobar', -1],
-        [false, 'foobar', 999],
+        ['', 'foobar', 999],
         ['foobar', 'foobar', 0],
         ['foobar', 'foobar', 0, null],
         ['foobar', 'foobar', 0, 6],

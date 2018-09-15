@@ -750,6 +750,14 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     }
 
     self::assertSame('éàa', UTF8::encode('UTF-8', UTF8::encode('ISO-8859-1', 'éàa', false), false));
+
+    // --- HTML
+
+    self::assertSame('éàa', UTF8::encode('UTF-8', UTF8::encode('ISO-8859-1', 'éàa', false), false));
+
+    // --- BASE64
+
+    self::assertSame('&#195;&#169;&#195;&#160;a', UTF8::encode('HTML', 'éàa'));
   }
 
   public function testEncodeUtf8EncodeUtf8()
@@ -1319,11 +1327,16 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
           'who\'s online&colon;'               => 'who\'s online&colon;',
       ];
 
+      // long string ...
+      $tmpTestArray['Who&amp;amp;#039;s Online &#20013; - Who&amp;amp;#039;s Online &#20013; - Who&amp;amp;#039;s Online &#20013; - Who&amp;amp;#039;s Online &#20013; - Who&amp;amp;#039;s Online &#20013; - Who&amp;amp;#039;s Online &#20013; - Who&amp;amp;#039;s Online &#20013; - Who&amp;amp;#039;s Online &#20013;'] = 'Who&#039;s Online 中 - Who&#039;s Online 中 - Who&#039;s Online 中 - Who&#039;s Online 中 - Who&#039;s Online 中 - Who&#039;s Online 中 - Who&#039;s Online 中 - Who&#039;s Online 中';
+
       $testArray = array_merge($testArray, $tmpTestArray);
     }
 
-    foreach ($testArray as $before => $after) {
-      self::assertSame($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
+    for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+      foreach ($testArray as $before => $after) {
+        self::assertSame($after, UTF8::html_entity_decode($before, ENT_COMPAT), 'error by ' . $before);
+      }
     }
   }
 
@@ -3781,6 +3794,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testStrtocasefold()
   {
+    self::assertSame(UTF8::strtocasefold('J̌̌◌̱',true), UTF8::strtocasefold('ǰ◌̱', true)); // Original (NFC)
     self::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱', true)); // Original (NFC)
     self::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌')); // Uppercased
     self::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC

@@ -42,7 +42,7 @@ class Utf8SubstrTest extends \PHPUnit\Framework\TestCase
   public function test_compare_start_great_than_length()
   {
     $str = 'abc';
-    self::assertSame(substr($str, 4), u::substr($str, 4));
+    self::assertSame((string)substr($str, 4), (string)u::substr($str, 4));
   }
 
   public function test_length_beyond_string()
