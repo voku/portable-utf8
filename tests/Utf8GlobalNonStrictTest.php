@@ -3800,7 +3800,7 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
 
   public function testStrtocasefold()
   {
-    self::assertSame(UTF8::strtocasefold('J̌̌◌̱',true), UTF8::strtocasefold('ǰ◌̱', true)); // Original (NFC)
+    self::assertSame(UTF8::strtocasefold('J̌̌◌̱', true), UTF8::strtocasefold('ǰ◌̱', true)); // Original (NFC)
     self::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱', true)); // Original (NFC)
     self::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌')); // Uppercased
     self::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC
