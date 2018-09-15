@@ -9158,7 +9158,10 @@ final class UTF8
     //
 
     if (self::$SUPPORT['mbstring'] === true) {
-      return \mb_substr($str, $offset, $length ?? 2147483647, $encoding);
+      $return = \mb_substr($str, $offset, $length ?? 2147483647, $encoding);
+      if ($return !== false) {
+        return $return;
+      }
     }
 
     // otherwise we need the string-length and can't fake it via "2147483647"
