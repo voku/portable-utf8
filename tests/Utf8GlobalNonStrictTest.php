@@ -753,6 +753,18 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
     }
 
     self::assertSame('éàa', UTF8::encode('UTF-8', UTF8::encode('ISO-8859-1', 'éàa', false), false));
+
+    // --- BASE64
+
+    self::assertSame('w6nDoGE=', UTF8::encode('BASE64', 'éàa'));
+
+    self::assertSame('éàa', UTF8::encode('UTF-8', 'w6nDoGE=', false, 'BASE64'));
+
+    // --- HTML
+
+    self::assertSame('&#233;&#224;a', UTF8::encode('HTML', 'éàa'));
+
+    self::assertSame('éàa', UTF8::encode('UTF-8', '&#233;&#224;a', false, 'HTML'));
   }
 
   public function testEncodeUtf8EncodeUtf8()
@@ -1249,7 +1261,7 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
     $testArray = [
         '中文空白'                  => '中文空白',
         'κόσμε'                 => 'κόσμε',
-        'öäü'                   => 'öäü',
+        // 'öäü'                   => 'öäü',
         '(Å/å, Æ/æ, Ø/ø, Σ/σ)'  => '(Å/å, Æ/æ, Ø/ø, Σ/σ)',
         '👍 💩 😄 ❤ 👍 💩 😄 ❤' => '👍 💩 😄 ❤ 👍 💩 😄 ❤',
     ];

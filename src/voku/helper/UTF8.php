@@ -1027,29 +1027,29 @@ final class UTF8
       self::checkForSupport();
     }
 
-    if ('BASE64' === $fromEncoding) {
+    if ($fromEncoding === 'BASE64') {
       $str = base64_decode($str);
       $fromEncoding = null;
     }
 
-    if ('BASE64' === $toEncoding) {
+    if ($toEncoding === 'BASE64') {
       return base64_encode($str);
     }
 
-    if ('HTML-ENTITIES' === $toEncoding || 'HTML' === $toEncoding) {
+    if ($toEncoding === 'HTML-ENTITIES') {
 
-      if ('HTML-ENTITIES' === $fromEncoding || 'HTML' === $fromEncoding) {
-        $fromEncoding = '';
+      if ($fromEncoding === 'HTML-ENTITIES') {
+        $fromEncoding = 'UTF-8';
       }
 
-      if ('UTF-8' !== $fromEncoding) {
+      if ($fromEncoding !== 'UTF-8') {
         $str = self::encode('UTF-8', $str, false, $fromEncoding);
       }
 
-      return self::html_encode($str, true, $toEncoding);
+      return self::html_encode($str, true, 'UTF-8');
     }
 
-    if ('HTML-ENTITIES' === $fromEncoding) {
+    if ($fromEncoding === 'HTML-ENTITIES') {
       $str = self::html_entity_decode($str, ENT_COMPAT, 'UTF-8');
       $fromEncoding = 'UTF-8';
     }
@@ -3958,6 +3958,14 @@ final class UTF8
         'BINARY' === $encoding
     ) {
       return 'CP850';
+    }
+
+    if (
+        'HTML' === $encoding
+        ||
+        'HTML-ENTITIES' === $encoding
+    ) {
+      return 'HTML-ENTITIES';
     }
 
     if (isset($STATIC_NORMALIZE_ENCODING_CACHE[$encoding])) {
