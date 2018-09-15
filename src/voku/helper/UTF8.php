@@ -1005,7 +1005,7 @@ final class UTF8
    *
    * @return string
    */
-  public static function encode(string $toEncoding, string $str, bool $autodetectFromEncoding = true, string $fromEncoding = null): string
+  public static function encode(string $toEncoding, string $str, bool $autodetectFromEncoding = true, $fromEncoding = null): string
   {
     if ('' === $str || '' === $toEncoding) {
       return $str;
