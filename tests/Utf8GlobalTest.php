@@ -85,8 +85,8 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testAccess()
   {
     $testArray = [
-        ' -1'        => [-1 => ''],
-        ' '          => [1 => ''],
+        ' -1'       => [-1 => ''],
+        ' '         => [1 => ''],
         '中文空白'      => [2 => '空'],
         '中文空白-test' => [3 => '白'],
         'fòô'       => [1 => 'ò'],
@@ -638,12 +638,12 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     }
 
     $tests = [
-        '  -ABC-中文空白-  ' => '  -ABC-????????????-  ',
-        '      - ÖÄÜ- '  => '      - ??????- ',
-        'öäü'            => '??????',
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ???- ',
+        'öäü'            => '???',
         ''               => '',
         'abc'            => 'abc',
-        'Berbée'         => 'Berb??e',
+        'Berbée'         => 'Berb?e',
     ];
 
     if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
@@ -672,6 +672,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         ''               => '',
         'abc'            => 'abc',
         'Berbée'         => 'Berbée',
+        '15,99 €'        => '15,99 ?',
     ];
 
     foreach ($tests as $before => $after) {
@@ -751,6 +752,13 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     self::assertSame('éàa', UTF8::encode('UTF-8', UTF8::encode('ISO-8859-1', 'éàa', false), false));
 
+    // --- JSON
+
+    self::assertSame('"\u00e9\u00e0a"', UTF8::encode('JSON', 'éàa'));
+
+    self::assertSame('éàa', UTF8::encode('UTF-8', '"\u00e9\u00e0a"', false, 'JSON'));
+
+
     // --- BASE64
 
     self::assertSame('w6nDoGE=', UTF8::encode('BASE64', 'éàa'));
@@ -789,6 +797,43 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     foreach ($tests as $before => $after) {
       self::assertSame($after, UTF8::utf8_encode(UTF8::encode('UTF-8', $before)));
+    }
+  }
+
+  public function testFilterFile()
+  {
+    $testArray = [
+        "test-\xe9\x00\x0é大般若經.txt"      => 'test-.txt',
+        'test-大般若經.txt'                  => 'test-.txt',
+        'фото.jpg'                       => '.jpg',
+        'Фото.jpg'                       => '.jpg',
+        'öäü  - test'                    => 'test',
+        'שדגשדג.png'                     => '.png',
+        '—©®±àáâãäåæÒÓÔÕÖ¼½¾§µçðþú–.jpg' => '.jpg',
+        '000—©—©.txt'                    => '000.txt',
+        ' '                              => '',
+    ];
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::to_filename($before, false));
+    }
+
+    // ---
+
+    $testArray = [
+        "test-\xe9\x00\x0é大般若經.txt"      => 'test-eDa-Ban-Ruo-Jing-.txt',
+        'test-大般若經.txt'                  => 'test-Da-Ban-Ruo-Jing-.txt',
+        'фото.jpg'                       => 'foto.jpg',
+        'Фото.jpg'                       => 'Foto.jpg',
+        'öäü  - test'                    => 'oau-test',
+        'שדגשדג.png'                     => 'shdgshdg.png',
+        '—©®±àáâãäåæÒÓÔÕÖ¼½¾§µçðþú–.jpg' => 'cr-aaaaaaaeOOOOO141234SSucdthu-.jpg',
+        '000—©—©.txt'                    => '000-c-c.txt',
+        ' '                              => '',
+    ];
+
+    foreach ($testArray as $before => $after) {
+      self::assertSame($after, UTF8::to_filename($before, true));
     }
   }
 
@@ -3100,13 +3145,13 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testStrToBinary()
   {
     $tests = [
-        // ''   => '0',
-        // '0'  => '110000',
-        // '1'  => '110001',
-        '~'  => '1111110',
-        '§'  => '1100001010100111',
-        'ሇ'  => '111000011000100010000111',
-        '😃' => '11110000100111111001100010000011',
+      // ''   => '0',
+      // '0'  => '110000',
+      // '1'  => '110001',
+      '~'  => '1111110',
+      '§'  => '1100001010100111',
+      'ሇ'  => '111000011000100010000111',
+      '😃' => '11110000100111111001100010000011',
 
     ];
 
@@ -3249,16 +3294,16 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testStripTags()
   {
     $tests = [
-        // null                                                                      => '',
-        // ''                                                                        => '',
-        ' '                                                                       => ' ',
-        // 1                                                                         => '1',
-        // '2'                                                                       => '2',
-        'Abcdef'                                                                  => 'Abcdef',
-        '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
-        "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
-        '<nav>中文空白 </nav>'                                                        => '中文空白 ',
-        "<span>κόσμε\xa0\xa1</span>-<span>öäü</span>öäü"                          => 'κόσμε-öäüöäü',
+      // null                                                                      => '',
+      // ''                                                                        => '',
+      ' '                                                                       => ' ',
+      // 1                                                                         => '1',
+      // '2'                                                                       => '2',
+      'Abcdef'                                                                  => 'Abcdef',
+      '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
+      "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
+      '<nav>中文空白 </nav>'                                                        => '中文空白 ',
+      "<span>κόσμε\xa0\xa1</span>-<span>öäü</span>öäü"                          => 'κόσμε-öäüöäü',
     ];
 
     foreach ($tests as $before => $after) {
@@ -3268,16 +3313,16 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     // ---
 
     $tests = [
-        // null                                                                      => '',
-        // ''                                                                        => '',
-        ' '                                                                       => ' ',
-        // 1                                                                         => '1',
-        // '2'                                                                       => '2',
-        'Abcdef'                                                                  => 'Abcdef',
-        '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
-        "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
-        '<nav>中文空白 </nav>'                                                        => '中文空白 ',
-        '<span>κόσμε</span>-<span>öäü</span>öäü'                                  => '<span>κόσμε</span>-<span>öäü</span>öäü',
+      // null                                                                      => '',
+      // ''                                                                        => '',
+      ' '                                                                       => ' ',
+      // 1                                                                         => '1',
+      // '2'                                                                       => '2',
+      'Abcdef'                                                                  => 'Abcdef',
+      '<nav>DÃ¼sseldorf</nav>'                                                  => 'DÃ¼sseldorf',
+      "<ㅡㅡ></ㅡㅡ><div></div><input type='email' name='user[email]' /><a>wtf</a>" => 'wtf',
+      '<nav>中文空白 </nav>'                                                        => '中文空白 ',
+      '<span>κόσμε</span>-<span>öäü</span>öäü'                                  => '<span>κόσμε</span>-<span>öäü</span>öäü',
     ];
 
     foreach ($tests as $before => $after) {
@@ -4437,29 +4482,29 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
   public function testSwapCase()
   {
     $tests = [
-        // 1                                      => '1',
-        // -1                                     => '-1',
-        ' '                                    => ' ',
-        // ''                                     => '',
-        'أبز'                                  => 'أبز',
-        "\xe2\x80\x99"                         => '’',
-        'Ɓtest'                                => 'ɓTEST',
-        '  -ABC-中文空白-  '                       => '  -abc-中文空白-  ',
-        "      - abc- \xc2\x87"                => '      - ABC- ',
-        'abc'                                  => 'ABC',
-        'deja vu'                              => 'DEJA VU',
-        'déjà vu'                              => 'DÉJÀ VU',
-        'déJÀ σσς iıII'                        => 'DÉjà ΣΣΣ IIIi',
-        "test\x80-\xBFöäü"                     => 'TEST-ÖÄÜ',
-        'Internationalizaetion'                => 'iNTERNATIONALIZAETION',
-        "中 - &#20013; - %&? - \xc2\x80"        => '中 - &#20013; - %&? - ',
-        'BonJour'                              => 'bONjOUR',
-        'BonJour & au revoir'                  => 'bONjOUR & AU REVOIR',
-        'Déjà'                                 => 'dÉJÀ',
-        'това е тестово заглавие'              => 'ТОВА Е ТЕСТОВО ЗАГЛАВИЕ',
-        'це є тестовий заголовок з ґ, є, ї, і' => 'ЦЕ Є ТЕСТОВИЙ ЗАГОЛОВОК З Ґ, Є, Ї, І',
-        'это тестовый заголовок'               => 'ЭТО ТЕСТОВЫЙ ЗАГОЛОВОК',
-        'führen Aktivitäten Haglöfs'           => 'FÜHREN aKTIVITÄTEN hAGLÖFS',
+      // 1                                      => '1',
+      // -1                                     => '-1',
+      ' '                                    => ' ',
+      // ''                                     => '',
+      'أبز'                                  => 'أبز',
+      "\xe2\x80\x99"                         => '’',
+      'Ɓtest'                                => 'ɓTEST',
+      '  -ABC-中文空白-  '                       => '  -abc-中文空白-  ',
+      "      - abc- \xc2\x87"                => '      - ABC- ',
+      'abc'                                  => 'ABC',
+      'deja vu'                              => 'DEJA VU',
+      'déjà vu'                              => 'DÉJÀ VU',
+      'déJÀ σσς iıII'                        => 'DÉjà ΣΣΣ IIIi',
+      "test\x80-\xBFöäü"                     => 'TEST-ÖÄÜ',
+      'Internationalizaetion'                => 'iNTERNATIONALIZAETION',
+      "中 - &#20013; - %&? - \xc2\x80"        => '中 - &#20013; - %&? - ',
+      'BonJour'                              => 'bONjOUR',
+      'BonJour & au revoir'                  => 'bONjOUR & AU REVOIR',
+      'Déjà'                                 => 'dÉJÀ',
+      'това е тестово заглавие'              => 'ТОВА Е ТЕСТОВО ЗАГЛАВИЕ',
+      'це є тестовий заголовок з ґ, є, ї, і' => 'ЦЕ Є ТЕСТОВИЙ ЗАГОЛОВОК З Ґ, Є, Ї, І',
+      'это тестовый заголовок'               => 'ЭТО ТЕСТОВЫЙ ЗАГОЛОВОК',
+      'führen Aktivitäten Haglöfs'           => 'FÜHREN aKTIVITÄTEN hAGLÖFS',
     ];
 
     foreach ($tests as $before => $after) {
@@ -5093,7 +5138,7 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         'öäü'                                                                                                                                                                                                                                                                                      => 'öäü',
         ''                                                                                                                                                                                                                                                                                         => '',
         'foobar'                                                                                                                                                                                                                                                                                   => 'foobar',
-        ' 123'                                                                                                                                                                                                                                                                                        => ' 123',
+        ' 123'                                                                                                                                                                                                                                                                                     => ' 123',
         "κόσμε\xc2\xa0"                                                                                                                                                                                                                                                                            => "κόσμε\xc2\xa0",
         "\xd1\xd2"                                                                                                                                                                                                                                                                                 => "\xd1\xd2",
     ];

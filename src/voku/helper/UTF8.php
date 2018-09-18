@@ -1027,6 +1027,14 @@ final class UTF8
       self::checkForSupport();
     }
 
+    if ($toEncoding === 'JSON') {
+      return self::json_encode($str);
+    }
+    if ($fromEncoding === 'JSON') {
+      $str = self::json_decode($str);
+      $fromEncoding = '';
+    }
+
     if ($toEncoding === 'BASE64') {
       return base64_encode($str);
     }
@@ -1115,7 +1123,7 @@ final class UTF8
       $strEncoded = \mb_convert_encoding(
           $str,
           $toEncoding,
-          ($autodetectFromEncoding === true ? $toEncoding : $fromEncoding)
+          $fromEncoding
       );
 
       if ($strEncoded) {
@@ -1123,7 +1131,7 @@ final class UTF8
       }
     }
 
-    $return = \iconv($fromEncoding, $toEncoding . '//IGNORE', $str);
+    $return = \iconv($fromEncoding, $toEncoding, $str);
     if ($return !== false) {
       return $return;
     }
@@ -10098,6 +10106,42 @@ final class UTF8
     }
 
     return (bool)self::trim($str);
+  }
+
+  /**
+   * Convert given string to safe filename (and keep string case).
+   *
+   * @param string $string
+   * @param bool   $use_transliterate No transliteration, conversion etc. is done by default - unsafe characters are
+   *                                  simply replaced with hyphen.
+   * @param string $fallback_char
+   *
+   * @return string
+   */
+  public static function to_filename(string $string, bool $use_transliterate = false, string $fallback_char = '-'): string
+  {
+    if ($use_transliterate === true) {
+      $string = self::str_transliterate($string, $fallback_char);
+    }
+
+    $fallback_char_escaped = \preg_quote($fallback_char, '/');
+
+    $string = (string)\preg_replace(
+        [
+            '/[^' . $fallback_char_escaped . '\.\-a-zA-Z0-9\s]/', // 1) remove un-needed chars
+            '/[\s]+/',                                            // 2) convert spaces to $fallback_char
+            '/[' . $fallback_char_escaped . ']+/',                // 3) remove double $fallback_char's
+        ],
+        [
+            '',
+            $fallback_char,
+            $fallback_char,
+        ],
+        $string
+    );
+
+    // trim "$fallback_char" from beginning and end of the string
+    return \trim($string, $fallback_char);
   }
 
   /**

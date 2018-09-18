@@ -641,12 +641,12 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
     }
 
     $tests = [
-        '  -ABC-中文空白-  ' => '  -ABC-????????????-  ',
-        '      - ÖÄÜ- '  => '      - ??????- ',
-        'öäü'            => '??????',
+        '  -ABC-中文空白-  ' => '  -ABC-????-  ',
+        '      - ÖÄÜ- '  => '      - ???- ',
+        'öäü'            => '???',
         ''               => '',
         'abc'            => 'abc',
-        'Berbée'         => 'Berb??e',
+        'Berbée'         => 'Berb?e',
     ];
 
     if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
