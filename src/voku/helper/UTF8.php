@@ -2008,18 +2008,27 @@ final class UTF8
 
   /**
    * @param string $str
+   * @param array  $fallback with this keys: 'ext', 'mime', 'type'
    *
-   * @return string[]
+   * @return array
+   *               with this keys: 'ext', 'mime', 'type'
    */
-  private static function get_file_type($str)
+  private static function get_file_type(
+      string $str,
+      array $fallback = [
+          'ext'  => null,
+          'mime' => 'application/octet-stream',
+          'type' => null,
+      ]
+  ): array
   {
-    if ('' === $str) {
-      return ['ext' => '', 'type' => ''];
+    if ($str === '') {
+      return $fallback;
     }
 
     $str_info = self::substr_in_byte($str, 0, 2);
     if (self::strlen_in_byte($str_info) !== 2) {
-      return ['ext' => '', 'type' => ''];
+      return $fallback;
     }
 
     $str_info = \unpack('C2chars', $str_info);
@@ -2031,47 +2040,67 @@ final class UTF8
     switch ($type_code) {
       case 3780:
         $ext = 'pdf';
+        $mime = 'application/pdf';
         $type = 'binary';
+
         break;
       case 7790:
         $ext = 'exe';
+        $mime = 'application/octet-stream';
         $type = 'binary';
+
         break;
       case 7784:
         $ext = 'midi';
+        $mime = 'audio/x-midi';
         $type = 'binary';
+
         break;
       case 8075:
         $ext = 'zip';
+        $mime = 'application/zip';
         $type = 'binary';
+
         break;
       case 8297:
         $ext = 'rar';
+        $mime = 'application/rar';
         $type = 'binary';
+
         break;
       case 255216:
         $ext = 'jpg';
+        $mime = 'image/jpeg';
         $type = 'binary';
+
         break;
       case 7173:
         $ext = 'gif';
+        $mime = 'image/gif';
         $type = 'binary';
+
         break;
       case 6677:
         $ext = 'bmp';
+        $mime = 'image/bmp';
         $type = 'binary';
+
         break;
       case 13780:
         $ext = 'png';
+        $mime = 'image/png';
         $type = 'binary';
+
         break;
       default:
-        $ext = '???';
-        $type = '???';
-        break;
+        return $fallback;
     }
 
-    return ['ext' => $ext, 'type' => $type];
+    return [
+        'ext'  => $ext,
+        'mime' => $mime,
+        'type' => $type,
+    ];
   }
 
   /**
