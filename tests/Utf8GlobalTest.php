@@ -5379,24 +5379,24 @@ class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
   public function testcleanParameter()
   {
-    $dirtyTestString = "\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃";
+    $dirtyTestString = "\xEF\xBB\xBF„ Abc d\00e\00f\xc2\xa0\x20…” — 😃";
 
-    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString));
-    self::assertSame("\xEF\xBB\xBF„Abcdef \x20…” — 😃", UTF8::clean($dirtyTestString, false, true, false, false));
-    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, true));
-    self::assertSame("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, false));
-    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, true));
-    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, false));
-    self::assertSame("\xEF\xBB\xBF\"Abcdef  ...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, false));
-    self::assertSame("\xEF\xBB\xBF\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, true));
-    self::assertSame("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, false));
-    self::assertSame("„Abcdef\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, true));
-    self::assertSame("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, false));
-    self::assertSame("\"Abcdef\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, true));
-    self::assertSame('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, false));
-    self::assertSame('„Abcdef  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, true));
-    self::assertSame('"Abcdef  ..." - 😃', UTF8::clean($dirtyTestString, true, true, true, false));
-    self::assertSame("\"Abcdef\xc2\xa0 ...\" - 😃", UTF8::clean($dirtyTestString, true, true, true, true));
+    self::assertSame("\xEF\xBB\xBF„ Abc def\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString));
+    self::assertSame("\xEF\xBB\xBF„ Abc def \x20…” — 😃", UTF8::clean($dirtyTestString, false, true, false, false));
+    self::assertSame("\xEF\xBB\xBF„ Abc def\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, true));
+    self::assertSame("\xEF\xBB\xBF„ Abc def\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, false, false, false, false));
+    self::assertSame("\xEF\xBB\xBF\" Abc def\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, true));
+    self::assertSame("\xEF\xBB\xBF\" Abc def\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, false, true, false));
+    self::assertSame("\xEF\xBB\xBF\" Abc def  ...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, false));
+    self::assertSame("\xEF\xBB\xBF\" Abc def\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, false, true, true, true));
+    self::assertSame("„ Abc def\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, false));
+    self::assertSame("„ Abc def\xc2\xa0\x20…” — 😃", UTF8::clean($dirtyTestString, true, false, false, true));
+    self::assertSame("\" Abc def\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, false));
+    self::assertSame("\" Abc def\xc2\xa0\x20...\" - 😃", UTF8::clean($dirtyTestString, true, false, true, true));
+    self::assertSame('„ Abc def  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, false));
+    self::assertSame('„ Abc def  …” — 😃', UTF8::clean($dirtyTestString, true, true, false, true));
+    self::assertSame('" Abc def  ..." - 😃', UTF8::clean($dirtyTestString, true, true, true, false));
+    self::assertSame("\" Abc def\xc2\xa0 ...\" - 😃", UTF8::clean($dirtyTestString, true, true, true, true));
   }
 
   public function testhex_to_chr()
