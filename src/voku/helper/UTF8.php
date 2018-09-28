@@ -9672,10 +9672,11 @@ final class UTF8
    *                                          string ); i.e. end the replacing at the end of string. Of course, if
    *                                          length is zero then this function will have the effect of inserting
    *                                          replacement into string at the given start offset.</p>
+   * @param string          $encoding         [optional] <p>Set the charset for e.g. "mb_" function</p>
    *
    * @return string|string[] The result string is returned. If string is an array then array is returned.
    */
-  public static function substr_replace($str, $replacement, $offset, $length = null)
+  public static function substr_replace($str, $replacement, $offset, $length = null, string $encoding = 'UTF-8')
   {
     if (\is_array($str) === true) {
       $num = \count($str);
@@ -9741,11 +9742,37 @@ final class UTF8
           \substr_replace($str, $replacement, $offset, $length);
     }
 
+    if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+      self::checkForSupport();
+    }
+
+    if (self::$SUPPORT['mbstring'] === true) {
+      $string_length = self::strlen($str, $encoding);
+
+      if ($offset < 0) {
+        $offset = \max(0, $string_length + $offset);
+      } else if ($offset > $string_length) {
+        $offset = $string_length;
+      }
+
+      if ($length < 0) {
+        $length = \max(0, $string_length - $offset + $length);
+      } else if ($length === null || $length > $string_length) {
+        $length = $string_length;
+      }
+
+      if (($offset + $length) > $string_length) {
+        $length = $string_length - $offset;
+      }
+
+      return self::substr($str, 0, $offset, $encoding) . $replacement . self::substr($str, $offset + $length, $string_length - $offset - $length, $encoding);
+    }
+
     \preg_match_all('/./us', $str, $smatches);
     \preg_match_all('/./us', $replacement, $rmatches);
 
     if ($length === null) {
-      $lengthTmp = self::strlen($str);
+      $lengthTmp = self::strlen($str, $encoding);
       if ($lengthTmp === false) {
         // e.g.: non mbstring support + invalid chars
         return '';
