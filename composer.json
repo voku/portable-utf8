@@ -50,10 +50,5 @@
       "voku\\": "src/voku/"
     },
     "files": [ "bootstrap.php" ]
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "4.0.x-dev"
-    }
   }
 }
