@@ -1,5 +1,12 @@
 # Changelog
 
+### 5.2.8 (2018-09-29)
+- "composer.json" -> remove extra alias
+- UTF8::substr_replace() -> optimize performance
+- UTF8::clean() -> add tests with "\00"
+- update "UTF8::get_file_type()"
+- fix fallback for "UTF8::encode()"
+
 ### 5.2.7 (2018-09-15)
 - simplify "UTF8::encode()"
 
