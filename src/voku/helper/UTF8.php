@@ -9751,13 +9751,13 @@ final class UTF8
 
       if ($offset < 0) {
         $offset = \max(0, $string_length + $offset);
-      } else if ($offset > $string_length) {
+      } elseif ($offset > $string_length) {
         $offset = $string_length;
       }
 
       if ($length < 0) {
         $length = \max(0, $string_length - $offset + $length);
-      } else if ($length === null || $length > $string_length) {
+      } elseif ($length === null || $length > $string_length) {
         $length = $string_length;
       }
 
