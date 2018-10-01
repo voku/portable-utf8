@@ -1385,16 +1385,19 @@ final class UTF8
     }
 
     if ($convertToUtf8 === true) {
-      // only for non binary, but also for UTF-16 or UTF-32
       if (
-          self::is_binary($data, true) !== true
-          ||
-          self::is_utf16($data) !== false
-          ||
-          self::is_utf32($data) !== false
+          self::is_binary($data, true) === true
+          &&
+          self::is_utf16($data, false) === false
+          &&
+          self::is_utf32($data, false) === false
       ) {
+        // do nothing, it's binary and not UTF16 or UTF32
+      } else {
+
         $data = self::encode('UTF-8', $data, false, $fromEncoding);
         $data = self::cleanup($data);
+
       }
     }
 
@@ -3046,6 +3049,23 @@ final class UTF8
       return true;
     }
 
+    $ext = self::get_file_type($input);
+    if ($ext['type'] === 'binary') {
+      return true;
+    }
+
+    $testLength = self::strlen_in_byte($input);
+    if ($testLength) {
+      if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
+        self::checkForSupport();
+      }
+
+      $testNull = self::substr_count_in_byte($input, "\x0", 0, $testLength);
+      if (($testNull / $testLength) > 0.256) {
+        return true;
+      }
+    }
+
     if ($strict === true) {
 
       if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
@@ -3063,23 +3083,6 @@ final class UTF8
         return true;
       }
 
-    }
-
-    $ext = self::get_file_type($input);
-    if ($ext['type'] === 'binary') {
-      return true;
-    }
-
-    $testLength = self::strlen_in_byte($input);
-    if ($testLength) {
-      if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
-        self::checkForSupport();
-      }
-
-      $testNull = self::substr_count_in_byte($input, "\x0", 0, $testLength);
-      if (($testNull / $testLength) > 0.256) {
-        return true;
-      }
     }
 
     return false;
@@ -3278,27 +3281,30 @@ final class UTF8
    * Check if the string is UTF-16.
    *
    * @param mixed $str <p>The input string.</p>
+   * @param bool  $checkIfStringIsBinary
    *
    * @return int|false
    *                   <strong>false</strong> if is't not UTF-16,<br>
    *                   <strong>1</strong> for UTF-16LE,<br>
    *                   <strong>2</strong> for UTF-16BE.
    */
-  public static function is_utf16($str)
+  public static function is_utf16($str, $checkIfStringIsBinary = true)
   {
     // init
     $str = (string)$str;
+    $strChars = [];
 
-    if (self::is_binary($str) === false) {
+    if (
+        $checkIfStringIsBinary === true
+        &&
+        self::is_binary($str, true) === false
+    ) {
       return false;
     }
 
     if (self::$SUPPORT['mbstring'] === false) {
       \trigger_error('UTF8::is_utf16() without mbstring may did not work correctly', E_USER_WARNING);
     }
-
-    // init
-    $strChars = [];
 
     $str = self::remove_bom($str);
 
@@ -3350,28 +3356,31 @@ final class UTF8
   /**
    * Check if the string is UTF-32.
    *
-   * @param mixed $str
+   * @param mixed $str <p>The input string.</p>
+   * @param bool  $checkIfStringIsBinary
    *
    * @return int|false
    *                   <strong>false</strong> if is't not UTF-32,<br>
    *                   <strong>1</strong> for UTF-32LE,<br>
    *                   <strong>2</strong> for UTF-32BE.
    */
-  public static function is_utf32($str)
+  public static function is_utf32($str, $checkIfStringIsBinary = true)
   {
     // init
     $str = (string)$str;
+    $strChars = [];
 
-    if (self::is_binary($str) === false) {
+    if (
+        $checkIfStringIsBinary === true
+        &&
+        self::is_binary($str, true) === false
+    ) {
       return false;
     }
 
     if (self::$SUPPORT['mbstring'] === false) {
       \trigger_error('UTF8::is_utf32() without mbstring may did not work correctly', E_USER_WARNING);
     }
-
-    // init
-    $strChars = [];
 
     $str = self::remove_bom($str);
 
@@ -3447,11 +3456,13 @@ final class UTF8
     }
 
     if ($strict === true) {
-      if (self::is_utf16($str) !== false) {
+      $isBinary = self::is_binary($str, true);
+
+      if ($isBinary && self::is_utf16($str, false) !== false) {
         return false;
       }
 
-      if (self::is_utf32($str) !== false) {
+      if ($isBinary && self::is_utf32($str, false) !== false) {
         return false;
       }
     }
@@ -5299,19 +5310,19 @@ final class UTF8
 
     if (self::is_binary($str, true) === true) {
 
-      if (self::is_utf16($str) === 1) {
+      $isUtf16 = self::is_utf16($str, false);
+      if ($isUtf16 === 1) {
         return 'UTF-16LE';
       }
-
-      if (self::is_utf16($str) === 2) {
+      if ($isUtf16 === 2) {
         return 'UTF-16BE';
       }
 
-      if (self::is_utf32($str) === 1) {
+      $isUtf32 = self::is_utf32($str, false);
+      if ($isUtf32 === 1) {
         return 'UTF-32LE';
       }
-
-      if (self::is_utf32($str) === 2) {
+      if ($isUtf32 === 2) {
         return 'UTF-32BE';
       }
 
