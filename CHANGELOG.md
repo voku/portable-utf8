@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.2.9 (2018-10-01)
+- fix binary check for UTF16 / UTF32
+
 ### 5.2.8 (2018-09-29)
 - "composer.json" -> remove extra alias
 - UTF8::substr_replace() -> optimize performance
