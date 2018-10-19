@@ -3712,13 +3712,15 @@ final class UTF8
   /**
    * Makes string's first char lowercase.
    *
-   * @param string $str       <p>The input string</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
-   * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string      $str                   <p>The input string</p>
+   * @param string      $encoding              [optional] <p>Set the charset for e.g. "mb_" function</p>
+   * @param bool        $cleanUtf8             [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
    *
    * @return string The resulting string.
    */
-  public static function lcfirst(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false): string
+  public static function lcfirst(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
     $strPartTwo = self::substr($str, 1, null, $encoding, $cleanUtf8);
     if ($strPartTwo === false) {
@@ -3728,7 +3730,9 @@ final class UTF8
     $strPartOne = self::strtolower(
         (string)self::substr($str, 0, 1, $encoding, $cleanUtf8),
         $encoding,
-        $cleanUtf8
+        $cleanUtf8,
+        $lang,
+        $tryToKeepStringLength
     );
 
     return $strPartOne . $strPartTwo;
@@ -3739,29 +3743,48 @@ final class UTF8
    *
    * @see UTF8::lcfirst()
    *
-   * @param string $str
-   * @param string $encoding
-   * @param bool   $cleanUtf8
+   * @param string      $str
+   * @param string      $encoding
+   * @param bool        $cleanUtf8
+   * @param string|null $lang
+   * @param bool        $tryToKeepStringLength
    *
    * @return string
    */
-  public static function lcword(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false): string
+  public static function lcword(
+      string $str,
+      string $encoding = 'UTF-8',
+      bool $cleanUtf8 = false,
+      string $lang = null,
+      bool $tryToKeepStringLength = false
+  ): string
   {
-    return self::lcfirst($str, $encoding, $cleanUtf8);
+    return self::lcfirst($str, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
   }
 
   /**
    * Lowercase for all words in the string.
    *
-   * @param string   $str        <p>The input string.</p>
-   * @param string[] $exceptions [optional] <p>Exclusion for some words.</p>
-   * @param string   $charlist   [optional] <p>Additional chars that contains to words and do not start a new word.</p>
-   * @param string   $encoding   [optional] <p>Set the charset.</p>
-   * @param bool     $cleanUtf8  [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string      $str                   <p>The input string.</p>
+   * @param string[]    $exceptions            [optional] <p>Exclusion for some words.</p>
+   * @param string      $charlist              [optional] <p>Additional chars that contains to words and do not start a
+   *                                           new word.</p>
+   * @param string      $encoding              [optional] <p>Set the charset.</p>
+   * @param bool        $cleanUtf8             [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
    *
    * @return string
    */
-  public static function lcwords(string $str, array $exceptions = [], string $charlist = '', string $encoding = 'UTF-8', bool $cleanUtf8 = false): string
+  public static function lcwords(
+      string $str,
+      array $exceptions = [],
+      string $charlist = '',
+      string $encoding = 'UTF-8',
+      bool $cleanUtf8 = false,
+      string $lang = null,
+      bool $tryToKeepStringLength = false
+  ): string
   {
     if (!$str) {
       return '';
@@ -3791,7 +3814,7 @@ final class UTF8
               !\in_array($word, $exceptions, true)
           )
       ) {
-        $word = self::lcfirst($word, $encoding, $cleanUtf8);
+        $word = self::lcfirst($word, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
       }
 
       $newWords[] = $word;
@@ -3805,15 +3828,23 @@ final class UTF8
    *
    * @see UTF8::lcfirst()
    *
-   * @param string $str
-   * @param string $encoding
-   * @param bool   $cleanUtf8
+   * @param string      $str
+   * @param string      $encoding
+   * @param bool        $cleanUtf8
+   * @param string|null $lang
+   * @param bool        $tryToKeepStringLength
    *
    * @return string
    */
-  public static function lowerCaseFirst(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false): string
+  public static function lowerCaseFirst(
+      string $str,
+      string $encoding = 'UTF-8',
+      bool $cleanUtf8 = false,
+      string $lang = null,
+      bool $tryToKeepStringLength = false
+  ): string
   {
-    return self::lcfirst($str, $encoding, $cleanUtf8);
+    return self::lcfirst($str, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
   }
 
   /**
@@ -5018,21 +5049,24 @@ final class UTF8
    * capitalizes letters following digits, spaces, dashes and underscores,
    * and removes spaces, dashes, as well as underscores.
    *
-   * @param string $str      <p>The input string.</p>
-   * @param string $encoding [optional] <p>Default: UTF-8</p>
+   * @param string      $str                   <p>The input string.</p>
+   * @param string      $encoding              [optional] <p>Default: UTF-8</p>
+   * @param bool        $cleanUtf8             [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
    *
    * @return string
    */
-  public static function str_camelize(string $str, string $encoding = 'UTF-8'): string
+  public static function str_camelize(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
-    $str = self::lcfirst(self::trim($str), $encoding);
+    $str = self::lcfirst(self::trim($str), $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
     $str = (string)\preg_replace('/^[-_]+/', '', $str);
 
     $str = (string)\preg_replace_callback(
         '/[-_\s]+(.)?/u',
-        function ($match) use ($encoding) {
+        function ($match) use ($encoding, $cleanUtf8, $lang, $tryToKeepStringLength) {
           if (isset($match[1])) {
-            return UTF8::strtoupper($match[1], $encoding);
+            return UTF8::strtoupper($match[1], $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
           }
 
           return '';
@@ -5042,8 +5076,8 @@ final class UTF8
 
     $str = (string)\preg_replace_callback(
         '/[\d]+(.)?/u',
-        function ($match) use ($encoding) {
-          return UTF8::strtoupper($match[0], $encoding);
+        function ($match) use ($encoding, $cleanUtf8, $lang, $tryToKeepStringLength) {
+          return UTF8::strtoupper($match[0], $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
         },
         $str
     );
@@ -5273,19 +5307,24 @@ final class UTF8
    * of the first character of the string), and in place of spaces, dashes,
    * and underscores. Alpha delimiters are not converted to lowercase.
    *
-   * @param string $str       <p>The input string.</p>
-   * @param string $delimiter <p>Sequence used to separate parts of the string.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
+   * @param string      $str                           <p>The input string.</p>
+   * @param string      $delimiter                     <p>Sequence used to separate parts of the string.</p>
+   * @param string      $encoding                      [optional] <p>Set the charset for e.g. "mb_" function</p>
+   * @param bool        $cleanUtf8                     [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt,
+   *                                                   tr</p>
+   * @param bool        $tryToKeepStringLength         [optional] <p>true === try to keep the string length: e.g. ẞ ->
+   *                                                   ß</p>
    *
    * @return string
    */
-  public static function str_delimit(string $str, string $delimiter, string $encoding = 'UTF-8'): string
+  public static function str_delimit(string $str, string $delimiter, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
     $str = self::trim($str);
 
     $str = (string)\preg_replace('/\B([A-Z])/u', '-\1', $str);
 
-    $str = self::strtolower($str, $encoding);
+    $str = self::strtolower($str, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
 
     return (string)\preg_replace('/[-_\s]+/u', $delimiter, $str);
   }
@@ -6921,23 +6960,41 @@ final class UTF8
    * capitalized.
    *
    * @param string              $str
-   * @param string[]|array|null $ignore   [optional] <p>An array of words not to capitalize or null. Default: null</p>
-   * @param string              $encoding [optional] <p>Default: UTF-8</p>
+   * @param string[]|array|null $ignore                [optional] <p>An array of words not to capitalize or null.
+   *                                                   Default: null</p>
+   * @param string              $encoding              [optional] <p>Default: UTF-8</p>
+   * @param bool                $cleanUtf8             [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null         $lang                  [optional] <p>Set the language for special cases: az, el, lt,
+   *                                                   tr</p>
+   * @param bool                $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ ->
+   *                                                   ß</p>
    *
    * @return string The titleized string.
    */
-  public static function str_titleize(string $str, array $ignore = null, string $encoding = 'UTF-8'): string
+  public static function str_titleize(string $str, array $ignore = null, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
     $str = self::trim($str);
 
     $str = (string)\preg_replace_callback(
         '/([\S]+)/u',
-        function ($match) use ($encoding, $ignore) {
+        function ($match) use ($ignore, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength) {
           if ($ignore && \in_array($match[0], $ignore, true)) {
             return $match[0];
           }
 
-          return self::str_upper_first(self::strtolower($match[0], $encoding));
+          return self::str_upper_first(
+              self::strtolower(
+                  $match[0],
+                  $encoding,
+                  $cleanUtf8,
+                  $lang,
+                  $tryToKeepStringLength
+              ),
+              $encoding,
+              $cleanUtf8,
+              $lang,
+              $tryToKeepStringLength
+          );
         },
         $str
     );
@@ -7299,14 +7356,17 @@ final class UTF8
    * surrounding spaces, capitalizes letters following digits, spaces, dashes
    * and underscores, and removes spaces, dashes, underscores.
    *
-   * @param string $str      <p>The input string.</p>
-   * @param string $encoding [optional] <p>Default: UTF-8</p>
+   * @param string      $str                   <p>The input string.</p>
+   * @param string      $encoding              [optional] <p>Default: UTF-8</p>
+   * @param bool        $cleanUtf8             [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
    *
    * @return string String in UpperCamelCase.
    */
-  public static function str_upper_camelize(string $str, string $encoding = 'UTF-8'): string
+  public static function str_upper_camelize(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
-    return self::str_upper_first(self::str_camelize($str, $encoding), $encoding);
+    return self::str_upper_first(self::str_camelize($str, $encoding), $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
   }
 
   /**
@@ -7314,15 +7374,18 @@ final class UTF8
    *
    * @see UTF8::ucfirst()
    *
-   * @param string $str
-   * @param string $encoding
-   * @param bool   $cleanUtf8
+   * @param string      $str
+   * @param string      $encoding
+   * @param bool        $cleanUtf8
+   * @param string|null $lang
+   * @param bool        $tryToKeepStringLength
+   *
    *
    * @return string
    */
-  public static function str_upper_first(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false): string
+  public static function str_upper_first(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
-    return self::ucfirst($str, $encoding, $cleanUtf8);
+    return self::ucfirst($str, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
   }
 
   /**
@@ -10427,13 +10490,15 @@ final class UTF8
   /**
    * Makes string's first char uppercase.
    *
-   * @param string $str       <p>The input string.</p>
-   * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
-   * @param bool   $cleanUtf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string      $str                   <p>The input string.</p>
+   * @param string      $encoding              [optional] <p>Set the charset for e.g. "mb_" function</p>
+   * @param bool        $cleanUtf8             [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
    *
    * @return string The resulting string.
    */
-  public static function ucfirst(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false): string
+  public static function ucfirst(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
     if ($cleanUtf8 === true) {
       // "mb_strpos()" and "iconv_strpos()" returns wrong position,
@@ -10449,7 +10514,9 @@ final class UTF8
     $strPartOne = self::strtoupper(
         (string)self::substr($str, 0, 1, $encoding),
         $encoding,
-        $cleanUtf8
+        $cleanUtf8,
+        $lang,
+        $tryToKeepStringLength
     );
 
     return $strPartOne . $strPartTwo;
