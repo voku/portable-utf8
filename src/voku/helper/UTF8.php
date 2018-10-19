@@ -6968,38 +6968,48 @@ final class UTF8
    *                                                   tr</p>
    * @param bool                $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ ->
    *                                                   ß</p>
+   * @param bool                $useTrimFirst          [optional] <p>true === trim the input string, first</p>
    *
    * @return string The titleized string.
    */
-  public static function str_titleize(string $str, array $ignore = null, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
+  public static function str_titleize(
+      string $str,
+      array $ignore = null,
+      string $encoding = 'UTF-8',
+      bool $cleanUtf8 = false,
+      string $lang = null,
+      bool $tryToKeepStringLength = false,
+      bool $useTrimFirst = true
+  ): string
   {
-    $str = self::trim($str);
+    if ($useTrimFirst === true) {
+      $str = self::trim($str);
+    }
 
-    $str = (string)\preg_replace_callback(
-        '/([\S]+)/u',
-        function ($match) use ($ignore, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength) {
-          if ($ignore && \in_array($match[0], $ignore, true)) {
-            return $match[0];
-          }
+    $str_array = self::str_to_words($str);
 
-          return self::str_upper_first(
-              self::strtolower(
-                  $match[0],
-                  $encoding,
-                  $cleanUtf8,
-                  $lang,
-                  $tryToKeepStringLength
-              ),
+    foreach ($str_array as &$str_tmp) {
+
+      if ($ignore && \in_array($str_tmp, $ignore, true)) {
+        continue;
+      }
+
+      $str_tmp = self::str_upper_first(
+          self::strtolower(
+              $str_tmp,
               $encoding,
               $cleanUtf8,
               $lang,
               $tryToKeepStringLength
-          );
-        },
-        $str
-    );
+          ),
+          $encoding,
+          $cleanUtf8,
+          $lang,
+          $tryToKeepStringLength
+      );
+    }
 
-    return $str;
+    return \implode('', $str_array);
   }
 
   /**
@@ -9955,19 +9965,21 @@ final class UTF8
    * Converts the first character of each word in the string to uppercase
    * and all other chars to lowercase.
    *
-   * @param string $str      <p>The input string.</p>
-   * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
+   * @param string      $str                   <p>The input string.</p>
+   * @param string      $encoding              [optional] <p>Set the charset for e.g. "mb_" function</p>
+   * @param bool        $cleanUtf8             [optional] <p>Remove non UTF-8 chars from the string.</p>
+   * @param string|null $lang                  [optional] <p>Set the language for special cases: az, el, lt, tr</p>
+   * @param bool        $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
    *
    * @return string String with all characters of $str being title-cased.
    */
-  public static function titlecase(string $str, string $encoding = 'UTF-8'): string
+  public static function titlecase(string $str, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
   {
     if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
     }
 
-    // always fallback via symfony polyfill
-    return \mb_convert_case($str, MB_CASE_TITLE, $encoding);
+    return self::str_titleize($str, null, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength, false);
   }
 
   /**
