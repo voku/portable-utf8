@@ -4238,16 +4238,24 @@ final class UTF8
 
     if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
       $encoding = self::normalize_encoding($encoding, 'UTF-8');
-
-      // check again, if it's still not UTF-8
-      if ($encoding !== 'UTF-8') {
-        $chr = self::encode($encoding, $chr);
-      }
     }
 
     $cacheKey = $chr_orig . $encoding;
     if (isset($CHAR_CACHE[$cacheKey]) === true) {
       return $CHAR_CACHE[$cacheKey];
+    }
+
+    if (self::$ORD === null) {
+      self::$ORD = self::getData('ord');
+    }
+
+    if (isset(self::$ORD[$chr])) {
+      return self::$ORD[$chr];
+    }
+
+    // check again, if it's still not UTF-8
+    if ($encoding !== 'UTF-8') {
+      $chr = self::encode($encoding, $chr);
     }
 
     if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
@@ -5318,7 +5326,14 @@ final class UTF8
    *
    * @return string
    */
-  public static function str_delimit(string $str, string $delimiter, string $encoding = 'UTF-8', bool $cleanUtf8 = false, string $lang = null, bool $tryToKeepStringLength = false): string
+  public static function str_delimit(
+      string $str,
+      string $delimiter,
+      string $encoding = 'UTF-8',
+      bool $cleanUtf8 = false,
+      string $lang = null,
+      bool $tryToKeepStringLength = false
+  ): string
   {
     $str = self::trim($str);
 
@@ -5753,7 +5768,8 @@ final class UTF8
 
     /** @noinspection AlterInForeachInspection */
     foreach ($search as &$s) {
-      if ('' === $s .= '') {
+      $s = (string)$s;
+      if ('' === $s) {
         $s = '/^(?<=.)$/';
       } else {
         $s = '/' . \preg_quote($s, '/') . '/ui';
@@ -7514,7 +7530,7 @@ final class UTF8
    */
   public static function strcspn(string $str, string $charList, int $offset = 0, int $length = null)
   {
-    if ('' === $charList .= '') {
+    if ('' === $charList) {
       return null;
     }
 
@@ -7523,7 +7539,7 @@ final class UTF8
       if ($strTmp === false) {
         return null;
       }
-      $str = (string)$strTmp;
+      $str = $strTmp;
     }
 
     if ('' === $str) {
