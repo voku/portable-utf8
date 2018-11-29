@@ -1,5 +1,15 @@
 # Changelog
 
+### 5.2.12 (2018-11-29)
+- optimize "UTF8::ord()" performance
+
+### 5.2.11 (2018-10-19)
+- merge UTF8::titlecase() && UTF8::str_titleize()
+- add new langage + keep-string-length arguments for string functions
+
+### 5.2.10 (2018-10-19)
+- test with PHP 7.3
+
 ### 5.2.9 (2018-10-01)
 - fix binary check for UTF16 / UTF32
 
