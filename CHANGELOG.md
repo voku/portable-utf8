@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.2.13 (2018-11-29)
+- "UTF8::get_file_type()" is now public + tested
+
 ### 5.2.12 (2018-11-29)
 - optimize "UTF8::ord()" performance
 
