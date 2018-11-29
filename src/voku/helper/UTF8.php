@@ -2010,13 +2010,16 @@ final class UTF8
   }
 
   /**
+   * Warning: this method only works for some file-types (png bmp gif jpg rar zip midi exe pdf)
+   *          if you need more supported types, please use e.g. "finfo"
+   *
    * @param string $str
    * @param array  $fallback with this keys: 'ext', 'mime', 'type'
    *
    * @return array
    *               with this keys: 'ext', 'mime', 'type'
    */
-  private static function get_file_type(
+  public static function get_file_type(
       string $str,
       array $fallback = [
           'ext'  => null,

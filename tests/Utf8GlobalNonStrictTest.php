@@ -41,9 +41,9 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
   /**
    * Call protected/private method of a class.
    *
-   * @param object &$object    Instantiated object that we will run method on.
-   * @param string $methodName Method name to call
-   * @param array  $parameters Array of parameters to pass into method.
+   * @param object &$object     Instantiated object that we will run method on.
+   * @param string  $methodName Method name to call
+   * @param array   $parameters Array of parameters to pass into method.
    *
    * @return mixed Method return.
    */
@@ -517,8 +517,8 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
             1 => 246,
             2 => 241,
         ],
-        ' ' => [
-            0 => 32
+        ' '                   => [
+            0 => 32,
         ],
     ];
 
@@ -939,6 +939,33 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
     self::assertEquals($image2, $image);
   }
 
+  public function testGetFileType()
+  {
+    $context = stream_context_create(
+        [
+            'http' =>
+                [
+                    'timeout' => 10,
+                ],
+        ]
+    );
+
+    $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', false, $context, null, null, 10, true);
+    self::assertSame(['ext' => 'png', 'mime' => 'image/png', 'type' => 'binary'], UTF8::get_file_type($image2));
+
+    $image = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png', false, $context, null, null, 10, false);
+    self::assertSame(['ext' => 'png', 'mime' => 'image/png', 'type' => 'binary'], UTF8::get_file_type($image));
+
+    $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png', false, $context, null, null, 10, true);
+    self::assertSame(['ext' => 'png', 'mime' => 'image/png', 'type' => 'binary'], UTF8::get_file_type($image2));
+
+    $image = UTF8::file_get_contents(__DIR__ . '/fixtures/test.zip', false, $context, null, null, 10, false);
+    self::assertSame(['ext' => 'zip', 'mime' => 'application/zip', 'type' => 'binary'], UTF8::get_file_type($image));
+
+    $image = UTF8::file_get_contents(__DIR__ . '/fixtures/test.pdf', false, $context, null, null, 10, false);
+    self::assertSame(['ext' => 'pdf', 'mime' => 'application/pdf', 'type' => 'binary'], UTF8::get_file_type($image));
+  }
+
   public function testFilter()
   {
     self::assertSame('é', UTF8::filter("\xE9"));
@@ -1354,7 +1381,7 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
         '  '                                                                                        => '  ',
         ''                                                                                          => '',
         '&lt;abcd&gt;\'$1\'(&quot;&amp;2&quot;)'                                                    => '<abcd>\'$1\'(&quot;&2&quot;)',
-        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert(&quot;foo&quot;);</script>, <marquee>test</marquee>',
+        '&lt;script&gt;alert(&quot;foo&quot;);&lt;/script&gt;, &lt;marquee&gt;test&lt;/marquee&gt;' => '<script>alert(&quot;foo&quot;)</script>, <marquee>test</marquee>',
         '&amp;lt;script&amp;gt;alert(&amp;quot;XSS&amp;quot;)&amp;lt;/script&amp;gt;'               => '<script>alert(&quot;XSS&quot;)</script>',
         '&lt;&copy; W3S&ccedil;h&deg;&deg;&brvbar;&sect;&gt;'                                       => '<© W3Sçh°°¦§>',
     ];
@@ -2259,16 +2286,16 @@ class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
   public function testMin()
   {
     $tests = [
-        'abc-äöü-中文空白' => '-',
-        'öäü'          => 'ä',
+        'abc-äöü-中文空白'        => '-',
+        'öäü'                 => 'ä',
         '0 123,a,A,z,Z,./\\-' => ' ',
-        'öäü test öäü' => ' ',
-        'ÖÄÜ'          => 'Ä',
-        '中文空白'         => '中',
-        false          => null,
-        null           => null,
-        ''             => null,
-        ' '            => ' ',
+        'öäü test öäü'        => ' ',
+        'ÖÄÜ'                 => 'Ä',
+        '中文空白'                => '中',
+        false                 => null,
+        null                  => null,
+        ''                    => null,
+        ' '                   => ' ',
     ];
 
     foreach ($tests as $before => $after) {
