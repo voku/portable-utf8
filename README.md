@@ -188,6 +188,19 @@ $stringy->length();         // '6'
 composer require voku/portable-utf8
 ```
 
+If your project do not need some of the Symfony polyfills please use the `replace` section of your `composer.json`. 
+This removes any overhead from these polyfills as they are no longer part of your project. e.g.:
+```json
+{
+  "replace": {
+    "symfony/polyfill-php72": "1.99",
+    "symfony/polyfill-iconv": "1.99",
+    "symfony/polyfill-intl-grapheme": "1.99",
+    "symfony/polyfill-intl-normalizer": "1.99",
+    "symfony/polyfill-mbstring": "1.99"
+  }
+}
+```
 
 ##  Why Portable UTF-8?[]()
 PHP 5 and earlier versions have no native Unicode support. To bridge the gap, there exist several extensions like "mbstring", "iconv" and "intl".
