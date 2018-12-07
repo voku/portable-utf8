@@ -1256,6 +1256,33 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         ['foo bar', 'foo bar', '', ''],
         ['foo bar', 'foo bar', 'f(o)o', '\1'],
         ['\1 bar', 'foo bar', 'foo', '\1'],
+        ['Foo bar', 'Foo bar', 'foo', '\1'],
+        ['bar', 'foo bar', 'foo ', ''],
+        ['far bar', 'foo bar', 'foo', 'far'],
+        ['bar foo bar', 'foo bar foo bar', 'foo ', ''],
+        ['', '', '', '', 'UTF-8'],
+        ['fòô', '', '', 'fòô', 'UTF-8'],
+        ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
+        ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'],
+        ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'],
+        ['bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'],
+    ];
+  }
+
+  /**
+   * @return array
+   */
+  public function ireplaceBeginningProvider(): array
+  {
+    return [
+        ['', '', '', ''],
+        ['foo', '', '', 'foo'],
+        ['foo', '\s', '\s', 'foo'],
+        ['foo bar', 'foo bar', '', ''],
+        ['foo bar', 'foo bar', 'f(o)o', '\1'],
+        ['\1 bar', 'foo bar', 'foo', '\1'],
+        ['\1 bar', 'Foo bar', 'foo', '\1'],
         ['bar', 'foo bar', 'foo ', ''],
         ['far bar', 'foo bar', 'foo', 'far'],
         ['bar foo bar', 'foo bar foo bar', 'foo ', ''],
@@ -1280,7 +1307,34 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         ['foo', '\s', '\s', 'foo'],
         ['foo bar', 'foo bar', '', ''],
         ['foo bar', 'foo bar', 'f(o)o', '\1'],
-        ['foo bar', 'foo bar', 'foo', '\1'],
+        ['foo \1', 'foo bar', 'bar', '\1'],
+        ['foo Bar', 'foo Bar', 'bar', '\1'],
+        ['foo bar', 'foo bar', 'foo ', ''],
+        ['foo lall', 'foo bar', 'bar', 'lall'],
+        ['foo bar foo ', 'foo bar foo bar', 'bar', ''],
+        ['', '', '', '', 'UTF-8'],
+        ['fòô', '', '', 'fòô', 'UTF-8'],
+        ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
+        ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
+        ['fòô', 'fòô bàř', ' bàř', '', 'UTF-8'],
+        ['fòôfar', 'fòô bàř', ' bàř', 'far', 'UTF-8'],
+        ['fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'],
+    ];
+  }
+
+  /**
+   * @return array
+   */
+  public function ireplaceEndingProvider(): array
+  {
+    return [
+        ['', '', '', ''],
+        ['foo', '', '', 'foo'],
+        ['foo', '\s', '\s', 'foo'],
+        ['foo bar', 'foo bar', '', ''],
+        ['foo bar', 'foo bar', 'f(o)o', '\1'],
+        ['foo \1', 'foo bar', 'bar', '\1'],
+        ['foo \1', 'foo Bar', 'bar', '\1'],
         ['foo bar', 'foo bar', 'foo ', ''],
         ['foo lall', 'foo bar', 'bar', 'lall'],
         ['foo bar foo ', 'foo bar foo bar', 'bar', ''],
@@ -2842,6 +2896,21 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
   }
 
   /**
+   * @dataProvider ireplaceBeginningProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $search
+   * @param      $replacement
+   */
+  public function testiReplaceBeginning($expected, $str, $search, $replacement)
+  {
+    $result = UTF8::str_ireplace_beginning($str, $search, $replacement);
+
+    self::assertSame($expected, $result);
+  }
+
+  /**
    * @dataProvider replaceEndingProvider()
    *
    * @param      $expected
@@ -2852,6 +2921,21 @@ class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
   public function testReplaceEnding($expected, $str, $search, $replacement)
   {
     $result = UTF8::str_replace_ending($str, $search, $replacement);
+
+    self::assertSame($expected, $result);
+  }
+
+  /**
+   * @dataProvider ireplaceEndingProvider()
+   *
+   * @param      $expected
+   * @param      $str
+   * @param      $search
+   * @param      $replacement
+   */
+  public function testiReplaceEnding($expected, $str, $search, $replacement)
+  {
+    $result = UTF8::str_ireplace_ending($str, $search, $replacement);
 
     self::assertSame($expected, $result);
   }

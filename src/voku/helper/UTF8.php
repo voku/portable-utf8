@@ -6462,7 +6462,7 @@ final class UTF8
   }
 
   /**
-   * Replaces all occurrences of $search from the beginning of string with $replacement.
+   * Replaces $search from the beginning of string with $replacement.
    *
    * @param string $str         <p>The input string.</p>
    * @param string $search      <p>The string to search for.</p>
@@ -6472,15 +6472,61 @@ final class UTF8
    */
   public static function str_replace_beginning(string $str, string $search, string $replacement): string
   {
-    return self::regex_replace(
-        $str,
-        '^' . \preg_quote($search, '/'),
-        self::str_replace('\\', '\\\\', $replacement)
-    );
+    if ('' === $str) {
+      if ('' === $replacement) {
+        return '';
+      }
+
+      if ('' === $search) {
+        return $replacement;
+      }
+    }
+
+    if ('' === $search) {
+      return $str . $replacement;
+    }
+
+    if (\strpos($str, $search) === 0) {
+      return $replacement . \substr($str, \strlen($search));
+    }
+
+    return $str;
   }
 
   /**
-   * Replaces all occurrences of $search from the ending of string with $replacement.
+   * Replaces $search from the beginning of string with $replacement.
+   *
+   * @param string $str         <p>The input string.</p>
+   * @param string $search      <p>The string to search for.</p>
+   * @param string $replacement <p>The replacement.</p>
+   *
+   * @return string String after the replacements.
+   */
+  public static function str_ireplace_beginning(string $str, string $search, string $replacement): string
+  {
+    if ('' === $str) {
+      if ('' === $replacement) {
+        return '';
+      }
+
+      if ('' === $search) {
+        return $replacement;
+      }
+    }
+
+    if ('' === $search) {
+      return $str . $replacement;
+    }
+
+    if (\stripos($str, $search) === 0) {
+      return $replacement . \substr($str, \strlen($search));
+    }
+
+    return $str;
+  }
+
+  /**
+   * Replaces $search from the ending of string with $replacement.
    *
    * @param string $str         <p>The input string.</p>
    * @param string $search      <p>The string to search for.</p>
@@ -6490,11 +6536,57 @@ final class UTF8
    */
   public static function str_replace_ending(string $str, string $search, string $replacement): string
   {
-    return self::regex_replace(
-        $str,
-        \preg_quote($search, '/') . '$',
-        self::str_replace('\\', '\\\\', $replacement)
-    );
+    if ('' === $str) {
+      if ('' === $replacement) {
+        return '';
+      }
+
+      if ('' === $search) {
+        return $replacement;
+      }
+    }
+
+    if ('' === $search) {
+      return $str . $replacement;
+    }
+
+    if (\strpos($str, $search, \strlen($str) - \strlen($search)) !== false) {
+      $str = substr($str, 0, -\strlen($search)) . $replacement;
+    }
+
+    return $str;
+  }
+
+  /**
+   * Replaces $search from the ending of string with $replacement.
+   *
+   * @param string $str         <p>The input string.</p>
+   * @param string $search      <p>The string to search for.</p>
+   * @param string $replacement <p>The replacement.</p>
+   *
+   * @return string String after the replacements.
+   */
+  public static function str_ireplace_ending(string $str, string $search, string $replacement): string
+  {
+    if ('' === $str) {
+      if ('' === $replacement) {
+        return '';
+      }
+
+      if ('' === $search) {
+        return $replacement;
+      }
+    }
+
+    if ('' === $search) {
+      return $str . $replacement;
+    }
+
+    if (\stripos($str, $search, \strlen($str) - \strlen($search)) !== false) {
+      $str = substr($str, 0, -\strlen($search)) . $replacement;
+    }
+
+    return $str;
   }
 
   /**
