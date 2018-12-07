@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.2.14 (2018-12-07)
+- optimize "UTF8::str_replace_beginning()" && "UTF8::str_replace_ending()"
+- added "UTF8::str_ireplace_beginning()" && "UTF8::str_ireplace_ending()"
+
 ### 5.2.13 (2018-11-29)
 - "UTF8::get_file_type()" is now public + tested
 
