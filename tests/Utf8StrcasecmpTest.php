@@ -6,68 +6,69 @@ use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8StrcasecmpTest
+ *
+ * @internal
  */
-class Utf8StrcasecmpTest extends \PHPUnit\Framework\TestCase
+final class Utf8StrcasecmpTest extends \PHPUnit\Framework\TestCase
 {
-  public function test_compare_equal()
-  {
-    $str_x = 'iñtërnâtiônàlizætiøn';
-    $str_y = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
-    self::assertSame(0, u::strcasecmp($str_x, $str_y));
-    self::assertSame(true, u::strcmp($str_x, $str_y) >= 1);
+    public function testCompareEqual()
+    {
+        $str_x = 'iñtërnâtiônàlizætiøn';
+        $str_y = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
+        static::assertSame(0, u::strcasecmp($str_x, $str_y));
+        static::assertTrue(u::strcmp($str_x, $str_y) >= 1);
 
-    $str_x = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
-    $str_y = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
-    self::assertSame(0, u::strcasecmp($str_x, $str_y));
-    self::assertSame(0, u::strcmp($str_x, $str_y));
-  }
+        $str_x = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
+        $str_y = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
+        static::assertSame(0, u::strcasecmp($str_x, $str_y));
+        static::assertSame(0, u::strcmp($str_x, $str_y));
+    }
 
-  public function test_less()
-  {
-    $str_x = 'iñtërnâtiônàlizætiøn';
-    $str_y = 'IÑTËRNÂTIÔÀLIZÆTIØN';
-    self::assertTrue(u::strcasecmp($str_x, $str_y) > 0);
-    self::assertTrue(u::strcmp($str_x, $str_y) > 0);
-  }
+    public function testLess()
+    {
+        $str_x = 'iñtërnâtiônàlizætiøn';
+        $str_y = 'IÑTËRNÂTIÔÀLIZÆTIØN';
+        static::assertTrue(u::strcasecmp($str_x, $str_y) > 0);
+        static::assertTrue(u::strcmp($str_x, $str_y) > 0);
+    }
 
-  public function test_greater()
-  {
-    $str_x = 'iñtërnâtiôàlizætiøn';
-    $str_y = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
-    self::assertTrue(u::strcasecmp($str_x, $str_y) < 0);
-    self::assertTrue(u::strcmp($str_x, $str_y) > 0);
-  }
+    public function testGreater()
+    {
+        $str_x = 'iñtërnâtiôàlizætiøn';
+        $str_y = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
+        static::assertTrue(u::strcasecmp($str_x, $str_y) < 0);
+        static::assertTrue(u::strcmp($str_x, $str_y) > 0);
+    }
 
-  public function test_empty_x()
-  {
-    $str_x = '';
-    $str_y = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
-    self::assertTrue(u::strcasecmp($str_x, $str_y) < 0);
-    self::assertTrue(u::strcmp($str_x, $str_y) < 0);
-  }
+    public function testEmptyX()
+    {
+        $str_x = '';
+        $str_y = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
+        static::assertTrue(u::strcasecmp($str_x, $str_y) < 0);
+        static::assertTrue(u::strcmp($str_x, $str_y) < 0);
+    }
 
-  public function test_empty_y()
-  {
-    $str_x = 'iñtërnâtiôàlizætiøn';
-    $str_y = '';
-    self::assertTrue(u::strcasecmp($str_x, $str_y) > 0);
-    self::assertTrue(u::strcmp($str_x, $str_y) > 0);
-  }
+    public function testEmptyY()
+    {
+        $str_x = 'iñtërnâtiôàlizætiøn';
+        $str_y = '';
+        static::assertTrue(u::strcasecmp($str_x, $str_y) > 0);
+        static::assertTrue(u::strcmp($str_x, $str_y) > 0);
+    }
 
-  public function test_empty_both()
-  {
-    $str_x = '';
-    $str_y = '';
-    self::assertTrue(u::strcasecmp($str_x, $str_y) === 0);
-    self::assertTrue(u::strcmp($str_x, $str_y) === 0);
-  }
+    public function testEmptyBoth()
+    {
+        $str_x = '';
+        $str_y = '';
+        static::assertTrue(u::strcasecmp($str_x, $str_y) === 0);
+        static::assertTrue(u::strcmp($str_x, $str_y) === 0);
+    }
 
-  public function test_linefeed()
-  {
-    $str_x = "iñtërnâtiôn\nàlizætiøn";
-    $str_y = "IÑTËRNÂTIÔN\nÀLIZÆTIØN";
-    self::assertTrue(u::strcasecmp($str_x, $str_y) === 0);
-    self::assertTrue(u::strcmp($str_x, $str_y) >= 1);
-  }
-
+    public function testLinefeed()
+    {
+        $str_x = "iñtërnâtiôn\nàlizætiøn";
+        $str_y = "IÑTËRNÂTIÔN\nÀLIZÆTIØN";
+        static::assertTrue(u::strcasecmp($str_x, $str_y) === 0);
+        static::assertTrue(u::strcmp($str_x, $str_y) >= 1);
+    }
 }

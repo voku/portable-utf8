@@ -6,27 +6,29 @@ use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8StrrevTest
+ *
+ * @internal
  */
-class Utf8StrrevTest extends \PHPUnit\Framework\TestCase
+final class Utf8StrrevTest extends \PHPUnit\Framework\TestCase
 {
-  public function test_reverse()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $rev = 'nøitæzilànôitânrëtñI';
-    self::assertSame($rev, u::strrev($str));
-  }
+    public function testReverse()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $rev = 'nøitæzilànôitânrëtñI';
+        static::assertSame($rev, u::strrev($str));
+    }
 
-  public function test_empty_str()
-  {
-    $str = '';
-    $rev = '';
-    self::assertSame($rev, u::strrev($str));
-  }
+    public function testEmptyStr()
+    {
+        $str = '';
+        $rev = '';
+        static::assertSame($rev, u::strrev($str));
+    }
 
-  public function test_linefeed()
-  {
-    $str = "Iñtërnâtiôn\nàlizætiøn";
-    $rev = "nøitæzilà\nnôitânrëtñI";
-    self::assertSame($rev, u::strrev($str));
-  }
+    public function testLinefeed()
+    {
+        $str = "Iñtërnâtiôn\nàlizætiøn";
+        $rev = "nøitæzilà\nnôitânrëtñI";
+        static::assertSame($rev, u::strrev($str));
+    }
 }

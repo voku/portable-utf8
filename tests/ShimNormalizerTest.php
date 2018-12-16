@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 declare(strict_types=0);
 
@@ -7,57 +7,59 @@ use Symfony\Polyfill\Intl\Normalizer\Normalizer as pn;
 
 /**
  * Class ShimNormalizerTest
+ *
+ * @internal
  */
-class ShimNormalizerTest extends \PHPUnit\Framework\TestCase
+final class ShimNormalizerTest extends \PHPUnit\Framework\TestCase
 {
-  public function testConstants()
-  {
-    $rpn = new \ReflectionClass('Symfony\Polyfill\Intl\Normalizer\Normalizer');
-    $rin = new \ReflectionClass('Normalizer');
+    public function testConstants()
+    {
+        $rpn = new \ReflectionClass('Symfony\Polyfill\Intl\Normalizer\Normalizer');
+        $rin = new \ReflectionClass('Normalizer');
 
-    $rpn = $rpn->getConstants();
-    $rin = $rin->getConstants();
+        $rpn = $rpn->getConstants();
+        $rin = $rin->getConstants();
 
-    ksort($rpn);
-    ksort($rin);
+        \ksort($rpn);
+        \ksort($rin);
 
-    self::assertSame($rin, $rpn);
-  }
+        static::assertSame($rin, $rpn);
+    }
 
-  public function testIsNormalized()
-  {
-    $c = 'déjà';
-    $d = in::normalize($c, pn::NFD);
+    public function testIsNormalized()
+    {
+        $c = 'déjà';
+        $d = in::normalize($c, pn::NFD);
 
-    self::assertTrue(pn::isNormalized(''));
-    self::assertTrue(pn::isNormalized('abc'));
-    self::assertTrue(pn::isNormalized($c));
-    self::assertTrue(pn::isNormalized($c, pn::NFC));
-    self::assertFalse(pn::isNormalized($d, pn::NFD)); // The current implementation defensively says false
-    self::assertFalse(pn::isNormalized($c, pn::NFD));
-    self::assertFalse(pn::isNormalized($d, pn::NFC));
-    self::assertFalse(pn::isNormalized("\xFF"));
-  }
+        static::assertTrue(pn::isNormalized(''));
+        static::assertTrue(pn::isNormalized('abc'));
+        static::assertTrue(pn::isNormalized($c));
+        static::assertTrue(pn::isNormalized($c, pn::NFC));
+        static::assertFalse(pn::isNormalized($d, pn::NFD)); // The current implementation defensively says false
+        static::assertFalse(pn::isNormalized($c, pn::NFD));
+        static::assertFalse(pn::isNormalized($d, pn::NFC));
+        static::assertFalse(pn::isNormalized("\xFF"));
+    }
 
-  public function testNormalize()
-  {
-    $c = in::normalize('déjà', pn::NFC) . in::normalize('훈쇼™', pn::NFD);
-    self::assertSame($c, pn::normalize($c, pn::NONE));
-    self::assertSame($c, in::normalize($c, pn::NONE));
+    public function testNormalize()
+    {
+        $c = in::normalize('déjà', pn::NFC) . in::normalize('훈쇼™', pn::NFD);
+        static::assertSame($c, pn::normalize($c, pn::NONE));
+        static::assertSame($c, in::normalize($c, pn::NONE));
 
-    $c = 'déjà 훈쇼™';
-    $d = in::normalize($c, pn::NFD);
-    $kc = in::normalize($c, pn::NFKC);
-    $kd = in::normalize($c, pn::NFKD);
+        $c = 'déjà 훈쇼™';
+        $d = in::normalize($c, pn::NFD);
+        $kc = in::normalize($c, pn::NFKC);
+        $kd = in::normalize($c, pn::NFKD);
 
-    self::assertSame('', pn::normalize(''));
-    self::assertSame($c, pn::normalize($d));
-    self::assertSame($c, pn::normalize($d, pn::NFC));
-    self::assertSame($d, pn::normalize($c, pn::NFD));
-    self::assertSame($kc, pn::normalize($d, pn::NFKC));
-    self::assertSame($kd, pn::normalize($c, pn::NFKD));
+        static::assertSame('', pn::normalize(''));
+        static::assertSame($c, pn::normalize($d));
+        static::assertSame($c, pn::normalize($d, pn::NFC));
+        static::assertSame($d, pn::normalize($c, pn::NFD));
+        static::assertSame($kc, pn::normalize($d, pn::NFKC));
+        static::assertSame($kd, pn::normalize($c, pn::NFKD));
 
-    self::assertFalse(pn::normalize($c, -1));
-    self::assertFalse(pn::normalize("\xFF"));
-  }
+        static::assertFalse(pn::normalize($c, -1));
+        static::assertFalse(pn::normalize("\xFF"));
+    }
 }

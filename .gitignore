@@ -8,6 +8,9 @@ build/
 # gitbook
 _book/
 
+# phpcs fixer
+.php_cs.cache
+
 # node
 node_modules/
 npm-debug.log

@@ -6,61 +6,63 @@ use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8StrReplaceTest
+ *
+ * @internal
  */
-class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
+final class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
 {
-  public function test_replace()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $replaced = 'Iñtërnâtiônàlisetiøn';
-    self::assertSame($replaced, u::str_replace('lizæ', 'lise', $str));
+    public function testReplace()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $replaced = 'Iñtërnâtiônàlisetiøn';
+        static::assertSame($replaced, u::str_replace('lizæ', 'lise', $str));
 
-    $str = 'Привет мир';
-    $replaced = 'Пока мир';
-    self::assertSame($replaced, u::str_replace('Привет', 'Пока', $str));
-  }
+        $str = 'Привет мир';
+        $replaced = 'Пока мир';
+        static::assertSame($replaced, u::str_replace('Привет', 'Пока', $str));
+    }
 
-  public function test_replace_no_match()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $replaced = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame($replaced, u::str_replace('foo', 'bar', $str));
-  }
+    public function testReplaceNoMatch()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $replaced = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame($replaced, u::str_replace('foo', 'bar', $str));
+    }
 
-  public function test_empty_string()
-  {
-    $str = '';
-    $replaced = '';
-    self::assertSame($replaced, u::str_replace('foo', 'bar', $str));
-  }
+    public function testEmptyString()
+    {
+        $str = '';
+        $replaced = '';
+        static::assertSame($replaced, u::str_replace('foo', 'bar', $str));
+    }
 
-  public function test_empty_search()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $replaced = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame($replaced, u::str_replace('', 'x', $str));
-  }
+    public function testEmptySearch()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $replaced = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame($replaced, u::str_replace('', 'x', $str));
+    }
 
-  public function test_replace_count()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $replaced = 'IñtërXâtiôXàlizætiøX';
-    self::assertSame($replaced, u::str_replace('n', 'X', $str, $count));
-    self::assertSame(3, $count);
-  }
+    public function testReplaceCount()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $replaced = 'IñtërXâtiôXàlizætiøX';
+        static::assertSame($replaced, u::str_replace('n', 'X', $str, $count));
+        static::assertSame(3, $count);
+    }
 
-  public function test_replace_different_search_replace_length()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $replaced = 'IñtërXXXâtiôXXXàlizætiøXXX';
-    self::assertSame($replaced, u::str_replace('n', 'XXX', $str));
-  }
+    public function testReplaceDifferentSearchReplaceLength()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $replaced = 'IñtërXXXâtiôXXXàlizætiøXXX';
+        static::assertSame($replaced, u::str_replace('n', 'XXX', $str));
+    }
 
-  public function test_replace_array_ascii_search()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $replaced = 'Iñyërxâyiôxàlizæyiøx';
-    self::assertSame(
+    public function testReplaceArrayAsciiSearch()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $replaced = 'Iñyërxâyiôxàlizæyiøx';
+        static::assertSame(
         $replaced,
         u::str_replace(
             [
@@ -74,13 +76,13 @@ class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
             $str
         )
     );
-  }
+    }
 
-  public function test_replace_array_utf8_search()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $replaced = 'I?tërnâti??nàliz????ti???n';
-    self::assertSame(
+    public function testReplaceArrayUtf8Search()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $replaced = 'I?tërnâti??nàliz????ti???n';
+        static::assertSame(
         u::str_replace(
             [
                 'ñ',
@@ -98,13 +100,13 @@ class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
         ),
         $replaced
     );
-  }
+    }
 
-  public function test_replace_array_string_replace()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $replaced = 'I?tërnâti?nàliz?ti?n';
-    self::assertSame(
+    public function testReplaceArrayStringReplace()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $replaced = 'I?tërnâti?nàliz?ti?n';
+        static::assertSame(
         $replaced,
         u::str_replace(
             [
@@ -117,13 +119,13 @@ class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
             $str
         )
     );
-  }
+    }
 
-  public function test_replace_array_single_array_replace()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $replaced = 'I?tërnâtinàliztin';
-    self::assertSame(
+    public function testReplaceArraySingleArrayReplace()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $replaced = 'I?tërnâtinàliztin';
+        static::assertSame(
         u::str_replace(
             [
                 'ñ',
@@ -136,19 +138,19 @@ class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
         ),
         $replaced
     );
-  }
+    }
 
-  public function test_replace_linefeed()
-  {
-    $str = "Iñtërnâti\nônàlizætiøn";
-    $replaced = "Iñtërnâti\nônàlisetiøn";
-    self::assertSame($replaced, u::str_replace('lizæ', 'lise', $str));
-  }
+    public function testReplaceLinefeed()
+    {
+        $str = "Iñtërnâti\nônàlizætiøn";
+        $replaced = "Iñtërnâti\nônàlisetiøn";
+        static::assertSame($replaced, u::str_replace('lizæ', 'lise', $str));
+    }
 
-  public function test_replace_linefeed_search()
-  {
-    $str = "Iñtërnâtiônàli\nzætiøn";
-    $replaced = 'Iñtërnâtiônàlisetiøn';
-    self::assertSame($replaced, u::str_replace("li\nzæ", 'lise', $str));
-  }
+    public function testReplaceLinefeedSearch()
+    {
+        $str = "Iñtërnâtiônàli\nzætiøn";
+        $replaced = 'Iñtërnâtiônàlisetiøn';
+        static::assertSame($replaced, u::str_replace("li\nzæ", 'lise', $str));
+    }
 }

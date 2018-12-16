@@ -4,6 +4,7 @@
 /tests export-ignore
 /.bookignore export-ignore
 /.editorconfig export-ignore
+/.php_cs.cache export-ignore
 /.scrutinizer.yml export-ignore
 /.styleci.yml export-ignore
 /.gitattributes export-ignore
@@ -13,6 +14,7 @@
 /book.json export-ignore
 /circle.yml export-ignore
 /phpstan.neon export-ignore
+/phpcs.php_cs export-ignore
 /phpunit.xml export-ignore
 /package.json export-ignore
 /CONTRIBUTING.md export-ignore

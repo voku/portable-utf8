@@ -7,74 +7,75 @@ use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8UcfirstTest
+ *
+ * @internal
  */
-class Utf8UcfirstTest extends \PHPUnit\Framework\TestCase
+final class Utf8UcfirstTest extends \PHPUnit\Framework\TestCase
 {
-  public function test_ucfirst()
-  {
-    $str = 'ñtërnâtiônàlizætiøn';
-    $ucfirst = 'Ñtërnâtiônàlizætiøn';
-    self::assertSame($ucfirst, u::ucfirst($str));
-  }
+    public function testUcfirstSpace()
+    {
+        $str = ' iñtërnâtiônàlizætiøn';
+        $ucfirst = ' iñtërnâtiônàlizætiøn';
+        static::assertSame($ucfirst, u::ucfirst($str));
+    }
 
-  public function test_ucfirst_space()
-  {
-    $str = ' iñtërnâtiônàlizætiøn';
-    $ucfirst = ' iñtërnâtiônàlizætiøn';
-    self::assertSame($ucfirst, u::ucfirst($str));
-  }
+    public function testUcfirstUpper()
+    {
+        $str = 'Ñtërnâtiônàlizætiøn';
+        $ucfirst = 'Ñtërnâtiônàlizætiøn';
+        static::assertSame($ucfirst, u::ucfirst($str));
+    }
 
-  public function test_ucfirst_upper()
-  {
-    $str = 'Ñtërnâtiônàlizætiøn';
-    $ucfirst = 'Ñtërnâtiônàlizætiøn';
-    self::assertSame($ucfirst, u::ucfirst($str));
-  }
+    public function testEmptyString()
+    {
+        $str = '';
+        static::assertSame('', u::ucfirst($str));
+    }
 
-  public function test_empty_string()
-  {
-    $str = '';
-    self::assertSame('', u::ucfirst($str));
-  }
+    public function testOneChar()
+    {
+        $str = 'ñ';
+        $ucfirst = 'Ñ';
+        static::assertSame($ucfirst, u::ucfirst($str));
+    }
 
-  public function test_one_char()
-  {
-    $str = 'ñ';
-    $ucfirst = 'Ñ';
-    self::assertSame($ucfirst, u::ucfirst($str));
-  }
+    public function testLinefeed()
+    {
+        $str = "ñtërn\nâtiônàlizætiøn";
+        $ucfirst = "Ñtërn\nâtiônàlizætiøn";
+        static::assertSame($ucfirst, u::ucfirst($str));
+    }
 
-  public function test_linefeed()
-  {
-    $str = "ñtërn\nâtiônàlizætiøn";
-    $ucfirst = "Ñtërn\nâtiônàlizætiøn";
-    self::assertSame($ucfirst, u::ucfirst($str));
-  }
+    public function testUcfirst()
+    {
+        $str = 'ñtërnâtiônàlizætiøn';
+        $ucfirst = 'Ñtërnâtiônàlizætiøn';
+        static::assertSame($ucfirst, u::ucfirst($str));
 
-  public function testUcfirst()
-  {
-    self::assertSame('', UTF8::ucfirst(''));
-    self::assertSame('Ä', UTF8::ucfirst('ä'));
-    self::assertSame('Öäü', UTF8::ucfirst('Öäü'));
-    self::assertSame('Öäü', UTF8::ucfirst('öäü'));
-    self::assertSame('Κόσμε', UTF8::ucfirst('κόσμε'));
-    self::assertSame('ABC-ÖÄÜ-中文空白', UTF8::ucfirst('aBC-ÖÄÜ-中文空白'));
-    self::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ucfirst('iñtërnâtiônàlizætiøn'));
-    self::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('ñtërnâtiônàlizætiøn'));
-    self::assertSame(' iñtërnâtiônàlizætiøn', UTF8::ucfirst(' iñtërnâtiônàlizætiøn'));
-    self::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('Ñtërnâtiônàlizætiøn'));
-    self::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucfirst('ñtërnâtiônàlizætIøN'));
-    self::assertSame('ÑtërnâtiônàlizætIøN test câse', UTF8::ucfirst('ñtërnâtiônàlizætIøN test câse'));
-    self::assertSame('', UTF8::ucfirst(''));
-    self::assertSame('Ñ', UTF8::ucfirst('ñ'));
-    self::assertSame("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
-    self::assertSame('Deja', UTF8::ucfirst('deja'));
-    self::assertSame('Σσς', UTF8::ucfirst('σσς'));
-    self::assertSame('DEJa', UTF8::ucfirst('dEJa'));
-    self::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
-    self::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ' . "\x01\x02", 'UTF8', true));
+        // ---
 
-    // alias
-    self::assertSame('Öäü', UTF8::ucword('öäü'));
-  }
+        static::assertSame('', UTF8::ucfirst(''));
+        static::assertSame('Ä', UTF8::ucfirst('ä'));
+        static::assertSame('Öäü', UTF8::ucfirst('Öäü'));
+        static::assertSame('Öäü', UTF8::ucfirst('öäü'));
+        static::assertSame('Κόσμε', UTF8::ucfirst('κόσμε'));
+        static::assertSame('ABC-ÖÄÜ-中文空白', UTF8::ucfirst('aBC-ÖÄÜ-中文空白'));
+        static::assertSame('Iñtërnâtiônàlizætiøn', UTF8::ucfirst('iñtërnâtiônàlizætiøn'));
+        static::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('ñtërnâtiônàlizætiøn'));
+        static::assertSame(' iñtërnâtiônàlizætiøn', UTF8::ucfirst(' iñtërnâtiônàlizætiøn'));
+        static::assertSame('Ñtërnâtiônàlizætiøn', UTF8::ucfirst('Ñtërnâtiônàlizætiøn'));
+        static::assertSame('ÑtërnâtiônàlizætIøN', UTF8::ucfirst('ñtërnâtiônàlizætIøN'));
+        static::assertSame('ÑtërnâtiônàlizætIøN test câse', UTF8::ucfirst('ñtërnâtiônàlizætIøN test câse'));
+        static::assertSame('', UTF8::ucfirst(''));
+        static::assertSame('Ñ', UTF8::ucfirst('ñ'));
+        static::assertSame("Ñtërn\nâtiônàlizætiøn", UTF8::ucfirst("ñtërn\nâtiônàlizætiøn"));
+        static::assertSame('Deja', UTF8::ucfirst('deja'));
+        static::assertSame('Σσς', UTF8::ucfirst('σσς'));
+        static::assertSame('DEJa', UTF8::ucfirst('dEJa'));
+        static::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
+        static::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ' . "\x01\x02", 'UTF8', true));
+
+        // alias
+        static::assertSame('Öäü', UTF8::ucword('öäü'));
+    }
 }

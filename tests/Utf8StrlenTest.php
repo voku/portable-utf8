@@ -6,34 +6,36 @@ use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8StrlenTest
+ *
+ * @internal
  */
-class Utf8StrlenTest extends \PHPUnit\Framework\TestCase
+final class Utf8StrlenTest extends \PHPUnit\Framework\TestCase
 {
-  public function test_utf8()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame(20, u::strlen($str));
-  }
-
-  public function test_utf8_invalid()
-  {
-    if (u::mbstring_loaded() === true) { // only with "mbstring"
-      $str = "Iñtërnâtiôn\xE9àlizætiøn";
-      self::assertSame(20, u::strlen($str));
-    } else {
-      self::markTestSkipped('only with "mbstring"');
+    public function testUtf8()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame(20, u::strlen($str));
     }
-  }
 
-  public function test_ascii()
-  {
-    $str = 'ABC 123';
-    self::assertSame(7, u::strlen($str));
-  }
+    public function testUtf8Invalid()
+    {
+        if (u::mbstring_loaded() === true) { // only with "mbstring"
+            $str = "Iñtërnâtiôn\xE9àlizætiøn";
+            static::assertSame(20, u::strlen($str));
+        } else {
+            static::markTestSkipped('only with "mbstring"');
+        }
+    }
 
-  public function test_empty_str()
-  {
-    $str = '';
-    self::assertSame(0, u::strlen($str));
-  }
+    public function testAscii()
+    {
+        $str = 'ABC 123';
+        static::assertSame(7, u::strlen($str));
+    }
+
+    public function testEmptyStr()
+    {
+        $str = '';
+        static::assertSame(0, u::strlen($str));
+    }
 }

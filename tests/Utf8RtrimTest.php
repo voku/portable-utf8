@@ -6,55 +6,57 @@ use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8RtrimTest
+ *
+ * @internal
  */
-class Utf8RtrimTest extends \PHPUnit\Framework\TestCase
+final class Utf8RtrimTest extends \PHPUnit\Framework\TestCase
 {
-  public function test_trim()
-  {
-    $str = '　中文空白　 ';
-    $trimmed = '　中文空白';
-    self::assertSame($trimmed, u::rtrim($str)); // rtrim() failed here
+    public function testTrim()
+    {
+        $str = '　中文空白　 ';
+        $trimmed = '　中文空白';
+        static::assertSame($trimmed, u::rtrim($str)); // rtrim() failed here
 
-    $str = 'Iñtërnâtiônàlizætiø';
-    $trimmed = 'Iñtërnâtiônàlizæti';
-    self::assertSame($trimmed, u::rtrim($str, 'ø'));
-    self::assertSame($trimmed, rtrim($str, 'ø'));
+        $str = 'Iñtërnâtiônàlizætiø';
+        $trimmed = 'Iñtërnâtiônàlizæti';
+        static::assertSame($trimmed, u::rtrim($str, 'ø'));
+        static::assertSame($trimmed, \rtrim($str, 'ø'));
 
-    $str = '//Iñtërnâtiônàlizætiø//';
-    $trimmed = '//Iñtërnâtiônàlizætiø';
-    self::assertSame($trimmed, u::rtrim($str, '/'));
-    self::assertSame($trimmed, rtrim($str, '/'));
-  }
+        $str = '//Iñtërnâtiônàlizætiø//';
+        $trimmed = '//Iñtërnâtiônàlizætiø';
+        static::assertSame($trimmed, u::rtrim($str, '/'));
+        static::assertSame($trimmed, \rtrim($str, '/'));
+    }
 
-  public function test_no_trim()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn ';
-    $trimmed = 'Iñtërnâtiônàlizætiøn ';
-    self::assertSame($trimmed, u::rtrim($str, 'ø'));
-    self::assertSame($trimmed, rtrim($str, 'ø'));
-  }
+    public function testNoTrim()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn ';
+        $trimmed = 'Iñtërnâtiônàlizætiøn ';
+        static::assertSame($trimmed, u::rtrim($str, 'ø'));
+        static::assertSame($trimmed, \rtrim($str, 'ø'));
+    }
 
-  public function test_empty_string()
-  {
-    $str = '';
-    $trimmed = '';
-    self::assertSame($trimmed, u::rtrim($str));
-    self::assertSame($trimmed, rtrim($str));
-  }
+    public function testEmptyString()
+    {
+        $str = '';
+        $trimmed = '';
+        static::assertSame($trimmed, u::rtrim($str));
+        static::assertSame($trimmed, \rtrim($str));
+    }
 
-  public function test_linefeed()
-  {
-    $str = "Iñtërnâtiônàlizætiø\nø";
-    $trimmed = "Iñtërnâtiônàlizætiø\n";
-    self::assertSame($trimmed, u::rtrim($str, 'ø'));
-    self::assertSame($trimmed, rtrim($str, 'ø'));
-  }
+    public function testLinefeed()
+    {
+        $str = "Iñtërnâtiônàlizætiø\nø";
+        $trimmed = "Iñtërnâtiônàlizætiø\n";
+        static::assertSame($trimmed, u::rtrim($str, 'ø'));
+        static::assertSame($trimmed, \rtrim($str, 'ø'));
+    }
 
-  public function test_linefeed_mask()
-  {
-    $str = "Iñtërnâtiônàlizætiø\nø";
-    $trimmed = 'Iñtërnâtiônàlizæti';
-    self::assertSame($trimmed, u::rtrim($str, "ø\n"));
-    self::assertSame($trimmed, rtrim($str, "ø\n"));
-  }
+    public function testLinefeedMask()
+    {
+        $str = "Iñtërnâtiônàlizætiø\nø";
+        $trimmed = 'Iñtërnâtiônàlizæti';
+        static::assertSame($trimmed, u::rtrim($str, "ø\n"));
+        static::assertSame($trimmed, \rtrim($str, "ø\n"));
+    }
 }

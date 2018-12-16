@@ -1,6 +1,6 @@
 <?php
 
-static $data = [
+return [
     "\xc2\xab"     => '"', // « (U+00AB) in UTF-8
     "\xc2\xbb"     => '"', // » (U+00BB) in UTF-8
     "\xe2\x80\x98" => "'", // ‘ (U+2018) in UTF-8
@@ -15,9 +15,5 @@ static $data = [
     "\xe2\x80\xba" => "'", // › (U+203A) in UTF-8
     "\xe2\x80\x93" => '-', // – (U+2013) in UTF-8
     "\xe2\x80\x94" => '-', // — (U+2014) in UTF-8
-    "\xe2\x80\xa6" => '...' // … (U+2026) in UTF-8
+    "\xe2\x80\xa6" => '...', // … (U+2026) in UTF-8
 ];
-
-$result =& $data;
-unset($data);
-return $result;

@@ -6,27 +6,29 @@ use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8TrimTest
+ *
+ * @internal
  */
-class Utf8TrimTest extends \PHPUnit\Framework\TestCase
+final class Utf8TrimTest extends \PHPUnit\Framework\TestCase
 {
-  public function test_trim()
-  {
-    $str = 'ñtërnâtiônàlizætiø';
-    $trimmed = 'tërnâtiônàlizæti';
-    self::assertSame($trimmed, u::trim($str, 'ñø'));
-  }
+    public function testTrim()
+    {
+        $str = 'ñtërnâtiônàlizætiø';
+        $trimmed = 'tërnâtiônàlizæti';
+        static::assertSame($trimmed, u::trim($str, 'ñø'));
+    }
 
-  public function test_no_trim()
-  {
-    $str = ' Iñtërnâtiônàlizætiøn ';
-    $trimmed = ' Iñtërnâtiônàlizætiøn ';
-    self::assertSame($trimmed, u::trim($str, 'ñø'));
-  }
+    public function testNoTrim()
+    {
+        $str = ' Iñtërnâtiônàlizætiøn ';
+        $trimmed = ' Iñtërnâtiônàlizætiøn ';
+        static::assertSame($trimmed, u::trim($str, 'ñø'));
+    }
 
-  public function test_empty_string()
-  {
-    $str = '';
-    $trimmed = '';
-    self::assertSame($trimmed, u::trim($str));
-  }
+    public function testEmptyString()
+    {
+        $str = '';
+        $trimmed = '';
+        static::assertSame($trimmed, u::trim($str));
+    }
 }

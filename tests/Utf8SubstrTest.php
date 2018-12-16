@@ -6,84 +6,86 @@ use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8SubstrTest
+ *
+ * @internal
  */
-class Utf8SubstrTest extends \PHPUnit\Framework\TestCase
+final class Utf8SubstrTest extends \PHPUnit\Framework\TestCase
 {
-  public function test_utf8()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame('Iñ', u::substr($str, 0, 2));
-  }
+    public function testUtf8()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame('Iñ', u::substr($str, 0, 2));
+    }
 
-  public function test_utf8_two()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame('të', u::substr($str, 2, 2));
-  }
+    public function testUtf8Two()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame('të', u::substr($str, 2, 2));
+    }
 
-  public function test_utf8_zero()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame('Iñtërnâtiônàlizætiøn', u::substr($str, 0));
-  }
+    public function testUtf8Zero()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame('Iñtërnâtiônàlizætiøn', u::substr($str, 0));
+    }
 
-  public function test_utf8_zero_zero()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame('', u::substr($str, 0, 0));
-  }
+    public function testUtf8ZeroZero()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame('', u::substr($str, 0, 0));
+    }
 
-  public function test_start_great_than_length()
-  {
-    $str = 'Iñt';
-    self::assertEmpty(u::substr($str, 4));
-  }
+    public function testStartGreatThanLength()
+    {
+        $str = 'Iñt';
+        static::assertEmpty(u::substr($str, 4));
+    }
 
-  public function test_compare_start_great_than_length()
-  {
-    $str = 'abc';
-    self::assertSame((string)substr($str, 4), (string)u::substr($str, 4));
-  }
+    public function testCompareStartGreatThanLength()
+    {
+        $str = 'abc';
+        static::assertSame((string) \substr($str, 4), (string) u::substr($str, 4));
+    }
 
-  public function test_length_beyond_string()
-  {
-    $str = 'Iñt';
-    self::assertSame('ñt', u::substr($str, 1, 5));
-  }
+    public function testLengthBeyondString()
+    {
+        $str = 'Iñt';
+        static::assertSame('ñt', u::substr($str, 1, 5));
+    }
 
-  public function test_compare_length_beyond_string()
-  {
-    $str = 'abc';
-    self::assertSame(substr($str, 1, 5), u::substr($str, 1, 5));
-  }
+    public function testCompareLengthBeyondString()
+    {
+        $str = 'abc';
+        static::assertSame(\substr($str, 1, 5), u::substr($str, 1, 5));
+    }
 
-  public function test_start_negative()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame('tiøn', u::substr($str, -4));
-  }
+    public function testStartNegative()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame('tiøn', u::substr($str, -4));
+    }
 
-  public function test_length_negative()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame('nàlizæti', u::substr($str, 10, -2));
-  }
+    public function testLengthNegative()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame('nàlizæti', u::substr($str, 10, -2));
+    }
 
-  public function test_start_length_negative()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame('ti', u::substr($str, -4, -2));
-  }
+    public function testStartLengthNegative()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame('ti', u::substr($str, -4, -2));
+    }
 
-  public function test_linefeed()
-  {
-    $str = "Iñ\ntërnâtiônàlizætiøn";
-    self::assertSame("ñ\ntër", u::substr($str, 1, 5));
-  }
+    public function testLinefeed()
+    {
+        $str = "Iñ\ntërnâtiônàlizætiøn";
+        static::assertSame("ñ\ntër", u::substr($str, 1, 5));
+    }
 
-  public function test_long_length()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame('Iñtërnâtiônàlizætiøn', u::substr($str, 0, 15536));
-  }
+    public function testLongLength()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame('Iñtërnâtiônàlizætiøn', u::substr($str, 0, 15536));
+    }
 }

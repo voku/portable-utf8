@@ -6,78 +6,80 @@ use voku\helper\UTF8 as u;
 
 /**
  * Class Utf8StrWordwrapTest
+ *
+ * @internal
  */
-class Utf8StrWordwrapTest extends \PHPUnit\Framework\TestCase
+final class Utf8StrWordwrapTest extends \PHPUnit\Framework\TestCase
 {
-  public function test_orig()
-  {
-    $str = '';
-    self::assertSame(wordwrap($str), u::wordwrap($str));
+    public function testOrig()
+    {
+        $str = '';
+        static::assertSame(\wordwrap($str), u::wordwrap($str));
 
-    $str = 'test foo';
-    self::assertSame(wordwrap($str, 1, '<br>', true), u::wordwrap($str, 1, '<br>', true));
-  }
+        $str = 'test foo';
+        static::assertSame(\wordwrap($str, 1, '<br>', true), u::wordwrap($str, 1, '<br>', true));
+    }
 
-  public function test_no_args_empty_string()
-  {
-    $str = '';
-    $wrapped = '';
-    self::assertSame($wrapped, u::wordwrap($str));
-  }
+    public function testNoArgsEmptyString()
+    {
+        $str = '';
+        $wrapped = '';
+        static::assertSame($wrapped, u::wordwrap($str));
+    }
 
-  public function test_no_args()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $wrapped = 'Iñtërnâtiônàlizætiøn';
-    self::assertSame($wrapped, u::wordwrap($str));
-  }
+    public function testNoArgs()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $wrapped = 'Iñtërnâtiônàlizætiøn';
+        static::assertSame($wrapped, u::wordwrap($str));
+    }
 
-  public function test_break_at_ten()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $wrapped = "Iñtërnâtiô\nnàlizætiøn";
-    self::assertSame($wrapped, u::wordwrap($str, 10, "\n", true));
-  }
+    public function testBreakAtTen()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $wrapped = "Iñtërnâtiô\nnàlizætiøn";
+        static::assertSame($wrapped, u::wordwrap($str, 10, "\n", true));
+    }
 
-  public function test_break_at_one()
-  {
-    $str = 'ñ';
-    $wrapped = 'ñ';
-    self::assertSame($wrapped, u::wordwrap($str, 1, "\n", true));
-  }
+    public function testBreakAtOne()
+    {
+        $str = 'ñ';
+        $wrapped = 'ñ';
+        static::assertSame($wrapped, u::wordwrap($str, 1, "\n", true));
+    }
 
-  public function test_empty_break()
-  {
-    $str = 'ñ';
-    $wrapped = '';
-    self::assertSame($wrapped, u::wordwrap($str, 1, '', true));
-  }
+    public function testEmptyBreak()
+    {
+        $str = 'ñ';
+        $wrapped = '';
+        static::assertSame($wrapped, u::wordwrap($str, 1, '', true));
+    }
 
-  public function test_break_special()
-  {
-    $str = 'ñ-ñ';
-    $wrapped = 'ñ-ñ';
-    self::assertSame($wrapped, u::wordwrap($str, 1, '-', true));
-  }
+    public function testBreakSpecial()
+    {
+        $str = 'ñ-ñ';
+        $wrapped = 'ñ-ñ';
+        static::assertSame($wrapped, u::wordwrap($str, 1, '-', true));
+    }
 
-  public function test_break_at_one_with_empty_string()
-  {
-    $str = 'ñ ñ';
-    $wrapped = 'ñ' . "\n" . 'ñ';
-    self::assertSame($wrapped, u::wordwrap($str, 1, "\n", true));
-  }
+    public function testBreakAtOneWithEmptyString()
+    {
+        $str = 'ñ ñ';
+        $wrapped = 'ñ' . "\n" . 'ñ';
+        static::assertSame($wrapped, u::wordwrap($str, 1, "\n", true));
+    }
 
-  public function test_break_at_two_br()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $wrapped = 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn';
-    self::assertSame($wrapped, u::wordwrap($str, 2, '<br>', true));
-  }
+    public function testBreakAtTwoBr()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $wrapped = 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn';
+        static::assertSame($wrapped, u::wordwrap($str, 2, '<br>', true));
+    }
 
-  public function test_break_at_ten_int()
-  {
-    $str = 'Iñtërnâtiônàlizætiøn';
-    $wrapped = 'Iñtërnâtiô 우리をあöä nàlizætiøn';
-    self::assertSame($wrapped, u::wordwrap($str, 10, ' 우리をあöä ', true));
-  }
+    public function testBreakAtTenInt()
+    {
+        $str = 'Iñtërnâtiônàlizætiøn';
+        $wrapped = 'Iñtërnâtiô 우리をあöä nàlizætiøn';
+        static::assertSame($wrapped, u::wordwrap($str, 10, ' 우리をあöä ', true));
+    }
 }

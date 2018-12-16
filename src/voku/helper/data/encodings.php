@@ -1,6 +1,6 @@
 <?php
 
-static $data = [
+return [
     'ISO-8859-1',
     'ISO-8859-2',
     'ISO-8859-3',
@@ -428,7 +428,3 @@ static $data = [
     'ATARIST',
     'RISCOS-LATIN1',
 ];
-
-$result =& $data;
-unset($data);
-return $result;

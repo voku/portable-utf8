@@ -1,6 +1,6 @@
 <?php
 
-static $data = [
+return [
     0   => "\x00",
     1   => "\x01",
     2   => "\x02",
@@ -258,7 +258,3 @@ static $data = [
     254 => "\xFE",
     255 => "\xFF",
 ];
-
-$result =& $data;
-unset($data);
-return $result;
