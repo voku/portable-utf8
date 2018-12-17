@@ -99,7 +99,7 @@ before_script:
   - travis_retry composer self-update
   - travis_retry composer require satooshi/php-coveralls
   - travis_retry composer require phpstan/phpstan-shim
-  - travis_retry composer requier friendsofphp/php-cs-fixer
+  - if [[ $PHP_CS_FIXER_IGNORE = false ]]; then travis_retry composer requier friendsofphp/php-cs-fixer; fi
   - if [[ $PHP_COMPOSER_SETUP = 'basic' ]]; then travis_retry composer install --prefer-dist --no-interaction; fi
   - if [[ $PHP_COMPOSER_SETUP = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
   - composer dump-autoload -o
