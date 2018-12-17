@@ -28,7 +28,7 @@ return PhpCsFixer\Config::create()
                                 'combine_consecutive_issets'                    => true,
                                 'combine_consecutive_unsets'                    => true,
                                 'combine_nested_dirname'                        => true,
-                                'compact_nullable_typehint'                     => true,
+                                // 'compact_nullable_typehint'                  => true, // PHP >= 7.1
                                 'concat_space'                                  => [
                                     'spacing' => 'one',
                                 ],
@@ -218,7 +218,7 @@ return PhpCsFixer\Config::create()
                                 'trim_array_spaces'                             => true,
                                 'unary_operator_spaces'                         => true,
                                 'visibility_required'                           => true,
-                                'void_return'                                   => false,
+                                // 'void_return'                                   => true, // PHP >= 7.1
                                 'whitespace_after_comma_in_array'               => true,
                                 'yoda_style'                                    => [
                                     'equal'            => false,
