@@ -13,6 +13,7 @@ env:
     - PHP_COMPOSER_SETUP=basic
     - PHP_EXTENSION=true
     - PHP_MBSTRING_FUNC_OVERLOAD=false
+    - PHP_CS_FIXER_IGNORE=false
 
 git:
   depth: 2
@@ -61,16 +62,21 @@ matrix:
         - PHP_COMPOSER_SETUP=lowest
         - PHP_EXTENSION=false
     - php: 7.3
+      env:
+        - PHP_CS_FIXER_IGNORE=true
     - php: 7.3
       env:
         - PHP_MBSTRING_FUNC_OVERLOAD=true
+        - PHP_CS_FIXER_IGNORE=true
     - php: 7.3
       env:
         - PHP_EXTENSION=false
+        - PHP_CS_FIXER_IGNORE=true
     - php: 7.3
       env:
         - PHP_COMPOSER_SETUP=lowest
         - PHP_EXTENSION=false
+        - PHP_CS_FIXER_IGNORE=true
 
 before_script:
   - stty cols 120
@@ -93,6 +99,7 @@ before_script:
   - travis_retry composer self-update
   - travis_retry composer require satooshi/php-coveralls
   - travis_retry composer require phpstan/phpstan-shim
+  - travis_retry composer requier friendsofphp/php-cs-fixer
   - if [[ $PHP_COMPOSER_SETUP = 'basic' ]]; then travis_retry composer install --prefer-dist --no-interaction; fi
   - if [[ $PHP_COMPOSER_SETUP = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
   - composer dump-autoload -o

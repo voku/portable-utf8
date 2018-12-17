@@ -35,7 +35,6 @@
     "symfony/polyfill-mbstring": "~1.0"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "2.13",
     "phpunit/phpunit": "~6.0|~7.0"
   },
   "suggest": {
