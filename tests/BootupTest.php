@@ -93,7 +93,7 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame($expect, $_GET);
 
-        [$_GET, $_POST, $_COOKIE, $_REQUEST, $_ENV, $_FILES] = $bak;
+        list($_GET, $_POST, $_COOKIE, $_REQUEST, $_ENV, $_FILES) = $bak;
     }
 
     public function testFilterRequestUri()

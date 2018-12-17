@@ -34,8 +34,7 @@ return PhpCsFixer\Config::create()
                                 ],
                                 'date_time_immutable'                           => false,
                                 'declare_equal_normalize'                       => true,
-                                'declare_strict_types'                          => false,
-                                // some tests need declare_strict_types === 0
+                                'declare_strict_types'                          => false, // some tests need declare_strict_types === 0
                                 'dir_constant'                                  => true,
                                 'elseif'                                        => true,
                                 'encoding'                                      => true,
@@ -48,8 +47,7 @@ return PhpCsFixer\Config::create()
                                 'fopen_flag_order'                              => true,
                                 'fopen_flags'                                   => true,
                                 'full_opening_tag'                              => true,
-                                'fully_qualified_strict_types'                  => false,
-                                // maybe better for readability, so keep it ...
+                                'fully_qualified_strict_types'                  => false, // maybe better for readability, so keep it ...
                                 'function_declaration'                          => true,
                                 'function_to_constant'                          => true,
                                 'function_typehint_space'                       => true,
@@ -63,14 +61,15 @@ return PhpCsFixer\Config::create()
                                 'heredoc_to_nowdoc'                             => false,
                                 'implode_call'                                  => false,
                                 'include'                                       => true,
-                                'increment_style'                               => false,
-                                // maybe better for readability, so keep it ...
+                                'increment_style'                               => false, // maybe better for readability, so keep it ...
                                 'indentation_type'                              => true,
                                 'line_ending'                                   => true,
                                 'linebreak_after_opening_tag'                   => false,
+                                /*                                                         // Requires PHP >= 7.1
                                 'list_syntax'                                   => [
                                     'syntax' => 'short',
                                 ],
+                                */
                                 'logical_operators'                             => true,
                                 'lowercase_cast'                                => true,
                                 'lowercase_constants'                           => true,
@@ -82,11 +81,9 @@ return PhpCsFixer\Config::create()
                                     'ensure_fully_multiline'           => true,
                                     'keep_multiple_spaces_after_comma' => false,
                                 ],
-                                'method_chaining_indentation'                   => false,
-                                // maybe better for readability, so keep it ...
+                                'method_chaining_indentation'                   => false, // maybe better for readability, so keep it ...
                                 'modernize_types_casting'                       => true,
-                                'multiline_comment_opening_closing'             => false,
-                                // maybe better for readability, so keep it ...
+                                'multiline_comment_opening_closing'             => false, // maybe better for readability, so keep it ...
                                 'multiline_whitespace_before_semicolons'        => [
                                     'strategy' => 'no_multi_line',
                                 ],
@@ -121,10 +118,8 @@ return PhpCsFixer\Config::create()
                                 'no_spaces_after_function_name'                 => true,
                                 'no_spaces_around_offset'                       => true,
                                 'no_spaces_inside_parenthesis'                  => true,
-                                'no_superfluous_elseif'                         => false,
-                                // maybe better for readability, so keep it ...
-                                'no_superfluous_phpdoc_tags'                    => false,
-                                // maybe add extra description, so keep it ...
+                                'no_superfluous_elseif'                         => false, // maybe better for readability, so keep it ...
+                                'no_superfluous_phpdoc_tags'                    => false, // maybe add extra description, so keep it ...
                                 'no_trailing_comma_in_list_call'                => true,
                                 'no_trailing_comma_in_singleline_array'         => true,
                                 'no_trailing_whitespace'                        => true,
@@ -132,8 +127,7 @@ return PhpCsFixer\Config::create()
                                 'no_unneeded_control_parentheses'               => true,
                                 'no_unneeded_curly_braces'                      => true,
                                 'no_unneeded_final_method'                      => true,
-                                'no_unreachable_default_argument_value'         => false,
-                                // do not changes the logic of the code ...
+                                'no_unreachable_default_argument_value'         => false, // do not changes the logic of the code ...
                                 'no_unset_on_property'                          => true,
                                 'no_unused_imports'                             => true,
                                 'no_useless_else'                               => true,
@@ -145,21 +139,18 @@ return PhpCsFixer\Config::create()
                                 'not_operator_with_space'                       => false,
                                 'not_operator_with_successor_space'             => false,
                                 'object_operator_without_whitespace'            => true,
-                                'ordered_class_elements'                        => false,
-                                // maybe better for readability, so keep it ...
+                                'ordered_class_elements'                        => false, // maybe better for readability, so keep it ...
                                 'ordered_imports'                               => true,
                                 'phpdoc_add_missing_param_annotation'           => [
                                     'only_untyped' => true,
                                 ],
-                                'phpdoc_align'                                  => false,
-                                // maybe better for readability for very long names, so keep it ...
+                                'phpdoc_align'                                  => false, // maybe better for readability for very long names, so keep it ...
                                 'phpdoc_annotation_without_dot'                 => true,
                                 'phpdoc_indent'                                 => true,
                                 'phpdoc_inline_tag'                             => true,
                                 'phpdoc_no_access'                              => true,
                                 'phpdoc_no_alias_tag'                           => true,
-                                'phpdoc_no_empty_return'                        => false,
-                                // maybe better for readability, so keep it ...
+                                'phpdoc_no_empty_return'                        => false, // maybe better for readability, so keep it ...
                                 'phpdoc_no_package'                             => true,
                                 'phpdoc_no_useless_inheritdoc'                  => true,
                                 'phpdoc_order'                                  => true,
@@ -203,8 +194,7 @@ return PhpCsFixer\Config::create()
                                 'set_type_to_cast'                              => true,
                                 'short_scalar_cast'                             => true,
                                 'silenced_deprecation_error'                    => false,
-                                'simplified_null_return'                        => false,
-                                // maybe better for readability, so keep it ...
+                                'simplified_null_return'                        => false, // maybe better for readability, so keep it ...
                                 'single_blank_line_at_eof'                      => true,
                                 'single_class_element_per_statement'            => true,
                                 'single_import_per_statement'                   => true,
@@ -214,8 +204,7 @@ return PhpCsFixer\Config::create()
                                 ],
                                 'single_quote'                                  => true,
                                 'space_after_semicolon'                         => true,
-                                'standardize_increment'                         => false,
-                                // maybe better for readability, so keep it ...
+                                'standardize_increment'                         => false, // maybe better for readability, so keep it ...
                                 'standardize_not_equals'                        => true,
                                 'static_lambda'                                 => false,
                                 'strict_comparison'                             => true,
