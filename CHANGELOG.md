@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.2.15 (2018-12-18)
+- optimize "getData()"
+- use phpcs fixer
+
 ### 5.2.14 (2018-12-07)
 - optimize "UTF8::str_replace_beginning()" && "UTF8::str_replace_ending()"
 - added "UTF8::str_ireplace_beginning()" && "UTF8::str_ireplace_ending()"
