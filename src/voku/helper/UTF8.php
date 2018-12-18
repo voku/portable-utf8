@@ -1940,18 +1940,31 @@ final class UTF8
     }
 
     /**
-     * get data from "/data/*.ser"
+     * get data from "/data/*.php"
+     *
+     * @param string $file
+     *
+     * @return mixed
+     */
+    private static function getData(string $file)
+    {
+        /** @noinspection PhpIncludeInspection */
+        return include __DIR__ . '/data/' . $file . '.php';
+    }
+
+    /**
+     * get data from "/data/*.php"
      *
      * @param string $file
      *
      * @return false|mixed will return false on error
      */
-    private static function getData(string $file)
+    private static function getDataIfExists(string $file)
     {
         $file = __DIR__ . '/data/' . $file . '.php';
         if (\file_exists($file)) {
             /** @noinspection PhpIncludeInspection */
-            return require $file;
+            return include $file;
         }
 
         return false;
@@ -10198,7 +10211,7 @@ final class UTF8
 
             $bank = $ord >> 8;
             if (!isset($UTF8_TO_ASCII[$bank])) {
-                $UTF8_TO_ASCII[$bank] = self::getData(\sprintf('x%02x', $bank));
+                $UTF8_TO_ASCII[$bank] = self::getDataIfExists(\sprintf('x%02x', $bank));
                 if ($UTF8_TO_ASCII[$bank] === false) {
                     $UTF8_TO_ASCII[$bank] = [];
                 }
