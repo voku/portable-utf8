@@ -318,11 +318,9 @@ final class UTF8
 
         $return = [];
         foreach ($array as $key => $value) {
-            if ($case === \CASE_LOWER) {
-                $key = self::strtolower($key);
-            } else {
-                $key = self::strtoupper($key);
-            }
+            $key = $case === \CASE_LOWER
+                ? self::strtolower($key)
+                : self::strtoupper($key);
 
             $return[$key] = $value;
         }
@@ -2737,7 +2735,7 @@ final class UTF8
      */
     public static function iconv_loaded(): bool
     {
-        return \extension_loaded('iconv') ? true : false;
+        return \extension_loaded('iconv');
     }
 
     /**
@@ -3174,7 +3172,7 @@ final class UTF8
 
         \preg_match("/<\/?\w+(?:(?:\s+\w+(?:\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)*+\s*|\s*)\/?>/", $str, $matches);
 
-        return !(\count($matches) === 0);
+        return \count($matches) !== 0;
     }
 
     /**
@@ -3217,11 +3215,7 @@ final class UTF8
      */
     public static function is_lowercase(string $str): bool
     {
-        if (self::str_matches_pattern($str, '^[[:lower:]]*$')) {
-            return true;
-        }
-
-        return false;
+        return self::str_matches_pattern($str, '^[[:lower:]]*$');
     }
 
     /**
@@ -3768,11 +3762,7 @@ final class UTF8
         $words = self::str_to_words($str, $charlist);
         $newWords = [];
 
-        if (\count($exceptions) > 0) {
-            $useExceptions = true;
-        } else {
-            $useExceptions = false;
-        }
+        $useExceptions = \count($exceptions) > 0;
 
         foreach ($words as $word) {
             if (!$word) {
@@ -3894,8 +3884,7 @@ final class UTF8
      */
     public static function mbstring_loaded(): bool
     {
-        $return = \extension_loaded('mbstring') ? true : false;
-
+        $return = \extension_loaded('mbstring');
         if ($return === true) {
             \mb_internal_encoding('UTF-8');
         }
@@ -4291,7 +4280,7 @@ final class UTF8
         if (self::$SUPPORT['mbstring'] === true) {
             $return = \mb_parse_str($str, $result);
 
-            return !($return === false || empty($result));
+            return $return !== false && !empty($result);
         }
 
         /** @noinspection PhpVoidFunctionResultUsedInspection */
@@ -4734,11 +4723,7 @@ final class UTF8
             $strTmp = \mb_convert_encoding($str, 'UTF-8', 'UTF-8');
             \mb_substitute_character($save);
 
-            if (\is_string($strTmp)) {
-                $str = $strTmp;
-            } else {
-                $str = '';
-            }
+            $str = \is_string($strTmp) ? $strTmp : '';
         }
 
         return \str_replace(
@@ -5038,15 +5023,13 @@ final class UTF8
             $str
         );
 
-        $str = (string) \preg_replace_callback(
+        return (string) \preg_replace_callback(
             '/[\d]+(.)?/u',
             function ($match) use ($encoding, $cleanUtf8, $lang, $tryToKeepStringLength) {
                 return self::strtoupper($match[0], $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
             },
             $str
         );
-
-        return $str;
     }
 
     /**
@@ -5540,11 +5523,7 @@ final class UTF8
             return false;
         }
 
-        if (self::strcasecmp(\substr($haystack, -\strlen($needle)), $needle) === 0) {
-            return true;
-        }
-
-        return false;
+        return self::strcasecmp(\substr($haystack, -\strlen($needle)), $needle) === 0;
     }
 
     /**
@@ -5813,11 +5792,7 @@ final class UTF8
             return false;
         }
 
-        if (self::stripos($haystack, $needle) === 0) {
-            return true;
-        }
-
-        return false;
+        return self::stripos($haystack, $needle) === 0;
     }
 
     /**
@@ -6233,11 +6208,7 @@ final class UTF8
      */
     public static function str_matches_pattern(string $str, string $pattern): bool
     {
-        if (\preg_match('/' . $pattern . '/u', $str)) {
-            return true;
-        }
-
-        return false;
+        return (bool) \preg_match('/' . $pattern . '/u', $str);
     }
 
     /**
@@ -6777,11 +6748,7 @@ final class UTF8
             return false;
         }
 
-        if (\strpos($haystack, $needle) === 0) {
-            return true;
-        }
-
-        return false;
+        return \strpos($haystack, $needle) === 0;
     }
 
     /**
@@ -9978,12 +9945,12 @@ final class UTF8
         // init
         $return = false;
 
-        $returnTmp = \extension_loaded('mbstring') ? true : false;
+        $returnTmp = \extension_loaded('mbstring');
         if ($returnTmp === false && \function_exists('mb_strlen')) {
             $return = true;
         }
 
-        $returnTmp = \extension_loaded('iconv') ? true : false;
+        $returnTmp = \extension_loaded('iconv');
         if ($returnTmp === false && \function_exists('iconv')) {
             $return = true;
         }
@@ -10625,11 +10592,7 @@ final class UTF8
         $words = self::str_to_words($str, $charlist);
         $newWords = [];
 
-        if (\count($exceptions) > 0) {
-            $useExceptions = true;
-        } else {
-            $useExceptions = false;
-        }
+        $useExceptions = \count($exceptions) > 0;
 
         foreach ($words as $word) {
             if (!$word) {
@@ -11152,11 +11115,9 @@ final class UTF8
 
         $w = '';
         $strSplit = \explode($break, $str);
-        if ($strSplit === false) {
-            $count = 0;
-        } else {
-            $count = \count($strSplit);
-        }
+        $count = $strSplit === false
+            ? 0
+            : \count($strSplit);
 
         $chars = [];
         /** @noinspection ForeachInvariantsInspection */
