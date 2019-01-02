@@ -1,4 +1,8 @@
-<?php declare(strict_types=0);
+<?php
+
+declare(strict_types=0);
+
+namespace voku\tests;
 
 use Normalizer as n;
 use Symfony\Polyfill\Intl\Grapheme\Grapheme as p;

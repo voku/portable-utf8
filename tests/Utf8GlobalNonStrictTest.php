@@ -2,6 +2,8 @@
 
 declare(strict_types=0);
 
+namespace voku\tests;
+
 use voku\helper\Bootup;
 use voku\helper\UTF8;
 
@@ -2123,7 +2125,7 @@ final class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
 
         // ----
 
-        $expected = new stdClass();
+        $expected = new \stdClass();
         $expected->array = [1, '¥', 'ä'];
         static::assertSame((array) $expected, (array) UTF8::json_decode('{"array":[1,"¥","ä"]}'));
 
@@ -2144,7 +2146,7 @@ final class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
 
     public function testJsonEncode()
     {
-        $test = new stdClass();
+        $test = new \stdClass();
         $test->array = [1, '¥', 'ä'];
         static::assertSame('{"array":[1,"\u00a5","\u00e4"]}', UTF8::json_encode($test));
 
@@ -2795,7 +2797,7 @@ final class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
             return;
         }
 
-        $refObject = new ReflectionObject(new UTF8());
+        $refObject = new \ReflectionObject(new UTF8());
         $refProperty = $refObject->getProperty('SUPPORT');
         $refProperty->setAccessible(true);
 
@@ -2804,7 +2806,7 @@ final class Utf8GlobalNonStrictTest extends \PHPUnit\Framework\TestCase
 
     protected function disableNativeUtf8Support()
     {
-        $refObject = new ReflectionObject(new UTF8());
+        $refObject = new \ReflectionObject(new UTF8());
         $refProperty = $refObject->getProperty('SUPPORT');
         $refProperty->setAccessible(true);
 

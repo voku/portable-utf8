@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace voku\tests;
+
 use voku\helper\UTF8;
 
 /**
@@ -11,15 +13,10 @@ use voku\helper\UTF8;
  */
 final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @return array
-     */
-    public function appendProvider(): array
+    public function appendProvider(): \Iterator
     {
-        return [
-            ['foobar', 'foo', 'bar'],
-            ['fòôbàř', 'fòô', 'bàř', 'UTF-8'],
-        ];
+        yield ['foobar', 'foo', 'bar'];
+        yield ['fòôbàř', 'fòô', 'bàř', 'UTF-8'];
     }
 
     /**
@@ -32,159 +29,134 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         static::assertTrue(UTF8::is_utf8($str));
     }
 
-    /**
-     * @return array
-     */
-    public function atProvider(): array
+    public function atProvider(): \Iterator
     {
-        return [
-            ['f', 'foo bar', 0],
-            ['o', 'foo bar', 1],
-            ['r', 'foo bar', 6],
-            ['', 'foo bar', 7],
-            ['f', 'fòô bàř', 0, 'UTF-8'],
-            ['ò', 'fòô bàř', 1, 'UTF-8'],
-            ['ř', 'fòô bàř', 6, 'UTF-8'],
-            ['', 'fòô bàř', 7, 'UTF-8'],
-        ];
+        yield ['f', 'foo bar', 0];
+        yield ['o', 'foo bar', 1];
+        yield ['r', 'foo bar', 6];
+        yield ['', 'foo bar', 7];
+        yield ['f', 'fòô bàř', 0, 'UTF-8'];
+        yield ['ò', 'fòô bàř', 1, 'UTF-8'];
+        yield ['ř', 'fòô bàř', 6, 'UTF-8'];
+        yield ['', 'fòô bàř', 7, 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function betweenProvider(): array
+    public function betweenProvider(): \Iterator
     {
-        return [
-            ['', 'foo', '{', '}'],
-            ['', '{foo', '{', '}'],
-            ['foo', '{foo}', '{', '}'],
-            ['{foo', '{{foo}', '{', '}'],
-            ['', '{}foo}', '{', '}'],
-            ['foo', '}{foo}', '{', '}'],
-            ['foo', 'A description of {foo} goes here', '{', '}'],
-            ['bar', '{foo} and {bar}', '{', '}', 1],
-            ['', 'fòô', '{', '}', 0, 'UTF-8'],
-            ['', '{fòô', '{', '}', 0, 'UTF-8'],
-            ['fòô', '{fòô}', '{', '}', 0, 'UTF-8'],
-            ['{fòô', '{{fòô}', '{', '}', 0, 'UTF-8'],
-            ['', '{}fòô}', '{', '}', 0, 'UTF-8'],
-            ['fòô', '}{fòô}', '{', '}', 0, 'UTF-8'],
-            ['fòô', 'A description of {fòô} goes here', '{', '}', 0, 'UTF-8'],
-            ['bàř', '{fòô} and {bàř}', '{', '}', 1, 'UTF-8'],
-        ];
+        yield ['', 'foo', '{', '}'];
+        yield ['', '{foo', '{', '}'];
+        yield ['foo', '{foo}', '{', '}'];
+        yield ['{foo', '{{foo}', '{', '}'];
+        yield ['', '{}foo}', '{', '}'];
+        yield ['foo', '}{foo}', '{', '}'];
+        yield ['foo', 'A description of {foo} goes here', '{', '}'];
+        yield ['bar', '{foo} and {bar}', '{', '}', 1];
+        yield ['', 'fòô', '{', '}', 0, 'UTF-8'];
+        yield ['', '{fòô', '{', '}', 0, 'UTF-8'];
+        yield ['fòô', '{fòô}', '{', '}', 0, 'UTF-8'];
+        yield ['{fòô', '{{fòô}', '{', '}', 0, 'UTF-8'];
+        yield ['', '{}fòô}', '{', '}', 0, 'UTF-8'];
+        yield ['fòô', '}{fòô}', '{', '}', 0, 'UTF-8'];
+        yield ['fòô', 'A description of {fòô} goes here', '{', '}', 0, 'UTF-8'];
+        yield ['bàř', '{fòô} and {bàř}', '{', '}', 1, 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function camelizeProvider(): array
+    public function camelizeProvider(): \Iterator
     {
-        return [
-            ['camelCase', 'CamelCase'],
-            ['camelCase', 'Camel-Case'],
-            ['camelCase', 'camel case'],
-            ['camelCase', 'camel -case'],
-            ['camelCase', 'camel - case'],
-            ['camelCase', 'camel_case'],
-            ['camelCTest', 'camel c test'],
-            ['stringWith1Number', 'string_with1number'],
-            ['stringWith22Numbers', 'string-with-2-2 numbers'],
-            ['dataRate', 'data_rate'],
-            ['backgroundColor', 'background-color'],
-            ['yesWeCan', 'yes_we_can'],
-            ['mozSomething', '-moz-something'],
-            ['carSpeed', '_car_speed_'],
-            ['serveHTTP', 'ServeHTTP'],
-            ['1Camel2Case', '1camel2case'],
-            ['camelΣase', 'camel σase', 'UTF-8'],
-            ['στανιλCase', 'Στανιλ case', 'UTF-8'],
-            ['σamelCase', 'σamel  Case', 'UTF-8'],
-        ];
+        yield ['camelCase', 'CamelCase'];
+        yield ['camelCase', 'Camel-Case'];
+        yield ['camelCase', 'camel case'];
+        yield ['camelCase', 'camel -case'];
+        yield ['camelCase', 'camel - case'];
+        yield ['camelCase', 'camel_case'];
+        yield ['camelCTest', 'camel c test'];
+        yield ['stringWith1Number', 'string_with1number'];
+        yield ['stringWith22Numbers', 'string-with-2-2 numbers'];
+        yield ['dataRate', 'data_rate'];
+        yield ['backgroundColor', 'background-color'];
+        yield ['yesWeCan', 'yes_we_can'];
+        yield ['mozSomething', '-moz-something'];
+        yield ['carSpeed', '_car_speed_'];
+        yield ['serveHTTP', 'ServeHTTP'];
+        yield ['1Camel2Case', '1camel2case'];
+        yield ['camelΣase', 'camel σase', 'UTF-8'];
+        yield ['στανιλCase', 'Στανιλ case', 'UTF-8'];
+        yield ['σamelCase', 'σamel  Case', 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function capitalizePersonalNameProvider(): array
+    public function capitalizePersonalNameProvider(): \Iterator
     {
-        return [
-            ['Marcus Aurelius', 'marcus aurelius'],
-            ['Torbjørn Færøvik', 'torbjørn færøvik'],
-            ['Jaap de Hoop Scheffer', 'jaap de hoop scheffer'],
-            ['K. Anders Ericsson', 'k. anders ericsson'],
-            ['Per-Einar', 'per-einar'],
-            [
-                'Line Break',
-                'line
+        yield ['Marcus Aurelius', 'marcus aurelius'];
+        yield ['Torbjørn Færøvik', 'torbjørn færøvik'];
+        yield ['Jaap de Hoop Scheffer', 'jaap de hoop scheffer'];
+        yield ['K. Anders Ericsson', 'k. anders ericsson'];
+        yield ['Per-Einar', 'per-einar'];
+        yield [
+            'Line Break',
+            'line
              break',
-            ],
-            ['ab', 'ab'],
-            ['af', 'af'],
-            ['al', 'al'],
-            ['and', 'and'],
-            ['ap', 'ap'],
-            ['bint', 'bint'],
-            ['binte', 'binte'],
-            ['da', 'da'],
-            ['de', 'de'],
-            ['del', 'del'],
-            ['den', 'den'],
-            ['der', 'der'],
-            ['di', 'di'],
-            ['dit', 'dit'],
-            ['ibn', 'ibn'],
-            ['la', 'la'],
-            ['mac', 'mac'],
-            ['nic', 'nic'],
-            ['of', 'of'],
-            ['ter', 'ter'],
-            ['the', 'the'],
-            ['und', 'und'],
-            ['van', 'van'],
-            ['von', 'von'],
-            ['y', 'y'],
-            ['zu', 'zu'],
-            ['Bashar al-Assad', 'bashar al-assad'],
-            ["d'Name", "d'Name"],
-            ['ffName', 'ffName'],
-            ["l'Name", "l'Name"],
-            ['macDuck', 'macDuck'],
-            ['mcDuck', 'mcDuck'],
-            ['nickMick', 'nickMick'],
         ];
+        yield ['ab', 'ab'];
+        yield ['af', 'af'];
+        yield ['al', 'al'];
+        yield ['and', 'and'];
+        yield ['ap', 'ap'];
+        yield ['bint', 'bint'];
+        yield ['binte', 'binte'];
+        yield ['da', 'da'];
+        yield ['de', 'de'];
+        yield ['del', 'del'];
+        yield ['den', 'den'];
+        yield ['der', 'der'];
+        yield ['di', 'di'];
+        yield ['dit', 'dit'];
+        yield ['ibn', 'ibn'];
+        yield ['la', 'la'];
+        yield ['mac', 'mac'];
+        yield ['nic', 'nic'];
+        yield ['of', 'of'];
+        yield ['ter', 'ter'];
+        yield ['the', 'the'];
+        yield ['und', 'und'];
+        yield ['van', 'van'];
+        yield ['von', 'von'];
+        yield ['y', 'y'];
+        yield ['zu', 'zu'];
+        yield ['Bashar al-Assad', 'bashar al-assad'];
+        yield ["d'Name", "d'Name"];
+        yield ['ffName', 'ffName'];
+        yield ["l'Name", "l'Name"];
+        yield ['macDuck', 'macDuck'];
+        yield ['mcDuck', 'mcDuck'];
+        yield ['nickMick', 'nickMick'];
     }
 
-    /**
-     * @return array
-     */
-    public function charsProvider(): array
+    public function charsProvider(): \Iterator
     {
-        return [
-            [[], ''],
-            [['T', 'e', 's', 't'], 'Test'],
-            [['F', 'ò', 'ô', ' ', 'B', 'à', 'ř'], 'Fòô Bàř'],
-        ];
+        yield [[], ''];
+        yield [['T', 'e', 's', 't'], 'Test'];
+        yield [['F', 'ò', 'ô', ' ', 'B', 'à', 'ř'], 'Fòô Bàř'];
     }
 
-    /**
-     * @return array
-     */
-    public function collapseWhitespaceProvider(): array
+    public function collapseWhitespaceProvider(): \Iterator
     {
-        return [
-            ['foo bar', '  foo   bar  '],
-            ['test string', 'test string'],
-            ['Ο συγγραφέας', '   Ο     συγγραφέας  '],
-            ['123', ' 123 '],
-            ['', ' ', 'UTF-8'], // no-break space (U+00A0)
-            ['', '           '], // spaces U+2000 to U+200A
-            ['', ' ', 'UTF-8'], // narrow no-break space (U+202F)
-            ['', ' ', 'UTF-8'], // medium mathematical space (U+205F)
-            ['', '　', 'UTF-8'], // ideographic space (U+3000)
-            ['1 2 3', '  1  2  3　　'],
-            ['', ' '],
-            ['', ''],
-        ];
+        yield ['foo bar', '  foo   bar  '];
+        yield ['test string', 'test string'];
+        yield ['Ο συγγραφέας', '   Ο     συγγραφέας  '];
+        yield ['123', ' 123 '];
+        yield ['', ' ', 'UTF-8'];
+        // no-break space (U+00A0)
+        yield ['', '           '];
+        // spaces U+2000 to U+200A
+        yield ['', ' ', 'UTF-8'];
+        // narrow no-break space (U+202F)
+        yield ['', ' ', 'UTF-8'];
+        // medium mathematical space (U+205F)
+        yield ['', '　', 'UTF-8'];
+        // ideographic space (U+3000)
+        yield ['1 2 3', '  1  2  3　　'];
+        yield ['', ' '];
+        yield ['', ''];
     }
 
     /**
@@ -192,15 +164,20 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      */
     public function containsAllProvider(): array
     {
+        $containsProvider = [];
+        foreach ($this->containsProvider() as $data) {
+            $containsProvider[] = $data;
+        }
+
         // One needle
         $singleNeedle = \array_map(
-        function ($array) {
-            $array[2] = [$array[2]];
+            function ($array) {
+                $array[2] = [$array[2]];
 
-            return $array;
-        },
-        $this->containsProvider()
-    );
+                return $array;
+            },
+            $containsProvider
+        );
 
         $provider = [
             // One needle
@@ -238,15 +215,20 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      */
     public function containsAnyProvider(): array
     {
+        $containsProvider = [];
+        foreach ($this->containsProvider() as $data) {
+            $containsProvider[] = $data;
+        }
+
         // One needle
         $singleNeedle = \array_map(
-        function ($array) {
-            $array[2] = [$array[2]];
+            function ($array) {
+                $array[2] = [$array[2]];
 
-            return $array;
-        },
-        $this->containsProvider()
-    );
+                return $array;
+            },
+            $containsProvider
+        );
 
         $provider = [
             // No needles
@@ -278,1398 +260,1065 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         return \array_merge($singleNeedle, $provider);
     }
 
-    /**
-     * @return array
-     */
-    public function containsProvider(): array
-    {
-        return [
-            [true, 'Str contains foo bar', 'foo bar'],
-            [true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%'],
-            [true, 'Ο συγγραφέας είπε', 'συγγραφέας', true, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å´¥©', true, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å˚ ∆', true, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'øœ¬', true, 'UTF-8'],
-            [false, 'Str contains foo bar', 'Foo bar'],
-            [false, 'Str contains foo bar', 'foobar'],
-            [false, 'Str contains foo bar', 'foo bar '],
-            [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', true, 'UTF-8'],
-            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßå˚', true, 'UTF-8'],
-            [true, 'Str contains foo bar', 'Foo bar', false],
-            [true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%', false],
-            [true, 'Ο συγγραφέας είπε', 'ΣΥΓΓΡΑΦΈΑΣ', false, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å´¥©', false, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å˚ ∆', false, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'ØŒ¬', false, 'UTF-8'],
-            [false, 'Str contains foo bar', 'foobar', false],
-            [false, 'Str contains foo bar', 'foo bar ', false],
-            [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', false, 'UTF-8'],
-            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßÅ˚', false, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function countSubstrProvider(): array
-    {
-        return [
-            [0, '', 'foo'],
-            [0, 'foo', 'bar'],
-            [1, 'foo bar', 'foo'],
-            [2, 'foo bar', 'o'],
-            [0, '', 'fòô', 'UTF-8'],
-            [0, 'fòô', 'bàř', 'UTF-8'],
-            [1, 'fòô bàř', 'fòô', 'UTF-8'],
-            [2, 'fôòô bàř', 'ô', 'UTF-8'],
-            [0, 'fÔÒÔ bàř', 'ô', 'UTF-8'],
-            [0, 'foo', 'BAR', false],
-            [1, 'foo bar', 'FOo', false],
-            [2, 'foo bar', 'O', false],
-            [1, 'fòô bàř', 'fÒÔ', false, 'UTF-8'],
-            [2, 'fôòô bàř', 'Ô', false, 'UTF-8'],
-            [2, 'συγγραφέας', 'Σ', false, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function dasherizeProvider(): array
-    {
-        return [
-            ['test-case', 'testCase'],
-            ['test-case', 'Test-Case'],
-            ['test-case', 'test case'],
-            ['-test-case', '-test -case'],
-            ['test-case', 'test - case'],
-            ['test-case', 'test_case'],
-            ['test-c-test', 'test c test'],
-            ['test-d-case', 'TestDCase'],
-            ['test-c-c-test', 'TestCCTest'],
-            ['string-with1number', 'string_with1number'],
-            ['string-with-2-2-numbers', 'String-with_2_2 numbers'],
-            ['1test2case', '1test2case'],
-            ['data-rate', 'dataRate'],
-            ['car-speed', 'CarSpeed'],
-            ['yes-we-can', 'yesWeCan'],
-            ['background-color', 'backgroundColor'],
-            ['dash-σase', 'dash Σase', 'UTF-8'],
-            ['στανιλ-case', 'Στανιλ case', 'UTF-8'],
-            ['σash-case', 'Σash  Case', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function delimitProvider(): array
-    {
-        return [
-            ['test*case', 'testCase', '*'],
-            ['test&case', 'Test-Case', '&'],
-            ['test#case', 'test case', '#'],
-            ['test**case', 'test -case', '**'],
-            ['~!~test~!~case', '-test - case', '~!~'],
-            ['test*case', 'test_case', '*'],
-            ['test%c%test', '  test c test', '%'],
-            ['test+u+case', 'TestUCase', '+'],
-            ['test=c=c=test', 'TestCCTest', '='],
-            ['string#>with1number', 'string_with1number', '#>'],
-            ['1test2case', '1test2case', '*'],
-            ['test ύα σase', 'test Σase', ' ύα ', 'UTF-8'],
-            ['στανιλαcase', 'Στανιλ case', 'α', 'UTF-8'],
-            ['σashΘcase', 'Σash  Case', 'Θ', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function endsWithAnyProvider(): array
-    {
-        return [
-            [true, 'foo bars', ['foo', 'o bars']],
-            [true, 'FOO bars', ['foo', 'o bars'], false],
-            [true, 'FOO bars', ['foo', 'o BARs'], false],
-            [true, 'FÒÔ bàřs', ['foo', 'ô bàřs'], false, 'UTF-8'],
-            [true, 'fòô bàřs', ['foo', 'ô BÀŘs'], false, 'UTF-8'],
-            [false, 'foo bar', ['foo']],
-            [false, 'foo bar', ['foo', 'foo bars']],
-            [false, 'FOO bar', ['foo', 'foo bars']],
-            [false, 'FOO bars', ['foo', 'foo BARS']],
-            [false, 'FÒÔ bàřs', ['fòô', 'fòô bàřs'], true, 'UTF-8'],
-            [false, 'fòô bàřs', ['fòô', 'fòô BÀŘS'], true, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function endsWithProvider(): array
-    {
-        return [
-            [true, 'foo bars', 'o bars'],
-            [true, 'FOO bars', 'o bars', false],
-            [true, 'FOO bars', 'o BARs', false],
-            [true, 'FÒÔ bàřs', 'ô bàřs', false],
-            [true, 'fòô bàřs', 'ô BÀŘs', false],
-            [false, 'foo bar', 'foo'],
-            [false, 'foo bar', 'foo bars'],
-            [false, 'FOO bar', 'foo bars'],
-            [false, 'FOO bars', 'foo BARS'],
-            [false, 'FÒÔ bàřs', 'fòô bàřs', true],
-            [false, 'fòô bàřs', 'fòô BÀŘS', true],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function ensureLeftProvider(): array
-    {
-        return [
-            ['foobar', 'foobar', 'f'],
-            ['foobar', 'foobar', 'foo'],
-            ['foo/foobar', 'foobar', 'foo/'],
-            ['http://foobar', 'foobar', 'http://'],
-            ['http://foobar', 'http://foobar', 'http://'],
-            ['fòôbàř', 'fòôbàř', 'f'],
-            ['fòôbàř', 'fòôbàř', 'fòô'],
-            ['fòô/fòôbàř', 'fòôbàř', 'fòô/'],
-            ['http://fòôbàř', 'fòôbàř', 'http://'],
-            ['http://fòôbàř', 'http://fòôbàř', 'http://'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function ensureRightProvider(): array
-    {
-        return [
-            ['foobar', 'foobar', 'r'],
-            ['foobar', 'foobar', 'bar'],
-            ['foobar/bar', 'foobar', '/bar'],
-            ['foobar.com/', 'foobar', '.com/'],
-            ['foobar.com/', 'foobar.com/', '.com/'],
-            ['fòôbàř', 'fòôbàř', 'ř'],
-            ['fòôbàř', 'fòôbàř', 'bàř'],
-            ['fòôbàř/bàř', 'fòôbàř', '/bàř'],
-            ['fòôbàř.com/', 'fòôbàř', '.com/'],
-            ['fòôbàř.com/', 'fòôbàř.com/', '.com/'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function escapeProvider(): array
-    {
-        return [
-            ['', ''],
-            ['raboof &lt;3', 'raboof <3'],
-            ['řàbôòf&lt;foo&lt;lall&gt;&gt;&gt;', 'řàbôòf<foo<lall>>>'],
-            ['řàb &lt;ô&gt;òf', 'řàb <ô>òf'],
-            ['&lt;∂∆ onerro=&quot;alert(xss)&quot;&gt; ˚åß', '<∂∆ onerro="alert(xss)"> ˚åß'],
-            ['&#039;œ … &#039;’)', '\'œ … \'’)'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function firstProvider(): array
-    {
-        return [
-            ['', '', 1],
-            ['', 'foo bar', -5],
-            ['', 'foo bar', 0],
-            ['f', 'foo bar', 1],
-            ['foo', 'foo bar', 3],
-            ['foo bar', 'foo bar', 7],
-            ['foo bar', 'foo bar', 8],
-            ['', 'fòô bàř', -5, 'UTF-8'],
-            ['', 'fòô bàř', 0, 'UTF-8'],
-            ['f', 'fòô bàř', 1, 'UTF-8'],
-            ['fòô', 'fòô bàř', 3, 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 7, 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 8, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function hasLowerCaseProvider(): array
-    {
-        return [
-            [false, ''],
-            [true, 'foobar'],
-            [false, 'FOO BAR'],
-            [true, 'fOO BAR'],
-            [true, 'foO BAR'],
-            [true, 'FOO BAr'],
-            [true, 'Foobar'],
-            [false, 'FÒÔBÀŘ'],
-            [true, 'fòôbàř'],
-            [true, 'fòôbàř2'],
-            [true, 'Fòô bàř'],
-            [true, 'fòôbÀŘ'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function hasUpperCaseProvider(): array
-    {
-        return [
-            [false, ''],
-            [true, 'FOOBAR'],
-            [false, 'foo bar'],
-            [true, 'Foo bar'],
-            [true, 'FOo bar'],
-            [true, 'foo baR'],
-            [true, 'fOOBAR'],
-            [false, 'fòôbàř'],
-            [true, 'FÒÔBÀŘ'],
-            [true, 'FÒÔBÀŘ2'],
-            [true, 'fÒÔ BÀŘ'],
-            [true, 'FÒÔBàř'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function htmlDecodeProvider(): array
-    {
-        return [
-            ['&', '&amp;'],
-            ['"', '&quot;'],
-            ["'", '&#039;', \ENT_QUOTES],
-            ['<', '&lt;'],
-            ['>', '&gt;'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function htmlEncodeProvider(): array
-    {
-        return [
-            ['&amp;', '&'],
-            ['&quot;', '"'],
-            ['&#039;', "'", \ENT_QUOTES],
-            ['&lt;', '<'],
-            ['&gt;', '>'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function humanizeProvider(): array
-    {
-        return [
-            ['Author', 'author_id'],
-            ['Test user', ' _test_user_'],
-            ['Συγγραφέας', ' συγγραφέας_id ', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function indexOfLastProvider(): array
-    {
-        return [
-            [6, 'foo & bar', 'bar'],
-            [6, 'foo & bar', 'bar', 0],
-            [false, 'foo & bar', 'baz'],
-            [false, 'foo & bar', 'baz', 0],
-            [12, 'foo & bar & foo', 'foo', 0],
-            [0, 'foo & bar & foo', 'foo', -5],
-            [6, 'fòô & bàř', 'bàř', 0, 'UTF-8'],
-            [false, 'fòô & bàř', 'baz', 0, 'UTF-8'],
-            [12, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'],
-            [0, 'fòô & bàř & fòô', 'fòô', -5, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function indexOfProvider(): array
-    {
-        return [
-            [6, 'foo & bar', 'bar'],
-            [6, 'foo & bar', 'bar', 0],
-            [false, 'foo & bar', 'baz'],
-            [false, 'foo & bar', 'baz', 0],
-            [0, 'foo & bar & foo', 'foo', 0],
-            [12, 'foo & bar & foo', 'foo', 5],
-            [6, 'fòô & bàř', 'bàř', 0, 'UTF-8'],
-            [false, 'fòô & bàř', 'baz', 0, 'UTF-8'],
-            [0, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'],
-            [12, 'fòô & bàř & fòô', 'fòô', 5, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function insertProvider(): array
-    {
-        return [
-            ['foo bar', 'oo bar', 'f', 0],
-            ['foo bar', 'f bar', 'oo', 1],
-            ['f bar', 'f bar', 'oo', 20],
-            ['foo bar', 'foo ba', 'r', 6],
-            ['fòôbàř', 'fòôbř', 'à', 4, 'UTF-8'],
-            ['fòô bàř', 'òô bàř', 'f', 0, 'UTF-8'],
-            ['fòô bàř', 'f bàř', 'òô', 1, 'UTF-8'],
-            ['fòô bàř', 'fòô bà', 'ř', 6, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isAlphaProvider(): array
-    {
-        return [
-            [true, ''],
-            [true, 'foobar'],
-            [false, 'foo bar'],
-            [false, 'foobar2'],
-            [true, 'fòôbàř', 'UTF-8'],
-            [false, 'fòô bàř', 'UTF-8'],
-            [false, 'fòôbàř2', 'UTF-8'],
-            [true, 'ҠѨњфгШ', 'UTF-8'],
-            [false, 'ҠѨњ¨ˆфгШ', 'UTF-8'],
-            [true, '丹尼爾', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isAlphanumericProvider(): array
-    {
-        return [
-            [true, ''],
-            [true, 'foobar1'],
-            [false, 'foo bar'],
-            [false, 'foobar2"'],
-            [false, "\nfoobar\n"],
-            [true, 'fòôbàř1', 'UTF-8'],
-            [false, 'fòô bàř', 'UTF-8'],
-            [false, 'fòôbàř2"', 'UTF-8'],
-            [true, 'ҠѨњфгШ', 'UTF-8'],
-            [false, 'ҠѨњ¨ˆфгШ', 'UTF-8'],
-            [true, '丹尼爾111', 'UTF-8'],
-            [true, 'دانيال1', 'UTF-8'],
-            [false, 'دانيال1 ', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isBase64Provider(): array
-    {
-        return [
-            [false, ' '],
-            [false, ''],
-            [true, \base64_encode('FooBar')],
-            [true, \base64_encode(' ')],
-            [true, \base64_encode('FÒÔBÀŘ')],
-            [true, \base64_encode('συγγραφέας')],
-            [false, 'Foobar'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isBlankProvider(): array
-    {
-        return [
-            [true, ''],
-            [true, ' '],
-            [true, "\n\t "],
-            [true, "\n\t  \v\f"],
-            [false, "\n\t a \v\f"],
-            [false, "\n\t ' \v\f"],
-            [false, "\n\t 2 \v\f"],
-            [true, '', 'UTF-8'],
-            [true, ' ', 'UTF-8'], // no-break space (U+00A0)
-            [true, '           ', 'UTF-8'], // spaces U+2000 to U+200A
-            [true, ' ', 'UTF-8'], // narrow no-break space (U+202F)
-            [true, ' ', 'UTF-8'], // medium mathematical space (U+205F)
-            [true, '　', 'UTF-8'], // ideographic space (U+3000)
-            [false, '　z', 'UTF-8'],
-            [false, '　1', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isHexadecimalProvider(): array
-    {
-        return [
-            [true, ''],
-            [true, 'abcdef'],
-            [true, 'ABCDEF'],
-            [true, '0123456789'],
-            [true, '0123456789AbCdEf'],
-            [false, '0123456789x'],
-            [false, 'ABCDEFx'],
-            [true, 'abcdef', 'UTF-8'],
-            [true, 'ABCDEF', 'UTF-8'],
-            [true, '0123456789', 'UTF-8'],
-            [true, '0123456789AbCdEf', 'UTF-8'],
-            [false, '0123456789x', 'UTF-8'],
-            [false, 'ABCDEFx', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isJsonProvider(): array
-    {
-        return [
-            [false, ''],
-            [false, '  '],
-            [false, 'null'],
-            [false, 'true'],
-            [false, 'false'],
-            [true, '[]'],
-            [true, '{}'],
-            [false, '123'],
-            [true, '{"foo": "bar"}'],
-            [false, '{"foo":"bar",}'],
-            [false, '{"foo"}'],
-            [true, '["foo"]'],
-            [false, '{"foo": "bar"]'],
-            [false, '123', 'UTF-8'],
-            [true, '{"fòô": "bàř"}', 'UTF-8'],
-            [false, '{"fòô":"bàř",}', 'UTF-8'],
-            [false, '{"fòô"}', 'UTF-8'],
-            [false, '["fòô": "bàř"]', 'UTF-8'],
-            [true, '["fòô"]', 'UTF-8'],
-            [false, '{"fòô": "bàř"]', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isLowerCaseProvider(): array
-    {
-        return [
-            [true, ''],
-            [true, 'foobar'],
-            [false, 'foo bar'],
-            [false, 'Foobar'],
-            [true, 'fòôbàř', 'UTF-8'],
-            [false, 'fòôbàř2', 'UTF-8'],
-            [false, 'fòô bàř', 'UTF-8'],
-            [false, 'fòôbÀŘ', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isProvider(): array
-    {
-        return [
-            [true, 'Gears\\String\\Str', 'Gears\\String\\Str'],
-            [true, 'Gears\\String\\Str', 'Gears\\*\\Str'],
-            [true, 'Gears\\String\\Str', 'Gears\\*\\*'],
-            [true, 'Gears\\String\\Str', '*\\*\\*'],
-            [true, 'Gears\\String\\Str', '*\\String\\*'],
-            [true, 'Gears\\String\\Str', '*\\*\\Str'],
-            [true, 'Gears\\String\\Str', '*\\Str'],
-            [true, 'Gears\\String\\Str', '*'],
-            [true, 'Gears\\String\\Str', '**'],
-            [true, 'Gears\\String\\Str', '****'],
-            [true, 'Gears\\String\\Str', '*Str'],
-            [false, 'Gears\\String\\Str', '*\\'],
-            [false, 'Gears\\String\\Str', 'Gears-*-*'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isSerializedProvider(): array
-    {
-        return [
-            [false, ''],
-            [true, 'a:1:{s:3:"foo";s:3:"bar";}'],
-            [false, 'a:1:{s:3:"foo";s:3:"bar"}'],
-            [true, \serialize(['foo' => 'bar'])],
-            [true, 'a:1:{s:5:"fòô";s:5:"bàř";}', 'UTF-8'],
-            [false, 'a:1:{s:5:"fòô";s:5:"bàř"}', 'UTF-8'],
-            [true, \serialize(['fòô' => 'bár']), 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function isUpperCaseProvider(): array
-    {
-        return [
-            [true, ''],
-            [true, 'FOOBAR'],
-            [false, 'FOO BAR'],
-            [false, 'fOOBAR'],
-            [true, 'FÒÔBÀŘ', 'UTF-8'],
-            [false, 'FÒÔBÀŘ2', 'UTF-8'],
-            [false, 'FÒÔ BÀŘ', 'UTF-8'],
-            [false, 'FÒÔBàř', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function lastProvider(): array
-    {
-        return [
-            ['', 'foo bar', -5],
-            ['', 'foo bar', 0],
-            ['r', 'foo bar', 1],
-            ['bar', 'foo bar', 3],
-            ['foo bar', 'foo bar', 7],
-            ['foo bar', 'foo bar', 8],
-            ['', 'fòô bàř', -5, 'UTF-8'],
-            ['', 'fòô bàř', 0, 'UTF-8'],
-            ['ř', 'fòô bàř', 1, 'UTF-8'],
-            ['bàř', 'fòô bàř', 3, 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 7, 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 8, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function lengthProvider(): array
-    {
-        return [
-            [11, '  foo bar  '],
-            [1, 'f'],
-            [0, ''],
-            [7, 'fòô bàř', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function linesProvider(): array
-    {
-        return [
-            [[], ''],
-            [[''], "\r\n"],
-            [['foo', 'bar'], "foo\nbar"],
-            [['foo', 'bar'], "foo\rbar"],
-            [['foo', 'bar'], "foo\r\nbar"],
-            [['foo', '', 'bar'], "foo\r\n\r\nbar"],
-            [['foo', 'bar', ''], "foo\r\nbar\r\n"],
-            [['', 'foo', 'bar'], "\r\nfoo\r\nbar"],
-            [['fòô', 'bàř'], "fòô\nbàř", 'UTF-8'],
-            [['fòô', 'bàř'], "fòô\rbàř", 'UTF-8'],
-            [['fòô', 'bàř'], "fòô\n\rbàř", 'UTF-8'],
-            [['fòô', 'bàř'], "fòô\r\nbàř", 'UTF-8'],
-            [['fòô', '', 'bàř'], "fòô\r\n\r\nbàř", 'UTF-8'],
-            [['fòô', 'bàř', ''], "fòô\r\nbàř\r\n", 'UTF-8'],
-            [['', 'fòô', 'bàř'], "\r\nfòô\r\nbàř", 'UTF-8'],
-            [['1111111111111111111'], '1111111111111111111', 'UTF-8'],
-            [['1111111111111111111111'], '1111111111111111111111', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function longestCommonPrefixProvider(): array
-    {
-        return [
-            ['foo', 'foobar', 'foo bar'],
-            ['foo bar', 'foo bar', 'foo bar'],
-            ['f', 'foo bar', 'far boo'],
-            ['', 'toy car', 'foo bar'],
-            ['', 'foo bar', ''],
-            ['fòô', 'fòôbar', 'fòô bar', 'UTF-8'],
-            ['fòô bar', 'fòô bar', 'fòô bar', 'UTF-8'],
-            ['fò', 'fòô bar', 'fòr bar', 'UTF-8'],
-            ['', 'toy car', 'fòô bar', 'UTF-8'],
-            ['', 'fòô bar', '', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function longestCommonSubstringProvider(): array
-    {
-        return [
-            ['foo', 'foobar', 'foo bar'],
-            ['foo bar', 'foo bar', 'foo bar'],
-            ['oo ', 'foo bar', 'boo far'],
-            ['foo ba', 'foo bad', 'foo bar'],
-            ['', 'foo bar', ''],
-            ['', 'foo', 'lall'],
-            ['fòô', 'fòôbàř', 'fòô bàř', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 'fòô bàř', 'UTF-8'],
-            [' bàř', 'fòô bàř', 'fòr bàř', 'UTF-8'],
-            [' ', 'toy car', 'fòô bàř', 'UTF-8'],
-            ['', 'fòô bàř', '', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function longestCommonSuffixProvider(): array
-    {
-        return [
-            ['bar', 'foobar', 'foo bar'],
-            ['foo bar', 'foo bar', 'foo bar'],
-            ['ar', 'foo bar', 'boo far'],
-            ['', 'foo bad', 'foo bar'],
-            ['', 'foo bar', ''],
-            ['bàř', 'fòôbàř', 'fòô bàř', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 'fòô bàř', 'UTF-8'],
-            [' bàř', 'fòô bàř', 'fòr bàř', 'UTF-8'],
-            ['', 'toy car', 'fòô bàř', 'UTF-8'],
-            ['', 'fòô bàř', '', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function lowerCaseFirstProvider(): array
-    {
-        return [
-            ['test', 'Test'],
-            ['test', 'test'],
-            ['1a', '1a'],
-            ['σ test', 'Σ test', 'UTF-8'],
-            [' Σ test', ' Σ test', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function offsetExistsProvider(): array
-    {
-        return [
-            [true, 0],
-            [true, 2],
-            [false, 3],
-            [true, -1],
-            [true, -3],
-            [false, -4],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function padBothProvider(): array
-    {
-        return [
-            ['foo bar ', 'foo bar', 8],
-            [' foo bar ', 'foo bar', 9, ' '],
-            ['fòô bàř ', 'fòô bàř', 8, ' ', 'UTF-8'],
-            [' fòô bàř ', 'fòô bàř', 9, ' ', 'UTF-8'],
-            ['fòô bàř¬', 'fòô bàř', 8, '¬ø', 'UTF-8'],
-            ['¬fòô bàř¬', 'fòô bàř', 9, '¬ø', 'UTF-8'],
-            ['¬fòô bàř¬ø', 'fòô bàř', 10, '¬ø', 'UTF-8'],
-            ['¬øfòô bàř¬ø', 'fòô bàř', 11, '¬ø', 'UTF-8'],
-            ['¬fòô bàř¬ø', 'fòô bàř', 10, '¬øÿ', 'UTF-8'],
-            ['¬øfòô bàř¬ø', 'fòô bàř', 11, '¬øÿ', 'UTF-8'],
-            ['¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function padLeftProvider(): array
-    {
-        return [
-            ['  foo bar', 'foo bar', 9],
-            ['_*foo bar', 'foo bar', 9, '_*'],
-            ['_*_foo bar', 'foo bar', 10, '_*'],
-            ['  fòô bàř', 'fòô bàř', 9, ' ', 'UTF-8'],
-            ['¬øfòô bàř', 'fòô bàř', 9, '¬ø', 'UTF-8'],
-            ['¬ø¬fòô bàř', 'fòô bàř', 10, '¬ø', 'UTF-8'],
-            ['¬ø¬øfòô bàř', 'fòô bàř', 11, '¬ø', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function padProvider(): array
-    {
-        return [
-            // length <= str
-            ['foo bar', 'foo bar', -1],
-            ['foo bar', 'foo bar', 7],
-            ['fòô bàř', 'fòô bàř', 7, ' ', 'right', 'UTF-8'],
-
-            // right
-            ['foo bar  ', 'foo bar', 9],
-            ['foo bar_*', 'foo bar', 9, '_*', 'right'],
-            ['fòô bàř¬ø¬', 'fòô bàř', 10, '¬ø', 'right', 'UTF-8'],
-
-            // left
-            ['  foo bar', 'foo bar', 9, ' ', 'left'],
-            ['_*foo bar', 'foo bar', 9, '_*', 'left'],
-            ['¬ø¬fòô bàř', 'fòô bàř', 10, '¬ø', 'left', 'UTF-8'],
-
-            // both
-            ['foo bar ', 'foo bar', 8, ' ', 'both'],
-            ['¬fòô bàř¬ø', 'fòô bàř', 10, '¬ø', 'both', 'UTF-8'],
-            ['¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'both', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function padRightProvider(): array
-    {
-        return [
-            ['foo bar  ', 'foo bar', 9],
-            ['foo bar_*', 'foo bar', 9, '_*'],
-            ['foo bar_*_', 'foo bar', 10, '_*'],
-            ['fòô bàř  ', 'fòô bàř', 9, ' ', 'UTF-8'],
-            ['fòô bàř¬ø', 'fòô bàř', 9, '¬ø', 'UTF-8'],
-            ['fòô bàř¬ø¬', 'fòô bàř', 10, '¬ø', 'UTF-8'],
-            ['fòô bàř¬ø¬ø', 'fòô bàř', 11, '¬ø', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function prependProvider(): array
-    {
-        return [
-            ['foobar', 'bar', 'foo'],
-            ['fòôbàř', 'bàř', 'fòô', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function regexReplaceProvider(): array
-    {
-        return [
-            ['', '', '', ''],
-            ['bar', 'foo', 'f[o]+', 'bar'],
-            ['//bar//', '/foo/', '/f[o]+/', '//bar//', 'msr', '#'],
-            ['o bar', 'foo bar', 'f(o)o', '\1'],
-            ['bar', 'foo bar', 'f[O]+\s', '', 'i'],
-            ['foo', 'bar', '[[:alpha:]]{3}', 'foo'],
-            ['', '', '', '', 'msr', '/', 'UTF-8'],
-            ['bàř', 'fòô ', 'f[òô]+\s', 'bàř', 'msr', '/', 'UTF-8'],
-            ['fòô', 'fò', '(ò)', '\\1ô', 'msr', '/', 'UTF-8'],
-            ['fòô', 'bàř', '[[:alpha:]]{3}', 'fòô', 'msr', '/', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function removeHtmlBreakProvider(): array
-    {
-        return [
-            ['', ''],
-            ['raboof <3', 'raboof <3', '<ä>'],
-            ['řàbôòf <foo<lall>>>', 'řàbôòf<br/><foo<lall>>>', ' '],
-            [
-                'řàb <ô>òf\', ô<br><br/>foo <a href="#">lall</a>',
-                'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>',
-                '<br><br/>',
-            ],
-            ['<∂∆ onerror="alert(xss)">˚åß', '<∂∆ onerror="alert(xss)">' . "\n" . '˚åß'],
-            ['\'œ … \'’)', '\'œ … \'’)'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function removeHtmlProvider(): array
-    {
-        return [
-            ['', ''],
-            ['raboof ', 'raboof <3', '<3>'],
-            ['řàbôòf>', 'řàbôòf<foo<lall>>>', '<lall><lall/>'],
-            ['řàb òf\', ô<br/>foo lall', 'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>', '<br><br/>'],
-            [' ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'],
-            ['\'œ … \'’)', '\'œ … \'’)'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function removeLeftProvider(): array
-    {
-        return [
-            ['foo bar', 'foo bar', ''],
-            ['oo bar', 'foo bar', 'f'],
-            ['bar', 'foo bar', 'foo '],
-            ['foo bar', 'foo bar', 'oo'],
-            ['foo bar', 'foo bar', 'oo bar'],
-            ['oo bar', 'foo bar', UTF8::first_char('foo bar', 1), 'UTF-8'],
-            ['oo bar', 'foo bar', UTF8::char_at('foo bar', 0), 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', '', 'UTF-8'],
-            ['òô bàř', 'fòô bàř', 'f', 'UTF-8'],
-            ['bàř', 'fòô bàř', 'fòô ', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 'òô', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 'òô bàř', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function removeRightProvider(): array
-    {
-        return [
-            ['foo bar', 'foo bar', ''],
-            ['foo ba', 'foo bar', 'r'],
-            ['foo', 'foo bar', ' bar'],
-            ['foo bar', 'foo bar', 'ba'],
-            ['foo bar', 'foo bar', 'foo ba'],
-            ['foo ba', 'foo bar', UTF8::str_last_char('foo bar', 1), 'UTF-8'],
-            ['foo ba', 'foo bar', UTF8::char_at('foo bar', 6), 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', '', 'UTF-8'],
-            ['fòô bà', 'fòô bàř', 'ř', 'UTF-8'],
-            ['fòô', 'fòô bàř', ' bàř', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 'bà', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', 'fòô bà', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function removeXssProvider(): array
-    {
-        return [
-            ['', ''],
-            [
-                'Hello, i try to alert&#40;\'Hack\'&#41;; your site',
-                'Hello, i try to <script>alert(\'Hack\');</script> your site',
-            ],
-            [
-                '<IMG >',
-                '<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>',
-            ],
-            ['&lt;XSS &gt;', '<XSS STYLE="behavior: url(xss.htc);">'],
-            ['<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'],
-            ['\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function repeatProvider(): array
-    {
-        return [
-            ['', 'foo', 0],
-            ['foo', 'foo', 1],
-            ['foofoo', 'foo', 2],
-            ['foofoofoo', 'foo', 3],
-            ['fòô', 'fòô', 1, 'UTF-8'],
-            ['fòôfòô', 'fòô', 2, 'UTF-8'],
-            ['fòôfòôfòô', 'fòô', 3, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function replaceAllProvider(): array
-    {
-        return [
-            ['', '', [], ''],
-            ['', '', [''], ''],
-            ['foo', ' ', [' ', ''], 'foo'],
-            ['foo', '\s', ['\s', '\t'], 'foo'],
-            ['foo bar', 'foo bar', [''], ''],
-            ['\1 bar', 'foo bar', ['f(o)o', 'foo'], '\1'],
-            ['\1 \1', 'foo bar', ['foo', 'föö', 'bar'], '\1'],
-            ['bar', 'foo bar', ['foo '], ''],
-            ['far bar', 'foo bar', ['foo'], 'far'],
-            ['bar bar', 'foo bar foo bar', ['foo ', ' foo'], ''],
-            ['bar bar bar bar', 'foo bar foo bar', ['foo ', ' foo'], ['bar ', ' bar']],
-            ['', '', [''], '', 'UTF-8'],
-            ['fòô', ' ', [' ', '', '  '], 'fòô', 'UTF-8'],
-            ['fòôòô', '\s', ['\s', 'f'], 'fòô', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', [''], '', 'UTF-8'],
-            ['bàř', 'fòô bàř', ['fòô '], '', 'UTF-8'],
-            ['far bàř', 'fòô bàř', ['fòô'], 'far', 'UTF-8'],
-            ['bàř bàř', 'fòô bàř fòô bàř', ['fòô ', 'fòô'], '', 'UTF-8'],
-            ['bàř bàř', 'fòô bàř fòô bàř', ['fòô '], ''],
-            ['bàř bàř', 'fòô bàř fòô bàř', ['fòô '], ''],
-            ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', ['Fòô '], ''],
-            ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', ['fòÔ '], ''],
-            ['fòô bàř bàř', 'fòô bàř [[fòô]] bàř', ['[[fòô]] ', '[]'], ''],
-            ['', '', [''], '', 'UTF-8', false],
-            ['fòô', ' ', [' ', '', '  '], 'fòô', 'UTF-8', false],
-            ['fòôòô', '\s', ['\s', 'f'], 'fòô', 'UTF-8', false],
-            ['fòô bàř', 'fòô bàř', [''], '', 'UTF-8', false],
-            ['bàř', 'fòô bàř', ['fòÔ '], '', 'UTF-8', false],
-            ['bàř', 'fòô bàř', ['fòÔ '], [''], 'UTF-8', false],
-            ['far bàř', 'fòô bàř', ['Fòô'], 'far', 'UTF-8', false],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function replaceBeginningProvider(): array
-    {
-        return [
-            ['', '', '', ''],
-            ['foo', '', '', 'foo'],
-            ['foo', '\s', '\s', 'foo'],
-            ['foo bar', 'foo bar', '', ''],
-            ['foo bar', 'foo bar', 'f(o)o', '\1'],
-            ['\1 bar', 'foo bar', 'foo', '\1'],
-            ['Foo bar', 'Foo bar', 'foo', '\1'],
-            ['bar', 'foo bar', 'foo ', ''],
-            ['far bar', 'foo bar', 'foo', 'far'],
-            ['bar foo bar', 'foo bar foo bar', 'foo ', ''],
-            ['', '', '', '', 'UTF-8'],
-            ['fòô', '', '', 'fòô', 'UTF-8'],
-            ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
-            ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'],
-            ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'],
-            ['bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function ireplaceBeginningProvider(): array
-    {
-        return [
-            ['', '', '', ''],
-            ['foo', '', '', 'foo'],
-            ['foo', '\s', '\s', 'foo'],
-            ['foo bar', 'foo bar', '', ''],
-            ['foo bar', 'foo bar', 'f(o)o', '\1'],
-            ['\1 bar', 'foo bar', 'foo', '\1'],
-            ['\1 bar', 'Foo bar', 'foo', '\1'],
-            ['bar', 'foo bar', 'foo ', ''],
-            ['far bar', 'foo bar', 'foo', 'far'],
-            ['bar foo bar', 'foo bar foo bar', 'foo ', ''],
-            ['', '', '', '', 'UTF-8'],
-            ['fòô', '', '', 'fòô', 'UTF-8'],
-            ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
-            ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'],
-            ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'],
-            ['bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function replaceEndingProvider(): array
-    {
-        return [
-            ['', '', '', ''],
-            ['foo', '', '', 'foo'],
-            ['foo', '\s', '\s', 'foo'],
-            ['foo bar', 'foo bar', '', ''],
-            ['foo bar', 'foo bar', 'f(o)o', '\1'],
-            ['foo \1', 'foo bar', 'bar', '\1'],
-            ['foo Bar', 'foo Bar', 'bar', '\1'],
-            ['foo bar', 'foo bar', 'foo ', ''],
-            ['foo lall', 'foo bar', 'bar', 'lall'],
-            ['foo bar foo ', 'foo bar foo bar', 'bar', ''],
-            ['', '', '', '', 'UTF-8'],
-            ['fòô', '', '', 'fòô', 'UTF-8'],
-            ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
-            ['fòô', 'fòô bàř', ' bàř', '', 'UTF-8'],
-            ['fòôfar', 'fòô bàř', ' bàř', 'far', 'UTF-8'],
-            ['fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function ireplaceEndingProvider(): array
-    {
-        return [
-            ['', '', '', ''],
-            ['foo', '', '', 'foo'],
-            ['foo', '\s', '\s', 'foo'],
-            ['foo bar', 'foo bar', '', ''],
-            ['foo bar', 'foo bar', 'f(o)o', '\1'],
-            ['foo \1', 'foo bar', 'bar', '\1'],
-            ['foo \1', 'foo Bar', 'bar', '\1'],
-            ['foo bar', 'foo bar', 'foo ', ''],
-            ['foo lall', 'foo bar', 'bar', 'lall'],
-            ['foo bar foo ', 'foo bar foo bar', 'bar', ''],
-            ['', '', '', '', 'UTF-8'],
-            ['fòô', '', '', 'fòô', 'UTF-8'],
-            ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
-            ['fòô', 'fòô bàř', ' bàř', '', 'UTF-8'],
-            ['fòôfar', 'fòô bàř', ' bàř', 'far', 'UTF-8'],
-            ['fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function replaceProvider(): array
-    {
-        return [
-            ['', '', '', ''],
-            ['foo', ' ', ' ', 'foo'],
-            ['foo', '\s', '\s', 'foo'],
-            ['foo bar', 'foo bar', '', ''],
-            ['foo bar', 'foo bar', 'f(o)o', '\1'],
-            ['\1 bar', 'foo bar', 'foo', '\1'],
-            ['bar', 'foo bar', 'foo ', ''],
-            ['far bar', 'foo bar', 'foo', 'far'],
-            ['bar bar', 'foo bar foo bar', 'foo ', ''],
-            ['', '', '', '', 'UTF-8'],
-            ['fòô', ' ', ' ', 'fòô', 'UTF-8'],
-            ['fòô', '\s', '\s', 'fòô', 'UTF-8'],
-            ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'],
-            ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'],
-            ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'],
-            ['bàř bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'],
-            ['bàř bàř', 'fòô bàř fòô bàř', 'fòô ', ''],
-            ['bàř bàř', 'fòô bàř fòô bàř', 'fòô ', ''],
-            ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'Fòô ', ''],
-            ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'fòÔ ', ''],
-            ['fòô bàř bàř', 'fòô bàř [[fòô]] bàř', '[[fòô]] ', ''],
-            ['', '', '', '', 'UTF-8', false],
-            ['òô', ' ', ' ', 'òô', 'UTF-8', false],
-            ['fòô', '\s', '\s', 'fòô', 'UTF-8', false],
-            ['fòô bàř', 'fòô bàř', '', '', 'UTF-8', false],
-            ['bàř', 'fòô bàř', 'Fòô ', '', 'UTF-8', false],
-            ['far bàř', 'fòô bàř', 'fòÔ', 'far', 'UTF-8', false],
-            ['bàř bàř', 'fòô bàř fòô bàř', 'Fòô ', '', 'UTF-8', false],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function reverseProvider(): array
-    {
-        return [
-            ['', ''],
-            ['raboof', 'foobar'],
-            ['řàbôòf', 'fòôbàř', 'UTF-8'],
-            ['řàb ôòf', 'fòô bàř', 'UTF-8'],
-            ['∂∆ ˚åß', 'ßå˚ ∆∂', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function safeTruncateProvider(): array
-    {
-        return [
-            ['Test foo bar', 'Test foo bar', 12],
-            ['Test foo', 'Test foo bar', 11],
-            ['Test foo', 'Test foo bar', 8],
-            ['Test', 'Test foo bar', 7],
-            ['Test', 'Test foo bar', 4],
-            ['Test', 'Testfoobar', 4],
-            ['Test foo bar', 'Test foo bar', 12, '...'],
-            ['Test foo...', 'Test foo bar', 11, '...'],
-            ['Test...', 'Test foo bar', 8, '...'],
-            ['Test...', 'Test foo bar', 7, '...'],
-            ['...', 'Test foo bar', 4, '...'],
-            ['Test....', 'Test foo bar', 11, '....'],
-            ['Test fòô bàř', 'Test fòô bàř', 12, '', 'UTF-8'],
-            ['Test fòô', 'Test fòô bàř', 11, '', 'UTF-8'],
-            ['Test fòô', 'Test fòô bàř', 8, '', 'UTF-8'],
-            ['Test', 'Test fòô bàř', 7, '', 'UTF-8'],
-            ['Test', 'Test fòô bàř', 4, '', 'UTF-8'],
-            ['Test fòô bàř', 'Test fòô bàř', 12, 'ϰϰ', 'UTF-8'],
-            ['Test fòôϰϰ', 'Test fòô bàř', 11, 'ϰϰ', 'UTF-8'],
-            ['Testϰϰ', 'Test fòô bàř', 8, 'ϰϰ', 'UTF-8'],
-            ['Testϰϰ', 'Test fòô bàř', 7, 'ϰϰ', 'UTF-8'],
-            ['ϰϰ', 'Test fòô bàř', 4, 'ϰϰ', 'UTF-8'],
-            ['What are your plans...', 'What are your plans today?', 22, '...'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function shortenAfterWordProvider(): array
-    {
-        return [
-            ['this...', 'this is a test', 5, '...'],
-            ['this is...', 'this is öäü-foo test', 8, '...'],
-            ['fòô', 'fòô bàř fòô', 6, ''],
-            ['fòô bàř', 'fòô bàř fòô', 8, ''],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function shuffleProvider(): array
-    {
-        return [
-            ['foo bar'],
-            ['∂∆ ˚åß', 'UTF-8'],
-            ['å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function sliceProvider(): array
-    {
-        return [
-            ['r', 'foobar', -1],
-            ['', 'foobar', 999],
-            ['foobar', 'foobar', 0],
-            ['foobar', 'foobar', 0, null],
-            ['foobar', 'foobar', 0, 6],
-            ['fooba', 'foobar', 0, 5],
-            ['', 'foobar', 3, 0],
-            ['', 'foobar', 3, 2],
-            ['ba', 'foobar', 3, 5],
-            ['ba', 'foobar', 3, -1],
-            ['fòôbàř', 'fòôbàř', 0, null, 'UTF-8'],
-            ['fòôbàř', 'fòôbàř', 0, null],
-            ['fòôbàř', 'fòôbàř', 0, 6, 'UTF-8'],
-            ['fòôbà', 'fòôbàř', 0, 5, 'UTF-8'],
-            ['', 'fòôbàř', 3, 0, 'UTF-8'],
-            ['', 'fòôbàř', 3, 2, 'UTF-8'],
-            ['bà', 'fòôbàř', 3, 5, 'UTF-8'],
-            ['bà', 'fòôbàř', 3, -1, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function slugifyProvider(): array
-    {
-        return [
-            ['foo-bar', ' foo  bar '],
-            ['foo-bar', 'foo -.-"-...bar'],
-            ['another-und-foo-bar', 'another..& foo -.-"-...bar'],
-            ['foo-dbar', " Foo d'Bar "],
-            ['a-string-with-dashes', 'A string-with-dashes'],
-            ['using-strings-like-foo-bar', 'Using strings like fòô bàř'],
-            ['numbers-1234', 'numbers 1234'],
-            ['perevirka-ryadka', 'перевірка рядка'],
-            ['bukvar-s-bukvoj-y', 'букварь с буквой ы'],
-            ['podehal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'],
-            ['foo:bar:baz', 'Foo bar baz', ':'],
-            ['a_string_with_underscores', 'A_string with_underscores', '_'],
-            ['a_string_with_dashes', 'A string-with-dashes', '_'],
-            ['a\string\with\dashes', 'A string-with-dashes', '\\'],
-            ['an_odd_string', '--   An odd__   string-_', '_'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function snakeizeProvider(): array
-    {
-        return [
-            ['snake_case', 'SnakeCase'],
-            ['snake_case', 'Snake-Case'],
-            ['snake_case', 'snake case'],
-            ['snake_case', 'snake -case'],
-            ['snake_case', 'snake - case'],
-            ['snake_case', 'snake_case'],
-            ['camel_c_test', 'camel c test'],
-            ['string_with_1_number', 'string_with 1 number'],
-            ['string_with_1_number', 'string_with1number'],
-            ['string_with_2_2_numbers', 'string-with-2-2 numbers'],
-            ['data_rate', 'data_rate'],
-            ['background_color', 'background-color'],
-            ['yes_we_can', 'yes_we_can'],
-            ['moz_something', '-moz-something'],
-            ['car_speed', '_car_speed_'],
-            ['serve_h_t_t_p', 'ServeHTTP'],
-            ['1_camel_2_case', '1camel2case'],
-            ['camel_σase', 'camel σase', 'UTF-8'],
-            ['Στανιλ_case', 'Στανιλ case', 'UTF-8'],
-            ['σamel_case', 'σamel  Case', 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function splitProvider(): array
-    {
-        return [
-            [['foo,bar,baz'], 'foo,bar,baz', ''],
-            [['foo,bar,baz'], 'foo,bar,baz', '-'],
-            [['foo', 'bar', 'baz'], 'foo,bar,baz', ','],
-            [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', -1],
-            [[], 'foo,bar,baz', ',', 0],
-            [['foo'], 'foo,bar,baz', ',', 1],
-            [['foo', 'bar'], 'foo,bar,baz', ',', 2],
-            [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', 3],
-            [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', 10],
-            [['fòô,bàř,baz'], 'fòô,bàř,baz', '-', -1, 'UTF-8'],
-            [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', -1, 'UTF-8'],
-            [[], 'fòô,bàř,baz', ',', 0, 'UTF-8'],
-            [['fòô'], 'fòô,bàř,baz', ',', 1, 'UTF-8'],
-            [['fòô', 'bàř'], 'fòô,bàř,baz', ',', 2, 'UTF-8'],
-            [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', 3, 'UTF-8'],
-            [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', 10, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function startsWithProvider(): array
-    {
-        return [
-            [true, 'foo bars', 'foo bar'],
-            [true, 'FOO bars', 'foo bar', false],
-            [true, 'FOO bars', 'foo BAR', false],
-            [true, 'FÒÔ bàřs', 'fòô bàř', false, 'UTF-8'],
-            [true, 'fòô bàřs', 'fòô BÀŘ', false, 'UTF-8'],
-            [false, 'foo bar', 'bar'],
-            [false, 'foo bar', 'foo bars'],
-            [false, 'FOO bar', 'foo bars'],
-            [false, 'FOO bars', 'foo BAR'],
-            [false, 'FÒÔ bàřs', 'fòô bàř', true, 'UTF-8'],
-            [false, 'fòô bàřs', 'fòô BÀŘ', true, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function startsWithProviderAny(): array
-    {
-        return [
-            [true, 'foo bars', ['foo bar']],
-            [true, 'foo bars', ['foo', 'bar']],
-            [true, 'FOO bars', ['foo', 'bar'], false],
-            [true, 'FOO bars', ['foo', 'BAR'], false],
-            [true, 'FÒÔ bàřs', ['fòô', 'bàř'], false, 'UTF-8'],
-            [true, 'fòô bàřs', ['fòô BÀŘ'], false, 'UTF-8'],
-            [false, 'foo bar', ['bar']],
-            [false, 'foo bar', ['foo bars']],
-            [false, 'FOO bar', ['foo bars']],
-            [false, 'FOO bars', ['foo BAR']],
-            [false, 'FÒÔ bàřs', ['fòô bàř'], true, 'UTF-8'],
-            [false, 'fòô bàřs', ['fòô BÀŘ'], true, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function stripWhitespaceProvider(): array
-    {
-        return [
-            ['foobar', '  foo   bar  '],
-            ['teststring', 'test string'],
-            ['Οσυγγραφέας', '   Ο     συγγραφέας  '],
-            ['123', ' 123 '],
-            ['', ' ', 'UTF-8'], // no-break space (U+00A0)
-            ['', '           ', 'UTF-8'], // spaces U+2000 to U+200A
-            ['', ' ', 'UTF-8'], // narrow no-break space (U+202F)
-            ['', ' ', 'UTF-8'], // medium mathematical space (U+205F)
-            ['', '　', 'UTF-8'], // ideographic space (U+3000)
-            ['123', '  1  2  3　　', 'UTF-8'],
-            ['', ' '],
-            ['', ''],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function substrProvider(): array
-    {
-        return [
-            ['foo bar', 'foo bar', 0],
-            ['bar', 'foo bar', 4],
-            ['bar', 'foo bar', 4, null],
-            ['o b', 'foo bar', 2, 3],
-            ['', 'foo bar', 4, 0],
-            ['fòô bàř', 'fòô bàř', 0, null, 'UTF-8'],
-            ['bàř', 'fòô bàř', 4, null, 'UTF-8'],
-            ['ô b', 'fòô bàř', 2, 3, 'UTF-8'],
-            ['', 'fòô bàř', 4, 0, 'UTF-8'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function surroundProvider(): array
-    {
-        return [
-            ['__foobar__', 'foobar', '__'],
-            ['test', 'test', ''],
-            ['**', '', '*'],
-            ['¬fòô bàř¬', 'fòô bàř', '¬'],
-            ['ßå∆˚ test ßå∆˚', ' test ', 'ßå∆˚'],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function swapCaseProvider(): array
-    {
-        return [
-            ['TESTcASE', 'testCase'],
-            ['tEST-cASE', 'Test-Case'],
-            [' - σASH  cASE', ' - Σash  Case', 'UTF-8'],
-            ['νΤΑΝΙΛ', 'Ντανιλ', 'UTF-8'],
-        ];
+    public function containsProvider(): \Iterator
+    {
+        yield [true, 'Str contains foo bar', 'foo bar'];
+        yield [true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%'];
+        yield [true, 'Ο συγγραφέας είπε', 'συγγραφέας', true, 'UTF-8'];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å´¥©', true, 'UTF-8'];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å˚ ∆', true, 'UTF-8'];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'øœ¬', true, 'UTF-8'];
+        yield [false, 'Str contains foo bar', 'Foo bar'];
+        yield [false, 'Str contains foo bar', 'foobar'];
+        yield [false, 'Str contains foo bar', 'foo bar '];
+        yield [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', true, 'UTF-8'];
+        yield [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßå˚', true, 'UTF-8'];
+        yield [true, 'Str contains foo bar', 'Foo bar', false];
+        yield [true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%', false];
+        yield [true, 'Ο συγγραφέας είπε', 'ΣΥΓΓΡΑΦΈΑΣ', false, 'UTF-8'];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å´¥©', false, 'UTF-8'];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å˚ ∆', false, 'UTF-8'];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'ØŒ¬', false, 'UTF-8'];
+        yield [false, 'Str contains foo bar', 'foobar', false];
+        yield [false, 'Str contains foo bar', 'foo bar ', false];
+        yield [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', false, 'UTF-8'];
+        yield [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßÅ˚', false, 'UTF-8'];
+    }
+
+    public function countSubstrProvider(): \Iterator
+    {
+        yield [0, '', 'foo'];
+        yield [0, 'foo', 'bar'];
+        yield [1, 'foo bar', 'foo'];
+        yield [2, 'foo bar', 'o'];
+        yield [0, '', 'fòô', 'UTF-8'];
+        yield [0, 'fòô', 'bàř', 'UTF-8'];
+        yield [1, 'fòô bàř', 'fòô', 'UTF-8'];
+        yield [2, 'fôòô bàř', 'ô', 'UTF-8'];
+        yield [0, 'fÔÒÔ bàř', 'ô', 'UTF-8'];
+        yield [0, 'foo', 'BAR', false];
+        yield [1, 'foo bar', 'FOo', false];
+        yield [2, 'foo bar', 'O', false];
+        yield [1, 'fòô bàř', 'fÒÔ', false, 'UTF-8'];
+        yield [2, 'fôòô bàř', 'Ô', false, 'UTF-8'];
+        yield [2, 'συγγραφέας', 'Σ', false, 'UTF-8'];
+    }
+
+    public function dasherizeProvider(): \Iterator
+    {
+        yield ['test-case', 'testCase'];
+        yield ['test-case', 'Test-Case'];
+        yield ['test-case', 'test case'];
+        yield ['-test-case', '-test -case'];
+        yield ['test-case', 'test - case'];
+        yield ['test-case', 'test_case'];
+        yield ['test-c-test', 'test c test'];
+        yield ['test-d-case', 'TestDCase'];
+        yield ['test-c-c-test', 'TestCCTest'];
+        yield ['string-with1number', 'string_with1number'];
+        yield ['string-with-2-2-numbers', 'String-with_2_2 numbers'];
+        yield ['1test2case', '1test2case'];
+        yield ['data-rate', 'dataRate'];
+        yield ['car-speed', 'CarSpeed'];
+        yield ['yes-we-can', 'yesWeCan'];
+        yield ['background-color', 'backgroundColor'];
+        yield ['dash-σase', 'dash Σase', 'UTF-8'];
+        yield ['στανιλ-case', 'Στανιλ case', 'UTF-8'];
+        yield ['σash-case', 'Σash  Case', 'UTF-8'];
+    }
+
+    public function delimitProvider(): \Iterator
+    {
+        yield ['test*case', 'testCase', '*'];
+        yield ['test&case', 'Test-Case', '&'];
+        yield ['test#case', 'test case', '#'];
+        yield ['test**case', 'test -case', '**'];
+        yield ['~!~test~!~case', '-test - case', '~!~'];
+        yield ['test*case', 'test_case', '*'];
+        yield ['test%c%test', '  test c test', '%'];
+        yield ['test+u+case', 'TestUCase', '+'];
+        yield ['test=c=c=test', 'TestCCTest', '='];
+        yield ['string#>with1number', 'string_with1number', '#>'];
+        yield ['1test2case', '1test2case', '*'];
+        yield ['test ύα σase', 'test Σase', ' ύα ', 'UTF-8'];
+        yield ['στανιλαcase', 'Στανιλ case', 'α', 'UTF-8'];
+        yield ['σashΘcase', 'Σash  Case', 'Θ', 'UTF-8'];
+    }
+
+    public function endsWithAnyProvider(): \Iterator
+    {
+        yield [true, 'foo bars', ['foo', 'o bars']];
+        yield [true, 'FOO bars', ['foo', 'o bars'], false];
+        yield [true, 'FOO bars', ['foo', 'o BARs'], false];
+        yield [true, 'FÒÔ bàřs', ['foo', 'ô bàřs'], false, 'UTF-8'];
+        yield [true, 'fòô bàřs', ['foo', 'ô BÀŘs'], false, 'UTF-8'];
+        yield [false, 'foo bar', ['foo']];
+        yield [false, 'foo bar', ['foo', 'foo bars']];
+        yield [false, 'FOO bar', ['foo', 'foo bars']];
+        yield [false, 'FOO bars', ['foo', 'foo BARS']];
+        yield [false, 'FÒÔ bàřs', ['fòô', 'fòô bàřs'], true, 'UTF-8'];
+        yield [false, 'fòô bàřs', ['fòô', 'fòô BÀŘS'], true, 'UTF-8'];
+    }
+
+    public function endsWithProvider(): \Iterator
+    {
+        yield [true, 'foo bars', 'o bars'];
+        yield [true, 'FOO bars', 'o bars', false];
+        yield [true, 'FOO bars', 'o BARs', false];
+        yield [true, 'FÒÔ bàřs', 'ô bàřs', false];
+        yield [true, 'fòô bàřs', 'ô BÀŘs', false];
+        yield [false, 'foo bar', 'foo'];
+        yield [false, 'foo bar', 'foo bars'];
+        yield [false, 'FOO bar', 'foo bars'];
+        yield [false, 'FOO bars', 'foo BARS'];
+        yield [false, 'FÒÔ bàřs', 'fòô bàřs', true];
+        yield [false, 'fòô bàřs', 'fòô BÀŘS', true];
+    }
+
+    public function ensureLeftProvider(): \Iterator
+    {
+        yield ['foobar', 'foobar', 'f'];
+        yield ['foobar', 'foobar', 'foo'];
+        yield ['foo/foobar', 'foobar', 'foo/'];
+        yield ['http://foobar', 'foobar', 'http://'];
+        yield ['http://foobar', 'http://foobar', 'http://'];
+        yield ['fòôbàř', 'fòôbàř', 'f'];
+        yield ['fòôbàř', 'fòôbàř', 'fòô'];
+        yield ['fòô/fòôbàř', 'fòôbàř', 'fòô/'];
+        yield ['http://fòôbàř', 'fòôbàř', 'http://'];
+        yield ['http://fòôbàř', 'http://fòôbàř', 'http://'];
+    }
+
+    public function ensureRightProvider(): \Iterator
+    {
+        yield ['foobar', 'foobar', 'r'];
+        yield ['foobar', 'foobar', 'bar'];
+        yield ['foobar/bar', 'foobar', '/bar'];
+        yield ['foobar.com/', 'foobar', '.com/'];
+        yield ['foobar.com/', 'foobar.com/', '.com/'];
+        yield ['fòôbàř', 'fòôbàř', 'ř'];
+        yield ['fòôbàř', 'fòôbàř', 'bàř'];
+        yield ['fòôbàř/bàř', 'fòôbàř', '/bàř'];
+        yield ['fòôbàř.com/', 'fòôbàř', '.com/'];
+        yield ['fòôbàř.com/', 'fòôbàř.com/', '.com/'];
+    }
+
+    public function escapeProvider(): \Iterator
+    {
+        yield ['', ''];
+        yield ['raboof &lt;3', 'raboof <3'];
+        yield ['řàbôòf&lt;foo&lt;lall&gt;&gt;&gt;', 'řàbôòf<foo<lall>>>'];
+        yield ['řàb &lt;ô&gt;òf', 'řàb <ô>òf'];
+        yield ['&lt;∂∆ onerro=&quot;alert(xss)&quot;&gt; ˚åß', '<∂∆ onerro="alert(xss)"> ˚åß'];
+        yield ['&#039;œ … &#039;’)', '\'œ … \'’)'];
+    }
+
+    public function firstProvider(): \Iterator
+    {
+        yield ['', '', 1];
+        yield ['', 'foo bar', -5];
+        yield ['', 'foo bar', 0];
+        yield ['f', 'foo bar', 1];
+        yield ['foo', 'foo bar', 3];
+        yield ['foo bar', 'foo bar', 7];
+        yield ['foo bar', 'foo bar', 8];
+        yield ['', 'fòô bàř', -5, 'UTF-8'];
+        yield ['', 'fòô bàř', 0, 'UTF-8'];
+        yield ['f', 'fòô bàř', 1, 'UTF-8'];
+        yield ['fòô', 'fòô bàř', 3, 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 7, 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 8, 'UTF-8'];
+    }
+
+    public function hasLowerCaseProvider(): \Iterator
+    {
+        yield [false, ''];
+        yield [true, 'foobar'];
+        yield [false, 'FOO BAR'];
+        yield [true, 'fOO BAR'];
+        yield [true, 'foO BAR'];
+        yield [true, 'FOO BAr'];
+        yield [true, 'Foobar'];
+        yield [false, 'FÒÔBÀŘ'];
+        yield [true, 'fòôbàř'];
+        yield [true, 'fòôbàř2'];
+        yield [true, 'Fòô bàř'];
+        yield [true, 'fòôbÀŘ'];
+    }
+
+    public function hasUpperCaseProvider(): \Iterator
+    {
+        yield [false, ''];
+        yield [true, 'FOOBAR'];
+        yield [false, 'foo bar'];
+        yield [true, 'Foo bar'];
+        yield [true, 'FOo bar'];
+        yield [true, 'foo baR'];
+        yield [true, 'fOOBAR'];
+        yield [false, 'fòôbàř'];
+        yield [true, 'FÒÔBÀŘ'];
+        yield [true, 'FÒÔBÀŘ2'];
+        yield [true, 'fÒÔ BÀŘ'];
+        yield [true, 'FÒÔBàř'];
+    }
+
+    public function htmlDecodeProvider(): \Iterator
+    {
+        yield ['&', '&amp;'];
+        yield ['"', '&quot;'];
+        yield ["'", '&#039;', \ENT_QUOTES];
+        yield ['<', '&lt;'];
+        yield ['>', '&gt;'];
+    }
+
+    public function htmlEncodeProvider(): \Iterator
+    {
+        yield ['&amp;', '&'];
+        yield ['&quot;', '"'];
+        yield ['&#039;', "'", \ENT_QUOTES];
+        yield ['&lt;', '<'];
+        yield ['&gt;', '>'];
+    }
+
+    public function humanizeProvider(): \Iterator
+    {
+        yield ['Author', 'author_id'];
+        yield ['Test user', ' _test_user_'];
+        yield ['Συγγραφέας', ' συγγραφέας_id ', 'UTF-8'];
+    }
+
+    public function indexOfLastProvider(): \Iterator
+    {
+        yield [6, 'foo & bar', 'bar'];
+        yield [6, 'foo & bar', 'bar', 0];
+        yield [false, 'foo & bar', 'baz'];
+        yield [false, 'foo & bar', 'baz', 0];
+        yield [12, 'foo & bar & foo', 'foo', 0];
+        yield [0, 'foo & bar & foo', 'foo', -5];
+        yield [6, 'fòô & bàř', 'bàř', 0, 'UTF-8'];
+        yield [false, 'fòô & bàř', 'baz', 0, 'UTF-8'];
+        yield [12, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'];
+        yield [0, 'fòô & bàř & fòô', 'fòô', -5, 'UTF-8'];
+    }
+
+    public function indexOfProvider(): \Iterator
+    {
+        yield [6, 'foo & bar', 'bar'];
+        yield [6, 'foo & bar', 'bar', 0];
+        yield [false, 'foo & bar', 'baz'];
+        yield [false, 'foo & bar', 'baz', 0];
+        yield [0, 'foo & bar & foo', 'foo', 0];
+        yield [12, 'foo & bar & foo', 'foo', 5];
+        yield [6, 'fòô & bàř', 'bàř', 0, 'UTF-8'];
+        yield [false, 'fòô & bàř', 'baz', 0, 'UTF-8'];
+        yield [0, 'fòô & bàř & fòô', 'fòô', 0, 'UTF-8'];
+        yield [12, 'fòô & bàř & fòô', 'fòô', 5, 'UTF-8'];
+    }
+
+    public function insertProvider(): \Iterator
+    {
+        yield ['foo bar', 'oo bar', 'f', 0];
+        yield ['foo bar', 'f bar', 'oo', 1];
+        yield ['f bar', 'f bar', 'oo', 20];
+        yield ['foo bar', 'foo ba', 'r', 6];
+        yield ['fòôbàř', 'fòôbř', 'à', 4, 'UTF-8'];
+        yield ['fòô bàř', 'òô bàř', 'f', 0, 'UTF-8'];
+        yield ['fòô bàř', 'f bàř', 'òô', 1, 'UTF-8'];
+        yield ['fòô bàř', 'fòô bà', 'ř', 6, 'UTF-8'];
+    }
+
+    public function isAlphaProvider(): \Iterator
+    {
+        yield [true, ''];
+        yield [true, 'foobar'];
+        yield [false, 'foo bar'];
+        yield [false, 'foobar2'];
+        yield [true, 'fòôbàř', 'UTF-8'];
+        yield [false, 'fòô bàř', 'UTF-8'];
+        yield [false, 'fòôbàř2', 'UTF-8'];
+        yield [true, 'ҠѨњфгШ', 'UTF-8'];
+        yield [false, 'ҠѨњ¨ˆфгШ', 'UTF-8'];
+        yield [true, '丹尼爾', 'UTF-8'];
+    }
+
+    public function isAlphanumericProvider(): \Iterator
+    {
+        yield [true, ''];
+        yield [true, 'foobar1'];
+        yield [false, 'foo bar'];
+        yield [false, 'foobar2"'];
+        yield [false, "\nfoobar\n"];
+        yield [true, 'fòôbàř1', 'UTF-8'];
+        yield [false, 'fòô bàř', 'UTF-8'];
+        yield [false, 'fòôbàř2"', 'UTF-8'];
+        yield [true, 'ҠѨњфгШ', 'UTF-8'];
+        yield [false, 'ҠѨњ¨ˆфгШ', 'UTF-8'];
+        yield [true, '丹尼爾111', 'UTF-8'];
+        yield [true, 'دانيال1', 'UTF-8'];
+        yield [false, 'دانيال1 ', 'UTF-8'];
+    }
+
+    public function isBase64Provider(): \Iterator
+    {
+        yield [false, ' '];
+        yield [false, ''];
+        yield [true, \base64_encode('FooBar')];
+        yield [true, \base64_encode(' ')];
+        yield [true, \base64_encode('FÒÔBÀŘ')];
+        yield [true, \base64_encode('συγγραφέας')];
+        yield [false, 'Foobar'];
+    }
+
+    public function isBlankProvider(): \Iterator
+    {
+        yield [true, ''];
+        yield [true, ' '];
+        yield [true, "\n\t "];
+        yield [true, "\n\t  \v\f"];
+        yield [false, "\n\t a \v\f"];
+        yield [false, "\n\t ' \v\f"];
+        yield [false, "\n\t 2 \v\f"];
+        yield [true, '', 'UTF-8'];
+        yield [true, ' ', 'UTF-8'];
+        // no-break space (U+00A0)
+        yield [true, '           ', 'UTF-8'];
+        // spaces U+2000 to U+200A
+        yield [true, ' ', 'UTF-8'];
+        // narrow no-break space (U+202F)
+        yield [true, ' ', 'UTF-8'];
+        // medium mathematical space (U+205F)
+        yield [true, '　', 'UTF-8'];
+        // ideographic space (U+3000)
+        yield [false, '　z', 'UTF-8'];
+        yield [false, '　1', 'UTF-8'];
+    }
+
+    public function isHexadecimalProvider(): \Iterator
+    {
+        yield [true, ''];
+        yield [true, 'abcdef'];
+        yield [true, 'ABCDEF'];
+        yield [true, '0123456789'];
+        yield [true, '0123456789AbCdEf'];
+        yield [false, '0123456789x'];
+        yield [false, 'ABCDEFx'];
+        yield [true, 'abcdef', 'UTF-8'];
+        yield [true, 'ABCDEF', 'UTF-8'];
+        yield [true, '0123456789', 'UTF-8'];
+        yield [true, '0123456789AbCdEf', 'UTF-8'];
+        yield [false, '0123456789x', 'UTF-8'];
+        yield [false, 'ABCDEFx', 'UTF-8'];
+    }
+
+    public function isJsonProvider(): \Iterator
+    {
+        yield [false, ''];
+        yield [false, '  '];
+        yield [false, 'null'];
+        yield [false, 'true'];
+        yield [false, 'false'];
+        yield [true, '[]'];
+        yield [true, '{}'];
+        yield [false, '123'];
+        yield [true, '{"foo": "bar"}'];
+        yield [false, '{"foo":"bar",}'];
+        yield [false, '{"foo"}'];
+        yield [true, '["foo"]'];
+        yield [false, '{"foo": "bar"]'];
+        yield [false, '123', 'UTF-8'];
+        yield [true, '{"fòô": "bàř"}', 'UTF-8'];
+        yield [false, '{"fòô":"bàř",}', 'UTF-8'];
+        yield [false, '{"fòô"}', 'UTF-8'];
+        yield [false, '["fòô": "bàř"]', 'UTF-8'];
+        yield [true, '["fòô"]', 'UTF-8'];
+        yield [false, '{"fòô": "bàř"]', 'UTF-8'];
+    }
+
+    public function isLowerCaseProvider(): \Iterator
+    {
+        yield [true, ''];
+        yield [true, 'foobar'];
+        yield [false, 'foo bar'];
+        yield [false, 'Foobar'];
+        yield [true, 'fòôbàř', 'UTF-8'];
+        yield [false, 'fòôbàř2', 'UTF-8'];
+        yield [false, 'fòô bàř', 'UTF-8'];
+        yield [false, 'fòôbÀŘ', 'UTF-8'];
+    }
+
+    public function isProvider(): \Iterator
+    {
+        yield [true, 'Gears\\String\\Str', 'Gears\\String\\Str'];
+        yield [true, 'Gears\\String\\Str', 'Gears\\*\\Str'];
+        yield [true, 'Gears\\String\\Str', 'Gears\\*\\*'];
+        yield [true, 'Gears\\String\\Str', '*\\*\\*'];
+        yield [true, 'Gears\\String\\Str', '*\\String\\*'];
+        yield [true, 'Gears\\String\\Str', '*\\*\\Str'];
+        yield [true, 'Gears\\String\\Str', '*\\Str'];
+        yield [true, 'Gears\\String\\Str', '*'];
+        yield [true, 'Gears\\String\\Str', '**'];
+        yield [true, 'Gears\\String\\Str', '****'];
+        yield [true, 'Gears\\String\\Str', '*Str'];
+        yield [false, 'Gears\\String\\Str', '*\\'];
+        yield [false, 'Gears\\String\\Str', 'Gears-*-*'];
+    }
+
+    public function isSerializedProvider(): \Iterator
+    {
+        yield [false, ''];
+        yield [true, 'a:1:{s:3:"foo";s:3:"bar";}'];
+        yield [false, 'a:1:{s:3:"foo";s:3:"bar"}'];
+        yield [true, \serialize(['foo' => 'bar'])];
+        yield [true, 'a:1:{s:5:"fòô";s:5:"bàř";}', 'UTF-8'];
+        yield [false, 'a:1:{s:5:"fòô";s:5:"bàř"}', 'UTF-8'];
+        yield [true, \serialize(['fòô' => 'bár']), 'UTF-8'];
+    }
+
+    public function isUpperCaseProvider(): \Iterator
+    {
+        yield [true, ''];
+        yield [true, 'FOOBAR'];
+        yield [false, 'FOO BAR'];
+        yield [false, 'fOOBAR'];
+        yield [true, 'FÒÔBÀŘ', 'UTF-8'];
+        yield [false, 'FÒÔBÀŘ2', 'UTF-8'];
+        yield [false, 'FÒÔ BÀŘ', 'UTF-8'];
+        yield [false, 'FÒÔBàř', 'UTF-8'];
+    }
+
+    public function lastProvider(): \Iterator
+    {
+        yield ['', 'foo bar', -5];
+        yield ['', 'foo bar', 0];
+        yield ['r', 'foo bar', 1];
+        yield ['bar', 'foo bar', 3];
+        yield ['foo bar', 'foo bar', 7];
+        yield ['foo bar', 'foo bar', 8];
+        yield ['', 'fòô bàř', -5, 'UTF-8'];
+        yield ['', 'fòô bàř', 0, 'UTF-8'];
+        yield ['ř', 'fòô bàř', 1, 'UTF-8'];
+        yield ['bàř', 'fòô bàř', 3, 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 7, 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 8, 'UTF-8'];
+    }
+
+    public function lengthProvider(): \Iterator
+    {
+        yield [11, '  foo bar  '];
+        yield [1, 'f'];
+        yield [0, ''];
+        yield [7, 'fòô bàř', 'UTF-8'];
+    }
+
+    public function linesProvider(): \Iterator
+    {
+        yield [[], ''];
+        yield [[''], "\r\n"];
+        yield [['foo', 'bar'], "foo\nbar"];
+        yield [['foo', 'bar'], "foo\rbar"];
+        yield [['foo', 'bar'], "foo\r\nbar"];
+        yield [['foo', '', 'bar'], "foo\r\n\r\nbar"];
+        yield [['foo', 'bar', ''], "foo\r\nbar\r\n"];
+        yield [['', 'foo', 'bar'], "\r\nfoo\r\nbar"];
+        yield [['fòô', 'bàř'], "fòô\nbàř", 'UTF-8'];
+        yield [['fòô', 'bàř'], "fòô\rbàř", 'UTF-8'];
+        yield [['fòô', 'bàř'], "fòô\n\rbàř", 'UTF-8'];
+        yield [['fòô', 'bàř'], "fòô\r\nbàř", 'UTF-8'];
+        yield [['fòô', '', 'bàř'], "fòô\r\n\r\nbàř", 'UTF-8'];
+        yield [['fòô', 'bàř', ''], "fòô\r\nbàř\r\n", 'UTF-8'];
+        yield [['', 'fòô', 'bàř'], "\r\nfòô\r\nbàř", 'UTF-8'];
+        yield [['1111111111111111111'], '1111111111111111111', 'UTF-8'];
+        yield [['1111111111111111111111'], '1111111111111111111111', 'UTF-8'];
+    }
+
+    public function longestCommonPrefixProvider(): \Iterator
+    {
+        yield ['foo', 'foobar', 'foo bar'];
+        yield ['foo bar', 'foo bar', 'foo bar'];
+        yield ['f', 'foo bar', 'far boo'];
+        yield ['', 'toy car', 'foo bar'];
+        yield ['', 'foo bar', ''];
+        yield ['fòô', 'fòôbar', 'fòô bar', 'UTF-8'];
+        yield ['fòô bar', 'fòô bar', 'fòô bar', 'UTF-8'];
+        yield ['fò', 'fòô bar', 'fòr bar', 'UTF-8'];
+        yield ['', 'toy car', 'fòô bar', 'UTF-8'];
+        yield ['', 'fòô bar', '', 'UTF-8'];
+    }
+
+    public function longestCommonSubstringProvider(): \Iterator
+    {
+        yield ['foo', 'foobar', 'foo bar'];
+        yield ['foo bar', 'foo bar', 'foo bar'];
+        yield ['oo ', 'foo bar', 'boo far'];
+        yield ['foo ba', 'foo bad', 'foo bar'];
+        yield ['', 'foo bar', ''];
+        yield ['', 'foo', 'lall'];
+        yield ['fòô', 'fòôbàř', 'fòô bàř', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 'fòô bàř', 'UTF-8'];
+        yield [' bàř', 'fòô bàř', 'fòr bàř', 'UTF-8'];
+        yield [' ', 'toy car', 'fòô bàř', 'UTF-8'];
+        yield ['', 'fòô bàř', '', 'UTF-8'];
+    }
+
+    public function longestCommonSuffixProvider(): \Iterator
+    {
+        yield ['bar', 'foobar', 'foo bar'];
+        yield ['foo bar', 'foo bar', 'foo bar'];
+        yield ['ar', 'foo bar', 'boo far'];
+        yield ['', 'foo bad', 'foo bar'];
+        yield ['', 'foo bar', ''];
+        yield ['bàř', 'fòôbàř', 'fòô bàř', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 'fòô bàř', 'UTF-8'];
+        yield [' bàř', 'fòô bàř', 'fòr bàř', 'UTF-8'];
+        yield ['', 'toy car', 'fòô bàř', 'UTF-8'];
+        yield ['', 'fòô bàř', '', 'UTF-8'];
+    }
+
+    public function lowerCaseFirstProvider(): \Iterator
+    {
+        yield ['test', 'Test'];
+        yield ['test', 'test'];
+        yield ['1a', '1a'];
+        yield ['σ test', 'Σ test', 'UTF-8'];
+        yield [' Σ test', ' Σ test', 'UTF-8'];
+    }
+
+    public function offsetExistsProvider(): \Iterator
+    {
+        yield [true, 0];
+        yield [true, 2];
+        yield [false, 3];
+        yield [true, -1];
+        yield [true, -3];
+        yield [false, -4];
+    }
+
+    public function padBothProvider(): \Iterator
+    {
+        yield ['foo bar ', 'foo bar', 8];
+        yield [' foo bar ', 'foo bar', 9, ' '];
+        yield ['fòô bàř ', 'fòô bàř', 8, ' ', 'UTF-8'];
+        yield [' fòô bàř ', 'fòô bàř', 9, ' ', 'UTF-8'];
+        yield ['fòô bàř¬', 'fòô bàř', 8, '¬ø', 'UTF-8'];
+        yield ['¬fòô bàř¬', 'fòô bàř', 9, '¬ø', 'UTF-8'];
+        yield ['¬fòô bàř¬ø', 'fòô bàř', 10, '¬ø', 'UTF-8'];
+        yield ['¬øfòô bàř¬ø', 'fòô bàř', 11, '¬ø', 'UTF-8'];
+        yield ['¬fòô bàř¬ø', 'fòô bàř', 10, '¬øÿ', 'UTF-8'];
+        yield ['¬øfòô bàř¬ø', 'fòô bàř', 11, '¬øÿ', 'UTF-8'];
+        yield ['¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'UTF-8'];
+    }
+
+    public function padLeftProvider(): \Iterator
+    {
+        yield ['  foo bar', 'foo bar', 9];
+        yield ['_*foo bar', 'foo bar', 9, '_*'];
+        yield ['_*_foo bar', 'foo bar', 10, '_*'];
+        yield ['  fòô bàř', 'fòô bàř', 9, ' ', 'UTF-8'];
+        yield ['¬øfòô bàř', 'fòô bàř', 9, '¬ø', 'UTF-8'];
+        yield ['¬ø¬fòô bàř', 'fòô bàř', 10, '¬ø', 'UTF-8'];
+        yield ['¬ø¬øfòô bàř', 'fòô bàř', 11, '¬ø', 'UTF-8'];
+    }
+
+    public function padProvider(): \Iterator
+    {
+        // length <= str
+        yield ['foo bar', 'foo bar', -1];
+        yield ['foo bar', 'foo bar', 7];
+        yield ['fòô bàř', 'fòô bàř', 7, ' ', 'right', 'UTF-8'];
+        // right
+        yield ['foo bar  ', 'foo bar', 9];
+        yield ['foo bar_*', 'foo bar', 9, '_*', 'right'];
+        yield ['fòô bàř¬ø¬', 'fòô bàř', 10, '¬ø', 'right', 'UTF-8'];
+        // left
+        yield ['  foo bar', 'foo bar', 9, ' ', 'left'];
+        yield ['_*foo bar', 'foo bar', 9, '_*', 'left'];
+        yield ['¬ø¬fòô bàř', 'fòô bàř', 10, '¬ø', 'left', 'UTF-8'];
+        // both
+        yield ['foo bar ', 'foo bar', 8, ' ', 'both'];
+        yield ['¬fòô bàř¬ø', 'fòô bàř', 10, '¬ø', 'both', 'UTF-8'];
+        yield ['¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'both', 'UTF-8'];
+    }
+
+    public function padRightProvider(): \Iterator
+    {
+        yield ['foo bar  ', 'foo bar', 9];
+        yield ['foo bar_*', 'foo bar', 9, '_*'];
+        yield ['foo bar_*_', 'foo bar', 10, '_*'];
+        yield ['fòô bàř  ', 'fòô bàř', 9, ' ', 'UTF-8'];
+        yield ['fòô bàř¬ø', 'fòô bàř', 9, '¬ø', 'UTF-8'];
+        yield ['fòô bàř¬ø¬', 'fòô bàř', 10, '¬ø', 'UTF-8'];
+        yield ['fòô bàř¬ø¬ø', 'fòô bàř', 11, '¬ø', 'UTF-8'];
+    }
+
+    public function prependProvider(): \Iterator
+    {
+        yield ['foobar', 'bar', 'foo'];
+        yield ['fòôbàř', 'bàř', 'fòô', 'UTF-8'];
+    }
+
+    public function regexReplaceProvider(): \Iterator
+    {
+        yield ['', '', '', ''];
+        yield ['bar', 'foo', 'f[o]+', 'bar'];
+        yield ['//bar//', '/foo/', '/f[o]+/', '//bar//', 'msr', '#'];
+        yield ['o bar', 'foo bar', 'f(o)o', '\1'];
+        yield ['bar', 'foo bar', 'f[O]+\s', '', 'i'];
+        yield ['foo', 'bar', '[[:alpha:]]{3}', 'foo'];
+        yield ['', '', '', '', 'msr', '/', 'UTF-8'];
+        yield ['bàř', 'fòô ', 'f[òô]+\s', 'bàř', 'msr', '/', 'UTF-8'];
+        yield ['fòô', 'fò', '(ò)', '\\1ô', 'msr', '/', 'UTF-8'];
+        yield ['fòô', 'bàř', '[[:alpha:]]{3}', 'fòô', 'msr', '/', 'UTF-8'];
+    }
+
+    public function removeHtmlBreakProvider(): \Iterator
+    {
+        yield ['', ''];
+        yield ['raboof <3', 'raboof <3', '<ä>'];
+        yield ['řàbôòf <foo<lall>>>', 'řàbôòf<br/><foo<lall>>>', ' '];
+        yield [
+            'řàb <ô>òf\', ô<br><br/>foo <a href="#">lall</a>',
+            'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>',
+            '<br><br/>',
+        ];
+        yield ['<∂∆ onerror="alert(xss)">˚åß', '<∂∆ onerror="alert(xss)">' . "\n" . '˚åß'];
+        yield ['\'œ … \'’)', '\'œ … \'’)'];
+    }
+
+    public function removeHtmlProvider(): \Iterator
+    {
+        yield ['', ''];
+        yield ['raboof ', 'raboof <3', '<3>'];
+        yield ['řàbôòf>', 'řàbôòf<foo<lall>>>', '<lall><lall/>'];
+        yield ['řàb òf\', ô<br/>foo lall', 'řàb <ô>òf\', ô<br/>foo <a href="#">lall</a>', '<br><br/>'];
+        yield [' ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'];
+        yield ['\'œ … \'’)', '\'œ … \'’)'];
+    }
+
+    public function removeLeftProvider(): \Iterator
+    {
+        yield ['foo bar', 'foo bar', ''];
+        yield ['oo bar', 'foo bar', 'f'];
+        yield ['bar', 'foo bar', 'foo '];
+        yield ['foo bar', 'foo bar', 'oo'];
+        yield ['foo bar', 'foo bar', 'oo bar'];
+        yield ['oo bar', 'foo bar', UTF8::first_char('foo bar', 1), 'UTF-8'];
+        yield ['oo bar', 'foo bar', UTF8::char_at('foo bar', 0), 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', '', 'UTF-8'];
+        yield ['òô bàř', 'fòô bàř', 'f', 'UTF-8'];
+        yield ['bàř', 'fòô bàř', 'fòô ', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 'òô', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 'òô bàř', 'UTF-8'];
+    }
+
+    public function removeRightProvider(): \Iterator
+    {
+        yield ['foo bar', 'foo bar', ''];
+        yield ['foo ba', 'foo bar', 'r'];
+        yield ['foo', 'foo bar', ' bar'];
+        yield ['foo bar', 'foo bar', 'ba'];
+        yield ['foo bar', 'foo bar', 'foo ba'];
+        yield ['foo ba', 'foo bar', UTF8::str_last_char('foo bar', 1), 'UTF-8'];
+        yield ['foo ba', 'foo bar', UTF8::char_at('foo bar', 6), 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', '', 'UTF-8'];
+        yield ['fòô bà', 'fòô bàř', 'ř', 'UTF-8'];
+        yield ['fòô', 'fòô bàř', ' bàř', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 'bà', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', 'fòô bà', 'UTF-8'];
+    }
+
+    public function removeXssProvider(): \Iterator
+    {
+        yield ['', ''];
+        yield [
+            'Hello, i try to alert&#40;\'Hack\'&#41;; your site',
+            'Hello, i try to <script>alert(\'Hack\');</script> your site',
+        ];
+        yield [
+            '<IMG >',
+            '<IMG SRC=&#x6A&#x61&#x76&#x61&#x73&#x63&#x72&#x69&#x70&#x74&#x3A&#x61&#x6C&#x65&#x72&#x74&#x28&#x27&#x58&#x53&#x53&#x27&#x29>',
+        ];
+        yield ['&lt;XSS &gt;', '<XSS STYLE="behavior: url(xss.htc);">'];
+        yield ['<∂∆ > ˚åß', '<∂∆ onerror="alert(xss)"> ˚åß'];
+        yield ['\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'];
+    }
+
+    public function repeatProvider(): \Iterator
+    {
+        yield ['', 'foo', 0];
+        yield ['foo', 'foo', 1];
+        yield ['foofoo', 'foo', 2];
+        yield ['foofoofoo', 'foo', 3];
+        yield ['fòô', 'fòô', 1, 'UTF-8'];
+        yield ['fòôfòô', 'fòô', 2, 'UTF-8'];
+        yield ['fòôfòôfòô', 'fòô', 3, 'UTF-8'];
+    }
+
+    public function replaceAllProvider(): \Iterator
+    {
+        yield ['', '', [], ''];
+        yield ['', '', [''], ''];
+        yield ['foo', ' ', [' ', ''], 'foo'];
+        yield ['foo', '\s', ['\s', '\t'], 'foo'];
+        yield ['foo bar', 'foo bar', [''], ''];
+        yield ['\1 bar', 'foo bar', ['f(o)o', 'foo'], '\1'];
+        yield ['\1 \1', 'foo bar', ['foo', 'föö', 'bar'], '\1'];
+        yield ['bar', 'foo bar', ['foo '], ''];
+        yield ['far bar', 'foo bar', ['foo'], 'far'];
+        yield ['bar bar', 'foo bar foo bar', ['foo ', ' foo'], ''];
+        yield ['bar bar bar bar', 'foo bar foo bar', ['foo ', ' foo'], ['bar ', ' bar']];
+        yield ['', '', [''], '', 'UTF-8'];
+        yield ['fòô', ' ', [' ', '', '  '], 'fòô', 'UTF-8'];
+        yield ['fòôòô', '\s', ['\s', 'f'], 'fòô', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', [''], '', 'UTF-8'];
+        yield ['bàř', 'fòô bàř', ['fòô '], '', 'UTF-8'];
+        yield ['far bàř', 'fòô bàř', ['fòô'], 'far', 'UTF-8'];
+        yield ['bàř bàř', 'fòô bàř fòô bàř', ['fòô ', 'fòô'], '', 'UTF-8'];
+        yield ['bàř bàř', 'fòô bàř fòô bàř', ['fòô '], ''];
+        yield ['bàř bàř', 'fòô bàř fòô bàř', ['fòô '], ''];
+        yield ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', ['Fòô '], ''];
+        yield ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', ['fòÔ '], ''];
+        yield ['fòô bàř bàř', 'fòô bàř [[fòô]] bàř', ['[[fòô]] ', '[]'], ''];
+        yield ['', '', [''], '', 'UTF-8', false];
+        yield ['fòô', ' ', [' ', '', '  '], 'fòô', 'UTF-8', false];
+        yield ['fòôòô', '\s', ['\s', 'f'], 'fòô', 'UTF-8', false];
+        yield ['fòô bàř', 'fòô bàř', [''], '', 'UTF-8', false];
+        yield ['bàř', 'fòô bàř', ['fòÔ '], '', 'UTF-8', false];
+        yield ['bàř', 'fòô bàř', ['fòÔ '], [''], 'UTF-8', false];
+        yield ['far bàř', 'fòô bàř', ['Fòô'], 'far', 'UTF-8', false];
+    }
+
+    public function replaceBeginningProvider(): \Iterator
+    {
+        yield ['', '', '', ''];
+        yield ['foo', '', '', 'foo'];
+        yield ['foo', '\s', '\s', 'foo'];
+        yield ['foo bar', 'foo bar', '', ''];
+        yield ['foo bar', 'foo bar', 'f(o)o', '\1'];
+        yield ['\1 bar', 'foo bar', 'foo', '\1'];
+        yield ['Foo bar', 'Foo bar', 'foo', '\1'];
+        yield ['bar', 'foo bar', 'foo ', ''];
+        yield ['far bar', 'foo bar', 'foo', 'far'];
+        yield ['bar foo bar', 'foo bar foo bar', 'foo ', ''];
+        yield ['', '', '', '', 'UTF-8'];
+        yield ['fòô', '', '', 'fòô', 'UTF-8'];
+        yield ['fòô', '\s', '\s', 'fòô', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'];
+        yield ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'];
+        yield ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'];
+        yield ['bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'];
+    }
+
+    public function ireplaceBeginningProvider(): \Iterator
+    {
+        yield ['', '', '', ''];
+        yield ['foo', '', '', 'foo'];
+        yield ['foo', '\s', '\s', 'foo'];
+        yield ['foo bar', 'foo bar', '', ''];
+        yield ['foo bar', 'foo bar', 'f(o)o', '\1'];
+        yield ['\1 bar', 'foo bar', 'foo', '\1'];
+        yield ['\1 bar', 'Foo bar', 'foo', '\1'];
+        yield ['bar', 'foo bar', 'foo ', ''];
+        yield ['far bar', 'foo bar', 'foo', 'far'];
+        yield ['bar foo bar', 'foo bar foo bar', 'foo ', ''];
+        yield ['', '', '', '', 'UTF-8'];
+        yield ['fòô', '', '', 'fòô', 'UTF-8'];
+        yield ['fòô', '\s', '\s', 'fòô', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'];
+        yield ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'];
+        yield ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'];
+        yield ['bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'];
+    }
+
+    public function replaceEndingProvider(): \Iterator
+    {
+        yield ['', '', '', ''];
+        yield ['foo', '', '', 'foo'];
+        yield ['foo', '\s', '\s', 'foo'];
+        yield ['foo bar', 'foo bar', '', ''];
+        yield ['foo bar', 'foo bar', 'f(o)o', '\1'];
+        yield ['foo \1', 'foo bar', 'bar', '\1'];
+        yield ['foo Bar', 'foo Bar', 'bar', '\1'];
+        yield ['foo bar', 'foo bar', 'foo ', ''];
+        yield ['foo lall', 'foo bar', 'bar', 'lall'];
+        yield ['foo bar foo ', 'foo bar foo bar', 'bar', ''];
+        yield ['', '', '', '', 'UTF-8'];
+        yield ['fòô', '', '', 'fòô', 'UTF-8'];
+        yield ['fòô', '\s', '\s', 'fòô', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'];
+        yield ['fòô', 'fòô bàř', ' bàř', '', 'UTF-8'];
+        yield ['fòôfar', 'fòô bàř', ' bàř', 'far', 'UTF-8'];
+        yield ['fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'];
+    }
+
+    public function ireplaceEndingProvider(): \Iterator
+    {
+        yield ['', '', '', ''];
+        yield ['foo', '', '', 'foo'];
+        yield ['foo', '\s', '\s', 'foo'];
+        yield ['foo bar', 'foo bar', '', ''];
+        yield ['foo bar', 'foo bar', 'f(o)o', '\1'];
+        yield ['foo \1', 'foo bar', 'bar', '\1'];
+        yield ['foo \1', 'foo Bar', 'bar', '\1'];
+        yield ['foo bar', 'foo bar', 'foo ', ''];
+        yield ['foo lall', 'foo bar', 'bar', 'lall'];
+        yield ['foo bar foo ', 'foo bar foo bar', 'bar', ''];
+        yield ['', '', '', '', 'UTF-8'];
+        yield ['fòô', '', '', 'fòô', 'UTF-8'];
+        yield ['fòô', '\s', '\s', 'fòô', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'];
+        yield ['fòô', 'fòô bàř', ' bàř', '', 'UTF-8'];
+        yield ['fòôfar', 'fòô bàř', ' bàř', 'far', 'UTF-8'];
+        yield ['fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'];
+    }
+
+    public function replaceProvider(): \Iterator
+    {
+        yield ['', '', '', ''];
+        yield ['foo', ' ', ' ', 'foo'];
+        yield ['foo', '\s', '\s', 'foo'];
+        yield ['foo bar', 'foo bar', '', ''];
+        yield ['foo bar', 'foo bar', 'f(o)o', '\1'];
+        yield ['\1 bar', 'foo bar', 'foo', '\1'];
+        yield ['bar', 'foo bar', 'foo ', ''];
+        yield ['far bar', 'foo bar', 'foo', 'far'];
+        yield ['bar bar', 'foo bar foo bar', 'foo ', ''];
+        yield ['', '', '', '', 'UTF-8'];
+        yield ['fòô', ' ', ' ', 'fòô', 'UTF-8'];
+        yield ['fòô', '\s', '\s', 'fòô', 'UTF-8'];
+        yield ['fòô bàř', 'fòô bàř', '', '', 'UTF-8'];
+        yield ['bàř', 'fòô bàř', 'fòô ', '', 'UTF-8'];
+        yield ['far bàř', 'fòô bàř', 'fòô', 'far', 'UTF-8'];
+        yield ['bàř bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'];
+        yield ['bàř bàř', 'fòô bàř fòô bàř', 'fòô ', ''];
+        yield ['bàř bàř', 'fòô bàř fòô bàř', 'fòô ', ''];
+        yield ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'Fòô ', ''];
+        yield ['fòô bàř fòô bàř', 'fòô bàř fòô bàř', 'fòÔ ', ''];
+        yield ['fòô bàř bàř', 'fòô bàř [[fòô]] bàř', '[[fòô]] ', ''];
+        yield ['', '', '', '', 'UTF-8', false];
+        yield ['òô', ' ', ' ', 'òô', 'UTF-8', false];
+        yield ['fòô', '\s', '\s', 'fòô', 'UTF-8', false];
+        yield ['fòô bàř', 'fòô bàř', '', '', 'UTF-8', false];
+        yield ['bàř', 'fòô bàř', 'Fòô ', '', 'UTF-8', false];
+        yield ['far bàř', 'fòô bàř', 'fòÔ', 'far', 'UTF-8', false];
+        yield ['bàř bàř', 'fòô bàř fòô bàř', 'Fòô ', '', 'UTF-8', false];
+    }
+
+    public function reverseProvider(): \Iterator
+    {
+        yield ['', ''];
+        yield ['raboof', 'foobar'];
+        yield ['řàbôòf', 'fòôbàř', 'UTF-8'];
+        yield ['řàb ôòf', 'fòô bàř', 'UTF-8'];
+        yield ['∂∆ ˚åß', 'ßå˚ ∆∂', 'UTF-8'];
+    }
+
+    public function safeTruncateProvider(): \Iterator
+    {
+        yield ['Test foo bar', 'Test foo bar', 12];
+        yield ['Test foo', 'Test foo bar', 11];
+        yield ['Test foo', 'Test foo bar', 8];
+        yield ['Test', 'Test foo bar', 7];
+        yield ['Test', 'Test foo bar', 4];
+        yield ['Test', 'Testfoobar', 4];
+        yield ['Test foo bar', 'Test foo bar', 12, '...'];
+        yield ['Test foo...', 'Test foo bar', 11, '...'];
+        yield ['Test...', 'Test foo bar', 8, '...'];
+        yield ['Test...', 'Test foo bar', 7, '...'];
+        yield ['...', 'Test foo bar', 4, '...'];
+        yield ['Test....', 'Test foo bar', 11, '....'];
+        yield ['Test fòô bàř', 'Test fòô bàř', 12, '', 'UTF-8'];
+        yield ['Test fòô', 'Test fòô bàř', 11, '', 'UTF-8'];
+        yield ['Test fòô', 'Test fòô bàř', 8, '', 'UTF-8'];
+        yield ['Test', 'Test fòô bàř', 7, '', 'UTF-8'];
+        yield ['Test', 'Test fòô bàř', 4, '', 'UTF-8'];
+        yield ['Test fòô bàř', 'Test fòô bàř', 12, 'ϰϰ', 'UTF-8'];
+        yield ['Test fòôϰϰ', 'Test fòô bàř', 11, 'ϰϰ', 'UTF-8'];
+        yield ['Testϰϰ', 'Test fòô bàř', 8, 'ϰϰ', 'UTF-8'];
+        yield ['Testϰϰ', 'Test fòô bàř', 7, 'ϰϰ', 'UTF-8'];
+        yield ['ϰϰ', 'Test fòô bàř', 4, 'ϰϰ', 'UTF-8'];
+        yield ['What are your plans...', 'What are your plans today?', 22, '...'];
+    }
+
+    public function shortenAfterWordProvider(): \Iterator
+    {
+        yield ['this...', 'this is a test', 5, '...'];
+        yield ['this is...', 'this is öäü-foo test', 8, '...'];
+        yield ['fòô', 'fòô bàř fòô', 6, ''];
+        yield ['fòô bàř', 'fòô bàř fòô', 8, ''];
+    }
+
+    public function shuffleProvider(): \Iterator
+    {
+        yield ['foo bar'];
+        yield ['∂∆ ˚åß', 'UTF-8'];
+        yield ['å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'UTF-8'];
+    }
+
+    public function sliceProvider(): \Iterator
+    {
+        yield ['r', 'foobar', -1];
+        yield ['', 'foobar', 999];
+        yield ['foobar', 'foobar', 0];
+        yield ['foobar', 'foobar', 0, null];
+        yield ['foobar', 'foobar', 0, 6];
+        yield ['fooba', 'foobar', 0, 5];
+        yield ['', 'foobar', 3, 0];
+        yield ['', 'foobar', 3, 2];
+        yield ['ba', 'foobar', 3, 5];
+        yield ['ba', 'foobar', 3, -1];
+        yield ['fòôbàř', 'fòôbàř', 0, null, 'UTF-8'];
+        yield ['fòôbàř', 'fòôbàř', 0, null];
+        yield ['fòôbàř', 'fòôbàř', 0, 6, 'UTF-8'];
+        yield ['fòôbà', 'fòôbàř', 0, 5, 'UTF-8'];
+        yield ['', 'fòôbàř', 3, 0, 'UTF-8'];
+        yield ['', 'fòôbàř', 3, 2, 'UTF-8'];
+        yield ['bà', 'fòôbàř', 3, 5, 'UTF-8'];
+        yield ['bà', 'fòôbàř', 3, -1, 'UTF-8'];
+    }
+
+    public function slugifyProvider(): \Iterator
+    {
+        yield ['foo-bar', ' foo  bar '];
+        yield ['foo-bar', 'foo -.-"-...bar'];
+        yield ['another-und-foo-bar', 'another..& foo -.-"-...bar'];
+        yield ['foo-dbar', " Foo d'Bar "];
+        yield ['a-string-with-dashes', 'A string-with-dashes'];
+        yield ['using-strings-like-foo-bar', 'Using strings like fòô bàř'];
+        yield ['numbers-1234', 'numbers 1234'];
+        yield ['perevirka-ryadka', 'перевірка рядка'];
+        yield ['bukvar-s-bukvoj-y', 'букварь с буквой ы'];
+        yield ['podehal-k-podezdu-moego-doma', 'подъехал к подъезду моего дома'];
+        yield ['foo:bar:baz', 'Foo bar baz', ':'];
+        yield ['a_string_with_underscores', 'A_string with_underscores', '_'];
+        yield ['a_string_with_dashes', 'A string-with-dashes', '_'];
+        yield ['a\string\with\dashes', 'A string-with-dashes', '\\'];
+        yield ['an_odd_string', '--   An odd__   string-_', '_'];
+    }
+
+    public function snakeizeProvider(): \Iterator
+    {
+        yield ['snake_case', 'SnakeCase'];
+        yield ['snake_case', 'Snake-Case'];
+        yield ['snake_case', 'snake case'];
+        yield ['snake_case', 'snake -case'];
+        yield ['snake_case', 'snake - case'];
+        yield ['snake_case', 'snake_case'];
+        yield ['camel_c_test', 'camel c test'];
+        yield ['string_with_1_number', 'string_with 1 number'];
+        yield ['string_with_1_number', 'string_with1number'];
+        yield ['string_with_2_2_numbers', 'string-with-2-2 numbers'];
+        yield ['data_rate', 'data_rate'];
+        yield ['background_color', 'background-color'];
+        yield ['yes_we_can', 'yes_we_can'];
+        yield ['moz_something', '-moz-something'];
+        yield ['car_speed', '_car_speed_'];
+        yield ['serve_h_t_t_p', 'ServeHTTP'];
+        yield ['1_camel_2_case', '1camel2case'];
+        yield ['camel_σase', 'camel σase', 'UTF-8'];
+        yield ['Στανιλ_case', 'Στανιλ case', 'UTF-8'];
+        yield ['σamel_case', 'σamel  Case', 'UTF-8'];
+    }
+
+    public function splitProvider(): \Iterator
+    {
+        yield [['foo,bar,baz'], 'foo,bar,baz', ''];
+        yield [['foo,bar,baz'], 'foo,bar,baz', '-'];
+        yield [['foo', 'bar', 'baz'], 'foo,bar,baz', ','];
+        yield [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', -1];
+        yield [[], 'foo,bar,baz', ',', 0];
+        yield [['foo'], 'foo,bar,baz', ',', 1];
+        yield [['foo', 'bar'], 'foo,bar,baz', ',', 2];
+        yield [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', 3];
+        yield [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', 10];
+        yield [['fòô,bàř,baz'], 'fòô,bàř,baz', '-', -1, 'UTF-8'];
+        yield [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', -1, 'UTF-8'];
+        yield [[], 'fòô,bàř,baz', ',', 0, 'UTF-8'];
+        yield [['fòô'], 'fòô,bàř,baz', ',', 1, 'UTF-8'];
+        yield [['fòô', 'bàř'], 'fòô,bàř,baz', ',', 2, 'UTF-8'];
+        yield [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', 3, 'UTF-8'];
+        yield [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', 10, 'UTF-8'];
+    }
+
+    public function startsWithProvider(): \Iterator
+    {
+        yield [true, 'foo bars', 'foo bar'];
+        yield [true, 'FOO bars', 'foo bar', false];
+        yield [true, 'FOO bars', 'foo BAR', false];
+        yield [true, 'FÒÔ bàřs', 'fòô bàř', false, 'UTF-8'];
+        yield [true, 'fòô bàřs', 'fòô BÀŘ', false, 'UTF-8'];
+        yield [false, 'foo bar', 'bar'];
+        yield [false, 'foo bar', 'foo bars'];
+        yield [false, 'FOO bar', 'foo bars'];
+        yield [false, 'FOO bars', 'foo BAR'];
+        yield [false, 'FÒÔ bàřs', 'fòô bàř', true, 'UTF-8'];
+        yield [false, 'fòô bàřs', 'fòô BÀŘ', true, 'UTF-8'];
+    }
+
+    public function startsWithProviderAny(): \Iterator
+    {
+        yield [true, 'foo bars', ['foo bar']];
+        yield [true, 'foo bars', ['foo', 'bar']];
+        yield [true, 'FOO bars', ['foo', 'bar'], false];
+        yield [true, 'FOO bars', ['foo', 'BAR'], false];
+        yield [true, 'FÒÔ bàřs', ['fòô', 'bàř'], false, 'UTF-8'];
+        yield [true, 'fòô bàřs', ['fòô BÀŘ'], false, 'UTF-8'];
+        yield [false, 'foo bar', ['bar']];
+        yield [false, 'foo bar', ['foo bars']];
+        yield [false, 'FOO bar', ['foo bars']];
+        yield [false, 'FOO bars', ['foo BAR']];
+        yield [false, 'FÒÔ bàřs', ['fòô bàř'], true, 'UTF-8'];
+        yield [false, 'fòô bàřs', ['fòô BÀŘ'], true, 'UTF-8'];
+    }
+
+    public function stripWhitespaceProvider(): \Iterator
+    {
+        yield ['foobar', '  foo   bar  '];
+        yield ['teststring', 'test string'];
+        yield ['Οσυγγραφέας', '   Ο     συγγραφέας  '];
+        yield ['123', ' 123 '];
+        yield ['', ' ', 'UTF-8'];
+        // no-break space (U+00A0)
+        yield ['', '           ', 'UTF-8'];
+        // spaces U+2000 to U+200A
+        yield ['', ' ', 'UTF-8'];
+        // narrow no-break space (U+202F)
+        yield ['', ' ', 'UTF-8'];
+        // medium mathematical space (U+205F)
+        yield ['', '　', 'UTF-8'];
+        // ideographic space (U+3000)
+        yield ['123', '  1  2  3　　', 'UTF-8'];
+        yield ['', ' '];
+        yield ['', ''];
+    }
+
+    public function substrProvider(): \Iterator
+    {
+        yield ['foo bar', 'foo bar', 0];
+        yield ['bar', 'foo bar', 4];
+        yield ['bar', 'foo bar', 4, null];
+        yield ['o b', 'foo bar', 2, 3];
+        yield ['', 'foo bar', 4, 0];
+        yield ['fòô bàř', 'fòô bàř', 0, null, 'UTF-8'];
+        yield ['bàř', 'fòô bàř', 4, null, 'UTF-8'];
+        yield ['ô b', 'fòô bàř', 2, 3, 'UTF-8'];
+        yield ['', 'fòô bàř', 4, 0, 'UTF-8'];
+    }
+
+    public function surroundProvider(): \Iterator
+    {
+        yield ['__foobar__', 'foobar', '__'];
+        yield ['test', 'test', ''];
+        yield ['**', '', '*'];
+        yield ['¬fòô bàř¬', 'fòô bàř', '¬'];
+        yield ['ßå∆˚ test ßå∆˚', ' test ', 'ßå∆˚'];
+    }
+
+    public function swapCaseProvider(): \Iterator
+    {
+        yield ['TESTcASE', 'testCase'];
+        yield ['tEST-cASE', 'Test-Case'];
+        yield [' - σASH  cASE', ' - Σash  Case', 'UTF-8'];
+        yield ['νΤΑΝΙΛ', 'Ντανιλ', 'UTF-8'];
     }
 
     public function testAddRandomString()
@@ -2999,9 +2648,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         $result = UTF8::str_shuffle($str);
 
         static::assertSame(
-        UTF8::strlen($str, $encoding),
-        UTF8::strlen($result, $encoding)
-    );
+            UTF8::strlen($str, $encoding),
+            UTF8::strlen($result, $encoding)
+        );
 
         // We'll make sure that the chars are present after shuffle
         $length = UTF8::strlen($str, $encoding);
@@ -3288,74 +2937,81 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
-    public function titleizeForHumansProvider()
+    public function titleizeForHumansProvider(): \Iterator
     {
-        return [
-            ['TITLE CASE', 'Title Case'],
-            ['testing the method', 'Testing the Method'],
-            ['i like to watch DVDs at home', 'I Like to watch DVDs at Home', ['watch']],
-            ['  Θα ήθελα να φύγει  ', 'Θα Ήθελα Να Φύγει', [], 'UTF-8'],
-            ['For step-by-step directions email someone@gmail.com', 'For Step-by-Step Directions Email someone@gmail.com'],
-            ["2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'", "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'"],
-            ['Have you read “The Lottery”?', 'Have You Read “The Lottery”?'],
-            ['your hair[cut] looks (nice)', 'Your Hair[cut] Looks (Nice)'],
-            [
-                "People probably won't put http://foo.com/bar/ in titles",
-                "People Probably Won't Put http://foo.com/bar/ in Titles",
-            ],
-            [
-                'Scott Moritz and TheStreet.com’s million iPhone la‑la land',
-                'Scott Moritz and TheStreet.com’s Million iPhone La‑La Land',
-            ],
-            ['BlackBerry vs. iPhone', 'BlackBerry vs. iPhone'],
-            [
-                'Notes and observations regarding Apple’s announcements from ‘The Beat Goes On’ special event',
-                'Notes and Observations Regarding Apple’s Announcements From ‘The Beat Goes On’ Special Event',
-            ],
-            [
-                'Read markdown_rules.txt to find out how _underscores around words_ will be interpretted',
-                'Read markdown_rules.txt to Find Out How _Underscores Around Words_ Will Be Interpretted',
-            ],
-            [
-                "Q&A with Steve Jobs: 'That's what happens in technology'",
-                "Q&A With Steve Jobs: 'That's What Happens in Technology'",
-            ],
-            ["What is AT&T's problem?", "What Is AT&T's Problem?"],
-            ['Apple deal with AT&T falls through', 'Apple Deal With AT&T Falls Through'],
-            ['this v that', 'This v That'],
-            ['this vs that', 'This vs That'],
-            ['this v. that', 'This v. That'],
-            ['this vs. that', 'This vs. That'],
-            ["The SEC's Apple probe: what you need to know", "The SEC's Apple Probe: What You Need to Know"],
-            [
-                "'by the way, small word at the start but within quotes.'",
-                "'By the Way, Small Word at the Start but Within Quotes.'",
-            ],
-            ['Small word at end is nothing to be afraid of', 'Small Word at End Is Nothing to Be Afraid Of'],
-            [
-                'Starting sub-phrase with a small word: a trick, perhaps?',
-                'Starting Sub-Phrase With a Small Word: A Trick, Perhaps?',
-            ],
-            [
-                "Sub-phrase with a small word in quotes: 'a trick, perhaps?'",
-                "Sub-Phrase With a Small Word in Quotes: 'A Trick, Perhaps?'",
-            ],
-            [
-                'Sub-phrase with a small word in quotes: "a trick, perhaps?"',
-                'Sub-Phrase With a Small Word in Quotes: "A Trick, Perhaps?"',
-            ],
-            ['"Nothing to Be Afraid of?"', '"Nothing to Be Afraid Of?"'],
-            ['a thing', 'A Thing'],
-            [
-                'Dr. Strangelove (or: how I Learned to Stop Worrying and Love the Bomb)',
-                'Dr. Strangelove (Or: How I Learned to Stop Worrying and Love the Bomb)',
-            ],
-            ['  this is trimming', 'This Is Trimming'],
-            ['this is trimming  ', 'This Is Trimming'],
-            ['  this is trimming  ', 'This Is Trimming'],
-            ['IF IT’S ALL CAPS, FIX IT', 'If It’s All Caps, Fix It'],
-            ['What could/should be done about slashes?', 'What Could/Should Be Done About Slashes?'],
-            ['Never touch paths like /var/run before/after /boot', 'Never Touch Paths Like /var/run Before/After /boot'],
+        yield ['TITLE CASE', 'Title Case'];
+        yield ['testing the method', 'Testing the Method'];
+        yield ['i like to watch DVDs at home', 'I Like to watch DVDs at Home', ['watch']];
+        yield ['  Θα ήθελα να φύγει  ', 'Θα Ήθελα Να Φύγει', [], 'UTF-8'];
+        yield [
+            'For step-by-step directions email someone@gmail.com',
+            'For Step-by-Step Directions Email someone@gmail.com',
+        ];
+        yield [
+            "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'",
+            "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware'",
+        ];
+        yield ['Have you read “The Lottery”?', 'Have You Read “The Lottery”?'];
+        yield ['your hair[cut] looks (nice)', 'Your Hair[cut] Looks (Nice)'];
+        yield [
+            "People probably won't put http://foo.com/bar/ in titles",
+            "People Probably Won't Put http://foo.com/bar/ in Titles",
+        ];
+        yield [
+            'Scott Moritz and TheStreet.com’s million iPhone la‑la land',
+            'Scott Moritz and TheStreet.com’s Million iPhone La‑La Land',
+        ];
+        yield ['BlackBerry vs. iPhone', 'BlackBerry vs. iPhone'];
+        yield [
+            'Notes and observations regarding Apple’s announcements from ‘The Beat Goes On’ special event',
+            'Notes and Observations Regarding Apple’s Announcements From ‘The Beat Goes On’ Special Event',
+        ];
+        yield [
+            'Read markdown_rules.txt to find out how _underscores around words_ will be interpretted',
+            'Read markdown_rules.txt to Find Out How _Underscores Around Words_ Will Be Interpretted',
+        ];
+        yield [
+            "Q&A with Steve Jobs: 'That's what happens in technology'",
+            "Q&A With Steve Jobs: 'That's What Happens in Technology'",
+        ];
+        yield ["What is AT&T's problem?", "What Is AT&T's Problem?"];
+        yield ['Apple deal with AT&T falls through', 'Apple Deal With AT&T Falls Through'];
+        yield ['this v that', 'This v That'];
+        yield ['this vs that', 'This vs That'];
+        yield ['this v. that', 'This v. That'];
+        yield ['this vs. that', 'This vs. That'];
+        yield ["The SEC's Apple probe: what you need to know", "The SEC's Apple Probe: What You Need to Know"];
+        yield [
+            "'by the way, small word at the start but within quotes.'",
+            "'By the Way, Small Word at the Start but Within Quotes.'",
+        ];
+        yield ['Small word at end is nothing to be afraid of', 'Small Word at End Is Nothing to Be Afraid Of'];
+        yield [
+            'Starting sub-phrase with a small word: a trick, perhaps?',
+            'Starting Sub-Phrase With a Small Word: A Trick, Perhaps?',
+        ];
+        yield [
+            "Sub-phrase with a small word in quotes: 'a trick, perhaps?'",
+            "Sub-Phrase With a Small Word in Quotes: 'A Trick, Perhaps?'",
+        ];
+        yield [
+            'Sub-phrase with a small word in quotes: "a trick, perhaps?"',
+            'Sub-Phrase With a Small Word in Quotes: "A Trick, Perhaps?"',
+        ];
+        yield ['"Nothing to Be Afraid of?"', '"Nothing to Be Afraid Of?"'];
+        yield ['a thing', 'A Thing'];
+        yield [
+            'Dr. Strangelove (or: how I Learned to Stop Worrying and Love the Bomb)',
+            'Dr. Strangelove (Or: How I Learned to Stop Worrying and Love the Bomb)',
+        ];
+        yield ['  this is trimming', 'This Is Trimming'];
+        yield ['this is trimming  ', 'This Is Trimming'];
+        yield ['  this is trimming  ', 'This Is Trimming'];
+        yield ['IF IT’S ALL CAPS, FIX IT', 'If It’s All Caps, Fix It'];
+        yield ['What could/should be done about slashes?', 'What Could/Should Be Done About Slashes?'];
+        yield [
+            'Never touch paths like /var/run before/after /boot',
+            'Never Touch Paths Like /var/run Before/After /boot',
         ];
     }
 
@@ -3558,41 +3214,41 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testUtf8ify()
     {
         $examples = [
-            '' => [''],
+            ''                                     => [''],
             // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-            "κόσμε\xc2\xa0" => ['κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"],
+            "κόσμε\xc2\xa0"                        => ['κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"],
             // Valid UTF-8
-            '中' => ['中' => '中'],
+            '中'                                    => ['中' => '中'],
             // Valid UTF-8 + ISO-Error
-            'DÃ¼sseldorf' => ['Düsseldorf' => 'Düsseldorf'],
+            'DÃ¼sseldorf'                          => ['Düsseldorf' => 'Düsseldorf'],
             // Valid UTF-8 + Invalid Chars
-            "κόσμε\xa0\xa1-öäü" => ['κόσμε-öäü' => 'κόσμε-öäü'],
+            "κόσμε\xa0\xa1-öäü"                    => ['κόσμε-öäü' => 'κόσμε-öäü'],
             // Valid ASCII
-            'a' => ['a' => 'a'],
+            'a'                                    => ['a' => 'a'],
             // Valid ASCII + Invalid Chars
-            "a\xa0\xa1-öäü" => ['a-öäü' => 'a-öäü'],
+            "a\xa0\xa1-öäü"                        => ['a-öäü' => 'a-öäü'],
             // Valid 2 Octet Sequence
-            "\xc3\xb1" => ['ñ' => 'ñ'],
+            "\xc3\xb1"                             => ['ñ' => 'ñ'],
             // Invalid 2 Octet Sequence
-            "\xc3\x28" => ['�(' => '('],
+            "\xc3\x28"                             => ['�(' => '('],
             // Invalid Sequence Identifier
-            "\xa0\xa1" => ['��' => ''],
+            "\xa0\xa1"                             => ['��' => ''],
             // Valid 3 Octet Sequence
-            "\xe2\x82\xa1" => ['₡' => '₡'],
+            "\xe2\x82\xa1"                         => ['₡' => '₡'],
             // Invalid 3 Octet Sequence (in 2nd Octet)
-            "\xe2\x28\xa1" => ['�(�' => '('],
+            "\xe2\x28\xa1"                         => ['�(�' => '('],
             // Invalid 3 Octet Sequence (in 3rd Octet)
-            "\xe2\x82\x28" => ['�(' => '('],
+            "\xe2\x82\x28"                         => ['�(' => '('],
             // Valid 4 Octet Sequence
-            "\xf0\x90\x8c\xbc" => ['𐌼' => '𐌼'],
+            "\xf0\x90\x8c\xbc"                     => ['𐌼' => '𐌼'],
             // Invalid 4 Octet Sequence (in 2nd Octet)
-            "\xf0\x28\x8c\xbc" => ['�(��' => '('],
+            "\xf0\x28\x8c\xbc"                     => ['�(��' => '('],
             // Invalid 4 Octet Sequence (in 3rd Octet)
-            "\xf0\x90\x28\xbc" => ['�(�' => '('],
+            "\xf0\x90\x28\xbc"                     => ['�(�' => '('],
             // Invalid 4 Octet Sequence (in 4th Octet)
-            " \xf0\x28\x8c\x28" => ['�(�(' => ' (('],
+            " \xf0\x28\x8c\x28"                    => ['�(�(' => ' (('],
             // Valid 5 Octet Sequence (but not Unicode!)
-            "\xf8\xa1\xa1\xa1\xa1" => ['�' => ''],
+            "\xf8\xa1\xa1\xa1\xa1"                 => ['�' => ''],
             // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
             "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => ['�' => ' '],
             // test for database-insert
@@ -3602,7 +3258,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         <p>
           &nbsp;�&foo;❤&nbsp;
         </p>
-        ' => [
+        '                              => [
                 '' => '
         <h1>«Düsseldorf» &ndash; &lt;Köln&gt;</h1>
         <br /><br />
@@ -3621,39 +3277,39 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         $examples = [
             // Valid UTF-8
-            'κόσμε'    => ['κόσμε' => 'κόσμε'],
-            '中'        => ['中' => '中'],
-            '«foobar»' => ['«foobar»' => '«foobar»'],
+            'κόσμε'                    => ['κόσμε' => 'κόσμε'],
+            '中'                        => ['中' => '中'],
+            '«foobar»'                 => ['«foobar»' => '«foobar»'],
             // Valid UTF-8 + Invalied Chars
-            "κόσμε\xa0\xa1-öäü" => ['κόσμε-öäü' => 'κόσμε-öäü'],
+            "κόσμε\xa0\xa1-öäü"        => ['κόσμε-öäü' => 'κόσμε-öäü'],
             // Valid ASCII
-            'a' => ['a' => 'a'],
+            'a'                        => ['a' => 'a'],
             // Valid emoji (non-UTF-8)
-            '😃' => ['😃' => '😃'],
+            '😃'                       => ['😃' => '😃'],
             // Valid ASCII + Invalied Chars
-            "a\xa0\xa1-öäü" => ['a-öäü' => 'a-öäü'],
+            "a\xa0\xa1-öäü"            => ['a-öäü' => 'a-öäü'],
             // Valid 2 Octet Sequence
-            "\xc3\xb1" => ['ñ' => 'ñ'],
+            "\xc3\xb1"                 => ['ñ' => 'ñ'],
             // Invalid 2 Octet Sequence
-            "\xc3\x28" => ['�(' => '('],
+            "\xc3\x28"                 => ['�(' => '('],
             // Invalid Sequence Identifier
-            "\xa0\xa1" => ['��' => ''],
+            "\xa0\xa1"                 => ['��' => ''],
             // Valid 3 Octet Sequence
-            "\xe2\x82\xa1" => ['₡' => '₡'],
+            "\xe2\x82\xa1"             => ['₡' => '₡'],
             // Invalid 3 Octet Sequence (in 2nd Octet)
-            "\xe2\x28\xa1" => ['�(�' => '('],
+            "\xe2\x28\xa1"             => ['�(�' => '('],
             // Invalid 3 Octet Sequence (in 3rd Octet)
-            "\xe2\x82\x28" => ['�(' => '('],
+            "\xe2\x82\x28"             => ['�(' => '('],
             // Valid 4 Octet Sequence
-            "\xf0\x90\x8c\xbc" => ['𐌼' => '𐌼'],
+            "\xf0\x90\x8c\xbc"         => ['𐌼' => '𐌼'],
             // Invalid 4 Octet Sequence (in 2nd Octet)
-            "\xf0\x28\x8c\xbc" => ['�(��' => '('],
+            "\xf0\x28\x8c\xbc"         => ['�(��' => '('],
             // Invalid 4 Octet Sequence (in 3rd Octet)
-            "\xf0\x90\x28\xbc" => ['�(�' => '('],
+            "\xf0\x90\x28\xbc"         => ['�(�' => '('],
             // Invalid 4 Octet Sequence (in 4th Octet)
-            "\xf0\x28\x8c\x28" => ['�(�(' => '(('],
+            "\xf0\x28\x8c\x28"         => ['�(�(' => '(('],
             // Valid 5 Octet Sequence (but not Unicode!)
-            "\xf8\xa1\xa1\xa1\xa1" => ['�' => ''],
+            "\xf8\xa1\xa1\xa1\xa1"     => ['�' => ''],
             // Valid 6 Octet Sequence (but not Unicode!)
             "\xfc\xa1\xa1\xa1\xa1\xa1" => ['�' => ''],
         ];
@@ -3702,332 +3358,257 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function tidyProvider(): array
+    public function tidyProvider(): \Iterator
     {
-        return [
-            ['"I see..."', '“I see…”'],
-            ["'This too'", '‘This too’'],
-            ['test-dash', 'test—dash'],
-            ['Ο συγγραφέας είπε...', 'Ο συγγραφέας είπε…'],
-        ];
+        yield ['"I see..."', '“I see…”'];
+        yield ["'This too'", '‘This too’'];
+        yield ['test-dash', 'test—dash'];
+        yield ['Ο συγγραφέας είπε...', 'Ο συγγραφέας είπε…'];
     }
 
-    /**
-     * @return array
-     */
-    public function titleizeProvider(): array
+    public function titleizeProvider(): \Iterator
     {
         $ignore = ['at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the'];
-
-        return [
-            ['Title Case', 'TITLE CASE'],
-            ['Testing The Method', 'testing the method'],
-            ['Testing the Method', 'testing the method', $ignore],
-            [
-                'I Like to Watch Dvds at Home',
-                'i like to watch DVDs at home',
-                $ignore,
-            ],
-            ['Θα Ήθελα Να Φύγει', '  Θα ήθελα να φύγει  ', null, 'UTF-8'],
+        yield ['Title Case', 'TITLE CASE'];
+        yield ['Testing The Method', 'testing the method'];
+        yield ['Testing the Method', 'testing the method', $ignore];
+        yield [
+            'I Like to Watch Dvds at Home',
+            'i like to watch DVDs at home',
+            $ignore,
         ];
+        yield ['Θα Ήθελα Να Φύγει', '  Θα ήθελα να φύγει  ', null, 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function toAsciiProvider(): array
+    public function toAsciiProvider(): \Iterator
     {
-        return [
-            ['foo bar', 'fòô bàř'],
-            [' TEST ', ' ŤÉŚŢ '],
-            ['ph = z = 3', 'φ = ź = 3'],
-            ['perevirka', 'перевірка'],
-            ['lysaia gora', 'лысая гора'],
-            ['shchuka', 'щука'],
-            ['Han Zi ', '漢字'],
-            ['xin chao the gioi', 'xin chào thế giới'],
-            ['XIN CHAO THE GIOI', 'XIN CHÀO THẾ GIỚI'],
-            ['dam phat chet luon', 'đấm phát chết luôn'],
-            [' ', ' '], // no-break space (U+00A0)
-            ['           ', '           '], // spaces U+2000 to U+200A
-            [' ', ' '], // narrow no-break space (U+202F)
-            [' ', ' '], // medium mathematical space (U+205F)
-            [' ', '　'], // ideographic space (U+3000)
-            ['?', '𐍉'], // some uncommon, unsupported character (U+10349)
-        ];
+        yield ['foo bar', 'fòô bàř'];
+        yield [' TEST ', ' ŤÉŚŢ '];
+        yield ['ph = z = 3', 'φ = ź = 3'];
+        yield ['perevirka', 'перевірка'];
+        yield ['lysaia gora', 'лысая гора'];
+        yield ['shchuka', 'щука'];
+        yield ['Han Zi ', '漢字'];
+        yield ['xin chao the gioi', 'xin chào thế giới'];
+        yield ['XIN CHAO THE GIOI', 'XIN CHÀO THẾ GIỚI'];
+        yield ['dam phat chet luon', 'đấm phát chết luôn'];
+        yield [' ', ' '];
+        // no-break space (U+00A0)
+        yield ['           ', '           '];
+        // spaces U+2000 to U+200A
+        yield [' ', ' '];
+        // narrow no-break space (U+202F)
+        yield [' ', ' '];
+        // medium mathematical space (U+205F)
+        yield [' ', '　'];
+        // ideographic space (U+3000)
+        yield ['?', '𐍉'];
     }
 
-    /**
-     * @return array
-     */
-    public function toBooleanProvider(): array
+    public function toBooleanProvider(): \Iterator
     {
-        return [
-            [true, true],
-            [true, 'true'],
-            [true, '1'],
-            [true, 1],
-            [true, 'on'],
-            [true, 'ON'],
-            [true, 'yes'],
-            [true, '999'],
-            [false, false],
-            [false, 'false'],
-            [false, '0'],
-            [false, 0],
-            [false, 'off'],
-            [false, 'OFF'],
-            [false, 'no'],
-            [false, '-999'],
-            [false, ''],
-            [false, ' '],
-            [false, '  ', 'UTF-8'], // narrow no-break space (U+202F)
-        ];
+        yield [true, true];
+        yield [true, 'true'];
+        yield [true, '1'];
+        yield [true, 1];
+        yield [true, 'on'];
+        yield [true, 'ON'];
+        yield [true, 'yes'];
+        yield [true, '999'];
+        yield [false, false];
+        yield [false, 'false'];
+        yield [false, '0'];
+        yield [false, 0];
+        yield [false, 'off'];
+        yield [false, 'OFF'];
+        yield [false, 'no'];
+        yield [false, '-999'];
+        yield [false, ''];
+        yield [false, ' '];
+        yield [false, '  ', 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function toLowerCaseProvider(): array
+    public function toLowerCaseProvider(): \Iterator
     {
-        return [
-            ['foo bar', 'FOO BAR'],
-            [' foo_bar ', ' FOO_bar '],
-            ['fòô bàř', 'FÒÔ BÀŘ', 'UTF-8'],
-            [' fòô_bàř ', ' FÒÔ_bàř ', 'UTF-8'],
-            ['αυτοκίνητο', 'ΑΥΤΟΚΊΝΗΤΟ', 'UTF-8'],
-        ];
+        yield ['foo bar', 'FOO BAR'];
+        yield [' foo_bar ', ' FOO_bar '];
+        yield ['fòô bàř', 'FÒÔ BÀŘ', 'UTF-8'];
+        yield [' fòô_bàř ', ' FÒÔ_bàř ', 'UTF-8'];
+        yield ['αυτοκίνητο', 'ΑΥΤΟΚΊΝΗΤΟ', 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function toSpacesProvider(): array
+    public function toSpacesProvider(): \Iterator
     {
-        return [
-            ['    foo    bar    ', '	foo	bar	'],
-            ['     foo     bar     ', '	foo	bar	', 5],
-            ['    foo  bar  ', '		foo	bar	', 2],
-            ['foobar', '	foo	bar	', 0],
-            ["    foo\n    bar", "	foo\n	bar"],
-            ["    fòô\n    bàř", "	fòô\n	bàř"],
-        ];
+        yield ['    foo    bar    ', '	foo	bar	'];
+        yield ['     foo     bar     ', '	foo	bar	', 5];
+        yield ['    foo  bar  ', '		foo	bar	', 2];
+        yield ['foobar', '	foo	bar	', 0];
+        yield ["    foo\n    bar", "	foo\n	bar"];
+        yield ["    fòô\n    bàř", "	fòô\n	bàř"];
     }
 
-    /**
-     * @return array
-     */
-    public function toStringProvider(): array
+    public function toStringProvider(): \Iterator
     {
-        return [
-            ['', null],
-            ['', false],
-            ['1', true],
-            ['-9', -9],
-            ['1.18', 1.18],
-            [' string  ', ' string  '],
-        ];
+        yield ['', null];
+        yield ['', false];
+        yield ['1', true];
+        yield ['-9', -9];
+        yield ['1.18', 1.18];
+        yield [' string  ', ' string  '];
     }
 
-    /**
-     * @return array
-     */
-    public function toTabsProvider(): array
+    public function toTabsProvider(): \Iterator
     {
-        return [
-            ['	foo	bar	', '    foo    bar    '],
-            ['	foo	bar	', '     foo     bar     ', 5],
-            ['		foo	bar	', '    foo  bar  ', 2],
-            ["	foo\n	bar", "    foo\n    bar"],
-            ["	fòô\n	bàř", "    fòô\n    bàř"],
-        ];
+        yield ['	foo	bar	', '    foo    bar    '];
+        yield ['	foo	bar	', '     foo     bar     ', 5];
+        yield ['		foo	bar	', '    foo  bar  ', 2];
+        yield ["	foo\n	bar", "    foo\n    bar"];
+        yield ["	fòô\n	bàř", "    fòô\n    bàř"];
     }
 
-    /**
-     * @return array
-     */
-    public function toTitleCaseProvider(): array
+    public function toTitleCaseProvider(): \Iterator
     {
-        return [
-            ['Foo Bar', 'foo bar'],
-            [' Foo_Bar ', ' foo_bar '],
-            ['Fòô Bàř', 'fòô bàř', 'UTF-8'],
-            [' Fòô_Bàř ', ' fòô_bàř ', 'UTF-8'],
-            ['Αυτοκίνητο Αυτοκίνητο', 'αυτοκίνητο αυτοκίνητο', 'UTF-8'],
-        ];
+        yield ['Foo Bar', 'foo bar'];
+        yield [' Foo_Bar ', ' foo_bar '];
+        yield ['Fòô Bàř', 'fòô bàř', 'UTF-8'];
+        yield [' Fòô_Bàř ', ' fòô_bàř ', 'UTF-8'];
+        yield ['Αυτοκίνητο Αυτοκίνητο', 'αυτοκίνητο αυτοκίνητο', 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function toUpperCaseProvider(): array
+    public function toUpperCaseProvider(): \Iterator
     {
-        return [
-            ['FOO BAR', 'foo bar'],
-            [' FOO_BAR ', ' FOO_bar '],
-            ['FÒÔ BÀŘ', 'fòô bàř', 'UTF-8'],
-            [' FÒÔ_BÀŘ ', ' FÒÔ_bàř ', 'UTF-8'],
-            ['ΑΥΤΟΚΊΝΗΤΟ', 'αυτοκίνητο', 'UTF-8'],
-        ];
+        yield ['FOO BAR', 'foo bar'];
+        yield [' FOO_BAR ', ' FOO_bar '];
+        yield ['FÒÔ BÀŘ', 'fòô bàř', 'UTF-8'];
+        yield [' FÒÔ_BÀŘ ', ' FÒÔ_bàř ', 'UTF-8'];
+        yield ['ΑΥΤΟΚΊΝΗΤΟ', 'αυτοκίνητο', 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function trimLeftProvider(): array
+    public function trimLeftProvider(): \Iterator
     {
-        return [
-            ['foo   bar  ', '  foo   bar  '],
-            ['foo bar', ' foo bar'],
-            ['foo bar ', 'foo bar '],
-            ["foo bar \n\t", "\n\t foo bar \n\t"],
-            ['fòô   bàř  ', '  fòô   bàř  '],
-            ['fòô bàř', ' fòô bàř'],
-            ['fòô bàř ', 'fòô bàř '],
-            ['foo bar', '--foo bar', '-'],
-            ['fòô bàř', 'òòfòô bàř', 'ò', 'UTF-8'],
-            ["fòô bàř \n\t", "\n\t fòô bàř \n\t", null, 'UTF-8'],
-            ['fòô ', ' fòô ', null, 'UTF-8'], // narrow no-break space (U+202F)
-            ['fòô  ', '  fòô  ', null, 'UTF-8'], // medium mathematical space (U+205F)
-            ['fòô', '           fòô', null, 'UTF-8'], // spaces U+2000 to U+200A
-        ];
+        yield ['foo   bar  ', '  foo   bar  '];
+        yield ['foo bar', ' foo bar'];
+        yield ['foo bar ', 'foo bar '];
+        yield ["foo bar \n\t", "\n\t foo bar \n\t"];
+        yield ['fòô   bàř  ', '  fòô   bàř  '];
+        yield ['fòô bàř', ' fòô bàř'];
+        yield ['fòô bàř ', 'fòô bàř '];
+        yield ['foo bar', '--foo bar', '-'];
+        yield ['fòô bàř', 'òòfòô bàř', 'ò', 'UTF-8'];
+        yield ["fòô bàř \n\t", "\n\t fòô bàř \n\t", null, 'UTF-8'];
+        yield ['fòô ', ' fòô ', null, 'UTF-8'];
+        // narrow no-break space (U+202F)
+        yield ['fòô  ', '  fòô  ', null, 'UTF-8'];
+        // medium mathematical space (U+205F)
+        yield ['fòô', '           fòô', null, 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function trimProvider(): array
+    public function trimProvider(): \Iterator
     {
-        return [
-            ['foo   bar', '  foo   bar  '],
-            ['foo bar', ' foo bar'],
-            ['foo bar', 'foo bar '],
-            ['foo bar', "\n\t foo bar \n\t"],
-            ['fòô   bàř', '  fòô   bàř  '],
-            ['fòô bàř', ' fòô bàř'],
-            ['fòô bàř', 'fòô bàř '],
-            [' foo bar ', "\n\t foo bar \n\t", "\n\t"],
-            ['fòô bàř', "\n\t fòô bàř \n\t", null, 'UTF-8'],
-            ['fòô', ' fòô ', null, 'UTF-8'], // narrow no-break space (U+202F)
-            ['fòô', '  fòô  ', null, 'UTF-8'], // medium mathematical space (U+205F)
-            ['fòô', '           fòô', null, 'UTF-8'], // spaces U+2000 to U+200A
-        ];
+        yield ['foo   bar', '  foo   bar  '];
+        yield ['foo bar', ' foo bar'];
+        yield ['foo bar', 'foo bar '];
+        yield ['foo bar', "\n\t foo bar \n\t"];
+        yield ['fòô   bàř', '  fòô   bàř  '];
+        yield ['fòô bàř', ' fòô bàř'];
+        yield ['fòô bàř', 'fòô bàř '];
+        yield [' foo bar ', "\n\t foo bar \n\t", "\n\t"];
+        yield ['fòô bàř', "\n\t fòô bàř \n\t", null, 'UTF-8'];
+        yield ['fòô', ' fòô ', null, 'UTF-8'];
+        // narrow no-break space (U+202F)
+        yield ['fòô', '  fòô  ', null, 'UTF-8'];
+        // medium mathematical space (U+205F)
+        yield ['fòô', '           fòô', null, 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function trimRightProvider(): array
+    public function trimRightProvider(): \Iterator
     {
-        return [
-            ['  foo   bar', '  foo   bar  '],
-            ['foo bar', 'foo bar '],
-            [' foo bar', ' foo bar'],
-            ["\n\t foo bar", "\n\t foo bar \n\t"],
-            ['  fòô   bàř', '  fòô   bàř  '],
-            ['fòô bàř', 'fòô bàř '],
-            [' fòô bàř', ' fòô bàř'],
-            ['foo bar', 'foo bar--', '-'],
-            ['fòô bàř', 'fòô bàřòò', 'ò', 'UTF-8'],
-            ["\n\t fòô bàř", "\n\t fòô bàř \n\t", null, 'UTF-8'],
-            [' fòô', ' fòô ', null, 'UTF-8'], // narrow no-break space (U+202F)
-            ['  fòô', '  fòô  ', null, 'UTF-8'], // medium mathematical space (U+205F)
-            ['fòô', 'fòô           ', null, 'UTF-8'], // spaces U+2000 to U+200A
-        ];
+        yield ['  foo   bar', '  foo   bar  '];
+        yield ['foo bar', 'foo bar '];
+        yield [' foo bar', ' foo bar'];
+        yield ["\n\t foo bar", "\n\t foo bar \n\t"];
+        yield ['  fòô   bàř', '  fòô   bàř  '];
+        yield ['fòô bàř', 'fòô bàř '];
+        yield [' fòô bàř', ' fòô bàř'];
+        yield ['foo bar', 'foo bar--', '-'];
+        yield ['fòô bàř', 'fòô bàřòò', 'ò', 'UTF-8'];
+        yield ["\n\t fòô bàř", "\n\t fòô bàř \n\t", null, 'UTF-8'];
+        yield [' fòô', ' fòô ', null, 'UTF-8'];
+        // narrow no-break space (U+202F)
+        yield ['  fòô', '  fòô  ', null, 'UTF-8'];
+        // medium mathematical space (U+205F)
+        yield ['fòô', 'fòô           ', null, 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function truncateProvider(): array
+    public function truncateProvider(): \Iterator
     {
-        return [
-            ['Test foo bar', 'Test foo bar', 12],
-            ['Test foo ba', 'Test foo bar', 11],
-            ['Test foo', 'Test foo bar', 8],
-            ['Test fo', 'Test foo bar', 7],
-            ['Test', 'Test foo bar', 4],
-            ['Test foo bar', 'Test foo bar', 12, '...'],
-            ['Test foo...', 'Test foo bar', 11, '...'],
-            ['Test ...', 'Test foo bar', 8, '...'],
-            ['Test...', 'Test foo bar', 7, '...'],
-            ['T...', 'Test foo bar', 4, '...'],
-            ['Test fo....', 'Test foo bar', 11, '....'],
-            ['Test fòô bàř', 'Test fòô bàř', 12, '', 'UTF-8'],
-            ['Test fòô bà', 'Test fòô bàř', 11, '', 'UTF-8'],
-            ['Test fòô', 'Test fòô bàř', 8, '', 'UTF-8'],
-            ['Test fò', 'Test fòô bàř', 7, '', 'UTF-8'],
-            ['Test', 'Test fòô bàř', 4, '', 'UTF-8'],
-            ['Test fòô bàř', 'Test fòô bàř', 12, 'ϰϰ', 'UTF-8'],
-            ['Test fòô ϰϰ', 'Test fòô bàř', 11, 'ϰϰ', 'UTF-8'],
-            ['Test fϰϰ', 'Test fòô bàř', 8, 'ϰϰ', 'UTF-8'],
-            ['Test ϰϰ', 'Test fòô bàř', 7, 'ϰϰ', 'UTF-8'],
-            ['Teϰϰ', 'Test fòô bàř', 4, 'ϰϰ', 'UTF-8'],
-            ['What are your pl...', 'What are your plans today?', 19, '...'],
-        ];
+        yield ['Test foo bar', 'Test foo bar', 12];
+        yield ['Test foo ba', 'Test foo bar', 11];
+        yield ['Test foo', 'Test foo bar', 8];
+        yield ['Test fo', 'Test foo bar', 7];
+        yield ['Test', 'Test foo bar', 4];
+        yield ['Test foo bar', 'Test foo bar', 12, '...'];
+        yield ['Test foo...', 'Test foo bar', 11, '...'];
+        yield ['Test ...', 'Test foo bar', 8, '...'];
+        yield ['Test...', 'Test foo bar', 7, '...'];
+        yield ['T...', 'Test foo bar', 4, '...'];
+        yield ['Test fo....', 'Test foo bar', 11, '....'];
+        yield ['Test fòô bàř', 'Test fòô bàř', 12, '', 'UTF-8'];
+        yield ['Test fòô bà', 'Test fòô bàř', 11, '', 'UTF-8'];
+        yield ['Test fòô', 'Test fòô bàř', 8, '', 'UTF-8'];
+        yield ['Test fò', 'Test fòô bàř', 7, '', 'UTF-8'];
+        yield ['Test', 'Test fòô bàř', 4, '', 'UTF-8'];
+        yield ['Test fòô bàř', 'Test fòô bàř', 12, 'ϰϰ', 'UTF-8'];
+        yield ['Test fòô ϰϰ', 'Test fòô bàř', 11, 'ϰϰ', 'UTF-8'];
+        yield ['Test fϰϰ', 'Test fòô bàř', 8, 'ϰϰ', 'UTF-8'];
+        yield ['Test ϰϰ', 'Test fòô bàř', 7, 'ϰϰ', 'UTF-8'];
+        yield ['Teϰϰ', 'Test fòô bàř', 4, 'ϰϰ', 'UTF-8'];
+        yield ['What are your pl...', 'What are your plans today?', 19, '...'];
     }
 
-    /**
-     * @return array
-     */
-    public function underscoredProvider(): array
+    public function underscoredProvider(): \Iterator
     {
-        return [
-            ['test_case', 'testCase'],
-            ['test_case', 'Test-Case'],
-            ['test_case', 'test case'],
-            ['test_case', 'test -case'],
-            ['_test_case', '-test - case'],
-            ['test_case', 'test_case'],
-            ['test_c_test', '  test c test'],
-            ['test_u_case', 'TestUCase'],
-            ['test_c_c_test', 'TestCCTest'],
-            ['string_with1number', 'string_with1number'],
-            ['string_with_2_2_numbers', 'String-with_2_2 numbers'],
-            ['1test2case', '1test2case'],
-            ['yes_we_can', 'yesWeCan'],
-            ['test_σase', 'test Σase', 'UTF-8'],
-            ['στανιλ_case', 'Στανιλ case', 'UTF-8'],
-            ['σash_case', 'Σash  Case', 'UTF-8'],
-        ];
+        yield ['test_case', 'testCase'];
+        yield ['test_case', 'Test-Case'];
+        yield ['test_case', 'test case'];
+        yield ['test_case', 'test -case'];
+        yield ['_test_case', '-test - case'];
+        yield ['test_case', 'test_case'];
+        yield ['test_c_test', '  test c test'];
+        yield ['test_u_case', 'TestUCase'];
+        yield ['test_c_c_test', 'TestCCTest'];
+        yield ['string_with1number', 'string_with1number'];
+        yield ['string_with_2_2_numbers', 'String-with_2_2 numbers'];
+        yield ['1test2case', '1test2case'];
+        yield ['yes_we_can', 'yesWeCan'];
+        yield ['test_σase', 'test Σase', 'UTF-8'];
+        yield ['στανιλ_case', 'Στανιλ case', 'UTF-8'];
+        yield ['σash_case', 'Σash  Case', 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function upperCamelizeProvider(): array
+    public function upperCamelizeProvider(): \Iterator
     {
-        return [
-            ['CamelCase', 'camelCase'],
-            ['CamelCase', 'Camel-Case'],
-            ['CamelCase', 'camel case'],
-            ['CamelCase', 'camel -case'],
-            ['CamelCase', 'camel - case'],
-            ['CamelCase', 'camel_case'],
-            ['CamelCTest', 'camel c test'],
-            ['StringWith1Number', 'string_with1number'],
-            ['StringWith22Numbers', 'string-with-2-2 numbers'],
-            ['1Camel2Case', '1camel2case'],
-            ['CamelΣase', 'camel σase', 'UTF-8'],
-            ['ΣτανιλCase', 'στανιλ case', 'UTF-8'],
-            ['ΣamelCase', 'Σamel  Case', 'UTF-8'],
-        ];
+        yield ['CamelCase', 'camelCase'];
+        yield ['CamelCase', 'Camel-Case'];
+        yield ['CamelCase', 'camel case'];
+        yield ['CamelCase', 'camel -case'];
+        yield ['CamelCase', 'camel - case'];
+        yield ['CamelCase', 'camel_case'];
+        yield ['CamelCTest', 'camel c test'];
+        yield ['StringWith1Number', 'string_with1number'];
+        yield ['StringWith22Numbers', 'string-with-2-2 numbers'];
+        yield ['1Camel2Case', '1camel2case'];
+        yield ['CamelΣase', 'camel σase', 'UTF-8'];
+        yield ['ΣτανιλCase', 'στανιλ case', 'UTF-8'];
+        yield ['ΣamelCase', 'Σamel  Case', 'UTF-8'];
     }
 
-    /**
-     * @return array
-     */
-    public function upperCaseFirstProvider(): array
+    public function upperCaseFirstProvider(): \Iterator
     {
-        return [
-            ['Test', 'Test'],
-            ['Test', 'test'],
-            ['1a', '1a'],
-            ['Σ test', 'σ test', 'UTF-8'],
-            [' σ test', ' σ test', 'UTF-8'],
-        ];
+        yield ['Test', 'Test'];
+        yield ['Test', 'test'];
+        yield ['1a', '1a'];
+        yield ['Σ test', 'σ test', 'UTF-8'];
+        yield [' σ test', ' σ test', 'UTF-8'];
     }
 }

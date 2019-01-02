@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace voku\tests;
+
 use voku\helper\Bootup;
 use voku\helper\UTF8;
 
@@ -24,7 +26,7 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         UTF8::checkForSupport();
 
         $c = 'à';
-        $d = Normalizer::normalize($c, Normalizer::NFD);
+        $d = \Normalizer::normalize($c, \Normalizer::NFD);
 
         $bak = [
             $_GET,

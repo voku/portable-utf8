@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-declare(strict_types=0);
+declare(strict_types=1);
+
+namespace voku\tests;
 
 use Symfony\Polyfill\Iconv\Iconv as p;
 use voku\helper\UTF8;

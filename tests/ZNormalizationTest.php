@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace voku\tests;
+
 //use Normalizer as n;
 use Symfony\Polyfill\Intl\Normalizer\Normalizer as n;
 

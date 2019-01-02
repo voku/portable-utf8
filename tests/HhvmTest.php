@@ -1,4 +1,8 @@
-<?php declare(strict_types=0);
+<?php
+
+declare(strict_types=0);
+
+namespace voku\tests;
 
 /**
  * Class HhvmTest
