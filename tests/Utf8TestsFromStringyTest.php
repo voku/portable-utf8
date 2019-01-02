@@ -171,7 +171,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         // One needle
         $singleNeedle = \array_map(
-            function ($array) {
+            static function ($array) {
                 $array[2] = [$array[2]];
 
                 return $array;
@@ -222,7 +222,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         // One needle
         $singleNeedle = \array_map(
-            function ($array) {
+            static function ($array) {
                 $array[2] = [$array[2]];
 
                 return $array;
@@ -1341,7 +1341,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testAddUniqueIdentifier()
     {
         $uniquIDs = [];
-        for ($i = 0; $i <= 100; $i++) {
+        for ($i = 0; $i <= 100; ++$i) {
             $uniquIDs[] = UTF8::get_unique_string();
         }
 
@@ -1450,10 +1450,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider atProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $index
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $index
+     * @param $encoding
      */
     public function testAt($expected, $str, $index, $encoding = '')
     {
@@ -1575,9 +1575,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider camelizeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testCamelize($expected, $str, $encoding = '')
     {
@@ -1589,8 +1589,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider charsProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testChars($expected, $str)
     {
@@ -1605,8 +1605,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider collapseWhitespaceProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testCollapseWhitespace($expected, $str)
     {
@@ -1665,9 +1665,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider dasherizeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testDasherize($expected, $str, $encoding = '')
     {
@@ -1679,10 +1679,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider delimitProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $delimiter
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $delimiter
+     * @param $encoding
      */
     public function testDelimit($expected, $str, $delimiter, $encoding = '')
     {
@@ -1734,9 +1734,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider ensureLeftProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $substring
+     * @param $expected
+     * @param $str
+     * @param $substring
      */
     public function testEnsureLeft($expected, $str, $substring)
     {
@@ -1748,9 +1748,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider ensureRightProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $substring
+     * @param $expected
+     * @param $str
+     * @param $substring
      */
     public function testEnsureRight($expected, $str, $substring)
     {
@@ -1762,9 +1762,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider escapeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testEscape($expected, $str, $encoding = '')
     {
@@ -1877,10 +1877,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider firstProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $n
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $n
+     * @param $encoding
      */
     public function testFirst($expected, $str, $n, $encoding = '')
     {
@@ -1892,8 +1892,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider hasLowerCaseProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testHasLowerCase($expected, $str)
     {
@@ -1906,8 +1906,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider hasUpperCaseProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testHasUpperCase($expected, $str)
     {
@@ -1920,10 +1920,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider htmlDecodeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param int  $flags
-     * @param      $encoding
+     * @param     $expected
+     * @param     $str
+     * @param int $flags
+     * @param     $encoding
      */
     public function testHtmlDecode($expected, $str, $flags = \ENT_COMPAT, $encoding = '')
     {
@@ -1935,10 +1935,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider htmlEncodeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param int  $flags
-     * @param      $encoding
+     * @param     $expected
+     * @param     $str
+     * @param int $flags
+     * @param     $encoding
      */
     public function testHtmlEncode($expected, $str, $flags = \ENT_COMPAT, $encoding = '')
     {
@@ -1950,8 +1950,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider humanizeProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testHumanize($expected, $str)
     {
@@ -1963,11 +1963,11 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider indexOfProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $subStr
-     * @param int  $offset
-     * @param      $encoding
+     * @param     $expected
+     * @param     $str
+     * @param     $subStr
+     * @param int $offset
+     * @param     $encoding
      */
     public function testIndexOf($expected, $str, $subStr, $offset = 0, $encoding = '')
     {
@@ -1979,11 +1979,11 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider indexOfLastProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $subStr
-     * @param int  $offset
-     * @param      $encoding
+     * @param     $expected
+     * @param     $str
+     * @param     $subStr
+     * @param int $offset
+     * @param     $encoding
      */
     public function testIndexOfLast($expected, $str, $subStr, $offset = 0, $encoding = '')
     {
@@ -1995,11 +1995,11 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider insertProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $substring
-     * @param      $index
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $substring
+     * @param $index
+     * @param $encoding
      */
     public function testInsert($expected, $str, $substring, $index, $encoding = '')
     {
@@ -2011,8 +2011,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider isAlphaProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testIsAlpha($expected, $str)
     {
@@ -2025,8 +2025,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider isAlphanumericProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testIsAlphanumeric($expected, $str)
     {
@@ -2053,8 +2053,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider isBlankProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testIsBlank($expected, $str)
     {
@@ -2067,8 +2067,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider isHexadecimalProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testIsHexadecimal($expected, $str)
     {
@@ -2115,8 +2115,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider isLowerCaseProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testIsLowerCase($expected, $str)
     {
@@ -2129,8 +2129,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider isSerializedProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testIsSerialized($expected, $str)
     {
@@ -2143,8 +2143,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider isUpperCaseProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testIsUpperCase($expected, $str)
     {
@@ -2157,10 +2157,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider lastProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $n
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $n
+     * @param $encoding
      */
     public function testLast($expected, $str, $n, $encoding = '')
     {
@@ -2217,9 +2217,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider lengthProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testLength($expected, $str, $encoding = '')
     {
@@ -2232,8 +2232,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider linesProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testLines($expected, $str)
     {
@@ -2246,7 +2246,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         $counter = \count($expected);
         /** @noinspection ForeachInvariantsInspection */
-        for ($i = 0; $i < $counter; $i++) {
+        for ($i = 0; $i < $counter; ++$i) {
             static::assertSame($expected[$i], $result[$i]);
         }
     }
@@ -2273,10 +2273,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider longestCommonPrefixProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $otherStr
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $otherStr
+     * @param $encoding
      */
     public function testLongestCommonPrefix($expected, $str, $otherStr, $encoding = '')
     {
@@ -2288,10 +2288,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider longestCommonSubstringProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $otherStr
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $otherStr
+     * @param $encoding
      */
     public function testLongestCommonSubstring($expected, $str, $otherStr, $encoding = '')
     {
@@ -2303,10 +2303,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider longestCommonSuffixProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $otherStr
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $otherStr
+     * @param $encoding
      */
     public function testLongestCommonSuffix($expected, $str, $otherStr, $encoding = '')
     {
@@ -2318,9 +2318,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider lowerCaseFirstProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testLowerCaseFirst($expected, $str, $encoding = '')
     {
@@ -2456,10 +2456,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider removeLeftProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $substring
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $substring
+     * @param $encoding
      */
     public function testRemoveLeft($expected, $str, $substring, $encoding = '')
     {
@@ -2471,10 +2471,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider removeRightProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $substring
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $substring
+     * @param $encoding
      */
     public function testRemoveRight($expected, $str, $substring, $encoding = '')
     {
@@ -2486,9 +2486,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider repeatProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $multiplier
+     * @param $expected
+     * @param $str
+     * @param $multiplier
      */
     public function testRepeat($expected, $str, $multiplier)
     {
@@ -2534,10 +2534,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider replaceBeginningProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $search
-     * @param      $replacement
+     * @param $expected
+     * @param $str
+     * @param $search
+     * @param $replacement
      */
     public function testReplaceBeginning($expected, $str, $search, $replacement)
     {
@@ -2549,10 +2549,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider ireplaceBeginningProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $search
-     * @param      $replacement
+     * @param $expected
+     * @param $str
+     * @param $search
+     * @param $replacement
      */
     public function testTestiReplaceBeginning($expected, $str, $search, $replacement)
     {
@@ -2564,10 +2564,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider replaceEndingProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $search
-     * @param      $replacement
+     * @param $expected
+     * @param $str
+     * @param $search
+     * @param $replacement
      */
     public function testReplaceEnding($expected, $str, $search, $replacement)
     {
@@ -2579,10 +2579,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider ireplaceEndingProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $search
-     * @param      $replacement
+     * @param $expected
+     * @param $str
+     * @param $search
+     * @param $replacement
      */
     public function testTestiReplaceEnding($expected, $str, $search, $replacement)
     {
@@ -2594,8 +2594,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider reverseProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testReverse($expected, $str)
     {
@@ -2639,8 +2639,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider shuffleProvider()
      *
-     * @param      $str
-     * @param      $encoding
+     * @param $str
+     * @param $encoding
      */
     public function testShuffle($str, $encoding = '')
     {
@@ -2654,7 +2654,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         // We'll make sure that the chars are present after shuffle
         $length = UTF8::strlen($str, $encoding);
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $char = UTF8::substr($str, $i, 1, $encoding);
             $countBefore = UTF8::substr_count($str, $char, 0, null, $encoding);
             $countAfter = UTF8::substr_count($result, $char, 0, null, $encoding);
@@ -2681,9 +2681,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider snakeizeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testSnakeize($expected, $str, $encoding = '')
     {
@@ -2695,10 +2695,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider splitProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $pattern
-     * @param int  $limit
+     * @param     $expected
+     * @param     $str
+     * @param     $pattern
+     * @param int $limit
      */
     public function testSplit($expected, $str, $pattern, $limit = -1)
     {
@@ -2711,7 +2711,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         $counter = \count($expected);
         /** @noinspection ForeachInvariantsInspection */
-        for ($i = 0; $i < $counter; $i++) {
+        for ($i = 0; $i < $counter; ++$i) {
             static::assertSame($expected[$i], $result[$i]);
         }
     }
@@ -2759,8 +2759,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider stripWhitespaceProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testStripWhitespace($expected, $str)
     {
@@ -2883,9 +2883,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider swapCaseProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testSwapCase($expected, $str, $encoding = '')
     {
@@ -3031,8 +3031,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider toBooleanProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testToBoolean($expected, $str)
     {
@@ -3045,9 +3045,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider toLowerCaseProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testToLowerCase($expected, $str, $encoding = '')
     {
@@ -3087,9 +3087,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider toTitleCaseProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testToTitleCase($expected, $str, $encoding = '')
     {
@@ -3101,9 +3101,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider toUpperCaseProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testToUpperCase($expected, $str, $encoding = '')
     {
@@ -3173,8 +3173,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider underscoredProvider()
      *
-     * @param      $expected
-     * @param      $str
+     * @param $expected
+     * @param $str
      */
     public function testUnderscored($expected, $str)
     {
@@ -3186,9 +3186,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider upperCamelizeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testUpperCamelize($expected, $str, $encoding = '')
     {
@@ -3200,9 +3200,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider upperCaseFirstProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param      $encoding
+     * @param $expected
+     * @param $str
+     * @param $encoding
      */
     public function testUpperCaseFirst($expected, $str, $encoding = '')
     {
@@ -3319,7 +3319,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
             foreach ($testResults as $before => $after) {
                 static::assertSame($after, UTF8::cleanup($before), 'tested: ' . $counter);
             }
-            $counter++;
+            ++$counter;
         }
     }
 

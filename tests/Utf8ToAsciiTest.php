@@ -143,7 +143,7 @@ final class Utf8ToAsciiTest extends \PHPUnit\Framework\TestCase
             '👍 💩 😄 ❤ 👍 💩 😄 ❤أحبك'           => '? ? ?  ? ? ? aHbk',
         ];
 
-        for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
             foreach ($tests as $before => $after) {
                 static::assertSame($after, UTF8::to_ascii($before), 'tested: ' . $before);
                 static::assertSame($after, UTF8::str_transliterate($before), 'tested: ' . $before);

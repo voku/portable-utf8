@@ -58,7 +58,7 @@ class Bootup
     /**
      * Filter current REQUEST_URI .
      *
-     * @param string|null $uri <p>If null is set, then the server REQUEST_URI will be used.</p>
+     * @param string|null $uri  <p>If null is set, then the server REQUEST_URI will be used.</p>
      * @param bool        $exit
      *
      * @return mixed
@@ -89,7 +89,7 @@ class Bootup
 
         $uri = (string) \preg_replace_callback(
             '/[\x80-\xFF]+/',
-            function ($m) {
+            static function ($m) {
                 return \rawurlencode($m[0]);
             },
             $uri
@@ -97,7 +97,7 @@ class Bootup
 
         $uri = (string) \preg_replace_callback(
             '/(?:%[89A-F][0-9A-F])+/i',
-            function ($m) {
+            static function ($m) {
                 return \rawurlencode(UTF8::rawurldecode($m[0]));
             },
             $uri
@@ -142,7 +142,7 @@ class Bootup
      * @throws \Exception if it was not possible to gather sufficient entropy
      *
      * @return false|string
-     *                       <strong>false</strong> on error
+     *                      <strong>false</strong> on error
      */
     public static function get_random_bytes($length)
     {
@@ -175,7 +175,7 @@ class Bootup
      * @param string $version <p>e.g. "7.1"<p>
      *
      * @return bool
-     *               Return <strong>true</strong> if the current version is $version or higher
+     *              Return <strong>true</strong> if the current version is $version or higher
      */
     public static function is_php($version): bool
     {

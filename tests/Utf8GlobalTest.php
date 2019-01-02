@@ -19,6 +19,11 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
      */
     private $oldSupportArray;
 
+    protected function setUp()
+    {
+        \error_reporting(\E_STRICT);
+    }
+
     /**
      * helper-function for test -> "testCombineSomeUtf8Functions()"
      *
@@ -26,7 +31,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
      *
      * @return string
      */
-    public function cleanString($comment)
+    public function cleanString($comment): string
     {
         foreach (['fuck', 'foo', 'bar'] as $value) {
             $value = UTF8::trim($value);
@@ -59,15 +64,10 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    protected function setUp()
-    {
-        \error_reporting(\E_STRICT);
-    }
-
     /**
      * @return array
      */
-    public function stripWhitespaceProvider()
+    public function stripWhitespaceProvider(): array
     {
         return [
             ['foobar', '  foo   bar  '],
@@ -217,7 +217,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             static::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
         }
 
-        for ($i = 0; $i < 200; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i < 200; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -410,7 +410,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             foreach ($testResults as $before => $after) {
                 static::assertSame($after, UTF8::cleanup($testString), 'tested: ' . $counter);
             }
-            $counter++;
+            ++$counter;
         }
     }
 
@@ -1141,7 +1141,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             'test'         => 'test',
         ];
 
-        for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -1380,7 +1380,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             $testArray = \array_merge($testArray, $tmpTestArray);
         }
 
-        for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
             foreach ($testArray as $before => $after) {
                 static::assertSame($after, UTF8::html_entity_decode($before, \ENT_COMPAT), 'error by ' . $before);
             }
@@ -1956,13 +1956,13 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         $conter = 0;
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::is_utf16($actual), 'error by - ' . $conter . ' :' . $actual);
-            $conter++;
+            ++$conter;
         }
 
         $conter = 0;
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::isUtf16($actual), 'error by - ' . $conter . ' :' . $actual);
-            $conter++;
+            ++$conter;
         }
 
         static::assertFalse(UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
@@ -2027,13 +2027,13 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         $conter = 0;
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::is_utf32($actual), 'error by - ' . $conter . ' :' . $actual);
-            $conter++;
+            ++$conter;
         }
 
         $conter = 0;
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::isUtf32($actual), 'error by - ' . $conter . ' :' . $actual);
-            $conter++;
+            ++$conter;
         }
 
         static::assertFalse(UTF8::isUtf32(\file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
@@ -2101,13 +2101,13 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         $conter = 0;
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
-            $conter++;
+            ++$conter;
         }
 
         $conter = 0;
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::isUtf8($actual), 'error by - ' . $conter . ' :' . $actual);
-            $conter++;
+            ++$conter;
         }
 
         static::assertFalse(UTF8::is_utf8(\file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt'), true));
@@ -2371,7 +2371,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             " foo\t foo "                                                                         => ' foo	 foo ',
         ];
 
-        for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -2413,7 +2413,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             ''                 => 0,
         ];
 
-        for ($i = 0; $i < 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -2751,51 +2751,10 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
         static::assertSame('&#246;', UTF8::single_chr_html_encode('ö', false, 'UTF8'));
     }
 
-    protected function reactivateNativeUtf8Support()
-    {
-        if ($this->oldSupportArray === null) {
-            return;
-        }
-
-        $refObject = new \ReflectionObject(new UTF8());
-        $refProperty = $refObject->getProperty('SUPPORT');
-        $refProperty->setAccessible(true);
-
-        $refProperty->setValue(null, $this->oldSupportArray);
-    }
-
-    protected function disableNativeUtf8Support()
-    {
-        $refObject = new \ReflectionObject(new UTF8());
-        $refProperty = $refObject->getProperty('SUPPORT');
-        $refProperty->setAccessible(true);
-
-        if ($this->oldSupportArray === null) {
-            $this->oldSupportArray = $refProperty->getValue(null);
-        }
-
-        // skip this if we already have different results from "mbstring_func_overload"
-        if ($this->oldSupportArray['mbstring_func_overload'] === true) {
-            return;
-        }
-
-        $testArray = [
-            'already_checked_via_portable_utf8' => true,
-            'mbstring'                          => false,
-            'mbstring_func_overload'            => false,
-            'iconv'                             => false,
-            'intl'                              => false,
-            'intl__transliterator_list_ids'     => [],
-            'intlChar'                          => false,
-            'pcre_utf8'                         => false,
-        ];
-        $refProperty->setValue(null, $testArray);
-    }
-
     public function testSplit()
     {
         $oldSupportArray = null;
-        for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -2845,7 +2804,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             01                              => false, // binary
         ];
 
-        for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -3343,7 +3302,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     public function testStripos()
     {
-        for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -3448,7 +3407,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             // -1                           => 2,
         ];
 
-        for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -3597,7 +3556,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
     public function testStrpos()
     {
-        for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -4575,7 +4534,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
             foreach ($testResults as $before => $after) {
                 static::assertSame($after, UTF8::to_utf8(UTF8::cleanup($testString)), $counter . ' - ' . $before);
             }
-            $counter++;
+            ++$counter;
         }
 
         $testString = 'test' . UTF8::html_entity_decode('&nbsp;') . 'test';
@@ -4817,7 +4776,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
 
             static::assertSame($test, $result[$i]);
 
-            $i++;
+            ++$i;
         }
 
         // test with array
@@ -4930,7 +4889,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
      */
     public function testTrim($input, $output)
     {
-        for ($i = 0; $i <= 2; $i++) { // keep this loop for simple performance tests
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -5413,7 +5372,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function trimProvider()
+    public function trimProvider(): array
     {
         return [
             [
@@ -5438,7 +5397,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function trimProviderAdvanced()
+    public function trimProviderAdvanced(): array
     {
         return [
             [
@@ -5471,7 +5430,7 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function trimProviderAdvancedWithMoreThenTwoBytes()
+    public function trimProviderAdvancedWithMoreThenTwoBytes(): array
     {
         return [
             [
@@ -5499,5 +5458,46 @@ final class Utf8GlobalTest extends \PHPUnit\Framework\TestCase
                 'do not go gentle into that good night',
             ],
         ];
+    }
+
+    protected function reactivateNativeUtf8Support()
+    {
+        if ($this->oldSupportArray === null) {
+            return;
+        }
+
+        $refObject = new \ReflectionObject(new UTF8());
+        $refProperty = $refObject->getProperty('SUPPORT');
+        $refProperty->setAccessible(true);
+
+        $refProperty->setValue(null, $this->oldSupportArray);
+    }
+
+    protected function disableNativeUtf8Support()
+    {
+        $refObject = new \ReflectionObject(new UTF8());
+        $refProperty = $refObject->getProperty('SUPPORT');
+        $refProperty->setAccessible(true);
+
+        if ($this->oldSupportArray === null) {
+            $this->oldSupportArray = $refProperty->getValue(null);
+        }
+
+        // skip this if we already have different results from "mbstring_func_overload"
+        if ($this->oldSupportArray['mbstring_func_overload'] === true) {
+            return;
+        }
+
+        $testArray = [
+            'already_checked_via_portable_utf8' => true,
+            'mbstring'                          => false,
+            'mbstring_func_overload'            => false,
+            'iconv'                             => false,
+            'intl'                              => false,
+            'intl__transliterator_list_ids'     => [],
+            'intlChar'                          => false,
+            'pcre_utf8'                         => false,
+        ];
+        $refProperty->setValue(null, $testArray);
     }
 }
