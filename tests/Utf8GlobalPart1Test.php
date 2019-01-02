@@ -2098,10 +2098,12 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
         static::assertFalse(UTF8::is_utf8(\array_keys($testArray)));
 
-        $conter = 0;
-        foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
-            ++$conter;
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
+            $conter = 0;
+            foreach ($testArray as $actual => $expected) {
+                static::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
+                ++$conter;
+            }
         }
 
         $conter = 0;

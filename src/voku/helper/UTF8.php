@@ -3313,7 +3313,7 @@ final class UTF8
     public static function is_utf8($str, bool $strict = false): bool
     {
         if (\is_array($str) === true) {
-            foreach ($str as $k => $v) {
+            foreach ($str as $v) {
                 if (self::is_utf8($v, $strict) === false) {
                     return false;
                 }
@@ -11140,7 +11140,7 @@ final class UTF8
                 }
             }
 
-            if ($continue) {
+            if ($continue === true) {
                 continue;
             }
 
