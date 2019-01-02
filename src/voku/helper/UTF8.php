@@ -2136,7 +2136,7 @@ final class UTF8
      */
     public static function get_unique_string($entropyExtra = '', bool $md5 = true): string
     {
-        $uniqueHelper = \mt_rand() .
+        $uniqueHelper = \random_int(0, \mt_getrandmax()) .
                         \session_id() .
                         ($_SERVER['REMOTE_ADDR'] ?? '') .
                         ($_SERVER['SERVER_ADDR'] ?? '') .
