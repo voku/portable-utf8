@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.2.16 (2019-01-02)
+- update phpcs fixer config
+- optimizing via "rector/rector"
+
 ### 5.2.15 (2018-12-18)
 - optimize "getData()"
 - use phpcs fixer
