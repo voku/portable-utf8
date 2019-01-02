@@ -3214,41 +3214,41 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testUtf8ify()
     {
         $examples = [
-            ''                                     => [''],
+            '' => [''],
             // Valid UTF-8 + UTF-8 NO-BREAK SPACE
-            "κόσμε\xc2\xa0"                        => ['κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"],
+            "κόσμε\xc2\xa0" => ['κόσμε' . "\xc2\xa0" => 'κόσμε' . "\xc2\xa0"],
             // Valid UTF-8
-            '中'                                    => ['中' => '中'],
+            '中' => ['中' => '中'],
             // Valid UTF-8 + ISO-Error
-            'DÃ¼sseldorf'                          => ['Düsseldorf' => 'Düsseldorf'],
+            'DÃ¼sseldorf' => ['Düsseldorf' => 'Düsseldorf'],
             // Valid UTF-8 + Invalid Chars
-            "κόσμε\xa0\xa1-öäü"                    => ['κόσμε-öäü' => 'κόσμε-öäü'],
+            "κόσμε\xa0\xa1-öäü" => ['κόσμε-öäü' => 'κόσμε-öäü'],
             // Valid ASCII
-            'a'                                    => ['a' => 'a'],
+            'a' => ['a' => 'a'],
             // Valid ASCII + Invalid Chars
-            "a\xa0\xa1-öäü"                        => ['a-öäü' => 'a-öäü'],
+            "a\xa0\xa1-öäü" => ['a-öäü' => 'a-öäü'],
             // Valid 2 Octet Sequence
-            "\xc3\xb1"                             => ['ñ' => 'ñ'],
+            "\xc3\xb1" => ['ñ' => 'ñ'],
             // Invalid 2 Octet Sequence
-            "\xc3\x28"                             => ['�(' => '('],
+            "\xc3\x28" => ['�(' => '('],
             // Invalid Sequence Identifier
-            "\xa0\xa1"                             => ['��' => ''],
+            "\xa0\xa1" => ['��' => ''],
             // Valid 3 Octet Sequence
-            "\xe2\x82\xa1"                         => ['₡' => '₡'],
+            "\xe2\x82\xa1" => ['₡' => '₡'],
             // Invalid 3 Octet Sequence (in 2nd Octet)
-            "\xe2\x28\xa1"                         => ['�(�' => '('],
+            "\xe2\x28\xa1" => ['�(�' => '('],
             // Invalid 3 Octet Sequence (in 3rd Octet)
-            "\xe2\x82\x28"                         => ['�(' => '('],
+            "\xe2\x82\x28" => ['�(' => '('],
             // Valid 4 Octet Sequence
-            "\xf0\x90\x8c\xbc"                     => ['𐌼' => '𐌼'],
+            "\xf0\x90\x8c\xbc" => ['𐌼' => '𐌼'],
             // Invalid 4 Octet Sequence (in 2nd Octet)
-            "\xf0\x28\x8c\xbc"                     => ['�(��' => '('],
+            "\xf0\x28\x8c\xbc" => ['�(��' => '('],
             // Invalid 4 Octet Sequence (in 3rd Octet)
-            "\xf0\x90\x28\xbc"                     => ['�(�' => '('],
+            "\xf0\x90\x28\xbc" => ['�(�' => '('],
             // Invalid 4 Octet Sequence (in 4th Octet)
-            " \xf0\x28\x8c\x28"                    => ['�(�(' => ' (('],
+            " \xf0\x28\x8c\x28" => ['�(�(' => ' (('],
             // Valid 5 Octet Sequence (but not Unicode!)
-            "\xf8\xa1\xa1\xa1\xa1"                 => ['�' => ''],
+            "\xf8\xa1\xa1\xa1\xa1" => ['�' => ''],
             // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
             "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => ['�' => ' '],
             // test for database-insert
@@ -3258,7 +3258,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         <p>
           &nbsp;�&foo;❤&nbsp;
         </p>
-        '                              => [
+        ' => [
                 '' => '
         <h1>«Düsseldorf» &ndash; &lt;Köln&gt;</h1>
         <br /><br />
@@ -3277,39 +3277,39 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         $examples = [
             // Valid UTF-8
-            'κόσμε'                    => ['κόσμε' => 'κόσμε'],
-            '中'                        => ['中' => '中'],
-            '«foobar»'                 => ['«foobar»' => '«foobar»'],
+            'κόσμε'    => ['κόσμε' => 'κόσμε'],
+            '中'        => ['中' => '中'],
+            '«foobar»' => ['«foobar»' => '«foobar»'],
             // Valid UTF-8 + Invalied Chars
-            "κόσμε\xa0\xa1-öäü"        => ['κόσμε-öäü' => 'κόσμε-öäü'],
+            "κόσμε\xa0\xa1-öäü" => ['κόσμε-öäü' => 'κόσμε-öäü'],
             // Valid ASCII
-            'a'                        => ['a' => 'a'],
+            'a' => ['a' => 'a'],
             // Valid emoji (non-UTF-8)
-            '😃'                       => ['😃' => '😃'],
+            '😃' => ['😃' => '😃'],
             // Valid ASCII + Invalied Chars
-            "a\xa0\xa1-öäü"            => ['a-öäü' => 'a-öäü'],
+            "a\xa0\xa1-öäü" => ['a-öäü' => 'a-öäü'],
             // Valid 2 Octet Sequence
-            "\xc3\xb1"                 => ['ñ' => 'ñ'],
+            "\xc3\xb1" => ['ñ' => 'ñ'],
             // Invalid 2 Octet Sequence
-            "\xc3\x28"                 => ['�(' => '('],
+            "\xc3\x28" => ['�(' => '('],
             // Invalid Sequence Identifier
-            "\xa0\xa1"                 => ['��' => ''],
+            "\xa0\xa1" => ['��' => ''],
             // Valid 3 Octet Sequence
-            "\xe2\x82\xa1"             => ['₡' => '₡'],
+            "\xe2\x82\xa1" => ['₡' => '₡'],
             // Invalid 3 Octet Sequence (in 2nd Octet)
-            "\xe2\x28\xa1"             => ['�(�' => '('],
+            "\xe2\x28\xa1" => ['�(�' => '('],
             // Invalid 3 Octet Sequence (in 3rd Octet)
-            "\xe2\x82\x28"             => ['�(' => '('],
+            "\xe2\x82\x28" => ['�(' => '('],
             // Valid 4 Octet Sequence
-            "\xf0\x90\x8c\xbc"         => ['𐌼' => '𐌼'],
+            "\xf0\x90\x8c\xbc" => ['𐌼' => '𐌼'],
             // Invalid 4 Octet Sequence (in 2nd Octet)
-            "\xf0\x28\x8c\xbc"         => ['�(��' => '('],
+            "\xf0\x28\x8c\xbc" => ['�(��' => '('],
             // Invalid 4 Octet Sequence (in 3rd Octet)
-            "\xf0\x90\x28\xbc"         => ['�(�' => '('],
+            "\xf0\x90\x28\xbc" => ['�(�' => '('],
             // Invalid 4 Octet Sequence (in 4th Octet)
-            "\xf0\x28\x8c\x28"         => ['�(�(' => '(('],
+            "\xf0\x28\x8c\x28" => ['�(�(' => '(('],
             // Valid 5 Octet Sequence (but not Unicode!)
-            "\xf8\xa1\xa1\xa1\xa1"     => ['�' => ''],
+            "\xf8\xa1\xa1\xa1\xa1" => ['�' => ''],
             // Valid 6 Octet Sequence (but not Unicode!)
             "\xfc\xa1\xa1\xa1\xa1\xa1" => ['�' => ''],
         ];
