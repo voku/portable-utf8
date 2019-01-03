@@ -2048,118 +2048,103 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame('Σ', UTF8::int_to_chr('0931'));
     }
 
-    /**
-     * @return array
-     */
-    public function trimProvider(): array
+    public function trimProvider(): \Iterator
     {
-        return [
-            [
-                1,
-                '1',
-            ],
-            [
-                -1,
-                '-1',
-            ],
-            [
-                '  ',
-                '',
-            ],
-            [
-                '',
-                '',
-            ],
-            [
-                '　中文空白　 ',
-                '中文空白',
-            ],
-            [
-                'do not go gentle into that good night',
-                'do not go gentle into that good night',
-            ],
+        yield [
+            1,
+            '1',
+        ];
+        yield [
+            -1,
+            '-1',
+        ];
+        yield [
+            '  ',
+            '',
+        ];
+        yield [
+            '',
+            '',
+        ];
+        yield [
+            '　中文空白　 ',
+            '中文空白',
+        ];
+        yield [
+            'do not go gentle into that good night',
+            'do not go gentle into that good night',
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function trimProviderAdvanced(): array
+    public function trimProviderAdvanced(): \Iterator
     {
-        return [
-            [
-                1,
-                '1',
-            ],
-            [
-                -1,
-                '-1',
-            ],
-            [
-                '  ',
-                '',
-            ],
-            [
-                '',
-                '',
-            ],
-            [
-                ' 白 ',
-                '白',
-            ],
-            [
-                '   白白 ',
-                '白白',
-            ],
-            [
-                '　中文空白',
-                '　中文空白',
-            ],
-            [
-                'do not go gentle into that good night',
-                'do not go gentle into that good night',
-            ],
+        yield [
+            1,
+            '1',
+        ];
+        yield [
+            -1,
+            '-1',
+        ];
+        yield [
+            '  ',
+            '',
+        ];
+        yield [
+            '',
+            '',
+        ];
+        yield [
+            ' 白 ',
+            '白',
+        ];
+        yield [
+            '   白白 ',
+            '白白',
+        ];
+        yield [
+            '　中文空白',
+            '　中文空白',
+        ];
+        yield [
+            'do not go gentle into that good night',
+            'do not go gentle into that good night',
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function trimProviderAdvancedWithMoreThenTwoBytes(): array
+    public function trimProviderAdvancedWithMoreThenTwoBytes(): \Iterator
     {
-        return [
-            [
-                1,
-                '1',
-            ],
-            [
-                -1,
-                '-1',
-            ],
-            [
-                '  ',
-                '  ',
-            ],
-            [
-                '',
-                '',
-            ],
-            [
-                '白',
-                '',
-            ],
-            [
-                '白白',
-                '',
-            ],
-            [
-                '　中文空白',
-                '　中文空',
-            ],
-            [
-                'do not go gentle into that good night',
-                'do not go gentle into that good night',
-            ],
+        yield [
+            1,
+            '1',
+        ];
+        yield [
+            -1,
+            '-1',
+        ];
+        yield [
+            '  ',
+            '  ',
+        ];
+        yield [
+            '',
+            '',
+        ];
+        yield [
+            '白',
+            '',
+        ];
+        yield [
+            '白白',
+            '',
+        ];
+        yield [
+            '　中文空白',
+            '　中文空',
+        ];
+        yield [
+            'do not go gentle into that good night',
+            'do not go gentle into that good night',
         ];
     }
 

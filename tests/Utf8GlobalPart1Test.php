@@ -64,25 +64,25 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
-    /**
-     * @return array
-     */
-    public function stripWhitespaceProvider(): array
+    public function stripWhitespaceProvider(): \Iterator
     {
-        return [
-            ['foobar', '  foo   bar  '],
-            ['teststring', 'test string'],
-            ['Οσυγγραφέας', '   Ο     συγγραφέας  '],
-            ['123', ' 123 '],
-            ['', ' ', 'UTF-8'], // no-break space (U+00A0)
-            ['', '           ', 'UTF-8'], // spaces U+2000 to U+200A
-            ['', ' ', 'UTF-8'], // narrow no-break space (U+202F)
-            ['', ' ', 'UTF-8'], // medium mathematical space (U+205F)
-            ['', '　', 'UTF-8'], // ideographic space (U+3000)
-            ['123', '  1  2  3　　', 'UTF-8'],
-            ['', ' '],
-            ['', ''],
-        ];
+        yield ['foobar', '  foo   bar  '];
+        yield ['teststring', 'test string'];
+        yield ['Οσυγγραφέας', '   Ο     συγγραφέας  '];
+        yield ['123', ' 123 '];
+        yield ['', ' ', 'UTF-8'];
+        // no-break space (U+00A0)
+        yield ['', '           ', 'UTF-8'];
+        // spaces U+2000 to U+200A
+        yield ['', ' ', 'UTF-8'];
+        // narrow no-break space (U+202F)
+        yield ['', ' ', 'UTF-8'];
+        // medium mathematical space (U+205F)
+        yield ['', '　', 'UTF-8'];
+        // ideographic space (U+3000)
+        yield ['123', '  1  2  3　　', 'UTF-8'];
+        yield ['', ' '];
+        yield ['', ''];
     }
 
     public function testAccess()
