@@ -107,7 +107,7 @@ before_script:
 script:
   - mkdir -p build/logs
   - php vendor/bin/phpunit -c phpunit.xml --debug
-  - php vendor/bin/phpstan analyse --level=3 --configuration=phpstan.neon src
+  - php vendor/bin/phpstan analyse --level=7 --configuration=phpstan.neon src
 
 after_script:
   - php vendor/bin/coveralls -v

@@ -17,13 +17,13 @@ final class Utf8StrcspnTest extends \PHPUnit\Framework\TestCase
     public function testNoCharlist()
     {
         $str = 'iñtërnâtiônàlizætiøn';
-        static::assertNull(u::strcspn($str, ''));
+        static::assertSame(20, u::strcspn($str, ''));
     }
 
     public function testEmptyInput()
     {
         $str = '';
-        static::assertNull(u::strcspn($str, "\n"));
+        static::assertSame(0, u::strcspn($str, "\n"));
     }
 
     public function testNoMatchSingleByteSearch()
@@ -57,6 +57,22 @@ final class Utf8StrcspnTest extends \PHPUnit\Framework\TestCase
     {
         $str = 'internationalization';
         static::assertSame(\strcspn($str, 'a'), u::strcspn($str, 'a'));
+    }
+
+    public function testCompatibleWithPhpNativeFunction()
+    {
+        $str = '';
+        static::assertSame(\strcspn($str, 'a'), u::strcspn($str, 'a'));
+
+        // ---
+
+        $str = 'internationalization';
+        static::assertSame(\strcspn($str, ''), u::strcspn($str, ''));
+
+        // ---
+
+        $str = 'internationalization';
+        static::assertSame(\strcspn($str, 't', 19), u::strcspn($str, 't', 19));
     }
 
     public function testLinefeed()

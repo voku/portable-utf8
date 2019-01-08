@@ -5,4 +5,23 @@ parameters:
     autoload_files:
         - %rootDir%/vendor/autoload.php
     ignoreErrors:
+        # phpstan errors?
+        - '#between \*NEVER\* and#'
+        - '#Strict comparison using === between int and false will always evaluate to false#' # already created a pull request
+        - '#Strict comparison using === between 1\|2\|3\|4\|5 and 0 will always evaluate to false#'
+        # ignore errors form breaking change fixes
+        - '#Result of && is always false#'
+        - '#Strict comparison using === between string and false will always evaluate to false#'
+        - '#Strict comparison using !== between true and true will always evaluate to false#'
+        # ignore
         - '#Binary operation ".*" between string#'
+        - '#Casting to .* something .* already .*#'
+        - '#voku\\helper\\UTF8::html_entity_decode\(\) expects string, array<string>|string given#'
+        - '#voku\\helper\\UTF8::fix_utf8\(\) should return array<string>\|string but returns array<array<string>\|string>#'
+        - '#voku\\helper\\UTF8::to_utf8\(\) should return array<string>\|string but returns array<array<string>\|string>#'
+        - '#voku\\helper\\UTF8::to_iso8859\(\) should return array<string>\|string but returns array<array<string>\|string>#'
+        - '#voku\\helper\\UTF8::substr_replace\(\) should return array<string>\|string but returns array<array<string>\|string>#'
+        - '#voku\\helper\\UTF8::encode\(\) should return string but returns array<string>\|string#'
+        - '#voku\\helper\\UTF8::split\(\) should return array<string> but returns array<array<string>\|int\|string>#'
+        - '#voku\\helper\\UTF8::str_replace_first\(\) should return string but returns array<string>\|string#'
+        - '#voku\\helper\\UTF8::str_replace_last\(\) should return string but returns array<string>\|string#'

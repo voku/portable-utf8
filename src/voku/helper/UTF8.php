@@ -983,7 +983,12 @@ final class UTF8
         }
 
         if ($toEncoding === 'JSON') {
-            return self::json_encode($str);
+            $return = self::json_encode($str);
+            if ($return === false) {
+                throw new \InvalidArgumentException('The input string [' . $str . '] can not be used for json_encode().');
+            }
+
+            return $return;
         }
         if ($fromEncoding === 'JSON') {
             $str = self::json_decode($str);
@@ -1159,9 +1164,8 @@ final class UTF8
         }
 
         if (empty($search)) {
-            $stringLength = self::strlen($str, $encoding);
-
             if ($length > 0) {
+                $stringLength = (int) self::strlen($str, $encoding);
                 $end = ($length - 1) > $stringLength ? $stringLength : ($length - 1);
             } else {
                 $end = 0;
@@ -1199,20 +1203,20 @@ final class UTF8
         }
 
         if ($wordPos && $halfSide > 0) {
-            $l = $pos_start + $length - 1;
-            $realLength = self::strlen($str, $encoding);
+            $offset = $pos_start + $length - 1;
+            $realLength = (int) self::strlen($str, $encoding);
 
-            if ($l > $realLength) {
-                $l = $realLength;
+            if ($offset > $realLength) {
+                $offset = $realLength;
             }
 
             $pos_end = (int) \min(
-                    self::strpos($str, ' ', $l, $encoding),
-                    self::strpos($str, '.', $l, $encoding)
+                    self::strpos($str, ' ', $offset, $encoding),
+                    self::strpos($str, '.', $offset, $encoding)
                 ) - $pos_start;
 
             if (!$pos_end || $pos_end <= 0) {
-                $strSub = self::substr($str, $pos_start, self::strlen($str), $encoding);
+                $strSub = self::substr($str, $pos_start, (int) self::strlen($str), $encoding);
                 if ($strSub !== false) {
                     $extract = $replacerForSkippedText . \ltrim($strSub, $trimChars);
                 } else {
@@ -1227,16 +1231,16 @@ final class UTF8
                 }
             }
         } else {
-            $l = $length - 1;
-            $trueLength = self::strlen($str, $encoding);
+            $offset = $length - 1;
+            $trueLength = (int) self::strlen($str, $encoding);
 
-            if ($l > $trueLength) {
-                $l = $trueLength;
+            if ($offset > $trueLength) {
+                $offset = $trueLength;
             }
 
             $pos_end = \min(
-                self::strpos($str, ' ', $l, $encoding),
-                self::strpos($str, '.', $l, $encoding)
+                self::strpos($str, ' ', $offset, $encoding),
+                self::strpos($str, '.', $offset, $encoding)
             );
 
             if ($pos_end) {
@@ -1912,7 +1916,7 @@ final class UTF8
         }
 
         $str_info = self::substr_in_byte($str, 0, 2);
-        if (self::strlen_in_byte($str_info) !== 2) {
+        if ($str_info === false || self::strlen_in_byte($str_info) !== 2) {
             return $fallback;
         }
 
@@ -2336,7 +2340,7 @@ final class UTF8
 
             // decode numeric & UTF16 two byte entities
             $str = \html_entity_decode(
-                \preg_replace('/(&#(?:x0*[0-9a-f]{2,6}(?![0-9a-f;])|(?:0*\d{2,6}(?![0-9;]))))/iS', '$1;', $str),
+                (string) \preg_replace('/(&#(?:x0*[0-9a-f]{2,6}(?![0-9a-f;])|(?:0*\d{2,6}(?![0-9;]))))/iS', '$1;', $str),
                 $flags,
                 $encoding
             );
@@ -2952,9 +2956,7 @@ final class UTF8
                 throw new \RuntimeException('ext-fileinfo: is not installed');
             }
 
-            /** @noinspection PhpComposerExtensionStubsInspection */
-            $finfo = new \finfo(\FILEINFO_MIME_ENCODING);
-            $finfo_encoding = $finfo->buffer($input);
+            $finfo_encoding = (new \finfo(\FILEINFO_MIME_ENCODING))->buffer($input);
             if ($finfo_encoding && $finfo_encoding === 'binary') {
                 return true;
             }
@@ -4229,10 +4231,9 @@ final class UTF8
         }
 
         return \array_map(
-            [
-                self::class,
-                'chr',
-            ],
+            static function ($i) {
+                return (string) self::chr($i);
+            },
             \range($start, $end)
         );
     }
@@ -4351,7 +4352,7 @@ final class UTF8
                     return '';
                 }
 
-                $strLength -= $bomByteLength;
+                $strLength -= (int) $bomByteLength;
 
                 $str = (string) $strTmp;
             }
@@ -4460,7 +4461,7 @@ final class UTF8
         if (self::str_starts_with($str, $substring)) {
             return (string) self::substr(
                 $str,
-                self::strlen($substring, $encoding),
+                (int) self::strlen($substring, $encoding),
                 null,
                 $encoding
             );
@@ -5362,7 +5363,7 @@ final class UTF8
      */
     public static function str_insert(string $str, string $substring, int $index, string $encoding = 'UTF-8'): string
     {
-        $len = self::strlen($str, $encoding);
+        $len = (int) self::strlen($str, $encoding);
 
         if ($index > $len) {
             return $str;
@@ -5972,14 +5973,15 @@ final class UTF8
     /**
      * Pad a UTF-8 string to given length with another string.
      *
-     * @param string $str        <p>The input string.</p>
-     * @param int    $pad_length <p>The length of return string.</p>
-     * @param string $pad_string [optional] <p>String to use for padding the input string.</p>
-     * @param int    $pad_type   [optional] <p>
-     *                           Can be <strong>STR_PAD_RIGHT</strong> (default),
-     *                           <strong>STR_PAD_LEFT</strong> or <strong>STR_PAD_BOTH</strong>
-     *                           </p>
-     * @param string $encoding   [optional] <p>Default: UTF-8</p>
+     * @param string     $str        <p>The input string.</p>
+     * @param int        $pad_length <p>The length of return string.</p>
+     * @param string     $pad_string [optional] <p>String to use for padding the input string.</p>
+     * @param int|string $pad_type   [optional] <p>
+     *                               Can be <strong>STR_PAD_RIGHT</strong> (default), [or string "right"]<br>
+     *                               <strong>STR_PAD_LEFT</strong> [or string "left"] or<br>
+     *                               <strong>STR_PAD_BOTH</strong> [or string "both"]
+     *                               </p>
+     * @param string     $encoding   [optional] <p>Default: UTF-8</p>
      *
      * @return string returns the padded string
      */
@@ -6229,7 +6231,7 @@ final class UTF8
     {
         $pos = self::strpos($subject, $search);
         if ($pos !== false) {
-            return self::substr_replace($subject, $replace, $pos, self::strlen($search));
+            return self::substr_replace($subject, $replace, $pos, (int) self::strlen($search));
         }
 
         return $subject;
@@ -6248,7 +6250,7 @@ final class UTF8
     {
         $pos = self::strrpos($subject, $search);
         if ($pos !== false) {
-            return self::substr_replace($subject, $replace, $pos, self::strlen($search));
+            return self::substr_replace($subject, $replace, $pos, (int) self::strlen($search));
         }
 
         return $subject;
@@ -6295,11 +6297,11 @@ final class UTF8
     public static function str_slice(string $str, int $start, int $end = null, string $encoding = 'UTF-8')
     {
         if ($end === null) {
-            $length = self::strlen($str);
+            $length = (int) self::strlen($str);
         } elseif ($end >= 0 && $end <= $start) {
             return '';
         } elseif ($end < 0) {
-            $length = self::strlen($str) + $end - $start;
+            $length = (int) self::strlen($str) + $end - $start;
         } else {
             $length = $end - $start;
         }
@@ -7230,31 +7232,37 @@ final class UTF8
      * @param int    $offset
      * @param int    $length
      *
-     * @return int|null
+     * @return int
      */
-    public static function strcspn(string $str, string $charList, int $offset = 0, int $length = null)
+    public static function strcspn(string $str, string $charList, int $offset = null, int $length = null): int
     {
         if ($charList === '') {
-            return null;
+            return (int) self::strlen($str);
         }
 
-        if ($offset || $length !== null) {
-            $strTmp = self::substr($str, $offset, $length);
+        if ($offset !== null || $length !== null) {
+            /** @noinspection UnnecessaryCastingInspection */
+            $strTmp = self::substr($str, (int) $offset, $length);
             if ($strTmp === false) {
-                return null;
+                return 0;
             }
             $str = $strTmp;
         }
 
         if ($str === '') {
-            return null;
+            return 0;
         }
 
         if (\preg_match('/^(.*?)' . self::rxClass($charList) . '/us', $str, $length)) {
-            return self::strlen($length[1]);
+            $return = self::strlen($length[1]);
+            if ($return === false) {
+                return 0;
+            }
+
+            return $return;
         }
 
-        return self::strlen($str);
+        return (int) self::strlen($str);
     }
 
     /**
@@ -7348,7 +7356,8 @@ final class UTF8
             $str = self::clean($str);
         }
 
-        return \strip_tags($str, $allowable_tags);
+        /** @noinspection UnnecessaryCastingInspection */
+        return \strip_tags($str, (string) $allowable_tags);
     }
 
     /**
@@ -7519,7 +7528,7 @@ final class UTF8
             return $match[1];
         }
 
-        return self::substr($haystack, self::strlen($match[1]));
+        return self::substr($haystack, (int) self::strlen($match[1]));
     }
 
     /**
@@ -7704,7 +7713,7 @@ final class UTF8
      */
     public static function strnatcmp(string $str1, string $str2): int
     {
-        return $str1 . '' === $str2 . '' ? 0 : \strnatcmp(self::strtonatfold($str1), self::strtonatfold($str2));
+        return $str1 . '' === $str2 . '' ? 0 : \strnatcmp((string) self::strtonatfold($str1), (string) self::strtonatfold($str2));
     }
 
     /**
@@ -8063,7 +8072,7 @@ final class UTF8
         }
         $needle = (string) $needleTmp;
 
-        $pos = self::strrpos($haystack, $needle, null, $encoding);
+        $pos = self::strrpos($haystack, $needle, 0, $encoding);
         if ($pos === false) {
             return false;
         }
@@ -8089,7 +8098,7 @@ final class UTF8
         }
 
         $reversed = '';
-        $i = self::strlen($str);
+        $i = (int) self::strlen($str);
         while ($i--) {
             $reversed .= self::substr($str, $i, 1);
         }
@@ -8328,7 +8337,7 @@ final class UTF8
      *                   The <strong>(int)</strong> numeric position of the last occurrence of needle in the haystack
      *                   string.<br>If needle is not found, it returns false.
      */
-    public static function strrpos(string $haystack, $needle, int $offset = null, string $encoding = 'UTF-8', bool $cleanUtf8 = false)
+    public static function strrpos(string $haystack, $needle, int $offset = 0, string $encoding = 'UTF-8', bool $cleanUtf8 = false)
     {
         if ($haystack === '') {
             return false;
@@ -8443,7 +8452,12 @@ final class UTF8
             return false;
         }
 
-        return $offset + self::strlen(self::substr_in_byte($haystack, 0, $pos));
+        $strTmp = self::substr_in_byte($haystack, 0, $pos);
+        if ($strTmp === false) {
+            return false;
+        }
+
+        return $offset + (int) self::strlen($strTmp);
     }
 
     /**
@@ -8490,9 +8504,9 @@ final class UTF8
      * @param int    $offset [optional]
      * @param int    $length [optional]
      *
-     * @return int
+     * @return false|int
      */
-    public static function strspn(string $str, string $mask, int $offset = 0, int $length = null): int
+    public static function strspn(string $str, string $mask, int $offset = 0, int $length = null)
     {
         if ($offset || $length !== null) {
             $strTmp = self::substr($str, $offset, $length);
@@ -8506,7 +8520,7 @@ final class UTF8
             return 0;
         }
 
-        return \preg_match('/^' . self::rxClass($mask) . '+/u', $str, $str) ? self::strlen($str[0]) : 0;
+        return \preg_match('/^' . self::rxClass($mask) . '+/u', $str, $str) ? (int) self::strlen($str[0]) : 0;
     }
 
     /**
@@ -8610,7 +8624,7 @@ final class UTF8
             return $match[1];
         }
 
-        return self::substr($haystack, self::strlen($match[1]));
+        return self::substr($haystack, (int) self::strlen($match[1]));
     }
 
     /**
@@ -8850,6 +8864,9 @@ final class UTF8
             }
 
             $from = \array_combine($from, $to);
+            if ($from === false) {
+                throw new \InvalidArgumentException('The number of elements for each array isn\'t equal or the arrays are empty: (from: ' . \print_r($from, true) . ' | to: ' . \print_r($to, true) . ')');
+            }
         }
 
         if (\is_string($from)) {
@@ -8907,7 +8924,7 @@ final class UTF8
         $wide = 0;
         $str = (string) \preg_replace('/[\x{1100}-\x{115F}\x{2329}\x{232A}\x{2E80}-\x{303E}\x{3040}-\x{A4CF}\x{AC00}-\x{D7A3}\x{F900}-\x{FAFF}\x{FE10}-\x{FE19}\x{FE30}-\x{FE6F}\x{FF00}-\x{FF60}\x{FFE0}-\x{FFE6}\x{20000}-\x{2FFFD}\x{30000}-\x{3FFFD}]/u', '', $str, -1, $wide);
 
-        return ($wide << 1) + self::strlen($str, 'UTF-8');
+        return ($wide << 1) + (int) self::strlen($str, 'UTF-8');
     }
 
     /**
@@ -9098,7 +9115,7 @@ final class UTF8
             }
             $str1 = (string) $str1Tmp;
 
-            $str2Tmp = self::substr($str2, 0, self::strlen($str1));
+            $str2Tmp = self::substr($str2, 0, (int) self::strlen($str1));
             if ($str2Tmp === false) {
                 $str2Tmp = '';
             }
@@ -9275,6 +9292,10 @@ final class UTF8
             return \mb_substr_count($haystack, $needle, 'CP850'); // 8-BIT
         }
 
+        if ($length === null) {
+            return \substr_count($haystack, $needle, $offset);
+        }
+
         return \substr_count($haystack, $needle, $offset, $length);
     }
 
@@ -9328,7 +9349,7 @@ final class UTF8
         }
 
         if (self::str_istarts_with($haystack, $needle) === true) {
-            $haystackTmp = self::substr($haystack, self::strlen($needle));
+            $haystackTmp = self::substr($haystack, (int) self::strlen($needle));
             if ($haystackTmp === false) {
                 $haystackTmp = '';
             }
@@ -9426,7 +9447,7 @@ final class UTF8
         }
 
         if (self::str_starts_with($haystack, $needle) === true) {
-            $haystackTmp = self::substr($haystack, self::strlen($needle));
+            $haystackTmp = self::substr($haystack, (int) self::strlen($needle));
             if ($haystackTmp === false) {
                 $haystackTmp = '';
             }
@@ -9517,6 +9538,14 @@ final class UTF8
         $str = (string) $str;
         $replacement = (string) $replacement;
 
+        if (\is_array($length) === true) {
+            throw new \InvalidArgumentException('Parameter "$length" can only be an array, if "$str" is also an array.');
+        }
+
+        if (\is_array($offset) === true) {
+            throw new \InvalidArgumentException('Parameter "$offset" can only be an array, if "$str" is also an array.');
+        }
+
         if ($str === '') {
             return $replacement;
         }
@@ -9535,15 +9564,15 @@ final class UTF8
             $string_length = self::strlen($str, $encoding);
 
             if ($offset < 0) {
-                $offset = \max(0, $string_length + $offset);
+                $offset = (int) \max(0, $string_length + $offset);
             } elseif ($offset > $string_length) {
-                $offset = $string_length;
+                $offset = (int) $string_length;
             }
 
             if ($length < 0) {
-                $length = \max(0, $string_length - $offset + $length);
+                $length = (int) \max(0, $string_length - $offset + $length);
             } elseif ($length === null || $length > $string_length) {
-                $length = $string_length;
+                $length = (int) $string_length;
             }
 
             if (($offset + $length) > $string_length) {
@@ -9628,10 +9657,10 @@ final class UTF8
     }
 
     /**
-     * Checks whether mbstring is available on the server.
+     * Checks whether symfony-polyfills are used.
      *
      * @return bool
-     *              <strong>true</strong> if available, <strong>false</strong> otherwise
+     *              <strong>true</strong> if in use, <strong>false</strong> otherwise
      */
     public static function symfony_polyfill_used(): bool
     {
@@ -10121,6 +10150,10 @@ final class UTF8
             },
             $buf
         );
+
+        if ($buf === null) {
+            return '';
+        }
 
         // decode UTF-8 codepoints
         if ($decodeHtmlEntityToUtf8 === true) {
@@ -11155,9 +11188,9 @@ final class UTF8
      *
      * @param string $str <p>The input string</p>
      *
-     * @return string
+     * @return string|null
      */
-    private static function strtonatfold(string $str): string
+    private static function strtonatfold(string $str)
     {
         /** @noinspection PhpUndefinedClassInspection */
         return \preg_replace('/\p{Mn}+/u', '', \Normalizer::normalize($str, \Normalizer::NFD));
