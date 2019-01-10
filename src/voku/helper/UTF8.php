@@ -10871,7 +10871,7 @@ final class UTF8
      *                      </p>
      *
      * @return string
-     *                 <p>The given string wrapped at the specified column.</p>
+     *                <p>The given string wrapped at the specified column.</p>
      */
     public static function wordwrap(string $str, int $width = 75, string $break = "\n", bool $cut = false): string
     {
