@@ -50,7 +50,7 @@ The project based on ...
     * [cleanup](#cleanupstring-str--string)
     * [codepoints](#codepointsmixed-arg-bool-u_style--false--array)
     * [count_chars](#count_charsstring-str-bool-cleanutf8--false--array)
-    * [encode](#encodestring-encoding-string-str-bool-force--true--string)
+    * [encode](#encodestring-encoding-string-str-bool-autodetectfromencoding--true-string-fromencoding----string)
     * [file_get_contents](#file_get_contentsstring-filename-intnull-flags--null-resourcenull-context--null-intnull-offset--null-intnull-maxlen--null-int-timeout--10-bool-converttoutf8--true--string) 
     * [file_has_bom](#file_has_bomstring-file_path--bool)
     * [filter](#filtermixed-var-int-normalization_form--4-string-leading_combining----mixed)
