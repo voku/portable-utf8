@@ -1,5 +1,14 @@
 # Changelog
 
+### 5.3.0 (2019-01-10)
+- use autoloader + namespace for "tests/"
+- fixes suggested by "phpstan" level 7
+- fixes suggested by "psalm" 
+- use variable references whenever possible
+- use types for callback functions
+- sync "UTF8::strcspn()" with native "strcspn()"
+- sync "UTF8::strtr()" with native "strtr()"
+
 ### 5.2.16 (2019-01-02)
 - update phpcs fixer config
 - optimizing via "rector/rector"
