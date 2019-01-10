@@ -89,7 +89,12 @@ class Bootup
 
         $uri = (string) \preg_replace_callback(
             '/[\x80-\xFF]+/',
-            static function ($m) {
+            /**
+             * @param array $m
+             *
+             * @return string
+             */
+            static function (array $m): string {
                 return \rawurlencode($m[0]);
             },
             $uri
@@ -97,7 +102,12 @@ class Bootup
 
         $uri = (string) \preg_replace_callback(
             '/(?:%[89A-F][0-9A-F])+/i',
-            static function ($m) {
+            /**
+             * @param array $m
+             *
+             * @return string
+             */
+            static function (array $m): string {
                 return \rawurlencode(UTF8::rawurldecode($m[0]));
             },
             $uri

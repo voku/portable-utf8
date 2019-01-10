@@ -171,7 +171,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         // One needle
         $singleNeedle = \array_map(
-            static function ($array) {
+            static function (array $array) {
                 $array[2] = [$array[2]];
 
                 return $array;
@@ -222,7 +222,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         // One needle
         $singleNeedle = \array_map(
-            static function ($array) {
+            static function (array $array) {
                 $array[2] = [$array[2]];
 
                 return $array;
