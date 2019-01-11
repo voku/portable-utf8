@@ -645,6 +645,30 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, '{"fòô": "bàř"]', 'UTF-8'];
     }
 
+    public function isJsonDoNotIgnoreProvider(): \Iterator
+    {
+        yield [false, ''];
+        yield [false, '  '];
+        yield [true, 'null'];
+        yield [true, 'true'];
+        yield [true, 'false'];
+        yield [true, '[]'];
+        yield [true, '{}'];
+        yield [true, '123'];
+        yield [true, '{"foo": "bar"}'];
+        yield [false, '{"foo":"bar",}'];
+        yield [false, '{"foo"}'];
+        yield [true, '["foo"]'];
+        yield [false, '{"foo": "bar"]'];
+        yield [true, '123', 'UTF-8'];
+        yield [true, '{"fòô": "bàř"}', 'UTF-8'];
+        yield [false, '{"fòô":"bàř",}', 'UTF-8'];
+        yield [false, '{"fòô"}', 'UTF-8'];
+        yield [false, '["fòô": "bàř"]', 'UTF-8'];
+        yield [true, '["fòô"]', 'UTF-8'];
+        yield [false, '{"fòô": "bàř"]', 'UTF-8'];
+    }
+
     public function isLowerCaseProvider(): \Iterator
     {
         yield [true, ''];
@@ -2148,6 +2172,20 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         foreach ($testArray as $testString => $testResult) {
             static::assertSame($testResult, UTF8::is_html($testString), 'tested: ' . $testString);
         }
+    }
+
+    /**
+     * @dataProvider isJsonDoNotIgnoreProvider()
+     *
+     * @param bool   $expected
+     * @param string $str
+     */
+    public function testIsJsonDoNotIgnore($expected, $str)
+    {
+        $result = UTF8::is_json($str, false);
+
+        static::assertInternalType('boolean', $result);
+        static::assertSame($expected, $result, 'tested: ' . $str);
     }
 
     /**

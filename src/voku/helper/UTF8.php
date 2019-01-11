@@ -3112,11 +3112,12 @@ final class UTF8
     /**
      * Try to check if "$str" is an json-string.
      *
-     * @param string $str <p>The input string.</p>
+     * @param string $str                              <p>The input string.</p>
+     * @param bool   $onlyArrayOrObjectResultsAreValid [optional] <p>Only array and objects are valid json results.</p>
      *
      * @return bool
      */
-    public static function is_json(string $str): bool
+    public static function is_json(string $str, $onlyArrayOrObjectResultsAreValid = true): bool
     {
         if ($str === '') {
             return false;
@@ -3131,15 +3132,22 @@ final class UTF8
         }
 
         $json = self::json_decode($str);
+        if ($json === null && \strtoupper($str) !== 'NULL') {
+            return false;
+        }
+
+        if (
+            $onlyArrayOrObjectResultsAreValid === true
+            &&
+            \is_object($json) === false
+            &&
+            \is_array($json) === false
+        ) {
+            return false;
+        }
 
         /** @noinspection PhpComposerExtensionStubsInspection */
-        return (
-                   \is_object($json) === true
-                   ||
-                   \is_array($json) === true
-               )
-               &&
-               \json_last_error() === \JSON_ERROR_NONE;
+        return \json_last_error() === \JSON_ERROR_NONE;
     }
 
     /**
@@ -7132,7 +7140,8 @@ final class UTF8
      *
      * @param string $str
      * @param int    $length                          <p>Desired length of the truncated string.</p>
-     * @param string $substring                       [optional] <p>The substring to append if it can fit. Default: ''</p>
+     * @param string $substring                       [optional] <p>The substring to append if it can fit. Default:
+     *                                                ''</p>
      * @param string $encoding                        [optional] <p>Default: UTF-8</p>
      * @param bool   $ignoreDoNotSplitWordsForOneWord [optional] <p>Default: false</p>
      *
@@ -10735,7 +10744,7 @@ final class UTF8
                 case "\xF0":
                     ++$i;
 
-                    // no break
+                // no break
 
                 case "\xE0":
                     $str[$j] = $noCharFound;
