@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.3.1 (2019-01-11)
+- update "UTF8::str_truncate_safe()" + tests
+
 ### 5.3.0 (2019-01-10)
 - use autoloader + namespace for "tests/"
 - fixes suggested by "phpstan" level 7
