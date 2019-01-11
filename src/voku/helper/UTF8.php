@@ -7133,10 +7133,17 @@ final class UTF8
      * @param int    $length    <p>Desired length of the truncated string.</p>
      * @param string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
      * @param string $encoding  [optional] <p>Default: UTF-8</p>
+     * @param bool   $ignoreDoNotSplitWordsForOneWord [optional] <p>Default: false</p>
      *
      * @return string string after truncating
      */
-    public static function str_truncate_safe(string $str, int $length, string $substring = '', string $encoding = 'UTF-8'): string
+    public static function str_truncate_safe(
+        string $str,
+        int $length,
+        string $substring = '',
+        string $encoding = 'UTF-8',
+        bool $ignoreDoNotSplitWordsForOneWord = false
+    ): string
     {
         if ($length >= (int) self::strlen($str, $encoding)) {
             return $str;
@@ -7157,7 +7164,11 @@ final class UTF8
             // find pos of the last occurrence of a space, get up to that
             $lastPos = self::strrpos($truncated, ' ', 0, $encoding);
 
-            if ($lastPos !== false || $strPosSpace !== false) {
+            if (
+                $lastPos !== false
+                ||
+                ($strPosSpace !== false && $ignoreDoNotSplitWordsForOneWord === false)
+            ) {
                 $truncated = (string) self::substr($truncated, 0, (int) $lastPos, $encoding);
             }
         }

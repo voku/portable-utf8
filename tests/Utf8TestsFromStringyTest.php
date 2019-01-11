@@ -1139,6 +1139,33 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['What are your plans...', 'What are your plans today?', 22, '...'];
     }
 
+    public function safeTruncateIgnoreWordsProvider(): \Iterator
+    {
+        yield ['Test foo bar', 'Test foo bar', 12];
+        yield ['Test foo', 'Test foo bar', 11];
+        yield ['Test foo', 'Test foo bar', 8];
+        yield ['Test', 'Test foo bar', 7];
+        yield ['Test', 'Test foo bar', 4];
+        yield ['Test', 'Testfoobar', 4];
+        yield ['Test foo bar', 'Test foo bar', 12, '...'];
+        yield ['Test foo...', 'Test foo bar', 11, '...'];
+        yield ['Test...', 'Test foo bar', 8, '...'];
+        yield ['Test...', 'Test foo bar', 7, '...'];
+        yield ['T...', 'Test foo bar', 4, '...'];
+        yield ['Test....', 'Test foo bar', 11, '....'];
+        yield ['Test fòô bàř', 'Test fòô bàř', 12, '', 'UTF-8'];
+        yield ['Test fòô', 'Test fòô bàř', 11, '', 'UTF-8'];
+        yield ['Test fòô', 'Test fòô bàř', 8, '', 'UTF-8'];
+        yield ['Test', 'Test fòô bàř', 7, '', 'UTF-8'];
+        yield ['Test', 'Test fòô bàř', 4, '', 'UTF-8'];
+        yield ['Test fòô bàř', 'Test fòô bàř', 12, 'ϰϰ', 'UTF-8'];
+        yield ['Test fòôϰϰ', 'Test fòô bàř', 11, 'ϰϰ', 'UTF-8'];
+        yield ['Testϰϰ', 'Test fòô bàř', 8, 'ϰϰ', 'UTF-8'];
+        yield ['Testϰϰ', 'Test fòô bàř', 7, 'ϰϰ', 'UTF-8'];
+        yield ['Teϰϰ', 'Test fòô bàř', 4, 'ϰϰ', 'UTF-8'];
+        yield ['What are your plans...', 'What are your plans today?', 22, '...'];
+    }
+
     public function shortenAfterWordProvider(): \Iterator
     {
         yield ['this...', 'this is a test', 5, '...'];
@@ -2616,6 +2643,22 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testSafeTruncate($expected, $str, $length, $substring = '', $encoding = '')
     {
         $result = UTF8::str_truncate_safe($str, $length, $substring, $encoding);
+
+        static::assertSame($expected, $result, 'tested: ' . $str . ' | ' . $substring . ' (' . $length . ')');
+    }
+
+    /**
+     * @dataProvider safeTruncateIgnoreWordsProvider()
+     *
+     * @param        $expected
+     * @param        $str
+     * @param        $length
+     * @param string $substring
+     * @param        $encoding
+     */
+    public function testSafeTruncateIgnoreWords($expected, $str, $length, $substring = '', $encoding = '')
+    {
+        $result = UTF8::str_truncate_safe($str, $length, $substring, $encoding, true);
 
         static::assertSame($expected, $result, 'tested: ' . $str . ' | ' . $substring . ' (' . $length . ')');
     }
