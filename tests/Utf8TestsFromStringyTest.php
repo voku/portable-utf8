@@ -569,6 +569,17 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'Foobar'];
     }
 
+    public function isBase64EmptyStringIsAlsoValidProvider(): \Iterator
+    {
+        yield [false, ' '];
+        yield [true, ''];
+        yield [true, \base64_encode('FooBar')];
+        yield [true, \base64_encode(' ')];
+        yield [true, \base64_encode('FÒÔBÀŘ')];
+        yield [true, \base64_encode('συγγραφέας')];
+        yield [false, 'Foobar'];
+    }
+
     public function isBlankProvider(): \Iterator
     {
         yield [true, ''];
@@ -2072,6 +2083,20 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testIsBase64($expected, $str)
     {
         $result = UTF8::is_base64($str);
+
+        static::assertInternalType('boolean', $result);
+        static::assertSame($expected, $result);
+    }
+
+    /**
+     * @dataProvider isBase64EmptyStringIsAlsoValidProvider()
+     *
+     * @param $expected
+     * @param $str
+     */
+    public function testIsBase64EmptyStringIsAlsoValid($expected, $str)
+    {
+        $result = UTF8::is_base64($str, true);
 
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result);

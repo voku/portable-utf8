@@ -2918,13 +2918,14 @@ final class UTF8
     /**
      * Returns true if the string is base64 encoded, false otherwise.
      *
-     * @param string $str <p>The input string.</p>
+     * @param mixed|string $str                <p>The input string.</p>
+     * @param bool         $emptyStringIsValid [optional] <p>Is an empty string valid base64 or not?</p>
      *
      * @return bool whether or not $str is base64 encoded
      */
-    public static function is_base64($str): bool
+    public static function is_base64($str, $emptyStringIsValid = false): bool
     {
-        if ($str === '') {
+        if ($emptyStringIsValid === false && $str === '') {
             return false;
         }
 
@@ -2935,9 +2936,9 @@ final class UTF8
             return false;
         }
 
-        $base64String = (string) \base64_decode($str, true);
+        $base64String = \base64_decode($str, true);
 
-        return $base64String && \base64_encode($base64String) === $str;
+        return $base64String !== false && \base64_encode($base64String) === $str;
     }
 
     /**
@@ -7130,9 +7131,9 @@ final class UTF8
      * exceeding the desired length.
      *
      * @param string $str
-     * @param int    $length    <p>Desired length of the truncated string.</p>
-     * @param string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
-     * @param string $encoding  [optional] <p>Default: UTF-8</p>
+     * @param int    $length                          <p>Desired length of the truncated string.</p>
+     * @param string $substring                       [optional] <p>The substring to append if it can fit. Default: ''</p>
+     * @param string $encoding                        [optional] <p>Default: UTF-8</p>
      * @param bool   $ignoreDoNotSplitWordsForOneWord [optional] <p>Default: false</p>
      *
      * @return string string after truncating
@@ -7143,8 +7144,7 @@ final class UTF8
         string $substring = '',
         string $encoding = 'UTF-8',
         bool $ignoreDoNotSplitWordsForOneWord = false
-    ): string
-    {
+    ): string {
         if ($length >= (int) self::strlen($str, $encoding)) {
             return $str;
         }
