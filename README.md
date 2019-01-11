@@ -6,6 +6,8 @@
 [![Latest Stable Version](https://poser.pugx.org/voku/portable-utf8/v/stable)](https://packagist.org/packages/voku/portable-utf8) 
 [![Total Downloads](https://poser.pugx.org/voku/portable-utf8/downloads)](https://packagist.org/packages/voku/portable-utf8)
 [![License](https://poser.pugx.org/voku/portable-utf8/license)](https://packagist.org/packages/voku/portable-utf8)
+[![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/moelleken)
+[![Donate to this project using Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://www.patreon.com/voku)
 
 # 🉑 Portable UTF-8
 
@@ -50,7 +52,7 @@ The project based on ...
     * [cleanup](#cleanupstring-str--string)
     * [codepoints](#codepointsmixed-arg-bool-u_style--false--array)
     * [count_chars](#count_charsstring-str-bool-cleanutf8--false--array)
-    * [encode](#encodestring-encoding-string-str-bool-force--true--string)
+    * [encode](#encodestring-encoding-string-str-bool-autodetectfromencoding--true-string-fromencoding----string)
     * [file_get_contents](#file_get_contentsstring-filename-intnull-flags--null-resourcenull-context--null-intnull-offset--null-intnull-maxlen--null-int-timeout--10-bool-converttoutf8--true--string) 
     * [file_has_bom](#file_has_bomstring-file_path--bool)
     * [filter](#filtermixed-var-int-normalization_form--4-string-leading_combining----mixed)
@@ -1498,6 +1500,22 @@ composer install
 ```bash
 ./vendor/bin/phpunit
 ```
+
+### Support
+
+For support and donations please visit [Github](https://github.com/voku/portable-utf8/) | [Issues](https://github.com/voku/portable-utf8/issues) | [PayPal](https://paypal.me/moelleken) | [Patreon](https://www.patreon.com/voku).
+
+For status updates and release announcements please visit [Releases](https://github.com/voku/portable-utf8/releases) | [Twitter](https://twitter.com/suckup_de) | [Patreon](https://www.patreon.com/voku/posts).
+
+For professional support please contact [me](https://about.me/voku).
+
+### Thanks
+
+- Thanks to [GitHub](https://github.com) (Microsoft) for hosting the code and a good infrastructure including Issues-Managment, etc.
+- Thanks to [IntelliJ](https://www.jetbrains.com) as they make the best IDEs for PHP and they gave me an open source license for PhpStorm!
+- Thanks to [Travis CI](https://travis-ci.com/) for being the most awesome, easiest continous integration tool out there!
+- Thanks to [StyleCI](https://styleci.io/) for the simple but powerfull code style check.
+- Thanks to [PHPStan](https://github.com/phpstan/phpstan) && [Psalm](https://github.com/vimeo/psalm) for relly great Static analysis tools and for discover bugs in the code!
 
 ### License and Copyright
 
