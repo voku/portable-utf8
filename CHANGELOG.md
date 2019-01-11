@@ -1,5 +1,8 @@
 # Changelog
 
+### 5.3.2 (2019-01-11)
+- update "UTF8::is_base64()" + tests
+
 ### 5.3.1 (2019-01-11)
 - update "UTF8::str_truncate_safe()" + tests
 
