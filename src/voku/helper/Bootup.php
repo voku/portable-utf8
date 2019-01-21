@@ -16,7 +16,7 @@ class Bootup
      * @param int    $normalization_form
      * @param string $leading_combining
      */
-    public static function filterRequestInputs($normalization_form = 4 /* n::NFC */, $leading_combining = '◌')
+    public static function filterRequestInputs($normalization_form = \Normalizer::NFC, $leading_combining = '◌')
     {
         $a = [
             &$_FILES,
@@ -139,7 +139,7 @@ class Bootup
      *
      * @return mixed
      */
-    public static function filterString($input, int $normalization_form = 4 /* n::NFC */, string $leading_combining = '◌')
+    public static function filterString($input, int $normalization_form = \Normalizer::NFC, string $leading_combining = '◌')
     {
         return UTF8::filter($input, $normalization_form, $leading_combining);
     }

@@ -186,25 +186,25 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
             // Multiple needles
             [true, 'Str contains foo bar', ['foo', 'bar']],
             [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*', '&^%']],
-            [true, 'Ο συγγραφέας είπε', ['συγγρ', 'αφέας'], 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å´¥', '©'], true, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å˚ ', '∆'], true, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['øœ', '¬'], true, 'UTF-8'],
+            [true, 'Ο συγγραφέας είπε', ['συγγρ', 'αφέας'], true],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å´¥', '©'], true],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å˚ ', '∆'], true],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['øœ', '¬'], true],
             [false, 'Str contains foo bar', ['Foo', 'bar']],
             [false, 'Str contains foo bar', ['foobar', 'bar']],
             [false, 'Str contains foo bar', ['foo bar ', 'bar']],
-            [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', '  συγγραφ '], true, 'UTF-8'],
-            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßå˚', ' ß '], true, 'UTF-8'],
+            [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', '  συγγραφ '], true],
+            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßå˚', ' ß '], true],
             [true, 'Str contains foo bar', ['Foo bar', 'bar'], false],
             [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*&^%', '*&^%'], false],
-            [true, 'Ο συγγραφέας είπε', ['ΣΥΓΓΡΑΦΈΑΣ', 'ΑΦΈΑ'], false, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å´¥©', '¥©'], false, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å˚ ∆', ' ∆'], false, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['ØŒ¬', 'Œ'], false, 'UTF-8'],
+            [true, 'Ο συγγραφέας είπε', ['ΣΥΓΓΡΑΦΈΑΣ', 'ΑΦΈΑ'], false],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å´¥©', '¥©'], false],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å˚ ∆', ' ∆'], false],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['ØŒ¬', 'Œ'], false],
             [false, 'Str contains foo bar', ['foobar', 'none'], false],
             [false, 'Str contains foo bar', ['foo bar ', ' ba'], false],
-            [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', ' ραφέ '], false, 'UTF-8'],
-            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßÅ˚', ' Å˚ '], false, 'UTF-8'],
+            [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', ' ραφέ '], false],
+            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßÅ˚', ' Å˚ '], false],
         ];
 
         return \array_merge($singleNeedle, $provider);
@@ -236,25 +236,25 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
             // Multiple needles
             [true, 'Str contains foo bar', ['foo', 'bar']],
             [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*', '&^%']],
-            [true, 'Ο συγγραφέας είπε', ['συγγρ', 'αφέας'], 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å´¥', '©'], true, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å˚ ', '∆'], true, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['øœ', '¬'], true, 'UTF-8'],
+            [true, 'Ο συγγραφέας είπε', ['συγγρ', 'αφέας']],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å´¥', '©'], true],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['å˚ ', '∆'], true],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['øœ', '¬'], true],
             [false, 'Str contains foo bar', ['Foo', 'Bar']],
             [false, 'Str contains foo bar', ['foobar', 'bar ']],
             [false, 'Str contains foo bar', ['foo bar ', '  foo']],
-            [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', '  συγγραφ '], true, 'UTF-8'],
-            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßå˚', ' ß '], true, 'UTF-8'],
+            [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', '  συγγραφ '], true],
+            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßå˚', ' ß '], true],
             [true, 'Str contains foo bar', ['Foo bar', 'bar'], false],
             [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*&^%', '*&^%'], false],
-            [true, 'Ο συγγραφέας είπε', ['ΣΥΓΓΡΑΦΈΑΣ', 'ΑΦΈΑ'], false, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å´¥©', '¥©'], false, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å˚ ∆', ' ∆'], false, 'UTF-8'],
-            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['ØŒ¬', 'Œ'], false, 'UTF-8'],
+            [true, 'Ο συγγραφέας είπε', ['ΣΥΓΓΡΑΦΈΑΣ', 'ΑΦΈΑ'], false],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å´¥©', '¥©'], false],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['Å˚ ∆', ' ∆'], false],
+            [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ['ØŒ¬', 'Œ'], false],
             [false, 'Str contains foo bar', ['foobar', 'none'], false],
             [false, 'Str contains foo bar', ['foo bar ', ' ba '], false],
-            [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', ' ραφέ '], false, 'UTF-8'],
-            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßÅ˚', ' Å˚ '], false, 'UTF-8'],
+            [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', ' ραφέ '], false],
+            [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßÅ˚', ' Å˚ '], false],
         ];
 
         return \array_merge($singleNeedle, $provider);
@@ -264,25 +264,25 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         yield [true, 'Str contains foo bar', 'foo bar'];
         yield [true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%'];
-        yield [true, 'Ο συγγραφέας είπε', 'συγγραφέας', true, 'UTF-8'];
-        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å´¥©', true, 'UTF-8'];
-        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å˚ ∆', true, 'UTF-8'];
-        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'øœ¬', true, 'UTF-8'];
+        yield [true, 'Ο συγγραφέας είπε', 'συγγραφέας', true];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å´¥©', true];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'å˚ ∆', true];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'øœ¬', true];
         yield [false, 'Str contains foo bar', 'Foo bar'];
         yield [false, 'Str contains foo bar', 'foobar'];
         yield [false, 'Str contains foo bar', 'foo bar '];
-        yield [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', true, 'UTF-8'];
-        yield [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßå˚', true, 'UTF-8'];
+        yield [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', true];
+        yield [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßå˚', true];
         yield [true, 'Str contains foo bar', 'Foo bar', false];
         yield [true, '12398!@(*%!@# @!%#*&^%', ' @!%#*&^%', false];
-        yield [true, 'Ο συγγραφέας είπε', 'ΣΥΓΓΡΑΦΈΑΣ', false, 'UTF-8'];
-        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å´¥©', false, 'UTF-8'];
-        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å˚ ∆', false, 'UTF-8'];
-        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'ØŒ¬', false, 'UTF-8'];
+        yield [true, 'Ο συγγραφέας είπε', 'ΣΥΓΓΡΑΦΈΑΣ', false];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å´¥©', false];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'Å˚ ∆', false];
+        yield [true, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'ØŒ¬', false];
         yield [false, 'Str contains foo bar', 'foobar', false];
         yield [false, 'Str contains foo bar', 'foo bar ', false];
-        yield [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', false, 'UTF-8'];
-        yield [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßÅ˚', false, 'UTF-8'];
+        yield [false, 'Ο συγγραφέας είπε', '  συγγραφέας ', false];
+        yield [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßÅ˚', false];
     }
 
     public function countSubstrProvider(): \Iterator
@@ -291,11 +291,11 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [0, 'foo', 'bar'];
         yield [1, 'foo bar', 'foo'];
         yield [2, 'foo bar', 'o'];
-        yield [0, '', 'fòô', 'UTF-8'];
-        yield [0, 'fòô', 'bàř', 'UTF-8'];
-        yield [1, 'fòô bàř', 'fòô', 'UTF-8'];
-        yield [2, 'fôòô bàř', 'ô', 'UTF-8'];
-        yield [0, 'fÔÒÔ bàř', 'ô', 'UTF-8'];
+        yield [0, '', 'fòô', false, 'UTF-8'];
+        yield [0, 'fòô', 'bàř', false, 'UTF-8'];
+        yield [1, 'fòô bàř', 'fòô', false, 'UTF-8'];
+        yield [2, 'fôòô bàř', 'ô', false, 'UTF-8'];
+        yield [2, 'fÔÒÔ bàř', 'ô', false, 'UTF-8'];
         yield [0, 'foo', 'BAR', false];
         yield [1, 'foo bar', 'FOo', false];
         yield [2, 'foo bar', 'O', false];
@@ -1625,7 +1625,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      * @param          $start
      * @param          $end
      * @param int|null $offset
-     * @param null     $encoding
+     * @param string   $encoding
      */
     public function testBetween($expected, $str, $start, $end, $offset = 0, $encoding = '')
     {
@@ -1684,11 +1684,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      * @param      $haystack
      * @param      $needle
      * @param bool $caseSensitive
-     * @param      $encoding
      */
-    public function testContains($expected, $haystack, $needle, $caseSensitive = true, $encoding = '')
+    public function testContains($expected, $haystack, $needle, $caseSensitive = true)
     {
-        $result = UTF8::str_contains($haystack, $needle, $caseSensitive, $encoding);
+        $result = UTF8::str_contains($haystack, $needle, $caseSensitive);
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result);
     }
@@ -1700,11 +1699,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      * @param string   $haystack
      * @param string[] $needles
      * @param bool     $caseSensitive
-     * @param string   $encoding
      */
-    public function testContainsAll($expected, $haystack, $needles, $caseSensitive = true, $encoding = '')
+    public function testContainsAll($expected, $haystack, $needles, $caseSensitive = true)
     {
-        $result = UTF8::str_contains_all($haystack, $needles, $caseSensitive, $encoding);
+        $result = UTF8::str_contains_all($haystack, $needles, $caseSensitive);
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result, 'tested: ' . $haystack);
     }
@@ -2440,6 +2438,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\OutOfBoundsException::class);
 
+        /** @noinspection UnusedFunctionResultInspection */
         UTF8::str_offset_get('fòô', -999);
     }
 
@@ -2480,6 +2479,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
+        /** @noinspection UnusedFunctionResultInspection */
         UTF8::str_pad('foo', 5, 'foo', 'bar');
     }
 
@@ -3276,6 +3276,50 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, $result);
     }
 
+    public function testTruncateSafeUnicode()
+    {
+        $s = "\u{158}ekn\u{11B}te, jak se (dnes) m\u{E1}te?"; // Řekněte, jak se (dnes) máte?
+
+        static::assertSame('…', UTF8::str_truncate_safe($s, -1, '…', 'UTF-8', true)); // length=-1
+        static::assertSame('…', UTF8::str_truncate_safe($s, 0, '…', 'UTF-8', true)); // length=0
+        static::assertSame('…', UTF8::str_truncate_safe($s, 1, '…', 'UTF-8', true)); // length=1
+        static::assertSame('Ř…', UTF8::str_truncate_safe($s, 2, '…', 'UTF-8', true)); // length=2
+        static::assertSame('Ře…', UTF8::str_truncate_safe($s, 3, '…', 'UTF-8', true)); // length=3
+        static::assertSame('Řek…', UTF8::str_truncate_safe($s, 4, '…', 'UTF-8', true)); // length=4
+        static::assertSame('Řekn…', UTF8::str_truncate_safe($s, 5, '…', 'UTF-8', true)); // length=5
+        static::assertSame('Řekně…', UTF8::str_truncate_safe($s, 6, '…', 'UTF-8', true)); // length=6
+        static::assertSame('Řeknět…', UTF8::str_truncate_safe($s, 7, '…', 'UTF-8', true)); // length=7
+        static::assertSame('Řekněte…', UTF8::str_truncate_safe($s, 8, '…', 'UTF-8', true)); // length=8
+        static::assertSame('Řekněte,…', UTF8::str_truncate_safe($s, 9, '…', 'UTF-8', true)); // length=9
+        static::assertSame('Řekněte,…', UTF8::str_truncate_safe($s, 10, '…', 'UTF-8', true)); // length=10
+        static::assertSame('Řekněte,…', UTF8::str_truncate_safe($s, 11, '…', 'UTF-8', true)); // length=11
+        static::assertSame('Řekněte,…', UTF8::str_truncate_safe($s, 12, '…', 'UTF-8', true)); // length=12
+        static::assertSame('Řekněte, jak…', UTF8::str_truncate_safe($s, 13, '…', 'UTF-8', true)); // length=13
+        static::assertSame('Řekněte, jak…', UTF8::str_truncate_safe($s, 14, '…', 'UTF-8', true)); // length=14
+        static::assertSame('Řekněte, jak…', UTF8::str_truncate_safe($s, 15, '…', 'UTF-8', true)); // length=15
+        static::assertSame('Řekněte, jak se…', UTF8::str_truncate_safe($s, 16, '…', 'UTF-8', true)); // length=16
+        static::assertSame('Řekněte, jak se…', UTF8::str_truncate_safe($s, 17, '…', 'UTF-8', true)); // length=17
+        static::assertSame('Řekněte, jak se…', UTF8::str_truncate_safe($s, 18, '…', 'UTF-8', true)); // length=18
+        static::assertSame('Řekněte, jak se…', UTF8::str_truncate_safe($s, 19, '…', 'UTF-8', true)); // length=19
+        static::assertSame('Řekněte, jak se…', UTF8::str_truncate_safe($s, 20, '…', 'UTF-8', true)); // length=20
+        static::assertSame('Řekněte, jak se…', UTF8::str_truncate_safe($s, 21, '…', 'UTF-8', true)); // length=21
+        static::assertSame('Řekněte, jak se…', UTF8::str_truncate_safe($s, 22, '…', 'UTF-8', true)); // length=22
+        static::assertSame('Řekněte, jak se (dnes)…', UTF8::str_truncate_safe($s, 23, '…', 'UTF-8', true)); // length=23
+        static::assertSame('Řekněte, jak se (dnes)…', UTF8::str_truncate_safe($s, 24, '…', 'UTF-8', true)); // length=24
+        static::assertSame('Řekněte, jak se (dnes)…', UTF8::str_truncate_safe($s, 25, '…', 'UTF-8', true)); // length=25
+        static::assertSame('Řekněte, jak se (dnes)…', UTF8::str_truncate_safe($s, 26, '…', 'UTF-8', true)); // length=26
+        static::assertSame('Řekněte, jak se (dnes)…', UTF8::str_truncate_safe($s, 27, '…', 'UTF-8', true)); // length=27
+        static::assertSame('Řekněte, jak se (dnes) máte?', UTF8::str_truncate_safe($s, 28, '…', 'UTF-8', true)); // length=28
+        static::assertSame('Řekněte, jak se (dnes) máte?', UTF8::str_truncate_safe($s, 29, '…', 'UTF-8', true)); // length=29
+        static::assertSame('Řekněte, jak se (dnes) máte?', UTF8::str_truncate_safe($s, 30, '…', 'UTF-8', true)); // length=30
+        static::assertSame('Řekněte, jak se (dnes) máte?', UTF8::str_truncate_safe($s, 31, '…', 'UTF-8', true)); // length=31
+        static::assertSame('Řekněte, jak se (dnes) máte?', UTF8::str_truncate_safe($s, 32, '…', 'UTF-8', true)); // length=32
+
+        // mañana, U+006E + U+0303 (combining character)
+        static::assertSame("man\u{303}", UTF8::str_truncate_safe("man\u{303}ana", 4, '', 'UTF-8', true));
+        static::assertSame('man', UTF8::str_truncate_safe("man\u{303}ana", 3, '', 'UTF-8', true));
+    }
+
     /**
      * @dataProvider underscoredProvider()
      *
@@ -3436,11 +3480,10 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      * @param      $haystack
      * @param      $needles
      * @param bool $caseSensitive
-     * @param      $encoding
      */
-    public function testTestcontainsAny($expected, $haystack, $needles, $caseSensitive = true, $encoding = '')
+    public function testTestcontainsAny($expected, $haystack, $needles, $caseSensitive = true)
     {
-        $result = UTF8::str_contains_any($haystack, $needles, $caseSensitive, $encoding);
+        $result = UTF8::str_contains_any($haystack, $needles, $caseSensitive);
 
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result);

@@ -35,8 +35,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
      */
     public function invokeMethod(&$object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(\get_class($object));
-        $method = $reflection->getMethod($methodName);
+        $method = (new \ReflectionClass(\get_class($object)))->getMethod($methodName);
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
@@ -299,10 +298,10 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
                 static::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
 
-                if (Bootup::is_php('7.1') === false) {
-                    static::assertSame(3, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
-                } else {
+                if (Bootup::is_php('7.1')) {
                     static::assertSame(20, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
+                } else {
+                    static::assertFalse(UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -8));
                 }
 
                 static::assertFalse(UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', -4));
@@ -902,23 +901,21 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(2, \substr_count('abcdebc', 'bc'));
         static::assertSame(2, UTF8::substr_count('abcdebc', 'bc'));
 
-        if (Bootup::is_php('7.1') === false) {
-            if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-                static::assertNull(\substr_count('abcde', 'de', -2, 2));
-            } else {
-                static::assertFalse(\substr_count('abcde', 'de', -2, 2));
-            }
-
-            static::assertFalse(UTF8::substr_count('abcde', 'de', -2, 2));
-        } else {
+        if (Bootup::is_php('7.1')) {
             if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
                 static::assertNull(\substr_count('abcde', 'de', -2, 2));
             } else {
                 static::assertSame(1, \substr_count('abcde', 'de', -2, 2));
             }
-
-            static::assertSame(1, UTF8::substr_count('abcde', 'de', -2, 2));
+        } else {
+            if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+                static::assertNull(\substr_count('abcde', 'de', -2, 2));
+            } else {
+                static::assertFalse(\substr_count('abcde', 'de', -2, 2));
+            }
         }
+
+        static::assertSame(1, UTF8::substr_count('abcde', 'de', -2, 2));
 
         if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
             static::assertNull(\substr_count('abcde', 'bcg', 1, 2));
@@ -1887,8 +1884,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
     public function testWhitespace()
     {
-        $whitespaces = UTF8::whitespace_table();
-        foreach ($whitespaces as $whitespace) {
+        foreach (UTF8::whitespace_table() as $whitespace) {
             static::assertSame(' ', UTF8::clean($whitespace, false, true));
         }
     }
@@ -2154,8 +2150,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             return;
         }
 
-        $refObject = new \ReflectionObject(new UTF8());
-        $refProperty = $refObject->getProperty('SUPPORT');
+        $refProperty = (new \ReflectionObject(new UTF8()))->getProperty('SUPPORT');
         $refProperty->setAccessible(true);
 
         $refProperty->setValue(null, $this->oldSupportArray);
@@ -2163,8 +2158,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
     protected function disableNativeUtf8Support()
     {
-        $refObject = new \ReflectionObject(new UTF8());
-        $refProperty = $refObject->getProperty('SUPPORT');
+        $refProperty = (new \ReflectionObject(new UTF8()))->getProperty('SUPPORT');
         $refProperty->setAccessible(true);
 
         if ($this->oldSupportArray === null) {

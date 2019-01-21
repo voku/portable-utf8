@@ -26,6 +26,7 @@ final class Utf8StrPadTest extends \PHPUnit\Framework\TestCase
         static::assertSame('5char', \str_pad('5char', 4)); // str_pos won't truncate input string
         static::assertSame($toPad, u::str_pad($toPad, 8));
 
+        static::assertSame('ø__ø__ø__ø__ø__ø__ø_', u::str_pad('', 20, $padding, \STR_PAD_RIGHT));
         static::assertSame($toPad . 'ø__ø__ø__ø', u::str_pad($toPad, 20, $padding, \STR_PAD_RIGHT));
         static::assertSame('ø__ø__ø__ø' . $toPad, u::str_pad($toPad, 20, $padding, \STR_PAD_LEFT));
         static::assertSame('ø__ø_' . $toPad . 'ø__ø_', u::str_pad($toPad, 20, $padding, \STR_PAD_BOTH));

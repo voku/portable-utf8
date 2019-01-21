@@ -3038,15 +3038,17 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testStrSort()
     {
-        $tests = [
-            ''               => '',
-            '  -ABC-中文空白-  ' => '    ---ABC中文白空',
-            '      - ÖÄÜ- '  => '        --ÄÖÜ',
-            'öäü'            => 'äöü',
-        ];
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
+            $tests = [
+                ''               => '',
+                '  -ABC-中文空白-  ' => '    ---ABC中文白空',
+                '      - ÖÄÜ- '  => '        --ÄÖÜ',
+                'öäü'            => 'äöü',
+            ];
 
-        foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::str_sort($before));
+            foreach ($tests as $before => $after) {
+                static::assertSame($after, UTF8::str_sort($before));
+            }
         }
 
         $tests = [
