@@ -1,5 +1,16 @@
 # Changelog
 
+### 5.4.0 (2019-01-22)
+- optimize performance | thx @fe3dback
+  -> e.g. use "\mb_"-functions without encoding parameter
+  -> e.g. simplify logic of "UTF8::str_pad()"
+- no more 100% support for "mbstring_func_overload", it's already deprecated in php
+- move "UTF8::checkForSupport()" into "bootstrap.php"
+- fix output from "UTF8::str_pad()" + empty input string
+- add more "encoding" parameter e.g. for "UTF8::str_shuffle()"
+- remove really old fallback for breaking-changes
+- do not use aliases for internal processing
+
 ### 5.3.3 (2019-01-11)
 - update "UTF8::is_json()" + tests
 
