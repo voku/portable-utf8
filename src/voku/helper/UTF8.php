@@ -5009,28 +5009,15 @@ final class UTF8
             self::$SUPPORT['mbstring'] === true
         ) {
             $iMax = \mb_strlen($str);
-
             if ($iMax <= 127) {
                 $ret = [];
                 for ($i = 0; $i < $iMax; ++$i) {
                     $ret[] = \mb_substr($str, $i, 1);
                 }
             } else {
-                /** @noinspection PhpComposerExtensionStubsInspection */
-                \mb_ereg_search_init($str, '.', 'm');
-                /** @noinspection PhpComposerExtensionStubsInspection */
-                $r = \mb_ereg_search();
-                if ($r) {
-                    /** @noinspection PhpComposerExtensionStubsInspection */
-                    $r = \mb_ereg_search_getregs(); // get first result
-                    do {
-                        $ret[] = $r[0];
-                        /** @noinspection PhpComposerExtensionStubsInspection */
-                        $r = \mb_ereg_search_regs(); // get next results
-                    } while ($r);
-                } else {
-                    $ret = [];
-                }
+                $retArray = [];
+                \preg_match_all('/./us', $str, $retArray);
+                $ret = $retArray[0] ?? [];
             }
         } elseif (self::$SUPPORT['pcre_utf8'] === true) {
             $retArray = [];
