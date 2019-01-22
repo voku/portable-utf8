@@ -8360,6 +8360,10 @@ final class UTF8
             $str = self::clean($str);
         }
 
+        if ($allowable_tags === null) {
+            return \strip_tags($str);
+        }
+
         return \strip_tags($str, $allowable_tags);
     }
 
@@ -10076,6 +10080,10 @@ final class UTF8
             ||
             $encoding === 'ASCII'
         ) {
+            if ($length === null) {
+                return \substr($str, $offset);
+            }
+
             return \substr($str, $offset, $length);
         }
 
