@@ -3318,6 +3318,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         // mañana, U+006E + U+0303 (combining character)
         static::assertSame("man\u{303}", UTF8::str_truncate_safe("man\u{303}ana", 4, '', 'UTF-8', true));
         static::assertSame('man', UTF8::str_truncate_safe("man\u{303}ana", 3, '', 'UTF-8', true));
+
+        static::assertSame("κόσμε\xa0", UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
     }
 
     /**
