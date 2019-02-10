@@ -11270,22 +11270,15 @@ final class UTF8
                 if (isset($matches[3])) {
                     $cp = (int) \hexdec($matches[3]);
                 } else {
-                    $lead = (int) \hexdec($matches[1]);
-                    $trail = (int) \hexdec($matches[2]);
-
                     // http://unicode.org/faq/utf_bom.html#utf16-4
-                    $cp = ($lead << 10) + $trail + 0x10000 - (0xD800 << 10) - 0xDC00;
+                    $cp = ((int) \hexdec($matches[1]) << 10)
+                          + (int) \hexdec($matches[2])
+                          + 0x10000
+                          - (0xD800 << 10)
+                          - 0xDC00;
                 }
 
-                // https://tools.ietf.org/html/rfc3629#section-3
-                //
-                // characters between U+D800 and U+DFFF are not allowed in UTF-8
-
-                if ($cp > 0xD7FF && $cp < 0xE000) {
-                    return '';
-                }
-
-                // https://github.com/php/php-src/blob/php-5.6.4/ext/standard/html.c#L471
+                // https://github.com/php/php-src/blob/php-7.3.2/ext/standard/html.c#L471
                 //
                 // php_utf32_utf8(unsigned char *buf, unsigned k)
 

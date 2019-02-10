@@ -403,8 +403,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => ['�' => ' '],
         ];
 
-        // <<<<--- \"this comment is only a helper for PHPStorm and non UTF-8 chars
-
         $counter = 0;
         foreach ($examples as $testString => $testResults) {
             foreach ($testResults as $before => $after) {

@@ -1173,6 +1173,8 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => ['👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'],
             // Valid ASCII
             'a' => ['a' => 'a'],
+            // Valid UTF-8
+            '纳达尔绝' => ['纳达尔绝' => '纳达尔绝'],
             // Valid ASCII + Invalid Chars
             "a\xa0\xa1-öäü" => ['a-öäü' => 'a-öäü'],
             // Valid 2 Octet Sequence
