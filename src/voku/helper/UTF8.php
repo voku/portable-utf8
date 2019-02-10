@@ -11290,11 +11290,12 @@ final class UTF8
                 // php_utf32_utf8(unsigned char *buf, unsigned k)
 
                 if ($cp < 0x80) {
-                    return self::chr($cp);
+                    return (string) self::chr($cp);
                 }
 
                 if ($cp < 0xA0) {
-                    return self::chr(0xC0 | $cp >> 6) . self::chr(0x80 | $cp & 0x3F);
+                    /** @noinspection UnnecessaryCastingInspection */
+                    return (string) self::chr(0xC0 | $cp >> 6) . (string) self::chr(0x80 | $cp & 0x3F);
                 }
 
                 return self::decimal_to_chr($cp);
