@@ -209,7 +209,7 @@ return PhpCsFixer\Config::create()
                                 'static_lambda'                                 => true,
                                 'strict_comparison'                             => true,
                                 'strict_param'                                  => true,
-                                'string_line_ending'                            => true,
+                                'string_line_ending'                            => false, // bug for e.g. "'<xonxxx=1'"
                                 'switch_case_semicolon_to_colon'                => true,
                                 'switch_case_space'                             => true,
                                 'ternary_operator_spaces'                       => true,
