@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.1 (2019-02-10)
+
+- optimize some RegEx
+- fix html-encoding for unicode surrogate pairs (e.g. UTF-16)
+
 ### 5.4.0 (2019-01-22)
 - optimize performance | thx @fe3dback
   -> e.g. use "\mb_"-functions without encoding parameter
