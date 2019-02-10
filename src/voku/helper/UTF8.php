@@ -2512,7 +2512,7 @@ final class UTF8
                 if (\strpos($str, '&#') !== false) {
                     // decode also numeric & UTF16 two byte entities
                     $str = (string) \preg_replace(
-                        '/(&#(?:x0*[0-9a-f]{2,6}(?![0-9a-f;])|(?:0*\d{2,6}(?![0-9;]))))/iS',
+                        '/(&#(?:x0*[0-9a-fA-F]{2,6}(?![0-9a-fA-F;])|(?:0*\d{2,6}(?![0-9;]))))/S',
                         '$1;',
                         $str
                     );
@@ -4517,7 +4517,7 @@ final class UTF8
             return '';
         }
 
-        $pattern = '/%u([0-9a-f]{3,4})/i';
+        $pattern = '/%u([0-9a-fA-F]{3,4})/';
         if (\preg_match($pattern, $str)) {
             $str = (string) \preg_replace($pattern, '&#x\\1;', \rawurldecode($str));
         }
@@ -4698,8 +4698,8 @@ final class UTF8
         // every control character except newline (dec 10),
         // carriage return (dec 13) and horizontal tab (dec 09)
         if ($url_encoded) {
-            $non_displayables[] = '/%0[0-8bcef]/'; // url encoded 00-08, 11, 12, 14, 15
-            $non_displayables[] = '/%1[0-9a-f]/'; // url encoded 16-31
+            $non_displayables[] = '/%0[0-8bcefBCEF]/'; // url encoded 00-08, 11, 12, 14, 15
+            $non_displayables[] = '/%1[0-9a-fA-F]/'; // url encoded 16-31
         }
 
         $non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S'; // 00-08, 11, 12, 14-31, 127
@@ -11246,26 +11246,62 @@ final class UTF8
                         $buf .= self::to_utf8_convert_helper($c1);
                     }
                 } else { // doesn't look like UTF8, but should be converted
+
                     $buf .= self::to_utf8_convert_helper($c1);
                 }
             } elseif (($c1 & "\xC0") === "\x80") { // needs conversion
 
                 $buf .= self::to_utf8_convert_helper($c1);
             } else { // it doesn't need conversion
+
                 $buf .= $c1;
             }
         }
 
-        // decode unicode escape sequences
+        // decode unicode escape sequences + unicode surrogate pairs
         $buf = \preg_replace_callback(
-            '/\\\\u([0-9a-f]{4})/i',
+            '/\\\\u([dD][89abAB][0-9a-fA-F]{2})\\\\u([dD][cdefCDEF][\da-fA-F]{2})|\\\\u([0-9a-fA-F]{4})/',
             /**
-             * @param array $match
+             * @param array $matches
              *
              * @return string
              */
-            static function (array $match): string {
-                return \mb_convert_encoding(\pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+            static function (array $matches): string {
+                if (isset($matches[3])) {
+                    $cp = \hexdec($matches[3]);
+                } else {
+                    $lead = \hexdec($matches[1]);
+                    $trail = \hexdec($matches[2]);
+
+                    // http://unicode.org/faq/utf_bom.html#utf16-4
+                    $cp = ($lead << 10) + $trail + 0x10000 - (0xD800 << 10) - 0xDC00;
+                }
+
+                if ($cp === null) {
+                    return '';
+                }
+
+                // https://tools.ietf.org/html/rfc3629#section-3
+                //
+                // characters between U+D800 and U+DFFF are not allowed in UTF-8
+
+                if ($cp > 0xD7FF && $cp < 0xE000) {
+                    $cp = 0xFFFD;
+                }
+
+                // https://github.com/php/php-src/blob/php-5.6.4/ext/standard/html.c#L471
+                //
+                // php_utf32_utf8(unsigned char *buf, unsigned k)
+
+                if ($cp < 0x80) {
+                    return self::chr($cp);
+                }
+
+                if ($cp < 0xA0) {
+                    return self::chr(0xC0 | $cp >> 6) . self::chr(0x80 | $cp & 0x3F);
+                }
+
+                return self::decimal_to_chr($cp);
             },
             $buf
         );
@@ -11489,7 +11525,7 @@ final class UTF8
             return '';
         }
 
-        $pattern = '/%u([0-9a-f]{3,4})/i';
+        $pattern = '/%u([0-9a-fA-F]{3,4})/';
         if (\preg_match($pattern, $str)) {
             $str = (string) \preg_replace($pattern, '&#x\\1;', \urldecode($str));
         }

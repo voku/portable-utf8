@@ -1177,6 +1177,8 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
             '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => ['👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;' => '👍 💩 😄 ❤ 👍 💩 😄 ❤ 🐶 💩 🐱 🐸 🌀 ❤ &#x267F; &#x26CE;'],
             // Valid ASCII
             'a' => ['a' => 'a'],
+            // Valid UTF-8
+            "con\u0066irm" => ['confirm' => 'confirm'],
             // Valid ASCII + Invalid Chars
             "a\xa0\xa1-öäü" => ['a-öäü' => 'a-öäü'],
             // Valid 2 Octet Sequence
