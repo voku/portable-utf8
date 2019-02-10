@@ -11268,17 +11268,13 @@ final class UTF8
              */
             static function (array $matches): string {
                 if (isset($matches[3])) {
-                    $cp = \hexdec($matches[3]);
+                    $cp = (int) \hexdec($matches[3]);
                 } else {
-                    $lead = \hexdec($matches[1]);
-                    $trail = \hexdec($matches[2]);
+                    $lead = (int) \hexdec($matches[1]);
+                    $trail = (int) \hexdec($matches[2]);
 
                     // http://unicode.org/faq/utf_bom.html#utf16-4
                     $cp = ($lead << 10) + $trail + 0x10000 - (0xD800 << 10) - 0xDC00;
-                }
-
-                if ($cp === null) {
-                    return '';
                 }
 
                 // https://tools.ietf.org/html/rfc3629#section-3
@@ -11286,7 +11282,7 @@ final class UTF8
                 // characters between U+D800 and U+DFFF are not allowed in UTF-8
 
                 if ($cp > 0xD7FF && $cp < 0xE000) {
-                    $cp = 0xFFFD;
+                    return '';
                 }
 
                 // https://github.com/php/php-src/blob/php-5.6.4/ext/standard/html.c#L471
