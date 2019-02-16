@@ -65,19 +65,19 @@ final class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
         $str = 'Iñtërnâtiônàlizætiøn';
         $replaced = 'Iñyërxâyiôxàlizæyiøx';
         static::assertSame(
-        $replaced,
-        u::str_replace(
-            [
-                'n',
-                't',
-            ],
-            [
-                'x',
-                'y',
-            ],
-            $str
-        )
-    );
+            $replaced,
+            u::str_replace(
+                [
+                    'n',
+                    't',
+                ],
+                [
+                    'x',
+                    'y',
+                ],
+                $str
+            )
+        );
     }
 
     public function testReplaceArrayUtf8Search()
@@ -85,23 +85,23 @@ final class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
         $str = 'Iñtërnâtiônàlizætiøn';
         $replaced = 'I?tërnâti??nàliz????ti???n';
         static::assertSame(
-        u::str_replace(
-            [
-                'ñ',
-                'ô',
-                'ø',
-                'æ',
-            ],
-            [
-                '?',
-                '??',
-                '???',
-                '????',
-            ],
-            $str
-        ),
-        $replaced
-    );
+            u::str_replace(
+                [
+                    'ñ',
+                    'ô',
+                    'ø',
+                    'æ',
+                ],
+                [
+                    '?',
+                    '??',
+                    '???',
+                    '????',
+                ],
+                $str
+            ),
+            $replaced
+        );
     }
 
     public function testReplaceArrayStringReplace()
@@ -109,18 +109,18 @@ final class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
         $str = 'Iñtërnâtiônàlizætiøn';
         $replaced = 'I?tërnâti?nàliz?ti?n';
         static::assertSame(
-        $replaced,
-        u::str_replace(
-            [
-                'ñ',
-                'ô',
-                'ø',
-                'æ',
-            ],
-            '?',
-            $str
-        )
-    );
+            $replaced,
+            u::str_replace(
+                [
+                    'ñ',
+                    'ô',
+                    'ø',
+                    'æ',
+                ],
+                '?',
+                $str
+            )
+        );
     }
 
     public function testReplaceArraySingleArrayReplace()
@@ -128,18 +128,18 @@ final class Utf8StrReplaceTest extends \PHPUnit\Framework\TestCase
         $str = 'Iñtërnâtiônàlizætiøn';
         $replaced = 'I?tërnâtinàliztin';
         static::assertSame(
-        u::str_replace(
-            [
-                'ñ',
-                'ô',
-                'ø',
-                'æ',
-            ],
-            ['?'],
-            $str
-        ),
-        $replaced
-    );
+            u::str_replace(
+                [
+                    'ñ',
+                    'ô',
+                    'ø',
+                    'æ',
+                ],
+                ['?'],
+                $str
+            ),
+            $replaced
+        );
     }
 
     public function testReplaceLinefeed()

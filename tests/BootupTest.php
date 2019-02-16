@@ -184,12 +184,12 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         ];
 
         static::assertTrue(
-        \strlen(\bin2hex($bytes[0])) === 24
-    );
+            \strlen(\bin2hex($bytes[0])) === 24
+        );
 
         static::assertFalse(
-        $bytes[1] === $bytes[2]
-    );
+            $bytes[1] === $bytes[2]
+        );
     }
 
     public function testIsPhp()

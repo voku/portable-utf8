@@ -75,17 +75,17 @@ final class Utf8UcwordsTest extends \PHPUnit\Framework\TestCase
         static::assertSame('deja Σσς DEJa σσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', ['deja', 'σσΣ']));
         static::assertSame('Deja σσς dEJa σσΣ', UTF8::ucwords('deja σσς dEJa σσΣ', ['deja', 'σσΣ'], ' '));
         static::assertSame(
-        'deja Σσς DEJa σσΣ',
-        UTF8::ucwords(
-        'deja σσς dEJa σσΣ' . "\x01\x02",
-            [
-                'deja',
-                'σσΣ',
-            ],
-            '',
-            'UTF-8',
-            true
-    )
-    );
+            'deja Σσς DEJa σσΣ',
+            UTF8::ucwords(
+                'deja σσς dEJa σσΣ' . "\x01\x02",
+                [
+                    'deja',
+                    'σσΣ',
+                ],
+                '',
+                'UTF-8',
+                true
+            )
+        );
     }
 }

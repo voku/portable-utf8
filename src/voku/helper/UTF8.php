@@ -1315,14 +1315,14 @@ final class UTF8
 
             if ($encoding === 'UTF-8') {
                 $pos_end = (int) \min(
-                        \mb_strpos($str, ' ', $offset),
-                        \mb_strpos($str, '.', $offset)
-                    ) - $pos_start;
+                    \mb_strpos($str, ' ', $offset),
+                    \mb_strpos($str, '.', $offset)
+                ) - $pos_start;
             } else {
                 $pos_end = (int) \min(
-                        self::strpos($str, ' ', $offset, $encoding),
-                        self::strpos($str, '.', $offset, $encoding)
-                    ) - $pos_start;
+                    self::strpos($str, ' ', $offset, $encoding),
+                    self::strpos($str, '.', $offset, $encoding)
+                ) - $pos_start;
             }
 
             if (!$pos_end || $pos_end <= 0) {
@@ -7923,11 +7923,11 @@ final class UTF8
         }
 
         return ((string) self::substr(
-                $str,
-                0,
-                $length,
-                $encoding
-            )) . $substring;
+            $str,
+            0,
+            $length,
+            $encoding
+        )) . $substring;
     }
 
     /**

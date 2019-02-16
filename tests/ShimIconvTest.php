@@ -98,8 +98,8 @@ final class ShimIconvTest extends \PHPUnit\Framework\TestCase
         static::assertSame('Legal encoded-word: * .', p::iconv_mime_decode('Legal encoded-word: =?utf-8?B?Kg==?= .'));
         static::assertSame('Legal encoded-word: * .', p::iconv_mime_decode('Legal encoded-word: =?utf-8?Q?*?= .'));
         static::assertSame(
-        'Illegal encoded-word:  .',
-        p::iconv_mime_decode(
+            'Illegal encoded-word:  .',
+            p::iconv_mime_decode(
             'Illegal encoded-word: =?utf-8?Q?' . \chr(0xA1) . '?= .',
             \ICONV_MIME_DECODE_CONTINUE_ON_ERROR
         )
@@ -143,8 +143,8 @@ HEADERS;
         ];
 
         static::assertSame(
-        "Subject: =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=\r\n =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=",
-        p::iconv_mime_encode('Subject', $text, $options)
+            "Subject: =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=\r\n =?UTF-8?Q?=E3=83=86?=\r\n =?UTF-8?Q?=E3=82=B9?=\r\n =?UTF-8?Q?=E3=83=88?=",
+            p::iconv_mime_encode('Subject', $text, $options)
     );
     }
 

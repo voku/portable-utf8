@@ -5959,6 +5959,14 @@ final class Utf8HtmlEncode extends \PHPUnit\Framework\TestCase
                 'tested: ' . \print_r($encodeDataInnerArray, true)
             );
         }
+
+        foreach ($encodeData as $encodeDataInnerArray) {
+            static::assertSame(
+                UTF8::to_utf8($encodeDataInnerArray['decoded']),
+                UTF8::html_decode(UTF8::html_encode($encodeDataInnerArray['decoded'], true)),
+                'tested: ' . \print_r($encodeDataInnerArray, true)
+            );
+        }
     }
 
     public function testHtmlEncode2()

@@ -41,9 +41,9 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
         static::assertSame('déjà', p::mb_convert_encoding('d&eacute;j&#224;', 'Utf-8', 'Html-entities'));
         static::assertSame('déjà', p::mb_convert_encoding(\utf8_decode('déjà'), 'Utf-8', 'ASCII,ISO-2022-JP,UTF-8,ISO-8859-1'));
         static::assertSame(
-        'déjà',
-        p::mb_convert_encoding(
-        \utf8_decode('déjà'),
+            'déjà',
+            p::mb_convert_encoding(
+            \utf8_decode('déjà'),
             'Utf-8',
             [
                 'ASCII',
@@ -216,8 +216,8 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
         static::assertSame('ASCII', p::mb_detect_encoding('abc', \mb_detect_order(), true));
         static::assertSame('UTF-8', p::mb_detect_encoding('abc', 'UTF8, ASCII', true));
         static::assertSame(
-        'ISO-8859-1',
-        p::mb_detect_encoding(
+            'ISO-8859-1',
+            p::mb_detect_encoding(
             "\x9D",
             [
                 'UTF-8',
@@ -232,20 +232,20 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
     public function testmbDetectOrder()
     {
         static::assertSame(
-        [
-            'ASCII',
-            'UTF-8',
-        ],
-        p::mb_detect_order()
-    );
+            [
+                'ASCII',
+                'UTF-8',
+            ],
+            p::mb_detect_order()
+        );
         static::assertTrue(p::mb_detect_order('UTF-8, ASCII'));
         static::assertSame(
-        [
-            'UTF-8',
-            'ASCII',
-        ],
-        p::mb_detect_order()
-    );
+            [
+                'UTF-8',
+                'ASCII',
+            ],
+            p::mb_detect_order()
+        );
     }
 
     public function testmbLanguage()

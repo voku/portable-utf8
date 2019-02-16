@@ -105,12 +105,12 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
     public function testCallback()
     {
         $actual = UTF8::callback(
-        [
-            'voku\helper\UTF8',
-            'strtolower',
-        ],
-        'Κόσμε-ÖÄÜ'
-    );
+            [
+                'voku\helper\UTF8',
+                'strtolower',
+            ],
+            'Κόσμε-ÖÄÜ'
+        );
         $expected = [
             'κ',
             'ό',
@@ -526,16 +526,16 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
         static::assertSame([0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'], UTF8::codepoints('κöñ', true));
         static::assertSame(
-        [0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'],
-        UTF8::codepoints(
-        [
-            'κ',
-            'ö',
-            'ñ',
-        ],
-            true
-    )
-    );
+            [0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'],
+            UTF8::codepoints(
+                [
+                    'κ',
+                    'ö',
+                    'ñ',
+                ],
+                true
+            )
+        );
     }
 
     public function testCombineSomeUtf8Functions()
@@ -862,16 +862,16 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
             static::assertContains(
-          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-          $testString
-      );
+                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                $testString
+            );
 
             static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
             static::assertContains(
-          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-          $testString
-      );
+                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                $testString
+            );
         }
 
         static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
@@ -888,15 +888,15 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
             static::assertContains(
-          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-          $testString
-      );
+                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                $testString
+            );
 
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
             static::assertContains(
-          '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-          $testString
-      );
+                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                $testString
+            );
 
             // text: with offset
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
@@ -920,12 +920,12 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         static::assertContains('Hírek', $testString);
 
         $context = \stream_context_create(
-        [
-            'http' => [
-                'timeout' => 10,
-            ],
-        ]
-    );
+            [
+                'http' => [
+                    'timeout' => 10,
+                ],
+            ]
+        );
 
         // text: with max-length + timeout
         $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10);
@@ -943,12 +943,12 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
     public function testFileGetContentsBinary()
     {
         $context = \stream_context_create(
-        [
-            'http' => [
-                'timeout' => 10,
-            ],
-        ]
-    );
+            [
+                'http' => [
+                    'timeout' => 10,
+                ],
+            ]
+        );
 
         // image: do not convert to utf-8 + timeout
         $image = UTF8::file_get_contents(__DIR__ . '/fixtures/image.png', false, $context, null, null, 10, false);
@@ -1057,22 +1057,22 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         $data['email'] = 'foo@bar.de';
 
         static::assertSame(
-        [
-            'name'  => 'Κόσμε',
-            'age'   => 18,
-            'email' => 'foo@bar.de',
-        ],
-        UTF8::filter_var_array($data, $filters, true)
-    );
+            [
+                'name'  => 'Κόσμε',
+                'age'   => 18,
+                'email' => 'foo@bar.de',
+            ],
+            UTF8::filter_var_array($data, $filters, true)
+        );
 
         static::assertSame(
-        [
-            'name'  => 'κόσμε',
-            'age'   => '18',
-            'email' => 'foo@bar.de',
-        ],
-        UTF8::filter_var_array($data)
-    );
+            [
+                'name'  => 'κόσμε',
+                'age'   => '18',
+                'email' => 'foo@bar.de',
+            ],
+            UTF8::filter_var_array($data)
+        );
     }
 
     public function testFitsInside()
@@ -1539,11 +1539,11 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             static::assertSame($expected, UTF8::htmlentities($actual));
 
             static::assertSame(
-          $actual,
-          UTF8::html_entity_decode(
-              UTF8::htmlentities($actual)
-          )
-      );
+                $actual,
+                UTF8::html_entity_decode(
+                    UTF8::htmlentities($actual)
+                )
+            );
         }
 
         // ---
@@ -1559,13 +1559,13 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             static::assertSame($expected, UTF8::htmlentities($actual, \ENT_COMPAT, 'ISO-8859-1', false));
 
             static::assertSame(
-          $actual,
-          UTF8::html_entity_decode(
-              UTF8::htmlentities($actual, \ENT_COMPAT, 'ISO-8859-1', false),
-              \ENT_COMPAT,
-              'ISO-8859-1'
-          )
-      );
+                $actual,
+                UTF8::html_entity_decode(
+                    UTF8::htmlentities($actual, \ENT_COMPAT, 'ISO-8859-1', false),
+                    \ENT_COMPAT,
+                    'ISO-8859-1'
+                )
+            );
         }
     }
 
@@ -2137,10 +2137,10 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
         foreach ($testArray as $before => $after) {
             static::assertSame(
-          ($after === false ? false : true),
-          UTF8::is_json($before),
-          'tested: ' . $before
-      );
+                ($after === false ? false : true),
+                UTF8::is_json($before),
+                'tested: ' . $before
+            );
         }
 
         // ----
@@ -2597,10 +2597,10 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             $test = UTF8::remove_bom($test);
 
             static::assertSame(
-          'Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα',
-          $test,
-          'error by ' . $count
-      );
+                'Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα',
+                $test,
+                'error by ' . $count
+            );
 
             $test = UTF8::add_bom_to_string($test);
             static::assertTrue(UTF8::string_has_bom($test));
@@ -2763,21 +2763,21 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             }
 
             static::assertSame(
-          [
-              '中',
-              '文',
-              '空',
-              '白',
-          ],
-          UTF8::split('中文空白')
-      );
+                [
+                    '中',
+                    '文',
+                    '空',
+                    '白',
+                ],
+                UTF8::split('中文空白')
+            );
             static::assertSame(
-          [
-              '中文',
-              '空白',
-          ],
-          UTF8::split('中文空白', 2)
-      );
+                [
+                    '中文',
+                    '空白',
+                ],
+                UTF8::split('中文空白', 2)
+            );
             static::assertSame(['中文空白'], UTF8::split('中文空白', 4));
             static::assertSame(['中文空白'], UTF8::split('中文空白', 8));
 
@@ -2938,10 +2938,10 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         $secondString = 'Do not go gentle into that good night.';
         $expectedString = $firstString . $secondString;
         $actualString = UTF8::str_pad(
-        $firstString,
-        UTF8::strlen($firstString) + UTF8::strlen($secondString),
-        $secondString
-    );
+            $firstString,
+            UTF8::strlen($firstString) + UTF8::strlen($secondString),
+            $secondString
+        );
 
         static::assertSame($expectedString, $actualString);
 
@@ -3024,13 +3024,13 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
         foreach ($testArray as $test) {
             static::assertSame(
-          [],
-          \array_diff(
-              UTF8::str_split($test),
-              UTF8::str_split(UTF8::str_shuffle($test))
-          ),
-          'tested: ' . $test
-      );
+                [],
+                \array_diff(
+                    UTF8::str_split($test),
+                    UTF8::str_split(UTF8::str_shuffle($test))
+                ),
+                'tested: ' . $test
+            );
         }
     }
 
@@ -3165,49 +3165,49 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
     public function testStrSplit()
     {
         static::assertSame(
-        [],
-        UTF8::str_split('déjà', 0)
-    );
+            [],
+            UTF8::str_split('déjà', 0)
+        );
         static::assertSame(
-        [
-            'd',
-            'é',
-            'j',
-            'à',
-        ],
-        UTF8::str_split('déjà', 1)
-    );
+            [
+                'd',
+                'é',
+                'j',
+                'à',
+            ],
+            UTF8::str_split('déjà', 1)
+        );
         static::assertSame(
-        [
-            'dé',
-            'jà',
-        ],
-        UTF8::str_split('déjà', 2)
-    );
+            [
+                'dé',
+                'jà',
+            ],
+            UTF8::str_split('déjà', 2)
+        );
     }
 
     public function testString()
     {
         static::assertSame('', UTF8::string([]));
         static::assertSame(
-        'öäü',
-        UTF8::string(
-            [
-                246,
-                228,
-                252,
-            ]
-        )
-    );
+            'öäü',
+            UTF8::string(
+                [
+                    246,
+                    228,
+                    252,
+                ]
+            )
+        );
         static::assertSame(
-        'ㅡㅡ',
-        UTF8::string(
-            [
-                12641,
-                12641,
-            ]
-        )
-    );
+            'ㅡㅡ',
+            UTF8::string(
+                [
+                    12641,
+                    12641,
+                ]
+            )
+        );
         static::assertSame('中文空白', UTF8::string(UTF8::codepoints('中文空白')));
     }
 

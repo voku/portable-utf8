@@ -1908,68 +1908,68 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(3, UTF8::str_word_count('中文空白 foo öäü'));
         static::assertSame(3, UTF8::str_word_count('中文空白 foo öäü', 0));
         static::assertSame(
-        [
-            0 => '中文空白',
-            1 => 'foo',
-            2 => 'öäü',
-        ],
-        UTF8::str_word_count('中文空白 foo öäü', 1)
-    );
+            [
+                0 => '中文空白',
+                1 => 'foo',
+                2 => 'öäü',
+            ],
+            UTF8::str_word_count('中文空白 foo öäü', 1)
+        );
         static::assertSame(3, UTF8::str_word_count('中文空白 foo öäü#s', 0, '#'));
         static::assertSame(4, UTF8::str_word_count('中文空白 foo öäü#s', 0, ''));
         static::assertSame(
-        [
-            '中文空白',
-            'foo',
-            'öäü#s',
-        ],
-        UTF8::str_word_count('中文空白 foo öäü#s', 1, '#')
-    );
+            [
+                '中文空白',
+                'foo',
+                'öäü#s',
+            ],
+            UTF8::str_word_count('中文空白 foo öäü#s', 1, '#')
+        );
         static::assertSame(
-        [
-            0 => '中文空白',
-            5 => 'foo',
-            9 => 'öäü#s',
-        ],
-        UTF8::str_word_count('中文空白 foo öäü#s', 2, '#')
-    );
+            [
+                0 => '中文空白',
+                5 => 'foo',
+                9 => 'öäü#s',
+            ],
+            UTF8::str_word_count('中文空白 foo öäü#s', 2, '#')
+        );
         static::assertSame(
-        [
-            0 => '中文空白',
-            5 => 'foo',
-            9 => 'öäü',
-        ],
-        UTF8::str_word_count('中文空白 foo öäü', 2)
-    );
+            [
+                0 => '中文空白',
+                5 => 'foo',
+                9 => 'öäü',
+            ],
+            UTF8::str_word_count('中文空白 foo öäü', 2)
+        );
         static::assertSame(
-        [
-            'test',
-            'foo',
-            'test',
-            'test-test',
-            'test',
-            'test',
-            'test\'s',
-            'test’s',
-            'test#s',
-        ],
-        UTF8::str_word_count('test,foo test test-test test_test test\'s test’s test#s', 1, '#')
-    );
+            [
+                'test',
+                'foo',
+                'test',
+                'test-test',
+                'test',
+                'test',
+                'test\'s',
+                'test’s',
+                'test#s',
+            ],
+            UTF8::str_word_count('test,foo test test-test test_test test\'s test’s test#s', 1, '#')
+        );
         static::assertSame(
-        [
-            'test',
-            'foo',
-            'test',
-            'test-test',
-            'test',
-            'test',
-            'test\'s',
-            'test’s',
-            'test',
-            's',
-        ],
-        UTF8::str_word_count('test,foo test test-test test_test test\'s test’s test#s', 1)
-    );
+            [
+                'test',
+                'foo',
+                'test',
+                'test-test',
+                'test',
+                'test',
+                'test\'s',
+                'test’s',
+                'test',
+                's',
+            ],
+            UTF8::str_word_count('test,foo test test-test test_test test\'s test’s test#s', 1)
+        );
     }
 
     public function testWordsLimit()
