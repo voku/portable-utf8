@@ -368,6 +368,76 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             // Valid UTF-8 + Invalid Chars
             "κόσμε\xa0\xa1-öäü" => ['κόσμε-öäü' => 'κόσμε-öäü'],
             // Valid UTF-8 + ISO-Errors
+            'DÃ¼sseldorf' => ['DÃ¼sseldorf' => 'DÃ¼sseldorf'],
+            // Valid invisible char
+            '<x%0Conxxx=1' => ['<xonxxx=1' => '<xonxxx=1'],
+            // Valid ASCII
+            'a' => ['a' => 'a'],
+            // Valid emoji (non-UTF-8)
+            '😃'                                                          => ['😃' => '😃'],
+            '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => ['🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧' => '🐵 🙈 🙉 🙊 | ❤️ 💔 💌 💕 💞 💓 💗 💖 💘 💝 💟 💜 💛 💚 💙 | 🚾 🆒 🆓 🆕 🆖 🆗 🆙 🏧'],
+            // Valid ASCII + Invalid Chars
+            "a\xa0\xa1-öäü" => ['a-öäü' => 'a-öäü'],
+            // Valid 2 Octet Sequence
+            "\xc3\xb1" => ['ñ' => 'ñ'],
+            // Invalid 2 Octet Sequence
+            "\xc3\x28" => ['�(' => '('],
+            // Invalid
+            "\x00" => ['�' => ''],
+            "a\xDFb" => ['ab' => 'ab'],
+            // Invalid Sequence Identifier
+            "\xa0\xa1" => ['��' => ''],
+            // Valid 3 Octet Sequence
+            "\xe2\x82\xa1" => ['₡' => '₡'],
+            // Invalid 3 Octet Sequence (in 2nd Octet)
+            "\xe2\x28\xa1" => ['�(�' => '('],
+            // Invalid 3 Octet Sequence (in 3rd Octet)
+            "\xe2\x82\x28" => ['�(' => '('],
+            // Valid 4 Octet Sequence
+            "\xf0\x90\x8c\xbc" => ['𐌼' => '𐌼'],
+            // Invalid 4 Octet Sequence (in 2nd Invalid 4 Octet Sequence (in 2ndOctet)
+            "\xf0\x28\x8c\xbc" => ['�(��' => '('],
+            // Invalid 4 Octet Sequence (in 3rd Octet)
+            "\xf0\x90\x28\xbc" => ['�(�' => '('],
+            // Invalid 4 Octet Sequence (in 4th Octet)
+            "\xf0\x28\x8c\x28" => ['�(�(' => '(('],
+            // Valid 5 Octet Sequence (but not Unicode!)
+            "\xf8\xa1\xa1\xa1\xa1" => ['�' => ''],
+            // Valid 6 Octet Sequence (but not Unicode!)
+            "\xfc\xa1\xa1\xa1\xa1\xa1" => ['�' => ''],
+            // Valid 6 Octet Sequence (but not Unicode!) + UTF-8 EN SPACE
+            "\xfc\xa1\xa1\xa1\xa1\xa1\xe2\x80\x82" => ['�' => ' '],
+        ];
+
+        $counter = 0;
+        foreach ($examples as $testString => $testResults) {
+            foreach ($testResults as $before => $after) {
+                static::assertSame($after, UTF8::clean($testString, true), 'tested: ' . $counter);
+            }
+            ++$counter;
+        }
+    }
+
+    public function testCleanup()
+    {
+        $examples = [
+            // Valid defaults
+            ''   => ['' => ''],
+            ' '  => [' ' => ' '],
+            null => [null => ''],
+            1    => [1 => '1'],
+            '2'  => ['2' => '2'],
+            '+1' => ['+1' => '+1'],
+            // Valid UTF-8
+            '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强' => ['纳达尔绝境下大反击拒绝冷门逆转晋级中网四强' => '纳达尔绝境下大反击拒绝冷门逆转晋级中网四强'],
+            'κόσμε'                 => ['κόσμε' => 'κόσμε'],
+            '中'                     => ['中' => '中'],
+            '«foobar»'              => ['«foobar»' => '«foobar»'],
+            // Valid UTF-8 + UTF-8 NO-BREAK SPACE
+            "κόσμε\xc2\xa0" => ["κόσμε\xc2\xa0" => "κόσμε\xc2\xa0"],
+            // Valid UTF-8 + Invalid Chars
+            "κόσμε\xa0\xa1-öäü" => ['κόσμε-öäü' => 'κόσμε-öäü'],
+            // Valid UTF-8 + ISO-Errors
             'DÃ¼sseldorf' => ['Düsseldorf' => 'Düsseldorf'],
             // Valid invisible char
             '<x%0Conxxx=1' => ['<xonxxx=1' => '<xonxxx=1'],
@@ -384,6 +454,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             "\xc3\x28" => ['�(' => '('],
             // Invalid
             "\x00" => ['�' => ''],
+            "a\xDFb" => ['ab' => 'ab'],
             // Invalid Sequence Identifier
             "\xa0\xa1" => ['��' => ''],
             // Valid 3 Octet Sequence
@@ -417,7 +488,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testCleanup()
+    public function testCleanup2()
     {
         $examples = [
             // Valid defaults
