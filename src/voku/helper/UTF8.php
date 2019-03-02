@@ -7922,12 +7922,14 @@ final class UTF8
             $length -= (int) self::strlen($substring, $encoding);
         }
 
-        return ((string) self::substr(
-            $str,
-            0,
-            $length,
-            $encoding
-        )) . $substring;
+        return (
+            (string) self::substr(
+                $str,
+                0,
+                $length,
+                $encoding
+            )
+       ) . $substring;
     }
 
     /**

@@ -379,7 +379,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             // Invalid 2 Octet Sequence
             "\xc3\x28" => ['�(' => '('],
             // Invalid
-            "\x00" => ['�' => ''],
+            "\x00"   => ['�' => ''],
             "a\xDFb" => ['ab' => 'ab'],
             // Invalid Sequence Identifier
             "\xa0\xa1" => ['��' => ''],

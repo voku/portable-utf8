@@ -43,16 +43,16 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
         static::assertSame(
             'déjà',
             p::mb_convert_encoding(
-            \utf8_decode('déjà'),
-            'Utf-8',
-            [
-                'ASCII',
-                'ISO-2022-JP',
-                'UTF-8',
-                'ISO-8859-1',
-            ]
-    )
-    );
+                \utf8_decode('déjà'),
+                'Utf-8',
+                [
+                    'ASCII',
+                    'ISO-2022-JP',
+                    'UTF-8',
+                    'ISO-8859-1',
+                ]
+            )
+        );
     }
 
     public function testStrCase()
@@ -218,15 +218,15 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
         static::assertSame(
             'ISO-8859-1',
             p::mb_detect_encoding(
-            "\x9D",
-            [
-                'UTF-8',
-                'ASCII',
-                'ISO-8859-1',
-            ],
-            true
-        )
-    );
+                "\x9D",
+                [
+                    'UTF-8',
+                    'ASCII',
+                    'ISO-8859-1',
+                ],
+                true
+            )
+        );
     }
 
     public function testmbDetectOrder()

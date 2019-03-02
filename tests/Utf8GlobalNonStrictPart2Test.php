@@ -377,21 +377,34 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     public function testStrrev()
     {
         $testArray = [
-            'κ-öäü'  => 'üäö-κ',
-            'abc'    => 'cba',
-            'abcöäü' => 'üäöcba',
-            '-白-'    => '-白-',
-            ''       => '',
-            ' '      => ' ',
-            '👱👱🏻👱🏼👱🏽👱🏾👱🏿' => '👱🏿👱🏾👱🏽👱🏼👱🏻👱',
-            '🧟‍♀️🧟‍♂️' => '🧟‍♂️🧟‍♀️',
-            '👨‍❤️‍💋‍👨👩‍👩‍👧‍👦' => '👩‍👩‍👧‍👦👨‍❤️‍💋‍👨',
-            'Z̤͔ͧ̑̓ä͖̭̈̇lͮ̒ͫǧ̗͚̚o̙̔ͮ̇͐̇'=> 'o̙̔ͮ̇͐̇ǧ̗͚̚lͮ̒ͫä͖̭̈̇Z̤͔ͧ̑̓',
-            'abcåö' => 'öåcba',
+            'Hello from github'                                      => 'buhtig morf olleH',
+            '1'                                                      => '1',
+            'ab'                                                     => 'ba',
+            'тест по UTF8'                                           => '8FTU оп тсет',
+            'اهلا بك'                                                => 'كب الها',
+            '👹👺💀👻'                                                   => '👻💀👺👹',
+            "abca\xCC\x8Ao\xCC\x88"                                  => '𒀱𒀰𒁂𒁂𒁃🟉က',
+            "\u{1000}\u{1F7C9}\u{12043}𒁂\u{12042}\u{12030}\u{12031}" => '𒀱𒀰𒁂𒁂𒁃🟉က',
+            '﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽'                                       => '﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽',
+            'κ-öäü'                                                  => 'üäö-κ',
+            'abc'                                                    => 'cba',
+            'abcöäü'                                                 => 'üäöcba',
+            '-白-'                                                    => '-白-',
+            ''                                                       => '',
+            ' '                                                      => ' ',
+            '👱👱🏻👱🏼👱🏽👱🏾👱🏿'                                            => '🏿👱🏾👱🏽👱🏼👱🏻👱👱',
+            '🧟‍♀️🧟‍♂️'                                               => '️♂‍🧟️♀‍🧟',
+            '👨‍❤️‍💋‍👨👩‍👩‍👧‍👦'                                        => '👦‍👧‍👩‍👩👨‍💋‍️❤‍👨',
+            'Z̤͔ͧ̑̓ä͖̭̈̇lͮ̒ͫǧ̗͚̚o̙̔ͮ̇͐̇'                           => '̙̇͐̇ͮ̔ǒ͚̗̚gͫ̒ͮḽ͖̇̈̈a͔̤̓̑ͧZ', // Vertically-stacked characters
+            'اختبار النص'                                            => 'صنلا رابتخا', // Right-to-left words
+            'من left اليمين to الى right اليسار'                     => 'راسيلا thgir ىلا ot نيميلا tfel نم', // Mixed-direction words
+            'abcåö'                                                => '̈o̊acba',
         ];
 
-        foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
+            foreach ($testArray as $actual => $expected) {
+                static::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
+            }
         }
     }
 
@@ -482,11 +495,11 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     public function testStrtocasefold()
     {
         static::assertSame(UTF8::strtocasefold('J̌̌◌̱', true), UTF8::strtocasefold('ǰ◌̱', true)); // Original (NFC)
-    static::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱', true)); // Original (NFC)
-    static::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌')); // Uppercased
-    static::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC
+        static::assertSame('ǰ◌̱', UTF8::strtocasefold('ǰ◌̱', true)); // Original (NFC)
+        static::assertSame('j◌̌◌', UTF8::strtocasefold('J◌̌◌')); // Uppercased
+        static::assertSame('j◌̱◌̌', UTF8::strtocasefold('J◌̱◌̌')); // Uppercased NFC
 
-    // valid utf-8
+        // valid utf-8
         static::assertSame('hello world 中文空白', UTF8::strtocasefold('Hello world 中文空白'));
 
         // invalid utf-8
@@ -521,10 +534,10 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         ];
 
         if (
-        Bootup::is_php('7.3')
-        &&
-        UTF8::mbstring_loaded() === true
-    ) {
+            Bootup::is_php('7.3')
+            &&
+            UTF8::mbstring_loaded() === true
+        ) {
             $tests += [
                 'DÉJÀ Σσς Iıİi' => 'déjà σσς iıi̇i', // result for language === "tr" --> "déjà σσς ııii"
                 'DİNÇ'          => 'di̇nç',
@@ -549,10 +562,10 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         // ---
 
         // invalid utf-8
-    if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
-      static::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn"));
-        static::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
-    }
+        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+            static::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn"));
+            static::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+        }
 
         static::assertSame('iñtërnâtiônàlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
 
@@ -568,10 +581,10 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // language === "tr"
         if (
-        UTF8::intl_loaded() === true
-        &&
-        \in_array('tr-Lower', $support['intl__transliterator_list_ids'], true)
-    ) {
+            UTF8::intl_loaded() === true
+            &&
+            \in_array('tr-Lower', $support['intl__transliterator_list_ids'], true)
+        ) {
             $tests = [
                 1               => '1',
                 -1              => '-1',
@@ -639,10 +652,10 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         ];
 
         if (
-        Bootup::is_php('7.3')
-        &&
-        UTF8::mbstring_loaded() === true
-    ) {
+            Bootup::is_php('7.3')
+            &&
+            UTF8::mbstring_loaded() === true
+        ) {
             $tests += [
                 'test-ß' => 'TEST-SS',
             ];
@@ -681,10 +694,10 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // language === "tr"
         if (
-        UTF8::intl_loaded() === true
-        &&
-        \in_array('tr-Upper', $support['intl__transliterator_list_ids'], true)
-    ) {
+            UTF8::intl_loaded() === true
+            &&
+            \in_array('tr-Upper', $support['intl__transliterator_list_ids'], true)
+        ) {
             $tests = [
                 1               => '1',
                 -1              => '-1',

@@ -100,8 +100,8 @@ final class ShimIconvTest extends \PHPUnit\Framework\TestCase
         static::assertSame(
             'Illegal encoded-word:  .',
             p::iconv_mime_decode(
-            'Illegal encoded-word: =?utf-8?Q?' . \chr(0xA1) . '?= .',
-            \ICONV_MIME_DECODE_CONTINUE_ON_ERROR
+                'Illegal encoded-word: =?utf-8?Q?' . \chr(0xA1) . '?= .',
+                \ICONV_MIME_DECODE_CONTINUE_ON_ERROR
         )
     );
 
