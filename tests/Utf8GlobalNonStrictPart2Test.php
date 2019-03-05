@@ -427,6 +427,12 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         foreach ($testArray as $actual) {
             static::assertSame($actual, UTF8::emoji_decode(UTF8::emoji_encode($actual, true), true), 'tested: ' . $actual);
         }
+
+        static::assertSame('foo CHARACTER_OGRE', UTF8::emoji_encode('foo 👹', false));
+        static::assertSame('foo _-_PORTABLE_UTF8_-_308095726_-_627590803_-_8FTU_ELBATROP_-_', UTF8::emoji_encode('foo 👹', true));
+
+        static::assertSame('foo 👹', UTF8::emoji_decode('foo CHARACTER_OGRE', false));
+        static::assertSame('foo 👹', UTF8::emoji_decode('foo _-_PORTABLE_UTF8_-_308095726_-_627590803_-_8FTU_ELBATROP_-_', true));
     }
 
     public function testStrrichr()

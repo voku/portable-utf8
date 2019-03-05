@@ -3547,6 +3547,8 @@ final class UTF8
     }
 
     /**
+     * Encode a string with emoji chars into a non-emoji string.
+     *
      * @param string $str                        <p>The input string</p>
      * @param bool   $useReversibleStringMapping [optional] <p>
      *                                           when <b>TRUE</b>, we se a reversible string mapping
@@ -3574,6 +3576,8 @@ final class UTF8
     }
 
     /**
+     * Decodes a string which was encoded by "UTF8::emoji_encode()".
+     *
      * @param string $str                        <p>The input string.</p>
      * @param bool   $useReversibleStringMapping [optional] <p>
      *                                           When <b>TRUE</b>, we se a reversible string mapping
@@ -12177,8 +12181,9 @@ final class UTF8
             self::$EMOJI_KEYS_CACHE = \array_keys(self::$EMOJI);
             self::$EMOJI_VALUES_CACHE = \array_values(self::$EMOJI);
 
-            foreach (self::$EMOJI_VALUES_CACHE as $counter => $value) {
-                self::$EMOJI_KEYS_REVERSIBLE_CACHE[] = '_-_PORTABLE_UTF8_-_' . $counter . '_-_' . \strrev((string) $counter) . '_-_8FTU_ELBATROP_-_';
+            foreach (self::$EMOJI_KEYS_CACHE as $key) {
+                $tmpKey = \crc32($key);
+                self::$EMOJI_KEYS_REVERSIBLE_CACHE[] = '_-_PORTABLE_UTF8_-_' . $tmpKey . '_-_' . \strrev((string) $tmpKey) . '_-_8FTU_ELBATROP_-_';
             }
         }
     }

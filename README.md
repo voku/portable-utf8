@@ -417,6 +417,26 @@ alias: UTF8::int_to_chr()
 UTF8::decimal_to_chr(931); // 'Σ'
 ```
 
+##### emoji_decode(string $str, bool $useReversibleStringMapping = false) : string
+
+Decodes a string which was encoded by "UTF8::emoji_encode()".
+
+```php
+UTF8::emoji_decode('foo CHARACTER_OGRE', false); // 'foo 👹'
+//
+UTF8::emoji_encode('foo _-_PORTABLE_UTF8_-_308095726_-_627590803_-_8FTU_ELBATROP_-_', true); // 'foo 👹'
+```
+
+##### emoji_encode(string $str, bool $useReversibleStringMapping = false) : string
+
+Encode a string with emoji chars into a non-emoji string.
+
+```php
+UTF8::emoji_encode('foo 👹', false); // 'foo CHARACTER_OGRE'
+//
+UTF8::emoji_encode('foo 👹', true); // 'foo _-_PORTABLE_UTF8_-_308095726_-_627590803_-_8FTU_ELBATROP_-_'
+```
+
 ##### encode(string $encoding, string $str, bool $autodetectFromEncoding = true, string $fromEncoding = '') : string
 
 Encode a string with a new charset-encoding.
