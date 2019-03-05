@@ -383,7 +383,6 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             'тест по UTF8'                                           => '8FTU оп тсет',
             'اهلا بك'                                                => 'كب الها',
             '👹👺💀👻'                                                   => '👻💀👺👹',
-            "abca\xCC\x8Ao\xCC\x88"                                  => '𒀱𒀰𒁂𒁂𒁃🟉က',
             "\u{1000}\u{1F7C9}\u{12043}𒁂\u{12042}\u{12030}\u{12031}" => '𒀱𒀰𒁂𒁂𒁃🟉က',
             '﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽'                                       => '﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽',
             'κ-öäü'                                                  => 'üäö-κ',
@@ -398,13 +397,16 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             'Z̤͔ͧ̑̓ä͖̭̈̇lͮ̒ͫǧ̗͚̚o̙̔ͮ̇͐̇'                           => 'o̙̔ͮ̇͐̇ǧ̗͚̚lͮ̒ͫä͖̭̈̇Z̤͔ͧ̑̓', // Vertically-stacked characters
             'اختبار النص'                                            => 'صنلا رابتخا', // Right-to-left words
             'من left اليمين to الى right اليسار'                     => 'راسيلا thgir ىلا ot نيميلا tfel نم', // Mixed-direction words
-            'abcåö'                                                => 'öåcba',
         ];
 
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
             foreach ($testArray as $actual => $expected) {
                 static::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
             }
+        }
+
+        if (UTF8::getSupportInfo('intl') === true) {
+            static::assertSame('abcåö', UTF8::strrev('öåcba'));
         }
     }
 
