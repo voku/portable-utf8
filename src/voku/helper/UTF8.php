@@ -3560,15 +3560,15 @@ final class UTF8
 
         if ($useReversibleStringMapping === true) {
             return (string) \str_replace(
-                self::$EMOJI_VALUES_CACHE,
-                self::$EMOJI_KEYS_REVERSIBLE_CACHE,
+                (array) self::$EMOJI_VALUES_CACHE,
+                (array) self::$EMOJI_KEYS_REVERSIBLE_CACHE,
                 $str
             );
         }
 
         return (string) \str_replace(
-            self::$EMOJI_VALUES_CACHE,
-            self::$EMOJI_KEYS_CACHE,
+            (array) self::$EMOJI_VALUES_CACHE,
+            (array) self::$EMOJI_KEYS_CACHE,
             $str
         );
     }
@@ -3587,15 +3587,15 @@ final class UTF8
 
         if ($useReversibleStringMapping === true) {
             return (string) \str_replace(
-                self::$EMOJI_KEYS_REVERSIBLE_CACHE,
-                self::$EMOJI_VALUES_CACHE,
+                (array) self::$EMOJI_KEYS_REVERSIBLE_CACHE,
+                (array) self::$EMOJI_VALUES_CACHE,
                 $str
             );
         }
 
         return (string) \str_replace(
-            self::$EMOJI_KEYS_CACHE,
-            self::$EMOJI_VALUES_CACHE,
+            (array) self::$EMOJI_KEYS_CACHE,
+            (array) self::$EMOJI_VALUES_CACHE,
             $str
         );
     }
