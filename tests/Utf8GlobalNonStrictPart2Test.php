@@ -392,19 +392,40 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             '-白-'                                                    => '-白-',
             ''                                                       => '',
             ' '                                                      => ' ',
-            '👱👱🏻👱🏼👱🏽👱🏾👱🏿'                                            => '🏿👱🏾👱🏽👱🏼👱🏻👱👱',
-            '🧟‍♀️🧟‍♂️'                                               => '️♂‍🧟️♀‍🧟',
-            '👨‍❤️‍💋‍👨👩‍👩‍👧‍👦'                                        => '👦‍👧‍👩‍👩👨‍💋‍️❤‍👨',
-            'Z̤͔ͧ̑̓ä͖̭̈̇lͮ̒ͫǧ̗͚̚o̙̔ͮ̇͐̇'                           => '̙̇͐̇ͮ̔ǒ͚̗̚gͫ̒ͮḽ͖̇̈̈a͔̤̓̑ͧZ', // Vertically-stacked characters
+            '👱👱🏻👱🏼👱🏽👱🏾👱🏿'                                            => '👱🏿👱🏾👱🏽👱🏼👱🏻👱',
+            '🧟‍♀️🧟‍♂️'                                               => '🧟‍♂️🧟‍♀️',
+            '👨‍❤️‍💋‍👨👩‍👩‍👧‍👦'                                        => '👩‍👩‍👧‍👦👨‍❤️‍💋‍👨',
+            'Z̤͔ͧ̑̓ä͖̭̈̇lͮ̒ͫǧ̗͚̚o̙̔ͮ̇͐̇'                           => 'o̙̔ͮ̇͐̇ǧ̗͚̚lͮ̒ͫä͖̭̈̇Z̤͔ͧ̑̓', // Vertically-stacked characters
             'اختبار النص'                                            => 'صنلا رابتخا', // Right-to-left words
             'من left اليمين to الى right اليسار'                     => 'راسيلا thgir ىلا ot نيميلا tfel نم', // Mixed-direction words
-            'abcåö'                                                => '̈o̊acba',
+            'abcåö'                                                => 'öåcba',
         ];
 
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
             foreach ($testArray as $actual => $expected) {
                 static::assertSame($expected, UTF8::strrev($actual), 'error by ' . $actual);
             }
+        }
+    }
+
+    public function testDecodeEncodeEmoji()
+    {
+        $testArray = [
+            '1',
+            'a',
+            'ö',
+            '👻💀👺👹',
+            '👱🏿👱🏾👱🏽👱🏼👱🏻👱',
+            '🧟‍♂️🧟‍♀️',
+            '👩‍👩‍👧‍👦👨‍❤️‍💋‍👨',
+        ];
+
+        foreach ($testArray as $actual) {
+            static::assertSame($actual, UTF8::emoji_decode(UTF8::emoji_encode($actual)), 'tested: ' . $actual);
+        }
+
+        foreach ($testArray as $actual) {
+            static::assertSame($actual, UTF8::emoji_decode(UTF8::emoji_encode($actual, true), true), 'tested: ' . $actual);
         }
     }
 

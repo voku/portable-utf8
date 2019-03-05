@@ -210,6 +210,26 @@ final class UTF8
     /**
      * @var array|null
      */
+    private static $EMOJI;
+
+    /**
+     * @var array|null
+     */
+    private static $EMOJI_VALUES_CACHE;
+
+    /**
+     * @var array|null
+     */
+    private static $EMOJI_KEYS_CACHE;
+
+    /**
+     * @var array|null
+     */
+    private static $EMOJI_KEYS_REVERSIBLE_CACHE;
+
+    /**
+     * @var array|null
+     */
     private static $CHR;
 
     /**
@@ -3524,6 +3544,60 @@ final class UTF8
         }
 
         return false;
+    }
+
+    /**
+     * @param string $str                        <p>The input string</p>
+     * @param bool   $useReversibleStringMapping [optional] <p>
+     *                                           when <b>TRUE</b>, we se a reversible string mapping
+     *                                           between "emoji_encode" and "emoji_decode"</p>
+     *
+     * @return string
+     */
+    public static function emoji_encode(string $str, bool $useReversibleStringMapping = false): string
+    {
+        self::initEmojiData();
+
+        if ($useReversibleStringMapping === true) {
+            return (string) \str_replace(
+                self::$EMOJI_VALUES_CACHE,
+                self::$EMOJI_KEYS_REVERSIBLE_CACHE,
+                $str
+            );
+        }
+
+        return (string) \str_replace(
+            self::$EMOJI_VALUES_CACHE,
+            self::$EMOJI_KEYS_CACHE,
+            $str
+        );
+    }
+
+    /**
+     * @param string $str                        <p>The input string.</p>
+     * @param bool   $useReversibleStringMapping [optional] <p>
+     *                                           When <b>TRUE</b>, we se a reversible string mapping
+     *                                           between "emoji_encode" and "emoji_decode".</p>
+     *
+     * @return string
+     */
+    public static function emoji_decode(string $str, bool $useReversibleStringMapping = false): string
+    {
+        self::initEmojiData();
+
+        if ($useReversibleStringMapping === true) {
+            return (string) \str_replace(
+                self::$EMOJI_KEYS_REVERSIBLE_CACHE,
+                self::$EMOJI_VALUES_CACHE,
+                $str
+            );
+        }
+
+        return (string) \str_replace(
+            self::$EMOJI_KEYS_CACHE,
+            self::$EMOJI_VALUES_CACHE,
+            $str
+        );
     }
 
     /**
@@ -9117,12 +9191,25 @@ final class UTF8
         // init
         $reversed = '';
 
+        $str = self::emoji_encode($str, true);
+
         if ($encoding === 'UTF-8') {
-            $i = (int) \mb_strlen($str);
-            while ($i--) {
-                $reversedTmp = \mb_substr($str, $i, 1);
-                if ($reversedTmp !== false) {
-                    $reversed .= $reversedTmp;
+            if (self::$SUPPORT['intl'] === true) {
+                // try "grapheme" first: https://stackoverflow.com/questions/17496493/strrev-dosent-support-utf-8
+                $i = (int) \grapheme_strlen($str);
+                while ($i--) {
+                    $reversedTmp = \grapheme_substr($str, $i, 1);
+                    if ($reversedTmp !== false) {
+                        $reversed .= $reversedTmp;
+                    }
+                }
+            } else {
+                $i = (int) \mb_strlen($str);
+                while ($i--) {
+                    $reversedTmp = \mb_substr($str, $i, 1);
+                    if ($reversedTmp !== false) {
+                        $reversed .= $reversedTmp;
+                    }
                 }
             }
         } else {
@@ -9137,7 +9224,7 @@ final class UTF8
             }
         }
 
-        return $reversed;
+        return self::emoji_decode($reversed, true);
     }
 
     /**
@@ -12068,6 +12155,32 @@ final class UTF8
     public static function ws(): array
     {
         return self::$WHITESPACE;
+    }
+
+    /**
+     * @return void
+     */
+    private static function initEmojiData()
+    {
+        if (self::$EMOJI_KEYS_CACHE === null) {
+            if (self::$EMOJI === null) {
+                self::$EMOJI = self::getData('emoji');
+            }
+
+            \uksort(
+                self::$EMOJI,
+                static function ($a, $b) {
+                    return \strlen($b) <=> \strlen($a);
+                }
+            );
+
+            self::$EMOJI_KEYS_CACHE = \array_keys(self::$EMOJI);
+            self::$EMOJI_VALUES_CACHE = \array_values(self::$EMOJI);
+
+            foreach (self::$EMOJI_VALUES_CACHE as $counter => $value) {
+                self::$EMOJI_KEYS_REVERSIBLE_CACHE[] = '_-_PORTABLE_UTF8_-_' . $counter . '_-_' . \strrev((string) $counter) . '_-_8FTU_ELBATROP_-_';
+            }
+        }
     }
 
     /**
