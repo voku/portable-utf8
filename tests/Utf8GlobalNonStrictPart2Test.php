@@ -394,7 +394,6 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             '👱👱🏻👱🏼👱🏽👱🏾👱🏿'                                            => '👱🏿👱🏾👱🏽👱🏼👱🏻👱',
             '🧟‍♀️🧟‍♂️'                                               => '🧟‍♂️🧟‍♀️',
             '👨‍❤️‍💋‍👨👩‍👩‍👧‍👦'                                        => '👩‍👩‍👧‍👦👨‍❤️‍💋‍👨',
-            'Z̤͔ͧ̑̓ä͖̭̈̇lͮ̒ͫǧ̗͚̚o̙̔ͮ̇͐̇'                           => 'o̙̔ͮ̇͐̇ǧ̗͚̚lͮ̒ͫä͖̭̈̇Z̤͔ͧ̑̓', // Vertically-stacked characters
             'اختبار النص'                                            => 'صنلا رابتخا', // Right-to-left words
             'من left اليمين to الى right اليسار'                     => 'راسيلا thgir ىلا ot نيميلا tfel نم', // Mixed-direction words
         ];
@@ -407,6 +406,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         if (UTF8::getSupportInfo('intl') === true) {
             static::assertSame('abcåö', UTF8::strrev('öåcba'));
+            static::assertSame('Z̤͔ͧ̑̓ä͖̭̈̇lͮ̒ͫǧ̗͚̚o̙̔ͮ̇͐̇', UTF8::strrev('o̙̔ͮ̇͐̇ǧ̗͚̚lͮ̒ͫä͖̭̈̇Z̤͔ͧ̑̓')); // Vertically-stacked characters
         }
     }
 
