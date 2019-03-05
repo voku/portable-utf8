@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.3 (2019-03-05)
+
+- optimize "UTF8::strrev()" with support for emoji chars
+- added "UTF8::emoji_encode()" + "UTF8::emoji_decode()"
+
 ### 5.4.2 (2019-02-11)
 
 - optimize html-encoding for unicode surrogate pairs (e.g. UTF-16)
