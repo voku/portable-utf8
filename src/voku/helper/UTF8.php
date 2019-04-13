@@ -4595,6 +4595,18 @@ final class UTF8
             return '';
         }
 
+        if (
+            \strpos($str, '&') === false
+            &&
+            \strpos($str, '%') === false
+            &&
+            \strpos($str, '+') === false
+            &&
+            \strpos($str, '\u') === false
+        ) {
+            return self::fix_simple_utf8($str);
+        }
+
         $pattern = '/%u([0-9a-fA-F]{3,4})/';
         if (\preg_match($pattern, $str)) {
             $str = (string) \preg_replace($pattern, '&#x\\1;', \rawurldecode($str));
@@ -11606,6 +11618,18 @@ final class UTF8
     {
         if ($str === '') {
             return '';
+        }
+
+        if (
+            \strpos($str, '&') === false
+            &&
+            \strpos($str, '%') === false
+            &&
+            \strpos($str, '+') === false
+            &&
+            \strpos($str, '\u') === false
+        ) {
+            return self::fix_simple_utf8($str);
         }
 
         $pattern = '/%u([0-9a-fA-F]{3,4})/';
