@@ -1443,7 +1443,7 @@ final class UTF8
      * @param string        $fromEncoding     [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.<br>
      *                                        A empty string will trigger the autodetect anyway.</p>
      *
-     * @return false|string the function returns the read data or false on failure
+     * @return false|string The function returns the read data as string or <b>false</b> on failure.
      */
     public static function file_get_contents(
         string $filename,
@@ -1457,6 +1457,10 @@ final class UTF8
     ) {
         // init
         $filename = \filter_var($filename, \FILTER_SANITIZE_STRING);
+
+        if ($filename === false) {
+            return false;
+        }
 
         if ($timeout && $context === null) {
             $context = \stream_context_create(
@@ -2076,6 +2080,9 @@ final class UTF8
         }
 
         $str_info = \unpack('C2chars', $str_info);
+        if ($str_info === false) {
+            return $fallback;
+        }
         $type_code = (int) ($str_info['chars1'] . $str_info['chars2']);
 
         // DEBUG
@@ -12107,40 +12114,41 @@ final class UTF8
             return '';
         }
 
-        $w = '';
         $strSplit = \explode($break, $str);
         if ($strSplit === false) {
             return '';
         }
-        $chars = [];
 
+        $chars = [];
+        $wordSplit = '';
         foreach ($strSplit as $i => $iValue) {
             if ($i) {
                 $chars[] = $break;
-                $w .= '#';
+                $wordSplit .= '#';
             }
 
-            $c = $iValue;
-            unset($strSplit[$i]);
-
-            foreach (self::str_split($c) as $c) {
+            foreach (self::str_split($iValue) as $c) {
                 $chars[] = $c;
-                $w .= $c === ' ' ? ' ' : '?';
+                $wordSplit .= $c === ' ' ? ' ' : '?';
             }
         }
 
         $strReturn = '';
         $j = 0;
         $b = $i = -1;
-        $w = \wordwrap($w, $width, '#', $cut);
+        $wordSplit = \wordwrap($wordSplit, $width, '#', $cut);
 
-        while (false !== $b = \mb_strpos($w, '#', $b + 1)) {
+        while (false !== $b = \mb_strpos($wordSplit, '#', $b + 1)) {
             for (++$i; $i < $b; ++$i) {
                 $strReturn .= $chars[$j];
                 unset($chars[$j++]);
             }
 
-            if ($break === $chars[$j] || $chars[$j] === ' ') {
+            if (
+                $break === $chars[$j]
+                ||
+                $chars[$j] === ' '
+            ) {
                 unset($chars[$j++]);
             }
 
@@ -12351,41 +12359,41 @@ final class UTF8
      */
     private static function rxClass(string $s, string $class = ''): string
     {
-        static $RX_CLASSS_CACHE = [];
+        static $RX_CLASS_CACHE = [];
 
         $cacheKey = $s . $class;
 
-        if (isset($RX_CLASSS_CACHE[$cacheKey])) {
-            return $RX_CLASSS_CACHE[$cacheKey];
+        if (isset($RX_CLASS_CACHE[$cacheKey])) {
+            return $RX_CLASS_CACHE[$cacheKey];
         }
 
-        $class = [$class];
+        $classArray = [$class];
 
         /** @noinspection SuspiciousLoopInspection */
         /** @noinspection AlterInForeachInspection */
         foreach (self::str_split($s) as &$s) {
             if ($s === '-') {
-                $class[0] = '-' . $class[0];
+                $classArray[0] = '-' . $classArray[0];
             } elseif (!isset($s[2])) {
-                $class[0] .= \preg_quote($s, '/');
+                $classArray[0] .= \preg_quote($s, '/');
             } elseif (self::strlen($s) === 1) {
-                $class[0] .= $s;
+                $classArray[0] .= $s;
             } else {
-                $class[] = $s;
+                $classArray[] = $s;
             }
         }
 
-        if ($class[0]) {
-            $class[0] = '[' . $class[0] . ']';
+        if ($classArray[0]) {
+            $classArray[0] = '[' . $classArray[0] . ']';
         }
 
-        if (\count($class) === 1) {
-            $return = $class[0];
+        if (\count($classArray) === 1) {
+            $return = $classArray[0];
         } else {
-            $return = '(?:' . \implode('|', $class) . ')';
+            $return = '(?:' . \implode('|', $classArray) . ')';
         }
 
-        $RX_CLASSS_CACHE[$cacheKey] = $return;
+        $RX_CLASS_CACHE[$cacheKey] = $return;
 
         return $return;
     }
@@ -12490,7 +12498,11 @@ final class UTF8
      */
     private static function strtonatfold(string $str)
     {
-        return \preg_replace('/\p{Mn}+/u', '', \Normalizer::normalize($str, \Normalizer::NFD));
+        return \preg_replace(
+            '/\p{Mn}+/u',
+            '',
+            \Normalizer::normalize($str, \Normalizer::NFD)
+        );
     }
 
     /**

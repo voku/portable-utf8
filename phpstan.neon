@@ -7,7 +7,6 @@ parameters:
     ignoreErrors:
         # phpstan errors?
         - '#between \*NEVER\* and#'
-        - '#Strict comparison using === between 1\|2\|3\|4\|5 and 0 will always evaluate to false#'
         - '#Function mb_decode_numericentity invoked with.*#'
         - '#Function mb_encode_numericentity invoked with.*#'
         # ignore
