@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.4.4 (2019-04-15)
+
+- optimize performance for UTF8::rawurldecode() and UTF8::urldecode()
+- optimize "UTF8::str_split_pattern()" with limit usage
+- fix warnings detected by psalm && phpstan && phpstorm
+
 ### 5.4.3 (2019-03-05)
 
 - optimize "UTF8::strrev()" with support for emoji chars
