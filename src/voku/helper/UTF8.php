@@ -457,6 +457,8 @@ final class UTF8
      * This method will auto-detect your server environment for UTF-8 support.
      *
      * @internal <p>You don't need to run it manually, it will be triggered if it's needed.</p>
+     *
+     * @return void
      */
     public static function checkForSupport()
     {
@@ -4997,6 +4999,8 @@ final class UTF8
 
     /**
      * WARNING: Print native UTF-8 support (libs), e.g. for debugging.
+     *
+     * @return void
      */
     public static function showSupport()
     {
@@ -7265,12 +7269,19 @@ final class UTF8
         if (self::$SUPPORT['mbstring'] === true) {
             if ($limit >= 0) {
                 /** @noinspection PhpComposerExtensionStubsInspection */
-                return \array_filter(
-                    \mb_split($pattern, $str),
-                    static function () use (&$limit): bool {
-                        return --$limit >= 0;
+                $resultTmp = \mb_split($pattern, $str);
+
+                $result = [];
+                foreach ($resultTmp as $itemTmp) {
+                    if ($limit === 0) {
+                        break;
                     }
-                );
+                    --$limit;
+
+                    $result[] = $itemTmp;
+                }
+
+                return $result;
             }
 
             /** @noinspection PhpComposerExtensionStubsInspection */
