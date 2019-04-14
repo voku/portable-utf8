@@ -9515,7 +9515,7 @@ final class UTF8
         }
         $needle = (string) $needle;
 
-        if ($needle === '' || $haystack === '') {
+        if ($needle === '') {
             return false;
         }
 
@@ -12216,7 +12216,7 @@ final class UTF8
 
             \uksort(
                 self::$EMOJI,
-                static function ($a, $b) {
+                static function (string $a, string $b): int {
                     return \strlen($b) <=> \strlen($a);
                 }
             );
