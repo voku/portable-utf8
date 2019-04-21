@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.5 (2019-04-21)
+
+- fix unicode support for regex 
+
 ### 5.4.4 (2019-04-15)
 
 - optimize performance for UTF8::rawurldecode() and UTF8::urldecode()
