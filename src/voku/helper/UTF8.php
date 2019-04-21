@@ -965,7 +965,7 @@ final class UTF8
     public static function css_stripe_media_queries(string $str): string
     {
         return (string) \preg_replace(
-            '#@media\\s+(?:only\\s)?(?:[\\s{\\(]|screen|all)\\s?[^{]+{.*}\\s*}\\s*#misU',
+            '#@media\\s+(?:only\\s)?(?:[\\s{\\(]|screen|all)\\s?[^{]+{.*}\\s*}\\s*#isumU',
             '',
             $str
         );
@@ -2321,7 +2321,7 @@ final class UTF8
             return false;
         }
 
-        if (\preg_match('/^(?:\\\u|U\+|)([a-z0-9]{4,6})$/i', $hexDec, $match)) {
+        if (\preg_match('/^(?:\\\u|U\+|)([a-zA-Z0-9]{4,6})$/', $hexDec, $match)) {
             return \intval($match[1], 16);
         }
 
@@ -2587,7 +2587,7 @@ final class UTF8
     public static function html_stripe_empty_tags(string $str): string
     {
         return (string) \preg_replace(
-            "/<[^\/>]*>(([\s]?)*|)<\/[^>]*>/iu",
+            "/<[^\/>]*>(([\s]?)*|)<\/[^>]*>/u",
             '',
             $str
         );
@@ -3303,7 +3303,7 @@ final class UTF8
         // init
         $matches = [];
 
-        \preg_match("/<\/?\w+(?:(?:\s+\w+(?:\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)*+\s*|\s*)\/?>/", $str, $matches);
+        \preg_match("/<\/?\w+(?:(?:\s+\w+(?:\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)*+\s*|\s*)\/?>/u", $str, $matches);
 
         return \count($matches) !== 0;
     }
@@ -4219,7 +4219,7 @@ final class UTF8
 
         $encodingOrig = $encoding;
         $encoding = \strtoupper($encoding);
-        $encodingUpperHelper = (string) \preg_replace('/[^a-zA-Z0-9\s]/', '', $encoding);
+        $encodingUpperHelper = (string) \preg_replace('/[^a-zA-Z0-9\s]/u', '', $encoding);
 
         $equivalences = [
             'ISO8859'     => 'ISO-8859-1',
@@ -4741,7 +4741,7 @@ final class UTF8
         if (\is_array($what) === true) {
             /** @noinspection ForeachSourceInspection */
             foreach ($what as $item) {
-                $str = (string) \preg_replace('/(' . \preg_quote($item, '/') . ')+/', $item, $str);
+                $str = (string) \preg_replace('/(' . \preg_quote($item, '/') . ')+/u', $item, $str);
             }
         }
 
@@ -5440,7 +5440,7 @@ final class UTF8
     ): string {
         if (self::$SUPPORT['mbstring'] === true) {
             /** @noinspection PhpComposerExtensionStubsInspection */
-            $str = (string) \mb_ereg_replace('\B([A-Z])', '-\1', \trim($str));
+            $str = (string) \mb_ereg_replace('\B(\p{Lu})', '-\1', \trim($str));
 
             $useMbFunction = $lang === null && $tryToKeepStringLength === false;
             if ($useMbFunction === true && $encoding === 'UTF-8') {
@@ -5453,7 +5453,7 @@ final class UTF8
             return (string) \mb_ereg_replace('[-_\s]+', $delimiter, $str);
         }
 
-        $str = (string) \preg_replace('/\B([A-Z])/u', '-\1', \trim($str));
+        $str = (string) \preg_replace('/\B(\p{Lu})/u', '-\1', \trim($str));
 
         $useMbFunction = $lang === null && $tryToKeepStringLength === false;
         if ($useMbFunction === true && $encoding === 'UTF-8') {
@@ -7160,7 +7160,7 @@ final class UTF8
         }
 
         $str = (string) \preg_replace_callback(
-            '/([\d|A-Z])/u',
+            '/([\d|\p{Lu}])/u',
             /**
              * @param string[] $matches
              *
@@ -7185,8 +7185,8 @@ final class UTF8
 
         $str = (string) \preg_replace(
             [
-                '/\s+/',        // convert spaces to "_"
-                '/^\s+|\s+$/',  // trim leading & trailing spaces
+                '/\s+/u',        // convert spaces to "_"
+                '/^\s+|\s+$/u',  // trim leading & trailing spaces
                 '/_+/',         // remove double "_"
             ],
             [
@@ -11243,8 +11243,8 @@ final class UTF8
         $string = (string) \preg_replace(
             [
                 '/[^' . $fallback_char_escaped . '\.\-a-zA-Z0-9\s]/', // 1) remove un-needed chars
-                '/[\s]+/',                                            // 2) convert spaces to $fallback_char
-                '/[' . $fallback_char_escaped . ']+/',                // 3) remove double $fallback_char's
+                '/[\s]+/u',                                           // 2) convert spaces to $fallback_char
+                '/[' . $fallback_char_escaped . ']+/u',               // 3) remove double $fallback_char's
             ],
             [
                 '',

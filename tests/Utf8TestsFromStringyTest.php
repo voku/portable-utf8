@@ -1277,7 +1277,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['serve_h_t_t_p', 'ServeHTTP'];
         yield ['1_camel_2_case', '1camel2case'];
         yield ['camel_σase', 'camel σase', 'UTF-8'];
-        yield ['Στανιλ_case', 'Στανιλ case', 'UTF-8'];
+        yield ['στανιλ_case', 'Στανιλ case', 'UTF-8'];
         yield ['σamel_case', 'σamel  Case', 'UTF-8'];
     }
 
