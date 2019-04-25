@@ -15,8 +15,6 @@ class Bootup
      *
      * @param int    $normalization_form
      * @param string $leading_combining
-     *
-     * @return void
      */
     public static function filterRequestInputs($normalization_form = \Normalizer::NFC, $leading_combining = '◌')
     {
@@ -60,7 +58,7 @@ class Bootup
     /**
      * Filter current REQUEST_URI .
      *
-     * @param string|null $uri <p>If null is set, then the server REQUEST_URI will be used.</p>
+     * @param string|null $uri  <p>If null is set, then the server REQUEST_URI will be used.</p>
      * @param bool        $exit
      *
      * @return mixed
@@ -72,7 +70,7 @@ class Bootup
                 return false;
             }
 
-            $uri = (string)$_SERVER['REQUEST_URI'];
+            $uri = (string) $_SERVER['REQUEST_URI'];
         }
 
         $uriOrig = $uri;
@@ -89,7 +87,7 @@ class Bootup
         // When not, assumes Windows-1252 and redirects to the corresponding UTF-8 encoded URL
         //
 
-        $uri = (string)\preg_replace_callback(
+        $uri = (string) \preg_replace_callback(
             '/[\x80-\xFF]+/',
             /**
              * @param array $m
@@ -102,7 +100,7 @@ class Bootup
             $uri
         );
 
-        $uri = (string)\preg_replace_callback(
+        $uri = (string) \preg_replace_callback(
             '/(?:%[89A-F][0-9A-F])+/i',
             /**
              * @param array $m
@@ -151,10 +149,10 @@ class Bootup
      *
      * @param int $length <p>output length</p>
      *
-     * @return false|string
-     *                      <strong>false</strong> on error
      * @throws \Exception if it was not possible to gather sufficient entropy
      *
+     * @return false|string
+     *                      <strong>false</strong> on error
      */
     public static function get_random_bytes($length)
     {
@@ -162,7 +160,7 @@ class Bootup
             return false;
         }
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if ($length <= 0) {
             return false;
@@ -173,8 +171,6 @@ class Bootup
 
     /**
      * bootstrap
-     *
-     * @return void
      */
     public static function initAll()
     {
@@ -195,7 +191,7 @@ class Bootup
     {
         static $_IS_PHP;
 
-        $version = (string)$version;
+        $version = (string) $version;
 
         if (!isset($_IS_PHP[$version])) {
             $_IS_PHP[$version] = \version_compare(\PHP_VERSION, $version, '>=');

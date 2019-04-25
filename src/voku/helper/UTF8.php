@@ -457,8 +457,6 @@ final class UTF8
      * This method will auto-detect your server environment for UTF-8 support.
      *
      * @internal <p>You don't need to run it manually, it will be triggered if it's needed.</p>
-     *
-     * @return void
      */
     public static function checkForSupport()
     {
@@ -1445,7 +1443,7 @@ final class UTF8
      * @param string        $fromEncoding     [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.<br>
      *                                        A empty string will trigger the autodetect anyway.</p>
      *
-     * @return false|string The function returns the read data as string or <b>false</b> on failure.
+     * @return false|string the function returns the read data as string or <b>false</b> on failure
      */
     public static function file_get_contents(
         string $filename,
@@ -4999,8 +4997,6 @@ final class UTF8
 
     /**
      * WARNING: Print native UTF-8 support (libs), e.g. for debugging.
-     *
-     * @return void
      */
     public static function showSupport()
     {
@@ -11929,20 +11925,6 @@ final class UTF8
             return '';
         }
 
-        static $UTF8_TO_WIN1252_KEYS_CACHE = null;
-        static $UTF8_TO_WIN1252_VALUES_CACHE = null;
-
-        if ($UTF8_TO_WIN1252_KEYS_CACHE === null) {
-            if (self::$WIN1252_TO_UTF8 === null) {
-                self::$WIN1252_TO_UTF8 = self::getData('win1252_to_utf8');
-            }
-
-            $UTF8_TO_WIN1252_KEYS_CACHE = \array_keys(self::$WIN1252_TO_UTF8);
-            $UTF8_TO_WIN1252_VALUES_CACHE = \array_values(self::$WIN1252_TO_UTF8);
-        }
-
-        $str = \str_replace($UTF8_TO_WIN1252_KEYS_CACHE, $UTF8_TO_WIN1252_VALUES_CACHE, $str);
-
         // save for later comparision
         $str_backup = $str;
         $len = \strlen($str);
@@ -12204,9 +12186,6 @@ final class UTF8
         return self::$WHITESPACE;
     }
 
-    /**
-     * @return void
-     */
     private static function initEmojiData()
     {
         if (self::$EMOJI_KEYS_CACHE === null) {

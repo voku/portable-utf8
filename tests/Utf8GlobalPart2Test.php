@@ -1150,11 +1150,15 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
             '  -ABC-中文空白-  ' => '  -ABC-????-  ',
             '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
             'öäü'            => 'öäü',
+            '152'            => '152',
+            's152'           => 's152',
             ''               => '',
         ];
 
-        foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::to_utf8(UTF8::to_latin1($before)));
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
+            foreach ($tests as $before => $after) {
+                static::assertSame($after, UTF8::to_utf8(UTF8::to_latin1($before)));
+            }
         }
 
         // alias
@@ -1699,11 +1703,13 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
             '  -ABC-中文空白-  ' => '  -ABC-????-  ',
             '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
             'öäü'            => 'öäü',
+            '152'            => '152',
+            's152'           => 's152',
             ''               => '',
         ];
 
         foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::utf8_encode(UTF8::encode('ISO-8859-1', $before, false)));
+            static::assertSame($after, UTF8::utf8_encode(UTF8::encode('ISO-8859-1', (string) $before, false)));
         }
     }
 
@@ -1713,9 +1719,11 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
             '  -ABC-中文空白-  ' => '  -ABC-????-  ',
             '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
             'öäü'            => 'öäü',
-            // ''                  => '',
-            // false               => '0',
-            // null                => '',
+            ''                  => '',
+            false               => '0',
+            null                => '',
+            '152'               => '152',
+            's152'              => 's152',
             "\xe2\x28\xa1"      => '?',
             "\xa0\xa1"          => \html_entity_decode('&nbsp;') . '¡',
             "κόσμε\xa0\xa1-öäü" => '?????' . \html_entity_decode('&nbsp;') . '¡-öäü',
@@ -1723,7 +1731,7 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::utf8_encode((UTF8::utf8_decode($before))));
+            static::assertSame($after, UTF8::utf8_encode((UTF8::utf8_decode((string) $before))));
         }
     }
 
