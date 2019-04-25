@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.6 (2019-04-25)
+
+- fix "UTF8::to_latin1()" for non-char input + optimize performance
+
 ### 5.4.5 (2019-04-21)
 
 - fix unicode support for regex 

@@ -1493,6 +1493,10 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     ';
 
         $testArray[] = 'Ã ñ àáâãäåæ ç èéêë ìíîï';
+        $testArray[] = '152';
+        $testArray[] = 's152';
+        $testArray[] = 'Ã ñ àáâãäåæ ç èéêë ìíîï';
+        $testArray[] = 'Â' . "\xc2\xa0" . ' ';
 
         $result = [];
         $i = 0;
@@ -1713,10 +1717,13 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     public function testUtf8DecodeEncodeUtf8()
     {
         $tests = [
-            '  -ABC-中文空白-  ' => '  -ABC-中文空白-  ',
-            '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-            'öäü'            => 'öäü',
-            ''               => '',
+            '  -ABC-中文空白-  '       => '  -ABC-中文空白-  ',
+            '      - ÖÄÜ- '        => '      - ÖÄÜ- ',
+            'öäü'                  => 'öäü',
+            '152'                  => '152',
+            's152'                 => 's152',
+            'Â' . "\xc2\xa0" . ' ' => 'Â' . "\xc2\xa0" . ' ',
+            ''                     => '',
         ];
 
         foreach ($tests as $before => $after) {
@@ -1726,10 +1733,13 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         // ---
 
         $tests = [
-            '  -ABC-中文空白-  ' => '  -ABC-????-  ',
-            '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-            'öäü'            => 'öäü',
-            ''               => '',
+            '  -ABC-中文空白-  '       => '  -ABC-????-  ',
+            '      - ÖÄÜ- '        => '      - ÖÄÜ- ',
+            'öäü'                  => 'öäü',
+            '152'                  => '152',
+            's152'                 => 's152',
+            'Â' . "\xc2\xa0" . ' ' => '  ',
+            ''                     => '',
         ];
 
         foreach ($tests as $before => $after) {
@@ -1773,10 +1783,13 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     public function testUtf8Encode()
     {
         $tests = [
-            '  -ABC-中文空白-  ' => '  -ABC-ä¸­æç©ºç½-  ',
-            '      - ÖÄÜ- '  => '      - ÃÃÃ- ',
-            'öäü'            => 'Ã¶Ã¤Ã¼',
-            ''               => '',
+            '  -ABC-中文空白-  '       => '  -ABC-ä¸­æç©ºç½-  ',
+            '      - ÖÄÜ- '        => '      - ÃÃÃ- ',
+            'öäü'                  => 'Ã¶Ã¤Ã¼',
+            '152'                  => '152',
+            's152'                 => 's152',
+            'Â' . "\xc2\xa0" . ' ' => 'ÃÂ  ',
+            ''                     => '',
         ];
 
         foreach ($tests as $before => $after) {
@@ -1787,10 +1800,13 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     public function testUtf8EncodeEncodeUtf8()
     {
         $tests = [
-            '  -ABC-中文空白-  ' => '  -ABC-ä¸­æç©ºç½-  ',
-            '      - ÖÄÜ- '  => '      - ÃÃÃ- ',
-            'öäü'            => 'Ã¶Ã¤Ã¼',
-            ''               => '',
+            '  -ABC-中文空白-  '       => '  -ABC-ä¸­æç©ºç½-  ',
+            '      - ÖÄÜ- '        => '      - ÃÃÃ- ',
+            'öäü'                  => 'Ã¶Ã¤Ã¼',
+            '152'                  => '152',
+            's152'                 => 's152',
+            'Â' . "\xc2\xa0" . ' ' => 'ÃÂ  ',
+            ''                     => '',
         ];
 
         foreach ($tests as $before => $after) {
@@ -1821,10 +1837,13 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     public function testUtf8EncodeUtf8Encode()
     {
         $tests = [
-            '  -ABC-中文空白-  ' => '  -ABC-Ã¤Â¸Â­Ã¦ÂÂÃ§Â©ÂºÃ§ÂÂ½-  ',
-            '      - ÖÄÜ- '  => '      - ÃÂÃÂÃÂ- ',
-            'öäü'            => 'ÃÂ¶ÃÂ¤ÃÂ¼',
-            ''               => '',
+            '  -ABC-中文空白-  '       => '  -ABC-Ã¤Â¸Â­Ã¦ÂÂÃ§Â©ÂºÃ§ÂÂ½-  ',
+            '      - ÖÄÜ- '        => '      - ÃÂÃÂÃÂ- ',
+            'öäü'                  => 'ÃÂ¶ÃÂ¤ÃÂ¼',
+            '152'                  => '152',
+            's152'                 => 's152',
+            'Â' . "\xc2\xa0" . ' ' => 'ÃÂÃÂ  ',
+            ''                     => '',
         ];
 
         foreach ($tests as $before => $after) {

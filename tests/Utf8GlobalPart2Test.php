@@ -1716,9 +1716,9 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
     public function testUtf8DecodeUtf8Encode()
     {
         $tests = [
-            '  -ABC-中文空白-  ' => '  -ABC-????-  ',
-            '      - ÖÄÜ- '  => '      - ÖÄÜ- ',
-            'öäü'            => 'öäü',
+            '  -ABC-中文空白-  '    => '  -ABC-????-  ',
+            '      - ÖÄÜ- '     => '      - ÖÄÜ- ',
+            'öäü'               => 'öäü',
             ''                  => '',
             false               => '0',
             null                => '',

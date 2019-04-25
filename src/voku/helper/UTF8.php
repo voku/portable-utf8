@@ -12003,23 +12003,7 @@ final class UTF8
             return '';
         }
 
-        if (\strpos($str, "\xC2") === false) {
-            return $str;
-        }
-
-        static $WIN1252_TO_UTF8_KEYS_CACHE = null;
-        static $WIN1252_TO_UTF8_VALUES_CACHE = null;
-
-        if ($WIN1252_TO_UTF8_KEYS_CACHE === null) {
-            if (self::$WIN1252_TO_UTF8 === null) {
-                self::$WIN1252_TO_UTF8 = self::getData('win1252_to_utf8');
-            }
-
-            $WIN1252_TO_UTF8_KEYS_CACHE = \array_keys(self::$WIN1252_TO_UTF8);
-            $WIN1252_TO_UTF8_VALUES_CACHE = \array_values(self::$WIN1252_TO_UTF8);
-        }
-
-        return \str_replace($WIN1252_TO_UTF8_KEYS_CACHE, $WIN1252_TO_UTF8_VALUES_CACHE, $str);
+        return $str;
     }
 
     /**
