@@ -1743,7 +1743,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)), 'tested: ' . print_r($before, true));
+            static::assertSame($after, UTF8::encode('UTF-8', UTF8::utf8_decode($before)), 'tested: ' . \print_r($before, true));
         }
 
         // ---
