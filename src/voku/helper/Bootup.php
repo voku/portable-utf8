@@ -15,9 +15,13 @@ class Bootup
      *
      * @param int    $normalization_form
      * @param string $leading_combining
+     *
+     * @return bool
      */
-    public static function filterRequestInputs($normalization_form = \Normalizer::NFC, $leading_combining = '◌')
-    {
+    public static function filterRequestInputs(
+        int $normalization_form = \Normalizer::NFC,
+        string $leading_combining = '◌'
+    ): bool {
         $a = [
             &$_FILES,
             &$_ENV,
@@ -53,6 +57,8 @@ class Bootup
             }
             unset($r, $a[$i]);
         }
+
+        return $len > 1;
     }
 
     /**
@@ -63,7 +69,7 @@ class Bootup
      *
      * @return mixed
      */
-    public static function filterRequestUri($uri = null, $exit = true)
+    public static function filterRequestUri($uri = null, bool $exit = true)
     {
         if ($uri === null) {
             if (!isset($_SERVER['REQUEST_URI'])) {
@@ -171,12 +177,16 @@ class Bootup
 
     /**
      * bootstrap
+     *
+     * @return bool
      */
-    public static function initAll()
+    public static function initAll(): bool
     {
-        \ini_set('default_charset', 'UTF-8');
+        $result = \ini_set('default_charset', 'UTF-8');
 
-        // everything is init via composer, so we are done here ...
+        // everything else is init via composer, so we are done here ...
+
+        return $result !== false;
     }
 
     /**

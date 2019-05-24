@@ -1738,7 +1738,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             'öäü'                  => 'öäü',
             '152'                  => '152',
             's152'                 => 's152',
-            'Â' . "\xc2\xa0" . ' ' => '  ',
+            'Â' . "\xc2\xa0" . ' ' => '  ',
             ''                     => '',
         ];
 
@@ -1788,7 +1788,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             'öäü'                  => 'Ã¶Ã¤Ã¼',
             '152'                  => '152',
             's152'                 => 's152',
-            'Â' . "\xc2\xa0" . ' ' => 'ÃÂ  ',
+            'Â' . "\xc2\xa0" . ' ' => 'ÃÂ  ',
             ''                     => '',
         ];
 
@@ -1805,7 +1805,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             'öäü'                  => 'Ã¶Ã¤Ã¼',
             '152'                  => '152',
             's152'                 => 's152',
-            'Â' . "\xc2\xa0" . ' ' => 'ÃÂ  ',
+            'Â' . "\xc2\xa0" . ' ' => 'ÃÂ  ',
             ''                     => '',
         ];
 
@@ -1842,7 +1842,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             'öäü'                  => 'ÃÂ¶ÃÂ¤ÃÂ¼',
             '152'                  => '152',
             's152'                 => 's152',
-            'Â' . "\xc2\xa0" . ' ' => 'ÃÂÃÂ  ',
+            'Â' . "\xc2\xa0" . ' ' => 'ÃÂÃÂ  ',
             ''                     => '',
         ];
 

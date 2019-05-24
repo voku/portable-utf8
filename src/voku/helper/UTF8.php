@@ -457,6 +457,8 @@ final class UTF8
      * This method will auto-detect your server environment for UTF-8 support.
      *
      * @internal <p>You don't need to run it manually, it will be triggered if it's needed.</p>
+     *
+     * @return true|null
      */
     public static function checkForSupport()
     {
@@ -510,7 +512,11 @@ final class UTF8
                 \mb_internal_encoding('UTF-8');
                 self::$SUPPORT['mbstring_internal_encoding'] = 'UTF-8';
             }
+
+            return true;
         }
+
+        return null;
     }
 
     /**
@@ -2045,11 +2051,7 @@ final class UTF8
             return self::$SUPPORT;
         }
 
-        if (!isset(self::$SUPPORT[$key])) {
-            return null;
-        }
-
-        return self::$SUPPORT[$key];
+        return self::$SUPPORT[$key] ?? null;
     }
 
     /**
@@ -4997,6 +4999,8 @@ final class UTF8
 
     /**
      * WARNING: Print native UTF-8 support (libs), e.g. for debugging.
+     *
+     * @psalm-suppress MissingReturnType
      */
     public static function showSupport()
     {
@@ -6918,8 +6922,15 @@ final class UTF8
         $subject,
         int &$count = null
     ) {
-        /** @psalm-suppress PossiblyNullArgument */
-        return \str_replace($search, $replace, $subject, $count);
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
+        return \str_replace(
+            $search,
+            $replace,
+            $subject,
+            $count
+        );
     }
 
     /**
@@ -7002,8 +7013,15 @@ final class UTF8
         $pos = self::strpos($subject, $search);
 
         if ($pos !== false) {
-            /** @psalm-suppress InvalidReturnStatement */
-            return self::substr_replace($subject, $replace, $pos, (int) self::strlen($search));
+            /**
+             * @psalm-suppress InvalidReturnStatement
+             */
+            return self::substr_replace(
+                $subject,
+                $replace,
+                $pos,
+                (int) self::strlen($search)
+            );
         }
 
         return $subject;
@@ -7027,8 +7045,15 @@ final class UTF8
     ): string {
         $pos = self::strrpos($subject, $search);
         if ($pos !== false) {
-            /** @psalm-suppress InvalidReturnStatement */
-            return self::substr_replace($subject, $replace, $pos, (int) self::strlen($search));
+            /**
+             * @psalm-suppress InvalidReturnStatement
+             */
+            return self::substr_replace(
+                $subject,
+                $replace,
+                $pos,
+                (int) self::strlen($search)
+            );
         }
 
         return $subject;
@@ -8333,9 +8358,11 @@ final class UTF8
                 /** @noinspection UnnecessaryCastingInspection */
                 $strTmp = self::substr($str, (int) $offset, $length, $encoding);
             }
+
             if ($strTmp === false) {
                 return 0;
             }
+
             $str = $strTmp;
         }
 
@@ -12170,6 +12197,9 @@ final class UTF8
         return self::$WHITESPACE;
     }
 
+    /**
+     * @return true|null
+     */
     private static function initEmojiData()
     {
         if (self::$EMOJI_KEYS_CACHE === null) {
@@ -12191,7 +12221,11 @@ final class UTF8
                 $tmpKey = \crc32($key);
                 self::$EMOJI_KEYS_REVERSIBLE_CACHE[] = '_-_PORTABLE_UTF8_-_' . $tmpKey . '_-_' . \strrev((string) $tmpKey) . '_-_8FTU_ELBATROP_-_';
             }
+
+            return true;
         }
+
+        return null;
     }
 
     /**
@@ -12241,9 +12275,9 @@ final class UTF8
      *
      * @param string $file
      *
-     * @return mixed
+     * @return array
      */
-    private static function getData(string $file)
+    private static function getData(string $file): array
     {
         /** @noinspection PhpIncludeInspection */
         /** @noinspection UsingInclusionReturnValueInspection */
