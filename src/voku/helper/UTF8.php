@@ -488,8 +488,7 @@ final class UTF8
                 &&
                 \function_exists('transliterator_list_ids') === true
             ) {
-                /** @noinspection PhpComposerExtensionStubsInspection */
-                self::$SUPPORT['intl__transliterator_list_ids'] = \transliterator_list_ids();
+                self::$SUPPORT['intl__transliterator_list_ids'] = self::getData('transliterator_list');
             }
 
             // http://php.net/manual/en/class.intlchar.php
