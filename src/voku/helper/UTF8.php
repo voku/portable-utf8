@@ -9962,7 +9962,6 @@ final class UTF8
 
         if ($lang !== null) {
             if (self::$SUPPORT['intl'] === true) {
-
                 if (self::$INTL_TRANSLITERATOR_LIST === null) {
                     self::$INTL_TRANSLITERATOR_LIST = self::getData('transliterator_list');
                 }
@@ -10033,7 +10032,6 @@ final class UTF8
 
         if ($lang !== null) {
             if (self::$SUPPORT['intl'] === true) {
-
                 if (self::$INTL_TRANSLITERATOR_LIST === null) {
                     self::$INTL_TRANSLITERATOR_LIST = self::getData('transliterator_list');
                 }
