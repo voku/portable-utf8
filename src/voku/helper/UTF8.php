@@ -200,6 +200,11 @@ final class UTF8
     /**
      * @var array|null
      */
+    private static $INTL_TRANSLITERATOR_LIST;
+
+    /**
+     * @var array|null
+     */
     private static $ENCODINGS;
 
     /**
@@ -481,15 +486,6 @@ final class UTF8
 
             // http://php.net/manual/en/book.intl.php
             self::$SUPPORT['intl'] = self::intl_loaded();
-            self::$SUPPORT['intl__transliterator_list_ids'] = [];
-
-            if (
-                self::$SUPPORT['intl'] === true
-                &&
-                \function_exists('transliterator_list_ids') === true
-            ) {
-                self::$SUPPORT['intl__transliterator_list_ids'] = self::getData('transliterator_list');
-            }
 
             // http://php.net/manual/en/class.intlchar.php
             self::$SUPPORT['intlChar'] = self::intlChar_loaded();
@@ -2049,6 +2045,12 @@ final class UTF8
         if ($key === null) {
             return self::$SUPPORT;
         }
+
+        if (self::$INTL_TRANSLITERATOR_LIST === null) {
+            self::$INTL_TRANSLITERATOR_LIST = self::getData('transliterator_list');
+        }
+        // compatibility fix for old versions
+        self::$SUPPORT['intl__transliterator_list_ids'] = self::$INTL_TRANSLITERATOR_LIST;
 
         return self::$SUPPORT[$key] ?? null;
     }
@@ -9960,8 +9962,13 @@ final class UTF8
 
         if ($lang !== null) {
             if (self::$SUPPORT['intl'] === true) {
+
+                if (self::$INTL_TRANSLITERATOR_LIST === null) {
+                    self::$INTL_TRANSLITERATOR_LIST = self::getData('transliterator_list');
+                }
+
                 $langCode = $lang . '-Lower';
-                if (!\in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
+                if (!\in_array($langCode, self::$INTL_TRANSLITERATOR_LIST, true)) {
                     \trigger_error('UTF8::strtolower() cannot handle special language: ' . $lang, \E_USER_WARNING);
 
                     $langCode = 'Any-Lower';
@@ -10026,8 +10033,13 @@ final class UTF8
 
         if ($lang !== null) {
             if (self::$SUPPORT['intl'] === true) {
+
+                if (self::$INTL_TRANSLITERATOR_LIST === null) {
+                    self::$INTL_TRANSLITERATOR_LIST = self::getData('transliterator_list');
+                }
+
                 $langCode = $lang . '-Upper';
-                if (!\in_array($langCode, self::$SUPPORT['intl__transliterator_list_ids'], true)) {
+                if (!\in_array($langCode, self::$INTL_TRANSLITERATOR_LIST, true)) {
                     \trigger_error('UTF8::strtoupper() without intl for special language: ' . $lang, \E_USER_WARNING);
 
                     $langCode = 'Any-Upper';
