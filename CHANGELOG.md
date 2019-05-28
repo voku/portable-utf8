@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.7 (2019-05-28)
+
+- optimize performance for "bootstrap.php"
+
 ### 5.4.6 (2019-04-25)
 
 - fix "UTF8::to_latin1()" for non-char input + optimize performance
