@@ -880,6 +880,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
         static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
 
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-win1252.html');
+        static::assertContains('áéíóúçÇ~^', $testString);
+
         $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
         static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
 
@@ -2945,6 +2948,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
                 static::assertSame($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
             }
         }
+
+        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-win1252.html');
+        static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString));
 
         $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
         static::assertContains('UTF-8', UTF8::str_detect_encoding($testString));

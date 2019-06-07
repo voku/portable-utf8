@@ -1497,6 +1497,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         $testArray[] = 's152';
         $testArray[] = 'Ã ñ àáâãäåæ ç èéêë ìíîï';
         $testArray[] = 'Â' . "\xc2\xa0" . ' ';
+        $testArray[] = 'product/category%bf%27';
 
         $result = [];
         $i = 0;
@@ -2065,7 +2066,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertTrue(\count($whitespace) > 0);
     }
 
-    public function testcleanParameter()
+    public function testCleanParameter()
     {
         $dirtyTestString = "\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃";
 
@@ -2087,7 +2088,16 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame("\"Abcdef\xc2\xa0 ...\" - 😃", UTF8::clean($dirtyTestString, true, true, true, true));
     }
 
-    public function testhexToChr()
+    public function testUrlencodedString()
+    {
+        static::assertSame('product/category¿\'', UTF8::urldecode('product/category%bf%27'));
+        static::assertSame('product/category¿\'', UTF8::rawurldecode('product/category%bf%27'));
+        static::assertSame('&#112;&#114;&#111;&#100;&#117;&#99;&#116;&#47;&#99;&#97;&#116;&#101;&#103;&#111;&#114;&#121;&#37;&#98;&#102;&#37;&#50;&#55;', UTF8::html_encode('product/category%bf%27'));
+        static::assertSame('product/category%bf%27', UTF8::html_entity_decode('product/category%bf%27'));
+        static::assertSame('product/category%bf%27', UTF8::clean('product/category%bf%27'));
+    }
+
+    public function testHexToChr()
     {
         static::assertSame('<', UTF8::hex_to_chr('3c'));
         static::assertSame('<', UTF8::hex_to_chr('003c'));
@@ -2099,7 +2109,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame('Σ', UTF8::hex_to_chr('03a3'));
     }
 
-    public function testhtmlEncodeChr()
+    public function testHtmlEncodeChr()
     {
         static::assertSame('\'', UTF8::decimal_to_chr(39));
         static::assertSame('\'', UTF8::decimal_to_chr('39'));
