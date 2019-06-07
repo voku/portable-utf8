@@ -1213,7 +1213,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             "\n"           => "\n",
             "test\xc2\x88" => 'testˆ',
             'DÃ¼sseldorf'  => 'Düsseldorf',
-            'Ã¤'           => 'ä',
+            'Ã¤AäÄÃ£'           => 'äAäÄã',
             'test'         => 'test',
         ];
 
