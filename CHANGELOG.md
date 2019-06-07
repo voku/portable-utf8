@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.8 (2019-06-08)
+
+- fix typo in "win1252_to_utf8.php"
+- optimize "UTF8::fix_simple_utf8()"
+
 ### 5.4.7 (2019-05-28)
 
 - optimize performance for "bootstrap.php"
