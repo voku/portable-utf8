@@ -1779,10 +1779,17 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/image_small.png'));
         $testString1 = \file_get_contents(__DIR__ . '/fixtures/image_small.png');
         static::assertTrue(UTF8::is_binary($testString1, false));
+
         $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png');
         static::assertTrue(UTF8::is_binary($testString2, false));
 
         static::assertSame($testString1, $testString2);
+
+        // ---
+
+        static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/test.js'));
+        $testString3 = \file_get_contents(__DIR__ . '/fixtures/test.js');
+        static::assertFalse(UTF8::is_binary($testString3, false));
 
         // ---
 

@@ -2192,6 +2192,12 @@ final class UTF8
                 $type = 'binary';
 
                 break;
+            case 7373:
+                $ext = 'tiff';
+                $mime = 'image/tiff';
+                $type = 'binary';
+
+                break;
             case 6677:
                 $ext = 'bmp';
                 $mime = 'image/bmp';
