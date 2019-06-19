@@ -4617,30 +4617,23 @@ final class UTF8
             return self::fix_simple_utf8($str);
         }
 
-        $pattern = '/%u([0-9a-fA-F]{3,4})/';
-        if (\preg_match($pattern, $str)) {
-            $str = (string) \preg_replace($pattern, '&#x\\1;', \rawurldecode($str));
-        }
+        $str = self::urldecode_unicode_helper($str);
 
-        $flags = \ENT_QUOTES | \ENT_HTML5;
+        do {
+            $str_compare = $str;
 
-        if ($multi_decode === true) {
-            do {
-                $str_compare = $str;
-
-                /**
-                 * @psalm-suppress PossiblyInvalidArgument
-                 */
-                $str = self::fix_simple_utf8(
-                    \rawurldecode(
-                        self::html_entity_decode(
-                            self::to_utf8($str),
-                            $flags
-                        )
+            /**
+             * @psalm-suppress PossiblyInvalidArgument
+             */
+            $str = self::fix_simple_utf8(
+                \rawurldecode(
+                    self::html_entity_decode(
+                        self::to_utf8($str),
+                        \ENT_QUOTES | \ENT_HTML5
                     )
-                );
-            } while ($str_compare !== $str);
-        }
+                )
+            );
+        } while ($multi_decode === true && $str_compare !== $str);
 
         return $str;
     }
@@ -11682,30 +11675,23 @@ final class UTF8
             return self::fix_simple_utf8($str);
         }
 
-        $pattern = '/%u([0-9a-fA-F]{3,4})/';
-        if (\preg_match($pattern, $str)) {
-            $str = (string) \preg_replace($pattern, '&#x\\1;', \urldecode($str));
-        }
+        $str = self::urldecode_unicode_helper($str);
 
-        $flags = \ENT_QUOTES | \ENT_HTML5;
+        do {
+            $str_compare = $str;
 
-        if ($multi_decode === true) {
-            do {
-                $str_compare = $str;
-
-                /**
-                 * @psalm-suppress PossiblyInvalidArgument
-                 */
-                $str = self::fix_simple_utf8(
-                    \urldecode(
-                        self::html_entity_decode(
-                            self::to_utf8($str),
-                            $flags
-                        )
+            /**
+             * @psalm-suppress PossiblyInvalidArgument
+             */
+            $str = self::fix_simple_utf8(
+                \urldecode(
+                    self::html_entity_decode(
+                        self::to_utf8($str),
+                        \ENT_QUOTES | \ENT_HTML5
                     )
-                );
-            } while ($str_compare !== $str);
-        }
+                )
+            );
+        } while ($multi_decode === true && $str_compare !== $str);
 
         return $str;
     }
@@ -11945,6 +11931,21 @@ final class UTF8
             '%FE' => 'þ',
             '%FF' => 'ÿ',
         ];
+    }
+
+    /**
+     * @param string $str
+     *
+     * @return string
+     */
+    private static function urldecode_unicode_helper(string $str): string
+    {
+        $pattern = '/%u([0-9a-fA-F]{3,4})/';
+        if (\preg_match($pattern, $str)) {
+            $str = (string)\preg_replace($pattern, '&#x\\1;', $str);
+        }
+
+        return $str;
     }
 
     /**
