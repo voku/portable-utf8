@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.9 (2019-06-19)
+
+- sync with "PHP RFC: Add str begin and end functions"
+
 ### 5.4.8 (2019-06-08)
 
 - fix typo in "win1252_to_utf8.php"
