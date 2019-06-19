@@ -11958,21 +11958,6 @@ final class UTF8
     }
 
     /**
-     * @param string $str
-     *
-     * @return string
-     */
-    private static function urldecode_unicode_helper(string $str): string
-    {
-        $pattern = '/%u([0-9a-fA-F]{3,4})/';
-        if (\preg_match($pattern, $str)) {
-            $str = (string)\preg_replace($pattern, '&#x\\1;', $str);
-        }
-
-        return $str;
-    }
-
-    /**
      * Decodes an UTF-8 string to ISO-8859-1.
      *
      * @param string $str           <p>The input string.</p>
@@ -12229,6 +12214,21 @@ final class UTF8
     public static function ws(): array
     {
         return self::$WHITESPACE;
+    }
+
+    /**
+     * @param string $str
+     *
+     * @return string
+     */
+    private static function urldecode_unicode_helper(string $str): string
+    {
+        $pattern = '/%u([0-9a-fA-F]{3,4})/';
+        if (\preg_match($pattern, $str)) {
+            $str = (string) \preg_replace($pattern, '&#x\\1;', $str);
+        }
+
+        return $str;
     }
 
     /**
