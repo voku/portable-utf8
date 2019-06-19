@@ -2970,7 +2970,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'Κόσμε' => true,
             'κόσμε' => false,
             null    => false,
-            ''      => false,
+            ''      => true,
             ' '     => false,
             false   => false,
             'ε'     => true,
@@ -2990,7 +2990,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $tests = [
             'Κόσμε' => true,
             'κόσμε' => true,
-            ''      => false,
+            ''      => true,
             ' '     => false,
             false   => false,
             'ε'     => true,
@@ -3010,7 +3010,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $tests = [
             'Κόσμε' => true,
             'κόσμε' => true,
-            ''      => false,
+            ''      => true,
             ' '     => false,
             false   => false,
             'Κ'     => true,
@@ -3221,7 +3221,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $tests = [
             'Κόσμε' => true,
             'κόσμε' => false,
-            ''      => false,
+            ''      => true,
             ' '     => false,
             false   => false,
             'Κ'     => true,

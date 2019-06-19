@@ -5591,6 +5591,14 @@ final class UTF8
      */
     public static function str_ends_with(string $haystack, string $needle): bool
     {
+        if ($needle === '') {
+            return true;
+        }
+
+        if ($haystack === '') {
+            return false;
+        }
+
         return \substr($haystack, -\strlen($needle)) === $needle;
     }
 
@@ -5699,7 +5707,11 @@ final class UTF8
      */
     public static function str_iends_with(string $haystack, string $needle): bool
     {
-        if ($haystack === '' || $needle === '') {
+        if ($needle === '') {
+            return true;
+        }
+
+        if ($haystack === '') {
             return false;
         }
 
@@ -6000,7 +6012,11 @@ final class UTF8
      */
     public static function str_istarts_with(string $haystack, string $needle): bool
     {
-        if ($haystack === '' || $needle === '') {
+        if ($needle === '') {
+            return true;
+        }
+
+        if ($haystack === '') {
             return false;
         }
 
@@ -7332,6 +7348,14 @@ final class UTF8
      */
     public static function str_starts_with(string $haystack, string $needle): bool
     {
+        if ($needle === '') {
+            return true;
+        }
+
+        if ($haystack === '') {
+            return false;
+        }
+
         return \strpos($haystack, $needle) === 0;
     }
 
