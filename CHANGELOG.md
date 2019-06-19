@@ -3,6 +3,7 @@
 ### 5.4.9 (2019-06-19)
 
 - sync with "PHP RFC: Add str begin and end functions"
+- fix "UTF8::rawurldecode()" and "UTF8::urldecode()" -> for non multi usage
 
 ### 5.4.8 (2019-06-08)
 
