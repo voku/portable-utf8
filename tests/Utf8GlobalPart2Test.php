@@ -128,6 +128,14 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(-1, UTF8::strcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!')); // strcasecmp
         static::assertSame(0, UTF8::strnatcasecmp('10Hello world 中文空白!', '10Hello world 中文空白!'));
         static::assertSame(0, UTF8::strnatcasecmp('Hello world 中文空白!', 'Hello WORLD 中文空白!'));
+
+        if (
+            Bootup::is_php('7.3')
+            &&
+            UTF8::mbstring_loaded() === true
+        ) {
+            static::assertSame(0, UTF8::strnatcasecmp('Hello world 中文空白-ἙΛΛΗΝΙΚῊ!', 'Hello WORLD 中文空白-ἑλληνικὴ!'));
+        }
     }
 
     public function testStrnatcmp()

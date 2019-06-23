@@ -5332,7 +5332,7 @@ final class UTF8
             }
 
             /** @noinspection PhpComposerExtensionStubsInspection */
-            return (string) \mb_ereg_replace('[-_\s]+', $delimiter, $str);
+            return (string) \mb_ereg_replace('[\-_\s]+', $delimiter, $str);
         }
 
         $str = (string) \preg_replace('/\B(\p{Lu})/u', '-\1', \trim($str));
@@ -5344,7 +5344,7 @@ final class UTF8
             $str = self::strtolower($str, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
         }
 
-        return (string) \preg_replace('/[-_\s]+/u', $delimiter, $str);
+        return (string) \preg_replace('/[\-_\s]+/u', $delimiter, $str);
     }
 
     /**
@@ -8385,7 +8385,11 @@ final class UTF8
      */
     public static function strcmp(string $str1, string $str2): int
     {
-        return $str1 . '' === $str2 . '' ? 0 : \strcmp(
+        if ($str1 === $str2) {
+            return 0;
+        }
+
+        return \strcmp(
             \Normalizer::normalize($str1, \Normalizer::NFD),
             \Normalizer::normalize($str2, \Normalizer::NFD)
         );
@@ -8912,7 +8916,14 @@ final class UTF8
      */
     public static function strnatcmp(string $str1, string $str2): int
     {
-        return $str1 . '' === $str2 . '' ? 0 : \strnatcmp((string) self::strtonatfold($str1), (string) self::strtonatfold($str2));
+        if ($str1 === $str2) {
+            return 0;
+        }
+
+        return \strnatcmp(
+            (string)self::strtonatfold($str1),
+            (string)self::strtonatfold($str2)
+        );
     }
 
     /**
@@ -9980,10 +9991,10 @@ final class UTF8
         }
 
         if ($lower === true) {
-            return self::strtolower($str, $encoding, $cleanUtf8, $lang);
+            return self::strtolower($str, $encoding, false, $lang);
         }
 
-        return self::strtoupper($str, $encoding, $cleanUtf8, $lang);
+        return self::strtoupper($str, $encoding, false, $lang);
     }
 
     /**

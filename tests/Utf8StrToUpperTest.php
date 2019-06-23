@@ -15,8 +15,8 @@ final class Utf8StrToUpperTest extends \PHPUnit\Framework\TestCase
 {
     public function testUpper()
     {
-        $str = 'iñtërnâtiônàlizætiøn';
-        $upper = 'IÑTËRNÂTIÔNÀLIZÆTIØN';
+        $str = 'iñtërnâtiônàlizætiøn--ἑλληνικὴ';
+        $upper = 'IÑTËRNÂTIÔNÀLIZÆTIØN--ἙΛΛΗΝΙΚῊ';
         static::assertSame(UTF8::strtoupper($str), $upper);
     }
 
