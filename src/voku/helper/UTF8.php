@@ -5260,21 +5260,20 @@ final class UTF8
         array $needles,
         bool $caseSensitive = true
     ): bool {
-        if ($haystack === '' || $needles === []) {
+        if ($haystack === '' || $needles === [])
             return false;
-        }
 
         /** @noinspection LoopWhichDoesNotLoopInspection */
         foreach ($needles as &$needle) {
-            if (!$needle) {
+            if (!$needle)
                 return false;
-            }
 
             if ($caseSensitive) {
-                return \strpos($haystack, $needle) !== false;
+                if (strpos($haystack, $needle) !== false) return true;
+                continue;
             }
 
-            return \mb_stripos($haystack, $needle) !== false;
+            if (mb_stripos($haystack, $needle) !== false) return true;
         }
 
         return false;
