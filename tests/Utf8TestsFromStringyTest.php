@@ -234,6 +234,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
             // No needles
             [false, 'Str contains foo bar', []],
             // Multiple needles
+            [true, 'foo bar', ['something', 'bar', 'somethingelse']],
+            [true, 'foo bar', ['something', 'foo']],
+            [false, 'foo bar', ['something', 'somethingelse']],
             [true, 'Str contains foo bar', ['foo', 'bar']],
             [true, '12398!@(*%!@# @!%#*&^%', [' @!%#*', '&^%']],
             [true, 'Ο συγγραφέας είπε', ['συγγρ', 'αφέας']],

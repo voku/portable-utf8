@@ -5260,19 +5260,27 @@ final class UTF8
         array $needles,
         bool $caseSensitive = true
     ): bool {
-        if ($haystack === '' || $needles === [])
+        if ($haystack === '' || $needles === []) {
             return false;
+        }
 
         /** @noinspection LoopWhichDoesNotLoopInspection */
         foreach ($needles as &$needle) {
-            if (!$needle) continue;
-
-            if ($caseSensitive) {
-                if (strpos($haystack, $needle) !== false) return true;
+            if (!$needle) {
                 continue;
             }
 
-            if (mb_stripos($haystack, $needle) !== false) return true;
+            if ($caseSensitive) {
+                if (\strpos($haystack, $needle) !== false) {
+                    return true;
+                }
+
+                continue;
+            }
+
+            if (\mb_stripos($haystack, $needle) !== false) {
+                return true;
+            }
         }
 
         return false;
@@ -8919,8 +8927,8 @@ final class UTF8
         }
 
         return \strnatcmp(
-            (string)self::strtonatfold($str1),
-            (string)self::strtonatfold($str2)
+            (string) self::strtonatfold($str1),
+            (string) self::strtonatfold($str2)
         );
     }
 
