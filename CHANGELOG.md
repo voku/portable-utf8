@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.10 (2019-07-05)
+
+- fix "UTF8::str_contains_any()" -> thanks @drupalista-br
+
+
 ### 5.4.9 (2019-06-19)
 
 - sync with "PHP RFC: Add str begin and end functions"
