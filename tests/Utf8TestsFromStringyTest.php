@@ -1266,6 +1266,8 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['snake_case', 'Snake-Case'];
         yield ['snake_case', 'snake case'];
         yield ['snake_case', 'snake -case'];
+        yield ['snake_case', ' snake -case  '];
+        yield ['snake_case', "\n\t " . ' snake -case  ' . "\n"];
         yield ['snake_case', 'snake - case'];
         yield ['snake_case', 'snake_case'];
         yield ['camel_c_test', 'camel c test'];
@@ -2160,6 +2162,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         $testArray = [
             ''                         => false,
             '<h1>test</h1>'            => true,
+            '<😃>test</😃>'              => true,
             'test'                     => false,
             '<b>lall</b>'              => true,
             'öäü<strong>lall</strong>' => true,
@@ -2881,16 +2884,22 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testStripeEmptyTags()
     {
         $testArray = [
-            ''                         => '',
-            '<h1>test</h1>'            => '<h1>test</h1>',
-            'foo<h1></h1>bar'          => 'foobar',
-            '<h1></h1> '               => ' ',
-            '</b></b>'                 => '</b></b>',
-            'öäü<strong>lall</strong>' => 'öäü<strong>lall</strong>',
-            ' b<b></b>'                => ' b',
-            '<b><b>lall</b>'           => '<b><b>lall</b>',
-            '</b>lall</b>'             => '</b>lall</b>',
-            '[b][/b]'                  => '[b][/b]',
+            ''                            => '',
+            '<h1>test</h1>'               => '<h1>test</h1>',
+            '<😃>test</😃>'                 => '<😃>test</😃>',
+            '<😃></😃>'                     => '',
+            '<😃>' . "\t" . '</😃>'         => '',
+            '<😃>😃</😃>' . "\n" . '<😃></😃>' => '<😃>😃</😃>' . "\n",
+            'foo<h1></h1>bar'             => 'foobar',
+            '<h1></h1> '                  => ' ',
+            '</b></b>'                    => '</b></b>',
+            'öäü<strong>lall</strong>'    => 'öäü<strong>lall</strong>',
+            ' b<b></b>'                   => ' b',
+            ' bc<b> </b>'                 => ' bc',
+            ' bd<b>' . "\t" . '</b>'      => ' bd',
+            '<b><b>lall</b>'              => '<b><b>lall</b>',
+            '</b>lall</b>'                => '</b>lall</b>',
+            '[b][/b]'                     => '[b][/b]',
         ];
 
         foreach ($testArray as $testString => $testResult) {
@@ -3524,6 +3533,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $ignore = ['at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the'];
         yield ['Title Case', 'TITLE CASE'];
+        yield ['Title Case', "\n\t" . 'TITLE CASE '];
         yield ['Testing The Method', 'testing the method'];
         yield ['Testing the Method', 'testing the method', $ignore];
         yield [

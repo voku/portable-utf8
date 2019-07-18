@@ -1951,25 +1951,28 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
     public function testIsHtml()
     {
         $testArray = [
-            '<h1>test</h1>'                     => true,
-            '<html><body class="no-js"></html>' => true,
-            '<html   f=\'\'    d="">'           => true,
-            '<b>lall</b>'                       => true,
-            'öäü<strong>lall</strong>'          => true,
-            ' <b>lall</b>'                      => true,
-            '<b><b>lall</b>'                    => true,
-            '</b>lall</b>'                      => true,
-            '<html><foo></html>'                => true,
-            '<html><html>'                      => true,
-            '<html>'                            => true,
-            '</html>'                           => true,
-            '<img src="#" alt="#" />'           => true,
-            ''                                  => false,
-            ' '                                 => false,
-            'test'                              => false,
-            '[b]lall[b]'                        => false,
-            '<img src="" ...'                   => false, // non closed tag
-            'html>'                             => false, // non opened tag
+            '<h1>test</h1>'                       => true,
+            '<😃>test</😃>'                         => true,
+            '<html><body class="no-js"></html>'   => true,
+            '<html   f=\'\'    d="">'             => true,
+            '<html   g=\'' . "\t" . '\'    d="">' => true,
+            '<html   e=lall d="">'                => true,
+            '<b>lall</b>'                         => true,
+            'öäü<strong>lall</strong>'            => true,
+            ' <b>lall</b>'                        => true,
+            '<b><b>lall</b>'                      => true,
+            '</b>lall</b>'                        => true,
+            '<html><foo></html>'                  => true,
+            '<html><html>'                        => true,
+            '<html>'                              => true,
+            '</html>'                             => true,
+            '<img src="#" alt="#" />'             => true,
+            ''                                    => false,
+            ' '                                   => false,
+            'test'                                => false,
+            '[b]lall[b]'                          => false,
+            '<img src="" ...'                     => false, // non closed tag
+            'html>'                               => false, // non opened tag
         ];
 
         foreach ($testArray as $testString => $testResult) {

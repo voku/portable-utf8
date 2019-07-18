@@ -553,7 +553,7 @@ final class UTF8
         if ($code_point <= 127) { // use "simple"-char only until "\x80"
 
             if (self::$CHR === null) {
-                self::$CHR = (array) self::getData('chr');
+                self::$CHR = self::getData('chr');
             }
 
             /**
@@ -588,7 +588,7 @@ final class UTF8
         //
 
         if (self::$CHR === null) {
-            self::$CHR = (array) self::getData('chr');
+            self::$CHR = self::getData('chr');
         }
 
         $code_point = (int) $code_point;
@@ -794,7 +794,7 @@ final class UTF8
         // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
         // caused connection reset problem on larger strings
 
-        $regx = '/
+        $regex = '/
           (
             (?: [\x00-\x7F]               # single-byte sequences   0xxxxxxx
             |   [\xC0-\xDF][\x80-\xBF]    # double-byte sequences   110xxxxx 10xxxxxx
@@ -805,7 +805,8 @@ final class UTF8
         | ( [\x80-\xBF] )                 # invalid byte in range 10000000 - 10111111
         | ( [\xC0-\xFF] )                 # invalid byte in range 11000000 - 11111111
         /x';
-        $str = (string) \preg_replace($regx, '$1', $str);
+        /** @noinspection NotOptimalRegularExpressionsInspection */
+        $str = (string) \preg_replace($regex, '$1', $str);
 
         if ($replace_diamond_question_mark === true) {
             $str = self::replace_diamond_question_mark($str, '');
@@ -1254,7 +1255,7 @@ final class UTF8
         $fromCharset = 'UTF-8',
         $toCharset = 'UTF-8',
         $transferEncoding = 'Q',
-        $linefeed = "\r\n",
+        $linefeed = '\\r\\n',
         $indent = 76
     ) {
         if ($fromCharset !== 'UTF-8' && $fromCharset !== 'CP850') {
@@ -1516,7 +1517,6 @@ final class UTF8
     ) {
         // init
         $filename = \filter_var($filename, \FILTER_SANITIZE_STRING);
-
         if ($filename === false) {
             return false;
         }
@@ -1548,14 +1548,12 @@ final class UTF8
 
         if ($convertToUtf8 === true) {
             if (
-                self::is_binary($data, true) === true
-                &&
-                self::is_utf16($data, false) === false
-                &&
-                self::is_utf32($data, false) === false
+                self::is_binary($data, true) !== true
+                ||
+                self::is_utf16($data, false) !== false
+                ||
+                self::is_utf32($data, false) !== false
             ) {
-                // do nothing, it's binary and not UTF16 or UTF32
-            } else {
                 $data = self::encode('UTF-8', $data, false, $fromEncoding);
                 $data = self::cleanup($data);
             }
@@ -1597,6 +1595,7 @@ final class UTF8
     {
         switch (\gettype($var)) {
             case 'array':
+                /** @noinspection ForeachSourceInspection */
                 foreach ($var as $k => &$v) {
                     $v = self::filter($v, $normalization_form, $leading_combining);
                 }
@@ -1604,6 +1603,7 @@ final class UTF8
 
                 break;
             case 'object':
+                /** @noinspection ForeachSourceInspection */
                 foreach ($var as $k => &$v) {
                     $v = self::filter($v, $normalization_form, $leading_combining);
                 }
@@ -1635,7 +1635,7 @@ final class UTF8
                         &&
                         isset($n[0], $leading_combining[0])
                         &&
-                        \preg_match('/^\p{Mn}/u', $var)
+                        \preg_match('/^\\p{Mn}/u', $var)
                     ) {
                         // Prevent leading combining chars
                         // for NFC-safe concatenations.
@@ -2144,6 +2144,7 @@ final class UTF8
         if ($str_info === false) {
             return $fallback;
         }
+        /** @noinspection OffsetOperationsInspection */
         $type_code = (int) ($str_info['chars1'] . $str_info['chars2']);
 
         // DEBUG
@@ -2651,7 +2652,7 @@ final class UTF8
     public static function html_stripe_empty_tags(string $str): string
     {
         return (string) \preg_replace(
-            "/<[^\/>]*>(([\s]?)*|)<\/[^>]*>/u",
+            '/<[^\\/>]*?>\\s*?<\\/[^>]*?>/u',
             '',
             $str
         );
@@ -3358,7 +3359,9 @@ final class UTF8
         // init
         $matches = [];
 
-        \preg_match("/<\/?\w+(?:(?:\s+\w+(?:\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)*+\s*|\s*)\/?>/u", $str, $matches);
+        $str = self::emoji_encode($str); // hack for emoji support :/
+
+        \preg_match("/<\\/?\\w+(?:(?:\\s+\\w+(?:\\s*=\\s*(?:\".*?\"|'.*?'|[^'\">\\s]+))?)*\\s*|\\s*)\\/?>/u", $str, $matches);
 
         return \count($matches) !== 0;
     }
@@ -4046,7 +4049,7 @@ final class UTF8
             $chars = \preg_quote($chars, '/');
             $pattern = "^[${chars}]+";
         } else {
-            $pattern = "^[\s]+";
+            $pattern = '^[\\s]+';
         }
 
         if (self::$SUPPORT['mbstring'] === true) {
@@ -4215,7 +4218,7 @@ final class UTF8
 
         $encodingOrig = $encoding;
         $encoding = \strtoupper($encoding);
-        $encodingUpperHelper = (string) \preg_replace('/[^a-zA-Z0-9\s]/u', '', $encoding);
+        $encodingUpperHelper = (string) \preg_replace('/[^a-zA-Z0-9]/u', '', $encoding);
 
         $equivalences = [
             'ISO8859'     => 'ISO-8859-1',
@@ -4457,20 +4460,27 @@ final class UTF8
 
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $chr = \unpack('C*', (string) \substr($chr, 0, 4));
+        /** @noinspection OffsetOperationsInspection */
         $code = $chr ? $chr[1] : 0;
 
+        /** @noinspection OffsetOperationsInspection */
         if ($code >= 0xF0 && isset($chr[4])) {
             /** @noinspection UnnecessaryCastingInspection */
+            /** @noinspection OffsetOperationsInspection */
             return $CHAR_CACHE[$cacheKey] = (int) ((($code - 0xF0) << 18) + (($chr[2] - 0x80) << 12) + (($chr[3] - 0x80) << 6) + $chr[4] - 0x80);
         }
 
+        /** @noinspection OffsetOperationsInspection */
         if ($code >= 0xE0 && isset($chr[3])) {
             /** @noinspection UnnecessaryCastingInspection */
+            /** @noinspection OffsetOperationsInspection */
             return $CHAR_CACHE[$cacheKey] = (int) ((($code - 0xE0) << 12) + (($chr[2] - 0x80) << 6) + $chr[3] - 0x80);
         }
 
+        /** @noinspection OffsetOperationsInspection */
         if ($code >= 0xC0 && isset($chr[2])) {
             /** @noinspection UnnecessaryCastingInspection */
+            /** @noinspection OffsetOperationsInspection */
             return $CHAR_CACHE[$cacheKey] = (int) ((($code - 0xC0) << 6) + $chr[2] - 0x80);
         }
 
@@ -4729,7 +4739,7 @@ final class UTF8
         if (\is_array($what) === true) {
             /** @noinspection ForeachSourceInspection */
             foreach ($what as $item) {
-                $str = (string) \preg_replace('/(' . \preg_quote($item, '/') . ')+/u', $item, $str);
+                $str = (string) \preg_replace('/(' . \preg_quote($item, '/u') . ')+/u', $item, $str);
             }
         }
 
@@ -4972,9 +4982,9 @@ final class UTF8
 
         if ($chars) {
             $chars = \preg_quote($chars, '/');
-            $pattern = "[${chars}]+\$";
+            $pattern = "[${chars}]+$";
         } else {
-            $pattern = "[\s]+\$";
+            $pattern = "[\\s]+$";
         }
 
         if (self::$SUPPORT['mbstring'] === true) {
@@ -5119,7 +5129,7 @@ final class UTF8
         $useMbFunction = $lang === null && $tryToKeepStringLength === false;
 
         $str = (string) \preg_replace_callback(
-            '/[-_\s]+(.)?/u',
+            '/[-_\\s]+(.)?/u',
             /**
              * @param array $match
              *
@@ -5144,7 +5154,7 @@ final class UTF8
         );
 
         return (string) \preg_replace_callback(
-            '/[\d]+(.)?/u',
+            '/[\\p{N}]+(.)?/u',
             /**
              * @param array $match
              *
@@ -5328,7 +5338,7 @@ final class UTF8
     ): string {
         if (self::$SUPPORT['mbstring'] === true) {
             /** @noinspection PhpComposerExtensionStubsInspection */
-            $str = (string) \mb_ereg_replace('\B(\p{Lu})', '-\1', \trim($str));
+            $str = (string) \mb_ereg_replace('\\B(\\p{Lu})', '-\1', \trim($str));
 
             $useMbFunction = $lang === null && $tryToKeepStringLength === false;
             if ($useMbFunction === true && $encoding === 'UTF-8') {
@@ -5338,10 +5348,10 @@ final class UTF8
             }
 
             /** @noinspection PhpComposerExtensionStubsInspection */
-            return (string) \mb_ereg_replace('[\-_\s]+', $delimiter, $str);
+            return (string) \mb_ereg_replace('[\\-_\\s]+', $delimiter, $str);
         }
 
-        $str = (string) \preg_replace('/\B(\p{Lu})/u', '-\1', \trim($str));
+        $str = (string) \preg_replace('/\\B(\\p{Lu})/u', '-\1', \trim($str));
 
         $useMbFunction = $lang === null && $tryToKeepStringLength === false;
         if ($useMbFunction === true && $encoding === 'UTF-8') {
@@ -5350,7 +5360,7 @@ final class UTF8
             $str = self::strtolower($str, $encoding, $cleanUtf8, $lang, $tryToKeepStringLength);
         }
 
-        return (string) \preg_replace('/[\-_\s]+/u', $delimiter, $str);
+        return (string) \preg_replace('/[\\-_\\s]+/u', $delimiter, $str);
     }
 
     /**
@@ -7095,7 +7105,7 @@ final class UTF8
         }
 
         $str = (string) \preg_replace_callback(
-            '/([\d|\p{Lu}])/u',
+            '/([\\p{N}|\\p{Lu}])/u',
             /**
              * @param string[] $matches
              *
@@ -7120,9 +7130,9 @@ final class UTF8
 
         $str = (string) \preg_replace(
             [
-                '/\s+/u',        // convert spaces to "_"
-                '/^\s+|\s+$/u',  // trim leading & trailing spaces
-                '/_+/',         // remove double "_"
+                '/\\s+/u',           // convert spaces to "_"
+                '/^\\s+|\\s+$/u', // trim leading & trailing spaces
+                '/_+/',                 // remove double "_"
             ],
             [
                 '_',
@@ -7725,7 +7735,7 @@ final class UTF8
         $useMbFunction = $lang === null && $tryToKeepStringLength === false;
 
         return (string) \preg_replace_callback(
-            '/([\S]+)/u',
+            '/([^\\s]+)/u',
             static function (array $match) use ($tryToKeepStringLength, $lang, $ignore, $useMbFunction, $encoding): string {
                 if ($ignore !== null && \in_array($match[0], $ignore, true)) {
                     return $match[0];
@@ -7813,7 +7823,7 @@ final class UTF8
 
         // the main substitutions
         $str = (string) \preg_replace_callback(
-            '~\b (_*) (?:                                                              # 1. Leading underscore and
+            '~\\b (_*) (?:                                                         # 1. Leading underscore and
                         ( (?<=[ ][/\\\\]) [[:alpha:]]+ [-_[:alpha:]/\\\\]+ |              # 2. file path or 
                           [-_[:alpha:]]+ [@.:] [-_[:alpha:]@.:/]+ ' . $apostropheRx . ' ) #    URL, domain, or email
                         |
@@ -7822,7 +7832,7 @@ final class UTF8
                         ( [[:alpha:]] [[:lower:]\'’()\[\]{}]* ' . $apostropheRx . ' )     # 4. or word w/o internal caps
                         |
                         ( [[:alpha:]] [[:alpha:]\'’()\[\]{}]* ' . $apostropheRx . ' )     # 5. or some other word
-                      ) (_*) \b                                                           # 6. With trailing underscore
+                      ) (_*) \\b                                                          # 6. With trailing underscore
                     ~ux',
             /**
              * @param string[] $matches
@@ -7855,10 +7865,10 @@ final class UTF8
 
         // Exceptions for small words: capitalize at start of title...
         $str = (string) \preg_replace_callback(
-            '~(  \A [[:punct:]]*                # start of title...
-                      |  [:.;?!][ ]+               # or of subsentence...
-                      |  [ ][\'"“‘(\[][ ]* )       # or of inserted subphrase...
-                      ( ' . $smallWordsRx . ' ) \b # ...followed by small word
+            '~(  \\A [[:punct:]]*            # start of title...
+                      |  [:.;?!][ ]+                # or of subsentence...
+                      |  [ ][\'"“‘(\[][ ]* )        # or of inserted subphrase...
+                      ( ' . $smallWordsRx . ' ) \\b # ...followed by small word
                      ~uxi',
             /**
              * @param string[] $matches
@@ -7873,9 +7883,9 @@ final class UTF8
 
         // ...and end of title
         $str = (string) \preg_replace_callback(
-            '~\b ( ' . $smallWordsRx . ' ) # small word...
-                      (?= [[:punct:]]* \Z     # ...at the end of the title...
-                      |   [\'"’”)\]] [ ] )    # ...or of an inserted subphrase?
+            '~\\b ( ' . $smallWordsRx . ' ) # small word...
+                      (?= [[:punct:]]* \Z          # ...at the end of the title...
+                      |   [\'"’”)\]] [ ] )         # ...or of an inserted subphrase?
                      ~uxi',
             /**
              * @param string[] $matches
@@ -7891,7 +7901,7 @@ final class UTF8
         // Exceptions for small words in hyphenated compound words.
         // e.g. "in-flight" -> In-Flight
         $str = (string) \preg_replace_callback(
-            '~\b
+            '~\\b
                         (?<! -)                   # Negative lookbehind for a hyphen; we do not want to match man-in-the-middle but do want (in-flight)
                         ( ' . $smallWordsRx . ' )
                         (?= -[[:alpha:]]+)        # lookahead for "-someword"
@@ -7909,11 +7919,11 @@ final class UTF8
 
         // e.g. "Stand-in" -> "Stand-In" (Stand is already capped at this point)
         $str = (string) \preg_replace_callback(
-            '~\b
+            '~\\b
                       (?<!…)                    # Negative lookbehind for a hyphen; we do not want to match man-in-the-middle but do want (stand-in)
                       ( [[:alpha:]]+- )         # $1 = first word and hyphen, should already be properly capped
                       ( ' . $smallWordsRx . ' ) # ...followed by small word
-                      (?!	- )                   # Negative lookahead for another -
+                      (?!	- )                 # Negative lookahead for another -
                      ~uxi',
             /**
              * @param string[] $matches
@@ -7934,12 +7944,17 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @return string
+     * @return false|string
+     *                      <p>false on error</p>
      */
-    public static function str_to_binary(string $str): string
+    public static function str_to_binary(string $str)
     {
         $value = \unpack('H*', $str);
+        if ($value === false) {
+            return false;
+        }
 
+        /** @noinspection OffsetOperationsInspection */
         return \base_convert($value[1], 16, 2);
     }
 
@@ -7958,7 +7973,7 @@ final class UTF8
 
         if (self::$SUPPORT['mbstring'] === true) {
             /** @noinspection PhpComposerExtensionStubsInspection */
-            $return = \mb_split('[\r\n]{1,2}', $str);
+            $return = \mb_split("[\r\n]{1,2}", $str);
         } else {
             $return = \preg_split("/[\r\n]{1,2}/u", $str);
         }
@@ -11161,6 +11176,7 @@ final class UTF8
         \preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
         $chars = $ar[0];
         $ord = null;
+        /** @noinspection ForeachSourceInspection */
         foreach ($chars as &$c) {
             $ordC0 = self::$ORD[$c[0]];
 
@@ -11323,9 +11339,9 @@ final class UTF8
 
         $string = (string) \preg_replace(
             [
-                '/[^' . $fallback_char_escaped . '\.\-a-zA-Z0-9\s]/', // 1) remove un-needed chars
-                '/[\s]+/u',                                           // 2) convert spaces to $fallback_char
-                '/[' . $fallback_char_escaped . ']+/u',               // 3) remove double $fallback_char's
+                '/[^' . $fallback_char_escaped . '\\.\\-a-zA-Z0-9\\s]/', // 1) remove un-needed chars
+                '/[\\s]+/u',                                           // 2) convert spaces to $fallback_char
+                '/[' . $fallback_char_escaped . ']+/u',                // 3) remove double $fallback_char's
             ],
             [
                 '',
@@ -11535,7 +11551,7 @@ final class UTF8
             $chars = \preg_quote($chars, '/');
             $pattern = "^[${chars}]+|[${chars}]+\$";
         } else {
-            $pattern = "^[\s]+|[\s]+\$";
+            $pattern = '^[\\s]+|[\\s]+$';
         }
 
         if (self::$SUPPORT['mbstring'] === true) {
@@ -12127,7 +12143,7 @@ final class UTF8
             return '';
         }
 
-        \preg_match('/^\s*+(?:\S++\s*+){1,' . $limit . '}/u', $str, $matches);
+        \preg_match('/^\\s*+(?:[^\\s]++\\s*+){1,' . $limit . '}/u', $str, $matches);
 
         if (
             !isset($matches[0])
@@ -12521,20 +12537,20 @@ final class UTF8
             $continue = false;
 
             if ($delimiter === '-') {
+                /** @noinspection AlterInForeachInspection */
                 foreach ((array) $specialCases['names'] as &$beginning) {
                     if (self::strpos($name, $beginning, 0, $encoding) === 0) {
                         $continue = true;
                     }
                 }
-                unset($beginning);
             }
 
+            /** @noinspection AlterInForeachInspection */
             foreach ((array) $specialCases['prefixes'] as &$beginning) {
                 if (self::strpos($name, $beginning, 0, $encoding) === 0) {
                     $continue = true;
                 }
             }
-            unset($beginning);
 
             if ($continue === true) {
                 continue;
@@ -12588,6 +12604,7 @@ final class UTF8
         if (isset(self::$WIN1252_TO_UTF8[$ordC1])) { // found in Windows-1252 special cases
             $buf .= self::$WIN1252_TO_UTF8[$ordC1];
         } else {
+            /** @noinspection OffsetOperationsInspection */
             $cc1 = self::$CHR[$ordC1 / 64] | "\xC0";
             $cc2 = ((string) $input & "\x3F") | "\x80";
             $buf .= $cc1 . $cc2;
