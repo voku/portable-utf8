@@ -1,9 +1,13 @@
 # Changelog
 
+### 5.4.11 (2019-07-19)
+
+- use "mb_detect_order()" for "UTF8::str_detect_encoding()"
+- code clean-up + optimize regex usage
+
 ### 5.4.10 (2019-07-05)
 
 - fix "UTF8::str_contains_any()" -> thanks @drupalista-br
-
 
 ### 5.4.9 (2019-06-19)
 
