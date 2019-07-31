@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.12 (2019-07-31)
+
+- fix "wordwrap_per_line()" -> use unicode version of "wordwrap"
+
+
 ### 5.4.11 (2019-07-19)
 
 - use "mb_detect_order()" for "UTF8::str_detect_encoding()"
