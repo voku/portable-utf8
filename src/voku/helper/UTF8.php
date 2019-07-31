@@ -12198,7 +12198,11 @@ final class UTF8
 
             foreach (self::str_split($iValue) as $c) {
                 $chars[] = $c;
-                $wordSplit .= $c === ' ' ? ' ' : '?';
+                if ($c === ' ') {
+                    $wordSplit .= ' ';
+                } else {
+                    $wordSplit .= '?';
+                }
             }
         }
 
@@ -12230,26 +12234,42 @@ final class UTF8
     /**
      * Line-Wrap the string after $limit, but also after the next word.
      *
-     * @param string $str
-     * @param int    $limit
+     * @param string $str   <p>The input string.</p>
+     * @param int    $width [optional] <p>The column width.</p>
+     * @param string $break [optional] <p>The line is broken using the optional break parameter.</p>
+     * @param bool   $cut   [optional] <p>
+     *                      If the cut is set to true, the string is
+     *                      always wrapped at or before the specified width. So if you have
+     *                      a word that is larger than the given width, it is broken apart.
+     *                      </p>
      *
      * @return string
      */
-    public static function wordwrap_per_line(string $str, int $limit): string
-    {
+    public static function wordwrap_per_line(
+        string $str,
+        int $width = 75,
+        string $break = "\n",
+        bool $cut = false,
+        bool $addFinalBreak = true
+    ): string {
         $strings = (array) \preg_split('/\\r\\n|\\r|\\n/', $str);
 
-        $string = '';
+        $stringArray = [];
         foreach ($strings as &$value) {
             if ($value === false) {
                 continue;
             }
 
-            $string .= \wordwrap($value, $limit);
-            $string .= "\n";
+            $stringArray[] = self::wordwrap($value, $width, $break, $cut);
         }
 
-        return $string;
+        if ($addFinalBreak) {
+            $finalBreak = $break;
+        } else {
+            $finalBreak = '';
+        }
+
+        return \implode("\n", $stringArray) . $finalBreak;
     }
 
     /**

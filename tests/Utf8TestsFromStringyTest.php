@@ -2360,8 +2360,31 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $testString => $testResult) {
-            static::assertSame($testResult, UTF8::wordwrap_per_line($testString, 10));
+            static::assertSame($testResult, UTF8::wordwrap_per_line($testString, 10), 'tested: "' . $testString . '"');
         }
+
+        // ---
+
+        $str = 'Iñtër' . "\n" . 'n' . "#\r\n#" . 'â' . "#\r#" . 't#i#ô#n#à#lizætiøndsdadadadadadadadasdadadasd';
+        $wrapped = 'Iñtër
+n#
+#â#
+#t#i#ô#n#à
+#lizætiønd
+sdadadadad
+adadadasda
+dadasd';
+        static::assertSame($wrapped, UTF8::wordwrap_per_line($str, 10, "\n", true, false));
+
+        // ---
+
+        $str = 'Iñtër' . "\n" . 'n' . "#\r\n#" . 'â' . "#\r#" . 't#i#ô#n#à#lizætiøndsdadadadadadadadasdadadasd';
+        $wrapped = 'Iñtër
+n#
+#â#
+#t#i#ô#n#à#lizætiøndsdadadadadadadadasdadadasd
+';
+        static::assertSame($wrapped, UTF8::wordwrap_per_line($str, 10, "\n", false, true));
     }
 
     /**

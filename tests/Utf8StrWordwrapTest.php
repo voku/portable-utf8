@@ -43,6 +43,13 @@ final class Utf8StrWordwrapTest extends \PHPUnit\Framework\TestCase
         static::assertSame($wrapped, u::wordwrap($str, 10, "\n", true));
     }
 
+    public function testBreakWithBreak()
+    {
+        $str = 'Iñtër' . "\n" . 'n' . "#\n#" . 'â' . "#\n#" . 't#i#ô#n#à#lizætiøn';
+        $wrapped = 'Iñtër' . "\n" . 'n#' . "\n" . '#â#' . "\n" . '#t#i#ô#n#à' . "\n" . '#lizætiøn';
+        static::assertSame($wrapped, u::wordwrap($str, 10, "\n", true));
+    }
+
     public function testBreakAtOne()
     {
         $str = 'ñ';
