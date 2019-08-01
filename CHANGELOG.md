@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.13 (2019-08-01)
+
+- extend "wordwrap_per_line()" -> split the input by "$delimiter"
+
 ### 5.4.12 (2019-07-31)
 
 - fix "wordwrap_per_line()" -> use unicode version of "wordwrap"
