@@ -4984,7 +4984,7 @@ final class UTF8
             $chars = \preg_quote($chars, '/');
             $pattern = "[${chars}]+$";
         } else {
-            $pattern = "[\\s]+$";
+            $pattern = '[\\s]+$';
         }
 
         if (self::$SUPPORT['mbstring'] === true) {
@@ -12208,13 +12208,20 @@ final class UTF8
 
         $strReturn = '';
         $j = 0;
-        $b = $i = -1;
+        $b = -1;
+        $i = -1;
         $wordSplit = \wordwrap($wordSplit, $width, '#', $cut);
 
-        while (false !== $b = \mb_strpos($wordSplit, '#', $b + 1)) {
+        $max = \mb_strlen($wordSplit);
+        while (($b = \mb_strpos($wordSplit, '#', $b + 1)) !== false) {
             for (++$i; $i < $b; ++$i) {
                 $strReturn .= $chars[$j];
                 unset($chars[$j++]);
+
+                // prevent endless loop, e.g. if there is a error in the "mb_*" polyfill
+                if ($i > $max) {
+                    break 2;
+                }
             }
 
             if (
@@ -12226,22 +12233,35 @@ final class UTF8
             }
 
             $strReturn .= $break;
+
+            // prevent endless loop, e.g. if there is a error in the "mb_*" polyfill
+            if ($b > $max) {
+                break;
+            }
         }
 
         return $strReturn . \implode('', $chars);
     }
 
     /**
-     * Line-Wrap the string after $limit, but also after the next word.
+     * Line-Wrap the string after $limit, but split the string by "$delimiter" before ...
+     *    ... so that we wrap the per line.
      *
-     * @param string $str   <p>The input string.</p>
-     * @param int    $width [optional] <p>The column width.</p>
-     * @param string $break [optional] <p>The line is broken using the optional break parameter.</p>
-     * @param bool   $cut   [optional] <p>
-     *                      If the cut is set to true, the string is
-     *                      always wrapped at or before the specified width. So if you have
-     *                      a word that is larger than the given width, it is broken apart.
-     *                      </p>
+     * @param string      $str           <p>The input string.</p>
+     * @param int         $width         [optional] <p>The column width.</p>
+     * @param string      $break         [optional] <p>The line is broken using the optional break parameter.</p>
+     * @param bool        $cut           [optional] <p>
+     *                                   If the cut is set to true, the string is
+     *                                   always wrapped at or before the specified width. So if you have
+     *                                   a word that is larger than the given width, it is broken apart.
+     *                                   </p>
+     * @param bool        $addFinalBreak [optional] <p>
+     *                                   If this flag is true, then the method will add a $break at the end
+     *                                   of the result string.
+     *                                   </p>
+     * @param string|null $delimiter     [optional] <p>
+     *                                   You can change the default behavior, where we split the string by newline.
+     *                                   </p>
      *
      * @return string
      */
@@ -12250,17 +12270,20 @@ final class UTF8
         int $width = 75,
         string $break = "\n",
         bool $cut = false,
-        bool $addFinalBreak = true
+        bool $addFinalBreak = true,
+        string $delimiter = null
     ): string {
-        $strings = (array) \preg_split('/\\r\\n|\\r|\\n/', $str);
+        if ($delimiter === null) {
+            $strings = \preg_split('/\\r\\n|\\r|\\n/', $str);
+        } else {
+            $strings = \explode($delimiter, $str);
+        }
 
         $stringArray = [];
-        foreach ($strings as &$value) {
-            if ($value === false) {
-                continue;
+        if ($strings !== false) {
+            foreach ($strings as $value) {
+                $stringArray[] = self::wordwrap($value, $width, $break, $cut);
             }
-
-            $stringArray[] = self::wordwrap($value, $width, $break, $cut);
         }
 
         if ($addFinalBreak) {
@@ -12269,7 +12292,7 @@ final class UTF8
             $finalBreak = '';
         }
 
-        return \implode("\n", $stringArray) . $finalBreak;
+        return \implode($delimiter ?? "\n", $stringArray) . $finalBreak;
     }
 
     /**

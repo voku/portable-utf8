@@ -2385,6 +2385,50 @@ n#
 #t#i#ô#n#à#lizætiøndsdadadadadadadadasdadadasd
 ';
         static::assertSame($wrapped, UTF8::wordwrap_per_line($str, 10, "\n", false, true));
+
+        // ---
+
+        $str = 'Iñtër<br>n' . "#\n#" . 'â#<br>#t#i#ô#n#à#lizætiøndsdad<br>adadadadadadasdadadasd';
+        $wrapped = 'Iñt
+ër<br>n#
+#â#<br>#t#
+i#ô
+#n#
+à#l
+izæ
+tiø
+nds
+dad<br>ada
+dad
+ada
+dad
+asd
+ada
+das
+d
+';
+        static::assertSame($wrapped, UTF8::wordwrap_per_line($str, 3, "\n", true, true, '<br>'));
+
+        // ---
+
+        $str = 'Iñtër<br>n' . "#\n#" . 'â#<br>#t#i#ô#n#à#lizætiøndsdad<br>adadadadadadasdadadasd';
+        $wrapped = 'Iñtër<br>n#
+#â#<br>#t#i#ô#n#à#lizætiøndsdad<br>adadadadadadasdadadasd';
+        static::assertSame($wrapped, UTF8::wordwrap_per_line($str, 3, "\n", false, false, '<br>'));
+
+        // ---
+
+        $str = 'Iñtër<br>n' . "#\n#" . 'â#<br>#t#i#ô#n#à#lizætiøndsdad<br>adadad ada dadasda dadasd';
+        $wrapped = 'Iñtër<br>n#
+#â#<br>#t#i#ô#n#à#lizætiøndsdad<br>adadad{BREAK}ada{BREAK}dadasda{BREAK}dadasd';
+        static::assertSame($wrapped, UTF8::wordwrap_per_line($str, 3, '{BREAK}', false, false, '<br>'));
+
+        // ---
+
+        $str = 'Iñtër<br>n' . "#\n#" . 'â#<br>#t#i#ô#n#à#lizætiøndsdad<br>adadad ada dadasda dadasd';
+        $wrapped = 'Iñtër<br>n#
+#â#<br>#t#i#ô#n#à#lizætiøndsdad<br>adadad ada{BREAK}dadasda{BREAK}dadasd';
+        static::assertSame($wrapped, UTF8::wordwrap_per_line($str, 10, '{BREAK}', false, false, '<br>'));
     }
 
     /**
