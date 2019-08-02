@@ -4536,13 +4536,19 @@ final class UTF8
     /**
      * Create an array containing a range of UTF-8 characters.
      *
-     * @param mixed $var1 <p>Numeric or hexadecimal code points, or a UTF-8 character to start from.</p>
-     * @param mixed $var2 <p>Numeric or hexadecimal code points, or a UTF-8 character to end at.</p>
+     * @param mixed  $var1      <p>Numeric or hexadecimal code points, or a UTF-8 character to start from.</p>
+     * @param mixed  $var2      <p>Numeric or hexadecimal code points, or a UTF-8 character to end at.</p>
+     * @param bool   $use_ctype <p>use ctype to detect numeric and hexadecimal, otherwise we will use a simple "is_numeric"</p>
+     * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @return string[]
      */
-    public static function range($var1, $var2): array
-    {
+    public static function range(
+        $var1,
+        $var2,
+        bool $use_ctype = true,
+        string $encoding = 'UTF-8'
+    ): array {
         if (!$var1 || !$var2) {
             return [];
         }
@@ -4551,11 +4557,18 @@ final class UTF8
             throw new \RuntimeException('ext-ctype: is not installed');
         }
 
+        $is_digit = false;
+        $is_xdigit = false;
+
         /** @noinspection PhpComposerExtensionStubsInspection */
-        if (\ctype_digit((string) $var1)) {
+        if ($use_ctype && \ctype_digit((string) $var1) && \ctype_digit((string) $var2)) {
+            $is_digit = true;
             $start = (int) $var1;
-        } /** @noinspection PhpComposerExtensionStubsInspection */ elseif (\ctype_xdigit($var1)) {
+        } /** @noinspection PhpComposerExtensionStubsInspection */ elseif ($use_ctype && \ctype_xdigit($var1) && \ctype_xdigit($var2)) {
+            $is_xdigit = true;
             $start = (int) self::hex_to_int($var1);
+        } elseif (!$use_ctype && \is_numeric($var1)) {
+            $start = (int) $var1;
         } else {
             $start = self::ord($var1);
         }
@@ -4564,11 +4577,12 @@ final class UTF8
             return [];
         }
 
-        /** @noinspection PhpComposerExtensionStubsInspection */
-        if (\ctype_digit((string) $var2)) {
+        if ($is_digit) {
             $end = (int) $var2;
-        } /** @noinspection PhpComposerExtensionStubsInspection */ elseif (\ctype_xdigit($var2)) {
+        } elseif ($is_xdigit) {
             $end = (int) self::hex_to_int($var2);
+        } elseif (!$use_ctype && \is_numeric($var2)) {
+            $end = (int) $var2;
         } else {
             $end = self::ord($var2);
         }
@@ -4578,8 +4592,8 @@ final class UTF8
         }
 
         return \array_map(
-            static function (int $i): string {
-                return (string) self::chr($i);
+            static function (int $i) use ($encoding): string {
+                return (string) self::chr($i, $encoding);
             },
             \range($start, $end)
         );

@@ -214,7 +214,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $before => $after) {
-            static::assertSame($after, UTF8::chr($before), 'tested: ' . $before);
+            static::assertSame($after, UTF8::chr($before, 'UTF8'), 'tested: ' . $before);
         }
 
         for ($i = 0; $i < 200; ++$i) { // keep this loop for simple performance tests

@@ -2586,10 +2586,24 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testRange()
     {
+        // --- INT
+
+        $expected = ['a', 'b', 'c', 'd'];
+        static::assertSame($expected, UTF8::range(97, 100, false));
+
+        // --- ISO chars
+
+        $expected = ['a', 'b', 'c', 'd'];
+        static::assertSame($expected, UTF8::range('a', 'd', false));
+
+        $expected = \range('A', 'Z');
+        static::assertSame($expected, UTF8::range('A', 'Z', false));
+        static::assertCount(0, UTF8::range('a', ''));
+
         // --- UTF-8 chars
 
         $expected = ['κ', 'ι', 'θ', 'η', 'ζ'];
-        static::assertSame($expected, UTF8::range('κ', 'ζ'));
+        static::assertSame($expected, UTF8::range('κ', 'ζ', false, 'UTF8'));
         static::assertCount(0, UTF8::range('κ', ''));
 
         // --- code points
