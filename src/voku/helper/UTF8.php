@@ -4570,7 +4570,7 @@ final class UTF8
             }
         }
 
-        if (self::$SUPPORT['ctype'] === false) {
+        if ($use_ctype && self::$SUPPORT['ctype'] === false) {
             throw new \RuntimeException('ext-ctype: is not installed');
         }
 
@@ -11239,7 +11239,7 @@ final class UTF8
             self::$ORD = self::getData('ord');
         }
 
-        \preg_match_all('/.{1}|[^\x00]{1,1}$/us', $str, $ar);
+        \preg_match_all('/.|[^\x00]$/us', $str, $ar);
         $chars = $ar[0];
         $ord = null;
         /** @noinspection ForeachSourceInspection */
@@ -11406,8 +11406,8 @@ final class UTF8
         $string = (string) \preg_replace(
             [
                 '/[^' . $fallback_char_escaped . '\\.\\-a-zA-Z0-9\\s]/', // 1) remove un-needed chars
-                '/[\\s]+/u',                                           // 2) convert spaces to $fallback_char
-                '/[' . $fallback_char_escaped . ']+/u',                // 3) remove double $fallback_char's
+                '/[\\s]+/u',                                             // 2) convert spaces to $fallback_char
+                '/[' . $fallback_char_escaped . ']+/u',                  // 3) remove double $fallback_char's
             ],
             [
                 '',
