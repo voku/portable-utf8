@@ -1,8 +1,10 @@
 # Changelog
 
-### 5.4.x (2019-xx-xx)
+### 5.4.15 (2019-08-06)
 
 - extend "UTF8::range()" -> support for different steps
+- fix "UTF8::str_detect_encoding()" detecting of "UTF-32"
+- revert: use "mb_detect_order()" for "UTF8::str_detect_encoding()"
 
 ### 5.4.14 (2019-08-02)
 
@@ -10,11 +12,11 @@
 
 ### 5.4.13 (2019-08-01)
 
-- extend "wordwrap_per_line()" -> split the input by "$delimiter"
+- extend "UTF8::wordwrap_per_line()" -> split the input by "$delimiter"
 
 ### 5.4.12 (2019-07-31)
 
-- fix "wordwrap_per_line()" -> use unicode version of "wordwrap"
+- fix "UTF8::wordwrap_per_line()" -> use unicode version of "wordwrap"
 
 ### 5.4.11 (2019-07-19)
 
