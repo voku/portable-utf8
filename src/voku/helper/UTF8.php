@@ -4536,10 +4536,16 @@ final class UTF8
     /**
      * Create an array containing a range of UTF-8 characters.
      *
-     * @param mixed  $var1      <p>Numeric or hexadecimal code points, or a UTF-8 character to start from.</p>
-     * @param mixed  $var2      <p>Numeric or hexadecimal code points, or a UTF-8 character to end at.</p>
-     * @param bool   $use_ctype <p>use ctype to detect numeric and hexadecimal, otherwise we will use a simple "is_numeric"</p>
-     * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
+     * @param mixed     $var1      <p>Numeric or hexadecimal code points, or a UTF-8 character to start from.</p>
+     * @param mixed     $var2      <p>Numeric or hexadecimal code points, or a UTF-8 character to end at.</p>
+     * @param bool      $use_ctype <p>use ctype to detect numeric and hexadecimal, otherwise we will use a simple "is_numeric"</p>
+     * @param string    $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
+     * @param float|int $step      [optional] <p>
+     *                             If a step value is given, it will be used as the
+     *                             increment between elements in the sequence. step
+     *                             should be given as a positive number. If not specified,
+     *                             step will default to 1.
+     *                             </p>
      *
      * @return string[]
      */
@@ -4547,10 +4553,21 @@ final class UTF8
         $var1,
         $var2,
         bool $use_ctype = true,
-        string $encoding = 'UTF-8'
+        string $encoding = 'UTF-8',
+        $step = 1
     ): array {
         if (!$var1 || !$var2) {
             return [];
+        }
+
+        if ($step !== 1) {
+            if (!\is_numeric($step)) {
+                throw new \InvalidArgumentException('$step need to be a number, type given: ' . \gettype($step));
+            }
+
+            if ($step <= 0) {
+                throw new \InvalidArgumentException('$step need to be a positive number, given: ' . $step);
+            }
         }
 
         if (self::$SUPPORT['ctype'] === false) {
@@ -4591,12 +4608,12 @@ final class UTF8
             return [];
         }
 
-        return \array_map(
-            static function (int $i) use ($encoding): string {
-                return (string) self::chr($i, $encoding);
-            },
-            \range($start, $end)
-        );
+        $array = [];
+        foreach (\range($start, $end, $step) as $i) {
+            $array[] = (string) self::chr((int) $i, $encoding);
+        }
+
+        return $array;
     }
 
     /**

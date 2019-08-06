@@ -2606,6 +2606,12 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         static::assertSame($expected, UTF8::range('κ', 'ζ', false, 'UTF8'));
         static::assertCount(0, UTF8::range('κ', ''));
 
+        // --- UTF-8 chars
+
+        $expected = ['κ', 'θ', 'ζ'];
+        static::assertSame($expected, UTF8::range('κ', 'ζ', false, 'UTF8', 2));
+        static::assertCount(0, UTF8::range('κ', ''));
+
         // --- code points
 
         $expected = ['₧', '₨', '₩'];

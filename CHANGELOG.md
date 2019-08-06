@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.x (2019-xx-xx)
+
+- extend "UTF8::range()" -> support for different steps
+
 ### 5.4.14 (2019-08-02)
 
 - extend "UTF8::range()" -> support for e.g. "a-z" + different encoding
