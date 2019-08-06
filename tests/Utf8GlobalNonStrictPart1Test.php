@@ -2955,6 +2955,15 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $testString = \file_get_contents(__DIR__ . '/fixtures/sample-win1252.html');
         static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString));
 
+        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-ascii-chart.txt');
+        static::assertContains('ASCII', UTF8::str_detect_encoding($testString));
+
+        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom.txt');
+        static::assertContains('UTF-16LE', UTF8::str_detect_encoding($testString));
+
+        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt');
+        static::assertContains('UTF-32BE', UTF8::str_detect_encoding($testString));
+
         $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
         static::assertContains('UTF-8', UTF8::str_detect_encoding($testString));
 
