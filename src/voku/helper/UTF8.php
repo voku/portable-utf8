@@ -3618,8 +3618,8 @@ final class UTF8
      *
      * @see http://hsivonen.iki.fi/php-utf8/
      *
-     * @param string|string[] $str    <p>The string to be checked.</p>
-     * @param bool            $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
+     * @param string $str    <p>The string to be checked.</p>
+     * @param bool   $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
      *
      * @return bool
      */
