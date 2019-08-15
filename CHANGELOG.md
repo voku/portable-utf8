@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.16 (2019-08-15)
+
+- optimize "UTF8::str_detect_encoding()"
+
 ### 5.4.15 (2019-08-06)
 
 - extend "UTF8::range()" -> support for different steps
