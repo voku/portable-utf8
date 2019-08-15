@@ -3623,18 +3623,8 @@ final class UTF8
      *
      * @return bool
      */
-    public static function is_utf8($str, bool $strict = false): bool
+    private static function is_utf8_string(string $str, bool $strict = false): bool
     {
-        if (\is_array($str) === true) {
-            foreach ($str as &$v) {
-                if (self::is_utf8($v, $strict) === false) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         if ($str === '') {
             return true;
         }
@@ -3652,7 +3642,6 @@ final class UTF8
         }
 
         if (self::pcre_utf8_support() !== true) {
-
             // If even just the first character can be matched, when the /u
             // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
             // invalid, nothing at all will match, even if the string contains
@@ -3673,6 +3662,7 @@ final class UTF8
         /** @noinspection ForeachInvariantsInspection */
         for ($i = 0; $i < $len; ++$i) {
             $in = self::$ORD[$str[$i]];
+
             if ($mState === 0) {
                 // When mState is zero we expect either a US-ASCII character or a
                 // multi-octet sequence.
@@ -3767,6 +3757,29 @@ final class UTF8
         }
 
         return true;
+    }
+
+    /**
+     * Checks whether the passed input contains only byte sequences that appear valid UTF-8.
+     *
+     * @param null|int|string|string[] $str <p>The input to be checked.</p>
+     * @param bool                     $strict  <p>Check also if the string is not UTF-16 or UTF-32.</p>
+     *
+     * @return bool
+     */
+    public static function is_utf8($str, bool $strict = false): bool
+    {
+        if (\is_array($str) === true) {
+            foreach ($str as &$v) {
+                if (self::is_utf8($v, $strict) === false) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return self::is_utf8_string((string)$str, $strict);
     }
 
     /**
@@ -5445,7 +5458,7 @@ final class UTF8
         // 3.) simple check for UTF-8 chars
         //
 
-        if (self::is_utf8($str) === true) {
+        if (self::is_utf8_string($str) === true) {
             return 'UTF-8';
         }
 

@@ -2027,16 +2027,16 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
         ];
 
-        $conter = 0;
+        $counter = 0;
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::is_utf16($actual), 'error by - ' . $conter . ' :' . $actual);
-            ++$conter;
+            static::assertSame($expected, UTF8::is_utf16($actual), 'error by - ' . $counter . ' :' . $actual);
+            ++$counter;
         }
 
-        $conter = 0;
+        $counter = 0;
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::isUtf16($actual), 'error by - ' . $conter . ' :' . $actual);
-            ++$conter;
+            static::assertSame($expected, UTF8::isUtf16($actual), 'error by - ' . $counter . ' :' . $actual);
+            ++$counter;
         }
 
         static::assertFalse(UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
@@ -2098,16 +2098,16 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
         ];
 
-        $conter = 0;
+        $counter = 0;
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::is_utf32($actual), 'error by - ' . $conter . ' :' . $actual);
-            ++$conter;
+            static::assertSame($expected, UTF8::is_utf32($actual), 'error by - ' . $counter . ' :' . $actual);
+            ++$counter;
         }
 
-        $conter = 0;
+        $counter = 0;
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::isUtf32($actual), 'error by - ' . $conter . ' :' . $actual);
-            ++$conter;
+            static::assertSame($expected, UTF8::isUtf32($actual), 'error by - ' . $counter . ' :' . $actual);
+            ++$counter;
         }
 
         static::assertFalse(UTF8::isUtf32(\file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
@@ -2173,17 +2173,18 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         static::assertFalse(UTF8::is_utf8(\array_keys($testArray)));
 
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-            $conter = 0;
+            $counter = 0;
             foreach ($testArray as $actual => $expected) {
-                static::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $conter . ' :' . $actual);
-                ++$conter;
+                static::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $counter . ' :' . $actual);
+                ++$counter;
             }
         }
 
-        $conter = 0;
+        $counter = 0;
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::isUtf8($actual), 'error by - ' . $conter . ' :' . $actual);
-            ++$conter;
+            static::assertSame($expected, UTF8::isUtf8($actual), 'error by - ' . $counter . ' :' . $actual);
+            static::assertSame($expected, UTF8::is_utf8((string)$actual), 'error by - ' . $counter . ' :' . $actual);
+            ++$counter;
         }
 
         static::assertFalse(UTF8::is_utf8(\file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt'), true));

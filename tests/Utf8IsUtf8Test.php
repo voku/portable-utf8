@@ -13,6 +13,18 @@ use voku\helper\UTF8;
  */
 final class Utf8IsUtf8Test extends \PHPUnit\Framework\TestCase
 {
+    public function testEmptyString()
+    {
+        $str = '';
+        static::assertTrue(UTF8::is_utf8($str));
+    }
+
+    public function testNull()
+    {
+        $str = null;
+        static::assertTrue(UTF8::is_utf8($str));
+    }
+
     public function testValidUtf8()
     {
         $str = 'Iñtërnâtiônàlizætiøn';
