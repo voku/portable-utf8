@@ -7618,7 +7618,9 @@ final class UTF8
         bool $useTrimFirst = true,
         string $word_define_chars = null
     ): string {
-        static $UNIQUE_STRING_HELPER = null;
+        if ($str === '') {
+            return '';
+        }
 
         if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
             $encoding = self::normalize_encoding($encoding, 'UTF-8');
