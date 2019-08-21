@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.17 (2019-08-21)
+
+- fix "UTF8::get_file_type()" -> do not add too simple comparisons, because of false-positive results
+- extend "UTF8::str_titleize()" -> allow to add "word"-chars as new parameter
+
 ### 5.4.16 (2019-08-15)
 
 - optimize "UTF8::str_detect_encoding()"
