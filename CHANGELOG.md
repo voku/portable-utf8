@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.18 (2019-08-21)
+
+- optimize "UTF8::str_titleize()" + clean-up
+
 ### 5.4.17 (2019-08-21)
 
 - fix "UTF8::get_file_type()" -> do not add too simple comparisons, because of false-positive results
