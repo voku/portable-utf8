@@ -3095,14 +3095,24 @@ d
     /**
      * @dataProvider titleizeProvider()
      *
-     * @param      $expected
-     * @param      $str
-     * @param null $ignore
-     * @param      $encoding
+     * @param string      $expected
+     * @param string      $str
+     * @param array|null  $ignore
+     * @param string|null $word_define_chars
+     * @param string      $encoding
      */
-    public function testTitleize($expected, $str, $ignore = null, $encoding = '')
+    public function testTitleize($expected, $str, $ignore = null, $word_define_chars = null, $encoding = '')
     {
-        $result = UTF8::str_titleize($str, $ignore, $encoding);
+        $result = UTF8::str_titleize(
+            $str,
+            $ignore,
+            $encoding,
+            false,
+            null,
+            false,
+            true,
+            $word_define_chars
+        );
 
         static::assertSame($expected, $result);
     }
@@ -3599,7 +3609,12 @@ d
     public function titleizeProvider(): \Iterator
     {
         $ignore = ['at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the'];
+
         yield ['Title Case', 'TITLE CASE'];
+        yield ['Up-to-Date', 'up-to-date', ['to'], '-'];
+        yield ['Up-to-Date', 'up-to-date', ['to'], '-*'];
+        yield ['Up-To-Date', 'up-to-date', [], '-*'];
+        yield ['Up-To-D*A*T*E*', 'up-to-d*a*t*e*', [], '-*'];
         yield ['Title Case', "\n\t" . 'TITLE CASE '];
         yield ['Testing The Method', 'testing the method'];
         yield ['Testing the Method', 'testing the method', $ignore];
@@ -3608,7 +3623,7 @@ d
             'i like to watch DVDs at home',
             $ignore,
         ];
-        yield ['Θα Ήθελα Να Φύγει', '  Θα ήθελα να φύγει  ', null, 'UTF-8'];
+        yield ['Θα Ήθελα Να Φύγει', '  Θα ήθελα να φύγει  ', null, null, 'UTF-8'];
     }
 
     public function toAsciiProvider(): \Iterator

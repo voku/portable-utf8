@@ -2114,7 +2114,7 @@ final class UTF8
     }
 
     /**
-     * Warning: this method only works for some file-types (png bmp gif jpg rar zip midi exe pdf)
+     * Warning: this method only works for some file-types (png, jpg)
      *          if you need more supported types, please use e.g. "finfo"
      *
      * @param string $str
@@ -2140,6 +2140,9 @@ final class UTF8
             return $fallback;
         }
 
+        // DEBUG
+        //var_dump($str_info);
+
         $str_info = \unpack('C2chars', $str_info);
         if ($str_info === false) {
             return $fallback;
@@ -2150,58 +2153,18 @@ final class UTF8
         // DEBUG
         //var_dump($type_code);
 
+        //
+        // info: https://en.wikipedia.org/wiki/Magic_number_%28programming%29#Format_indicator
+        //
         switch ($type_code) {
-            case 3780:
-                $ext = 'pdf';
-                $mime = 'application/pdf';
-                $type = 'binary';
-
-                break;
-            case 7790:
-                $ext = 'exe';
-                $mime = 'application/octet-stream';
-                $type = 'binary';
-
-                break;
-            case 7784:
-                $ext = 'midi';
-                $mime = 'audio/x-midi';
-                $type = 'binary';
-
-                break;
-            case 8075:
-                $ext = 'zip';
-                $mime = 'application/zip';
-                $type = 'binary';
-
-                break;
-            case 8297:
-                $ext = 'rar';
-                $mime = 'application/rar';
-                $type = 'binary';
-
-                break;
+            // WARNING: do not add too simple comparisons, because of false-positive results:
+            //
+            // 3780 => 'pdf', 7790 => 'exe', 7784 => 'midi', 8075 => 'zip',
+            // 8297 => 'rar', 7173 => 'gif', 7373 => 'tiff' 6677 => 'bmp', ...
+            //
             case 255216:
                 $ext = 'jpg';
                 $mime = 'image/jpeg';
-                $type = 'binary';
-
-                break;
-            case 7173:
-                $ext = 'gif';
-                $mime = 'image/gif';
-                $type = 'binary';
-
-                break;
-            case 7373:
-                $ext = 'tiff';
-                $mime = 'image/tiff';
-                $type = 'binary';
-
-                break;
-            case 6677:
-                $ext = 'bmp';
-                $mime = 'image/bmp';
                 $type = 'binary';
 
                 break;
@@ -3614,156 +3577,10 @@ final class UTF8
     }
 
     /**
-     * Checks whether the passed string contains only byte sequences that appear valid UTF-8 characters.
-     *
-     * @see http://hsivonen.iki.fi/php-utf8/
-     *
-     * @param string $str    <p>The string to be checked.</p>
-     * @param bool   $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
-     *
-     * @return bool
-     */
-    private static function is_utf8_string(string $str, bool $strict = false): bool
-    {
-        if ($str === '') {
-            return true;
-        }
-
-        if ($strict === true) {
-            $isBinary = self::is_binary($str, true);
-
-            if ($isBinary && self::is_utf16($str, false) !== false) {
-                return false;
-            }
-
-            if ($isBinary && self::is_utf32($str, false) !== false) {
-                return false;
-            }
-        }
-
-        if (self::pcre_utf8_support() !== true) {
-            // If even just the first character can be matched, when the /u
-            // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
-            // invalid, nothing at all will match, even if the string contains
-            // some valid sequences
-            return \preg_match('/^.{1}/us', $str, $ar) === 1;
-        }
-
-        $mState = 0; // cached expected number of octets after the current octet
-        // until the beginning of the next UTF8 character sequence
-        $mUcs4 = 0; // cached Unicode character
-        $mBytes = 1; // cached expected number of octets in the current sequence
-
-        if (self::$ORD === null) {
-            self::$ORD = self::getData('ord');
-        }
-
-        $len = \strlen((string) $str);
-        /** @noinspection ForeachInvariantsInspection */
-        for ($i = 0; $i < $len; ++$i) {
-            $in = self::$ORD[$str[$i]];
-
-            if ($mState === 0) {
-                // When mState is zero we expect either a US-ASCII character or a
-                // multi-octet sequence.
-                if ((0x80 & $in) === 0) {
-                    // US-ASCII, pass straight through.
-                    $mBytes = 1;
-                } elseif ((0xE0 & $in) === 0xC0) {
-                    // First octet of 2 octet sequence.
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 0x1F) << 6;
-                    $mState = 1;
-                    $mBytes = 2;
-                } elseif ((0xF0 & $in) === 0xE0) {
-                    // First octet of 3 octet sequence.
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 0x0F) << 12;
-                    $mState = 2;
-                    $mBytes = 3;
-                } elseif ((0xF8 & $in) === 0xF0) {
-                    // First octet of 4 octet sequence.
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 0x07) << 18;
-                    $mState = 3;
-                    $mBytes = 4;
-                } elseif ((0xFC & $in) === 0xF8) {
-                    /* First octet of 5 octet sequence.
-                     *
-                     * This is illegal because the encoded codepoint must be either
-                     * (a) not the shortest form or
-                     * (b) outside the Unicode range of 0-0x10FFFF.
-                     * Rather than trying to resynchronize, we will carry on until the end
-                     * of the sequence and let the later error handling code catch it.
-                     */
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 0x03) << 24;
-                    $mState = 4;
-                    $mBytes = 5;
-                } elseif ((0xFE & $in) === 0xFC) {
-                    // First octet of 6 octet sequence, see comments for 5 octet sequence.
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 1) << 30;
-                    $mState = 5;
-                    $mBytes = 6;
-                } else {
-                    // Current octet is neither in the US-ASCII range nor a legal first
-                    // octet of a multi-octet sequence.
-                    return false;
-                }
-            } elseif ((0xC0 & $in) === 0x80) {
-
-                // When mState is non-zero, we expect a continuation of the multi-octet
-                // sequence
-
-                // Legal continuation.
-                $shift = ($mState - 1) * 6;
-                $tmp = $in;
-                $tmp = ($tmp & 0x0000003F) << $shift;
-                $mUcs4 |= $tmp;
-                // Prefix: End of the multi-octet sequence. mUcs4 now contains the final
-                // Unicode code point to be output.
-                if (--$mState === 0) {
-                    // Check for illegal sequences and code points.
-                    //
-                    // From Unicode 3.1, non-shortest form is illegal
-                    if (
-                        ($mBytes === 2 && $mUcs4 < 0x0080)
-                        ||
-                        ($mBytes === 3 && $mUcs4 < 0x0800)
-                        ||
-                        ($mBytes === 4 && $mUcs4 < 0x10000)
-                        ||
-                        ($mBytes > 4)
-                        ||
-                        // From Unicode 3.2, surrogate characters are illegal.
-                        (($mUcs4 & 0xFFFFF800) === 0xD800)
-                        ||
-                        // Code points outside the Unicode range are illegal.
-                        ($mUcs4 > 0x10FFFF)
-                    ) {
-                        return false;
-                    }
-                    // initialize UTF8 cache
-                    $mState = 0;
-                    $mUcs4 = 0;
-                    $mBytes = 1;
-                }
-            } else {
-                // ((0xC0 & (*in) != 0x80) && (mState != 0))
-                // Incomplete multi-octet sequence.
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Checks whether the passed input contains only byte sequences that appear valid UTF-8.
      *
-     * @param null|int|string|string[] $str <p>The input to be checked.</p>
-     * @param bool                     $strict  <p>Check also if the string is not UTF-16 or UTF-32.</p>
+     * @param int|string|string[]|null $str    <p>The input to be checked.</p>
+     * @param bool                     $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
      *
      * @return bool
      */
@@ -3779,7 +3596,7 @@ final class UTF8
             return true;
         }
 
-        return self::is_utf8_string((string)$str, $strict);
+        return self::is_utf8_string((string) $str, $strict);
     }
 
     /**
@@ -7787,6 +7604,7 @@ final class UTF8
      * @param bool                $tryToKeepStringLength [optional] <p>true === try to keep the string length: e.g. ẞ ->
      *                                                   ß</p>
      * @param bool                $useTrimFirst          [optional] <p>true === trim the input string, first</p>
+     * @param string|null         $word_define_chars     [optional] <p>An string of chars that will be used as whitespace separator === words.</p>
      *
      * @return string the titleized string
      */
@@ -7797,8 +7615,11 @@ final class UTF8
         bool $cleanUtf8 = false,
         string $lang = null,
         bool $tryToKeepStringLength = false,
-        bool $useTrimFirst = true
+        bool $useTrimFirst = true,
+        string $word_define_chars = null
     ): string {
+        static $UNIQUE_STRING_HELPER = null;
+
         if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
             $encoding = self::normalize_encoding($encoding, 'UTF-8');
         }
@@ -7813,8 +7634,14 @@ final class UTF8
 
         $useMbFunction = $lang === null && $tryToKeepStringLength === false;
 
-        return (string) \preg_replace_callback(
-            '/([^\\s]+)/u',
+        if ($word_define_chars) {
+            $word_define_chars = \preg_quote($word_define_chars, '/');
+        } else {
+            $word_define_chars = '';
+        }
+
+        $str = (string) \preg_replace_callback(
+            '/([^\\s' . $word_define_chars . ']+)/u',
             static function (array $match) use ($tryToKeepStringLength, $lang, $ignore, $useMbFunction, $encoding): string {
                 if ($ignore !== null && \in_array($match[0], $ignore, true)) {
                     return $match[0];
@@ -7846,6 +7673,8 @@ final class UTF8
             },
             $str
         );
+
+        return $str;
     }
 
     /**
@@ -7864,8 +7693,11 @@ final class UTF8
      *
      * @return string the titleized string
      */
-    public static function str_titleize_for_humans(string $str, array $ignore = [], string $encoding = 'UTF-8'): string
-    {
+    public static function str_titleize_for_humans(
+        string $str,
+        array $ignore = [],
+        string $encoding = 'UTF-8'
+    ): string {
         $smallWords = \array_merge(
             [
                 '(?<!q&)a',
@@ -10115,7 +9947,7 @@ final class UTF8
 
                 $langCode = $lang . '-Lower';
                 if (!\in_array($langCode, self::$INTL_TRANSLITERATOR_LIST, true)) {
-                    \trigger_error('UTF8::strtolower() cannot handle special language: ' . $lang, \E_USER_WARNING);
+                    \trigger_error('UTF8::strtolower() cannot handle special language: ' . $lang . ' | supported: ' . \print_r(self::$INTL_TRANSLITERATOR_LIST, true), \E_USER_WARNING);
 
                     $langCode = 'Any-Lower';
                 }
@@ -11129,7 +10961,15 @@ final class UTF8
             return \mb_convert_case($str, \MB_CASE_TITLE, $encoding);
         }
 
-        return self::str_titleize($str, null, $encoding, false, $lang, $tryToKeepStringLength, false);
+        return self::str_titleize(
+            $str,
+            null,
+            $encoding,
+            false,
+            $lang,
+            $tryToKeepStringLength,
+            false
+        );
     }
 
     /**
@@ -12382,6 +12222,152 @@ final class UTF8
     public static function ws(): array
     {
         return self::$WHITESPACE;
+    }
+
+    /**
+     * Checks whether the passed string contains only byte sequences that appear valid UTF-8 characters.
+     *
+     * @see http://hsivonen.iki.fi/php-utf8/
+     *
+     * @param string $str    <p>The string to be checked.</p>
+     * @param bool   $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
+     *
+     * @return bool
+     */
+    private static function is_utf8_string(string $str, bool $strict = false): bool
+    {
+        if ($str === '') {
+            return true;
+        }
+
+        if ($strict === true) {
+            $isBinary = self::is_binary($str, true);
+
+            if ($isBinary && self::is_utf16($str, false) !== false) {
+                return false;
+            }
+
+            if ($isBinary && self::is_utf32($str, false) !== false) {
+                return false;
+            }
+        }
+
+        if (self::pcre_utf8_support() !== true) {
+            // If even just the first character can be matched, when the /u
+            // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
+            // invalid, nothing at all will match, even if the string contains
+            // some valid sequences
+            return \preg_match('/^.{1}/us', $str, $ar) === 1;
+        }
+
+        $mState = 0; // cached expected number of octets after the current octet
+        // until the beginning of the next UTF8 character sequence
+        $mUcs4 = 0; // cached Unicode character
+        $mBytes = 1; // cached expected number of octets in the current sequence
+
+        if (self::$ORD === null) {
+            self::$ORD = self::getData('ord');
+        }
+
+        $len = \strlen((string) $str);
+        /** @noinspection ForeachInvariantsInspection */
+        for ($i = 0; $i < $len; ++$i) {
+            $in = self::$ORD[$str[$i]];
+
+            if ($mState === 0) {
+                // When mState is zero we expect either a US-ASCII character or a
+                // multi-octet sequence.
+                if ((0x80 & $in) === 0) {
+                    // US-ASCII, pass straight through.
+                    $mBytes = 1;
+                } elseif ((0xE0 & $in) === 0xC0) {
+                    // First octet of 2 octet sequence.
+                    $mUcs4 = $in;
+                    $mUcs4 = ($mUcs4 & 0x1F) << 6;
+                    $mState = 1;
+                    $mBytes = 2;
+                } elseif ((0xF0 & $in) === 0xE0) {
+                    // First octet of 3 octet sequence.
+                    $mUcs4 = $in;
+                    $mUcs4 = ($mUcs4 & 0x0F) << 12;
+                    $mState = 2;
+                    $mBytes = 3;
+                } elseif ((0xF8 & $in) === 0xF0) {
+                    // First octet of 4 octet sequence.
+                    $mUcs4 = $in;
+                    $mUcs4 = ($mUcs4 & 0x07) << 18;
+                    $mState = 3;
+                    $mBytes = 4;
+                } elseif ((0xFC & $in) === 0xF8) {
+                    /* First octet of 5 octet sequence.
+                     *
+                     * This is illegal because the encoded codepoint must be either
+                     * (a) not the shortest form or
+                     * (b) outside the Unicode range of 0-0x10FFFF.
+                     * Rather than trying to resynchronize, we will carry on until the end
+                     * of the sequence and let the later error handling code catch it.
+                     */
+                    $mUcs4 = $in;
+                    $mUcs4 = ($mUcs4 & 0x03) << 24;
+                    $mState = 4;
+                    $mBytes = 5;
+                } elseif ((0xFE & $in) === 0xFC) {
+                    // First octet of 6 octet sequence, see comments for 5 octet sequence.
+                    $mUcs4 = $in;
+                    $mUcs4 = ($mUcs4 & 1) << 30;
+                    $mState = 5;
+                    $mBytes = 6;
+                } else {
+                    // Current octet is neither in the US-ASCII range nor a legal first
+                    // octet of a multi-octet sequence.
+                    return false;
+                }
+            } elseif ((0xC0 & $in) === 0x80) {
+
+                // When mState is non-zero, we expect a continuation of the multi-octet
+                // sequence
+
+                // Legal continuation.
+                $shift = ($mState - 1) * 6;
+                $tmp = $in;
+                $tmp = ($tmp & 0x0000003F) << $shift;
+                $mUcs4 |= $tmp;
+                // Prefix: End of the multi-octet sequence. mUcs4 now contains the final
+                // Unicode code point to be output.
+                if (--$mState === 0) {
+                    // Check for illegal sequences and code points.
+                    //
+                    // From Unicode 3.1, non-shortest form is illegal
+                    if (
+                        ($mBytes === 2 && $mUcs4 < 0x0080)
+                        ||
+                        ($mBytes === 3 && $mUcs4 < 0x0800)
+                        ||
+                        ($mBytes === 4 && $mUcs4 < 0x10000)
+                        ||
+                        ($mBytes > 4)
+                        ||
+                        // From Unicode 3.2, surrogate characters are illegal.
+                        (($mUcs4 & 0xFFFFF800) === 0xD800)
+                        ||
+                        // Code points outside the Unicode range are illegal.
+                        ($mUcs4 > 0x10FFFF)
+                    ) {
+                        return false;
+                    }
+                    // initialize UTF8 cache
+                    $mState = 0;
+                    $mUcs4 = 0;
+                    $mBytes = 1;
+                }
+            } else {
+                // ((0xC0 & (*in) != 0x80) && (mState != 0))
+                // Incomplete multi-octet sequence.
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

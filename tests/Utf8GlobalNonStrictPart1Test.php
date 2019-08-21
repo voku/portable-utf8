@@ -1034,6 +1034,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $image2 = UTF8::file_get_contents(__DIR__ . '/fixtures/image_small.png', false, $context, null, null, 10, true);
         static::assertSame(['ext' => 'png', 'mime' => 'image/png', 'type' => 'binary'], UTF8::get_file_type($image2));
 
+        /*
         $image = UTF8::file_get_contents(__DIR__ . '/fixtures/test.zip', false, $context, null, null, 10, false);
         static::assertSame(
             [
@@ -1043,7 +1044,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             ],
             UTF8::get_file_type($image)
         );
+         */
 
+        /*
         $image = UTF8::file_get_contents(__DIR__ . '/fixtures/test.pdf', false, $context, null, null, 10, false);
         static::assertSame(
             [
@@ -1053,6 +1056,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             ],
             UTF8::get_file_type($image)
         );
+         */
     }
 
     public function testFilter()
@@ -1742,9 +1746,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.xlsx'));
         $testString1 = \file_get_contents(__DIR__ . '/fixtures/test.xlsx');
-        static::assertTrue(UTF8::is_binary($testString1, false));
+        static::assertFalse(UTF8::is_binary($testString1, false));
         $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.xlsx');
-        static::assertTrue(UTF8::is_binary($testString2, false));
+        static::assertFalse(UTF8::is_binary($testString2, false));
 
         static::assertSame($testString1, $testString2);
 
@@ -1762,9 +1766,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.pdf'));
         $testString1 = \file_get_contents(__DIR__ . '/fixtures/test.pdf');
-        static::assertTrue(UTF8::is_binary($testString1, false));
+        static::assertFalse(UTF8::is_binary($testString1, false));
         $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.pdf');
-        static::assertTrue(UTF8::is_binary($testString2, false));
+        static::assertFalse(UTF8::is_binary($testString2, false));
 
         static::assertSame($testString1, $testString2);
 
@@ -2952,26 +2956,29 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             }
         }
 
+        $testString = \file_get_contents(__DIR__ . '/fixtures/broken_import.csv');
+        static::assertSame('ISO-8859-1', UTF8::str_detect_encoding($testString));
+
         $testString = \file_get_contents(__DIR__ . '/fixtures/sample-win1252.html');
-        static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString));
+        static::assertSame('ISO-8859-1', UTF8::str_detect_encoding($testString));
 
         $testString = \file_get_contents(__DIR__ . '/fixtures/sample-ascii-chart.txt');
-        static::assertContains('ASCII', UTF8::str_detect_encoding($testString));
+        static::assertSame('ASCII', UTF8::str_detect_encoding($testString));
 
         $testString = \file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom.txt');
-        static::assertContains('UTF-16LE', UTF8::str_detect_encoding($testString));
+        static::assertSame('UTF-16LE', UTF8::str_detect_encoding($testString));
 
         $testString = \file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt');
-        static::assertContains('UTF-32BE', UTF8::str_detect_encoding($testString));
+        static::assertSame('UTF-32BE', UTF8::str_detect_encoding($testString));
 
         $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-        static::assertContains('UTF-8', UTF8::str_detect_encoding($testString));
+        static::assertSame('UTF-8', UTF8::str_detect_encoding($testString));
 
         $testString = \file_get_contents(__DIR__ . '/fixtures/latin.txt');
-        static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString));
+        static::assertSame('ISO-8859-1', UTF8::str_detect_encoding($testString));
 
         $testString = \file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
-        static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString)); // ?
+        static::assertSame('ISO-8859-1', UTF8::str_detect_encoding($testString)); // ?
     }
 
     public function testStrEndsWith()

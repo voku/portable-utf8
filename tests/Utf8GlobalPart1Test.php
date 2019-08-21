@@ -1738,9 +1738,9 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
         static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.xlsx'));
         $testString1 = \file_get_contents(__DIR__ . '/fixtures/test.xlsx');
-        static::assertTrue(UTF8::is_binary($testString1, false));
+        static::assertFalse(UTF8::is_binary($testString1, false));
         $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.xlsx');
-        static::assertTrue(UTF8::is_binary($testString2, false));
+        static::assertFalse(UTF8::is_binary($testString2, false));
 
         static::assertSame($testString1, $testString2);
 
@@ -1758,9 +1758,9 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
         static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/test.pdf'));
         $testString1 = \file_get_contents(__DIR__ . '/fixtures/test.pdf');
-        static::assertTrue(UTF8::is_binary($testString1, false));
+        static::assertFalse(UTF8::is_binary($testString1, false));
         $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/test.pdf');
-        static::assertTrue(UTF8::is_binary($testString2, false));
+        static::assertFalse(UTF8::is_binary($testString2, false));
 
         static::assertSame($testString1, $testString2);
 
@@ -2183,7 +2183,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         $counter = 0;
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::isUtf8($actual), 'error by - ' . $counter . ' :' . $actual);
-            static::assertSame($expected, UTF8::is_utf8((string)$actual), 'error by - ' . $counter . ' :' . $actual);
+            static::assertSame($expected, UTF8::is_utf8((string) $actual), 'error by - ' . $counter . ' :' . $actual);
             ++$counter;
         }
 
