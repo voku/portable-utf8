@@ -6,6 +6,7 @@ namespace voku\tests;
 
 //use Normalizer as n;
 use Symfony\Polyfill\Intl\Normalizer\Normalizer as n;
+use voku\helper\UTF8;
 
 /**
  * Class ZNormalizationTest
@@ -20,16 +21,19 @@ final class ZNormalizationTest extends \PHPUnit\Framework\TestCase
     {
         $t = \file(__DIR__ . '/fixtures/ZNormalizationTest.' . $this->unicodeVersion . '.txt');
         $c = [];
+        $utf8 = new UTF8();
 
         foreach ($t as $s) {
             $t = \explode('#', $s);
             $t = \explode(';', $t[0]);
 
             if (\count($t) === 6) {
+                /** @noinspection PhpForeachNestedOuterKeyValueVariablesConflictInspection */
+                /** @noinspection SuspiciousLoopInspection */
                 foreach ($t as $k => $s) {
                     $t = \explode(' ', $s);
                     $t = \array_map('hexdec', $t);
-                    $t = \array_map('voku\helper\UTF8::chr', $t);
+                    $t = \array_map([$utf8, 'chr'], $t);
                     $c[$k] = \implode('', $t);
                 }
 

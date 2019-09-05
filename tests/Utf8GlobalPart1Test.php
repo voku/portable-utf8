@@ -8,8 +8,6 @@ use voku\helper\Bootup;
 use voku\helper\UTF8;
 
 /**
- * Class Utf8GlobalPart1Test
- *
  * @internal
  */
 final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase

@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.19 (2019-09-05)
+
+- move ASCII functions into a separated package "Portable ASCII"
+
 ### 5.4.18 (2019-08-21)
 
 - optimize "UTF8::str_titleize()" + clean-up

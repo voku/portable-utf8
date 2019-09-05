@@ -32,7 +32,8 @@
         "symfony/polyfill-iconv": "~1.0",
         "symfony/polyfill-intl-grapheme": "~1.0",
         "symfony/polyfill-intl-normalizer": "~1.0",
-        "symfony/polyfill-mbstring": "~1.0"
+        "symfony/polyfill-mbstring": "~1.0",
+        "voku/portable-ascii": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0 || ~7.0"
