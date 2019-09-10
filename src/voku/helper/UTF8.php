@@ -360,7 +360,7 @@ final class UTF8
     }
 
     /**
-     * Convert binary into an string.
+     * Convert binary into a string.
      *
      * @param mixed $bin 1|0
      *
@@ -811,7 +811,7 @@ final class UTF8
     }
 
     /**
-     * Clean-up a and show only printable UTF-8 chars at the end  + fix UTF-8 encoding.
+     * Clean-up a string and show only printable UTF-8 chars at the end  + fix UTF-8 encoding.
      *
      * @param string $str <p>The input string.</p>
      *
@@ -962,7 +962,7 @@ final class UTF8
     }
 
     /**
-     * Converts a int-value into an UTF-8 character.
+     * Converts an int value into a UTF-8 character.
      *
      * @param mixed $int
      *
@@ -1066,7 +1066,7 @@ final class UTF8
      * Encode a string with a new charset-encoding.
      *
      * INFO:  This function will also try to fix broken / double encoding,
-     *        so you can call this function also on a UTF-8 string and you don't mess the string.
+     *        so you can call this function also on a UTF-8 string and you don't mess up the string.
      *
      * @param string $to_encoding                   <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.</p>
      * @param string $str                           <p>The input string</p>
@@ -1454,7 +1454,7 @@ final class UTF8
     /**
      * Reads entire file into a string.
      *
-     * WARNING: do not use UTF-8 Option ($convert_to_utf8) for binary-files (e.g.: images) !!!
+     * WARNING: Do not use UTF-8 Option ($convert_to_utf8) for binary files (e.g.: images) !!!
      *
      * @see http://php.net/manual/en/function.file-get-contents.php
      *
@@ -1886,7 +1886,7 @@ final class UTF8
     }
 
     /**
-     * Check if the number of unicode characters are not more than the specified integer.
+     * Check if the number of Unicode characters isn't greater than the specified integer.
      *
      * @param string $str      the original string to be checked
      * @param int    $box_size the size in number of chars to be checked against string
@@ -2324,7 +2324,7 @@ final class UTF8
     }
 
     /**
-     * Converts a hexadecimal-value into an UTF-8 character.
+     * Converts a hexadecimal value into a UTF-8 character.
      *
      * @param string $hexdec <p>The hexadecimal value.</p>
      *
@@ -3330,7 +3330,7 @@ final class UTF8
     }
 
     /**
-     * Check if the string contains any html-tags.
+     * Check if the string contains any HTML tags.
      *
      * @param string $str <p>The input string.</p>
      *
@@ -3353,7 +3353,7 @@ final class UTF8
     }
 
     /**
-     * Try to check if "$str" is an json-string.
+     * Try to check if "$str" is a JSON-string.
      *
      * @param string $str                                    <p>The input string.</p>
      * @param bool   $only_array_or_object_results_are_valid [optional] <p>Only array and objects are valid json results.</p>
@@ -3887,7 +3887,7 @@ final class UTF8
     }
 
     /**
-     * Strip whitespace or other characters from beginning of a UTF-8 string.
+     * Strip whitespace or other characters from the beginning of a UTF-8 string.
      *
      * @param string      $str   <p>The string to be trimmed</p>
      * @param string|null $chars <p>Optional characters to be stripped</p>
@@ -4285,7 +4285,7 @@ final class UTF8
     /**
      * Parses the string into an array (into the the second parameter).
      *
-     * WARNING: Instead of "parse_str()" this method do not (re-)placing variables in the current scope,
+     * WARNING: Unlike "parse_str()", this method does not (re-)place variables in the current scope,
      *          if the second parameter is not set!
      *
      * @see http://php.net/manual/en/function.parse-str.php
@@ -4412,7 +4412,7 @@ final class UTF8
     }
 
     /**
-     * Multi decode html entity & fix urlencoded-win1252-chars.
+     * Multi decode HTML entity + fix urlencoded-win1252-chars.
      *
      * e.g:
      * 'test+test'                     => 'test+test'
@@ -4793,7 +4793,7 @@ final class UTF8
     }
 
     /**
-     * Strip whitespace or other characters from end of a UTF-8 string.
+     * Strip whitespace or other characters from the end of a UTF-8 string.
      *
      * @param string      $str   <p>The string to be trimmed.</p>
      * @param string|null $chars <p>Optional characters to be stripped.</p>
@@ -5476,7 +5476,7 @@ final class UTF8
     }
 
     /**
-     * Check if the string ends with the given substring, case insensitive.
+     * Check if the string ends with the given substring, case-insensitive.
      *
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
@@ -5781,7 +5781,7 @@ final class UTF8
     }
 
     /**
-     * Check if the string starts with the given substring, case insensitive.
+     * Check if the string starts with the given substring, case-insensitive.
      *
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
@@ -6459,7 +6459,7 @@ final class UTF8
     }
 
     /**
-     * Pad a UTF-8 string to given length with another string.
+     * Pad a UTF-8 string to a given length with another string.
      *
      * @param string     $str        <p>The input string.</p>
      * @param int        $pad_length <p>The length of return string.</p>
@@ -8227,7 +8227,7 @@ final class UTF8
     }
 
     /**
-     * Counts number of words in the UTF-8 string.
+     * Get the number of words in a specific string.
      *
      * @param string $str       <p>The input string.</p>
      * @param int    $format    [optional] <p>
@@ -8553,7 +8553,7 @@ final class UTF8
     }
 
     /**
-     * Finds position of first occurrence of a string within another, case insensitive.
+     * Find the position of the first occurrence of a substring in a string, case-insensitive.
      *
      * @see http://php.net/manual/en/function.mb-stripos.php
      *
@@ -8855,7 +8855,7 @@ final class UTF8
     }
 
     /**
-     * Case insensitive string comparisons using a "natural order" algorithm.
+     * Case-insensitive string comparisons using a "natural order" algorithm.
      *
      * INFO: natural order version of UTF8::strcasecmp()
      *
@@ -8973,7 +8973,7 @@ final class UTF8
      * @see http://php.net/manual/en/function.strpbrk.php
      *
      * @param string $haystack  <p>The string where char_list is looked for.</p>
-     * @param string $char_list <p>This parameter is case sensitive.</p>
+     * @param string $char_list <p>This parameter is case-sensitive.</p>
      *
      * @return false|string string starting from the character found, or false if it is not found
      */
@@ -8991,7 +8991,7 @@ final class UTF8
     }
 
     /**
-     * Find position of first occurrence of string in a string.
+     * Find the position of the first occurrence of a substring in a string.
      *
      * @see http://php.net/manual/en/function.mb-strpos.php
      *
@@ -9139,7 +9139,7 @@ final class UTF8
     }
 
     /**
-     * Find position of first occurrence of string in a string.
+     * Find the position of the first occurrence of a substring in a string.
      *
      * @param string $haystack <p>
      *                         The string being checked.
@@ -9169,7 +9169,7 @@ final class UTF8
     }
 
     /**
-     * Finds the last occurrence of a character in a string within another.
+     * Find the last occurrence of a character in a string within another.
      *
      * @see http://php.net/manual/en/function.mb-strrchr.php
      *
@@ -9345,7 +9345,7 @@ final class UTF8
     }
 
     /**
-     * Finds the last occurrence of a character in a string within another, case insensitive.
+     * Find the last occurrence of a character in a string within another, case-insensitive.
      *
      * @see http://php.net/manual/en/function.mb-strrichr.php
      *
@@ -9421,7 +9421,7 @@ final class UTF8
     }
 
     /**
-     * Find position of last occurrence of a case-insensitive string.
+     * Find the position of the last occurrence of a substring in a string, case-insensitive.
      *
      * @param string     $haystack   <p>The string to look in.</p>
      * @param int|string $needle     <p>The string to look for.</p>
@@ -9532,7 +9532,7 @@ final class UTF8
     }
 
     /**
-     * Finds position of last occurrence of a string within another, case insensitive.
+     * Finds position of last occurrence of a string within another, case-insensitive.
      *
      * @param string $haystack <p>
      *                         The string from which to get the position of the last occurrence
@@ -9565,7 +9565,7 @@ final class UTF8
     }
 
     /**
-     * Find position of last occurrence of a string in a string.
+     * Find the position of the last occurrence of a substring in a string.
      *
      * @see http://php.net/manual/en/function.mb-strrpos.php
      *
@@ -9703,7 +9703,7 @@ final class UTF8
     }
 
     /**
-     * Find position of last occurrence of a string in a string.
+     * Find the position of the last occurrence of a substring in a string.
      *
      * @param string $haystack <p>
      *                         The string being checked, for the last occurrence
@@ -10386,7 +10386,7 @@ final class UTF8
     }
 
     /**
-     * Binary safe comparison of two strings from an offset, up to length characters.
+     * Binary-safe comparison of two strings from an offset, up to a length of characters.
      *
      * @param string   $str1               <p>The main string being compared.</p>
      * @param string   $str2               <p>The secondary string being compared.</p>
@@ -10646,7 +10646,7 @@ final class UTF8
     }
 
     /**
-     * Removes an prefix ($needle) from start of the string ($haystack), case insensitive.
+     * Removes a prefix ($needle) from the beginning of the string ($haystack), case-insensitive.
      *
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
@@ -10703,7 +10703,7 @@ final class UTF8
     }
 
     /**
-     * Removes an suffix ($needle) from end of the string ($haystack), case insensitive.
+     * Removes a suffix ($needle) from the end of the string ($haystack), case-insensitive.
      *
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
@@ -10728,7 +10728,7 @@ final class UTF8
     }
 
     /**
-     * Removes an prefix ($needle) from start of the string ($haystack).
+     * Removes a prefix ($needle) from the beginning of the string ($haystack).
      *
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
@@ -10904,7 +10904,7 @@ final class UTF8
     }
 
     /**
-     * Removes an suffix ($needle) from end of the string ($haystack).
+     * Removes a suffix ($needle) from the end of the string ($haystack).
      *
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
@@ -11253,7 +11253,7 @@ final class UTF8
      * This function leaves UTF-8 characters alone, while converting almost all non-UTF8 to UTF8.
      *
      * <ul>
-     * <li>It decode UTF-8 codepoints and unicode escape sequences.</li>
+     * <li>It decode UTF-8 codepoints and Unicode escape sequences.</li>
      * <li>It assumes that the encoding of the original string is either WINDOWS-1252 or ISO-8859.</li>
      * <li>WARNING: It does not remove invalid UTF-8 characters, so you maybe need to use "UTF8::clean()" for this
      * case.</li>
@@ -11384,7 +11384,7 @@ final class UTF8
     }
 
     /**
-     * Strip whitespace or other characters from beginning or end of a UTF-8 string.
+     * Strip whitespace or other characters from the beginning and end of a UTF-8 string.
      *
      * INFO: This is slower then "trim()"
      *
@@ -11569,7 +11569,7 @@ final class UTF8
     }
 
     /**
-     * Multi decode html entity & fix urlencoded-win1252-chars.
+     * Multi decode HTML entity + fix urlencoded-win1252-chars.
      *
      * e.g:
      * 'test+test'                     => 'test test'
@@ -11864,7 +11864,7 @@ final class UTF8
     }
 
     /**
-     * Decodes an UTF-8 string to ISO-8859-1.
+     * Decodes a UTF-8 string to ISO-8859-1.
      *
      * @param string $str             <p>The input string.</p>
      * @param bool   $keep_utf8_chars
@@ -12167,7 +12167,7 @@ final class UTF8
     }
 
     /**
-     * Checks whether the passed string contains only byte sequences that appear valid UTF-8 characters.
+     * Checks whether the passed string contains only byte sequences that are valid UTF-8 characters.
      *
      * @see http://hsivonen.iki.fi/php-utf8/
      *
@@ -12599,7 +12599,7 @@ final class UTF8
     }
 
     /**
-     * Generic case sensitive transformation for collation matching.
+     * Generic case-sensitive transformation for collation matching.
      *
      * @param string $str <p>The input string</p>
      *
