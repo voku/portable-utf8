@@ -12,4 +12,4 @@ disabled:
   - braces
 
 finder:
-  - not-name: "Utf8GlobalPart2Test.php"
+  not-name: "Utf8GlobalPart2Test.php"
