@@ -395,8 +395,8 @@ final class UTF8
     /**
      * @alias of UTF8::chr_map()
      *
-     * @param array|string $callback
-     * @param string       $str
+     * @param callable $callback
+     * @param string   $str
      *
      * @return string[]
      *
@@ -609,8 +609,8 @@ final class UTF8
     /**
      * Applies callback to all characters of a string.
      *
-     * @param array|string $callback <p>The callback function.</p>
-     * @param string       $str      <p>UTF-8 string to run callback on.</p>
+     * @param callable $callback <p>The callback function.</p>
+     * @param string   $str      <p>UTF-8 string to run callback on.</p>
      *
      * @return string[] the outcome of callback
      */
@@ -2136,6 +2136,7 @@ final class UTF8
             return $fallback;
         }
 
+        /** @var string|false $str_info - needed for PhpStan (stubs error) */
         $str_info = \substr($str, 0, 2);
         if ($str_info === false || \strlen($str_info) !== 2) {
             return $fallback;
@@ -2144,6 +2145,7 @@ final class UTF8
         // DEBUG
         //var_dump($str_info);
 
+        /** @var array|false $str_info - needed for PhpStan (stubs error) */
         $str_info = \unpack('C2chars', $str_info);
         if ($str_info === false) {
             return $fallback;
@@ -2411,22 +2413,22 @@ final class UTF8
             }
 
             if ($encoding === 'UTF-8') {
+                /** @var false|string|null $return */
                 $return = \mb_encode_numericentity(
                     $str,
                     [$start_code, 0xfffff, 0, 0xfffff, 0]
                 );
-
                 if ($return !== null && $return !== false) {
                     return $return;
                 }
             }
 
+            /** @var false|string|null $return */
             $return = \mb_encode_numericentity(
                 $str,
                 [$start_code, 0xfffff, 0, 0xfffff, 0],
                 $encoding
             );
-
             if ($return !== null && $return !== false) {
                 return $return;
             }
@@ -2555,18 +2557,19 @@ final class UTF8
             // INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
             if (self::$SUPPORT['mbstring'] === true) {
                 if ($encoding === 'UTF-8') {
+                    /** @var false|string|null $strTmp */
                     $strTmp = \mb_decode_numericentity(
                         $str,
                         [0x80, 0xfffff, 0, 0xfffff, 0]
                     );
                 } else {
+                    /** @var false|string|null $strTmp */
                     $strTmp = \mb_decode_numericentity(
                         $str,
                         [0x80, 0xfffff, 0, 0xfffff, 0],
                         $encoding
                     );
                 }
-
                 if ($strTmp === null || $strTmp === false) {
                     $str = self::html_entity_decode_helper($str, $encoding);
                 }
@@ -4530,6 +4533,7 @@ final class UTF8
         $str_length = \strlen($str);
         foreach (self::$BOM as $bom_string => $bom_byte_length) {
             if (\strpos($str, $bom_string, 0) === 0) {
+                /** @var string|false $str_tmp - needed for PhpStan (stubs error) */
                 $str_tmp = \substr($str, $bom_byte_length, $str_length);
                 if ($str_tmp === false) {
                     return '';
@@ -7885,6 +7889,7 @@ final class UTF8
      */
     public static function str_to_binary(string $str)
     {
+        /** @var array|false $value - needed for PhpStan (stubs error) */
         $value = \unpack('H*', $str);
         if ($value === false) {
             return false;
@@ -8096,8 +8101,8 @@ final class UTF8
                 return $substring;
             }
 
+            /** @var string|false $truncated - needed for PhpStan (stubs error) */
             $truncated = \mb_substr($str, 0, $length);
-
             if ($truncated === false) {
                 return '';
             }
@@ -9690,6 +9695,7 @@ final class UTF8
             return false;
         }
 
+        /** @var string|false $str_tmp - needed for PhpStan (stubs error) */
         $str_tmp = \substr($haystack, 0, $pos);
         if ($str_tmp === false) {
             return false;
@@ -10576,6 +10582,7 @@ final class UTF8
                 return false;
             }
 
+            /** @var string|false $haystack_tmp - needed for PhpStan (stubs error) */
             $haystack_tmp = \substr($haystack, $offset, $length);
             if ($haystack_tmp === false) {
                 $haystack_tmp = '';
@@ -11913,6 +11920,7 @@ final class UTF8
             }
         }
 
+        /** @var string|false $return - needed for PhpStan (stubs error) */
         $return = \substr($str, 0, $j);
         if ($return === false) {
             $return = '';
@@ -11942,9 +11950,9 @@ final class UTF8
             return '';
         }
 
+        /** @var string|false $str - the polyfill maybe return false */
         $str = \utf8_encode($str);
 
-        // the polyfill maybe return false
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         /** @psalm-suppress TypeDoesNotContainType */
         if ($str === false) {

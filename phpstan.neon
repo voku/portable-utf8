@@ -7,11 +7,9 @@ parameters:
     ignoreErrors:
         # phpstan errors?
         - '#between \*NEVER\* and#'
-        - '#Strict comparison using === between array and false will always evaluate to false#'
         - '#Function mb_decode_numericentity invoked with.*#'
         - '#Function mb_encode_numericentity invoked with.*#'
         # ignore
-        - '#.*using === between string and false.*#'
         - '#voku\\helper\\UTF8::html_entity_decode\(\) expects string, array<string>|string given#'
         - '#voku\\helper\\UTF8::substr_replace\(\) should return array<string>\|string but returns array<array<string>\|string>#'
         - '#voku\\helper\\UTF8::encode\(\) should return string but returns array<string>\|string#'
