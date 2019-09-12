@@ -2413,7 +2413,7 @@ final class UTF8
             }
 
             if ($encoding === 'UTF-8') {
-                /** @var false|string|null $return */
+                /** @var false|string|null $return - needed for PhpStan (stubs error) */
                 $return = \mb_encode_numericentity(
                     $str,
                     [$start_code, 0xfffff, 0, 0xfffff, 0]
@@ -2423,7 +2423,7 @@ final class UTF8
                 }
             }
 
-            /** @var false|string|null $return */
+            /** @var false|string|null $return - needed for PhpStan (stubs error) */
             $return = \mb_encode_numericentity(
                 $str,
                 [$start_code, 0xfffff, 0, 0xfffff, 0],
@@ -2557,13 +2557,13 @@ final class UTF8
             // INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
             if (self::$SUPPORT['mbstring'] === true) {
                 if ($encoding === 'UTF-8') {
-                    /** @var false|string|null $strTmp */
+                    /** @var false|string|null $strTmp - needed for PhpStan (stubs error) */
                     $strTmp = \mb_decode_numericentity(
                         $str,
                         [0x80, 0xfffff, 0, 0xfffff, 0]
                     );
                 } else {
-                    /** @var false|string|null $strTmp */
+                    /** @var false|string|null $strTmp - needed for PhpStan (stubs error) */
                     $strTmp = \mb_decode_numericentity(
                         $str,
                         [0x80, 0xfffff, 0, 0xfffff, 0],
