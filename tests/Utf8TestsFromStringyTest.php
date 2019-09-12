@@ -3408,7 +3408,9 @@ d
         static::assertSame("man\u{303}", UTF8::str_truncate_safe("man\u{303}ana", 4, '', 'UTF-8', true));
         static::assertSame('man', UTF8::str_truncate_safe("man\u{303}ana", 3, '', 'UTF-8', true));
 
-        static::assertSame("κόσμε\xa0", UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
+        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+            static::assertSame("κόσμε\xa0", UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
+        }
     }
 
     /**

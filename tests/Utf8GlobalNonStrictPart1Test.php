@@ -1553,7 +1553,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
 
         if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
-            static::assertSame('Who\'s Online ?', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
+            static::assertSame('Who\'s Online &#20013;', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
         } else {
             static::assertSame('Who\'s Online ', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
         }

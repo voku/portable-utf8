@@ -1895,7 +1895,7 @@ final class UTF8
      */
     public static function fits_inside(string $str, int $box_size): bool
     {
-        return self::strlen($str) <= $box_size;
+        return (int) self::strlen($str) <= $box_size;
     }
 
     /**
@@ -2411,17 +2411,25 @@ final class UTF8
             }
 
             if ($encoding === 'UTF-8') {
-                return \mb_encode_numericentity(
+                $return = \mb_encode_numericentity(
                     $str,
                     [$start_code, 0xfffff, 0, 0xfffff, 0]
                 );
+
+                if ($return !== null && $return !== false) {
+                    return $return;
+                }
             }
 
-            return \mb_encode_numericentity(
+            $return = \mb_encode_numericentity(
                 $str,
                 [$start_code, 0xfffff, 0, 0xfffff, 0],
                 $encoding
             );
+
+            if ($return !== null && $return !== false) {
+                return $return;
+            }
         }
 
         //
@@ -2547,35 +2555,23 @@ final class UTF8
             // INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
             if (self::$SUPPORT['mbstring'] === true) {
                 if ($encoding === 'UTF-8') {
-                    $str = \mb_decode_numericentity(
+                    $strTmp = \mb_decode_numericentity(
                         $str,
                         [0x80, 0xfffff, 0, 0xfffff, 0]
                     );
                 } else {
-                    $str = \mb_decode_numericentity(
+                    $strTmp = \mb_decode_numericentity(
                         $str,
                         [0x80, 0xfffff, 0, 0xfffff, 0],
                         $encoding
                     );
                 }
-            } else {
-                $str = (string) \preg_replace_callback(
-                    "/&#\d{2,6};/",
-                    /**
-                     * @param string[] $matches
-                     *
-                     * @return string
-                     */
-                    static function (array $matches) use ($encoding): string {
-                        $return_tmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
-                        if ($return_tmp !== '"' && $return_tmp !== "'") {
-                            return $return_tmp;
-                        }
 
-                        return $matches[0];
-                    },
-                    $str
-                );
+                if ($strTmp === null || $strTmp === false) {
+                    $str = self::html_entity_decode_helper($str, $encoding);
+                }
+            } else {
+                $str = self::html_entity_decode_helper($str, $encoding);
             }
 
             if (\strpos($str, '&') !== false) {
@@ -11925,7 +11921,7 @@ final class UTF8
         if (
             $keep_utf8_chars === true
             &&
-            self::strlen($return) >= (int) self::strlen($str_backup)
+            (int) self::strlen($return) >= (int) self::strlen($str_backup)
         ) {
             return $str_backup;
         }
@@ -12164,6 +12160,33 @@ final class UTF8
     public static function ws(): array
     {
         return self::$WHITESPACE;
+    }
+
+    /**
+     * @param string $str
+     * @param string $encoding
+     *
+     * @return string
+     */
+    private static function html_entity_decode_helper(string $str, string $encoding): string
+    {
+        return (string) \preg_replace_callback(
+            "/&#\d{2,6};/",
+            /**
+             * @param string[] $matches
+             *
+             * @return string
+             */
+            static function (array $matches) use ($encoding): string {
+                $return_tmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
+                if ($return_tmp !== '"' && $return_tmp !== "'") {
+                    return $return_tmp;
+                }
+
+                return $matches[0];
+            },
+            $str
+        );
     }
 
     /**
