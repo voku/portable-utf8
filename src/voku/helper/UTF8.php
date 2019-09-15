@@ -721,6 +721,7 @@ final class UTF8
      * @return int
      *
      * @see UTF8::chr_to_decimal()
+     * @deprecated <p>please use "UTF8::chr_to_decimal()"</p>
      */
     public static function chr_to_int(string $chr): int
     {
@@ -1133,7 +1134,7 @@ final class UTF8
             return self::html_encode($str, true, 'UTF-8');
         }
         if ($from_encoding === 'HTML-ENTITIES') {
-            $str = self::html_decode($str, \ENT_COMPAT, 'UTF-8');
+            $str = self::html_entity_decode($str, \ENT_COMPAT, 'UTF-8');
             $from_encoding = '';
         }
 
@@ -2372,6 +2373,7 @@ final class UTF8
      * @return string
      *
      * @see UTF8::html_entity_decode()
+     * @deprecated <p>please use "UTF8::html_entity_decode()"</p>
      */
     public static function html_decode(
         string $str,
@@ -2915,6 +2917,7 @@ final class UTF8
      * @return string
      *
      * @see UTF8::decimal_to_chr()
+     * @deprecated <p>please use "UTF8::decimal_to_chr()"</p>
      */
     public static function int_to_chr($int): string
     {
@@ -3804,6 +3807,7 @@ final class UTF8
      * @return string
      *
      * @see UTF8::lcfirst()
+     * @deprecated <p>please use "UTF8::lcfirst()"</p>
      */
     public static function lcword(
         string $str,
@@ -3812,7 +3816,13 @@ final class UTF8
         string $lang = null,
         bool $try_to_keep_the_string_length = false
     ): string {
-        return self::lcfirst($str, $encoding, $clean_utf8, $lang, $try_to_keep_the_string_length);
+        return self::lcfirst(
+            $str,
+            $encoding,
+            $clean_utf8,
+            $lang,
+            $try_to_keep_the_string_length
+        );
     }
 
     /**
@@ -3874,6 +3884,7 @@ final class UTF8
      * @return string
      *
      * @see UTF8::lcfirst()
+     * @deprecated <p>please use "UTF8::lcfirst()"</p>
      */
     public static function lowerCaseFirst(
         string $str,
@@ -3882,7 +3893,13 @@ final class UTF8
         string $lang = null,
         bool $try_to_keep_the_string_length = false
     ): string {
-        return self::lcfirst($str, $encoding, $clean_utf8, $lang, $try_to_keep_the_string_length);
+        return self::lcfirst(
+            $str,
+            $encoding,
+            $clean_utf8,
+            $lang,
+            $try_to_keep_the_string_length
+        );
     }
 
     /**
@@ -4894,6 +4911,7 @@ final class UTF8
      * @return string[]
      *
      * @see UTF8::str_split()
+     * @deprecated <p>please use "UTF8::str_split()"</p>
      */
     public static function split(
         $str,
@@ -4912,6 +4930,7 @@ final class UTF8
      * @return bool
      *
      * @see UTF8::str_starts_with()
+     * @deprecated <p>please use "UTF8::str_starts_with()"</p>
      */
     public static function str_begins(string $haystack, string $needle): bool
     {
@@ -5323,6 +5342,7 @@ final class UTF8
      * @return bool
      *
      * @see UTF8::str_ends_with()
+     * @deprecated <p>please use "UTF8::str_ends_with()"</p>
      */
     public static function str_ends(string $haystack, string $needle): bool
     {
@@ -5454,6 +5474,7 @@ final class UTF8
      * @return bool
      *
      * @see UTF8::str_istarts_with()
+     * @deprecated <p>please use "UTF8::str_istarts_with()"</p>
      */
     public static function str_ibegins(string $haystack, string $needle): bool
     {
@@ -5469,6 +5490,7 @@ final class UTF8
      * @return bool
      *
      * @see UTF8::str_iends_with()
+     * @deprecated <p>please use "UTF8::str_iends_with()"</p>
      */
     public static function str_iends(string $haystack, string $needle): bool
     {
@@ -6623,14 +6645,15 @@ final class UTF8
 
     /**
      * Returns a new string of a given length such that both sides of the
-     * string are padded. Alias for pad() with a $pad_type of 'both'.
+     * string are padded. Alias for "UTF8::str_pad()" with a $pad_type of 'both'.
      *
      * @param string $str
      * @param int    $length   <p>Desired string length after padding.</p>
      * @param string $pad_str  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return string string with padding applied
+     * @return string
+     *                <p>The string with padding applied.</p>
      */
     public static function str_pad_both(
         string $str,
@@ -6649,14 +6672,15 @@ final class UTF8
 
     /**
      * Returns a new string of a given length such that the beginning of the
-     * string is padded. Alias for pad() with a $pad_type of 'left'.
+     * string is padded. Alias for "UTF8::str_pad()" with a $pad_type of 'left'.
      *
      * @param string $str
      * @param int    $length   <p>Desired string length after padding.</p>
      * @param string $pad_str  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return string string with left padding
+     * @return string
+     *                <p>The string with left padding.</p>
      */
     public static function str_pad_left(
         string $str,
@@ -6675,14 +6699,15 @@ final class UTF8
 
     /**
      * Returns a new string of a given length such that the end of the string
-     * is padded. Alias for pad() with a $pad_type of 'right'.
+     * is padded. Alias for "UTF8::str_pad()" with a $pad_type of 'right'.
      *
      * @param string $str
      * @param int    $length   <p>Desired string length after padding.</p>
      * @param string $pad_str  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return string string with right padding
+     * @return string
+     *                <p>The string with right padding.</p>
      */
     public static function str_pad_right(
         string $str,
@@ -6715,7 +6740,8 @@ final class UTF8
      *                           will return an empty string.
      *                           </p>
      *
-     * @return string the repeated string
+     * @return string
+     *                <p>The repeated string.</P>
      */
     public static function str_repeat(string $str, int $multiplier): string
     {
@@ -8316,6 +8342,7 @@ final class UTF8
      * @return false|string
      *
      * @see UTF8::strstr()
+     * @deprecated <p>please use "UTF8::strstr()"</p>
      */
     public static function strchr(
         string $haystack,
@@ -8433,6 +8460,7 @@ final class UTF8
      * @return false|string
      *
      * @see UTF8::stristr()
+     * @deprecated <p>please use "UTF8::stristr()"</p>
      */
     public static function strichr(
         string $haystack,
@@ -11108,12 +11136,12 @@ final class UTF8
      *
      * @return string|string[]
      *
-     * @see UTF8::to_latin1()
-     * @deprecated <p>please use "UTF8::to_latin1()"</p>
+     * @see UTF8::to_iso8859()
+     * @deprecated <p>please use "UTF8::to_iso8859()"</p>
      */
     public static function toLatin1($str)
     {
-        return self::to_latin1($str);
+        return self::to_iso8859($str);
     }
 
     /**
@@ -11246,6 +11274,7 @@ final class UTF8
      * @return string|string[]
      *
      * @see UTF8::to_iso8859()
+     * @deprecated <p>please use "UTF8::to_iso8859()"</p>
      */
     public static function to_latin1($str)
     {
@@ -11500,6 +11529,7 @@ final class UTF8
      * @return string
      *
      * @see UTF8::ucfirst()
+     * @deprecated <p>please use "UTF8::ucfirst()"</p>
      */
     public static function ucword(
         string $str,
