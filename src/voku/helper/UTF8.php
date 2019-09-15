@@ -5526,7 +5526,8 @@ final class UTF8
      * @param string   $str        <p>The input string.</p>
      * @param string[] $substrings <p>Substrings to look for.</p>
      *
-     * @return bool whether or not $str ends with $substring
+     * @return bool
+     *              <p>Whether or not $str ends with $substring.</p>
      */
     public static function str_iends_with_any(string $str, array $substrings): bool
     {
@@ -5554,7 +5555,10 @@ final class UTF8
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @return false|int
-     *                   The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>
+     *                   <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
+     *
+     * @see UTF8::stripos()
+     * @deprecated <p>please use "UTF8::stripos()"</p>
      */
     public static function str_iindex_first(
         string $str,
@@ -5582,7 +5586,10 @@ final class UTF8
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @return false|int
-     *                   The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>
+     *                   <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
+     *
+     * @see UTF8::strripos()
+     * @deprecated <p>please use "UTF8::strripos()"</p>
      */
     public static function str_iindex_last(
         string $str,
@@ -5609,7 +5616,10 @@ final class UTF8
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @return false|int
-     *                   The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>
+     *                   <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
+     *
+     * @see UTF8::strpos()
+     * @deprecated <p>please use "UTF8::strpos()"</p>
      */
     public static function str_index_first(
         string $str,
@@ -5637,7 +5647,10 @@ final class UTF8
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @return false|int
-     *                   The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>
+     *                   <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
+     *
+     * @see UTF8::strrpos()
+     * @deprecated <p>please use "UTF8::strrpos()"</p>
      */
     public static function str_index_last(
         string $str,
@@ -5870,7 +5883,7 @@ final class UTF8
             return '';
         }
 
-        $offset = self::str_iindex_first($str, $separator);
+        $offset = self::stripos($str, $separator);
         if ($offset === false) {
             return '';
         }
@@ -5946,7 +5959,7 @@ final class UTF8
             return '';
         }
 
-        $offset = self::str_iindex_first($str, $separator);
+        $offset = self::stripos($str, $separator);
         if ($offset === false) {
             return '';
         }
