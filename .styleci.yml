@@ -11,5 +11,3 @@ disabled:
   - indentation
   - braces
 
-finder:
-  not-name: "Utf8GlobalPart2Test.php"

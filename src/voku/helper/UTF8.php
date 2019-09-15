@@ -2137,7 +2137,7 @@ final class UTF8
             return $fallback;
         }
 
-        /** @var string|false $str_info - needed for PhpStan (stubs error) */
+        /** @var false|string $str_info - needed for PhpStan (stubs error) */
         $str_info = \substr($str, 0, 2);
         if ($str_info === false || \strlen($str_info) !== 2) {
             return $fallback;
@@ -4550,7 +4550,7 @@ final class UTF8
         $str_length = \strlen($str);
         foreach (self::$BOM as $bom_string => $bom_byte_length) {
             if (\strpos($str, $bom_string, 0) === 0) {
-                /** @var string|false $str_tmp - needed for PhpStan (stubs error) */
+                /** @var false|string $str_tmp - needed for PhpStan (stubs error) */
                 $str_tmp = \substr($str, $bom_byte_length, $str_length);
                 if ($str_tmp === false) {
                     return '';
@@ -8140,7 +8140,7 @@ final class UTF8
                 return $substring;
             }
 
-            /** @var string|false $truncated - needed for PhpStan (stubs error) */
+            /** @var false|string $truncated - needed for PhpStan (stubs error) */
             $truncated = \mb_substr($str, 0, $length);
             if ($truncated === false) {
                 return '';
@@ -9736,7 +9736,7 @@ final class UTF8
             return false;
         }
 
-        /** @var string|false $str_tmp - needed for PhpStan (stubs error) */
+        /** @var false|string $str_tmp - needed for PhpStan (stubs error) */
         $str_tmp = \substr($haystack, 0, $pos);
         if ($str_tmp === false) {
             return false;
@@ -10623,7 +10623,7 @@ final class UTF8
                 return false;
             }
 
-            /** @var string|false $haystack_tmp - needed for PhpStan (stubs error) */
+            /** @var false|string $haystack_tmp - needed for PhpStan (stubs error) */
             $haystack_tmp = \substr($haystack, $offset, $length);
             if ($haystack_tmp === false) {
                 $haystack_tmp = '';
@@ -11963,7 +11963,7 @@ final class UTF8
             }
         }
 
-        /** @var string|false $return - needed for PhpStan (stubs error) */
+        /** @var false|string $return - needed for PhpStan (stubs error) */
         $return = \substr($str, 0, $j);
         if ($return === false) {
             $return = '';
@@ -11993,7 +11993,7 @@ final class UTF8
             return '';
         }
 
-        /** @var string|false $str - the polyfill maybe return false */
+        /** @var false|string $str - the polyfill maybe return false */
         $str = \utf8_encode($str);
 
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
