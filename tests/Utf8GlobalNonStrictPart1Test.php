@@ -2341,6 +2341,11 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         static::assertSame("#string#\xc2\xa0\xe1\x9a\x80", UTF8::ltrim("\xe2\x80\x83\x20#string#\xc2\xa0\xe1\x9a\x80"));
     }
 
+    public function testTrim()
+    {
+        static::assertSame('κöäüσμε', UTF8::trim('κöäüσμε' . \html_entity_decode('&nbsp;')));
+    }
+
     public function testMax()
     {
         $tests = [

@@ -612,7 +612,8 @@ final class UTF8
      * @param callable $callback <p>The callback function.</p>
      * @param string   $str      <p>UTF-8 string to run callback on.</p>
      *
-     * @return string[] the outcome of callback
+     * @return string[]
+     *                   <p>The outcome of the callback, as array.</p>
      */
     public static function chr_map($callback, string $str): array
     {
@@ -3916,16 +3917,25 @@ final class UTF8
             return '';
         }
 
+        if (self::$SUPPORT['mbstring'] === true) {
+
+            if ($chars) {
+                /** @noinspection PregQuoteUsageInspection */
+                $chars = \preg_quote($chars);
+                $pattern = "^[${chars}]+";
+            } else {
+                $pattern = '^[\\s]+';
+            }
+
+            /** @noinspection PhpComposerExtensionStubsInspection */
+            return (string) \mb_ereg_replace($pattern, '', $str);
+        }
+
         if ($chars) {
             $chars = \preg_quote($chars, '/');
             $pattern = "^[${chars}]+";
         } else {
             $pattern = '^[\\s]+';
-        }
-
-        if (self::$SUPPORT['mbstring'] === true) {
-            /** @noinspection PhpComposerExtensionStubsInspection */
-            return (string) \mb_ereg_replace($pattern, '', $str);
         }
 
         return self::regex_replace($str, $pattern, '', '', '/');
@@ -4582,7 +4592,7 @@ final class UTF8
         if (\is_array($what) === true) {
             /** @noinspection ForeachSourceInspection */
             foreach ($what as $item) {
-                $str = (string) \preg_replace('/(' . \preg_quote($item, '/u') . ')+/u', $item, $str);
+                $str = (string) \preg_replace('/(' . \preg_quote($item, '/') . ')+/u', $item, $str);
             }
         }
 
@@ -4823,16 +4833,25 @@ final class UTF8
             return '';
         }
 
+        if (self::$SUPPORT['mbstring'] === true) {
+
+            if ($chars) {
+                /** @noinspection PregQuoteUsageInspection */
+                $chars = \preg_quote($chars);
+                $pattern = "[${chars}]+$";
+            } else {
+                $pattern = '[\\s]+$';
+            }
+
+            /** @noinspection PhpComposerExtensionStubsInspection */
+            return (string) \mb_ereg_replace($pattern, '', $str);
+        }
+
         if ($chars) {
             $chars = \preg_quote($chars, '/');
             $pattern = "[${chars}]+$";
         } else {
             $pattern = '[\\s]+$';
-        }
-
-        if (self::$SUPPORT['mbstring'] === true) {
-            /** @noinspection PhpComposerExtensionStubsInspection */
-            return (string) \mb_ereg_replace($pattern, '', $str);
         }
 
         return self::regex_replace($str, $pattern, '', '', '/');
@@ -7274,7 +7293,7 @@ final class UTF8
 
     /**
      * Splits the string with the provided regular expression, returning an
-     * array of Stringy objects. An optional integer $limit will truncate the
+     * array of strings. An optional integer $limit will truncate the
      * results.
      *
      * @param string $str
@@ -11447,16 +11466,25 @@ final class UTF8
             return '';
         }
 
+        if (self::$SUPPORT['mbstring'] === true) {
+
+            if ($chars) {
+                /** @noinspection PregQuoteUsageInspection */
+                $chars = \preg_quote($chars);
+                $pattern = "^[${chars}]+|[${chars}]+\$";
+            } else {
+                $pattern = '^[\\s]+|[\\s]+$';
+            }
+
+            /** @noinspection PhpComposerExtensionStubsInspection */
+            return (string) \mb_ereg_replace($pattern, '', $str);
+        }
+
         if ($chars) {
             $chars = \preg_quote($chars, '/');
             $pattern = "^[${chars}]+|[${chars}]+\$";
         } else {
             $pattern = '^[\\s]+|[\\s]+$';
-        }
-
-        if (self::$SUPPORT['mbstring'] === true) {
-            /** @noinspection PhpComposerExtensionStubsInspection */
-            return (string) \mb_ereg_replace($pattern, '', $str);
         }
 
         return self::regex_replace($str, $pattern, '', '', '/');
