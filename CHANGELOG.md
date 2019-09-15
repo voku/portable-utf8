@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.4.20 (2019-09-16)
+
+- fix "preg_quote()" usage
+- fix return type from "mb_encode_numericentity" & "mb_decode_numeric_entity" usage
+- add "@deprecated" for all alias methods
+
 ### 5.4.19 (2019-09-05)
 
 - move ASCII functions into a separated package "Portable ASCII"
