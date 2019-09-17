@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.4.21 (2019-09-17)
+
+- improve performance by not using return types for ```private``` methods
+   -> the code is already checked via phpstan + psalm + phpstorm, ...
+      so no need to check it every time at runtime at this point
+
 ### 5.4.20 (2019-09-16)
 
 - fix "preg_quote()" usage
