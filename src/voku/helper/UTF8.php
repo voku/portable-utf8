@@ -12247,7 +12247,7 @@ final class UTF8
      *
      * @return string
      */
-    private static function html_entity_decode_helper(string $str, string $encoding): string
+    private static function html_entity_decode_helper(string $str, string $encoding)
     {
         return (string) \preg_replace_callback(
             "/&#\d{2,6};/",
@@ -12278,7 +12278,7 @@ final class UTF8
      *
      * @return bool
      */
-    private static function is_utf8_string(string $str, bool $strict = false): bool
+    private static function is_utf8_string(string $str, bool $strict = false)
     {
         if ($str === '') {
             return true;
@@ -12425,7 +12425,7 @@ final class UTF8
         string $str,
         $use_lowercase = false,
         $use_full_case_fold = false
-    ): string {
+    ) {
         $upper = self::$COMMON_CASE_FOLD['upper'];
         $lower = self::$COMMON_CASE_FOLD['lower'];
 
@@ -12466,7 +12466,7 @@ final class UTF8
      *
      * @return array
      */
-    private static function getData(string $file): array
+    private static function getData(string $file)
     {
         /** @noinspection PhpIncludeInspection */
         /** @noinspection UsingInclusionReturnValueInspection */
@@ -12510,7 +12510,7 @@ final class UTF8
      *
      * @return bool
      */
-    private static function mbstring_overloaded(): bool
+    private static function mbstring_overloaded()
     {
         /**
          * INI directive 'mbstring.func_overload' is deprecated since PHP 7.2
@@ -12534,7 +12534,7 @@ final class UTF8
         array $strings,
         bool $remove_empty_values,
         int $remove_short_values = null
-    ): array {
+    ) {
         // init
         $return = [];
 
@@ -12569,7 +12569,7 @@ final class UTF8
      *
      * @return string
      */
-    private static function rxClass(string $s, string $class = ''): string
+    private static function rxClass(string $s, string $class = '')
     {
         static $RX_CLASS_CACHE = [];
 
@@ -12619,7 +12619,7 @@ final class UTF8
      *
      * @return string
      */
-    private static function str_capitalize_name_helper(string $names, string $delimiter, string $encoding = 'UTF-8'): string
+    private static function str_capitalize_name_helper(string $names, string $delimiter, string $encoding = 'UTF-8')
     {
         // init
         $name_helper_array = \explode($delimiter, $names);
@@ -12722,7 +12722,7 @@ final class UTF8
      *
      * @return string
      */
-    private static function to_utf8_convert_helper($input): string
+    private static function to_utf8_convert_helper($input)
     {
         // init
         $buf = '';
@@ -12757,7 +12757,7 @@ final class UTF8
      *
      * @return string
      */
-    private static function urldecode_unicode_helper(string $str): string
+    private static function urldecode_unicode_helper(string $str)
     {
         $pattern = '/%u([0-9a-fA-F]{3,4})/';
         if (\preg_match($pattern, $str)) {
