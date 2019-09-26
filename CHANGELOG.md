@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.22 (2019-09-26)
+
+- improve performance by replacing ```count($a) === 0``` with ```$a === []```
+   -> so we don't need a function call to check if an array is empty
+
 ### 5.4.21 (2019-09-17)
 
 - improve performance by not using return types for ```private``` methods
