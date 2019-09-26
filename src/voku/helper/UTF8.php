@@ -613,7 +613,7 @@ final class UTF8
      * @param string   $str      <p>UTF-8 string to run callback on.</p>
      *
      * @return string[]
-     *                   <p>The outcome of the callback, as array.</p>
+     *                  <p>The outcome of the callback, as array.</p>
      */
     public static function chr_map($callback, string $str): array
     {
@@ -867,6 +867,14 @@ final class UTF8
             $arg = self::str_split($arg);
         }
 
+        if (!\is_array($arg)) {
+            return [];
+        }
+
+        if ($arg === []) {
+            return [];
+        }
+
         $arg = \array_map(
             [
                 self::class,
@@ -874,10 +882,6 @@ final class UTF8
             ],
             $arg
         );
-
-        if (\count($arg) === 0) {
-            return [];
-        }
 
         if ($u_style === true) {
             $arg = \array_map(
@@ -946,7 +950,7 @@ final class UTF8
     public static function css_stripe_media_queries(string $str): string
     {
         return (string) \preg_replace(
-            '#@media\\s+(?:only\\s)?(?:[\\s{\\(]|screen|all)\\s?[^{]+{.*}\\s*}\\s*#isumU',
+            '#@media\\s+(?:only\\s)?(?:[\\s{(]|screen|all)\\s?[^{]+{.*}\\s*}\\s*#isumU',
             '',
             $str
         );
@@ -3352,7 +3356,7 @@ final class UTF8
 
         \preg_match("/<\\/?\\w+(?:(?:\\s+\\w+(?:\\s*=\\s*(?:\".*?\"|'.*?'|[^'\">\\s]+))?)*\\s*|\\s*)\\/?>/u", $str, $matches);
 
-        return \count($matches) !== 0;
+        return $matches !== [];
     }
 
     /**
@@ -3485,7 +3489,7 @@ final class UTF8
             $test2 = \mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
             $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
             if ($test3 === $test) {
-                if (\count($str_chars) === 0) {
+                if ($str_chars === []) {
                     $str_chars = self::count_chars($str, true, false);
                 }
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
@@ -3503,7 +3507,7 @@ final class UTF8
             $test2 = \mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
             $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
             if ($test3 === $test) {
-                if (\count($str_chars) === 0) {
+                if ($str_chars === []) {
                     $str_chars = self::count_chars($str, true, false);
                 }
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
@@ -3563,7 +3567,7 @@ final class UTF8
             $test2 = \mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
             $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
             if ($test3 === $test) {
-                if (\count($str_chars) === 0) {
+                if ($str_chars === []) {
                     $str_chars = self::count_chars($str, true, false);
                 }
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
@@ -3581,7 +3585,7 @@ final class UTF8
             $test2 = \mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
             $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
             if ($test3 === $test) {
-                if (\count($str_chars) === 0) {
+                if ($str_chars === []) {
                     $str_chars = self::count_chars($str, true, false);
                 }
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
@@ -3854,7 +3858,7 @@ final class UTF8
         }
 
         $words = self::str_to_words($str, $char_list);
-        $use_exceptions = \count($exceptions) > 0;
+        $use_exceptions = $exceptions !== [];
 
         foreach ($words as &$word) {
             if (!$word) {
@@ -3918,7 +3922,6 @@ final class UTF8
         }
 
         if (self::$SUPPORT['mbstring'] === true) {
-
             if ($chars) {
                 /** @noinspection PregQuoteUsageInspection */
                 $chars = \preg_quote($chars);
@@ -3955,7 +3958,7 @@ final class UTF8
         }
 
         $codepoints = self::codepoints($arg, false);
-        if (\count($codepoints) === 0) {
+        if ($codepoints === []) {
             return null;
         }
 
@@ -3975,7 +3978,7 @@ final class UTF8
     public static function max_chr_width(string $str): int
     {
         $bytes = self::chr_size_list($str);
-        if (\count($bytes) > 0) {
+        if ($bytes !== []) {
             return (int) \max($bytes);
         }
 
@@ -4007,7 +4010,7 @@ final class UTF8
         }
 
         $codepoints = self::codepoints($arg, false);
-        if (\count($codepoints) === 0) {
+        if ($codepoints === []) {
             return null;
         }
 
@@ -4834,7 +4837,6 @@ final class UTF8
         }
 
         if (self::$SUPPORT['mbstring'] === true) {
-
             if ($chars) {
                 /** @noinspection PregQuoteUsageInspection */
                 $chars = \preg_quote($chars);
@@ -10886,7 +10888,7 @@ final class UTF8
         }
 
         if (\is_array($replacement) === true) {
-            if (\count($replacement) > 0) {
+            if ($replacement !== []) {
                 $replacement = $replacement[0];
             } else {
                 $replacement = '';
@@ -11467,7 +11469,6 @@ final class UTF8
         }
 
         if (self::$SUPPORT['mbstring'] === true) {
-
             if ($chars) {
                 /** @noinspection PregQuoteUsageInspection */
                 $chars = \preg_quote($chars);
@@ -11623,7 +11624,7 @@ final class UTF8
         }
 
         $words = self::str_to_words($str, $char_list);
-        $use_exceptions = \count($exceptions) > 0;
+        $use_exceptions = $exceptions !== [];
 
         foreach ($words as &$word) {
             if (!$word) {
@@ -12246,6 +12247,8 @@ final class UTF8
      * @param string $encoding
      *
      * @return string
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     private static function html_entity_decode_helper(string $str, string $encoding)
     {
@@ -12277,6 +12280,8 @@ final class UTF8
      * @param bool   $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
      *
      * @return bool
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     private static function is_utf8_string(string $str, bool $strict = false)
     {
@@ -12420,6 +12425,8 @@ final class UTF8
      * @param bool   $use_full_case_fold <p>Convert not only common cases.</p>
      *
      * @return string
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     private static function fixStrCaseHelper(
         string $str,
@@ -12465,6 +12472,8 @@ final class UTF8
      * @param string $file
      *
      * @return array
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     private static function getData(string $file)
     {
@@ -12509,6 +12518,8 @@ final class UTF8
      * Checks whether mbstring "overloaded" is active on the server.
      *
      * @return bool
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     private static function mbstring_overloaded()
     {
@@ -12529,6 +12540,8 @@ final class UTF8
      * @param int|null $remove_short_values
      *
      * @return array
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     private static function reduce_string_array(
         array $strings,
@@ -12568,6 +12581,8 @@ final class UTF8
      * @param string $class
      *
      * @return string
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     private static function rxClass(string $s, string $class = '')
     {
@@ -12618,9 +12633,14 @@ final class UTF8
      * @param string $encoding
      *
      * @return string
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
-    private static function str_capitalize_name_helper(string $names, string $delimiter, string $encoding = 'UTF-8')
-    {
+    private static function str_capitalize_name_helper(
+        string $names,
+        string $delimiter,
+        string $encoding = 'UTF-8'
+    ) {
         // init
         $name_helper_array = \explode($delimiter, $names);
         if ($name_helper_array === false) {
@@ -12721,6 +12741,8 @@ final class UTF8
      * @param int|string $input
      *
      * @return string
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     private static function to_utf8_convert_helper($input)
     {
@@ -12756,6 +12778,8 @@ final class UTF8
      * @param string $str
      *
      * @return string
+     *
+     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     private static function urldecode_unicode_helper(string $str)
     {
