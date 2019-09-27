@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.23 (2019-09-27)
+
+- improve performance from "UTF8::chr_to_decimal()" (now we use iconv if it's available)
+- improve performance from "UTF8::html_entity_decode()" (code cleanup, remove dead code)
+
 ### 5.4.22 (2019-09-26)
 
 - improve performance by replacing ```count($a) === 0``` with ```$a === []```
