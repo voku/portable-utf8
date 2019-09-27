@@ -294,9 +294,11 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             'ሇ' => 0x1207,
         ];
 
-        foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::chr_to_decimal($before));
-            static::assertSame($after, UTF8::chr_to_int(UTF8::int_to_chr(UTF8::chr_to_int($before))));
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
+            foreach ($tests as $before => $after) {
+                static::assertSame($after, UTF8::chr_to_decimal($before));
+                static::assertSame($after, UTF8::chr_to_int(UTF8::int_to_chr(UTF8::chr_to_int($before))));
+            }
         }
     }
 
@@ -1544,11 +1546,8 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             static::assertSame($after, UTF8::html_entity_decode($before, \ENT_QUOTES, 'ISO'), 'error by ' . $before); // 'ISO-8859-1'
         }
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
-            static::assertSame('Who\'s Online &#20013;', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
-        } else {
-            static::assertSame('Who\'s Online ', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
-        }
+        static::assertSame('Who\'s Online 中', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'UTF8'));
+        static::assertSame('Who\'s Online &#20013;', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
     }
 
     public function testHtmlEntityDecodeWithHtml5()

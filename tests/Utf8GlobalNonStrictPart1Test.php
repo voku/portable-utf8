@@ -1457,8 +1457,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             $testArray = \array_merge($testArray, $tmpTestArray);
         }
 
-        foreach ($testArray as $before => $after) {
-            static::assertSame($after, UTF8::html_entity_decode($before, \ENT_COMPAT), 'error by ' . $before);
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
+            foreach ($testArray as $before => $after) {
+                static::assertSame($after, UTF8::html_entity_decode($before, \ENT_COMPAT), 'error by ' . $before);
+            }
         }
     }
 
@@ -1532,8 +1534,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             $testArray = \array_merge($testArray, $tmpTestArray);
         }
 
-        foreach ($testArray as $before => $after) {
-            static::assertSame($after, UTF8::html_entity_decode($before, \ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
+        for ($i = 0; $i < 50000; ++$i) { // keep this loop for simple performance tests
+            foreach ($testArray as $before => $after) {
+                static::assertSame($after, UTF8::html_entity_decode($before, \ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
+            }
         }
 
         // ---
@@ -1552,11 +1556,8 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             static::assertSame($after, UTF8::html_entity_decode($before, \ENT_QUOTES, 'ISO'), 'error by ' . $before); // 'ISO-8859-1'
         }
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
-            static::assertSame('Who\'s Online &#20013;', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
-        } else {
-            static::assertSame('Who\'s Online ', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
-        }
+        static::assertSame('Who\'s Online 中', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'UTF8'));
+        static::assertSame('Who\'s Online &#20013;', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
     }
 
     public function testHtmlEntityDecodeWithHtml5()
@@ -1592,8 +1593,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             $testArray = \array_merge($testArray, $tmpTestArray);
         }
 
-        foreach ($testArray as $before => $after) {
-            static::assertSame($after, UTF8::html_entity_decode($before, \ENT_QUOTES | \ENT_HTML5, 'UTF-8'), 'error by ' . $before);
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
+            foreach ($testArray as $before => $after) {
+                static::assertSame($after, UTF8::html_entity_decode($before, \ENT_QUOTES | \ENT_HTML5, 'UTF-8'), 'error by ' . $before);
+            }
         }
     }
 

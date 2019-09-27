@@ -80,7 +80,8 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        Bootup::filterRequestInputs();
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        @Bootup::filterRequestInputs();
 
         $expect = [
             'n' => 4,

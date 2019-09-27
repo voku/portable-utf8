@@ -88,6 +88,8 @@ final class UTF8
         8239 => "\xe2\x80\xaf",
         // MEDIUM MATHEMATICAL SPACE
         8287 => "\xe2\x81\x9f",
+        // HALFWIDTH HANGUL FILLER
+        65440 => "\xef\xbe\xa0",
         // IDEOGRAPHIC SPACE
         12288 => "\xe3\x80\x80",
     ];
@@ -663,6 +665,14 @@ final class UTF8
      */
     public static function chr_to_decimal(string $char): int
     {
+        if (self::$SUPPORT['iconv'] === true) {
+            $chr_tmp = \iconv('UTF-8', 'UCS-4LE', $char);
+            if ($chr_tmp !== false) {
+                /** @noinspection OffsetOperationsInspection */
+                return \unpack('V', $chr_tmp)[1];
+            }
+        }
+
         $code = self::ord($char[0]);
         $bytes = 1;
 
@@ -2561,30 +2571,8 @@ final class UTF8
         do {
             $str_compare = $str;
 
-            // INFO: http://stackoverflow.com/questions/35854535/better-explanation-of-convmap-in-mb-encode-numericentity
-            if (self::$SUPPORT['mbstring'] === true) {
-                if ($encoding === 'UTF-8') {
-                    /** @var false|string|null $strTmp - needed for PhpStan (stubs error) */
-                    $strTmp = \mb_decode_numericentity(
-                        $str,
-                        [0x80, 0xfffff, 0, 0xfffff, 0]
-                    );
-                } else {
-                    /** @var false|string|null $strTmp - needed for PhpStan (stubs error) */
-                    $strTmp = \mb_decode_numericentity(
-                        $str,
-                        [0x80, 0xfffff, 0, 0xfffff, 0],
-                        $encoding
-                    );
-                }
-                if ($strTmp === null || $strTmp === false) {
-                    $str = self::html_entity_decode_helper($str, $encoding);
-                }
-            } else {
-                $str = self::html_entity_decode_helper($str, $encoding);
-            }
-
             if (\strpos($str, '&') !== false) {
+
                 if (\strpos($str, '&#') !== false) {
                     // decode also numeric & UTF16 two byte entities
                     $str = (string) \preg_replace(
@@ -2599,6 +2587,7 @@ final class UTF8
                     $flags,
                     $encoding
                 );
+
             }
         } while ($str_compare !== $str);
 
@@ -4076,6 +4065,14 @@ final class UTF8
             $encoding === 'HTML-ENTITIES'
         ) {
             return 'HTML-ENTITIES';
+        }
+
+        if (
+            $encoding === 'ISO'
+            ||
+            $encoding === 'ISO-8859-1'
+        ) {
+            return 'ISO-8859-1';
         }
 
         if (
@@ -12240,35 +12237,6 @@ final class UTF8
     public static function ws(): array
     {
         return self::$WHITESPACE;
-    }
-
-    /**
-     * @param string $str
-     * @param string $encoding
-     *
-     * @return string
-     *
-     * @noinspection ReturnTypeCanBeDeclaredInspection
-     */
-    private static function html_entity_decode_helper(string $str, string $encoding)
-    {
-        return (string) \preg_replace_callback(
-            "/&#\d{2,6};/",
-            /**
-             * @param string[] $matches
-             *
-             * @return string
-             */
-            static function (array $matches) use ($encoding): string {
-                $return_tmp = \mb_convert_encoding($matches[0], $encoding, 'HTML-ENTITIES');
-                if ($return_tmp !== '"' && $return_tmp !== "'") {
-                    return $return_tmp;
-                }
-
-                return $matches[0];
-            },
-            $str
-        );
     }
 
     /**
