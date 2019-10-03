@@ -438,6 +438,16 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testToUtf8V4()
+    {
+        $utf8File = \file_get_contents(__DIR__ . '/fixtures/utf-8-extra.txt');
+
+        $utf8File = \explode("\n", \str_replace(["\r\n", "\r", '<br>', '<br />'], "\n", $utf8File));
+        foreach ($utf8File as $str) {
+            static::assertSame($str, UTF8::to_utf8($str), 'tested: ' . $str);
+        }
+    }
+
     /**
      * @dataProvider trimProvider
      *
