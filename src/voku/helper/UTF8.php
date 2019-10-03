@@ -2572,7 +2572,6 @@ final class UTF8
             $str_compare = $str;
 
             if (\strpos($str, '&') !== false) {
-
                 if (\strpos($str, '&#') !== false) {
                     // decode also numeric & UTF16 two byte entities
                     $str = (string) \preg_replace(
@@ -2587,7 +2586,6 @@ final class UTF8
                     $flags,
                     $encoding
                 );
-
             }
         } while ($str_compare !== $str);
 
@@ -3849,6 +3847,7 @@ final class UTF8
         $words = self::str_to_words($str, $char_list);
         $use_exceptions = $exceptions !== [];
 
+        $words_str = '';
         foreach ($words as &$word) {
             if (!$word) {
                 continue;
@@ -3859,11 +3858,13 @@ final class UTF8
                 ||
                 !\in_array($word, $exceptions, true)
             ) {
-                $word = self::lcfirst($word, $encoding, $clean_utf8, $lang, $try_to_keep_the_string_length);
+                $words_str .= self::lcfirst($word, $encoding, $clean_utf8, $lang, $try_to_keep_the_string_length);
+            } else {
+                $words_str .= $word;
             }
         }
 
-        return \implode('', $words);
+        return $words_str;
     }
 
     /**
@@ -11623,6 +11624,7 @@ final class UTF8
         $words = self::str_to_words($str, $char_list);
         $use_exceptions = $exceptions !== [];
 
+        $words_str = '';
         foreach ($words as &$word) {
             if (!$word) {
                 continue;
@@ -11633,11 +11635,13 @@ final class UTF8
                 ||
                 !\in_array($word, $exceptions, true)
             ) {
-                $word = self::ucfirst($word, $encoding);
+                $words_str .= self::ucfirst($word, $encoding);
+            } else {
+                $words_str .= $word;
             }
         }
 
-        return \implode('', $words);
+        return $words_str;
     }
 
     /**
