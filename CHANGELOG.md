@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.24 (2019-10-06)
+
+- improve performance from "UTF8::UTF8::str_titleize_for_humans()" (use "array_merge" only if needed)
+- improve performance from "UTF8::ucwords()" + "UTF8::lcwords()" (don't use "implode()" if it's not needed)
+
 ### 5.4.23 (2019-09-27)
 
 - improve performance from "UTF8::chr_to_decimal()" (now we use iconv if it's available)
