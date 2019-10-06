@@ -7785,30 +7785,35 @@ final class UTF8
         array $ignore = [],
         string $encoding = 'UTF-8'
     ): string {
-        $small_words = \array_merge(
-            [
-                '(?<!q&)a',
-                'an',
-                'and',
-                'as',
-                'at(?!&t)',
-                'but',
-                'by',
-                'en',
-                'for',
-                'if',
-                'in',
-                'of',
-                'on',
-                'or',
-                'the',
-                'to',
-                'v[.]?',
-                'via',
-                'vs[.]?',
-            ],
-            $ignore
-        );
+        if ($str === '') {
+            return '';
+        }
+
+        $small_words = [
+            '(?<!q&)a',
+            'an',
+            'and',
+            'as',
+            'at(?!&t)',
+            'but',
+            'by',
+            'en',
+            'for',
+            'if',
+            'in',
+            'of',
+            'on',
+            'or',
+            'the',
+            'to',
+            'v[.]?',
+            'via',
+            'vs[.]?',
+        ];
+
+        if ($ignore !== []) {
+            $small_words = \array_merge($small_words, $ignore);
+        }
 
         $small_words_rx = \implode('|', $small_words);
         $apostrophe_rx = '(?x: [\'’] [[:lower:]]* )?';
