@@ -29,6 +29,12 @@ The project based on ...
 + Ivan Enderlin's work (https://github.com/hoaproject/Ustring)
 + and many cherry-picks from "GitHub"-gists and "Stack Overflow"-snippets ...
 
+## Demo
+
+Here you can test some basic functions from this library and you can compare some results with the native php function results.
+
++ [encoder.suckup.de](https://encoder.suckup.de/)
+
 ## Index
 
 * [Alternative](#alternative)
