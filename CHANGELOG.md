@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.25 (2019-10-14)
+
+- update vendor (ASCII) lib
+
 ### 5.4.24 (2019-10-06)
 
 - improve performance from "UTF8::UTF8::str_titleize_for_humans()" (use "array_merge" only if needed)
