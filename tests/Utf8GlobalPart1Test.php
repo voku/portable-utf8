@@ -2421,7 +2421,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         $tests = [
             ''                                                                         => '',
             ' '                                                                        => ' ',
-            '«foobar»'                                                                 => '"foobar"',
+            '«foobar»'                                                                 => '<<foobar>>',
             '中文空白 ‟'                                                                   => '中文空白 "',
             "<ㅡㅡ></ㅡㅡ><div>…</div><input type='email' name='user[email]' /><a>wtf</a>" => "<ㅡㅡ></ㅡㅡ><div>...</div><input type='email' name='user[email]' /><a>wtf</a>",
             '– DÃ¼sseldorf —'                                                          => '- DÃ¼sseldorf -',
