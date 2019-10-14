@@ -22,12 +22,18 @@ so you will have the best possible performance.
 As a fallback we will use Symfony Polyfills, if needed. (https://github.com/symfony/polyfill)
 
 The project based on ...
-+ Hamid Sarfraz's work (http://pageconfig.com/attachments/portable-utf8.php) 
-+ Nicolas Grekas's work (https://github.com/tchwork/utf8) 
-+ Behat's work (https://github.com/Behat/Transliterator) 
-+ Sebastián Grignoli's work (https://github.com/neitanod/forceutf8) 
-+ Ivan Enderlin's work (https://github.com/hoaproject/Ustring)
++ Hamid Sarfraz's work - [portable-utf8](http://pageconfig.com/attachments/portable-utf8.php) 
++ Nicolas Grekas's work - [tchwork/utf8](https://github.com/tchwork/utf8) 
++ Behat's work - [Behat/Transliterator](https://github.com/Behat/Transliterator) 
++ Sebastián Grignoli's work - [neitanod/forceutf8](https://github.com/neitanod/forceutf8) 
++ Ivan Enderlin's work - [hoaproject/Ustring](https://github.com/hoaproject/Ustring)
 + and many cherry-picks from "GitHub"-gists and "Stack Overflow"-snippets ...
+
+## Demo
+
+Here you can test some basic functions from this library and you can compare some results with the native php function results.
+
++ [encoder.suckup.de](https://encoder.suckup.de/)
 
 ## Index
 
