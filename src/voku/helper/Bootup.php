@@ -17,6 +17,8 @@ class Bootup
      * @param string $leading_combining
      *
      * @return bool
+     *
+     * @deprecated <p>This method will be removed in future releases, so please don't use it anymore.</p>
      */
     public static function filterRequestInputs(
         int $normalization_form = \Normalizer::NFC,
@@ -68,6 +70,8 @@ class Bootup
      * @param bool        $exit
      *
      * @return mixed
+     *
+     * @deprecated <p>This method will be removed in future releases, so please don't use it anymore.</p>
      */
     public static function filterRequestUri($uri = null, bool $exit = true)
     {
@@ -126,11 +130,20 @@ class Bootup
             &&
             \headers_sent() === false
         ) {
-            // Use ob_start() to buffer content and avoid problem of headers already sent...
             $severProtocol = ($_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1');
             \header($severProtocol . ' 301 Moved Permanently');
-            \header('Location: ' . $uri);
+
+            if (\strncmp($uri, '/', 1) === 0) {
+                \header('Location: /' . \ltrim($uri, '/'));
+            } else {
+                \header('Location: ' . $uri);
+            }
+
             exit();
+        }
+
+        if (\strncmp($uri, '/', 1) === 0) {
+            $uri = '/' . \ltrim($uri, '/');
         }
 
         return $uri;
@@ -145,9 +158,16 @@ class Bootup
      *
      * @return mixed
      */
-    public static function filterString($input, int $normalization_form = \Normalizer::NFC, string $leading_combining = '◌')
-    {
-        return UTF8::filter($input, $normalization_form, $leading_combining);
+    public static function filterString(
+        $input,
+        int $normalization_form = \Normalizer::NFC,
+        string $leading_combining = '◌'
+    ){
+        return UTF8::filter(
+            $input,
+            $normalization_form,
+            $leading_combining
+        );
     }
 
     /**
@@ -176,8 +196,6 @@ class Bootup
     }
 
     /**
-     * bootstrap
-     *
      * @return bool
      */
     public static function initAll(): bool

@@ -221,14 +221,18 @@ The problem with "mbstring" and others is that most of the time you cannot ensur
 *   Although Portable UTF-8 is easy to use; moving from native API to Portable UTF-8 may not be straight-forward for everyone. It is highly recommended that you do not update your scripts to include Portable UTF-8 or replace or change anything before you first know the reason and consequences. Most of the time, some native function may be all what you need.
 *   There is also a shim for "mbstring", "iconv" and "intl", so you can use it also on shared webspace. 
 
-## Warning
+## Info
 
-By default this library requires that you using "UTF-8"-encoding on your server and it will force "UTF-8" by "bootstrap.php".
-If you need to disable this behavior you can define "PORTABLE_UTF8__DISABLE_AUTO_FILTER".
+Since version 5.4.26 this library will NOT force "UTF-8" by "bootstrap.php" anymore.
+If you need to enable this behavior you can define "PORTABLE_UTF8__ENABLE_AUTO_FILTER", before requiring the autoloader.
 
 ```php
-define('PORTABLE_UTF8__DISABLE_AUTO_FILTER', 1);
+define('PORTABLE_UTF8__ENABLE_AUTO_FILTER', 1);
 ```
+
+Before version 5.4.26 this behavior was enabled by default and you could disable it via "PORTABLE_UTF8__DISABLE_AUTO_FILTER",
+but the code had potential security vulnerabilities via injecting code while redirecting via ```header('Location ...```.
+This is the reason I decided to add this BC in a bug fix release, so that everybody using the current version will receive the security-fix.
 
 ## Usage
 

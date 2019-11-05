@@ -157,6 +157,37 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
 
         $u = Bootup::filterRequestUri($uriK, false);
         static::assertSame($uriA, $u);
+
+        // ---
+
+        $_SERVER['REQUEST_URI'] = '//google.com/%c0%af';
+
+        $u = Bootup::filterRequestUri(null, false);
+        static::assertSame('/google.com/%C0%AF', $u);
+
+        // ---
+
+        $_SERVER['REQUEST_URI'] = '////google.com/%c0%af';
+
+        $u = Bootup::filterRequestUri(null, false);
+        static::assertSame('/google.com/%C0%AF', $u);
+
+        // ---
+
+        $_SERVER['REQUEST_URI'] = '/%c0%af/google.com/%c0%af';
+
+        $u = Bootup::filterRequestUri(null, false);
+        static::assertSame('/%C0%AF/google.com/%C0%AF', $u);
+
+        // ---
+
+        $_SERVER['REQUEST_URI'] = '%22http%3a%2f%2f
+www.badplace.com%2fnasty.js%22%3e%3c%2fscript%3e&%C0%AF';
+
+        $u = Bootup::filterRequestUri(null, false);
+        static::assertSame('%22http%3a%2f%2f
+www.badplace.com%2fnasty.js%22%3e%3c%2fscript%3e&%C0%AF', $u);
+
     }
 
     public function testGetRandomBytes()
