@@ -1,5 +1,20 @@
 # Changelog
 
+### 5.4.26 (2019-11-05)
+
+- disable "Bootup::filterRequestUri()" && "Bootup::filterRequestInputs()" by default
+      
+      Since version 5.4.26 this library will NOT force "UTF-8" by "bootstrap.php" anymore.
+      If you need to enable this behavior you can define "PORTABLE_UTF8__ENABLE_AUTO_FILTER", 
+      before requiring the autoloader.
+      
+      ```
+      define('PORTABLE_UTF8__ENABLE_AUTO_FILTER', 1);
+      ```
+      
+      Before version 5.4.26 this behavior was enabled by default and you could disable it via "PORTABLE_UTF8__DISABLE_AUTO_FILTER", but the code had potential security vulnerabilities via injecting code while redirecting via ```header('Location ...```.
+      This is the reason I decided to add this BC in a bug fix release, so that everybody using the current version will receive the security-fix.
+
 ### 5.4.25 (2019-10-14)
 
 - update vendor (ASCII) lib
