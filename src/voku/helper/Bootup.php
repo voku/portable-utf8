@@ -162,7 +162,7 @@ class Bootup
         $input,
         int $normalization_form = \Normalizer::NFC,
         string $leading_combining = '◌'
-    ){
+    ) {
         return UTF8::filter(
             $input,
             $normalization_form,
