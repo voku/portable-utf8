@@ -370,7 +370,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             // Valid UTF-8 + ISO-Errors
             'DÃ¼sseldorf' => ['DÃ¼sseldorf' => 'DÃ¼sseldorf'],
             // Valid invisible char
-            '<x%0Conxxx=1' => ['<xonxxx=1' => '<xonxxx=1'],
+            '<x%0Conxxx=1' => ['<xonxxx=1' => '<x%0Conxxx=1'],
             // Valid ASCII
             'a' => ['a' => 'a'],
             // Valid emoji (non-UTF-8)
@@ -440,7 +440,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             // Valid UTF-8 + ISO-Errors
             'DÃ¼sseldorf' => ['Düsseldorf' => 'Düsseldorf'],
             // Valid invisible char
-            '<x%0Conxxx=1' => ['<xonxxx=1' => '<xonxxx=1'],
+            '<x%0Conxxx=1' => ['<xonxxx=1' => '<x%0Conxxx=1'],
             // Valid ASCII
             'a' => ['a' => 'a'],
             // Valid emoji (non-UTF-8)
@@ -1534,7 +1534,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             $testArray = \array_merge($testArray, $tmpTestArray);
         }
 
-        for ($i = 0; $i < 50000; ++$i) { // keep this loop for simple performance tests
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
             foreach ($testArray as $before => $after) {
                 static::assertSame($after, UTF8::html_entity_decode($before, \ENT_QUOTES, 'UTF-8'), 'error by ' . $before);
             }

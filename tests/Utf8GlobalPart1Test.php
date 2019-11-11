@@ -366,7 +366,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             // Valid UTF-8 + ISO-Errors
             'DÃ¼sseldorf' => ['DÃ¼sseldorf' => 'DÃ¼sseldorf'],
             // Valid invisible char
-            '<x%0Conxxx=1' => ['<xonxxx=1' => '<xonxxx=1'],
+            '<x%0Conxxx=1' => ['<xonxxx=1' => '<x%0Conxxx=1'],
             // Valid ASCII
             'a' => ['a' => 'a'],
             // Valid emoji (non-UTF-8)

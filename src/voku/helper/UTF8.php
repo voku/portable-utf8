@@ -756,20 +756,22 @@ final class UTF8
     /**
      * Accepts a string and removes all non-UTF-8 characters from it + extras if needed.
      *
-     * @param string $str                           <p>The string to be sanitized.</p>
-     * @param bool   $remove_bom                    [optional] <p>Set to true, if you need to remove UTF-BOM.</p>
-     * @param bool   $normalize_whitespace          [optional] <p>Set to true, if you need to normalize the
-     *                                              whitespace.</p>
-     * @param bool   $normalize_msword              [optional] <p>Set to true, if you need to normalize MS Word chars
-     *                                              e.g.: "…"
-     *                                              => "..."</p>
-     * @param bool   $keep_non_breaking_space       [optional] <p>Set to true, to keep non-breaking-spaces, in
-     *                                              combination with
-     *                                              $normalize_whitespace</p>
-     * @param bool   $replace_diamond_question_mark [optional] <p>Set to true, if you need to remove diamond question
-     *                                              mark e.g.: "�"</p>
-     * @param bool   $remove_invisible_characters   [optional] <p>Set to false, if you not want to remove invisible
-     *                                              characters e.g.: "\0"</p>
+     * @param string $str                                     <p>The string to be sanitized.</p>
+     * @param bool   $remove_bom                              [optional] <p>Set to true, if you need to remove UTF-BOM.</p>
+     * @param bool   $normalize_whitespace                    [optional] <p>Set to true, if you need to normalize the
+     *                                                        whitespace.</p>
+     * @param bool   $normalize_msword                        [optional] <p>Set to true, if you need to normalize MS Word chars
+     *                                                        e.g.: "…"
+     *                                                        => "..."</p>
+     * @param bool   $keep_non_breaking_space                 [optional] <p>Set to true, to keep non-breaking-spaces, in
+     *                                                        combination with
+     *                                                        $normalize_whitespace</p>
+     * @param bool   $replace_diamond_question_mark           [optional] <p>Set to true, if you need to remove diamond question
+     *                                                        mark e.g.: "�"</p>
+     * @param bool   $remove_invisible_characters             [optional] <p>Set to false, if you not want to remove invisible
+     *                                                        characters e.g.: "\0"</p>
+     * @param bool   $remove_invisible_characters_url_encoded [optional] <p>Set to true, if you not want to remove invisible
+     *                                                        url encoded characters e.g.: "%0B"</p>
      *
      * @return string clean UTF-8 encoded string
      */
@@ -780,7 +782,8 @@ final class UTF8
         bool $normalize_msword = false,
         bool $keep_non_breaking_space = false,
         bool $replace_diamond_question_mark = false,
-        bool $remove_invisible_characters = true
+        bool $remove_invisible_characters = true,
+        bool $remove_invisible_characters_url_encoded = false
     ): string {
         // http://stackoverflow.com/questions/1401317/remove-non-utf8-characters-from-string
         // caused connection reset problem on larger strings
@@ -804,7 +807,7 @@ final class UTF8
         }
 
         if ($remove_invisible_characters === true) {
-            $str = self::remove_invisible_characters($str);
+            $str = self::remove_invisible_characters($str, $remove_invisible_characters_url_encoded);
         }
 
         if ($normalize_whitespace === true) {
