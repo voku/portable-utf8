@@ -187,7 +187,6 @@ www.badplace.com%2fnasty.js%22%3e%3c%2fscript%3e&%C0%AF';
         $u = Bootup::filterRequestUri(null, false);
         static::assertSame('%22http%3a%2f%2f
 www.badplace.com%2fnasty.js%22%3e%3c%2fscript%3e&%C0%AF', $u);
-
     }
 
     public function testGetRandomBytes()

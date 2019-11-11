@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.4.27 (2019-11-11)
+
+- "UTF8::clean() / UTF8::cleanup()" -> do not remove invisible urlencoded strings by default
+
+      -> problem with e.g. pdf content: "%1b;" -> ...p(CRnAYOD*9a1>VAk^mH%1b;?ZVuX$`P[%...
+
 ### 5.4.26 (2019-11-05)
 
 - disable "Bootup::filterRequestUri()" && "Bootup::filterRequestInputs()" by default
