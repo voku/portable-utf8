@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/voku/portable-utf8.svg?branch=master)](https://travis-ci.org/voku/portable-utf8)
-[![Build status](https://ci.appveyor.com/api/projects/status/gnejjnk7qplr7f5t/branch/master?svg=true)](https://ci.appveyor.com/project/voku/portable-utf8/branch/master)
+[![Financial Contributors on Open Collective](https://opencollective.com/portable-utf8/all/badge.svg?label=financial+contributors)](https://opencollective.com/portable-utf8) [![Build status](https://ci.appveyor.com/api/projects/status/gnejjnk7qplr7f5t/branch/master?svg=true)](https://ci.appveyor.com/project/voku/portable-utf8/branch/master)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvoku%2Fportable-utf8.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvoku%2Fportable-utf8?ref=badge_shield)
 [![Coverage Status](https://coveralls.io/repos/voku/portable-utf8/badge.svg?branch=master&service=github)](https://coveralls.io/github/voku/portable-utf8?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/997c9bb10d1c4791967bdf2e42013e8e)](https://www.codacy.com/app/voku/portable-utf8)
@@ -1546,6 +1546,36 @@ For professional support please contact [me](https://about.me/voku).
 - Thanks to [Travis CI](https://travis-ci.com/) for being the most awesome, easiest continuous integration tool out there!
 - Thanks to [StyleCI](https://styleci.io/) for the simple but powerful code style check.
 - Thanks to [PHPStan](https://github.com/phpstan/phpstan) && [Psalm](https://github.com/vimeo/psalm) for really great Static analysis tools and for discovering bugs in the code!
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/voku/portable-utf8/graphs/contributors"><img src="https://opencollective.com/portable-utf8/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/portable-utf8/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/portable-utf8"><img src="https://opencollective.com/portable-utf8/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/portable-utf8/contribute)]
+
+<a href="https://opencollective.com/portable-utf8/organization/0/website"><img src="https://opencollective.com/portable-utf8/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/portable-utf8/organization/1/website"><img src="https://opencollective.com/portable-utf8/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/portable-utf8/organization/2/website"><img src="https://opencollective.com/portable-utf8/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/portable-utf8/organization/3/website"><img src="https://opencollective.com/portable-utf8/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/portable-utf8/organization/4/website"><img src="https://opencollective.com/portable-utf8/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/portable-utf8/organization/5/website"><img src="https://opencollective.com/portable-utf8/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/portable-utf8/organization/6/website"><img src="https://opencollective.com/portable-utf8/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/portable-utf8/organization/7/website"><img src="https://opencollective.com/portable-utf8/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/portable-utf8/organization/8/website"><img src="https://opencollective.com/portable-utf8/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/portable-utf8/organization/9/website"><img src="https://opencollective.com/portable-utf8/organization/9/avatar.svg"></a>
 
 ### License and Copyright
 
