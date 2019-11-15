@@ -7206,16 +7206,20 @@ final class UTF8
             &&
             self::$SUPPORT['mbstring'] === true
         ) {
-            $i_max = \mb_strlen($str);
-            if ($i_max <= 127) {
-                $ret = [];
-                for ($i = 0; $i < $i_max; ++$i) {
-                    $ret[] = \mb_substr($str, $i, 1);
-                }
+            if (Bootup::is_php('7.4')) {
+                $ret = \mb_str_split($str, $length);
             } else {
-                $return_array = [];
-                \preg_match_all('/./us', $str, $return_array);
-                $ret = $return_array[0] ?? [];
+                $i_max = \mb_strlen($str);
+                if ($i_max <= 127) {
+                    $ret = [];
+                    for ($i = 0; $i < $i_max; ++$i) {
+                        $ret[] = \mb_substr($str, $i, 1);
+                    }
+                } else {
+                    $return_array = [];
+                    \preg_match_all('/./us', $str, $return_array);
+                    $ret = $return_array[0] ?? [];
+                }
             }
         } elseif (self::$SUPPORT['pcre_utf8'] === true) {
             $return_array = [];
