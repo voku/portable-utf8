@@ -771,7 +771,9 @@ final class UTF8
      * @param bool   $remove_invisible_characters             [optional] <p>Set to false, if you not want to remove invisible
      *                                                        characters e.g.: "\0"</p>
      * @param bool   $remove_invisible_characters_url_encoded [optional] <p>Set to true, if you not want to remove invisible
-     *                                                        url encoded characters e.g.: "%0B"</p>
+     *                                                        url encoded characters e.g.: "%0B"<br>
+     *                                                        WARNING: maybe contains false-positives e.g. aa%0Baa -> aaaa.
+     *                                                        </p>
      *
      * @return string clean UTF-8 encoded string
      */
@@ -880,6 +882,9 @@ final class UTF8
             $arg = self::str_split($arg);
         }
 
+        /**
+         * @psalm-suppress DocblockTypeContradiction
+         */
         if (!\is_array($arg)) {
             return [];
         }
@@ -1691,7 +1696,7 @@ final class UTF8
         int $filter = \FILTER_DEFAULT,
         $options = null
     ) {
-        if (\func_num_args() < 4) {
+        if ($options === null || \func_num_args() < 4) {
             $var = \filter_input($type, $variable_name, $filter);
         } else {
             $var = \filter_input($type, $variable_name, $filter, $options);
@@ -1740,7 +1745,7 @@ final class UTF8
         $definition = null,
         bool $add_empty = true
     ) {
-        if (\func_num_args() < 2) {
+        if ($definition === null || \func_num_args() < 2) {
             $a = \filter_input_array($type);
         } else {
             $a = \filter_input_array($type, $definition, $add_empty);
@@ -2138,10 +2143,10 @@ final class UTF8
      *          if you need more supported types, please use e.g. "finfo"
      *
      * @param string $str
-     * @param array  $fallback with this keys: 'ext', 'mime', 'type'
+     * @param array  $fallback <p>with this keys: 'ext', 'mime', 'type'
      *
-     * @return array
-     *               with this keys: 'ext', 'mime', 'type'
+     * @return array<string, string|null>
+     *                       <p>with this keys: 'ext', 'mime', 'type'</p>
      */
     public static function get_file_type(
         string $str,
@@ -2315,7 +2320,8 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @return bool whether or not the string contains a lower case character
+     * @return bool
+     *              <p>Whether or not the string contains a lower case character.</p>
      */
     public static function has_lowercase(string $str): bool
     {
@@ -3106,10 +3112,10 @@ final class UTF8
     /**
      * Returns true if the string contains only alphabetic chars, false otherwise.
      *
-     * @param string $str
+     * @param string $str <p>The input string.</p>
      *
      * @return bool
-     *              Whether or not $str contains only alphabetic chars
+     *              <p>Whether or not $str contains only alphabetic chars.</p>
      */
     public static function is_alpha(string $str): bool
     {
@@ -3124,10 +3130,10 @@ final class UTF8
     /**
      * Returns true if the string contains only alphabetic and numeric chars, false otherwise.
      *
-     * @param string $str
+     * @param string $str <p>The input string.</p>
      *
      * @return bool
-     *              Whether or not $str contains only alphanumeric chars
+     *              <p>Whether or not $str contains only alphanumeric chars.</p>
      */
     public static function is_alphanumeric(string $str): bool
     {
@@ -3145,8 +3151,10 @@ final class UTF8
      * @param string $str <p>The string to check.</p>
      *
      * @return bool
+     *              <p>
      *              <strong>true</strong> if it is ASCII<br>
      *              <strong>false</strong> otherwise
+     *              </p>
      */
     public static function is_ascii(string $str): bool
     {
@@ -3256,10 +3264,10 @@ final class UTF8
     /**
      * Returns true if the string contains only whitespace chars, false otherwise.
      *
-     * @param string $str
+     * @param string $str <p>The input string.</p>
      *
      * @return bool
-     *              Whether or not $str contains only whitespace characters
+     *              <p>Whether or not $str contains only whitespace characters.</p>
      */
     public static function is_blank(string $str): bool
     {
@@ -3279,7 +3287,7 @@ final class UTF8
      * @param string $str <p>The input string.</p>
      *
      * @return bool
-     *              <strong>true</strong> if the $utf8_chr is Byte Order Mark, <strong>false</strong> otherwise
+     *              <p><strong>true</strong> if the $utf8_chr is Byte Order Mark, <strong>false</strong> otherwise.</p>
      */
     public static function is_bom($str): bool
     {
@@ -3311,10 +3319,10 @@ final class UTF8
     /**
      * Returns true if the string contains only hexadecimal chars, false otherwise.
      *
-     * @param string $str
+     * @param string $str <p>The input string.</p>
      *
      * @return bool
-     *              Whether or not $str contains only hexadecimal chars
+     *              <p>Whether or not $str contains only hexadecimal chars.</p>
      */
     public static function is_hexadecimal(string $str): bool
     {
@@ -3332,6 +3340,7 @@ final class UTF8
      * @param string $str <p>The input string.</p>
      *
      * @return bool
+     *              <p>Whether or not $str contains html elements.</p>
      */
     public static function is_html(string $str): bool
     {
@@ -3356,6 +3365,7 @@ final class UTF8
      * @param bool   $only_array_or_object_results_are_valid [optional] <p>Only array and objects are valid json results.</p>
      *
      * @return bool
+     *              <p>Whether or not the $str is in JSON format.</p>
      */
     public static function is_json(
         string $str,
@@ -3389,9 +3399,10 @@ final class UTF8
     }
 
     /**
-     * @param string $str
+     * @param string $str <p>The input string.</p>
      *
      * @return bool
+     *              <p>Whether or not $str contains only lowercase chars.</p>
      */
     public static function is_lowercase(string $str): bool
     {
@@ -3406,9 +3417,10 @@ final class UTF8
     /**
      * Returns true if the string is serialized, false otherwise.
      *
-     * @param string $str
+     * @param string $str <p>The input string.</p>
      *
-     * @return bool whether or not $str is serialized
+     * @return bool
+     *              <p>Whether or not $str is serialized.</p>
      */
     public static function is_serialized(string $str): bool
     {
@@ -3479,6 +3491,9 @@ final class UTF8
             $test2 = \mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
             $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
             if ($test3 === $test) {
+                /**
+                 * @psalm-suppress RedundantCondition
+                 */
                 if ($str_chars === []) {
                     $str_chars = self::count_chars($str, true, false);
                 }
@@ -3557,6 +3572,9 @@ final class UTF8
             $test2 = \mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
             $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
             if ($test3 === $test) {
+                /**
+                 * @psalm-suppress RedundantCondition
+                 */
                 if ($str_chars === []) {
                     $str_chars = self::count_chars($str, true, false);
                 }
@@ -3966,7 +3984,8 @@ final class UTF8
      *
      * @param string $str <p>The original Unicode string.</p>
      *
-     * @return int max byte lengths of the given chars
+     * @return int
+     *             <p>Max byte lengths of the given chars.</p>
      */
     public static function max_chr_width(string $str): int
     {
@@ -4183,13 +4202,15 @@ final class UTF8
     /**
      * Standardize line ending to unix-like.
      *
-     * @param string $str
+     * @param string $str      <p>The input string.</p>
+     * @param string $replacer <p>The replacer char e.g. "\n" (Linux) or "\r\n" (Windows). You can also use \PHP_EOL here.</p>
      *
      * @return string
+     *                <p>A string with normalized line ending.</p>
      */
-    public static function normalize_line_ending(string $str): string
+    public static function normalize_line_ending(string $str, $replacer = "\n"): string
     {
-        return \str_replace(["\r\n", "\r"], "\n", $str);
+        return \str_replace(["\r\n", "\r", "\n"], $replacer, $str);
     }
 
     /**
@@ -4198,6 +4219,7 @@ final class UTF8
      * @param string $str <p>The string to be normalized.</p>
      *
      * @return string
+     *                <p>A string with normalized characters for commonly used chars in Word documents.</p>
      */
     public static function normalize_msword(string $str): string
     {
@@ -4213,6 +4235,7 @@ final class UTF8
      *                                           bidirectional text chars.</p>
      *
      * @return string
+     *                <p>A string with normalized whitespace.</p>
      */
     public static function normalize_whitespace(
         string $str,
@@ -4235,8 +4258,8 @@ final class UTF8
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @return int
-     *             Unicode code point of the given character,<br>
-     *             0 on invalid UTF-8 byte sequence
+     *             <p>Unicode code point of the given character,<br>
+     *             0 on invalid UTF-8 byte sequence</p>
      */
     public static function ord($chr, string $encoding = 'UTF-8'): int
     {
@@ -4325,7 +4348,7 @@ final class UTF8
      * @param bool   $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
      * @return bool
-     *              Will return <strong>false</strong> if php can't parse the string and we haven't any $result
+     *              <p>Will return <strong>false</strong> if php can't parse the string and we haven't any $result.</p>
      */
     public static function parse_str(string $str, &$result, bool $clean_utf8 = false): bool
     {
@@ -4349,8 +4372,10 @@ final class UTF8
      * Checks if \u modifier is available that enables Unicode support in PCRE.
      *
      * @return bool
+     *              <p>
      *              <strong>true</strong> if support is available,<br>
      *              <strong>false</strong> otherwise
+     *              </p>
      */
     public static function pcre_utf8_support(): bool
     {
@@ -4386,10 +4411,16 @@ final class UTF8
         }
 
         if ($step !== 1) {
+            /**
+             * @psalm-suppress RedundantConditionGivenDocblockType
+             */
             if (!\is_numeric($step)) {
                 throw new \InvalidArgumentException('$step need to be a number, type given: ' . \gettype($step));
             }
 
+            /**
+             * @psalm-suppress RedundantConditionGivenDocblockType - false-positive from psalm?
+             */
             if ($step <= 0) {
                 throw new \InvalidArgumentException('$step need to be a positive number, given: ' . $step);
             }
@@ -4459,6 +4490,7 @@ final class UTF8
      * @param bool   $multi_decode <p>Decode as often as possible.</p>
      *
      * @return string
+     *                <p>The decoded URL, as a string.</p>
      */
     public static function rawurldecode(string $str, bool $multi_decode = true): string
     {
@@ -4480,9 +4512,23 @@ final class UTF8
 
         $str = self::urldecode_unicode_helper($str);
 
-        do {
-            $str_compare = $str;
+        if ($multi_decode) {
+            do {
+                $str_compare = $str;
 
+                /**
+                 * @psalm-suppress PossiblyInvalidArgument
+                 */
+                $str = self::fix_simple_utf8(
+                    \rawurldecode(
+                        self::html_entity_decode(
+                            self::to_utf8($str),
+                            \ENT_QUOTES | \ENT_HTML5
+                        )
+                    )
+                );
+            } while ($str_compare !== $str);
+        } else {
             /**
              * @psalm-suppress PossiblyInvalidArgument
              */
@@ -4494,7 +4540,7 @@ final class UTF8
                     )
                 )
             );
-        } while ($multi_decode === true && $str_compare !== $str);
+        }
 
         return $str;
     }
@@ -4553,7 +4599,8 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @return string string without UTF-BOM
+     * @return string
+     *                <p>A string without UTF-BOM.</p>
      */
     public static function remove_bom(string $str): string
     {
@@ -4585,7 +4632,8 @@ final class UTF8
      * @param string          $str  <p>The base string.</p>
      * @param string|string[] $what <p>String to search for in the base string.</p>
      *
-     * @return string the result string with removed duplicates
+     * @return string
+     *                <p>A string with removed duplicates.</p>
      */
     public static function remove_duplicates(string $str, $what = ' '): string
     {
@@ -4593,8 +4641,10 @@ final class UTF8
             $what = [$what];
         }
 
+        /**
+         * @psalm-suppress RedundantConditionGivenDocblockType
+         */
         if (\is_array($what) === true) {
-            /** @noinspection ForeachSourceInspection */
             foreach ($what as $item) {
                 $str = (string) \preg_replace('/(' . \preg_quote($item, '/') . ')+/u', $item, $str);
             }
@@ -4606,12 +4656,13 @@ final class UTF8
     /**
      * Remove html via "strip_tags()" from the string.
      *
-     * @param string $str
+     * @param string $str            <p>The input string.</p>
      * @param string $allowable_tags [optional] <p>You can use the optional second parameter to specify tags which should
      *                               not be stripped. Default: null
      *                               </p>
      *
      * @return string
+     *                <p>A string with without html tags.</p>
      */
     public static function remove_html(string $str, string $allowable_tags = ''): string
     {
@@ -4621,10 +4672,11 @@ final class UTF8
     /**
      * Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
      *
-     * @param string $str
+     * @param string $str         <p>The input string.</p>
      * @param string $replacement [optional] <p>Default is a empty string.</p>
      *
      * @return string
+     *                <p>A string without breaks.</p>
      */
     public static function remove_html_breaks(string $str, string $replacement = ''): string
     {
@@ -4638,15 +4690,21 @@ final class UTF8
      *
      * copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
      *
-     * @param string $str
-     * @param bool   $url_encoded
-     * @param string $replacement
+     * @param string $str         <p>The input string.</p>
+     * @param bool   $url_encoded [optional] <p>
+     *                            Try to remove url encoded control character.
+     *                            WARNING: maybe contains false-positives e.g. aa%0Baa -> aaaa.
+     *                            <br>
+     *                            Default: false
+     *                            </p>
+     * @param string $replacement [optional] <p>The replacement character.</p>
      *
      * @return string
+     *                <p>A string without invisible chars.</p>
      */
     public static function remove_invisible_characters(
         string $str,
-        bool $url_encoded = true,
+        bool $url_encoded = false,
         string $replacement = ''
     ): string {
         return ASCII::remove_invisible_characters(
@@ -4659,11 +4717,12 @@ final class UTF8
     /**
      * Returns a new string with the prefix $substring removed, if present.
      *
-     * @param string $str
+     * @param string $str       <p>The input string.</p>
      * @param string $substring <p>The prefix to remove.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @return string string without the prefix $substring
+     * @return string
+     *                <p>A string without the prefix $substring.</p>
      */
     public static function remove_left(
         string $str,
@@ -4698,7 +4757,8 @@ final class UTF8
      * @param string $substring <p>The suffix to remove.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @return string string having a $str without the suffix $substring
+     * @return string
+     *                <p>A string having a $str without the suffix $substring.</p>
      */
     public static function remove_right(
         string $str,
@@ -4735,7 +4795,8 @@ final class UTF8
      * @param string $replacement    <p>The string to replace with.</p>
      * @param bool   $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
-     * @return string string after the replacements
+     * @return string
+     *                <p>A string with replaced parts.</p>
      */
     public static function replace(
         string $str,
@@ -4758,7 +4819,8 @@ final class UTF8
      * @param array|string $replacement    <p>The string to replace with.</p>
      * @param bool         $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
-     * @return string string after the replacements
+     * @return string
+     *                <p>A string with replaced parts.</p>
      */
     public static function replace_all(
         string $str,
@@ -4781,6 +4843,7 @@ final class UTF8
      * @param bool   $process_invalid_utf8_chars <p>Convert invalid UTF-8 chars </p>
      *
      * @return string
+     *                <p>A string without diamond question marks (�).</p>
      */
     public static function replace_diamond_question_mark(
         string $str,
@@ -4829,7 +4892,8 @@ final class UTF8
      * @param string      $str   <p>The string to be trimmed.</p>
      * @param string|null $chars <p>Optional characters to be stripped.</p>
      *
-     * @return string the string with unwanted characters stripped from the right
+     * @return string
+     *                <p>A string with unwanted characters stripped from the right.</p>
      */
     public static function rtrim(string $str = '', string $chars = null): string
     {
@@ -4882,7 +4946,8 @@ final class UTF8
      * @param bool   $keep_ascii_chars <p>Set to <strong>true</strong> to keep ASCII chars.</>
      * @param string $encoding         [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return string the HTML numbered entity
+     * @return string
+     *                <p>The HTML numbered entity for the given character.</p>
      */
     public static function single_chr_html_encode(
         string $char,
@@ -5051,7 +5116,8 @@ final class UTF8
      *
      * @param string $str
      *
-     * @return string string with $str capitalized
+     * @return string
+     *                <p>A string with $str capitalized.</p>
      */
     public static function str_capitalize_name(string $str): string
     {
@@ -5812,7 +5878,8 @@ final class UTF8
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
      *
-     * @return string string after the replacements
+     * @return string
+     *                <p>string after the replacements.</p>
      */
     public static function str_ireplace_ending(string $str, string $search, string $replacement): string
     {
@@ -6304,7 +6371,8 @@ final class UTF8
      * @param string $str2     <p>Second string for comparison.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return string string with its $str being the longest common substring
+     * @return string
+     *                <p>A string with its $str being the longest common substring.</p>
      */
     public static function str_longest_common_substring(
         string $str1,
@@ -6497,7 +6565,8 @@ final class UTF8
      *
      * @throws \OutOfBoundsException if the positive or negative offset does not exist
      *
-     * @return string the character at the specified index
+     * @return string
+     *                <p>The character at the specified index.</p>
      */
     public static function str_offset_get(string $str, int $index, string $encoding = 'UTF-8'): string
     {
@@ -6528,7 +6597,8 @@ final class UTF8
      *                               </p>
      * @param string     $encoding   [optional] <p>Default: 'UTF-8'</p>
      *
-     * @return string returns the padded string
+     * @return string
+     *                <p>Returns the padded string.</p>
      */
     public static function str_pad(
         string $str,
@@ -6838,7 +6908,8 @@ final class UTF8
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
      *
-     * @return string string after the replacements
+     * @return string
+     *                <p>A string after the replacements.</p>
      */
     public static function str_replace_beginning(
         string $str,
@@ -6873,7 +6944,8 @@ final class UTF8
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
      *
-     * @return string string after the replacements
+     * @return string
+     *                <p>A string after the replacements.</p>
      */
     public static function str_replace_ending(
         string $str,
@@ -6974,7 +7046,8 @@ final class UTF8
      * @param string $str      <p>The input string</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return string the shuffled string
+     * @return string
+     *                <p>The shuffled string.</p>
      */
     public static function str_shuffle(string $str, string $encoding = 'UTF-8'): string
     {
@@ -7069,7 +7142,8 @@ final class UTF8
      * @param string $str
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return string string in snake_case
+     * @return string
+     *                <p>A string in snake_case.</p>
      */
     public static function str_snakeize(string $str, string $encoding = 'UTF-8'): string
     {
@@ -7135,7 +7209,8 @@ final class UTF8
      * @param bool   $unique <p>Sort unique. If <strong>true</strong>, repeated characters are ignored.</p>
      * @param bool   $desc   <p>If <strong>true</strong>, will sort characters in reverse code point order.</p>
      *
-     * @return string string of sorted characters
+     * @return string
+     *                <p>A string of sorted characters.</p>
      */
     public static function str_sort(string $str, bool $unique = false, bool $desc = false): string
     {
@@ -7165,7 +7240,7 @@ final class UTF8
      *                                                           "mb_substr"</p>
      *
      * @return array
-     *               <p>An array containing chunks of the input.</p>
+     *                  <p>An array containing chunks of the input.</p>
      */
     public static function str_split(
         $str,
@@ -7207,19 +7282,19 @@ final class UTF8
             self::$SUPPORT['mbstring'] === true
         ) {
             if (Bootup::is_php('7.4')) {
-                $ret = \mb_str_split($str, $length);
-            } else {
-                $i_max = \mb_strlen($str);
-                if ($i_max <= 127) {
-                    $ret = [];
-                    for ($i = 0; $i < $i_max; ++$i) {
-                        $ret[] = \mb_substr($str, $i, 1);
-                    }
-                } else {
-                    $return_array = [];
-                    \preg_match_all('/./us', $str, $return_array);
-                    $ret = $return_array[0] ?? [];
+                return \mb_str_split($str, $length);
+            }
+
+            $i_max = \mb_strlen($str);
+            if ($i_max <= 127) {
+                $ret = [];
+                for ($i = 0; $i < $i_max; ++$i) {
+                    $ret[] = \mb_substr($str, $i, 1);
                 }
+            } else {
+                $return_array = [];
+                \preg_match_all('/./us', $str, $return_array);
+                $ret = $return_array[0] ?? [];
             }
         } elseif (self::$SUPPORT['pcre_utf8'] === true) {
             $return_array = [];
@@ -7307,7 +7382,8 @@ final class UTF8
      * @param string $pattern <p>The regex with which to split the string.</p>
      * @param int    $limit   [optional] <p>Maximum number of results to return. Default: -1 === no limit</p>
      *
-     * @return string[] an array of strings
+     * @return string[]
+     *                  <p>An array of strings.</p>
      */
     public static function str_split_pattern(string $str, string $pattern, int $limit = -1): array
     {
@@ -7673,7 +7749,8 @@ final class UTF8
      * @param string $str
      * @param string $substring <p>The substring to add to both sides.</P>
      *
-     * @return string string with the substring both prepended and appended
+     * @return string
+     *                <p>A string with the substring both prepended and appended.</p>
      */
     public static function str_surround(string $str, string $substring): string
     {
@@ -7785,7 +7862,8 @@ final class UTF8
      * @param array  $ignore   <p>An array of words not to capitalize.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return string the titleized string
+     * @return string
+     *                <p>The titleized string.</p>
      */
     public static function str_titleize_for_humans(
         string $str,
@@ -8086,7 +8164,8 @@ final class UTF8
      * @param string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @return string string after truncating
+     * @return string
+     *                <p>A string after truncating.</p>
      */
     public static function str_truncate(
         string $str,
@@ -8147,7 +8226,8 @@ final class UTF8
      * @param string $encoding                               [optional] <p>Default: 'UTF-8'</p>
      * @param bool   $ignore_do_not_split_words_for_one_word [optional] <p>Default: false</p>
      *
-     * @return string string after truncating
+     * @return string
+     *                <p>A string after truncating.</p>
      */
     public static function str_truncate_safe(
         string $str,
@@ -8237,7 +8317,8 @@ final class UTF8
      *
      * @param string $str
      *
-     * @return string the underscored string
+     * @return string
+     *                <p>The underscored string.</p>
      */
     public static function str_underscored(string $str): string
     {
@@ -8255,7 +8336,8 @@ final class UTF8
      * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt, tr</p>
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
      *
-     * @return string string in UpperCamelCase
+     * @return string
+     *                <p>A string in UpperCamelCase.</p>
      */
     public static function str_upper_camelize(
         string $str,
@@ -8529,20 +8611,21 @@ final class UTF8
      *
      * @param array $array <p>Integer or Hexadecimal codepoints.</p>
      *
-     * @return string UTF-8 encoded string
+     * @return string
+     *                <p>A UTF-8 encoded string.</p>
      */
     public static function string(array $array): string
     {
-        return \implode(
-            '',
-            \array_map(
-                [
-                    self::class,
-                    'chr',
-                ],
-                $array
-            )
-        );
+        if ($array === []) {
+            return  '';
+        }
+
+        $str = '';
+        foreach ($array as $strPart) {
+            $str .= '&#' . (int) $strPart . ';';
+        }
+
+        return self::html_entity_decode($str, \ENT_QUOTES | \ENT_HTML5);
     }
 
     /**
@@ -11695,9 +11778,23 @@ final class UTF8
 
         $str = self::urldecode_unicode_helper($str);
 
-        do {
-            $str_compare = $str;
+        if ($multi_decode === true) {
+            do {
+                $str_compare = $str;
 
+                /**
+                 * @psalm-suppress PossiblyInvalidArgument
+                 */
+                $str = self::fix_simple_utf8(
+                    \urldecode(
+                        self::html_entity_decode(
+                            self::to_utf8($str),
+                            \ENT_QUOTES | \ENT_HTML5
+                        )
+                    )
+                );
+            } while ($str_compare !== $str);
+        } else {
             /**
              * @psalm-suppress PossiblyInvalidArgument
              */
@@ -11709,7 +11806,7 @@ final class UTF8
                     )
                 )
             );
-        } while ($multi_decode === true && $str_compare !== $str);
+        }
 
         return $str;
     }

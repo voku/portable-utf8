@@ -3184,15 +3184,17 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             "\t\t",
         ];
 
-        foreach ($testArray as $test) {
-            static::assertSame(
-                [],
-                \array_diff(
-                    UTF8::str_split($test),
-                    UTF8::str_split(UTF8::str_shuffle($test))
-                ),
-                'tested: ' . $test
-            );
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
+            foreach ($testArray as $test) {
+                static::assertSame(
+                    [],
+                    \array_diff(
+                        UTF8::str_split($test),
+                        UTF8::str_split(UTF8::str_shuffle($test))
+                    ),
+                    'tested: ' . $test
+                );
+            }
         }
     }
 
@@ -3328,6 +3330,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             [],
             UTF8::str_split('déjà', 0)
         );
+
         static::assertSame(
             [
                 'd',
@@ -3337,12 +3340,21 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             ],
             UTF8::str_split('déjà', 1)
         );
+
         static::assertSame(
             [
                 'dé',
                 'jà',
             ],
             UTF8::str_split('déjà', 2)
+        );
+
+        static::assertSame(
+            [
+                '12',
+                '3',
+            ],
+            UTF8::str_split(123, 2)
         );
     }
 
@@ -3369,7 +3381,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
                 ]
             )
         );
-        static::assertSame('中文空白', UTF8::string(UTF8::codepoints('中文空白')));
+
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
+            static::assertSame('中文空白', UTF8::string(UTF8::codepoints('中文空白')));
+        }
     }
 
     public function testStringHasBom()
