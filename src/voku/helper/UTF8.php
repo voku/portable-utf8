@@ -7282,7 +7282,10 @@ final class UTF8
             self::$SUPPORT['mbstring'] === true
         ) {
             if (Bootup::is_php('7.4')) {
-                return \mb_str_split($str, $length);
+                $return = \mb_str_split($str, $length);
+                if ($return !== false) {
+                    return $return;
+                }
             }
 
             $i_max = \mb_strlen($str);
