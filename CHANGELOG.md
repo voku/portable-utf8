@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.4.28 (2019-11-17)
+
+- use "mb_str_split" with PHP >= 7.4 + mbstring support (performance++)
+- improve performance from "UTF8::string()" (use UTF8::html_entity_decode() for the full string)
+- fix errors reported by phpstan (level 7) / psalm
+
 ### 5.4.27 (2019-11-11)
 
 - "UTF8::clean() / UTF8::cleanup()" -> do not remove invisible urlencoded strings by default
