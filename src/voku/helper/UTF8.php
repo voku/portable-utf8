@@ -7240,7 +7240,7 @@ final class UTF8
      *                                                           "mb_substr"</p>
      *
      * @return array
-     *                  <p>An array containing chunks of the input.</p>
+     *               <p>An array containing chunks of the input.</p>
      */
     public static function str_split(
         $str,
