@@ -3107,6 +3107,34 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testToUtf8()
+    {
+        // test string from: https://r12a.github.io/app-conversion/
+
+        $testStr = "
+        The decomposition mapping is <츠, U+11B8>, and not <0x110E, ᅳ, 11B8>.  1234 (ethiopic/latin?)
+        <p>The title says ‫פעילות הבינאום, W3C‬ &rlm;in Hebrew</p>
+        \nabc\x09áßç\tक際👽 	%E0%A4%95%E9%9A%9B%F0%9F%91%BD
+        html/xml (hex)\x09&#x00E7;&#x0916;&#x0940;&#x570B;&#x1F47D;&Aacute;
+        html/xml (dec)\x09&#231;&#2326;&#2368;&#22283;&#128125;&aacute;
+        javascript\x09\u00E7\u0916\u0940\u570B\uD83D\uDC7D
+        js/rust/ruby\x09\u{E7}\u{916}\u{940}\u{570B}\u{1F47D}
+        ";
+
+        $expected = "
+        The decomposition mapping is <츠, U+11B8>, and not <0x110E, ᅳ, 11B8>.  1234 (ethiopic/latin?)
+        <p>The title says ‫פעילות הבינאום, W3C‬ ‏in Hebrew</p>
+        
+abc	áßç	क際👽 	क際👽
+        html/xml (hex)	çखी國👽Á
+        html/xml (dec)	çखी國👽á
+        javascript	çखी國👽
+        js/rust/ruby	çखी國👽
+        ";
+
+        static::assertSame($expected, UTF8::rawurldecode(UTF8::to_utf8($testStr, true)));
+    }
+
     public function testStrShuffle()
     {
         $testArray = [
