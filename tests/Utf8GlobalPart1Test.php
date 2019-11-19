@@ -3121,7 +3121,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         js/rust/ruby\x09\u{E7}\u{916}\u{940}\u{570B}\u{1F47D}
         ";
 
-        $expected = "
+        $expected = '
         The decomposition mapping is <츠, U+11B8>, and not <0x110E, ᅳ, 11B8>.  1234 (ethiopic/latin?)
         <p>The title says ‫פעילות הבינאום, W3C‬ ‏in Hebrew</p>
         
@@ -3130,7 +3130,7 @@ abc	áßç	क際👽 	क際👽
         html/xml (dec)	çखी國👽á
         javascript	çखी國👽
         js/rust/ruby	çखी國👽
-        ";
+        ';
 
         static::assertSame($expected, UTF8::rawurldecode(UTF8::to_utf8($testStr, true)));
     }

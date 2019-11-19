@@ -11203,7 +11203,11 @@ final class UTF8
             $str = self::clean($str);
         }
 
-        if ($lang === null && $try_to_keep_the_string_length === false) {
+        if (
+            $lang === null
+            &&
+            $try_to_keep_the_string_length === false
+        ) {
             if ($encoding === 'UTF-8') {
                 return \mb_convert_case($str, \MB_CASE_TITLE);
             }
