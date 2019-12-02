@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.29
+
+- add "UTF8::has_whitespace()"
+
 ### 5.4.28 (2019-11-17)
 
 - use "mb_str_split" with PHP >= 7.4 + mbstring support (performance++)
