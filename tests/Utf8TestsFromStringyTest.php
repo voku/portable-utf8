@@ -138,6 +138,26 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [['F', 'ò', 'ô', ' ', 'B', 'à', 'ř'], 'Fòô Bàř'];
     }
 
+    public function hasWhitespaceProvider(): \Iterator
+    {
+        yield ['foo bar', '  foo   bar  '];
+        yield ['test string', 'test string'];
+        yield ['Ο συγγραφέας', '   Ο     συγγραφέας  '];
+        yield ['123' . "\n", ' 123 '];
+        yield [' ', ' ', 'UTF-8'];
+        // no-break space (U+00A0)
+        yield [' ', '           '];
+        // spaces U+2000 to U+200A
+        yield [' ', ' ', 'UTF-8'];
+        // narrow no-break space (U+202F)
+        yield [' ', ' ', 'UTF-8'];
+        // medium mathematical space (U+205F)
+        yield [' ', '　', 'UTF-8'];
+        // ideographic space (U+3000)
+        yield ['1 2 3', '  1  2  3　　'];
+        yield ['  ', ' '];
+    }
+
     public function collapseWhitespaceProvider(): \Iterator
     {
         yield ['foo bar', '  foo   bar  '];
@@ -1966,6 +1986,41 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result);
+    }
+
+    /**
+     * @dataProvider hasWhitespaceProvider()
+     *
+     * @param $str1
+     * @param $str2
+     */
+    public function testHasWhitespace($str1, $str2)
+    {
+        $result = UTF8::has_whitespace($str1);
+
+        static::assertInternalType('boolean', $result);
+        static::assertSame(true, $result, 'tested: ' . $str1);
+
+        // ---
+
+        $result = UTF8::has_whitespace($str2);
+
+        static::assertInternalType('boolean', $result);
+        static::assertSame(true, $result, 'tested: ' . $str2);
+
+        // ---
+
+        $result = UTF8::has_whitespace('');
+
+        static::assertInternalType('boolean', $result);
+        static::assertSame(false, $result);
+
+        // ---
+
+        $result = UTF8::has_whitespace('abc-öäü');
+
+        static::assertInternalType('boolean', $result);
+        static::assertSame(false, $result);
     }
 
     /**

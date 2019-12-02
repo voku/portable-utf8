@@ -2334,6 +2334,24 @@ final class UTF8
     }
 
     /**
+     * Returns true if the string contains whitespace, false otherwise.
+     *
+     * @param string $str <p>The input string.</p>
+     *
+     * @return bool
+     *              <p>Whether or not the string contains whitespace.</p>
+     */
+    public static function has_whitespace(string $str): bool
+    {
+        if (self::$SUPPORT['mbstring'] === true) {
+            /** @noinspection PhpComposerExtensionStubsInspection */
+            return \mb_ereg_match('.*[[:space:]]', $str);
+        }
+
+        return self::str_matches_pattern($str, '.*[[:space:]]');
+    }
+
+    /**
      * Returns true if the string contains an upper case char, false otherwise.
      *
      * @param string $str <p>The input string.</p>
