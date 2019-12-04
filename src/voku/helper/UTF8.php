@@ -2172,7 +2172,11 @@ final class UTF8
         //var_dump($str_info);
 
         $str_info = \unpack('C2chars', $str_info);
+
+        /** @noinspection PhpSillyAssignmentInspection */
         /** @var array|false $str_info - needed for PhpStan (stubs error) */
+        $str_info = $str_info;
+
         if ($str_info === false) {
             return $fallback;
         }

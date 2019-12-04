@@ -1,6 +1,10 @@
 # Changelog
 
-### 5.4.29
+### 5.4.30 (2019-12-04)
+
+- fix "UTF8::str_contains_all" -> fix the loop
+
+### 5.4.29 (2019-12-02)
 
 - add "UTF8::has_whitespace()"
 
