@@ -17,7 +17,7 @@ final class UTF8
      *
      * INFO: https://en.wikipedia.org/wiki/Byte_order_mark
      *
-     * @var array
+     * @var array<string, int>
      */
     private static $BOM = [
         "\xef\xbb\xbf"     => 3, // UTF-8 BOM
@@ -37,7 +37,7 @@ final class UTF8
      *
      * url: http://www.w3schools.com/charsets/ref_utf_punctuation.asp
      *
-     * @var array
+     * @var array<int, string>
      */
     private static $WHITESPACE = [
         // NUL Byte
@@ -95,7 +95,7 @@ final class UTF8
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     private static $WHITESPACE_TABLE = [
         'SPACE'                     => "\x20",
@@ -160,57 +160,57 @@ final class UTF8
     ];
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private static $SUPPORT = [];
 
     /**
-     * @var array|null
+     * @var array<string, string>|null
      */
     private static $BROKEN_UTF8_FIX;
 
     /**
-     * @var array|null
+     * @var array<int, string>|null
      */
     private static $WIN1252_TO_UTF8;
 
     /**
-     * @var array|null
+     * @var array<int ,string>|null
      */
     private static $INTL_TRANSLITERATOR_LIST;
 
     /**
-     * @var array|null
+     * @var array<string>|null
      */
     private static $ENCODINGS;
 
     /**
-     * @var array|null
+     * @var array<string ,int>|null
      */
     private static $ORD;
 
     /**
-     * @var array|null
+     * @var array<string, string>|null
      */
     private static $EMOJI;
 
     /**
-     * @var array|null
+     * @var array<string>|null
      */
     private static $EMOJI_VALUES_CACHE;
 
     /**
-     * @var array|null
+     * @var array<string>|null
      */
     private static $EMOJI_KEYS_CACHE;
 
     /**
-     * @var array|null
+     * @var array<string>|null
      */
     private static $EMOJI_KEYS_REVERSIBLE_CACHE;
 
     /**
-     * @var array|null
+     * @var array<int, string>|null
      */
     private static $CHR;
 
@@ -264,10 +264,10 @@ final class UTF8
     /**
      * Changes all keys in an array.
      *
-     * @param array  $array    <p>The array to work on</p>
-     * @param int    $case     [optional] <p> Either <strong>CASE_UPPER</strong><br>
-     *                         or <strong>CASE_LOWER</strong> (default)</p>
-     * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
+     * @param array<string, mixed> $array    <p>The array to work on</p>
+     * @param int                  $case     [optional] <p> Either <strong>CASE_UPPER</strong><br>
+     *                                       or <strong>CASE_LOWER</strong> (default)</p>
+     * @param string               $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @return string[]
      *                  <p>An array with its keys lower- or uppercased.</p>
@@ -1833,27 +1833,27 @@ final class UTF8
      *
      * @see http://php.net/manual/en/function.filter-var-array.php
      *
-     * @param array $data       <p>
-     *                          An array with string keys containing the data to filter.
-     *                          </p>
-     * @param mixed $definition [optional] <p>
-     *                          An array defining the arguments. A valid key is a string
-     *                          containing a variable name and a valid value is either a
-     *                          filter type, or an
-     *                          array optionally specifying the filter, flags and options.
-     *                          If the value is an array, valid keys are filter
-     *                          which specifies the filter type,
-     *                          flags which specifies any flags that apply to the
-     *                          filter, and options which specifies any options that
-     *                          apply to the filter. See the example below for a better understanding.
-     *                          </p>
-     *                          <p>
-     *                          This parameter can be also an integer holding a filter constant. Then all values in the
-     *                          input array are filtered by this filter.
-     *                          </p>
-     * @param bool  $add_empty  [optional] <p>
-     *                          Add missing keys as <b>NULL</b> to the return value.
-     *                          </p>
+     * @param array<mixed> $data       <p>
+     *                                 An array with string keys containing the data to filter.
+     *                                 </p>
+     * @param mixed        $definition [optional] <p>
+     *                                 An array defining the arguments. A valid key is a string
+     *                                 containing a variable name and a valid value is either a
+     *                                 filter type, or an
+     *                                 array optionally specifying the filter, flags and options.
+     *                                 If the value is an array, valid keys are filter
+     *                                 which specifies the filter type,
+     *                                 flags which specifies any flags that apply to the
+     *                                 filter, and options which specifies any options that
+     *                                 apply to the filter. See the example below for a better understanding.
+     *                                 </p>
+     *                                 <p>
+     *                                 This parameter can be also an integer holding a filter constant. Then all values in the
+     *                                 input array are filtered by this filter.
+     *                                 </p>
+     * @param bool         $add_empty  [optional] <p>
+     *                                 Add missing keys as <b>NULL</b> to the return value.
+     *                                 </p>
      *
      * @return mixed an array containing the values of the requested variables on success, or <b>FALSE</b> on failure.
      *               An array value will be <b>FALSE</b> if the filter fails, or <b>NULL</b> if the variable is not
@@ -2147,6 +2147,8 @@ final class UTF8
      *
      * @return array<string, string|null>
      *                       <p>with this keys: 'ext', 'mime', 'type'</p>
+     *
+     * @phpstan-param array{ext: null|string, mime: null|string, type: null|string} $fallback
      */
     public static function get_file_type(
         string $str,
@@ -2169,8 +2171,8 @@ final class UTF8
         // DEBUG
         //var_dump($str_info);
 
-        /** @var array|false $str_info - needed for PhpStan (stubs error) */
         $str_info = \unpack('C2chars', $str_info);
+        /** @var array|false $str_info - needed for PhpStan (stubs error) */
         if ($str_info === false) {
             return $fallback;
         }
@@ -4945,7 +4947,7 @@ final class UTF8
     /**
      * WARNING: Print native UTF-8 support (libs), e.g. for debugging.
      *
-     * @psalm-suppress MissingReturnType
+     * @return void
      */
     public static function showSupport()
     {
@@ -5193,15 +5195,16 @@ final class UTF8
 
         /** @noinspection LoopWhichDoesNotLoopInspection */
         foreach ($needles as &$needle) {
-            if (!$needle) {
-                return false;
-            }
-
             if ($case_sensitive) {
-                return \strpos($haystack, $needle) !== false;
+                /** @noinspection NestedPositiveIfStatementsInspection */
+                if (\strpos($haystack, $needle) === false) {
+                    return  false;
+                }
             }
 
-            return \mb_stripos($haystack, $needle) !== false;
+            if (\mb_stripos($haystack, $needle) === false) {
+                return  false;
+            }
         }
 
         return true;

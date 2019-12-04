@@ -213,6 +213,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
             [false, 'Str contains foo bar', ['Foo', 'bar']],
             [false, 'Str contains foo bar', ['foobar', 'bar']],
             [false, 'Str contains foo bar', ['foo bar ', 'bar']],
+            [false, 'Str contains foo bar', ['Str', 'foo bar ', 'bar']],
             [false, 'Ο συγγραφέας είπε', ['  συγγραφέας ', '  συγγραφ '], true],
             [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', [' ßå˚', ' ß '], true],
             [true, 'Str contains foo bar', ['Foo bar', 'bar'], false],
@@ -1999,28 +2000,28 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         $result = UTF8::has_whitespace($str1);
 
         static::assertInternalType('boolean', $result);
-        static::assertSame(true, $result, 'tested: ' . $str1);
+        static::assertTrue($result, 'tested: ' . $str1);
 
         // ---
 
         $result = UTF8::has_whitespace($str2);
 
         static::assertInternalType('boolean', $result);
-        static::assertSame(true, $result, 'tested: ' . $str2);
+        static::assertTrue($result, 'tested: ' . $str2);
 
         // ---
 
         $result = UTF8::has_whitespace('');
 
         static::assertInternalType('boolean', $result);
-        static::assertSame(false, $result);
+        static::assertFalse($result);
 
         // ---
 
         $result = UTF8::has_whitespace('abc-öäü');
 
         static::assertInternalType('boolean', $result);
-        static::assertSame(false, $result);
+        static::assertFalse($result);
     }
 
     /**
