@@ -2292,10 +2292,10 @@ final class UTF8
     public static function get_unique_string($entropy_extra = '', bool $use_md5 = true): string
     {
         $unique_helper = \random_int(0, \mt_getrandmax()) .
-                        \session_id() .
-                        ($_SERVER['REMOTE_ADDR'] ?? '') .
-                        ($_SERVER['SERVER_ADDR'] ?? '') .
-                        $entropy_extra;
+                         \session_id() .
+                         ($_SERVER['REMOTE_ADDR'] ?? '') .
+                         ($_SERVER['SERVER_ADDR'] ?? '') .
+                         $entropy_extra;
 
         $unique_string = \uniqid($unique_helper, true);
 
@@ -5201,12 +5201,12 @@ final class UTF8
         foreach ($needles as &$needle) {
             if ($case_sensitive) {
                 /** @noinspection NestedPositiveIfStatementsInspection */
-                if (\strpos($haystack, $needle) === false) {
+                if (!$needle || \strpos($haystack, $needle) === false) {
                     return  false;
                 }
             }
 
-            if (\mb_stripos($haystack, $needle) === false) {
+            if (!$needle || \mb_stripos($haystack, $needle) === false) {
                 return  false;
             }
         }
