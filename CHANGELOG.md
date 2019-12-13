@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.31 (2019-12-13)
+
+- update vendor (ASCII) lib
+- optimize phpstan config
+
 ### 5.4.30 (2019-12-04)
 
 - fix "UTF8::str_contains_all" -> fix the loop
