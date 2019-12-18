@@ -405,7 +405,7 @@ final class UTF8
      *
      * @return string[]
      *
-     * @see UTF8::chr_map()
+     * @see   UTF8::chr_map()
      */
     public static function callback($callback, string $str): array
     {
@@ -734,7 +734,7 @@ final class UTF8
      *
      * @return int
      *
-     * @see UTF8::chr_to_decimal()
+     * @see        UTF8::chr_to_decimal()
      * @deprecated <p>please use "UTF8::chr_to_decimal()"</p>
      */
     public static function chr_to_int(string $chr): int
@@ -760,22 +760,24 @@ final class UTF8
      * Accepts a string and removes all non-UTF-8 characters from it + extras if needed.
      *
      * @param string $str                                     <p>The string to be sanitized.</p>
-     * @param bool   $remove_bom                              [optional] <p>Set to true, if you need to remove UTF-BOM.</p>
+     * @param bool   $remove_bom                              [optional] <p>Set to true, if you need to remove
+     *                                                        UTF-BOM.</p>
      * @param bool   $normalize_whitespace                    [optional] <p>Set to true, if you need to normalize the
      *                                                        whitespace.</p>
-     * @param bool   $normalize_msword                        [optional] <p>Set to true, if you need to normalize MS Word chars
-     *                                                        e.g.: "…"
+     * @param bool   $normalize_msword                        [optional] <p>Set to true, if you need to normalize MS
+     *                                                        Word chars e.g.: "…"
      *                                                        => "..."</p>
-     * @param bool   $keep_non_breaking_space                 [optional] <p>Set to true, to keep non-breaking-spaces, in
+     * @param bool   $keep_non_breaking_space                 [optional] <p>Set to true, to keep non-breaking-spaces,
+     *                                                        in
      *                                                        combination with
      *                                                        $normalize_whitespace</p>
-     * @param bool   $replace_diamond_question_mark           [optional] <p>Set to true, if you need to remove diamond question
-     *                                                        mark e.g.: "�"</p>
-     * @param bool   $remove_invisible_characters             [optional] <p>Set to false, if you not want to remove invisible
-     *                                                        characters e.g.: "\0"</p>
-     * @param bool   $remove_invisible_characters_url_encoded [optional] <p>Set to true, if you not want to remove invisible
-     *                                                        url encoded characters e.g.: "%0B"<br>
-     *                                                        WARNING: maybe contains false-positives e.g. aa%0Baa -> aaaa.
+     * @param bool   $replace_diamond_question_mark           [optional] <p>Set to true, if you need to remove diamond
+     *                                                        question mark e.g.: "�"</p>
+     * @param bool   $remove_invisible_characters             [optional] <p>Set to false, if you not want to remove
+     *                                                        invisible characters e.g.: "\0"</p>
+     * @param bool   $remove_invisible_characters_url_encoded [optional] <p>Set to true, if you not want to remove
+     *                                                        invisible url encoded characters e.g.: "%0B"<br> WARNING:
+     *                                                        maybe contains false-positives e.g. aa%0Baa -> aaaa.
      *                                                        </p>
      *
      * @return string clean UTF-8 encoded string
@@ -1851,8 +1853,8 @@ final class UTF8
      *                                 apply to the filter. See the example below for a better understanding.
      *                                 </p>
      *                                 <p>
-     *                                 This parameter can be also an integer holding a filter constant. Then all values in the
-     *                                 input array are filtered by this filter.
+     *                                 This parameter can be also an integer holding a filter constant. Then all values
+     *                                 in the input array are filtered by this filter.
      *                                 </p>
      * @param bool         $add_empty  [optional] <p>
      *                                 Add missing keys as <b>NULL</b> to the return value.
@@ -2316,7 +2318,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::string_has_bom()
+     * @see        UTF8::string_has_bom()
      * @deprecated <p>please use "UTF8::string_has_bom()"</p>
      */
     public static function hasBom(string $str): bool
@@ -2423,7 +2425,7 @@ final class UTF8
      *
      * @return string
      *
-     * @see UTF8::html_entity_decode()
+     * @see        UTF8::html_entity_decode()
      * @deprecated <p>please use "UTF8::html_entity_decode()"</p>
      */
     public static function html_decode(
@@ -2944,7 +2946,7 @@ final class UTF8
      *
      * @return string
      *
-     * @see UTF8::decimal_to_chr()
+     * @see        UTF8::decimal_to_chr()
      * @deprecated <p>please use "UTF8::decimal_to_chr()"</p>
      */
     public static function int_to_chr($int): string
@@ -3000,7 +3002,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::is_ascii()
+     * @see        UTF8::is_ascii()
      * @deprecated <p>please use "UTF8::is_ascii()"</p>
      */
     public static function isAscii(string $str): bool
@@ -3015,7 +3017,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::is_base64()
+     * @see        UTF8::is_base64()
      * @deprecated <p>please use "UTF8::is_base64()"</p>
      */
     public static function isBase64($str): bool
@@ -3031,7 +3033,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::is_binary()
+     * @see        UTF8::is_binary()
      * @deprecated <p>please use "UTF8::is_binary()"</p>
      */
     public static function isBinary($str, $strict = false): bool
@@ -3046,7 +3048,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::is_bom()
+     * @see        UTF8::is_bom()
      * @deprecated <p>please use "UTF8::is_bom()"</p>
      */
     public static function isBom(string $utf8_chr): bool
@@ -3061,7 +3063,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::is_html()
+     * @see        UTF8::is_html()
      * @deprecated <p>please use "UTF8::is_html()"</p>
      */
     public static function isHtml(string $str): bool
@@ -3076,7 +3078,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::is_json()
+     * @see        UTF8::is_json()
      * @deprecated <p>please use "UTF8::is_json()"</p>
      */
     public static function isJson(string $str): bool
@@ -3094,7 +3096,7 @@ final class UTF8
      *                   <strong>1</strong> for UTF-16LE,<br>
      *                   <strong>2</strong> for UTF-16BE
      *
-     * @see UTF8::is_utf16()
+     * @see        UTF8::is_utf16()
      * @deprecated <p>please use "UTF8::is_utf16()"</p>
      */
     public static function isUtf16($str)
@@ -3112,7 +3114,7 @@ final class UTF8
      *                   <strong>1</strong> for UTF-32LE,
      *                   <strong>2</strong> for UTF-32BE
      *
-     * @see UTF8::is_utf32()
+     * @see        UTF8::is_utf32()
      * @deprecated <p>please use "UTF8::is_utf32()"</p>
      */
     public static function isUtf32($str)
@@ -3128,7 +3130,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::is_utf8()
+     * @see        UTF8::is_utf8()
      * @deprecated <p>please use "UTF8::is_utf8()"</p>
      */
     public static function isUtf8($str, $strict = false): bool
@@ -3389,7 +3391,8 @@ final class UTF8
      * Try to check if "$str" is a JSON-string.
      *
      * @param string $str                                    <p>The input string.</p>
-     * @param bool   $only_array_or_object_results_are_valid [optional] <p>Only array and objects are valid json results.</p>
+     * @param bool   $only_array_or_object_results_are_valid [optional] <p>Only array and objects are valid json
+     *                                                       results.</p>
      *
      * @return bool
      *              <p>Whether or not the $str is in JSON format.</p>
@@ -3784,8 +3787,10 @@ final class UTF8
      * @param string      $str                           <p>The input string</p>
      * @param string      $encoding                      [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool        $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the string.</p>
-     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt, tr</p>
-     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
+     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt,
+     *                                                   tr</p>
+     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
+     *                                                   -> ß</p>
      *
      * @return string the resulting string
      */
@@ -3846,7 +3851,7 @@ final class UTF8
      *
      * @return string
      *
-     * @see UTF8::lcfirst()
+     * @see        UTF8::lcfirst()
      * @deprecated <p>please use "UTF8::lcfirst()"</p>
      */
     public static function lcword(
@@ -3870,12 +3875,14 @@ final class UTF8
      *
      * @param string      $str                           <p>The input string.</p>
      * @param string[]    $exceptions                    [optional] <p>Exclusion for some words.</p>
-     * @param string      $char_list                     [optional] <p>Additional chars that contains to words and do not start
-     *                                                   a new word.</p>
+     * @param string      $char_list                     [optional] <p>Additional chars that contains to words and do
+     *                                                   not start a new word.</p>
      * @param string      $encoding                      [optional] <p>Set the charset.</p>
      * @param bool        $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the string.</p>
-     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt, tr</p>
-     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
+     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt,
+     *                                                   tr</p>
+     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
+     *                                                   -> ß</p>
      *
      * @return string
      */
@@ -3926,7 +3933,7 @@ final class UTF8
      *
      * @return string
      *
-     * @see UTF8::lcfirst()
+     * @see        UTF8::lcfirst()
      * @deprecated <p>please use "UTF8::lcfirst()"</p>
      */
     public static function lowerCaseFirst(
@@ -4066,7 +4073,7 @@ final class UTF8
      *
      * @return mixed
      *
-     * @see UTF8::normalize_encoding()
+     * @see        UTF8::normalize_encoding()
      * @deprecated <p>please use "UTF8::normalize_encoding()"</p>
      */
     public static function normalizeEncoding($encoding, $fallback = '')
@@ -4230,7 +4237,8 @@ final class UTF8
      * Standardize line ending to unix-like.
      *
      * @param string $str      <p>The input string.</p>
-     * @param string $replacer <p>The replacer char e.g. "\n" (Linux) or "\r\n" (Windows). You can also use \PHP_EOL here.</p>
+     * @param string $replacer <p>The replacer char e.g. "\n" (Linux) or "\r\n" (Windows). You can also use \PHP_EOL
+     *                         here.</p>
      *
      * @return string
      *                <p>A string with normalized line ending.</p>
@@ -4415,7 +4423,8 @@ final class UTF8
      *
      * @param mixed     $var1      <p>Numeric or hexadecimal code points, or a UTF-8 character to start from.</p>
      * @param mixed     $var2      <p>Numeric or hexadecimal code points, or a UTF-8 character to end at.</p>
-     * @param bool      $use_ctype <p>use ctype to detect numeric and hexadecimal, otherwise we will use a simple "is_numeric"</p>
+     * @param bool      $use_ctype <p>use ctype to detect numeric and hexadecimal, otherwise we will use a simple
+     *                             "is_numeric"</p>
      * @param string    $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param float|int $step      [optional] <p>
      *                             If a step value is given, it will be used as the
@@ -4613,7 +4622,7 @@ final class UTF8
      *
      * @return string
      *
-     * @see UTF8::remove_bom()
+     * @see        UTF8::remove_bom()
      * @deprecated <p>please use "UTF8::remove_bom()"</p>
      */
     public static function removeBOM(string $str): string
@@ -4684,8 +4693,8 @@ final class UTF8
      * Remove html via "strip_tags()" from the string.
      *
      * @param string $str            <p>The input string.</p>
-     * @param string $allowable_tags [optional] <p>You can use the optional second parameter to specify tags which should
-     *                               not be stripped. Default: null
+     * @param string $allowable_tags [optional] <p>You can use the optional second parameter to specify tags which
+     *                               should not be stripped. Default: null
      *                               </p>
      *
      * @return string
@@ -5024,7 +5033,7 @@ final class UTF8
      *
      * @return string[]
      *
-     * @see UTF8::str_split()
+     * @see        UTF8::str_split()
      * @deprecated <p>please use "UTF8::str_split()"</p>
      */
     public static function split(
@@ -5043,7 +5052,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::str_starts_with()
+     * @see        UTF8::str_starts_with()
      * @deprecated <p>please use "UTF8::str_starts_with()"</p>
      */
     public static function str_begins(string $haystack, string $needle): bool
@@ -5059,8 +5068,10 @@ final class UTF8
      * @param string      $str                           <p>The input string.</p>
      * @param string      $encoding                      [optional] <p>Default: 'UTF-8'</p>
      * @param bool        $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the string.</p>
-     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt, tr</p>
-     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
+     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt,
+     *                                                   tr</p>
+     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
+     *                                                   -> ß</p>
      *
      * @return string
      */
@@ -5205,12 +5216,12 @@ final class UTF8
             if ($case_sensitive) {
                 /** @noinspection NestedPositiveIfStatementsInspection */
                 if (!$needle || \strpos($haystack, $needle) === false) {
-                    return  false;
+                    return false;
                 }
             }
 
             if (!$needle || \mb_stripos($haystack, $needle) === false) {
-                return  false;
+                return false;
             }
         }
 
@@ -5457,7 +5468,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::str_ends_with()
+     * @see        UTF8::str_ends_with()
      * @deprecated <p>please use "UTF8::str_ends_with()"</p>
      */
     public static function str_ends(string $haystack, string $needle): bool
@@ -5589,7 +5600,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::str_istarts_with()
+     * @see        UTF8::str_istarts_with()
      * @deprecated <p>please use "UTF8::str_istarts_with()"</p>
      */
     public static function str_ibegins(string $haystack, string $needle): bool
@@ -5605,7 +5616,7 @@ final class UTF8
      *
      * @return bool
      *
-     * @see UTF8::str_iends_with()
+     * @see        UTF8::str_iends_with()
      * @deprecated <p>please use "UTF8::str_iends_with()"</p>
      */
     public static function str_iends(string $haystack, string $needle): bool
@@ -5673,7 +5684,7 @@ final class UTF8
      * @return false|int
      *                   <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      *
-     * @see UTF8::stripos()
+     * @see        UTF8::stripos()
      * @deprecated <p>please use "UTF8::stripos()"</p>
      */
     public static function str_iindex_first(
@@ -5704,7 +5715,7 @@ final class UTF8
      * @return false|int
      *                   <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      *
-     * @see UTF8::strripos()
+     * @see        UTF8::strripos()
      * @deprecated <p>please use "UTF8::strripos()"</p>
      */
     public static function str_iindex_last(
@@ -5734,7 +5745,7 @@ final class UTF8
      * @return false|int
      *                   <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      *
-     * @see UTF8::strpos()
+     * @see        UTF8::strpos()
      * @deprecated <p>please use "UTF8::strpos()"</p>
      */
     public static function str_index_first(
@@ -5765,7 +5776,7 @@ final class UTF8
      * @return false|int
      *                   <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
      *
-     * @see UTF8::strrpos()
+     * @see        UTF8::strrpos()
      * @deprecated <p>please use "UTF8::strrpos()"</p>
      */
     public static function str_index_last(
@@ -7263,7 +7274,8 @@ final class UTF8
      * @param int|int[]|string|string[] $str                     <p>The string to split into array.</p>
      * @param int                       $length                  [optional] <p>Max character length of each array
      *                                                           element.</p>
-     * @param bool                      $clean_utf8              [optional] <p>Remove non UTF-8 chars from the string.</p>
+     * @param bool                      $clean_utf8              [optional] <p>Remove non UTF-8 chars from the
+     *                                                           string.</p>
      * @param bool                      $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
      *                                                           "mb_substr"</p>
      *
@@ -7794,16 +7806,19 @@ final class UTF8
      * capitalized.
      *
      * @param string              $str
-     * @param array|string[]|null $ignore                        [optional] <p>An array of words not to capitalize or null.
-     *                                                           Default: null</p>
+     * @param array|string[]|null $ignore                        [optional] <p>An array of words not to capitalize or
+     *                                                           null. Default: null</p>
      * @param string              $encoding                      [optional] <p>Default: 'UTF-8'</p>
-     * @param bool                $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the string.</p>
-     * @param string|null         $lang                          [optional] <p>Set the language for special cases: az, el, lt,
-     *                                                           tr</p>
-     * @param bool                $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ ->
-     *                                                           ß</p>
-     * @param bool                $use_trim_first                [optional] <p>true === trim the input string, first</p>
-     * @param string|null         $word_define_chars             [optional] <p>An string of chars that will be used as whitespace separator === words.</p>
+     * @param bool                $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the
+     *                                                           string.</p>
+     * @param string|null         $lang                          [optional] <p>Set the language for special cases: az,
+     *                                                           el, lt, tr</p>
+     * @param bool                $try_to_keep_the_string_length [optional] <p>true === try to keep the string length:
+     *                                                           e.g. ẞ -> ß</p>
+     * @param bool                $use_trim_first                [optional] <p>true === trim the input string,
+     *                                                           first</p>
+     * @param string|null         $word_define_chars             [optional] <p>An string of chars that will be used as
+     *                                                           whitespace separator === words.</p>
      *
      * @return string
      *                <p>The titleized string.</p>
@@ -8174,7 +8189,7 @@ final class UTF8
      *
      * @return string
      *
-     * @see UTF8::to_ascii()
+     * @see        UTF8::to_ascii()
      * @deprecated <p>please use "UTF8::to_ascii()"</p>
      */
     public static function str_transliterate(
@@ -8252,7 +8267,8 @@ final class UTF8
      *
      * @param string $str
      * @param int    $length                                 <p>Desired length of the truncated string.</p>
-     * @param string $substring                              [optional] <p>The substring to append if it can fit. Default:
+     * @param string $substring                              [optional] <p>The substring to append if it can fit.
+     *                                                       Default:
      *                                                       ''</p>
      * @param string $encoding                               [optional] <p>Default: 'UTF-8'</p>
      * @param bool   $ignore_do_not_split_words_for_one_word [optional] <p>Default: false</p>
@@ -8364,8 +8380,10 @@ final class UTF8
      * @param string      $str                           <p>The input string.</p>
      * @param string      $encoding                      [optional] <p>Default: 'UTF-8'</p>
      * @param bool        $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the string.</p>
-     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt, tr</p>
-     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
+     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt,
+     *                                                   tr</p>
+     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
+     *                                                   -> ß</p>
      *
      * @return string
      *                <p>A string in UpperCamelCase.</p>
@@ -8391,7 +8409,7 @@ final class UTF8
      *
      * @return string
      *
-     * @see UTF8::ucfirst()
+     * @see        UTF8::ucfirst()
      * @deprecated <p>please use "UTF8::ucfirst()"</p>
      */
     public static function str_upper_first(
@@ -8498,7 +8516,7 @@ final class UTF8
      *
      * @return false|string
      *
-     * @see UTF8::strstr()
+     * @see        UTF8::strstr()
      * @deprecated <p>please use "UTF8::strstr()"</p>
      */
     public static function strchr(
@@ -8616,7 +8634,7 @@ final class UTF8
      *
      * @return false|string
      *
-     * @see UTF8::stristr()
+     * @see        UTF8::stristr()
      * @deprecated <p>please use "UTF8::stristr()"</p>
      */
     public static function strichr(
@@ -8648,7 +8666,7 @@ final class UTF8
     public static function string(array $array): string
     {
         if ($array === []) {
-            return  '';
+            return '';
         }
 
         $str = '';
@@ -10177,8 +10195,10 @@ final class UTF8
      * @param string      $str                           <p>The string being lowercased.</p>
      * @param string      $encoding                      [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool        $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the string.</p>
-     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt, tr</p>
-     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
+     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt,
+     *                                                   tr</p>
+     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
+     *                                                   -> ß</p>
      *
      * @return string
      *                <p>String with all alphabetic characters converted to lowercase.</p>
@@ -10247,8 +10267,10 @@ final class UTF8
      * @param string      $str                           <p>The string being uppercased.</p>
      * @param string      $encoding                      [optional] <p>Set the charset.</p>
      * @param bool        $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the string.</p>
-     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt, tr</p>
-     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
+     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt,
+     *                                                   tr</p>
+     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
+     *                                                   -> ß</p>
      *
      * @return string
      *                <p>String with all alphabetic characters converted to uppercase.</p>
@@ -10319,8 +10341,8 @@ final class UTF8
      * @param string|string[] $to   [optional] <p>The string being translated to to.</p>
      *
      * @return string
-     *                <p>This function returns a copy of str, translating all occurrences of each character in "from" to the
-     *                corresponding character in "to".</p>
+     *                <p>This function returns a copy of str, translating all occurrences of each character in "from"
+     *                to the corresponding character in "to".</p>
      */
     public static function strtr(string $str, $from, $to = ''): string
     {
@@ -11212,8 +11234,10 @@ final class UTF8
      * @param string      $str                           <p>The input string.</p>
      * @param string      $encoding                      [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool        $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the string.</p>
-     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt, tr</p>
-     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
+     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt,
+     *                                                   tr</p>
+     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
+     *                                                   -> ß</p>
      *
      * @return string
      *                <p>A string with all characters of $str being title-cased.</p>
@@ -11265,7 +11289,7 @@ final class UTF8
      *
      * @return string
      *
-     * @see UTF8::to_ascii()
+     * @see        UTF8::to_ascii()
      * @deprecated <p>please use "UTF8::to_ascii()"</p>
      */
     public static function toAscii(
@@ -11283,7 +11307,7 @@ final class UTF8
      *
      * @return string|string[]
      *
-     * @see UTF8::to_iso8859()
+     * @see        UTF8::to_iso8859()
      * @deprecated <p>please use "UTF8::to_iso8859()"</p>
      */
     public static function toIso8859($str)
@@ -11298,7 +11322,7 @@ final class UTF8
      *
      * @return string|string[]
      *
-     * @see UTF8::to_iso8859()
+     * @see        UTF8::to_iso8859()
      * @deprecated <p>please use "UTF8::to_iso8859()"</p>
      */
     public static function toLatin1($str)
@@ -11313,7 +11337,7 @@ final class UTF8
      *
      * @return string|string[]
      *
-     * @see UTF8::to_utf8()
+     * @see        UTF8::to_utf8()
      * @deprecated <p>please use "UTF8::to_utf8()"</p>
      */
     public static function toUTF8($str)
@@ -11435,7 +11459,7 @@ final class UTF8
      *
      * @return string|string[]
      *
-     * @see UTF8::to_iso8859()
+     * @see        UTF8::to_iso8859()
      * @deprecated <p>please use "UTF8::to_iso8859()"</p>
      */
     public static function to_latin1($str)
@@ -11625,8 +11649,10 @@ final class UTF8
      * @param string      $str                           <p>The input string.</p>
      * @param string      $encoding                      [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool        $clean_utf8                    [optional] <p>Remove non UTF-8 chars from the string.</p>
-     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt, tr</p>
-     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ -> ß</p>
+     * @param string|null $lang                          [optional] <p>Set the language for special cases: az, el, lt,
+     *                                                   tr</p>
+     * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
+     *                                                   -> ß</p>
      *
      * @return string the resulting string
      */
@@ -11698,7 +11724,7 @@ final class UTF8
      *
      * @return string
      *
-     * @see UTF8::ucfirst()
+     * @see        UTF8::ucfirst()
      * @deprecated <p>please use "UTF8::ucfirst()"</p>
      */
     public static function ucword(
@@ -12390,7 +12416,7 @@ final class UTF8
     /**
      * Checks whether the passed string contains only byte sequences that are valid UTF-8 characters.
      *
-     * @see http://hsivonen.iki.fi/php-utf8/
+     * @see          http://hsivonen.iki.fi/php-utf8/
      *
      * @param string $str    <p>The string to be checked.</p>
      * @param bool   $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>

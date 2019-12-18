@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.33 (2019-12-18)
+
+- use "@psalm-immutable"
+
 ### 5.4.32 (2019-12-13)
 
 - fix "UTF8::str_contains_all" -> "strpos(): Empty needle"
