@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace voku\helper;
 
+/**
+ * @psalm-immutable
+ */
 final class UTF8
 {
     /**
