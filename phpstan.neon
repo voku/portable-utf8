@@ -1,4 +1,5 @@
 parameters:
+    reportUnmatchedIgnoredErrors: false
     level: max
     paths:
         - %currentWorkingDirectory%/src/
@@ -8,6 +9,7 @@ parameters:
     autoload_files:
         - %currentWorkingDirectory%/vendor/autoload.php
     ignoreErrors:
+        - '#Function mb_str_split invoked with 2 parameters, 0 required#'
         - '#int<68472, 68479> and 68479 is always true#'
         - '#no value type specified in iterable type#'
         - '#voku\\helper\\UTF8::html_entity_decode\(\) expects string, array<string>|string given#'
