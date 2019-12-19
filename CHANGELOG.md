@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.34 (2019-12-18)
+
+- use "@psalm-pure"
+
 ### 5.4.33 (2019-12-18)
 
 - use "@psalm-immutable"
