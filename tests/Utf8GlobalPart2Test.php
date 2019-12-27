@@ -984,6 +984,55 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testToInt()
+    {
+        $examples = [
+            // int
+            '3'        => 3,
+            '99999999' => 99999999,
+            // float
+            '4.3' => null,
+            '4.8' => null,
+            // Valid UTF-8
+            'κόσμε' => null,
+            // Valid UTF-8 + Invalid Chars
+            "κόσμε\xa0\xa1-öäü-‽‽‽" => null,
+            "123\xf0\x28\x8c\x28"   => null,
+        ];
+
+        $counter = 0;
+        foreach ($examples as $testString => $testResults) {
+            static::assertSame($testResults, UTF8::to_int((string) $testString), $counter . ' - ' . $testString);
+            ++$counter;
+        }
+    }
+
+    public function testToString()
+    {
+        $examples = [
+            // float
+            '4.3' => '4.3',
+            '4.8' => '4.8',
+            // Valid UTF-8
+            'κόσμε' => 'κόσμε',
+            // Valid UTF-8 + Invalid Chars
+            "κόσμε\xa0\xa1-öäü-‽‽‽" => "κόσμε\xa0\xa1-öäü-‽‽‽",
+            "123\xf0\x28\x8c\x28"   => "123\xf0\x28\x8c\x28",
+        ];
+
+        $counter = 0;
+        foreach ($examples as $testString => $testResults) {
+            static::assertSame($testResults, UTF8::to_string($testString), $counter . ' - ' . $testString);
+            ++$counter;
+        }
+
+        static::assertSame('4', UTF8::to_string('4'));
+        static::assertNull(UTF8::to_string(true));
+        static::assertNull(UTF8::to_string(false));
+
+        static::assertContains('WARNING:', UTF8::to_string(new \ReflectionMethod(new UTF8(), 'showSupport')));
+    }
+
     public function testSubstrILeft()
     {
         $str = 'ΚόσμεMiddleEnd';

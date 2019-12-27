@@ -3447,7 +3447,7 @@ final class UTF8
             }
 
             /**
-             * @noinspection PhpComposerExtensionStubsInspection
+             * @noinspection   PhpComposerExtensionStubsInspection
              * @psalm-suppress ImpureMethodCall - it will return the same result for the same file ...
              */
             $finfo_encoding = (new \finfo(\FILEINFO_MIME_ENCODING))->buffer($input);
@@ -5268,20 +5268,31 @@ final class UTF8
     }
 
     /**
-     * WARNING: Print native UTF-8 support (libs), e.g. for debugging.
+     * WARNING: Print native UTF-8 support (libs) by default, e.g. for debugging.
+     *
+     * @param bool $useEcho
      *
      * @psalm-pure
      *
-     * @return void
+     * @return string|void
      */
-    public static function showSupport()
+    public static function showSupport(bool $useEcho = true)
     {
-        echo '<pre>';
+        // init
+        $html = '';
+
+        $html .= '<pre>';
+        /** @noinspection AlterInForeachInspection */
         foreach (self::$SUPPORT as $key => &$value) {
-            echo $key . ' - ' . \print_r($value, true) . "\n<br>";
+            $html .= $key . ' - ' . \print_r($value, true) . "\n<br>";
         }
-        unset($value);
-        echo '</pre>';
+        $html .= '</pre>';
+
+        if ($useEcho) {
+            echo $html;
+        }
+
+        return $html;
     }
 
     /**
@@ -7761,6 +7772,9 @@ final class UTF8
             self::$SUPPORT['mbstring'] === true
         ) {
             if (Bootup::is_php('7.4')) {
+                /**
+                 * @psalm-suppress ImpureFunctionCall - why?
+                 */
                 $return = \mb_str_split($str, $length);
                 if ($return !== false) {
                     return $return;
@@ -12253,6 +12267,64 @@ final class UTF8
         }
 
         return $buf;
+    }
+
+    /**
+     * Returns the given string as an integer, or null if the string isn't numeric.
+     *
+     * @param string $str
+     *
+     * @psalm-pure
+     *
+     * @return int|null
+     *                  <p>null if the string isn't numeric</p>
+     */
+    public static function to_int(string $str)
+    {
+        if ((string) (int) $str === $str) {
+            return (int) $str;
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the given input as string, or null if the input isn't int|float|string
+     * and do not implement the "__toString()" method.
+     *
+     * @param mixed $input
+     *
+     * @psalm-pure
+     *
+     * @return string|null
+     *                     <p>null if the input isn't int|float|string and has no "__toString()" method</p>
+     */
+    public static function to_string($input)
+    {
+        /** @var string $input_type - hack for psalm */
+        $input_type = \gettype($input);
+
+        if (
+            $input_type === 'string'
+            ||
+            $input_type === 'integer'
+            ||
+            $input_type === 'float'
+            ||
+            $input_type === 'double'
+        ) {
+            return (string) $input;
+        }
+
+        if (
+            $input_type === 'object'
+            &&
+            \method_exists($input, '__toString')
+        ) {
+            return (string) $input;
+        }
+
+        return null;
     }
 
     /**
