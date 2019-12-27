@@ -991,8 +991,8 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
             '3'        => 3,
             '99999999' => 99999999,
             // float
-            '4.3' => null,
-            '4.8' => null,
+            '4.3' => 4,
+            '4.8' => 4,
             // Valid UTF-8
             'κόσμε' => null,
             // Valid UTF-8 + Invalid Chars

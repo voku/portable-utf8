@@ -12281,7 +12281,7 @@ final class UTF8
      */
     public static function to_int(string $str)
     {
-        if ((string) (int) $str === $str) {
+        if (\is_numeric($str)) {
             return (int) $str;
         }
 
