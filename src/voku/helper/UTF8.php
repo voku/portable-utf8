@@ -11131,8 +11131,6 @@ final class UTF8
 
                 return \mb_substr($str, $offset, $length);
             }
-
-            return self::substr($str, $offset, $length, $encoding);
         }
 
         //
