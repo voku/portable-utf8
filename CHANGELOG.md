@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.36 (2019-12-30)
+
+- add "is_punctuation()" && "is_printable()"
+
 ### 5.4.35 (2019-12-27)
 
 - add "UTF8::to_int()" && "UTF8::to_string()"
