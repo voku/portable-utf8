@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.37 (2019-12-30)
+
+- fix nesting function error from "UTF8::substr()"
+
 ### 5.4.36 (2019-12-30)
 
 - add "is_punctuation()" && "is_printable()"
