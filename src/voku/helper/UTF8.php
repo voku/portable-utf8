@@ -3360,6 +3360,36 @@ final class UTF8
     }
 
     /**
+     * Returns true if the string contains only punctuation chars, false otherwise.
+     *
+     * @param string $str <p>The input string.</p>
+     *
+     * @psalm-pure
+     *
+     * @return bool
+     *              <p>Whether or not $str contains only punctuation chars.</p>
+     */
+    public static function is_punctuation(string $str): bool
+    {
+        return self::str_matches_pattern($str, '^[[:punct:]]*$');
+    }
+
+    /**
+     * Returns true if the string contains only printable (non-invisible) chars, false otherwise.
+     *
+     * @param string $str <p>The input string.</p>
+     *
+     * @psalm-pure
+     *
+     * @return bool
+     *              <p>Whether or not $str contains only printable (non-invisible) chars.</p>
+     */
+    public static function is_printable(string $str): bool
+    {
+        return self::remove_invisible_characters($str) === $str;
+    }
+
+    /**
      * Checks if a string is 7 bit ASCII.
      *
      * @param string $str <p>The string to check.</p>

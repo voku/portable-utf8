@@ -2738,9 +2738,17 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             ''                                                                                 => '',
         ];
 
+        $count = 0;
         foreach ($testArray as $before => $after) {
             static::assertSame($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
+
+            if ($before !== $after) {
+                if (UTF8::is_printable($before) === false) {
+                    ++$count;
+                }
+            }
         }
+        static::assertSame(10, 2);
 
         static::assertSame('κόσ?με 	%00 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", false, '?'));
         static::assertSame('κόσμε 	 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", true, ''));

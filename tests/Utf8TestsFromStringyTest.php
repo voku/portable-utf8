@@ -565,6 +565,20 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [true, '丹尼爾', 'UTF-8'];
     }
 
+    public function isPunctuationProvider(): \Iterator
+    {
+        yield [true, '****'];
+        yield [true, '*&$();,.?'];
+        yield [false, 'foo bar'];
+        yield [false, 'foobar2"'];
+        yield [false, "\nfoobar\n"];
+        yield [true, '*&$();,.?', 'UTF-8'];
+        yield [false, 'fòô bàř', 'UTF-8'];
+        yield [false, 'fòôbàř2"', 'UTF-8'];
+        yield [false, 'ҠѨњ¨ˆфгШ', 'UTF-8'];
+        yield [false, 'دانيال1 ', 'UTF-8'];
+    }
+
     public function isAlphanumericProvider(): \Iterator
     {
         yield [true, ''];
@@ -2152,6 +2166,20 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testIsAlphanumeric($expected, $str)
     {
         $result = UTF8::is_alphanumeric($str);
+
+        static::assertInternalType('boolean', $result);
+        static::assertSame($expected, $result);
+    }
+
+    /**
+     * @dataProvider isPunctuationProvider()
+     *
+     * @param $expected
+     * @param $str
+     */
+    public function testIsPunctuation($expected, $str)
+    {
+        $result = UTF8::is_punctuation($str);
 
         static::assertInternalType('boolean', $result);
         static::assertSame($expected, $result);
