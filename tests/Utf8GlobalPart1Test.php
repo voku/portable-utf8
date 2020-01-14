@@ -2815,6 +2815,92 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         static::assertSame("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', false));
     }
 
+    /**
+     * @return void
+     */
+    public function testIsUrl()
+    {
+        $testArray = [
+            'test'                                                                                            => false,
+            'öäü'                                                                                             => false,
+            'lall'                                                                                            => false,
+            'foo.jpg'                                                                                         => false,
+            'http://test.de'                                                                                  => true,
+            'http://test.de/lall'                                                                             => true,
+            'http:/google.de'                                                                                 => false,
+            '//google.de'                                                                                     => false,
+            'http://heise.de'                                                                                 => true,
+            'http://heise.de/foo/lall.jpg'                                                                    => true,
+            'https://test.de'                                                                                 => true,
+            'http://test.localhost/'                                                                          => true,
+            'https://lall123.localhost/'                                                                      => true,
+            'http://test_test.localhost/test'                                                                 => true,
+            'http://test_test.localhost'                                                                      => true,
+            'http://localhost/test'                                                                           => true,
+            'http://localhost/'                                                                               => true,
+            'http://testestestest.localhost'                                                                  => true,
+            'http://www.bbc.co.uk'                                                                            => true,
+            'http://www.müller.de'                                                                            => true,
+            'http://foobar.com/hlk/lall.php?tracking=foobar&email=foo@bar.com&winner=1&winnercomment=foo-öäü' => true,
+            'http://.com'                                                                                     => false,
+            'foo://bar'                                                                                       => false,
+            'javascript://test%0Aalert(321)'                                                                  => false,
+            'phar:///home/lmoelleken/hackme.php'                                                              => false,
+            ' '                                                                                               => false,
+            ''                                                                                                => false,
+            'file:///etc/passwd'                                                                              => false,
+            'file://hack'                                                                                     => false,
+            '/etc/passwd'                                                                                     => false,
+        ];
+
+        foreach ($testArray as $testString => $testResult) {
+            static::assertSame($testResult, UTF8::is_url($testString), $testString);
+        }
+
+        // ---
+
+        $testArray = [
+            'test'                                                                                            => false,
+            'öäü'                                                                                             => false,
+            'lall'                                                                                            => false,
+            'foo.jpg'                                                                                         => false,
+            'http://test.de'                                                                                  => true,
+            'http://test.de/lall'                                                                             => true,
+            'http:/google.de'                                                                                 => false,
+            'http/öäü.de'                                                                                     => false,
+            'http//öäü.de'                                                                                    => false,
+            'https//öäü.de'                                                                                   => false,
+            'https://öäü.de'                                                                                  => true,
+            '//google.de'                                                                                     => false,
+            'http://heise.de'                                                                                 => true,
+            'http://heise.de/foo/lall.jpg'                                                                    => true,
+            'https://test.de'                                                                                 => true,
+            'http://test.localhost/'                                                                          => true,
+            'https://lall123.localhost/'                                                                      => true,
+            'http://test_test.localhost/test'                                                                 => true,
+            'http://test_öäü.localhost'                                                                       => true,
+            'http://localhost/test'                                                                           => true,
+            'https://localhost/'                                                                              => true,
+            'http://testestestest.localhost'                                                                  => true,
+            'http://www.bbc.co.uk'                                                                            => true,
+            'http://www.müller.de'                                                                            => true,
+            'http://foobar.com/hlk/lall.php?tracking=foobar&email=foo@bar.com&winner=1&winnercomment=foo-öäü' => true,
+            'http://.com'                                                                                     => false,
+            'foo://bar'                                                                                       => false,
+            'javascript://test%0Aalert(321)'                                                                  => false,
+            'phar:///home/lmoelleken/hackme.php'                                                              => false,
+            ' '                                                                                               => false,
+            ''                                                                                                => false,
+            'file:///etc/passwd'                                                                              => false,
+            'file://hack'                                                                                     => false,
+            '/etc/passwd'                                                                                     => false,
+        ];
+
+        foreach ($testArray as $testString => $testResult) {
+            static::assertSame($testResult, UTF8::is_url($testString), $testString);
+        }
+    }
+
     public function testRtrim()
     {
         $tests = [

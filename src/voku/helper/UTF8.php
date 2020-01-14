@@ -3622,6 +3622,59 @@ final class UTF8
     }
 
     /**
+     * Check if $url is an correct url.
+     *
+     * @param string $url
+     * @param bool   $disallow_localhost
+     *
+     * @psalm-pure
+     *
+     * @return bool
+     */
+    public static function is_url(string $url, bool $disallow_localhost = false): bool
+    {
+        $url = (string) $url;
+        if (!$url) {
+            return false;
+        }
+
+        // WARNING: keep this as hack protection
+        if (self::str_istarts_with_any($url, ['http://', 'https://']) === false) {
+            return false;
+        }
+
+        // e.g. -> the server itself connect to "https://foo.localhost/phpmyadmin/...
+        if ($disallow_localhost) {
+            if (self::str_istarts_with_any(
+                $url,
+                [
+                    'http://localhost',
+                    'https://localhost',
+                    'http://127.0.0.1',
+                    'https://127.0.0.1',
+                    'http://::1',
+                    'https://::1',
+                ]
+            )) {
+                return false;
+            }
+
+            $regex = '/^(?:http(?:s)?:\/\/).*?(?:\.localhost)/iu';
+            if (\preg_match($regex, $url)) {
+                return false;
+            }
+        }
+
+        // INFO: this is needed for e.g. "http://müller.de/" (internationalized domain names) and non ASCII-parameters
+        $regex = '/^(?:http(?:s)?:\\/\\/)(?:[\p{L}0-9][\p{L}0-9_-]*(?:\\.[\p{L}0-9][\p{L}0-9_-]*))(?:\\d+)?(?:\\/\\.*)?/iu';
+        if (\preg_match($regex, $url)) {
+            return true;
+        }
+
+        return \filter_var($url, \FILTER_VALIDATE_URL, ['flags' => \FILTER_FLAG_SCHEME_REQUIRED | \FILTER_FLAG_HOST_REQUIRED]) !== false;
+    }
+
+    /**
      * Try to check if "$str" is a JSON-string.
      *
      * @param string $str                                    <p>The input string.</p>
@@ -4755,6 +4808,7 @@ final class UTF8
         if ($step !== 1) {
             /**
              * @psalm-suppress RedundantConditionGivenDocblockType
+             * @psalm-suppress DocblockTypeContradiction
              */
             if (!\is_numeric($step)) {
                 throw new \InvalidArgumentException('$step need to be a number, type given: ' . \gettype($step));

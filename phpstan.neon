@@ -9,6 +9,7 @@ parameters:
     autoload_files:
         - %currentWorkingDirectory%/vendor/autoload.php
     ignoreErrors:
+        - '#Result of \|\| is always true#'
         - '#Function mb_str_split invoked with 2 parameters, 0 required#'
         - '#int<68472, 68479> and 68479 is always true#'
         - '#no value type specified in iterable type#'
