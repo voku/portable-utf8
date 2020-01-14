@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.38 (2020-01-14)
+
+- add "UTF8::is_url()"
+
 ### 5.4.37 (2019-12-30)
 
 - fix nesting function error from "UTF8::substr()"
