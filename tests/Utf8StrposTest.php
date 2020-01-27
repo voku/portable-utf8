@@ -32,8 +32,6 @@ final class Utf8StrposTest extends \PHPUnit\Framework\TestCase
         $str = "Iñtërnâtiôn\xE9àlizætiøn";
         static::assertSame(15, u::strpos($str, 'æ', 0, 'UTF-8', true));
         static::assertSame(15, u::stripos($str, 'æ', 0, 'UTF-8', true));
-        static::assertSame(15, u::strpos($str, 'æ', 0, true, true));
-        static::assertSame(15, u::stripos($str, 'æ', 0, false, true));
     }
 
     public function testAscii()
@@ -48,6 +46,10 @@ final class Utf8StrposTest extends \PHPUnit\Framework\TestCase
         $str = 'ABC 123 ABC';
         static::assertSame(\strpos($str, 'B', 3), u::strpos($str, 'B', 3));
         static::assertSame(\stripos($str, 'b', 3), u::stripos($str, 'b', 3));
+
+        $str = 'ABC 123 ABC';
+        static::assertSame(\strpos($str, 'B', 3), u::str_index_first($str, 'B', 3));
+        static::assertSame(\stripos($str, 'b', 3), u::str_iindex_first($str, 'b', 3));
     }
 
     public function testEmptyStr()

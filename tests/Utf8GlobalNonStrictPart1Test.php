@@ -2222,6 +2222,12 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
                 UTF8::is_json($before),
                 'tested: ' . $before
             );
+
+            static::assertSame(
+                ($after !== false),
+                UTF8::isJson($before),
+                'tested: ' . $before
+            );
         }
 
         // ----
@@ -2237,12 +2243,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testShowSupport()
     {
-        \ob_start();
-        UTF8::showSupport();
-        $support = \ob_get_contents();
-        \ob_end_clean();
-
-        static::assertContains('mbstring_func_overload', $support);
+        static::assertContains('mbstring_func_overload', UTF8::showSupport(false));
     }
 
     public function testJsonEncode()
@@ -2415,15 +2416,14 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'ISO'          => 'ISO-8859-1',
             'UTF8'         => 'UTF-8',
             'WINDOWS-1251' => 'WINDOWS-1251',
-            ''             => false,
+            ''             => '',
             'Utf-8'        => 'UTF-8',
             'UTF-8'        => 'UTF-8',
             'ISO-8859-5'   => 'ISO-8859-5',
-            false          => false,
         ];
 
         foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::normalizeEncoding($before, false), 'tested: ' . $before);
+            static::assertSame($after, UTF8::normalizeEncoding($before, ''), 'tested: ' . $before);
         }
     }
 
@@ -2750,6 +2750,20 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
                 $test = UTF8::add_bom_to_string($test);
                 static::assertTrue(UTF8::string_has_bom($test));
+            }
+        }
+
+        for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
+            foreach ($testBom as $count => &$test) {
+                $test = UTF8::removeBOM($test);
+
+                static::assertSame(
+                    'Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα',
+                    $test,
+                    'error by ' . $count
+                );
+
+                $test = UTF8::add_bom_to_string($test);
                 static::assertTrue(UTF8::hasBom($test)); // alias
             }
         }
@@ -3008,6 +3022,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         foreach ($tests as $test => $result) {
             static::assertSame($result, UTF8::str_ends_with($str, $test), 'tested: ' . $test);
         }
+
+        foreach ($tests as $test => $result) {
+            static::assertSame($result, UTF8::str_ends($str, $test), 'tested: ' . $test);
+        }
     }
 
     public function testStrIEndsWith()
@@ -3028,6 +3046,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         foreach ($tests as $test => $result) {
             static::assertSame($result, UTF8::str_iends_with($str, $test), 'tested: ' . $test);
         }
+
+        foreach ($tests as $test => $result) {
+            static::assertSame($result, UTF8::str_iends($str, $test), 'tested: ' . $test);
+        }
     }
 
     public function testStrIStartsWith()
@@ -3047,6 +3069,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         foreach ($tests as $test => $result) {
             static::assertSame($result, UTF8::str_istarts_with($str, $test), 'tested: ' . $test);
+        }
+
+        foreach ($tests as $test => $result) {
+            static::assertSame($result, UTF8::str_ibegins($str, $test), 'tested: ' . $test);
         }
     }
 
@@ -3260,6 +3286,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         foreach ($tests as $test => $result) {
             static::assertSame($result, UTF8::str_starts_with($str, $test), 'tested: ' . $test);
+        }
+
+        foreach ($tests as $test => $result) {
+            static::assertSame($result, UTF8::str_begins($str, $test), 'tested: ' . $test);
         }
     }
 
@@ -3508,6 +3538,11 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             static::assertSame(3, UTF8::stripos('DÉJÀ', 'à', 1, 'UTF-8'));
             static::assertFalse(UTF8::stripos('DÉJÀ', 'à', 1, 'ISO'));
         }
+    }
+
+    public function testStrstrInByte()
+    {
+        static::assertSame('ello', UTF8::strstr_in_byte('Hello', 'e'));
     }
 
     public function testStrrirpos()

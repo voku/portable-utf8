@@ -242,6 +242,42 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         static::assertFalse(UTF8::strpbrk($text, 'z'));
     }
 
+    public function testStrrposInByte()
+    {
+        static::assertSame(40, UTF8::strrpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
+        static::assertSame(40, UTF8::strrpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
+        static::assertSame(0, UTF8::strrpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 0));
+        static::assertFalse(UTF8::strrpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 0));
+        static::assertFalse(UTF8::strrpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 1));
+    }
+
+    public function testStrriposInByte()
+    {
+        static::assertSame(40, UTF8::strripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
+        static::assertSame(40, UTF8::strripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
+        static::assertSame(0, UTF8::strripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 0));
+        static::assertSame(0, UTF8::strripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 0));
+        static::assertFalse(UTF8::strripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 1));
+    }
+
+    public function testStriposInByte()
+    {
+        static::assertSame(27, UTF8::stripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
+        static::assertSame(27, UTF8::stripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
+        static::assertSame(0, UTF8::stripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 0));
+        static::assertSame(0, UTF8::stripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 0));
+        static::assertSame(47, UTF8::stripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'A', 1));
+    }
+
+    public function testStrposInByte()
+    {
+        static::assertSame(27, UTF8::strpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
+        static::assertSame(27, UTF8::strpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
+        static::assertSame(0, UTF8::strpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 0));
+        static::assertFalse(UTF8::strpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 0));
+        static::assertFalse(UTF8::strpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'A', 1));
+    }
+
     public function testStrpos()
     {
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
@@ -736,7 +772,7 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(' world', UTF8::strtr('Hello world', 'Hello'));
         static::assertSame('test world', UTF8::strtr('Hello world', ['Hello' => 'test']));
         static::assertSame('Hello world H●◎', UTF8::strtr('Hello world ○●◎', '○', 'Hello'));
-        static::assertSame('Hello world ○●◎', UTF8::strtr('Hello world ○●◎', ['○'], ['Hello']));
+        static::assertSame('Hello world Hello●◎', UTF8::strtr('Hello world ○●◎', ['○'], ['Hello']));
     }
 
     public function testStrwidth()

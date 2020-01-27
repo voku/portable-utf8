@@ -41,6 +41,14 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         return $method->invokeArgs($object, $parameters);
     }
 
+    public function testStrlenInByte()
+    {
+        // string with UTF-16 (LE) BOM + valid UTF-8 && invalid UTF-8
+        $string = "\xFF\xFE" . 'string <strong>with utf-8 chars åèä</strong>' . "\xa0\xa1" . ' - doo-bee doo-bee dooh';
+
+        static::assertSame(74, UTF8::strlen_in_byte($string));
+    }
+
     public function testStrlen()
     {
         // string with UTF-16 (LE) BOM + valid UTF-8 && invalid UTF-8
@@ -234,6 +242,42 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         // not matching char-list
         $text = 'Hello -中文空白-';
         static::assertFalse(UTF8::strpbrk($text, 'z'));
+    }
+
+    public function testStrrposInByte()
+    {
+        static::assertSame(40, UTF8::strrpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
+        static::assertSame(40, UTF8::strrpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
+        static::assertSame(0, UTF8::strrpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 0));
+        static::assertFalse(UTF8::strrpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 0));
+        static::assertFalse(UTF8::strrpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 1));
+    }
+
+    public function testStrriposInByte()
+    {
+        static::assertSame(40, UTF8::strripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
+        static::assertSame(40, UTF8::strripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
+        static::assertSame(0, UTF8::strripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 0));
+        static::assertSame(0, UTF8::strripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 0));
+        static::assertFalse(UTF8::strripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 1));
+    }
+
+    public function testStriposInByte()
+    {
+        static::assertSame(27, UTF8::stripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
+        static::assertSame(27, UTF8::stripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
+        static::assertSame(0, UTF8::stripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 0));
+        static::assertSame(0, UTF8::stripos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 0));
+        static::assertSame(47, UTF8::stripos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'A', 1));
+    }
+
+    public function testStrposInByte()
+    {
+        static::assertSame(27, UTF8::strpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
+        static::assertSame(27, UTF8::strpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白', 0));
+        static::assertSame(0, UTF8::strpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'Z', 0));
+        static::assertFalse(UTF8::strpos_in_byte('ZBC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'z', 0));
+        static::assertFalse(UTF8::strpos_in_byte('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', 'A', 1));
     }
 
     public function testStrpos()
@@ -776,8 +820,16 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame('○●◎◎o wor◎d', UTF8::strtr('Hello world', 'Hello', '○●◎'));
         static::assertSame(' world', UTF8::strtr('Hello world', 'Hello'));
         static::assertSame('test world', UTF8::strtr('Hello world', ['Hello' => 'test']));
+
         static::assertSame('Hello world H●◎', UTF8::strtr('Hello world ○●◎', '○', 'Hello'));
-        static::assertSame('Hello world ○●◎', UTF8::strtr('Hello world ○●◎', ['○'], ['Hello']));
+        static::assertSame('Hello world Hello●◎', UTF8::strtr('Hello world ○●◎', '○', ['Hello']));
+        static::assertSame('Hello world Hello●◎', UTF8::strtr('Hello world ○●◎', ['○'], ['Hello']));
+
+        // specials
+        static::assertSame('Hello world Hel', UTF8::strtr('Hello world ○●◎', '○●◎', 'Hello'));
+        static::assertSame('Hello world Hello●◎', UTF8::strtr('Hello world ○●◎', '○●◎', ['Hello']));
+        static::assertSame('Hello world Hello', UTF8::strtr('Hello world ○●◎', ['○●◎'], ['Hello']));
+        static::assertSame('Hello world HelloHelloHello', UTF8::strtr('Hello world ○●◎', ['○', '●', '◎'], ['Hello', 'Hello', 'Hello']));
     }
 
     public function testStrwidth()
@@ -817,6 +869,70 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             static::assertSame(28, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'ISO', false));
             static::assertSame(27, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'ISO', true));
         }
+    }
+
+    public function testEmpty()
+    {
+        static::assertTrue(UTF8::is_empty(''));
+        static::assertTrue(UTF8::is_empty('0'));
+        static::assertTrue(UTF8::is_empty([]));
+        static::assertTrue(UTF8::is_empty(null));
+        static::assertTrue(UTF8::is_empty(0));
+        static::assertTrue(UTF8::is_empty(0000));
+        static::assertTrue(UTF8::is_empty(0.0000));
+
+        static::assertFalse(UTF8::is_empty('0000'));
+        static::assertFalse(UTF8::is_empty(0.0001));
+        static::assertFalse(UTF8::is_empty(-0.0001));
+        static::assertFalse(UTF8::is_empty([null]));
+        static::assertFalse(UTF8::is_empty([0]));
+        static::assertFalse(UTF8::is_empty([0.0000]));
+        static::assertFalse(UTF8::is_empty([1]));
+        static::assertFalse(UTF8::is_empty(-1));
+        static::assertFalse(UTF8::is_empty(1));
+        static::assertFalse(UTF8::is_empty('1'));
+    }
+
+    public function testEncodeMimeheader()
+    {
+        $text = UTF8::encode_mimeheader('💻 Issue 192 - Machine learning library for php.');
+        static::assertSame(': =?UTF-8?Q?=F0=9F=92=BB=20Issue=20192=20-=20Machine=20learning=20library?=' . "\r\n" . ' =?UTF-8?Q?=20for=20php.?=', $text);
+        static::assertSame(': 💻 Issue 192 - Machine learning library for php.', UTF8::decode_mimeheader($text));
+
+        $text = UTF8::encode_mimeheader('Keld Jørn Simonsen <keld@example.com>');
+        static::assertSame(': =?UTF-8?Q?Keld=20J=C3=B8rn=20Simonsen=20<keld@example.com>?=', $text);
+        static::assertSame(': Keld Jørn Simonsen <keld@example.com>', UTF8::decode_mimeheader($text));
+
+        $text = UTF8::encode_mimeheader('Keld Jørn Simonsen <keld@example.com>', 'UTF-8', 'ISO-8859-1');
+        static::assertSame(': =?ISO-8859-1?Q?Keld=20J=F8rn=20Simonsen=20<keld@example.com>?=', $text);
+        static::assertSame(': Keld Jørn Simonsen <keld@example.com>', UTF8::utf8_encode(UTF8::decode_mimeheader($text, 'ISO-8859-1')));
+    }
+
+    public function testDecodeMimeheader()
+    {
+        $text = '=?ISO-8859-1?Q?Keld_J=F8rn_Simonsen?= <keld@example.com>';
+        static::assertSame('Keld Jørn Simonsen <keld@example.com>', UTF8::utf8_encode(UTF8::decode_mimeheader($text, 'ISO-8859-1')));
+
+        $subject = 'Subject: =?UTF-8?B?UHLDvGZ1bmcgUHLDvGZ1bmc=?=';
+        static::assertSame('Subject: Prüfung Prüfung', UTF8::decode_mimeheader($subject, 'UTF-8'));
+
+        $subject_utf8 = 'Subject: =?UTF-8?Q?=F0=9F=92=BB_Issue_192_-_Machine_learning_library_for?=
+ =?UTF-8?Q?_php.?=';
+        static::assertSame('Subject: 💻 Issue 192 - Machine learning library for php.', UTF8::decode_mimeheader($subject_utf8));
+    }
+
+    public function testSubstrInByte()
+    {
+        static::assertSame('23', UTF8::substr_in_byte(1234, 1, 2));
+        static::assertSame('bc', UTF8::substr_in_byte('abcde', 1, 2));
+        static::assertSame('de', UTF8::substr_in_byte('abcde', -2, 2));
+        static::assertSame('bc', UTF8::substr_in_byte('abcde', 1, 2));
+        static::assertSame('bc', UTF8::substr_in_byte('abcde', 1, 2));
+        static::assertSame('bc', UTF8::substr_in_byte('abcde', 1, 2));
+        static::assertSame('bcd', UTF8::substr_in_byte('abcde', 1, 3));
+        static::assertSame('bc', UTF8::substr_in_byte('abcde', 1, 2));
+
+        // ... no support for UTF-8
     }
 
     public function testSubstr()
