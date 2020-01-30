@@ -13,7 +13,7 @@ final class UTF8
      * (CRLF|([ZWNJ-ZWJ]|T+|L*(LV?V+|LV|LVT)T*|L+|[^Control])[Extend]*|[Control])
      * This regular expression is a work around for http://bugs.exim.org/1279
      *
-     * @deprecated <p>please don't use it</p>
+     * @deprecated <p>please don't use it anymore</p>
      */
     const GRAPHEME_CLUSTER_RX = "(?:\r\n|(?:[ -~\x{200C}\x{200D}]|[ᆨ-ᇹ]+|[ᄀ-ᅟ]*(?:[가개갸걔거게겨계고과괘괴교구궈궤귀규그긔기까깨꺄꺠꺼께껴꼐꼬꽈꽤꾀꾜꾸꿔꿰뀌뀨끄끠끼나내냐냬너네녀녜노놔놰뇌뇨누눠눼뉘뉴느늬니다대댜댸더데뎌뎨도돠돼되됴두둬뒈뒤듀드듸디따때땨떄떠떼뗘뗴또똬뙈뙤뚀뚜뚸뛔뛰뜌뜨띄띠라래랴럐러레려례로롸뢔뢰료루뤄뤠뤼류르릐리마매먀먜머메며몌모뫄뫠뫼묘무뭐뭬뮈뮤므믜미바배뱌뱨버베벼볘보봐봬뵈뵤부붜붸뷔뷰브븨비빠빼뺘뺴뻐뻬뼈뼤뽀뽜뽸뾔뾰뿌뿨쀄쀠쀼쁘쁴삐사새샤섀서세셔셰소솨쇄쇠쇼수숴쉐쉬슈스싀시싸쌔쌰썌써쎄쎠쎼쏘쏴쐐쐬쑈쑤쒀쒜쒸쓔쓰씌씨아애야얘어에여예오와왜외요우워웨위유으의이자재쟈쟤저제져졔조좌좨죄죠주줘줴쥐쥬즈즤지짜째쨔쨰쩌쩨쪄쪠쪼쫘쫴쬐쬬쭈쭤쮀쮜쮸쯔쯰찌차채챠챼처체쳐쳬초촤쵀최쵸추춰췌취츄츠츼치카캐캬컈커케켜켸코콰쾌쾨쿄쿠쿼퀘퀴큐크킈키타태탸턔터테텨톄토톼퇘퇴툐투퉈퉤튀튜트틔티파패퍄퍠퍼페펴폐포퐈퐤푀표푸풔풰퓌퓨프픠피하해햐햬허헤혀혜호화홰회효후훠훼휘휴흐희히]?[ᅠ-ᆢ]+|[가-힣])[ᆨ-ᇹ]*|[ᄀ-ᅟ]+|[^\p{Cc}\p{Cf}\p{Zl}\p{Zp}])[\p{Mn}\p{Me}\x{09BE}\x{09D7}\x{0B3E}\x{0B57}\x{0BBE}\x{0BD7}\x{0CC2}\x{0CD5}\x{0CD6}\x{0D3E}\x{0D57}\x{0DCF}\x{0DDF}\x{200C}\x{200D}\x{1D165}\x{1D16E}-\x{1D172}]*|[\p{Cc}\p{Cf}\p{Zl}\p{Zp}])";
 
@@ -45,7 +45,7 @@ final class UTF8
      * @var array<int, string>
      */
     private static $WHITESPACE = [
-        // NUL Byte
+        // NULL Byte
         0 => "\x0",
         // Tab
         9 => "\x9",
@@ -83,7 +83,7 @@ final class UTF8
         8200 => "\xe2\x80\x88",
         // THIN SPACE
         8201 => "\xe2\x80\x89",
-        //HAIR SPACE
+        // HAIR SPACE
         8202 => "\xe2\x80\x8a",
         // LINE SEPARATOR
         8232 => "\xe2\x80\xa8",
@@ -460,10 +460,11 @@ final class UTF8
      * @psalm-pure
      *
      * @return string[]
-     *                 <p>An array of chars.</p>
+     *                  <p>An array of chars.</p>
      */
     public static function chars(string $str): array
     {
+        /** @var string[] */
         return self::str_split($str);
     }
 
@@ -1099,6 +1100,35 @@ final class UTF8
     }
 
     /**
+     * Convert any two-letter country code (ISO 3166-1) to the corresponding Emoji.
+     *
+     * @see https://en.wikipedia.org/wiki/ISO_3166-1
+     *
+     * @param string $country_code_iso_3166_1 <p>e.g. DE</p>
+     *
+     * @return string
+     *                <p>Emoji or empty string on error.</p>
+     */
+    public static function emoji_from_country_code(string $country_code_iso_3166_1): string
+    {
+        if ($country_code_iso_3166_1 === '') {
+            return '';
+        }
+
+        if (self::strlen($country_code_iso_3166_1) !== 2) {
+            return '';
+        }
+
+        $country_code_iso_3166_1 = \strtoupper($country_code_iso_3166_1);
+
+        $flagOffset = 0x1F1E6;
+        $asciiOffset = 0x41;
+
+        return self::chr(self::ord($country_code_iso_3166_1[0]) - $asciiOffset + $flagOffset) .
+               self::chr(self::ord($country_code_iso_3166_1[1]) - $asciiOffset + $flagOffset);
+    }
+
+    /**
      * Decodes a string which was encoded by "UTF8::emoji_encode()".
      *
      * @param string $str                            <p>The input string.</p>
@@ -1359,6 +1389,7 @@ final class UTF8
             $to_charset = self::normalize_encoding($to_charset, 'UTF-8');
         }
 
+        // always fallback via symfony polyfill
         return \iconv_mime_encode(
             '',
             $str,
@@ -2148,7 +2179,7 @@ final class UTF8
      * @psalm-pure
      *
      * @return string
-     *               <p>'RTL' or 'LTR'.</p>
+     *                <p>'RTL' or 'LTR'.</p>
      */
     public static function getCharDirection(string $char): string
     {
@@ -3693,7 +3724,7 @@ final class UTF8
         }
 
         // INFO: this is needed for e.g. "http://müller.de/" (internationalized domain names) and non ASCII-parameters
-        /** @noinspection SuspiciousAssignmentsInspection - false-positive ? */
+        /** @noinspection SuspiciousAssignmentsInspection - false-positive - https://github.com/kalessil/phpinspectionsea/issues/1500 */
         $regex = '/^(?:http(?:s)?:\\/\\/)(?:[\p{L}0-9][\p{L}0-9_-]*(?:\\.[\p{L}0-9][\p{L}0-9_-]*))(?:\\d+)?(?:\\/\\.*)?/iu';
         /** @noinspection BypassedUrlValidationInspection */
         if (\preg_match($regex, $url)) {
@@ -5479,6 +5510,7 @@ final class UTF8
         int $length = 1,
         bool $clean_utf8 = false
     ): array {
+        /** @var string[] */
         return self::str_split($str, $length, $clean_utf8);
     }
 
@@ -7862,18 +7894,18 @@ final class UTF8
     /**
      * Convert a string to an array of unicode characters.
      *
-     * @param int|string $input                   <p>The string or int to split into array.</p>
-     * @param int        $length                  [optional] <p>Max character length of each array
-     *                                            element.</p>
-     * @param bool       $clean_utf8              [optional] <p>Remove non UTF-8 chars from the
-     *                                            string.</p>
-     * @param bool       $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
-     *                                            "mb_substr"</p>
+     * @param int|int[]|string|string[] $input                   <p>The string or int to split into array.</p>
+     * @param int                       $length                  [optional] <p>Max character length of each array
+     *                                                           element.</p>
+     * @param bool                      $clean_utf8              [optional] <p>Remove non UTF-8 chars from the
+     *                                                           string.</p>
+     * @param bool                      $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
+     *                                                           "mb_substr"</p>
      *
      * @psalm-pure
      *
-     * @return string[]
-     *                  <p>An array containing chunks of chars from the input.</p>
+     * @return string[]|string[][]
+     *                             <p>An array containing chunks of chars from the input.</p>
      *
      * @noinspection SuspiciousBinaryOperationInspection
      */
@@ -8583,7 +8615,7 @@ final class UTF8
         }
 
         // the main substitutions
-        /** @noinspection RegExpDuplicateAlternationBranch - false-positive */
+        /** @noinspection RegExpDuplicateAlternationBranch - false-positive - https://youtrack.jetbrains.com/issue/WI-51002 */
         $str = (string) \preg_replace_callback(
             '~\\b (_*) (?:                                                           # 1. Leading underscore and
                         ( (?<=[ ][/\\\\]) [[:alpha:]]+ [-_[:alpha:]/\\\\]+ |                # 2. file path or 
@@ -13754,6 +13786,7 @@ final class UTF8
         /** @noinspection SuspiciousLoopInspection */
         /** @noinspection AlterInForeachInspection */
         foreach (self::str_split($s) as &$s) {
+            /** @var string $s */
             if ($s === '-') {
                 $class_array[0] = '-' . $class_array[0];
             } elseif (!isset($s[2])) {

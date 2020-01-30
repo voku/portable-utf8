@@ -481,6 +481,15 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame('foo 👹', UTF8::emoji_decode('foo _-_PORTABLE_UTF8_-_308095726_-_627590803_-_8FTU_ELBATROP_-_', true));
     }
 
+    public function testEmojiFromCountryCode()
+    {
+        static::assertSame('🇩🇪', UTF8::emoji_from_country_code('DE'));
+        static::assertSame('🇯🇵', UTF8::emoji_from_country_code('JP'));
+        static::assertSame('🇯🇵', UTF8::emoji_from_country_code('Jp'));
+        static::assertSame('', UTF8::emoji_from_country_code('J'));
+        static::assertSame('', UTF8::emoji_from_country_code(''));
+    }
+
     public function testStrrichr()
     {
         $testArray = [
@@ -895,17 +904,31 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
     public function testEncodeMimeheader()
     {
-        $text = UTF8::encode_mimeheader('💻 Issue 192 - Machine learning library for php.');
-        static::assertSame(': =?UTF-8?Q?=F0=9F=92=BB=20Issue=20192=20-=20Machine=20learning=20library?=' . "\r\n" . ' =?UTF-8?Q?=20for=20php.?=', $text);
-        static::assertSame(': 💻 Issue 192 - Machine learning library for php.', UTF8::decode_mimeheader($text));
+        if (Bootup::is_php('7.1')) {
+            $text = UTF8::encode_mimeheader('💻 Issue 192 - Machine learning library for php.');
+            static::assertSame(': =?UTF-8?Q?=F0=9F=92=BB=20Issue=20192=20-=20Machine=20learning=20library?=' . "\r\n" . ' =?UTF-8?Q?=20for=20php.?=', $text);
+            static::assertSame(': 💻 Issue 192 - Machine learning library for php.', UTF8::decode_mimeheader($text));
 
-        $text = UTF8::encode_mimeheader('Keld Jørn Simonsen <keld@example.com>');
-        static::assertSame(': =?UTF-8?Q?Keld=20J=C3=B8rn=20Simonsen=20<keld@example.com>?=', $text);
-        static::assertSame(': Keld Jørn Simonsen <keld@example.com>', UTF8::decode_mimeheader($text));
+            $text = UTF8::encode_mimeheader('Keld Jørn Simonsen <keld@example.com>');
+            static::assertSame(': =?UTF-8?Q?Keld=20J=C3=B8rn=20Simonsen=20<keld@example.com>?=', $text);
+            static::assertSame(': Keld Jørn Simonsen <keld@example.com>', UTF8::decode_mimeheader($text));
 
-        $text = UTF8::encode_mimeheader('Keld Jørn Simonsen <keld@example.com>', 'UTF-8', 'ISO-8859-1');
-        static::assertSame(': =?ISO-8859-1?Q?Keld=20J=F8rn=20Simonsen=20<keld@example.com>?=', $text);
-        static::assertSame(': Keld Jørn Simonsen <keld@example.com>', UTF8::utf8_encode(UTF8::decode_mimeheader($text, 'ISO-8859-1')));
+            $text = UTF8::encode_mimeheader('Keld Jørn Simonsen <keld@example.com>', 'UTF-8', 'ISO-8859-1');
+            static::assertSame(': =?ISO-8859-1?Q?Keld=20J=F8rn=20Simonsen=20<keld@example.com>?=', $text);
+            static::assertSame(': Keld Jørn Simonsen <keld@example.com>', UTF8::utf8_encode(UTF8::decode_mimeheader($text, 'ISO-8859-1')));
+        } else {
+            $text = UTF8::encode_mimeheader('💻 Issue 192 - Machine learning library for php.');
+            static::assertSame(': =?UTF-8?Q?=F0=9F=92=BB=20Issue=20192=20-=20Mac?==?UTF-8?Q?hine?=' . "\r\n" . ' =?UTF-8?Q?=20learning=20library=20for?==?UTF-8?Q?=20php.?=', $text);
+            static::assertSame(': 💻 Issue 192 - Machine learning library for php.', UTF8::decode_mimeheader($text));
+
+            $text = UTF8::encode_mimeheader('Keld Jørn Simonsen <keld@example.com>');
+            static::assertSame(': =?UTF-8?Q?Keld=20J=C3=B8rn=20Simonsen=20?==?UTF-8?Q?<keld@?=' . "\r\n" . ' =?UTF-8?Q?example.com>?=', $text);
+            static::assertSame(': Keld Jørn Simonsen <keld@example.com>', UTF8::decode_mimeheader($text));
+
+            $text = UTF8::encode_mimeheader('Keld Jørn Simonsen <keld@example.com>', 'UTF-8', 'ISO-8859-1');
+            static::assertSame(': =?ISO-8859-1?Q?Keld=20J=F8rn=20Simonsen=20?==?ISO-8859-1?Q?<kel?=' . "\r\n" . ' =?ISO-8859-1?Q?d@example.com>?=', $text);
+            static::assertSame(': Keld Jørn Simonsen <keld@example.com>', UTF8::utf8_encode(UTF8::decode_mimeheader($text, 'ISO-8859-1')));
+        }
     }
 
     public function testDecodeMimeheader()

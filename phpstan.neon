@@ -1,5 +1,5 @@
 parameters:
-    reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: true
     level: max
     paths:
         - %currentWorkingDirectory%/src/
@@ -10,10 +10,9 @@ parameters:
         - %currentWorkingDirectory%/vendor/autoload.php
     ignoreErrors:
         - '#Result of \|\| is always true#'
-        - '#Function mb_str_split invoked with 2 parameters, 0 required#'
-        - '#int<68472, 68479> and 68479 is always true#'
         - '#no value type specified in iterable type#'
-        - '#voku\\helper\\UTF8::html_entity_decode\(\) expects string, array<string>|string given#'
+        - '#voku\\helper\\UTF8::html_entity_decode\(\) expects string, array<string>\|string given#'
+        - '#voku\\helper\\UTF8::utf8_decode\(\) expects string, array<string>\|string given#'
         - '#voku\\helper\\UTF8::substr_replace\(\) should return array<string>\|string but returns array<array<string>\|string>#'
         - '#voku\\helper\\UTF8::encode\(\) should return string but returns array<string>\|string#'
         - '#voku\\helper\\UTF8::str_replace_first\(\) should return string but returns array<string>\|string#'

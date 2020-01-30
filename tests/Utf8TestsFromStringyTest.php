@@ -309,6 +309,14 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßÅ˚', false];
     }
 
+    public function countSubstrByteProvider(): \Iterator
+    {
+        yield [0, '', 'foo'];
+        yield [0, 'foo', 'bar'];
+        yield [1, 'foo bar', 'foo'];
+        yield [2, 'foo bar', 'o'];
+    }
+
     public function countSubstrProvider(): \Iterator
     {
         yield [0, '', 'foo'];
@@ -1748,6 +1756,19 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider countSubstrByteProvider
+     *
+     * @param $expected
+     * @param $str
+     * @param $substring
+     */
+    public function testCountSubstrInByte($expected, $str, $substring)
+    {
+        $result = UTF8::substr_count_in_byte($str, $substring);
+        static::assertSame($expected, $result, 'tested:' . $str);
+    }
+
+    /**
      * @dataProvider countSubstrProvider()
      *
      * @param      $expected
@@ -2123,6 +2144,22 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testIndexOfLast($expected, $str, $subStr, $offset = 0, $encoding = '')
     {
         $result = UTF8::str_index_last($str, $subStr, $offset, $encoding);
+
+        static::assertSame($expected, $result);
+    }
+
+    /**
+     * @dataProvider indexOfLastProvider()
+     *
+     * @param     $expected
+     * @param     $str
+     * @param     $subStr
+     * @param int $offset
+     * @param     $encoding
+     */
+    public function testIindexOfLast($expected, $str, $subStr, $offset = 0, $encoding = '')
+    {
+        $result = UTF8::str_iindex_last($str, $subStr, $offset, $encoding);
 
         static::assertSame($expected, $result);
     }
