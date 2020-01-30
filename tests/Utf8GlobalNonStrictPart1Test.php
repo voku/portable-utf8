@@ -3386,6 +3386,17 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             ],
             UTF8::str_split(123, 2)
         );
+
+        static::assertSame(
+            [
+                0 => 'foo',
+                1 => 'bar',
+                2 => 'foo',
+                3 => 'bar',
+                4 => 'foo',
+            ],
+            UTF8::str_split('foobarfoobarfoo', 3)
+        );
     }
 
     public function testString()

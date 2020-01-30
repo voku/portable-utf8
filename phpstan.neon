@@ -9,6 +9,9 @@ parameters:
     autoload_files:
         - %currentWorkingDirectory%/vendor/autoload.php
     ignoreErrors:
+        # false-positiv
+        - '#Function mb_str_split invoked with#'
+        # ignore errors
         - '#Result of \|\| is always true#'
         - '#no value type specified in iterable type#'
         - '#voku\\helper\\UTF8::html_entity_decode\(\) expects string, array<string>\|string given#'
