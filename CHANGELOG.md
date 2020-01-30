@@ -1,5 +1,23 @@
 # Changelog
 
+### 5.4.39 (2020-01-30)
+
+- "GRAPHEME_CLUSTER_RX" -> is not used anymore and is now deprecated
+- fix "UTF8::decode_mimeheader" fallback -> now we always use the symfony polyfill (mb_decode_mimeheader has different results)
+- fix "UTF8::get_unique_string()" -> use "mt_rand" as fallback
+- fix "UTF8::strtr()" -> now it works also with arrays
+- fix phpdoc for "UTF8::normalize_line_ending()"
+- fix phpdoc for "UTF8::split()" & "UTF8::str_split()"
+- add "UTF8::str_split_array()"
+- add "UTF8::stripos_in_byte()"
+- add many new tests
+- optimize "UTF8::is_url()" + fix deprecated php (>= 7.3) constants
+- optimize "UTF8::str_limit_after_word()" -> optimize the regex
+- optimize "UTF8::substr()" -> combine "if"-statements
+- optimize "UTF8::str_capitalize_name_helper()" -> performance -> use break
+- code style: fix for "UTF8::filter()"
+- code style: do not use "=== false" | "=== true" for "bool" types
+
 ### 5.4.38 (2020-01-14)
 
 - add "UTF8::is_url()"
