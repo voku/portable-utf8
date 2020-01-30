@@ -1,5 +1,5 @@
 parameters:
-    reportUnmatchedIgnoredErrors: true
+    reportUnmatchedIgnoredErrors: false
     level: max
     paths:
         - %currentWorkingDirectory%/src/
@@ -9,8 +9,6 @@ parameters:
     autoload_files:
         - %currentWorkingDirectory%/vendor/autoload.php
     ignoreErrors:
-        # false-positiv
-        - '#Function mb_str_split invoked with#'
         # ignore errors
         - '#Result of \|\| is always true#'
         - '#no value type specified in iterable type#'
