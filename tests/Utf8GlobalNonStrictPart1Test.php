@@ -21,7 +21,14 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        \error_reporting(\E_STRICT);
+        parent::setUp();
+
+        \error_reporting(\E_ALL ^ \E_USER_WARNING);
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
     }
 
     /**
@@ -106,7 +113,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
     {
         $actual = UTF8::callback(
             [
-                'voku\helper\UTF8',
+                UTF8::class,
                 'strtolower',
             ],
             'Κόσμε-ÖÄÜ'
@@ -217,7 +224,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             static::assertSame($after, UTF8::chr($before, 'UTF8'), 'tested: ' . $before);
         }
 
-        for ($i = 0; $i < 200; ++$i) { // keep this loop for simple performance tests
+        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
 
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
@@ -665,14 +672,14 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $actual => $expected) {
-            static::assertTrue($expected === UTF8::count_chars($actual), 'error by ' . $actual);
+            static::assertSame($expected, UTF8::count_chars($actual), 'error by ' . $actual);
         }
 
         // added invalid UTF-8
         $testArray['白' . "\xa0\xa1" . '白'] = ['白' => 2];
 
         foreach ($testArray as $actual => $expected) {
-            static::assertTrue($expected === UTF8::count_chars($actual, true), 'error by ' . $actual);
+            static::assertSame($expected, UTF8::count_chars($actual, true), 'error by ' . $actual);
         }
     }
 
@@ -687,6 +694,16 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         foreach ($tests as $before => $after) {
             static::assertSame($after, UTF8::decimal_to_chr($before));
         }
+    }
+
+    public function testFilterInput()
+    {
+        static::assertEquals(null, UTF8::filter_input(\INPUT_POST, 'foo', \FILTER_SANITIZE_STRING));
+    }
+
+    public function testFilterInputArray()
+    {
+        static::assertEquals(null, UTF8::filter_input_array(\INPUT_POST, ['version' => FILTER_SANITIZE_ENCODED]));
     }
 
     public function testEncode()
@@ -726,7 +743,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'Berbée'         => 'Berb?e',
         ];
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             foreach ($tests as $before => $after) {
                 static::assertSame($after, UTF8::encode('CP367', $before, true), 'tested: ' . $before); // CP367
             }
@@ -797,7 +814,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'Berbée'         => 'Berb?e',
         ];
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             foreach ($tests as $before => $after) {
                 static::assertSame($after, UTF8::encode('CP367', $before, false), 'tested: ' . $before); // CP367
             }
@@ -895,7 +912,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         // ---
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
 
             static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
@@ -922,7 +939,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
         static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
 
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
             static::assertContains(
@@ -1122,7 +1139,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $filters = [
             'name' => [
                 'filter'  => \FILTER_CALLBACK,
-                'options' => ['voku\helper\UTF8', 'ucwords'],
+                'options' => [UTF8::class, 'ucwords'],
             ],
             'age' => [
                 'filter'  => \FILTER_VALIDATE_INT,
@@ -1198,7 +1215,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             "FÃÂÂÂÂ©dÃÂÂÂÂ©ration Camerounaise de Football\n"                                                                                                                                                                                                                                          => "Fédération Camerounaise de Football\n",
         ];
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             foreach ($testArray as $before => $after) {
                 static::assertSame($after, UTF8::fix_utf8($before), 'tested: ' . $before);
             }
@@ -1409,7 +1426,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         // ---
 
         // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             $testArray = [
                 '&#d;'  => '&#d;',
                 '&d;'   => '&d;',
@@ -1423,6 +1440,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @noinspection HtmlUnknownTag
+     * @noinspection HtmlDeprecatedTag
+     */
     public function testHtmlEntityDecode()
     {
         $testArray = [
@@ -1443,7 +1464,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             $tmpTestArray = [
                 'who&#039;s online'                  => 'who&#039;s online',
                 'who&amp;#039;s online'              => 'who&#039;s online',
@@ -1464,6 +1485,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @noinspection NonShortCircuitBooleanExpressionJS
+     * @noinspection HtmlDeprecatedTag
+     */
     public function testHtmlEntityDecodeWithEntNoQuotes()
     {
         $testArray = [
@@ -1482,7 +1507,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             $tmpTestArray = [
                 'who&#039;s online'                  => 'who&#039;s online',
                 'who&amp;#039;s online'              => 'who&#039;s online',
@@ -1501,6 +1526,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @noinspection HtmlDeprecatedTag
+     */
     public function testHtmlEntityDecodeWithEntQuotes()
     {
         $testArray = [
@@ -1526,7 +1554,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             $tmpTestArray = [
                 'who\'s online&colon;' => 'who\'s online&colon;',
             ];
@@ -1560,6 +1588,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         static::assertSame('Who\'s Online &#20013;', UTF8::html_entity_decode('Who&amp;#039;s Online &#20013;', \ENT_QUOTES, 'ISO'));
     }
 
+    /**
+     * @noinspection HtmlDeprecatedTag
+     */
     public function testHtmlEntityDecodeWithHtml5()
     {
         $testArray = [
@@ -1585,7 +1616,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         // bug is reported: https://github.com/facebook/hhvm/issues/6303#issuecomment-234739899
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             $tmpTestArray = [
                 'who\'s online&colon;' => 'who\'s online:',
             ];
@@ -1736,7 +1767,8 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testIsBinaryNonStrict()
     {
-        static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/fileNotExists.txt'));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertFalse(@UTF8::is_binary_file(__DIR__ . '/fixtures/fileNotExists.txt'));
         static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/latin.txt'));
         $testString1 = \file_get_contents(__DIR__ . '/fixtures/latin.txt');
         static::assertFalse(UTF8::is_binary($testString1, false));
@@ -1836,7 +1868,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testIsBinaryStrict()
     {
-        if (\class_exists('finfo') === false) {
+        if (!\class_exists('finfo')) {
             static::markTestSkipped('finfo is not supported');
         }
 
@@ -1955,6 +1987,10 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @noinspection HtmlUnknownAttribute
+     * @noinspection HtmlPresentationalElement
+     */
     public function testIsHtml()
     {
         $testArray = [
@@ -2581,14 +2617,14 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         static::assertTrue($result);
 
         // bug is already reported: https://github.com/facebook/hhvm/issues/6340
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             static::assertSame('foo 測試', $array['arr'][0]);
             static::assertSame('ການທົດສອບ', $array['arr'][1]);
         }
 
         // bug is already reported: https://github.com/facebook/hhvm/issues/6340
         // -> mb_parse_str not parsing multidimensional array
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             static::assertSame('測試', $array['Iñtërnâtiônàlizætiøn']);
         }
 
@@ -2602,14 +2638,14 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         static::assertTrue($result);
 
         // bug is already reported: https://github.com/facebook/hhvm/issues/6340
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             static::assertSame('foo 測試', $array['arr'][0]);
             static::assertSame('ການທົດສອບ', $array['arr'][1]);
         }
 
         // bug is already reported: https://github.com/facebook/hhvm/issues/6340
         // -> mb_parse_str not parsing multidimensional array
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             static::assertSame('測試', $array['Iñtërnâtiônàlizætiøn']);
         }
 
@@ -2621,7 +2657,8 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $test = '';
 
         /** @noinspection NonSecureParseStrUsageInspection */
-        \parse_str($str); // <- you don't need to use the second parameter, but it is more then recommended!!!
+        /** @noinspection PhpUsageOfSilenceOperatorInspection - deprecated */
+        @\parse_str($str); // <- you don't need to use the second parameter, but it is more then recommended!!!
 
         static::assertSame($foo, [0 => 'bar']);
         static::assertSame($test, 'lall');
@@ -2630,7 +2667,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $foo = '123';
         $test = '';
 
-        if (Bootup::is_php('7.1') === false) {
+        if (!Bootup::is_php('7.1')) {
             /** @noinspection NonSecureParseStrUsageInspection */
             /** @noinspection PhpParamsInspection */
             UTF8::parse_str($str); // <- you need to use the second parameter!!!
@@ -2647,7 +2684,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $result = UTF8::parse_str($str, $array);
 
         // bug reported (hhvm (3.6.6~precise)): https://github.com/facebook/hhvm/issues/7247
-        if (\defined('HHVM_VERSION') === false) {
+        if (!\defined('HHVM_VERSION')) {
             static::assertFalse($result);
         }
     }
@@ -2751,6 +2788,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
                 $test = UTF8::add_bom_to_string($test);
                 static::assertTrue(UTF8::string_has_bom($test));
             }
+            unset($test);
         }
 
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
@@ -2766,6 +2804,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
                 $test = UTF8::add_bom_to_string($test);
                 static::assertTrue(UTF8::hasBom($test)); // alias
             }
+            unset($test);
         }
     }
 
@@ -2861,7 +2900,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         // ---
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame('Iñtërnâtiônàlizætiøn??Iñtërnâtiônàlizætiøn', UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', true));
         } else {
             static::assertSame('IñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn', UTF8::replace_diamond_question_mark("Iñtërnâtiônàlizætiøn\xa0\xa1Iñtërnâtiônàlizætiøn", '?', true));
@@ -3594,6 +3633,8 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $refProperty->setAccessible(true);
 
         $refProperty->setValue(null, $this->oldSupportArray);
+
+        $this->oldSupportArray = null;
     }
 
     protected function disableNativeUtf8Support()
@@ -3615,11 +3656,16 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'already_checked_via_portable_utf8' => true,
             'mbstring'                          => false,
             'mbstring_func_overload'            => false,
+            'mbstring_internal_encoding'        => 'UTF-8',
             'iconv'                             => false,
             'intl'                              => false,
             'intl__transliterator_list_ids'     => [],
             'intlChar'                          => false,
             'pcre_utf8'                         => false,
+            'ctype'                             => true,
+            'finfo'                             => true,
+            'json'                              => true,
+            'symfony_polyfill_used'             => true,
         ];
         $refProperty->setValue(null, $testArray);
     }

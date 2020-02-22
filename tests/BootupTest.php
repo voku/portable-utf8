@@ -214,12 +214,14 @@ www.badplace.com%2fnasty.js%22%3e%3c%2fscript%3e&%C0%AF', $u);
             Bootup::get_random_bytes(16),
         ];
 
-        static::assertTrue(
-            \strlen(\bin2hex($bytes[0])) === 24
+        static::assertSame(
+            \strlen(\bin2hex($bytes[0])),
+            24
         );
 
-        static::assertFalse(
-            $bytes[1] === $bytes[2]
+        static::assertNotSame(
+            $bytes[1],
+            $bytes[2]
         );
     }
 

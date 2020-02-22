@@ -62,15 +62,15 @@ final class Utf8StrcasecmpTest extends \PHPUnit\Framework\TestCase
     {
         $str_x = '';
         $str_y = '';
-        static::assertTrue(u::strcasecmp($str_x, $str_y) === 0);
-        static::assertTrue(u::strcmp($str_x, $str_y) === 0);
+        static::assertSame(u::strcasecmp($str_x, $str_y), 0);
+        static::assertSame(u::strcmp($str_x, $str_y), 0);
     }
 
     public function testLinefeed()
     {
         $str_x = "iñtërnâtiôn\nàlizætiøn";
         $str_y = "IÑTËRNÂTIÔN\nÀLIZÆTIØN";
-        static::assertTrue(u::strcasecmp($str_x, $str_y) === 0);
+        static::assertSame(u::strcasecmp($str_x, $str_y), 0);
         static::assertTrue(u::strcmp($str_x, $str_y) >= 1);
     }
 }

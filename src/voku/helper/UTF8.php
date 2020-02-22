@@ -215,7 +215,9 @@ final class UTF8
     private static $EMOJI_KEYS_REVERSIBLE_CACHE;
 
     /**
-     * @var array<int, string>|null
+     * @var string[]|null
+     *
+     * @psalm-var array<int, string>|null
      */
     private static $CHR;
 
@@ -564,6 +566,10 @@ final class UTF8
              * @psalm-suppress ImpureFunctionCall - is is only a warning
              */
             \trigger_error('UTF8::chr() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
+        }
+
+        if ($code_point <= 0) {
+            return null;
         }
 
         $cache_key = $code_point . '_' . $encoding;
@@ -1124,8 +1130,8 @@ final class UTF8
         $flagOffset = 0x1F1E6;
         $asciiOffset = 0x41;
 
-        return self::chr(self::ord($country_code_iso_3166_1[0]) - $asciiOffset + $flagOffset) .
-               self::chr(self::ord($country_code_iso_3166_1[1]) - $asciiOffset + $flagOffset);
+        return (self::chr((self::ord($country_code_iso_3166_1[0]) - $asciiOffset + $flagOffset)) ?? '') .
+               (self::chr((self::ord($country_code_iso_3166_1[1]) - $asciiOffset + $flagOffset)) ?? '');
     }
 
     /**
@@ -5351,7 +5357,8 @@ final class UTF8
              * @psalm-suppress ImpureFunctionCall - we will reset the value in the next step
              */
             $save = \mb_substitute_character();
-            \mb_substitute_character($replacement_char_helper);
+            /** @noinspection PhpUsageOfSilenceOperatorInspection - ignore "Unknown character" warnings, it's working anyway */
+            @\mb_substitute_character($replacement_char_helper);
             // the polyfill maybe return false, so cast to string
             $str = (string) \mb_convert_encoding($str, 'UTF-8', 'UTF-8');
             \mb_substitute_character($save);
@@ -6360,29 +6367,28 @@ final class UTF8
      *
      * @see http://php.net/manual/en/function.str-ireplace.php
      *
-     * @param mixed $search  <p>
-     *                       Every replacement with search array is
-     *                       performed on the result of previous replacement.
-     *                       </p>
-     * @param mixed $replace <p>
-     *                       </p>
-     * @param mixed $subject <p>
-     *                       If subject is an array, then the search and
-     *                       replace is performed with every entry of
-     *                       subject, and the return value is an array as
-     *                       well.
-     *                       </p>
-     * @param int   $count   [optional] <p>
-     *                       The number of matched and replaced needles will
-     *                       be returned in count which is passed by
-     *                       reference.
-     *                       </p>
+     * @param string|string[] $search      <p>
+     *                                     Every replacement with search array is
+     *                                     performed on the result of previous replacement.
+     *                                     </p>
+     * @param string|string[] $replacement <p>The replacement.</p>
+     * @param mixed           $subject     <p>
+     *                                     If subject is an array, then the search and
+     *                                     replace is performed with every entry of
+     *                                     subject, and the return value is an array as
+     *                                     well.
+     *                                     </p>
+     * @param int             $count       [optional] <p>
+     *                                     The number of matched and replaced needles will
+     *                                     be returned in count which is passed by
+     *                                     reference.
+     *                                     </p>
      *
      * @psalm-pure
      *
      * @return mixed a string or an array of replacements
      */
-    public static function str_ireplace($search, $replace, $subject, &$count = null)
+    public static function str_ireplace($search, $replacement, $subject, &$count = null)
     {
         $search = (array) $search;
 
@@ -6396,8 +6402,10 @@ final class UTF8
             }
         }
 
-        $subject = \preg_replace($search, $replace, $subject, -1, $replace);
-        $count = $replace; // used as reference parameter
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         */
+        $subject = \preg_replace($search, $replacement, $subject, -1, $count);
 
         return $subject;
     }
@@ -7894,18 +7902,18 @@ final class UTF8
     /**
      * Convert a string to an array of unicode characters.
      *
-     * @param int|int[]|string|string[] $input                   <p>The string or int to split into array.</p>
-     * @param int                       $length                  [optional] <p>Max character length of each array
-     *                                                           element.</p>
-     * @param bool                      $clean_utf8              [optional] <p>Remove non UTF-8 chars from the
-     *                                                           string.</p>
-     * @param bool                      $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
-     *                                                           "mb_substr"</p>
+     * @param int|string $input                   <p>The string or int to split into array.</p>
+     * @param int        $length                  [optional] <p>Max character length of each array
+     *                                            element.</p>
+     * @param bool       $clean_utf8              [optional] <p>Remove non UTF-8 chars from the
+     *                                            string.</p>
+     * @param bool       $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
+     *                                            "mb_substr"</p>
      *
      * @psalm-pure
      *
-     * @return string[]|string[][]
-     *                             <p>An array containing chunks of chars from the input.</p>
+     * @return string[]
+     *                  <p>An array containing chunks of chars from the input.</p>
      *
      * @noinspection SuspiciousBinaryOperationInspection
      */
@@ -7920,9 +7928,9 @@ final class UTF8
         }
 
         // this is only an old fallback
-        /**
-         * @psalm-suppress DocblockTypeContradiction
-         */
+        /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
+        /** @var int|int[]|string|string[] $input */
+        $input = $input;
         if (\is_array($input)) {
             /**
              * @psalm-suppress InvalidReturnStatement
@@ -9688,10 +9696,12 @@ final class UTF8
 
         if (self::$SUPPORT['mbstring'] === true) {
             if ($encoding === 'UTF-8') {
-                return \mb_strlen($str);
+                /** @noinspection PhpUsageOfSilenceOperatorInspection - ignore warnings, it's working anyway */
+                return @\mb_strlen($str);
             }
 
-            return \mb_strlen($str, $encoding);
+            /** @noinspection PhpUsageOfSilenceOperatorInspection - ignore warnings, it's working anyway */
+            return @\mb_strlen($str, $encoding);
         }
 
         //
@@ -13309,16 +13319,17 @@ final class UTF8
             return '';
         }
 
-        $chars = [];
+        /** @var string[] $charsArray */
+        $charsArray = [];
         $word_split = '';
         foreach ($str_split as $i => $i_value) {
             if ($i) {
-                $chars[] = $break;
+                $charsArray[] = $break;
                 $word_split .= '#';
             }
 
             foreach (self::str_split($i_value) as $c) {
-                $chars[] = $c;
+                $charsArray[] = $c;
                 if ($c === ' ') {
                     $word_split .= ' ';
                 } else {
@@ -13336,8 +13347,11 @@ final class UTF8
         $max = \mb_strlen($word_split);
         while (($b = \mb_strpos($word_split, '#', $b + 1)) !== false) {
             for (++$i; $i < $b; ++$i) {
-                $str_return .= $chars[$j];
-                unset($chars[$j++]);
+                if (isset($charsArray[$j])) {
+                    $str_return .= $charsArray[$j];
+                    unset($charsArray[$j]);
+                }
+                ++$j;
 
                 // prevent endless loop, e.g. if there is a error in the "mb_*" polyfill
                 if ($i > $max) {
@@ -13346,11 +13360,11 @@ final class UTF8
             }
 
             if (
-                $break === $chars[$j]
+                $break === $charsArray[$j]
                 ||
-                $chars[$j] === ' '
+                $charsArray[$j] === ' '
             ) {
-                unset($chars[$j++]);
+                unset($charsArray[$j++]);
             }
 
             $str_return .= $break;
@@ -13361,7 +13375,7 @@ final class UTF8
             }
         }
 
-        return $str_return . \implode('', $chars);
+        return $str_return . \implode('', $charsArray);
     }
 
     /**
@@ -13781,12 +13795,12 @@ final class UTF8
             return $RX_CLASS_CACHE[$cache_key];
         }
 
-        $class_array = [$class];
+        /** @var string[] $class_array */
+        $class_array[] = $class;
 
         /** @noinspection SuspiciousLoopInspection */
         /** @noinspection AlterInForeachInspection */
         foreach (self::str_split($s) as &$s) {
-            /** @var string $s */
             if ($s === '-') {
                 $class_array[0] = '-' . $class_array[0];
             } elseif (!isset($s[2])) {

@@ -21,7 +21,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        \error_reporting(\E_STRICT);
+        \error_reporting(\E_ALL ^ \E_USER_WARNING);
     }
 
     /**
@@ -63,7 +63,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(74, UTF8::strlen($string, '8bit'));
         static::assertSame(67, UTF8::strlen($string, 'UTF-8', true));
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame(71, UTF8::strlen($string));
             static::assertSame(71, UTF8::strlen($string, 'UTF-8', false));
         }
@@ -78,7 +78,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         }
 
         // only "mbstring" can handle broken UTF-8 by default
-        if (UTF8::mbstring_loaded() === true) {
+        if (UTF8::mbstring_loaded()) {
             static::assertSame(54, UTF8::strlen($string_test2, 'UTF-8', false));
         } else {
             static::assertFalse(UTF8::strlen($string_test2, 'UTF-8', false));
@@ -174,7 +174,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             } elseif ($after > 0) {
                 static::assertTrue(UTF8::strncasecmp($before, 'ü', 10) > 0, 'tested: ' . $before);
             } else {
-                static::assertTrue(UTF8::strncasecmp($before, 'ü', 10) === 0, 'tested: ' . $before);
+                static::assertSame(UTF8::strncasecmp($before, 'ü', 10), 0, 'tested: ' . $before);
             }
         }
     }
@@ -202,7 +202,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             } elseif ($after > 0) {
                 static::assertTrue(UTF8::strncmp($before, 'ü', 10) > 0, 'tested: ' . $before);
             } else {
-                static::assertTrue(UTF8::strncmp($before, 'ü', 10) === 0, 'tested: ' . $before);
+                static::assertSame(UTF8::strncmp($before, 'ü', 10), 0, 'tested: ' . $before);
             }
         }
     }
@@ -213,8 +213,10 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         $text = 'This is a Simple text.';
 
-        static::assertFalse(\strpbrk($text, ''));
-        static::assertSame(\strpbrk($text, ''), UTF8::strpbrk($text, ''));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertFalse(@\strpbrk($text, ''));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame(@\strpbrk($text, ''), UTF8::strpbrk($text, ''));
 
         static::assertFalse(\strpbrk('', 'mi'));
         static::assertSame(\strpbrk('', 'mi'), UTF8::strpbrk('', 'mi'));
@@ -292,7 +294,8 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
             // php compatible tests
 
-            static::assertFalse(\strpos('abc', ''));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\strpos('abc', ''));
             static::assertFalse(UTF8::strpos('abc', ''));
 
             static::assertFalse(\strpos('abc', 'd'));
@@ -409,7 +412,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // --- ISO
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame('κόσμε-äöü', UTF8::strrchr('κόσμεκόσμε-äöü', 'κόσμε', false, 'ISO'));
             static::assertFalse(UTF8::strrchr('Aκόσμεκόσμε-äöü', 'aκόσμε', false, 'ISO'));
 
@@ -520,7 +523,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // --- ISO
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame('Aκόσμεκόσμε-äöü', UTF8::strrichr('Aκόσμεκόσμε-äöü', 'aκόσμε', false, 'ISO'));
             static::assertSame('ü-abc', UTF8::strrichr('äöü-abc', 'ü', false, 'ISO'));
 
@@ -538,7 +541,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         }
 
         // bug is reported: https://github.com/facebook/hhvm/issues/7318
-        if (\defined('HHVM_VERSION') === true) {
+        if (\defined('HHVM_VERSION')) {
             static::assertSame(1, UTF8::strrpos('한국어', '국', 0, '8bit', false));
             static::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'ISO', false));
             static::assertSame(1, UTF8::strrpos('한국어', '국', 0, '', true));
@@ -555,7 +558,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // --- invalid UTF-8
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame(11, UTF8::strrpos("Iñtërnâtiôn\xE9àlizætiøn", 'à', 0, 'UTF-8', true));
             static::assertSame(12, UTF8::strrpos("Iñtërnâtiôn\xE9àlizætiøn", 'à', 0, 'UTF-8', false));
         }
@@ -586,7 +589,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // invalid utf-8
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn"));
             static::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtocasefold("Iñtërnâtiôn\xE9àlizætiøn", true));
         }
@@ -618,7 +621,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         if (
             Bootup::is_php('7.3')
             &&
-            UTF8::mbstring_loaded() === true
+            UTF8::mbstring_loaded()
         ) {
             $tests += [
                 'DÉJÀ Σσς Iıİi' => 'déjà σσς iıi̇i', // result for language === "tr" --> "déjà σσς ııii"
@@ -644,7 +647,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         // ---
 
         // invalid utf-8
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn"));
             static::assertSame('iñtërnâtiôn?àlizætiøn', UTF8::strtolower("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
         }
@@ -654,7 +657,6 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         // ---
 
         UTF8::checkForSupport();
-
         $supportNull = UTF8::getSupportInfo('foo');
         static::assertNull($supportNull);
 
@@ -663,7 +665,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // language === "tr"
         if (
-            UTF8::intl_loaded() === true
+            UTF8::intl_loaded()
             &&
             \in_array('tr-Lower', $support['intl__transliterator_list_ids'], true)
         ) {
@@ -736,7 +738,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         if (
             Bootup::is_php('7.3')
             &&
-            UTF8::mbstring_loaded() === true
+            UTF8::mbstring_loaded()
         ) {
             $tests += [
                 'test-ß' => 'TEST-SS',
@@ -762,7 +764,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // invalid utf-8
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn"));
             static::assertSame('IÑTËRNÂTIÔN?ÀLIZÆTIØN', UTF8::strtoupper("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
         }
@@ -776,7 +778,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // language === "tr"
         if (
-            UTF8::intl_loaded() === true
+            UTF8::intl_loaded()
             &&
             \in_array('tr-Upper', $support['intl__transliterator_list_ids'], true)
         ) {
@@ -860,13 +862,13 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // test + Invalid Chars
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame(21, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
         }
 
         static::assertSame(20, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
         }
 
@@ -1038,32 +1040,41 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     {
         // php compatible tests
 
-        static::assertFalse(\substr_count('', ''));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertFalse(@\substr_count('', ''));
         static::assertFalse(UTF8::substr_count('', ''));
 
-        static::assertFalse(\substr_count('', '', 1));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertFalse(@\substr_count('', '', 1));
         static::assertFalse(UTF8::substr_count('', '', 1));
 
         if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-            static::assertNull(\substr_count('', '', 1, 1));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertNull(@\substr_count('', '', 1, 1));
         } else {
-            static::assertFalse(\substr_count('', '', 1, 1));
+
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\substr_count('', '', 1, 1));
         }
 
         static::assertFalse(UTF8::substr_count('', '', 1, 1));
 
         if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-            static::assertNull(\substr_count('', 'test', 1, 1));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertNull(@\substr_count('', 'test', 1, 1));
         } else {
-            static::assertFalse(\substr_count('', 'test', 1, 1));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\substr_count('', 'test', 1, 1));
         }
 
         static::assertFalse(UTF8::substr_count('', 'test', 1, 1));
 
         if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-            static::assertNull(\substr_count('test', '', 1, 1));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertNull(@\substr_count('test', '', 1, 1));
         } else {
-            static::assertFalse(\substr_count('test', '', 1, 1));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\substr_count('test', '', 1, 1));
         }
 
         static::assertFalse(UTF8::substr_count('test', '', 1, 1));
@@ -1375,11 +1386,16 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             'already_checked_via_portable_utf8' => true,
             'mbstring'                          => false,
             'mbstring_func_overload'            => false,
+            'mbstring_internal_encoding'        => 'UTF-8',
             'iconv'                             => false,
             'intl'                              => false,
             'intl__transliterator_list_ids'     => [],
             'intlChar'                          => false,
             'pcre_utf8'                         => false,
+            'ctype'                             => true,
+            'finfo'                             => true,
+            'json'                              => true,
+            'symfony_polyfill_used'             => true,
         ];
         $refProperty->setValue(null, $testArray);
     }

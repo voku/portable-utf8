@@ -335,7 +335,7 @@ UTF8::chr(0x2603); // '☃'
 Applies callback to all characters of a string.
 
 ```php
-UTF8::chr_map(['voku\helper\UTF8', 'strtolower'], 'Κόσμε'); // ['κ','ό', 'σ', 'μ', 'ε']
+UTF8::chr_map([UTF8::class, 'strtolower'], 'Κόσμε'); // ['κ','ό', 'σ', 'μ', 'ε']
 ```
 
 ##### chr_size_list(string $str) : array
@@ -522,7 +522,7 @@ UTF8::filter_var('-ABC-中文空白-', FILTER_VALIDATE_URL); // false
 
 ```php
 $filters = [ 
-  'name'  => ['filter'  => FILTER_CALLBACK, 'options' => ['voku\helper\UTF8', 'ucwords']],
+  'name'  => ['filter'  => FILTER_CALLBACK, 'options' => [UTF8::class, 'ucwords']],
   'age'   => ['filter'  => FILTER_VALIDATE_INT, 'options' => ['min_range' => 1, 'max_range' => 120]],
   'email' => FILTER_VALIDATE_EMAIL,
 ];

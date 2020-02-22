@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <psalm
-    totallyTyped="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    totallyTyped="false"
+    allowPhpStormGenerics="true"
 >
     <projectFiles>
         <directory name="src" />
@@ -11,5 +12,9 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <ImpureStaticProperty errorLevel="suppress" />
+    </issueHandlers>
 
 </psalm>

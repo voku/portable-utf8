@@ -18,7 +18,7 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        \error_reporting(\E_STRICT);
+        \error_reporting(\E_ALL ^ \E_USER_WARNING);
     }
 
     /**
@@ -1198,11 +1198,16 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
             'already_checked_via_portable_utf8' => true,
             'mbstring'                          => false,
             'mbstring_func_overload'            => false,
+            'mbstring_internal_encoding'        => 'UTF-8',
             'iconv'                             => false,
             'intl'                              => false,
             'intl__transliterator_list_ids'     => [],
             'intlChar'                          => false,
             'pcre_utf8'                         => false,
+            'ctype'                             => true,
+            'finfo'                             => true,
+            'json'                              => true,
+            'symfony_polyfill_used'             => true,
         ];
         $refProperty->setValue(null, $testArray);
     }

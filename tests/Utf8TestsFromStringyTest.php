@@ -13,6 +13,9 @@ use voku\helper\UTF8;
  */
 final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @return \Iterator
+     */
     public function appendProvider(): \Iterator
     {
         yield ['foobar', 'foo', 'bar'];
@@ -29,6 +32,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         static::assertTrue(UTF8::is_utf8($str));
     }
 
+    /**
+     * @return \Iterator
+     */
     public function atProvider(): \Iterator
     {
         yield ['f', 'foo bar', 0];
@@ -41,6 +47,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['', 'fòô bàř', 7, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function betweenProvider(): \Iterator
     {
         yield ['', 'foo', '{', '}'];
@@ -61,6 +70,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['bàř', '{fòô} and {bàř}', '{', '}', 1, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function camelizeProvider(): \Iterator
     {
         yield ['camelCase', 'CamelCase'];
@@ -84,6 +96,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['σamelCase', 'σamel  Case', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function capitalizePersonalNameProvider(): \Iterator
     {
         yield ['Marcus Aurelius', 'marcus aurelius'];
@@ -131,6 +146,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['nickMick', 'nickMick'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function charsProvider(): \Iterator
     {
         yield [[], ''];
@@ -138,6 +156,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [['F', 'ò', 'ô', ' ', 'B', 'à', 'ř'], 'Fòô Bàř'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function hasWhitespaceProvider(): \Iterator
     {
         yield ['foo bar', '  foo   bar  '];
@@ -158,6 +179,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['  ', ' '];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function collapseWhitespaceProvider(): \Iterator
     {
         yield ['foo bar', '  foo   bar  '];
@@ -284,6 +308,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         return \array_merge($singleNeedle, $provider);
     }
 
+    /**
+     * @return \Iterator
+     */
     public function containsProvider(): \Iterator
     {
         yield [true, 'Str contains foo bar', 'foo bar'];
@@ -309,6 +336,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', ' ßÅ˚', false];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function countSubstrByteProvider(): \Iterator
     {
         yield [0, '', 'foo'];
@@ -317,6 +347,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [2, 'foo bar', 'o'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function countSubstrProvider(): \Iterator
     {
         yield [0, '', 'foo'];
@@ -336,6 +369,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [2, 'συγγραφέας', 'Σ', false, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function dasherizeProvider(): \Iterator
     {
         yield ['test-case', 'testCase'];
@@ -359,6 +395,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['σash-case', 'Σash  Case', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function delimitProvider(): \Iterator
     {
         yield ['test*case', 'testCase', '*'];
@@ -377,6 +416,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['σashΘcase', 'Σash  Case', 'Θ', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function endsWithAnyProvider(): \Iterator
     {
         yield [true, 'foo bars', ['foo', 'o bars']];
@@ -392,6 +434,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'fòô bàřs', ['fòô', 'fòô BÀŘS'], true, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function endsWithProvider(): \Iterator
     {
         yield [true, 'foo bars', 'o bars'];
@@ -407,6 +452,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'fòô bàřs', 'fòô BÀŘS', true];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function ensureLeftProvider(): \Iterator
     {
         yield ['foobar', 'foobar', 'f'];
@@ -421,6 +469,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['http://fòôbàř', 'http://fòôbàř', 'http://'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function ensureRightProvider(): \Iterator
     {
         yield ['foobar', 'foobar', 'r'];
@@ -435,6 +486,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòôbàř.com/', 'fòôbàř.com/', '.com/'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function escapeProvider(): \Iterator
     {
         yield ['', ''];
@@ -445,6 +499,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['&#039;œ … &#039;’)', '\'œ … \'’)'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function firstProvider(): \Iterator
     {
         yield ['', '', 1];
@@ -462,6 +519,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô bàř', 'fòô bàř', 8, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function hasLowerCaseProvider(): \Iterator
     {
         yield [false, ''];
@@ -478,6 +538,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [true, 'fòôbÀŘ'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function hasUpperCaseProvider(): \Iterator
     {
         yield [false, ''];
@@ -494,6 +557,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [true, 'FÒÔBàř'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function htmlDecodeProvider(): \Iterator
     {
         yield ['&', '&amp;'];
@@ -503,6 +569,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['>', '&gt;'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function htmlEncodeProvider(): \Iterator
     {
         yield ['&amp;', '&'];
@@ -512,6 +581,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['&gt;', '>'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function humanizeProvider(): \Iterator
     {
         yield ['Author', 'author_id'];
@@ -519,6 +591,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['Συγγραφέας', ' συγγραφέας_id ', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function indexOfLastProvider(): \Iterator
     {
         yield [6, 'foo & bar', 'bar'];
@@ -533,6 +608,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [0, 'fòô & bàř & fòô', 'fòô', -5, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function indexOfProvider(): \Iterator
     {
         yield [6, 'foo & bar', 'bar'];
@@ -547,6 +625,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [12, 'fòô & bàř & fòô', 'fòô', 5, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function insertProvider(): \Iterator
     {
         yield ['foo bar', 'oo bar', 'f', 0];
@@ -559,6 +640,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô bàř', 'fòô bà', 'ř', 6, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isAlphaProvider(): \Iterator
     {
         yield [true, ''];
@@ -573,6 +657,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [true, '丹尼爾', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isPunctuationProvider(): \Iterator
     {
         yield [true, '****'];
@@ -587,6 +674,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'دانيال1 ', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isAlphanumericProvider(): \Iterator
     {
         yield [true, ''];
@@ -604,6 +694,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'دانيال1 ', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isBase64Provider(): \Iterator
     {
         yield [false, ' '];
@@ -615,6 +708,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'Foobar'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isBase64EmptyStringIsAlsoValidProvider(): \Iterator
     {
         yield [false, ' '];
@@ -626,6 +722,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'Foobar'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isBlankProvider(): \Iterator
     {
         yield [true, ''];
@@ -650,6 +749,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, '　1', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isHexadecimalProvider(): \Iterator
     {
         yield [true, ''];
@@ -667,6 +769,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'ABCDEFx', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isJsonProvider(): \Iterator
     {
         yield [false, ''];
@@ -691,6 +796,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, '{"fòô": "bàř"]', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isJsonDoNotIgnoreProvider(): \Iterator
     {
         yield [false, ''];
@@ -715,6 +823,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, '{"fòô": "bàř"]', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isLowerCaseProvider(): \Iterator
     {
         yield [true, ''];
@@ -727,6 +838,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'fòôbÀŘ', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isProvider(): \Iterator
     {
         yield [true, 'Gears\\String\\Str', 'Gears\\String\\Str'];
@@ -744,6 +858,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'Gears\\String\\Str', 'Gears-*-*'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isSerializedProvider(): \Iterator
     {
         yield [false, ''];
@@ -755,6 +872,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [true, \serialize(['fòô' => 'bár']), 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function isUpperCaseProvider(): \Iterator
     {
         yield [true, ''];
@@ -767,6 +887,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'FÒÔBàř', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function lastProvider(): \Iterator
     {
         yield ['', 'foo bar', -5];
@@ -783,6 +906,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô bàř', 'fòô bàř', 8, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function lengthProvider(): \Iterator
     {
         yield [11, '  foo bar  '];
@@ -791,6 +917,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [7, 'fòô bàř', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function linesProvider(): \Iterator
     {
         yield [[], ''];
@@ -812,6 +941,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [['1111111111111111111111'], '1111111111111111111111', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function longestCommonPrefixProvider(): \Iterator
     {
         yield ['foo', 'foobar', 'foo bar'];
@@ -826,6 +958,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['', 'fòô bar', '', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function longestCommonSubstringProvider(): \Iterator
     {
         yield ['foo', 'foobar', 'foo bar'];
@@ -841,6 +976,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['', 'fòô bàř', '', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function longestCommonSuffixProvider(): \Iterator
     {
         yield ['bar', 'foobar', 'foo bar'];
@@ -855,6 +993,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['', 'fòô bàř', '', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function lowerCaseFirstProvider(): \Iterator
     {
         yield ['test', 'Test'];
@@ -864,6 +1005,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [' Σ test', ' Σ test', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function offsetExistsProvider(): \Iterator
     {
         yield [true, 0];
@@ -874,6 +1018,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, -4];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function padBothProvider(): \Iterator
     {
         yield ['foo bar ', 'foo bar', 8];
@@ -889,6 +1036,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function padLeftProvider(): \Iterator
     {
         yield ['  foo bar', 'foo bar', 9];
@@ -900,6 +1050,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['¬ø¬øfòô bàř', 'fòô bàř', 11, '¬ø', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function padProvider(): \Iterator
     {
         // length <= str
@@ -920,6 +1073,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['¬øfòô bàř¬øÿ', 'fòô bàř', 12, '¬øÿ', 'both', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function padRightProvider(): \Iterator
     {
         yield ['foo bar  ', 'foo bar', 9];
@@ -931,12 +1087,18 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô bàř¬ø¬ø', 'fòô bàř', 11, '¬ø', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function prependProvider(): \Iterator
     {
         yield ['foobar', 'bar', 'foo'];
         yield ['fòôbàř', 'bàř', 'fòô', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function regexReplaceProvider(): \Iterator
     {
         yield ['', '', '', ''];
@@ -951,6 +1113,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô', 'bàř', '[[:alpha:]]{3}', 'fòô', 'msr', '/', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function removeHtmlBreakProvider(): \Iterator
     {
         yield ['', ''];
@@ -965,6 +1130,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['\'œ … \'’)', '\'œ … \'’)'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function removeHtmlProvider(): \Iterator
     {
         yield ['', ''];
@@ -975,6 +1143,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['\'œ … \'’)', '\'œ … \'’)'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function removeLeftProvider(): \Iterator
     {
         yield ['foo bar', 'foo bar', ''];
@@ -991,6 +1162,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô bàř', 'fòô bàř', 'òô bàř', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function removeRightProvider(): \Iterator
     {
         yield ['foo bar', 'foo bar', ''];
@@ -1007,6 +1181,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô bàř', 'fòô bàř', 'fòô bà', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function removeXssProvider(): \Iterator
     {
         yield ['', ''];
@@ -1023,6 +1200,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['\'œ … <a href="#foo"> \'’)', '\'œ … <a href="#foo"> \'’)'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function repeatProvider(): \Iterator
     {
         yield ['', 'foo', 0];
@@ -1034,6 +1214,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòôfòôfòô', 'fòô', 3, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function replaceAllProvider(): \Iterator
     {
         yield ['', '', [], ''];
@@ -1068,6 +1251,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['far bàř', 'fòô bàř', ['Fòô'], 'far', 'UTF-8', false];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function replaceBeginningProvider(): \Iterator
     {
         yield ['', '', '', ''];
@@ -1089,6 +1275,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function ireplaceBeginningProvider(): \Iterator
     {
         yield ['', '', '', ''];
@@ -1110,6 +1299,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['bàř fòô bàř', 'fòô bàř fòô bàř', 'fòô ', '', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function replaceEndingProvider(): \Iterator
     {
         yield ['', '', '', ''];
@@ -1131,6 +1323,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function ireplaceEndingProvider(): \Iterator
     {
         yield ['', '', '', ''];
@@ -1152,6 +1347,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô bàř fòô', 'fòô bàř fòô bàř', ' bàř', '', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function replaceProvider(): \Iterator
     {
         yield ['', '', '', ''];
@@ -1184,6 +1382,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['bàř bàř', 'fòô bàř fòô bàř', 'Fòô ', '', 'UTF-8', false];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function reverseProvider(): \Iterator
     {
         yield ['', ''];
@@ -1193,6 +1394,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['∂∆ ˚åß', 'ßå˚ ∆∂', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function safeTruncateProvider(): \Iterator
     {
         yield ['Test foo bar', 'Test foo bar', 12];
@@ -1220,6 +1424,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['What are your plans...', 'What are your plans today?', 22, '...'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function safeTruncateIgnoreWordsProvider(): \Iterator
     {
         yield ['Test foo bar', 'Test foo bar', 12];
@@ -1247,6 +1454,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['What are your plans...', 'What are your plans today?', 22, '...'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function shortenAfterWordProvider(): \Iterator
     {
         yield ['this...', 'this is a test', 5, '...'];
@@ -1255,6 +1465,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['fòô bàř', 'fòô bàř fòô', 8, ''];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function shuffleProvider(): \Iterator
     {
         yield ['foo bar'];
@@ -1262,6 +1475,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['å´¥©¨ˆßå˚ ∆∂˙©å∑¥øœ¬', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function sliceProvider(): \Iterator
     {
         yield ['r', 'foobar', -1];
@@ -1284,6 +1500,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['bà', 'fòôbàř', 3, -1, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function slugifyProvider(): \Iterator
     {
         yield ['foo-bar', ' foo  bar '];
@@ -1303,6 +1522,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['an_odd_string', '--   An odd__   string-_', '_'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function snakeizeProvider(): \Iterator
     {
         yield ['snake_case', 'SnakeCase'];
@@ -1329,6 +1551,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['σamel_case', 'σamel  Case', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function splitProvider(): \Iterator
     {
         yield [['foo,bar,baz'], 'foo,bar,baz', ''];
@@ -1349,6 +1574,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [['fòô', 'bàř', 'baz'], 'fòô,bàř,baz', ',', 10, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function startsWithProvider(): \Iterator
     {
         yield [true, 'foo bars', 'foo bar'];
@@ -1364,6 +1592,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'fòô bàřs', 'fòô BÀŘ', true, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function startsWithProviderAny(): \Iterator
     {
         yield [true, 'foo bars', ['foo bar']];
@@ -1380,6 +1611,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [false, 'fòô bàřs', ['fòô BÀŘ'], true, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function stripWhitespaceProvider(): \Iterator
     {
         yield ['foobar', '  foo   bar  '];
@@ -1401,6 +1635,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['', ''];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function substrProvider(): \Iterator
     {
         yield ['foo bar', 'foo bar', 0];
@@ -1414,6 +1651,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['', 'fòô bàř', 4, 0, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function surroundProvider(): \Iterator
     {
         yield ['__foobar__', 'foobar', '__'];
@@ -1423,6 +1663,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['ßå∆˚ test ßå∆˚', ' test ', 'ßå∆˚'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function swapCaseProvider(): \Iterator
     {
         yield ['TESTcASE', 'testCase'];
@@ -1822,7 +2065,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      */
     public function testEndsWith($expected, $str, $substring, $caseSensitive = true)
     {
-        if ($caseSensitive === true) {
+        if ($caseSensitive) {
             $result = UTF8::str_ends_with($str, $substring);
         } else {
             $result = UTF8::str_iends_with($str, $substring);
@@ -1842,7 +2085,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      */
     public function testEndsWithAny($expected, $str, $substrings, $caseSensitive = true)
     {
-        if ($caseSensitive === true) {
+        if ($caseSensitive) {
             $result = UTF8::str_ends_with_any($str, $substrings);
         } else {
             $result = UTF8::str_iends_with_any($str, $substrings);
@@ -3253,6 +3496,9 @@ d
         static::assertSame($expected, $result);
     }
 
+    /**
+     * @return \Iterator
+     */
     public function titleizeForHumansProvider(): \Iterator
     {
         yield ['TITLE CASE', 'Title Case'];
@@ -3529,7 +3775,7 @@ d
         static::assertSame("man\u{303}", UTF8::str_truncate_safe("man\u{303}ana", 4, '', 'UTF-8', true));
         static::assertSame('man', UTF8::str_truncate_safe("man\u{303}ana", 3, '', 'UTF-8', true));
 
-        if (UTF8::mbstring_loaded() === true) { // only with "mbstring"
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame("κόσμε\xa0", UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
         }
     }
@@ -3721,6 +3967,9 @@ d
         static::assertSame($expected, $result);
     }
 
+    /**
+     * @return \Iterator
+     */
     public function tidyProvider(): \Iterator
     {
         yield ['"I see..."', '“I see…”'];
@@ -3729,6 +3978,9 @@ d
         yield ['Ο συγγραφέας είπε...', 'Ο συγγραφέας είπε…'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function titleizeProvider(): \Iterator
     {
         $ignore = ['at', 'by', 'for', 'in', 'of', 'on', 'out', 'to', 'the'];
@@ -3749,6 +4001,9 @@ d
         yield ['Θα Ήθελα Να Φύγει', '  Θα ήθελα να φύγει  ', null, null, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function toAsciiProvider(): \Iterator
     {
         yield ['foo bar', 'fòô bàř'];
@@ -3774,6 +4029,9 @@ d
         yield ['?', '𐍉'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function toBooleanProvider(): \Iterator
     {
         yield [true, true];
@@ -3797,6 +4055,9 @@ d
         yield [false, '  ', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function toLowerCaseProvider(): \Iterator
     {
         yield ['foo bar', 'FOO BAR'];
@@ -3806,6 +4067,9 @@ d
         yield ['αυτοκίνητο', 'ΑΥΤΟΚΊΝΗΤΟ', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function toSpacesProvider(): \Iterator
     {
         yield ['    foo    bar    ', '	foo	bar	'];
@@ -3816,6 +4080,9 @@ d
         yield ["    fòô\n    bàř", "	fòô\n	bàř"];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function toStringProvider(): \Iterator
     {
         yield ['', null];
@@ -3826,6 +4093,9 @@ d
         yield [' string  ', ' string  '];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function toTabsProvider(): \Iterator
     {
         yield ['	foo	bar	', '    foo    bar    '];
@@ -3835,6 +4105,9 @@ d
         yield ["	fòô\n	bàř", "    fòô\n    bàř"];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function toTitleCaseProvider(): \Iterator
     {
         yield ['Foo Bar', 'foo bar'];
@@ -3844,6 +4117,9 @@ d
         yield ['Αυτοκίνητο Αυτοκίνητο', 'αυτοκίνητο αυτοκίνητο', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function toUpperCaseProvider(): \Iterator
     {
         yield ['FOO BAR', 'foo bar'];
@@ -3853,6 +4129,9 @@ d
         yield ['ΑΥΤΟΚΊΝΗΤΟ', 'αυτοκίνητο', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function trimLeftProvider(): \Iterator
     {
         yield ['foo   bar  ', '  foo   bar  '];
@@ -3872,6 +4151,9 @@ d
         yield ['fòô', '           fòô', null, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function trimProvider(): \Iterator
     {
         yield ['foo   bar', '  foo   bar  '];
@@ -3890,6 +4172,9 @@ d
         yield ['fòô', '           fòô', null, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function trimRightProvider(): \Iterator
     {
         yield ['  foo   bar', '  foo   bar  '];
@@ -3909,6 +4194,9 @@ d
         yield ['fòô', 'fòô           ', null, 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function truncateProvider(): \Iterator
     {
         yield ['Test foo bar', 'Test foo bar', 12];
@@ -3935,6 +4223,9 @@ d
         yield ['What are your pl...', 'What are your plans today?', 19, '...'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function underscoredProvider(): \Iterator
     {
         yield ['test_case', 'testCase'];
@@ -3955,6 +4246,9 @@ d
         yield ['σash_case', 'Σash  Case', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function upperCamelizeProvider(): \Iterator
     {
         yield ['CamelCase', 'camelCase'];
@@ -3972,6 +4266,9 @@ d
         yield ['ΣamelCase', 'Σamel  Case', 'UTF-8'];
     }
 
+    /**
+     * @return \Iterator
+     */
     public function upperCaseFirstProvider(): \Iterator
     {
         yield ['Test', 'Test'];

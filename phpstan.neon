@@ -20,3 +20,5 @@ parameters:
         - '#voku\\helper\\UTF8::encode\(\) should return string but returns array<string>\|string#'
         - '#voku\\helper\\UTF8::str_replace_first\(\) should return string but returns array<string>\|string#'
         - '#voku\\helper\\UTF8::str_replace_last\(\) should return string but returns array<string>\|string#'
+        # prevent breaking change
+        - '#Method voku\\helper\\UTF8::str_split\(\) should return array<string> but returns array<array<string>>#'

@@ -50,14 +50,14 @@ final class Utf8StrrposTest extends \PHPUnit\Framework\TestCase
         static::assertSame(\strrpos($str, 'B'), u::strrpos($str, 'B'));
         if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
             // strrpos() is not working as expected with overload ...
-            static::assertSame(\strrpos($str, 1), u::strrpos($str, 1));
+            static::assertSame(\strrpos($str, '1'), u::strrpos($str, '1'));
         }
 
         $str = 'ABC * ABC';
         static::assertSame(\strrpos($str, 'B'), u::strrpos($str, 'B'));
         if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
             // strrpos() is not working as expected with overload ...
-            static::assertSame(\strrpos($str, 42), u::strrpos($str, 42));
+            static::assertSame(\strrpos($str, '42'), u::strrpos($str, '42'));
         }
     }
 

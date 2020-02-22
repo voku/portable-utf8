@@ -14,6 +14,13 @@ use voku\helper\UTF8 as u;
  */
 final class Utf8ToAsciiTest extends \PHPUnit\Framework\TestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        \error_reporting(\E_ALL ^ \E_USER_WARNING);
+    }
+
     public function testUtf8()
     {
         $str = 'testiñg';
@@ -53,9 +60,9 @@ final class Utf8ToAsciiTest extends \PHPUnit\Framework\TestCase
     public function testToASCII()
     {
         $testsStrict = [];
-        if (UTF8::intl_loaded() === true) {
+        if (UTF8::intl_loaded()) {
 
-      // ---
+            // ---
 
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
             $resultString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-ascii-chart.txt');
