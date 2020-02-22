@@ -2578,7 +2578,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         if (!Bootup::is_php('7.1')) {
             /** @noinspection NonSecureParseStrUsageInspection */
             /** @noinspection PhpParamsInspection */
-            UTF8::parse_str($str); // <- you need to use the second parameter!!!
+            UTF8::parse_str($str, $result); // <- you need to use the second parameter!!!
 
             static::assertSame($foo, '123');
             static::assertSame($test, '');

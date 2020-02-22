@@ -310,7 +310,8 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             static::assertSame(1, \strpos('abc', 'b', 1));
             static::assertSame(1, UTF8::strpos('abc', 'b', 1));
 
-            static::assertFalse(\strpos('abc', 'b', -1));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\strpos('abc', 'b', -1));
             static::assertFalse(UTF8::strpos('abc', 'b', -1));
 
             static::assertSame(1, \strpos('abc', 'b', 0));
@@ -1106,42 +1107,52 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             }
         } else {
             if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-                static::assertNull(\substr_count('abcde', 'de', -2, 2));
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertNull(@\substr_count('abcde', 'de', -2, 2));
             } else {
-                static::assertFalse(\substr_count('abcde', 'de', -2, 2));
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertFalse(@\substr_count('abcde', 'de', -2, 2));
             }
         }
 
         static::assertSame(1, UTF8::substr_count('abcde', 'de', -2, 2));
 
         if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-            static::assertNull(\substr_count('abcde', 'bcg', 1, 2));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertNull(@\substr_count('abcde', 'bcg', 1, 2));
         } else {
-            static::assertSame(0, \substr_count('abcde', 'bcg', 1, 2));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(0, @\substr_count('abcde', 'bcg', 1, 2));
         }
 
         static::assertSame(0, UTF8::substr_count('abcde', 'bcg', 1, 2));
 
         if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-            static::assertNull(\substr_count('abcde', 'BC', 1, 2));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertNull(@\substr_count('abcde', 'BC', 1, 2));
         } else {
-            static::assertSame(0, \substr_count('abcde', 'BC', 1, 2));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(0, @\substr_count('abcde', 'BC', 1, 2));
         }
 
         static::assertSame(0, UTF8::substr_count('abcde', 'BC', 1, 2));
 
         if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-            static::assertNull(\substr_count('abcde', 'bc', 1, 3));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertNull(@\substr_count('abcde', 'bc', 1, 3));
         } else {
-            static::assertSame(1, \substr_count('abcde', 'bc', 1, 3));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(1, @\substr_count('abcde', 'bc', 1, 3));
         }
 
         static::assertSame(1, UTF8::substr_count('abcde', 'bc', 1, 3));
 
         if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-            static::assertNull(\substr_count('abcde', 'cd', 1, 2));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertNull(@\substr_count('abcde', 'cd', 1, 2));
         } else {
-            static::assertSame(0, \substr_count('abcde', 'cd', 1, 2));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(0, @\substr_count('abcde', 'cd', 1, 2));
         }
 
         static::assertSame(0, UTF8::substr_count('abcde', 'cd', 1, 2));

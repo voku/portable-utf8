@@ -1357,7 +1357,8 @@ final class UTF8
             }
         }
 
-        $return = \iconv($from_encoding, $to_encoding, $str);
+        /** @noinspection PhpUsageOfSilenceOperatorInspection - Detected an incomplete multibyte character in input string */
+        $return = @\iconv($from_encoding, $to_encoding, $str);
         if ($return !== false) {
             return $return;
         }
@@ -10003,10 +10004,12 @@ final class UTF8
 
         if (self::$SUPPORT['mbstring'] === true) {
             if ($encoding === 'UTF-8') {
-                return \mb_strpos($haystack, $needle, $offset);
+                /** @noinspection PhpUsageOfSilenceOperatorInspection - Offset not contained in string */
+                return @\mb_strpos($haystack, $needle, $offset);
             }
 
-            return \mb_strpos($haystack, $needle, $offset, $encoding);
+            /** @noinspection PhpUsageOfSilenceOperatorInspection - Offset not contained in string */
+            return @\mb_strpos($haystack, $needle, $offset, $encoding);
         }
 
         //
@@ -10072,7 +10075,8 @@ final class UTF8
         //
 
         if (ASCII::is_ascii($haystack . $needle)) {
-            return \strpos($haystack, $needle, $offset);
+            /** @noinspection PhpUsageOfSilenceOperatorInspection - Offset not contained in string */
+            return @\strpos($haystack, $needle, $offset);
         }
 
         //

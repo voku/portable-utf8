@@ -310,7 +310,8 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
             static::assertSame(1, \strpos('abc', 'b', 1));
             static::assertSame(1, UTF8::strpos('abc', 'b', 1));
 
-            static::assertFalse(\strpos('abc', 'b', -1));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\strpos('abc', 'b', -1));
             static::assertFalse(UTF8::strpos('abc', 'b', -1));
 
             static::assertSame(1, \strpos('abc', 'b', 0));
@@ -968,9 +969,11 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
             }
         } else {
             if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-                static::assertFalse(\substr_count('abcde', 'de', (string) -2)); // offset (int) is encoding (string) + last parameter is not available :/
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertFalse(@\substr_count('abcde', 'de', (string) -2)); // offset (int) is encoding (string) + last parameter is not available :/
             } else {
-                static::assertFalse(\substr_count('abcde', 'de', -2, 2));
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertFalse(@\substr_count('abcde', 'de', -2, 2));
             }
         }
 
