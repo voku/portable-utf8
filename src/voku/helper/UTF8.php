@@ -2585,7 +2585,8 @@ final class UTF8
      */
     public static function hex_to_chr(string $hexdec)
     {
-        return self::decimal_to_chr(\hexdec($hexdec));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection - Invalid characters passed for attempted conversion, these have been ignored */
+        return self::decimal_to_chr(@\hexdec($hexdec));
     }
 
     /**
