@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.40 (2020-02-23)
+
+- fix php notices (run all tests with E_ALL ^ E_USER_WARNING)
+
 ### 5.4.39 (2020-01-30)
 
 - "GRAPHEME_CLUSTER_RX" -> is not used anymore and is now deprecated
