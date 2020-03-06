@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.41 (2020-03-06)
+
+- fix "UTF8::is_utf8*" -> detecting when last byte is incomplete multibyte character | big thanks @daniel-jeffery 
+
 ### 5.4.40 (2020-02-23)
 
 - fix php notices (run all tests with E_ALL ^ E_USER_WARNING)
