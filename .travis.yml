@@ -96,7 +96,7 @@ before_script:
 script:
   - mkdir -p build/logs
   - php vendor/bin/phpunit -c phpunit.xml --debug
-  - if [ "$(phpenv version-name)" == 7.3 ]; then php vendor/bin/phpstan analyse; fi
+  - if [ "$(phpenv version-name)" == 7.3 ]; then php vendor/bin/phpstan analyse --memory-limit=-1; fi
 
 after_script:
   - php vendor/bin/php-coveralls -v
