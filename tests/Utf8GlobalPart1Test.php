@@ -1737,10 +1737,14 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testIsBinaryNonStrict()
     {
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
         static::assertFalse(@UTF8::is_binary_file(__DIR__ . '/fixtures/fileNotExists.txt'));
+
         static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/latin.txt'));
+
         $testString1 = \file_get_contents(__DIR__ . '/fixtures/latin.txt');
         static::assertFalse(UTF8::is_binary($testString1, false));
+
         $testString2 = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
         static::assertFalse(UTF8::is_binary($testString2, false));
 
@@ -2157,34 +2161,34 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             'ますだ, よしひこ'                                             => true,
             '𐭠 𐭡 𐭢 𐭣 𐭤 𐭥 𐭦 𐭧 𐭨 𐭩 𐭪 𐭫 𐭬 𐭭 𐭮 𐭯 𐭰 𐭱 𐭲 𐭸 𐭹 𐭺 𐭻 𐭼 𐭽 𐭾 𐭿' => true,
             // http://www.sonderzeichen.de/Inscriptional_Pahlavi/Unicode-10B7F.html
-            "\xf0\x28\x8c\x28"                                                 => false,
-            "this is an invalid char '\xE9' here"                              => false,
-            "\xC3\xB1"                                                         => true,
-            "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn"               => false,
-            "Iñtërnâtiônàlizætiøn\xA0\xA1Iñtërnâtiônàlizætiøn"                 => false,
-            "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn"             => true,
-            "Iñtërnâtiônàlizætiøn\xE2\x28\xA1Iñtërnâtiônàlizætiøn"             => false,
-            "Iñtërnâtiônàlizætiøn\xE2\x82\x28Iñtërnâtiônàlizætiøn"             => false,
-            "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiøn"         => true,
-            "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiøn"         => false,
-            "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1Iñtërnâtiônàlizætiøn"     => false,
-            "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1Iñtërnâtiônàlizætiøn" => false,
-            "\xC3\x28"                                                         => false,
-            "\xA0\xA1"                                                         => false,
-            "\xE2\x82\xA1"                                                     => true,
-            "\xE2\x28\xA1"                                                     => false,
-            "\xE2\x82\x28"                                                     => false,
-            "\xF0\x90\x8C\xBC"                                                 => true,
-            "\xF0\x28\x8C\xBC"                                                 => false,
-            "\xF0\x90\x28\xBC"                                                 => false,
-            "\xF0\x28\x8C\x28"                                                 => false,
-            "\xF8\xA1\xA1\xA1\xA1"                                             => false,
-            "\xFC\xA1\xA1\xA1\xA1\xA1"                                         => false,
+            "\xf0\x28\x8c\x28"                                                                                                             => false,
+            "this is an invalid char '\xE9' here"                                                                                          => false,
+            "\xC3\xB1"                                                                                                                     => true,
+            "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn"                                                                           => false,
+            "Iñtërnâtiônàlizætiøn\xA0\xA1Iñtërnâtiônàlizætiøn"                                                                             => false,
+            "Iñtërnâtiônàlizætiøn\xE2\x82\xA1Iñtërnâtiônàlizætiøn"                                                                         => true,
+            "Iñtërnâtiônàlizætiøn\xE2\x28\xA1Iñtërnâtiônàlizætiøn"                                                                         => false,
+            "Iñtërnâtiônàlizætiøn\xE2\x82\x28IñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn"             => false,
+            "Iñtërnâtiônàlizætiøn\xF0\x90\x8C\xBCIñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn"         => true,
+            "Iñtërnâtiônàlizætiøn\xF0\x28\x8C\xBCIñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn"         => false,
+            "Iñtërnâtiônàlizætiøn\xf8\xa1\xa1\xa1\xa1IñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn"     => false,
+            "Iñtërnâtiônàlizætiøn\xFC\xA1\xA1\xA1\xA1\xA1IñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiønIñtërnâtiônàlizætiøn" => false,
+            "\xC3\x28"                                                                                                                     => false,
+            "\xA0\xA1"                                                                                                                     => false,
+            "\xE2\x82\xA1"                                                                                                                 => true,
+            "\xE2\x28\xA1"                                                                                                                 => false,
+            "\xE2\x82\x28"                                                                                                                 => false,
+            "\xF0\x90\x8C\xBC"                                                                                                             => true,
+            "\xF0\x28\x8C\xBC"                                                                                                             => false,
+            "\xF0\x90\x28\xBC"                                                                                                             => false,
+            "\xF0\x28\x8C\x28"                                                                                                             => false,
+            "\xF8\xA1\xA1\xA1\xA1"                                                                                                         => false,
+            "\xFC\xA1\xA1\xA1\xA1\xA1"                                                                                                     => false,
         ];
 
         static::assertFalse(UTF8::is_utf8(\array_keys($testArray)));
 
-        for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
+        for ($i = 0; $i < 1000; ++$i) { // keep this loop for simple performance tests
             $counter = 0;
             foreach ($testArray as $actual => $expected) {
                 static::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $counter . ' :' . $actual);
@@ -2595,6 +2599,21 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         if (!\defined('HHVM_VERSION')) {
             static::assertFalse($result);
         }
+    }
+
+    public function testIssue94()
+    {
+        $input = "Montr\xE9al";
+        $output = UTF8::filter($input);
+        static::assertSame('Montréal', $output);
+        // Expected output: Montréal
+        // Real output: Montréal
+
+        $input = "Quantit\xE9";
+        $output = UTF8::filter($input);
+        static::assertSame('Quantité', $output);
+        // Expected output: Quantité
+        // Real output: Quantit�
     }
 
     public function testRange()

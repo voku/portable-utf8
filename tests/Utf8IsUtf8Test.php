@@ -55,10 +55,10 @@ final class Utf8IsUtf8Test extends \PHPUnit\Framework\TestCase
         static::assertFalse(UTF8::is_utf8($str));
     }
 
-    public function testValidUtf8End()
+    public function testInvalidUtf8End()
     {
         $str = "Iñtërnâtiônàlizætiøn\xe9";
-        static::assertTrue(UTF8::is_utf8($str));
+        static::assertFalse(UTF8::is_utf8($str));
     }
 
     public function testValidTwoOctetId()

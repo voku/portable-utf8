@@ -7918,6 +7918,7 @@ final class UTF8
      *                  <p>An array containing chunks of chars from the input.</p>
      *
      * @noinspection SuspiciousBinaryOperationInspection
+     * @noinspection OffsetOperationsInspection
      */
     public static function str_split(
         $input,
@@ -13482,7 +13483,7 @@ final class UTF8
             }
         }
 
-        if (!self::pcre_utf8_support()) {
+        if (self::$SUPPORT['pcre_utf8']) {
             // If even just the first character can be matched, when the /u
             // modifier is used, then it's valid UTF-8. If the UTF-8 is somehow
             // invalid, nothing at all will match, even if the string contains
@@ -13597,7 +13598,7 @@ final class UTF8
             }
         }
 
-        return true;
+        return $mState === 0;
     }
 
     /**
