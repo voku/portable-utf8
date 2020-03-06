@@ -9,7 +9,6 @@ enabled:
 
 disabled:
   - indentation
-  - braces
 
 finder:
   not-name:
