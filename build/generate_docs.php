@@ -134,8 +134,13 @@ foreach ($reflection->getMethods() as $method) {
 
     $methodWithType = $method->getShortName() . '(' . implode(', ', $paramsTypes) . '): ' . implode('|', $returnsTypes);
 
+    $description = (string)$doc->getDescription();
+    if (!$description) {
+        $description = $doc->getSummary();
+    }
+
     $methodTemplate->set('name', $methodWithType);
-    $methodTemplate->set('description', $doc->getDescription());
+    $methodTemplate->set('description', $description);
     $methodTemplate->set('code', '```php echo ```');
 
     $methodIndexTemplate->set('title', $method->getShortName());

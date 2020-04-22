@@ -474,7 +474,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 
 ## access(string $str, int $pos, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Return the character at the specified position: $str[1] like functionality.
 
 **Parameters:**
 - string $str <p>A UTF-8 string.</p>
@@ -496,7 +496,7 @@ INFO: If BOM already existed there, the Input string is returned.
 --------
 ## array_change_key_case(array<string,mixed> $array, int $case, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Changes all keys in an array.
 
 **Parameters:**
 - array<string,mixed> $array <p>The array to work on</p>
@@ -509,7 +509,9 @@ or <strong>CASE_LOWER</strong> (default)</p>
 --------
 ## between(string $str, string $start, string $end, int $offset, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the substring between $start and $end, if found, or an empty
+string. An optional offset may be supplied from which to begin the
+search for the start string.
 
 **Parameters:**
 - string $str 
@@ -523,7 +525,7 @@ or <strong>CASE_LOWER</strong> (default)</p>
 --------
 ## binary_to_str(mixed $bin): mixed
 <a href="#class-methods">↑</a>
-
+Convert binary into a string.
 
 **Parameters:**
 - mixed $bin 1|0
@@ -554,7 +556,7 @@ __nothing__
 --------
 ## char_at(string $str, int $index, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the character at $index, with indexes starting at 0.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -566,7 +568,7 @@ __nothing__
 --------
 ## chars(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns an array consisting of the characters in the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -576,7 +578,7 @@ __nothing__
 --------
 ## checkForSupport(): string
 <a href="#class-methods">↑</a>
-
+This method will auto-detect your server environment for UTF-8 support.
 
 **Parameters:**
 __nothing__
@@ -597,7 +599,7 @@ INFO: opposite to UTF8::ord()
 --------
 ## chr_map(callable $callback, string $str): string
 <a href="#class-methods">↑</a>
-
+Applies callback to all characters of a string.
 
 **Parameters:**
 - callable $callback <p>The callback function.</p>
@@ -621,7 +623,7 @@ INFO: opposite to UTF8::ord()
 --------
 ## chr_to_decimal(string $char): string
 <a href="#class-methods">↑</a>
-
+Get a decimal code representation of a specific character.
 
 **Parameters:**
 - string $char <p>The input character.</p>
@@ -631,7 +633,7 @@ INFO: opposite to UTF8::ord()
 --------
 ## chr_to_hex(int|string $char, string $prefix): string
 <a href="#class-methods">↑</a>
-
+Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.
 
 **Parameters:**
 - int|string $char <p>The input character</p>
@@ -642,7 +644,7 @@ INFO: opposite to UTF8::ord()
 --------
 ## chr_to_int(string $chr): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::chr_to_decimal()"
 
 **Parameters:**
 - string $chr 
@@ -652,7 +654,7 @@ INFO: opposite to UTF8::ord()
 --------
 ## chunk_split(string $body, int $chunk_length, string $end): string
 <a href="#class-methods">↑</a>
-
+Splits a string into smaller chunks and multiple lines, using the specified line ending character.
 
 **Parameters:**
 - string $body <p>The original string to be split.</p>
@@ -664,7 +666,7 @@ INFO: opposite to UTF8::ord()
 --------
 ## clean(string $str, bool $remove_bom, bool $normalize_whitespace, bool $normalize_msword, bool $keep_non_breaking_space, bool $replace_diamond_question_mark, bool $remove_invisible_characters, bool $remove_invisible_characters_url_encoded): bool
 <a href="#class-methods">↑</a>
-
+Accepts a string and removes all non-UTF-8 characters from it + extras if needed.
 
 **Parameters:**
 - string $str <p>The string to be sanitized.</p>
@@ -693,7 +695,7 @@ maybe contains false-positives e.g. aa%0Baa -> aaaa.
 --------
 ## cleanup(string $str): string
 <a href="#class-methods">↑</a>
-
+Clean-up a string and show only printable UTF-8 chars at the end  + fix UTF-8 encoding.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -719,7 +721,9 @@ array<string> for $u_style === true<br>
 --------
 ## collapse_whitespace(string $str): string
 <a href="#class-methods">↑</a>
-
+Trims the string and replaces consecutive whitespace characters with a
+single space. This includes tabs and newline characters, as well as
+multibyte whitespace such as the thin space and ideographic space.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -729,7 +733,7 @@ array<string> for $u_style === true<br>
 --------
 ## count_chars(string $str, bool $clean_utf8, bool $try_to_use_mb_functions): bool
 <a href="#class-methods">↑</a>
-
+Returns count of characters used in a string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -742,7 +746,7 @@ their count as values.</p>
 --------
 ## css_identifier(string $str, array<string,string> $filter, bool $stripe_tags, bool $strtolower): bool
 <a href="#class-methods">↑</a>
-
+Create a valid CSS identifier for e.g. "class"- or "id"-attributes.
 
 **Parameters:**
 - string $str <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
@@ -755,7 +759,7 @@ their count as values.</p>
 --------
 ## css_stripe_media_queries(string $str): string
 <a href="#class-methods">↑</a>
-
+Remove css media-queries.
 
 **Parameters:**
 - string $str 
@@ -765,7 +769,7 @@ their count as values.</p>
 --------
 ## ctype_loaded(): string
 <a href="#class-methods">↑</a>
-
+Checks whether ctype is available on the server.
 
 **Parameters:**
 __nothing__
@@ -775,7 +779,7 @@ __nothing__
 --------
 ## decimal_to_chr(mixed $int): mixed
 <a href="#class-methods">↑</a>
-
+Converts an int value into a UTF-8 character.
 
 **Parameters:**
 - mixed $int 
@@ -785,7 +789,7 @@ __nothing__
 --------
 ## decode_mimeheader(string $str, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Decodes a MIME header field
 
 **Parameters:**
 - string $str 
@@ -797,7 +801,7 @@ or false if an error occurs during the decoding.</p>
 --------
 ## emoji_decode(string $str, bool $use_reversible_string_mappings): bool
 <a href="#class-methods">↑</a>
-
+Decodes a string which was encoded by "UTF8::emoji_encode()".
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -810,7 +814,7 @@ between "emoji_encode" and "emoji_decode".</p>
 --------
 ## emoji_encode(string $str, bool $use_reversible_string_mappings): bool
 <a href="#class-methods">↑</a>
-
+Encode a string with emoji chars into a non-emoji string.
 
 **Parameters:**
 - string $str <p>The input string</p>
@@ -823,7 +827,7 @@ between "emoji_encode" and "emoji_decode"</p>
 --------
 ## emoji_from_country_code(string $country_code_iso_3166_1): string
 <a href="#class-methods">↑</a>
-
+Convert any two-letter country code (ISO 3166-1) to the corresponding Emoji.
 
 **Parameters:**
 - string $country_code_iso_3166_1 <p>e.g. DE</p>
@@ -866,7 +870,7 @@ or false if an error occurs during the encoding.</p>
 --------
 ## extract_text(string $str, string $search, int|null $length, string $replacer_for_skipped_text, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Create an extract from a sentence, so if the search-string was found, it try to centered in the output.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -917,7 +921,7 @@ A empty string will trigger the autodetect anyway.</p>
 --------
 ## file_has_bom(string $file_path): string
 <a href="#class-methods">↑</a>
-
+Checks if a file starts with BOM (Byte Order Mark) character.
 
 **Parameters:**
 - string $file_path <p>Path to a valid file.</p>
@@ -927,7 +931,7 @@ A empty string will trigger the autodetect anyway.</p>
 --------
 ## filter(mixed $var, int $normalization_form, string $leading_combining): string
 <a href="#class-methods">↑</a>
-
+Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
 **Parameters:**
 - mixed $var 
@@ -1095,7 +1099,7 @@ set.
 --------
 ## finfo_loaded(): bool
 <a href="#class-methods">↑</a>
-
+Checks whether finfo is available on the server.
 
 **Parameters:**
 __nothing__
@@ -1105,7 +1109,7 @@ __nothing__
 --------
 ## first_char(string $str, int $n, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the first $n characters of the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1117,7 +1121,7 @@ __nothing__
 --------
 ## fits_inside(string $str, int $box_size): int
 <a href="#class-methods">↑</a>
-
+Check if the number of Unicode characters isn't greater than the specified integer.
 
 **Parameters:**
 - string $str the original string to be checked
@@ -1142,7 +1146,7 @@ See: http://en.wikipedia.org/wiki/Windows-1252
 --------
 ## fix_utf8(string|string[] $str): string|string[]
 <a href="#class-methods">↑</a>
-
+Fix a double (or multiple) encoded UTF8 string.
 
 **Parameters:**
 - string|string[] $str you can use a string or an array of strings
@@ -1153,7 +1157,7 @@ the fixed input-"string"
 --------
 ## getCharDirection(string $char): string
 <a href="#class-methods">↑</a>
-
+Get character of a specific character.
 
 **Parameters:**
 - string $char 
@@ -1163,7 +1167,7 @@ the fixed input-"string"
 --------
 ## getSupportInfo(string|null $key): string|null
 <a href="#class-methods">↑</a>
-
+Check for php-support.
 
 **Parameters:**
 - string|null $key 
@@ -1175,7 +1179,8 @@ otherwise return <strong>null</strong>
 --------
 ## get_file_type(string $str, array $fallback): array
 <a href="#class-methods">↑</a>
-
+Warning: this method only works for some file-types (png, jpg)
+         if you need more supported types, please use e.g. "finfo"
 
 **Parameters:**
 - string $str 
@@ -1209,7 +1214,7 @@ otherwise return <strong>null</strong>
 --------
 ## hasBom(string $str): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::string_has_bom()"
 
 **Parameters:**
 - string $str 
@@ -1219,7 +1224,7 @@ otherwise return <strong>null</strong>
 --------
 ## has_lowercase(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains a lower case char, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1229,7 +1234,7 @@ otherwise return <strong>null</strong>
 --------
 ## has_uppercase(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains an upper case char, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1239,7 +1244,7 @@ otherwise return <strong>null</strong>
 --------
 ## has_whitespace(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains whitespace, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1249,7 +1254,7 @@ otherwise return <strong>null</strong>
 --------
 ## hex_to_chr(string $hexdec): string
 <a href="#class-methods">↑</a>
-
+Converts a hexadecimal value into a UTF-8 character.
 
 **Parameters:**
 - string $hexdec <p>The hexadecimal value.</p>
@@ -1269,7 +1274,7 @@ INFO: opposite to UTF8::int_to_hex()
 --------
 ## html_decode(string $str, int $flags, string $encoding): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::html_entity_decode()"
 
 **Parameters:**
 - string $str 
@@ -1361,7 +1366,7 @@ Handle code as HTML 5.
 --------
 ## html_escape(string $str, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Create a escape html version of the string via "UTF8::htmlspecialchars()".
 
 **Parameters:**
 - string $str 
@@ -1382,7 +1387,7 @@ e.g.: <pre><tag></tag></pre>
 --------
 ## htmlentities(string $str, int $flags, string $encoding, bool $double_encode): bool
 <a href="#class-methods">↑</a>
-
+Convert all applicable characters to HTML entities: UTF-8 version of htmlentities()
 
 **Parameters:**
 - string $str <p>
@@ -1596,7 +1601,7 @@ will be returned, unless either the <b>ENT_IGNORE</b> or
 --------
 ## iconv_loaded(): bool
 <a href="#class-methods">↑</a>
-
+Checks whether iconv is available on the server.
 
 **Parameters:**
 __nothing__
@@ -1606,7 +1611,7 @@ __nothing__
 --------
 ## int_to_chr(mixed $int): mixed
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::decimal_to_chr()"
 
 **Parameters:**
 - mixed $int 
@@ -1627,7 +1632,7 @@ INFO: opposite to UTF8::hex_to_int()
 --------
 ## intlChar_loaded(): string
 <a href="#class-methods">↑</a>
-
+Checks whether intl-char is available on the server.
 
 **Parameters:**
 __nothing__
@@ -1637,7 +1642,7 @@ __nothing__
 --------
 ## intl_loaded(): string
 <a href="#class-methods">↑</a>
-
+Checks whether intl is available on the server.
 
 **Parameters:**
 __nothing__
@@ -1647,7 +1652,7 @@ __nothing__
 --------
 ## isAscii(string $str): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::is_ascii()"
 
 **Parameters:**
 - string $str 
@@ -1657,7 +1662,7 @@ __nothing__
 --------
 ## isBase64(string $str): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::is_base64()"
 
 **Parameters:**
 - string $str 
@@ -1667,7 +1672,7 @@ __nothing__
 --------
 ## isBinary(mixed $str, bool $strict): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::is_binary()"
 
 **Parameters:**
 - mixed $str 
@@ -1678,7 +1683,7 @@ __nothing__
 --------
 ## isBom(string $utf8_chr): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::is_bom()"
 
 **Parameters:**
 - string $utf8_chr 
@@ -1688,7 +1693,7 @@ __nothing__
 --------
 ## isHtml(string $str): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::is_html()"
 
 **Parameters:**
 - string $str 
@@ -1698,7 +1703,7 @@ __nothing__
 --------
 ## isJson(string $str): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::is_json()"
 
 **Parameters:**
 - string $str 
@@ -1708,7 +1713,7 @@ __nothing__
 --------
 ## isUtf16(mixed $str): mixed
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::is_utf16()"
 
 **Parameters:**
 - mixed $str 
@@ -1720,7 +1725,7 @@ __nothing__
 --------
 ## isUtf32(mixed $str): mixed
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::is_utf32()"
 
 **Parameters:**
 - mixed $str 
@@ -1732,7 +1737,7 @@ __nothing__
 --------
 ## isUtf8(string $str, bool $strict): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::is_utf8()"
 
 **Parameters:**
 - string $str 
@@ -1743,7 +1748,7 @@ __nothing__
 --------
 ## is_alpha(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains only alphabetic chars, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1753,7 +1758,7 @@ __nothing__
 --------
 ## is_alphanumeric(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains only alphabetic and numeric chars, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1763,7 +1768,7 @@ __nothing__
 --------
 ## is_ascii(string $str): string
 <a href="#class-methods">↑</a>
-
+Checks if a string is 7 bit ASCII.
 
 **Parameters:**
 - string $str <p>The string to check.</p>
@@ -1776,7 +1781,7 @@ __nothing__
 --------
 ## is_base64(mixed|string $str, bool $empty_string_is_valid): bool
 <a href="#class-methods">↑</a>
-
+Returns true if the string is base64 encoded, false otherwise.
 
 **Parameters:**
 - mixed|string $str <p>The input string.</p>
@@ -1787,7 +1792,7 @@ __nothing__
 --------
 ## is_binary(mixed $input, bool $strict): bool
 <a href="#class-methods">↑</a>
-
+Check if the input is binary... (is look like a hack).
 
 **Parameters:**
 - mixed $input 
@@ -1798,7 +1803,7 @@ __nothing__
 --------
 ## is_binary_file(string $file): string
 <a href="#class-methods">↑</a>
-
+Check if the file is binary.
 
 **Parameters:**
 - string $file 
@@ -1808,7 +1813,7 @@ __nothing__
 --------
 ## is_blank(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains only whitespace chars, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1839,7 +1844,7 @@ empty() does not generate a warning if the variable does not exist.
 --------
 ## is_hexadecimal(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains only hexadecimal chars, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1849,7 +1854,7 @@ empty() does not generate a warning if the variable does not exist.
 --------
 ## is_html(string $str): string
 <a href="#class-methods">↑</a>
-
+Check if the string contains any HTML tags.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1859,7 +1864,7 @@ empty() does not generate a warning if the variable does not exist.
 --------
 ## is_json(string $str, bool $only_array_or_object_results_are_valid): bool
 <a href="#class-methods">↑</a>
-
+Try to check if "$str" is a JSON-string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1881,7 +1886,7 @@ results.</p>
 --------
 ## is_printable(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains only printable (non-invisible) chars, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1891,7 +1896,7 @@ results.</p>
 --------
 ## is_punctuation(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains only punctuation chars, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1901,7 +1906,7 @@ results.</p>
 --------
 ## is_serialized(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string is serialized, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1911,7 +1916,8 @@ results.</p>
 --------
 ## is_uppercase(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains only lower case chars, false
+otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -1921,7 +1927,7 @@ results.</p>
 --------
 ## is_url(string $url, bool $disallow_localhost): bool
 <a href="#class-methods">↑</a>
-
+Check if $url is an correct url.
 
 **Parameters:**
 - string $url 
@@ -1932,7 +1938,7 @@ results.</p>
 --------
 ## is_utf16(mixed $str, bool $check_if_string_is_binary): bool
 <a href="#class-methods">↑</a>
-
+Check if the string is UTF-16.
 
 **Parameters:**
 - mixed $str <p>The input string.</p>
@@ -1945,7 +1951,7 @@ results.</p>
 --------
 ## is_utf32(mixed $str, bool $check_if_string_is_binary): bool
 <a href="#class-methods">↑</a>
-
+Check if the string is UTF-32.
 
 **Parameters:**
 - mixed $str <p>The input string.</p>
@@ -1958,7 +1964,7 @@ results.</p>
 --------
 ## is_utf8(int|string|string[]|null $str, bool $strict): bool
 <a href="#class-methods">↑</a>
-
+Checks whether the passed input contains only byte sequences that appear valid UTF-8.
 
 **Parameters:**
 - int|string|string[]|null $str <p>The input to be checked.</p>
@@ -1969,7 +1975,8 @@ results.</p>
 --------
 ## json_decode(string $json, bool $assoc, int $depth, int $options): int
 <a href="#class-methods">↑</a>
-
+(PHP 5 &gt;= 5.2.0, PECL json &gt;= 1.2.0)<br/>
+Decodes a JSON string
 
 **Parameters:**
 - string $json <p>
@@ -2003,7 +2010,8 @@ is deeper than the recursion limit.</p>
 --------
 ## json_encode(mixed $value, int $options, int $depth): int
 <a href="#class-methods">↑</a>
-
+(PHP 5 &gt;= 5.2.0, PECL json &gt;= 1.2.0)<br/>
+Returns the JSON representation of a value.
 
 **Parameters:**
 - mixed $value <p>
@@ -2040,7 +2048,7 @@ Set the maximum depth. Must be greater than zero.
 --------
 ## json_loaded(): int
 <a href="#class-methods">↑</a>
-
+Checks whether JSON is available on the server.
 
 **Parameters:**
 __nothing__
@@ -2050,7 +2058,7 @@ __nothing__
 --------
 ## lcfirst(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+Makes string's first char lowercase.
 
 **Parameters:**
 - string $str <p>The input string</p>
@@ -2066,7 +2074,7 @@ tr</p>
 --------
 ## lcword(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::lcfirst()"
 
 **Parameters:**
 - string $str 
@@ -2080,7 +2088,7 @@ tr</p>
 --------
 ## lcwords(string $str, string[] $exceptions, string $char_list, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+Lowercase for all words in the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2099,7 +2107,7 @@ tr</p>
 --------
 ## lowerCaseFirst(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::lcfirst()"
 
 **Parameters:**
 - string $str 
@@ -2113,7 +2121,7 @@ tr</p>
 --------
 ## ltrim(string $str, string|null $chars): string|null
 <a href="#class-methods">↑</a>
-
+Strip whitespace or other characters from the beginning of a UTF-8 string.
 
 **Parameters:**
 - string $str <p>The string to be trimmed</p>
@@ -2124,7 +2132,7 @@ tr</p>
 --------
 ## max(string[]|string $arg): string[]|string
 <a href="#class-methods">↑</a>
-
+Returns the UTF-8 character with the maximum code point in the given data.
 
 **Parameters:**
 - string[]|string $arg <p>A UTF-8 encoded string or an array of such strings.</p>
@@ -2134,7 +2142,8 @@ tr</p>
 --------
 ## max_chr_width(string $str): string
 <a href="#class-methods">↑</a>
-
+Calculates and returns the maximum number of bytes taken by any
+UTF-8 encoded character in the given string.
 
 **Parameters:**
 - string $str <p>The original Unicode string.</p>
@@ -2144,7 +2153,7 @@ tr</p>
 --------
 ## mbstring_loaded(): string
 <a href="#class-methods">↑</a>
-
+Checks whether mbstring is available on the server.
 
 **Parameters:**
 __nothing__
@@ -2154,7 +2163,7 @@ __nothing__
 --------
 ## min(mixed $arg): mixed
 <a href="#class-methods">↑</a>
-
+Returns the UTF-8 character with the minimum code point in the given data.
 
 **Parameters:**
 - mixed $arg <strong>A UTF-8 encoded string or an array of such strings.</strong>
@@ -2164,7 +2173,7 @@ __nothing__
 --------
 ## normalizeEncoding(mixed $encoding, mixed $fallback): mixed
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::normalize_encoding()"
 
 **Parameters:**
 - mixed $encoding 
@@ -2175,7 +2184,7 @@ __nothing__
 --------
 ## normalize_encoding(mixed $encoding, mixed $fallback): mixed
 <a href="#class-methods">↑</a>
-
+Normalize the encoding-"name" input.
 
 **Parameters:**
 - mixed $encoding <p>e.g.: ISO, UTF8, WINDOWS-1251 etc.</p>
@@ -2186,7 +2195,7 @@ __nothing__
 --------
 ## normalize_line_ending(string $str, string|string[] $replacer): string|string[]
 <a href="#class-methods">↑</a>
-
+Standardize line ending to unix-like.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2198,7 +2207,7 @@ here.</p>
 --------
 ## normalize_msword(string $str): string
 <a href="#class-methods">↑</a>
-
+Normalize some MS Word special characters.
 
 **Parameters:**
 - string $str <p>The string to be normalized.</p>
@@ -2208,7 +2217,7 @@ here.</p>
 --------
 ## normalize_whitespace(string $str, bool $keep_non_breaking_space, bool $keep_bidi_unicode_controls): bool
 <a href="#class-methods">↑</a>
-
+Normalize the whitespace.
 
 **Parameters:**
 - string $str <p>The string to be normalized.</p>
@@ -2246,7 +2255,7 @@ if the second parameter is not set!
 --------
 ## pcre_utf8_support(): bool
 <a href="#class-methods">↑</a>
-
+Checks if \u modifier is available that enables Unicode support in PCRE.
 
 **Parameters:**
 __nothing__
@@ -2259,7 +2268,7 @@ __nothing__
 --------
 ## range(mixed $var1, mixed $var2, bool $use_ctype, string $encoding, float|int $step): float|int
 <a href="#class-methods">↑</a>
-
+Create an array containing a range of UTF-8 characters.
 
 **Parameters:**
 - mixed $var1 <p>Numeric or hexadecimal code points, or a UTF-8 character to start from.</p>
@@ -2299,7 +2308,7 @@ e.g:
 --------
 ## regex_replace(string $str, string $pattern, string $replacement, string $options, string $delimiter): string
 <a href="#class-methods">↑</a>
-
+Replaces all occurrences of $pattern in $str by $replacement.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2313,7 +2322,7 @@ e.g:
 --------
 ## removeBOM(string $str): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::remove_bom()"
 
 **Parameters:**
 - string $str 
@@ -2323,7 +2332,7 @@ e.g:
 --------
 ## remove_bom(string $str): string
 <a href="#class-methods">↑</a>
-
+Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2333,7 +2342,7 @@ e.g:
 --------
 ## remove_duplicates(string $str, string|string[] $what): string|string[]
 <a href="#class-methods">↑</a>
-
+Removes duplicate occurrences of a string in another string.
 
 **Parameters:**
 - string $str <p>The base string.</p>
@@ -2344,7 +2353,7 @@ e.g:
 --------
 ## remove_html(string $str, string $allowable_tags): string
 <a href="#class-methods">↑</a>
-
+Remove html via "strip_tags()" from the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2357,7 +2366,7 @@ should not be stripped. Default: null
 --------
 ## remove_html_breaks(string $str, string $replacement): string
 <a href="#class-methods">↑</a>
-
+Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2387,7 +2396,7 @@ Default: false
 --------
 ## remove_left(string $str, string $substring, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns a new string with the prefix $substring removed, if present.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2399,7 +2408,7 @@ Default: false
 --------
 ## remove_right(string $str, string $substring, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns a new string with the suffix $substring removed, if present.
 
 **Parameters:**
 - string $str 
@@ -2411,7 +2420,7 @@ Default: false
 --------
 ## replace(string $str, string $search, string $replacement, bool $case_sensitive): bool
 <a href="#class-methods">↑</a>
-
+Replaces all occurrences of $search in $str by $replacement.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2424,7 +2433,7 @@ Default: false
 --------
 ## replace_all(string $str, array $search, array|string $replacement, bool $case_sensitive): bool
 <a href="#class-methods">↑</a>
-
+Replaces all occurrences of $search in $str by $replacement.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2437,7 +2446,7 @@ Default: false
 --------
 ## replace_diamond_question_mark(string $str, string $replacement_char, bool $process_invalid_utf8_chars): bool
 <a href="#class-methods">↑</a>
-
+Replace the diamond question mark (�) and invalid-UTF8 chars with the replacement.
 
 **Parameters:**
 - string $str <p>The input string</p>
@@ -2449,7 +2458,7 @@ Default: false
 --------
 ## rtrim(string $str, string|null $chars): string|null
 <a href="#class-methods">↑</a>
-
+Strip whitespace or other characters from the end of a UTF-8 string.
 
 **Parameters:**
 - string $str <p>The string to be trimmed.</p>
@@ -2460,7 +2469,7 @@ Default: false
 --------
 ## showSupport(bool $useEcho): bool
 <a href="#class-methods">↑</a>
-
+WARNING: Print native UTF-8 support (libs) by default, e.g. for debugging.
 
 **Parameters:**
 - bool $useEcho 
@@ -2470,7 +2479,7 @@ Default: false
 --------
 ## single_chr_html_encode(string $char, bool $keep_ascii_chars, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Converts a UTF-8 character to HTML Numbered Entity like "&#123;".
 
 **Parameters:**
 - string $char <p>The Unicode character to be encoded as numbered entity.</p>
@@ -2493,7 +2502,7 @@ Default: false
 --------
 ## split(int|string $str, int $length, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::str_split()"
 
 **Parameters:**
 - int|string $str 
@@ -2505,7 +2514,7 @@ Default: false
 --------
 ## str_begins(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::str_starts_with()"
 
 **Parameters:**
 - string $haystack 
@@ -2516,7 +2525,9 @@ Default: false
 --------
 ## str_camelize(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+Returns a camelCase version of the string. Trims surrounding spaces,
+capitalizes letters following digits, spaces, dashes and underscores,
+and removes spaces, dashes, as well as underscores.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2532,7 +2543,8 @@ tr</p>
 --------
 ## str_capitalize_name(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns the string with the first letter of each word capitalized,
+except for when the word is a name which shouldn't be capitalized.
 
 **Parameters:**
 - string $str 
@@ -2542,7 +2554,9 @@ tr</p>
 --------
 ## str_contains(string $haystack, string $needle, bool $case_sensitive): bool
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains $needle, false otherwise. By default
+the comparison is case-sensitive, but can be made insensitive by setting
+$case_sensitive to false.
 
 **Parameters:**
 - string $haystack <p>The input string.</p>
@@ -2554,7 +2568,9 @@ tr</p>
 --------
 ## str_contains_all(string $haystack, array $needles, bool $case_sensitive): bool
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains all $needles, false otherwise. By
+default the comparison is case-sensitive, but can be made insensitive by
+setting $case_sensitive to false.
 
 **Parameters:**
 - string $haystack <p>The input string.</p>
@@ -2566,7 +2582,9 @@ tr</p>
 --------
 ## str_contains_any(string $haystack, array $needles, bool $case_sensitive): bool
 <a href="#class-methods">↑</a>
-
+Returns true if the string contains any $needles, false otherwise. By
+default the comparison is case-sensitive, but can be made insensitive by
+setting $case_sensitive to false.
 
 **Parameters:**
 - string $haystack <p>The input string.</p>
@@ -2578,7 +2596,9 @@ tr</p>
 --------
 ## str_dasherize(string $str, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns a lowercase and trimmed string separated by dashes. Dashes are
+inserted before uppercase characters (with the exception of the first
+character of the string), and in place of spaces as well as underscores.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2608,7 +2628,7 @@ tr</p>
 --------
 ## str_detect_encoding(string $str): string
 <a href="#class-methods">↑</a>
-
+Optimized "mb_detect_encoding()"-function -> with support for UTF-16 and UTF-32.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2619,7 +2639,7 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_ends(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::str_ends_with()"
 
 **Parameters:**
 - string $haystack 
@@ -2630,7 +2650,7 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_ends_with(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+Check if the string ends with the given substring.
 
 **Parameters:**
 - string $haystack <p>The string to search in.</p>
@@ -2652,7 +2672,8 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_ensure_left(string $str, string $substring): string
 <a href="#class-methods">↑</a>
-
+Ensures that the string begins with $substring. If it doesn't, it's
+prepended.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2663,7 +2684,7 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_ensure_right(string $str, string $substring): string
 <a href="#class-methods">↑</a>
-
+Ensures that the string ends with $substring. If it doesn't, it's appended.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2674,7 +2695,8 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_humanize(string $str): string
 <a href="#class-methods">↑</a>
-
+Capitalizes the first word of the string, replaces underscores with
+spaces, and strips '_id'.
 
 **Parameters:**
 - string $str 
@@ -2684,7 +2706,7 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_ibegins(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::str_istarts_with()"
 
 **Parameters:**
 - string $haystack 
@@ -2695,7 +2717,7 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_iends(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::str_iends_with()"
 
 **Parameters:**
 - string $haystack 
@@ -2706,7 +2728,7 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_iends_with(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+Check if the string ends with the given substring, case-insensitive.
 
 **Parameters:**
 - string $haystack <p>The string to search in.</p>
@@ -2728,7 +2750,9 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_iindex_first(string $str, string $needle, int $offset, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the index of the first occurrence of $needle in the string,
+and false if not found. Accepts an optional offset from which to begin
+the search.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2741,7 +2765,10 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_iindex_last(string $str, string $needle, int $offset, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the index of the last occurrence of $needle in the string,
+and false if not found. Accepts an optional offset from which to begin
+the search. Offsets may be negative to count from the last character
+in the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2754,7 +2781,9 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_index_first(string $str, string $needle, int $offset, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the index of the first occurrence of $needle in the string,
+and false if not found. Accepts an optional offset from which to begin
+the search.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2767,7 +2796,10 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_index_last(string $str, string $needle, int $offset, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the index of the last occurrence of $needle in the string,
+and false if not found. Accepts an optional offset from which to begin
+the search. Offsets may be negative to count from the last character
+in the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2780,7 +2812,7 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_insert(string $str, string $substring, int $index, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Inserts $substring into the string at the $index provided.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2793,7 +2825,7 @@ otherwise it will return false e.g. for BINARY or not detected encoding.
 --------
 ## str_ireplace(string|string[] $search, string|string[] $replacement, mixed $subject, int $count): int
 <a href="#class-methods">↑</a>
-
+Case-insensitive and UTF-8 safe version of <function>str_replace</function>.
 
 **Parameters:**
 - string|string[] $search <p>
@@ -2818,7 +2850,7 @@ reference.
 --------
 ## str_ireplace_beginning(string $str, string $search, string $replacement): string
 <a href="#class-methods">↑</a>
-
+Replaces $search from the beginning of string with $replacement.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2830,7 +2862,7 @@ reference.
 --------
 ## str_ireplace_ending(string $str, string $search, string $replacement): string
 <a href="#class-methods">↑</a>
-
+Replaces $search from the ending of string with $replacement.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2842,7 +2874,7 @@ reference.
 --------
 ## str_istarts_with(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+Check if the string starts with the given substring, case-insensitive.
 
 **Parameters:**
 - string $haystack <p>The string to search in.</p>
@@ -2864,7 +2896,7 @@ reference.
 --------
 ## str_isubstr_after_first_separator(string $str, string $separator, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring after the first occurrence of a separator.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2876,7 +2908,7 @@ reference.
 --------
 ## str_isubstr_after_last_separator(string $str, string $separator, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring after the last occurrence of a separator.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2888,7 +2920,7 @@ reference.
 --------
 ## str_isubstr_before_first_separator(string $str, string $separator, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring before the first occurrence of a separator.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2900,7 +2932,7 @@ reference.
 --------
 ## str_isubstr_before_last_separator(string $str, string $separator, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring before the last occurrence of a separator.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2912,7 +2944,7 @@ reference.
 --------
 ## str_isubstr_first(string $str, string $needle, bool $before_needle, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring after (or before via "$before_needle") the first occurrence of the "$needle".
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2925,7 +2957,7 @@ reference.
 --------
 ## str_isubstr_last(string $str, string $needle, bool $before_needle, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring after (or before via "$before_needle") the last occurrence of the "$needle".
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2938,7 +2970,7 @@ reference.
 --------
 ## str_last_char(string $str, int $n, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the last $n characters of the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2950,7 +2982,7 @@ reference.
 --------
 ## str_limit(string $str, int $length, string $str_add_on, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Limit the number of characters in a string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2963,7 +2995,7 @@ reference.
 --------
 ## str_limit_after_word(string $str, int $length, string $str_add_on, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Limit the number of characters in a string, but also after the next word.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -2976,7 +3008,7 @@ reference.
 --------
 ## str_longest_common_prefix(string $str1, string $str2, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the longest common prefix between the $str1 and $str2.
 
 **Parameters:**
 - string $str1 <p>The input sting.</p>
@@ -3000,7 +3032,7 @@ In the case of ties, it returns that which occurs first.
 --------
 ## str_longest_common_suffix(string $str1, string $str2, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the longest common suffix between the $str1 and $str2.
 
 **Parameters:**
 - string $str1 
@@ -3012,7 +3044,7 @@ In the case of ties, it returns that which occurs first.
 --------
 ## str_matches_pattern(string $str, string $pattern): string
 <a href="#class-methods">↑</a>
-
+Returns true if $str matches the supplied pattern, false otherwise.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3023,7 +3055,9 @@ In the case of ties, it returns that which occurs first.
 --------
 ## str_offset_exists(string $str, int $offset, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns whether or not a character exists at an index. Offsets may be
+negative to count from the last character in the string. Implements
+part of the ArrayAccess interface.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3035,7 +3069,10 @@ In the case of ties, it returns that which occurs first.
 --------
 ## str_offset_get(string $str, int $index, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the character at the given index. Offsets may be negative to
+count from the last character in the string. Implements part of the
+ArrayAccess interface, and throws an OutOfBoundsException if the index
+does not exist.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3047,7 +3084,7 @@ In the case of ties, it returns that which occurs first.
 --------
 ## str_pad(string $str, int $pad_length, string $pad_string, int|string $pad_type, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Pad a UTF-8 string to a given length with another string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3065,7 +3102,8 @@ Can be <strong>STR_PAD_RIGHT</strong> (default), [or string "right"]<br>
 --------
 ## str_pad_both(string $str, int $length, string $pad_str, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns a new string of a given length such that both sides of the
+string are padded. Alias for "UTF8::str_pad()" with a $pad_type of 'both'.
 
 **Parameters:**
 - string $str 
@@ -3078,7 +3116,8 @@ Can be <strong>STR_PAD_RIGHT</strong> (default), [or string "right"]<br>
 --------
 ## str_pad_left(string $str, int $length, string $pad_str, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns a new string of a given length such that the beginning of the
+string is padded. Alias for "UTF8::str_pad()" with a $pad_type of 'left'.
 
 **Parameters:**
 - string $str 
@@ -3091,7 +3130,8 @@ Can be <strong>STR_PAD_RIGHT</strong> (default), [or string "right"]<br>
 --------
 ## str_pad_right(string $str, int $length, string $pad_str, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns a new string of a given length such that the end of the string
+is padded. Alias for "UTF8::str_pad()" with a $pad_type of 'right'.
 
 **Parameters:**
 - string $str 
@@ -3104,7 +3144,7 @@ Can be <strong>STR_PAD_RIGHT</strong> (default), [or string "right"]<br>
 --------
 ## str_repeat(string $str, int $multiplier): int
 <a href="#class-methods">↑</a>
-
+Repeat a string.
 
 **Parameters:**
 - string $str <p>
@@ -3153,7 +3193,7 @@ well.
 --------
 ## str_replace_beginning(string $str, string $search, string $replacement): string
 <a href="#class-methods">↑</a>
-
+Replaces $search from the beginning of string with $replacement.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3165,7 +3205,7 @@ well.
 --------
 ## str_replace_ending(string $str, string $search, string $replacement): string
 <a href="#class-methods">↑</a>
-
+Replaces $search from the ending of string with $replacement.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3177,7 +3217,7 @@ well.
 --------
 ## str_replace_first(string $search, string $replace, string $subject): string
 <a href="#class-methods">↑</a>
-
+Replace the first "$search"-term with the "$replace"-term.
 
 **Parameters:**
 - string $search 
@@ -3189,7 +3229,7 @@ well.
 --------
 ## str_replace_last(string $search, string $replace, string $subject): string
 <a href="#class-methods">↑</a>
-
+Replace the last "$search"-term with the "$replace"-term.
 
 **Parameters:**
 - string $search 
@@ -3212,7 +3252,10 @@ PS: uses random algorithm which is weak for cryptography purposes
 --------
 ## str_slice(string $str, int $start, int $end, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Returns the substring beginning at $start, and up to, but not including
+the index specified by $end. If $end is omitted, the function extracts
+the remaining string. If $end is negative, it is computed from the end
+of the string.
 
 **Parameters:**
 - string $str 
@@ -3226,7 +3269,7 @@ characters long, <b>FALSE</b> will be returned.
 --------
 ## str_snakeize(string $str, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Convert a string to e.g.: "snake_case"
 
 **Parameters:**
 - string $str 
@@ -3237,7 +3280,7 @@ characters long, <b>FALSE</b> will be returned.
 --------
 ## str_sort(string $str, bool $unique, bool $desc): bool
 <a href="#class-methods">↑</a>
-
+Sort all characters according to code points.
 
 **Parameters:**
 - string $str <p>A UTF-8 string.</p>
@@ -3249,7 +3292,7 @@ characters long, <b>FALSE</b> will be returned.
 --------
 ## str_split(int|string $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): bool
 <a href="#class-methods">↑</a>
-
+Convert a string to an array of unicode characters.
 
 **Parameters:**
 - int|string $input <p>The string or int to split into array.</p>
@@ -3265,7 +3308,7 @@ string.</p>
 --------
 ## str_split_array(int[]|string[] $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): bool
 <a href="#class-methods">↑</a>
-
+Convert a string to an array of Unicode characters.
 
 **Parameters:**
 - int[]|string[] $input <p>The string[] or int[] to split into array.</p>
@@ -3281,7 +3324,9 @@ string.</p>
 --------
 ## str_split_pattern(string $str, string $pattern, int $limit): int
 <a href="#class-methods">↑</a>
-
+Splits the string with the provided regular expression, returning an
+array of strings. An optional integer $limit will truncate the
+results.
 
 **Parameters:**
 - string $str 
@@ -3293,7 +3338,7 @@ string.</p>
 --------
 ## str_starts_with(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+Check if the string starts with the given substring.
 
 **Parameters:**
 - string $haystack <p>The string to search in.</p>
@@ -3315,7 +3360,7 @@ string.</p>
 --------
 ## str_substr_after_first_separator(string $str, string $separator, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring after the first occurrence of a separator.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3327,7 +3372,7 @@ string.</p>
 --------
 ## str_substr_after_last_separator(string $str, string $separator, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring after the last occurrence of a separator.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3339,7 +3384,7 @@ string.</p>
 --------
 ## str_substr_before_first_separator(string $str, string $separator, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring before the first occurrence of a separator.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3351,7 +3396,7 @@ string.</p>
 --------
 ## str_substr_before_last_separator(string $str, string $separator, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring before the last occurrence of a separator.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3363,7 +3408,7 @@ string.</p>
 --------
 ## str_substr_first(string $str, string $needle, bool $before_needle, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring after (or before via "$before_needle") the first occurrence of the "$needle".
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3376,7 +3421,7 @@ string.</p>
 --------
 ## str_substr_last(string $str, string $needle, bool $before_needle, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Gets the substring after (or before via "$before_needle") the last occurrence of the "$needle".
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3389,7 +3434,7 @@ string.</p>
 --------
 ## str_surround(string $str, string $substring): string
 <a href="#class-methods">↑</a>
-
+Surrounds $str with the given substring.
 
 **Parameters:**
 - string $str 
@@ -3439,7 +3484,7 @@ Adapted from John Gruber's script.
 --------
 ## str_to_binary(string $str): string
 <a href="#class-methods">↑</a>
-
+Get a binary representation of a specific string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3461,7 +3506,7 @@ Adapted from John Gruber's script.
 --------
 ## str_to_words(string $str, string $char_list, bool $remove_empty_values, int|null $remove_short_values): int|null
 <a href="#class-methods">↑</a>
-
+Convert a string into an array of words.
 
 **Parameters:**
 - string $str 
@@ -3474,7 +3519,7 @@ Adapted from John Gruber's script.
 --------
 ## str_transliterate(string $str, string $unknown, bool $strict): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::to_ascii()"
 
 **Parameters:**
 - string $str 
@@ -3486,7 +3531,9 @@ Adapted from John Gruber's script.
 --------
 ## str_truncate(string $str, int $length, string $substring, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Truncates the string to a given length. If $substring is provided, and
+truncating occurs, the string is further truncated so that the substring
+may be appended without exceeding the desired length.
 
 **Parameters:**
 - string $str 
@@ -3499,7 +3546,10 @@ Adapted from John Gruber's script.
 --------
 ## str_truncate_safe(string $str, int $length, string $substring, string $encoding, bool $ignore_do_not_split_words_for_one_word): bool
 <a href="#class-methods">↑</a>
-
+Truncates the string to a given length, while ensuring that it does not
+split words. If $substring is provided, and truncating occurs, the
+string is further truncated so that the substring may be appended without
+exceeding the desired length.
 
 **Parameters:**
 - string $str 
@@ -3527,7 +3577,9 @@ dashes.
 --------
 ## str_upper_camelize(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+Returns an UpperCamelCase version of the supplied string. It trims
+surrounding spaces, capitalizes letters following digits, spaces, dashes
+and underscores, and removes spaces, dashes, underscores.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3543,7 +3595,7 @@ tr</p>
 --------
 ## str_upper_first(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::ucfirst()"
 
 **Parameters:**
 - string $str 
@@ -3557,7 +3609,7 @@ tr</p>
 --------
 ## str_word_count(string $str, int $format, string $char_list): string
 <a href="#class-methods">↑</a>
-
+Get the number of words in a specific string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3587,7 +3639,7 @@ INFO: Case-insensitive version of UTF8::strcmp()
 --------
 ## strchr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::strstr()"
 
 **Parameters:**
 - string $haystack 
@@ -3601,7 +3653,7 @@ INFO: Case-insensitive version of UTF8::strcmp()
 --------
 ## strcmp(string $str1, string $str2): string
 <a href="#class-methods">↑</a>
-
+Case-sensitive string comparison.
 
 **Parameters:**
 - string $str1 <p>The first string.</p>
@@ -3614,7 +3666,7 @@ INFO: Case-insensitive version of UTF8::strcmp()
 --------
 ## strcspn(string $str, string $char_list, int $offset, int $length, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Find length of initial segment not matching mask.
 
 **Parameters:**
 - string $str 
@@ -3628,7 +3680,7 @@ INFO: Case-insensitive version of UTF8::strcmp()
 --------
 ## strichr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::stristr()"
 
 **Parameters:**
 - string $haystack 
@@ -3652,7 +3704,7 @@ INFO: opposite to UTF8::codepoints()
 --------
 ## string_has_bom(string $str): string
 <a href="#class-methods">↑</a>
-
+Checks if string starts with "BOM" (Byte Order Mark Character) character.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3663,7 +3715,7 @@ INFO: opposite to UTF8::codepoints()
 --------
 ## strip_tags(string $str, string $allowable_tags, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Strip HTML and PHP tags from a string + clean invalid UTF-8.
 
 **Parameters:**
 - string $str <p>
@@ -3684,7 +3736,9 @@ can not be changed with allowable_tags.
 --------
 ## strip_whitespace(string $str): string
 <a href="#class-methods">↑</a>
-
+Strip all whitespace characters. This includes tabs and newline
+characters, as well as multibyte whitespace such as the thin space
+and ideographic space.
 
 **Parameters:**
 - string $str 
@@ -3694,7 +3748,7 @@ can not be changed with allowable_tags.
 --------
 ## stripos(string $haystack, string $needle, int $offset, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Find the position of the first occurrence of a substring in a string, case-insensitive.
 
 **Parameters:**
 - string $haystack <p>The string from which to get the position of the first occurrence of needle.</p>
@@ -3709,7 +3763,7 @@ haystack string,<br> or <strong>false</strong> if needle is not found
 --------
 ## stripos_in_byte(string $haystack, string $needle, int $offset): int
 <a href="#class-methods">↑</a>
-
+Find the position of the first occurrence of a substring in a string, case-insensitive.
 
 **Parameters:**
 - string $haystack <p>
@@ -3728,7 +3782,7 @@ haystack string. If needle is not found, it returns false.</p>
 --------
 ## stristr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Returns all of haystack starting from and including the first occurrence of needle to the end.
 
 **Parameters:**
 - string $haystack <p>The input string. Must be valid UTF-8.</p>
@@ -3745,7 +3799,7 @@ haystack before the first occurrence of the needle (excluding the needle).
 --------
 ## strlen(string $str, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Get the string length, not the byte-length!
 
 **Parameters:**
 - string $str <p>The string being checked for length.</p>
@@ -3764,7 +3818,7 @@ chars.
 --------
 ## strlen_in_byte(string $str): string
 <a href="#class-methods">↑</a>
-
+Get string length in byte.
 
 **Parameters:**
 - string $str 
@@ -3801,7 +3855,7 @@ INFO: natural order version of UTF8::strcmp()
 --------
 ## strncasecmp(string $str1, string $str2, int $len, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Case-insensitive string comparison of the first n characters.
 
 **Parameters:**
 - string $str1 <p>The first string.</p>
@@ -3816,7 +3870,7 @@ INFO: natural order version of UTF8::strcmp()
 --------
 ## strncmp(string $str1, string $str2, int $len, string $encoding): string
 <a href="#class-methods">↑</a>
-
+String comparison of the first n characters.
 
 **Parameters:**
 - string $str1 <p>The first string.</p>
@@ -3831,7 +3885,7 @@ INFO: natural order version of UTF8::strcmp()
 --------
 ## strpbrk(string $haystack, string $char_list): string
 <a href="#class-methods">↑</a>
-
+Search a string for any of a set of characters.
 
 **Parameters:**
 - string $haystack <p>The string where char_list is looked for.</p>
@@ -3842,7 +3896,7 @@ INFO: natural order version of UTF8::strcmp()
 --------
 ## strpos(string $haystack, int|string $needle, int $offset, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Find the position of the first occurrence of a substring in a string.
 
 **Parameters:**
 - string $haystack <p>The string from which to get the position of the first occurrence of needle.</p>
@@ -3857,7 +3911,7 @@ string.<br> If needle is not found it returns false.
 --------
 ## strpos_in_byte(string $haystack, string $needle, int $offset): int
 <a href="#class-methods">↑</a>
-
+Find the position of the first occurrence of a substring in a string.
 
 **Parameters:**
 - string $haystack <p>
@@ -3876,7 +3930,7 @@ haystack string. If needle is not found, it returns false.</p>
 --------
 ## strrchr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Find the last occurrence of a character in a string within another.
 
 **Parameters:**
 - string $haystack <p>The string from which to get the last occurrence of needle.</p>
@@ -3897,7 +3951,7 @@ from the last occurrence of needle to the end,
 --------
 ## strrev(string $str, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Reverses characters order in the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -3908,7 +3962,7 @@ from the last occurrence of needle to the end,
 --------
 ## strrichr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Find the last occurrence of a character in a string within another, case-insensitive.
 
 **Parameters:**
 - string $haystack <p>The string from which to get the last occurrence of needle.</p>
@@ -3929,7 +3983,7 @@ from the last occurrence of needle to the end,
 --------
 ## strripos(string $haystack, int|string $needle, int $offset, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Find the position of the last occurrence of a substring in a string, case-insensitive.
 
 **Parameters:**
 - string $haystack <p>The string to look in.</p>
@@ -3944,7 +3998,7 @@ string.<br>If needle is not found, it returns false.</p>
 --------
 ## strripos_in_byte(string $haystack, string $needle, int $offset): int
 <a href="#class-methods">↑</a>
-
+Finds position of last occurrence of a string within another, case-insensitive.
 
 **Parameters:**
 - string $haystack <p>
@@ -3965,7 +4019,7 @@ haystack string, or false if needle is not found.</p>
 --------
 ## strrpos(string $haystack, int|string $needle, int $offset, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Find the position of the last occurrence of a substring in a string.
 
 **Parameters:**
 - string $haystack <p>The string being checked, for the last occurrence of needle</p>
@@ -3983,7 +4037,7 @@ string.<br>If needle is not found, it returns false.</p>
 --------
 ## strrpos_in_byte(string $haystack, string $needle, int $offset): int
 <a href="#class-methods">↑</a>
-
+Find the position of the last occurrence of a substring in a string.
 
 **Parameters:**
 - string $haystack <p>
@@ -4004,7 +4058,8 @@ haystack string. If needle is not found, it returns false.</p>
 --------
 ## strspn(string $str, string $mask, int $offset, int $length, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Finds the length of the initial segment of a string consisting entirely of characters contained within a given
+mask.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4018,7 +4073,7 @@ haystack string. If needle is not found, it returns false.</p>
 --------
 ## strstr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Returns part of haystack string from the first occurrence of needle to the end of haystack.
 
 **Parameters:**
 - string $haystack <p>The input string. Must be valid UTF-8.</p>
@@ -4035,7 +4090,7 @@ haystack before the first occurrence of the needle (excluding the needle).
 --------
 ## strstr_in_byte(string $haystack, string $needle, bool $before_needle): bool
 <a href="#class-methods">↑</a>
-
+Finds first occurrence of a string within another.
 
 **Parameters:**
 - string $haystack <p>
@@ -4060,7 +4115,7 @@ or false if needle is not found.</p>
 --------
 ## strtocasefold(string $str, bool $full, bool $clean_utf8, string $encoding, string|null $lang, bool $lower): bool
 <a href="#class-methods">↑</a>
-
+Unicode transformation for case-less matching.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4079,7 +4134,7 @@ is for some languages better ...</p>
 --------
 ## strtolower(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+Make a string lowercase.
 
 **Parameters:**
 - string $str <p>The string being lowercased.</p>
@@ -4095,7 +4150,7 @@ tr</p>
 --------
 ## strtoupper(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+Make a string uppercase.
 
 **Parameters:**
 - string $str <p>The string being uppercased.</p>
@@ -4136,7 +4191,7 @@ to the corresponding character in "to".</p>
 --------
 ## strwidth(string $str, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Return the width of a string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4148,7 +4203,7 @@ to the corresponding character in "to".</p>
 --------
 ## substr(string $str, int $offset, int $length, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Get part of a string.
 
 **Parameters:**
 - string $str <p>The string being checked.</p>
@@ -4164,7 +4219,7 @@ characters long, <b>FALSE</b> will be returned.
 --------
 ## substr_compare(string $str1, string $str2, int $offset, int|null $length, bool $case_insensitivity, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Binary-safe comparison of two strings from an offset, up to a length of characters.
 
 **Parameters:**
 - string $str1 <p>The main string being compared.</p>
@@ -4185,7 +4240,7 @@ insensitive.</p>
 --------
 ## substr_count(string $haystack, string $needle, int $offset, int $length, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Count the number of substring occurrences.
 
 **Parameters:**
 - string $haystack <p>The string to search in.</p>
@@ -4204,7 +4259,7 @@ greater than the haystack length.
 --------
 ## substr_count_in_byte(string $haystack, string $needle, int $offset, int $length): int
 <a href="#class-methods">↑</a>
-
+Count the number of substring occurrences.
 
 **Parameters:**
 - string $haystack <p>
@@ -4243,7 +4298,7 @@ by setting $case_sensitive to false.
 --------
 ## substr_ileft(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+Removes a prefix ($needle) from the beginning of the string ($haystack), case-insensitive.
 
 **Parameters:**
 - string $haystack <p>The string to search in.</p>
@@ -4254,7 +4309,7 @@ by setting $case_sensitive to false.
 --------
 ## substr_in_byte(string $str, int $offset, int $length): int
 <a href="#class-methods">↑</a>
-
+Get part of a string process in bytes.
 
 **Parameters:**
 - string $str <p>The string being checked.</p>
@@ -4268,7 +4323,7 @@ characters long, <b>FALSE</b> will be returned.
 --------
 ## substr_iright(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+Removes a suffix ($needle) from the end of the string ($haystack), case-insensitive.
 
 **Parameters:**
 - string $haystack <p>The string to search in.</p>
@@ -4279,7 +4334,7 @@ characters long, <b>FALSE</b> will be returned.
 --------
 ## substr_left(string $haystack, string $needle): string
 <a href="#class-methods">↑</a>
-
+Removes a prefix ($needle) from the beginning of the string ($haystack).
 
 **Parameters:**
 - string $haystack <p>The string to search in.</p>
@@ -4316,7 +4371,7 @@ replacement into string at the given start offset.</p>
 --------
 ## substr_right(string $haystack, string $needle, string $encoding): string
 <a href="#class-methods">↑</a>
-
+Removes a suffix ($needle) from the end of the string ($haystack).
 
 **Parameters:**
 - string $haystack <p>The string to search in.</p>
@@ -4328,7 +4383,7 @@ replacement into string at the given start offset.</p>
 --------
 ## swapCase(string $str, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Returns a case swapped version of the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4340,7 +4395,7 @@ replacement into string at the given start offset.</p>
 --------
 ## symfony_polyfill_used(): bool
 <a href="#class-methods">↑</a>
-
+Checks whether symfony-polyfills are used.
 
 **Parameters:**
 __nothing__
@@ -4361,7 +4416,8 @@ __nothing__
 --------
 ## titlecase(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+Converts the first character of each word in the string to uppercase
+and all other chars to lowercase.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4377,7 +4433,7 @@ tr</p>
 --------
 ## toAscii(string $str, string $subst_chr, bool $strict): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::to_ascii()"
 
 **Parameters:**
 - string $str 
@@ -4389,7 +4445,7 @@ tr</p>
 --------
 ## toIso8859(string|string[] $str): string|string[]
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::to_iso8859()"
 
 **Parameters:**
 - string|string[] $str 
@@ -4399,7 +4455,7 @@ tr</p>
 --------
 ## toLatin1(string|string[] $str): string|string[]
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::to_latin1()"
 
 **Parameters:**
 - string|string[] $str 
@@ -4409,7 +4465,7 @@ tr</p>
 --------
 ## toUTF8(string|string[] $str): string|string[]
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::to_utf8()"
 
 **Parameters:**
 - string|string[] $str 
@@ -4419,7 +4475,7 @@ tr</p>
 --------
 ## to_ascii(string $str, string $unknown, bool $strict): bool
 <a href="#class-methods">↑</a>
-
+Convert a string into ASCII.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4442,7 +4498,7 @@ performance</p>
 --------
 ## to_filename(string $str, bool $use_transliterate, string $fallback_char): string
 <a href="#class-methods">↑</a>
-
+Convert given string to safe filename (and keep string case).
 
 **Parameters:**
 - string $str 
@@ -4455,7 +4511,7 @@ simply replaced with hyphen.
 --------
 ## to_int(string $str): string
 <a href="#class-methods">↑</a>
-
+Returns the given string as an integer, or null if the string isn't numeric.
 
 **Parameters:**
 - string $str 
@@ -4465,7 +4521,7 @@ simply replaced with hyphen.
 --------
 ## to_iso8859(string|string[] $str): string|string[]
 <a href="#class-methods">↑</a>
-
+Convert a string into "ISO-8859"-encoding (Latin-1).
 
 **Parameters:**
 - string|string[] $str 
@@ -4475,7 +4531,7 @@ simply replaced with hyphen.
 --------
 ## to_latin1(string|string[] $str): string|string[]
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::to_iso8859()"
 
 **Parameters:**
 - string|string[] $str 
@@ -4485,7 +4541,8 @@ simply replaced with hyphen.
 --------
 ## to_string(mixed $input): mixed
 <a href="#class-methods">↑</a>
-
+Returns the given input as string, or null if the input isn't int|float|string
+and do not implement the "__toString()" method.
 
 **Parameters:**
 - mixed $input 
@@ -4525,7 +4582,7 @@ but the check for ASCII (7-Bit) cost more time, then we can safe here.
 --------
 ## ucfirst(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
 <a href="#class-methods">↑</a>
-
+Makes string's first char uppercase.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4541,7 +4598,7 @@ tr</p>
 --------
 ## ucword(string $str, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+alias for "UTF8::ucfirst()"
 
 **Parameters:**
 - string $str 
@@ -4553,7 +4610,7 @@ tr</p>
 --------
 ## ucwords(string $str, string[] $exceptions, string $char_list, string $encoding, bool $clean_utf8): bool
 <a href="#class-methods">↑</a>
-
+Uppercase for all words in the string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4588,7 +4645,7 @@ e.g:
 --------
 ## urldecode_fix_win1252_chars(): bool
 <a href="#class-methods">↑</a>
-
+Return a array with "urlencoded"-win1252 -> UTF-8
 
 **Parameters:**
 __nothing__
@@ -4598,7 +4655,7 @@ __nothing__
 --------
 ## utf8_decode(string $str, bool $keep_utf8_chars): bool
 <a href="#class-methods">↑</a>
-
+Decodes a UTF-8 string to ISO-8859-1.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4609,7 +4666,7 @@ __nothing__
 --------
 ## utf8_encode(string $str): string
 <a href="#class-methods">↑</a>
-
+Encodes an ISO-8859-1 string to UTF-8.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4619,7 +4676,7 @@ __nothing__
 --------
 ## utf8_fix_win1252_chars(string $str): string
 <a href="#class-methods">↑</a>
-
+fix -> utf8-win1252 chars
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4629,7 +4686,7 @@ __nothing__
 --------
 ## whitespace_table(): string
 <a href="#class-methods">↑</a>
-
+Returns an array with all utf8 whitespace characters.
 
 **Parameters:**
 __nothing__
@@ -4640,7 +4697,7 @@ as defined in above URL
 --------
 ## words_limit(string $str, int $limit, string $str_add_on): string
 <a href="#class-methods">↑</a>
-
+Limit the number of words in a string.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4652,7 +4709,7 @@ as defined in above URL
 --------
 ## wordwrap(string $str, int $width, string $break, bool $cut): bool
 <a href="#class-methods">↑</a>
-
+Wraps a string to a given number of characters
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4669,7 +4726,8 @@ a word that is larger than the given width, it is broken apart.
 --------
 ## wordwrap_per_line(string $str, int $width, string $break, bool $cut, bool $add_final_break, string|null $delimiter): string|null
 <a href="#class-methods">↑</a>
-
+Line-Wrap the string after $limit, but split the string by "$delimiter" before ...
+   ... so that we wrap the per line.
 
 **Parameters:**
 - string $str <p>The input string.</p>
@@ -4693,7 +4751,7 @@ You can change the default behavior, where we split the string by newline.
 --------
 ## ws(): string|null
 <a href="#class-methods">↑</a>
-
+Returns an array of Unicode White Space characters.
 
 **Parameters:**
 __nothing__
