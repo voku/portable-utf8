@@ -38,7 +38,8 @@ RAW;
 
 // -------------------------------------
 
-class TemplateFormatter {
+class TemplateFormatter
+{
     /** @var array */
     private $vars = [];
 
@@ -48,7 +49,8 @@ class TemplateFormatter {
     /**
      * @param string $template
      */
-    public function __construct(string $template) {
+    public function __construct(string $template)
+    {
         $this->template = $template;
     }
 
@@ -58,7 +60,8 @@ class TemplateFormatter {
      *
      * @return mixed
      */
-    public function set(string $var, string $value): self {
+    public function set(string $var, string $value): self
+    {
         $this->vars[$var] = $value;
 
         return $this;
@@ -67,7 +70,8 @@ class TemplateFormatter {
     /**
      * @return string
      */
-    public function format(): string {
+    public function format(): string
+    {
         $s = $this->template;
 
         foreach ($this->vars as $name => $value) {
