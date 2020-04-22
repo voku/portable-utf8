@@ -1055,7 +1055,7 @@ final class UTF8
         array $filter = [
             ' ' => '-',
             '/' => '-',
-            '[' => '-',
+            '[' => '',
             ']' => '',
         ],
         bool $stripe_tags = false,
