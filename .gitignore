@@ -14,3 +14,6 @@ _book/
 # node
 node_modules/
 npm-debug.log
+
+# PhpStorm
+.idea/

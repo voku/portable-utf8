@@ -21,6 +21,7 @@ RAW;
 
 $templateMethod = <<<RAW
 ## %name%
+<a href="#class-methods">↑</a>
 %description%
 
 **Parameters:**
