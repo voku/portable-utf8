@@ -138,13 +138,7 @@ foreach ($reflection->getMethods() as $method) {
     $methodTemplate->set('code', '```php echo ```');
 
     $methodIndexTemplate->set('title', $method->getShortName());
-    $methodIndexTemplate->set('href', '#' . UTF8::css_identifier(
-        UTF8::strip_whitespace(
-            UTF8::trim(
-                UTF8::strtolower($methodWithType)
-            )
-        )
-    ));
+    $methodIndexTemplate->set('href', '#' . UTF8::css_identifier($methodWithType));
 
     $functionsDocumentation[$method->getShortName()] = $methodTemplate->format();
     $functionsIndex[$method->getShortName()] = $methodIndexTemplate->format();
