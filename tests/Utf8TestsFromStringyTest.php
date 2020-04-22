@@ -3353,6 +3353,22 @@ d
         }
     }
 
+    public function testCssIdentifier()
+    {
+        $testArray = [
+            'test lall '                    => 'test-lall',
+            'chr(int $code_point) : string' => 'chrint-code_point--string',
+            'öäü!23!!__[!]?='               => 'öäü23__',
+        ];
+
+        foreach ($testArray as $testString => $testResult) {
+            static::assertSame($testResult, UTF8::css_identifier($testString));
+        }
+
+        static::assertContains('auto-generated-css-', UTF8::css_identifier());
+        static::assertContains('auto-generated-css-', UTF8::css_identifier(' '));
+    }
+
     public function testSubStringOf()
     {
         $testArray = [

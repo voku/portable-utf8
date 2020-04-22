@@ -3,7 +3,7 @@ vendor
 composer.lock
 
 # php (phpunit)
-build/
+build/logs/
 
 # gitbook
 _book/
