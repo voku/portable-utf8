@@ -174,7 +174,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 <table>
     <tr><td><a href="#accessstring-str-int-pos-string-encoding-string">access</a>
 </td><td><a href="#add_bom_to_stringstring-str-string">add_bom_to_string</a>
-</td><td><a href="#array_change_key_casearray-array-int-case-string-encoding-string">array_change_key_case</a>
+</td><td><a href="#array_change_key_casearraystringmixed-array-int-case-string-encoding-string">array_change_key_case</a>
 </td><td><a href="#betweenstring-str-string-start-string-end-int-offset-string-encoding-string">between</a>
 </td></tr><tr><td><a href="#binary_to_strmixed-bin-mixed">binary_to_str</a>
 </td><td><a href="#bom-mixed">bom</a>
@@ -194,7 +194,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#codepointsstringstring--arg-bool-use_u_style-bool">codepoints</a>
 </td></tr><tr><td><a href="#collapse_whitespacestring-str-string">collapse_whitespace</a>
 </td><td><a href="#count_charsstring-str-bool-clean_utf8-bool-try_to_use_mb_functions-bool">count_chars</a>
-</td><td><a href="#css_identifierstring-str-array-filter-array">css_identifier</a>
+</td><td><a href="#css_identifierstring-str-arraystringstring-filter-bool-stripe_tags-bool-strtolower-bool">css_identifier</a>
 </td><td><a href="#css_stripe_media_queriesstring-str-string">css_stripe_media_queries</a>
 </td></tr><tr><td><a href="#ctype_loaded-string">ctype_loaded</a>
 </td><td><a href="#decimal_to_chrmixed-int-mixed">decimal_to_chr</a>
@@ -254,7 +254,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#is_asciistring-str-string">is_ascii</a>
 </td></tr><tr><td><a href="#is_base64mixedstring-str-bool-empty_string_is_valid-bool">is_base64</a>
 </td><td><a href="#is_binarymixed-input-bool-strict-bool">is_binary</a>
-</td><td><a href="#is_binary_filestring-file-string">is_binary_file</a>
+</td><td><a href="#is_bicss_identifierstring-str-arraystringstring-filter-arraystringstringnary_filestring-file-string">is_binary_file</a>
 </td><td><a href="#is_blankstring-str-string">is_blank</a>
 </td></tr><tr><td><a href="#is_bomstring-str-string">is_bom</a>
 </td><td><a href="#is_emptymixed-str-mixed">is_empty</a>
@@ -740,13 +740,15 @@ array<string> for $u_style === true<br>
 - int[] <p>An associative array of Character as keys and
 their count as values.</p>
 --------
-## css_identifier(string $str, array<string,string> $filter): array<string,string>
+## css_identifier(string $str, array<string,string> $filter, bool $stripe_tags, bool $strtolower): bool
 <a href="#class-methods">↑</a>
 
 
 **Parameters:**
 - string $str <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
 - array<string,string> $filter 
+- bool $stripe_tags 
+- bool $strtolower 
 
 **Return:**
 - string 

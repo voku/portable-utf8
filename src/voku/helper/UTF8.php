@@ -1043,6 +1043,8 @@ final class UTF8
      *
      * @param string               $str    <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
      * @param array<string,string> $filter
+     * @param bool                 $stripe_tags
+     * @param bool                 $strtolower
      *
      * @psalm-pure
      *
@@ -1055,7 +1057,9 @@ final class UTF8
             '/' => '-',
             '[' => '-',
             ']' => '',
-        ]
+        ],
+        bool $stripe_tags = false,
+        bool $strtolower = true
     ): string {
         // We could also use strtr() here but its much slower than str_replace(). In
         // order to keep '__' to stay '__' we first replace it with a different
@@ -1069,8 +1073,13 @@ final class UTF8
             $str = self::clean($str);
         }
 
-        // First, clean all html-tags ...
-        $str = \strtolower(\strip_tags($str));
+        if ($stripe_tags) {
+            $str = \strip_tags($str);
+        }
+
+        if ($strtolower) {
+            $str = \strtolower($str);
+        }
 
         if (!isset($filter['__'])) {
             $str = \str_replace('__', '##', $str, $double_underscore_replacements);
