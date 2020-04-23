@@ -29,7 +29,9 @@ $templateMethod = <<<RAW
 
 **Return:**
 %return%
+
 --------
+
 RAW;
 
 $templateIndexLink = <<<RAW
