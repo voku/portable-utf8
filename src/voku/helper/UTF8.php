@@ -873,7 +873,7 @@ final class UTF8
         $str = (string) \preg_replace($regex, '$1', $str);
 
         if ($replace_diamond_question_mark) {
-            $str = self::replace_diamond_question_mark($str, '');
+            $str = self::replace_diamond_question_mark($str);
         }
 
         if ($remove_invisible_characters) {
@@ -926,7 +926,6 @@ final class UTF8
             true,
             true,
             false,
-            true,
             true,
             true
         );
@@ -1040,6 +1039,8 @@ final class UTF8
 
     /**
      * Create a valid CSS identifier for e.g. "class"- or "id"-attributes.
+     *
+     * copy&past from https://github.com/drupal/core/blob/8.8.x/lib/Drupal/Component/Utility/Html.php#L95
      *
      * @param string               $str    <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
      * @param array<string,string> $filter
@@ -1305,7 +1306,7 @@ final class UTF8
         }
 
         if ($from_encoding && $from_encoding !== 'UTF-8' && $from_encoding !== 'CP850') {
-            $from_encoding = self::normalize_encoding($from_encoding, '');
+            $from_encoding = self::normalize_encoding($from_encoding);
         }
 
         if (
@@ -1340,10 +1341,10 @@ final class UTF8
         }
 
         if ($to_encoding === 'HTML-ENTITIES') {
-            return self::html_encode($str, true, 'UTF-8');
+            return self::html_encode($str, true);
         }
         if ($from_encoding === 'HTML-ENTITIES') {
-            $str = self::html_entity_decode($str, \ENT_COMPAT, 'UTF-8');
+            $str = self::html_entity_decode($str, \ENT_COMPAT);
             $from_encoding = '';
         }
 
@@ -1511,7 +1512,7 @@ final class UTF8
         $trim_chars = "\t\r\n -_()!~?=+/*\\,.:;\"'[]{}`&";
 
         if ($length === null) {
-            $length = (int) \round((int) self::strlen($str, $encoding) / 2, 0);
+            $length = (int) \round((int) self::strlen($str, $encoding) / 2);
         }
 
         if ($search === '') {
@@ -1834,7 +1835,7 @@ final class UTF8
                         if (isset($n[0])) {
                             $var = $n;
                         } else {
-                            $var = self::encode('UTF-8', $var, true);
+                            $var = self::encode('UTF-8', $var);
                         }
                     }
 
@@ -4444,7 +4445,7 @@ final class UTF8
             $pattern = '^[\\s]+';
         }
 
-        return self::regex_replace($str, $pattern, '', '', '/');
+        return self::regex_replace($str, $pattern, '');
     }
 
     /**
@@ -4462,7 +4463,7 @@ final class UTF8
             $arg = \implode('', $arg);
         }
 
-        $codepoints = self::codepoints($arg, false);
+        $codepoints = self::codepoints($arg);
         if ($codepoints === []) {
             return null;
         }
@@ -4521,7 +4522,7 @@ final class UTF8
             $arg = \implode('', $arg);
         }
 
-        $codepoints = self::codepoints($arg, false);
+        $codepoints = self::codepoints($arg);
         if ($codepoints === []) {
             return null;
         }
@@ -5151,7 +5152,7 @@ final class UTF8
 
         $str_length = \strlen($str);
         foreach (self::$BOM as $bom_string => $bom_byte_length) {
-            if (\strpos($str, $bom_string, 0) === 0) {
+            if (\strpos($str, $bom_string) === 0) {
                 /** @var false|string $str_tmp - needed for PhpStan (stubs error) */
                 $str_tmp = \substr($str, $bom_byte_length, $str_length);
                 if ($str_tmp === false) {
@@ -5486,7 +5487,7 @@ final class UTF8
             $pattern = '[\\s]+$';
         }
 
-        return self::regex_replace($str, $pattern, '', '', '/');
+        return self::regex_replace($str, $pattern, '');
     }
 
     /**
@@ -11213,7 +11214,7 @@ final class UTF8
 
         // hack for old php version or for the polyfill ...
         if ($try_to_keep_the_string_length) {
-            $str = self::fixStrCaseHelper($str, false);
+            $str = self::fixStrCaseHelper($str);
         }
 
         if ($lang === null && $encoding === 'UTF-8') {
@@ -11379,7 +11380,7 @@ final class UTF8
         $wide = 0;
         $str = (string) \preg_replace('/[\x{1100}-\x{115F}\x{2329}\x{232A}\x{2E80}-\x{303E}\x{3040}-\x{A4CF}\x{AC00}-\x{D7A3}\x{F900}-\x{FAFF}\x{FE10}-\x{FE19}\x{FE30}-\x{FE6F}\x{FF00}-\x{FF60}\x{FFE0}-\x{FFE6}\x{20000}-\x{2FFFD}\x{30000}-\x{3FFFD}]/u', '', $str, -1, $wide);
 
-        return ($wide << 1) + (int) self::strlen($str, 'UTF-8');
+        return ($wide << 1) + (int) self::strlen($str);
     }
 
     /**
@@ -12714,7 +12715,7 @@ final class UTF8
             $pattern = '^[\\s]+|[\\s]+$';
         }
 
-        return self::regex_replace($str, $pattern, '', '', '/');
+        return self::regex_replace($str, $pattern, '');
     }
 
     /**
