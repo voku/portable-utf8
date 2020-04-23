@@ -3358,7 +3358,7 @@ d
         $testArray = [
             'test lall '                    => 'test-lall',
             'chr(int $code_point) : string' => 'chrint-code_point--string',
-            'öäü!23!!__[!]?='               => 'öäü23__',
+            '123foo/bar!!!'                 => '_23foo-bar',
         ];
 
         foreach ($testArray as $testString => $testResult) {
