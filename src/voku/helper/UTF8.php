@@ -1080,7 +1080,7 @@ final class UTF8
      *
      * copy&past from https://github.com/drupal/core/blob/8.8.x/lib/Drupal/Component/Utility/Html.php#L95
      *
-     * @param string               $str    <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
+     * @param string               $str         <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
      * @param array<string,string> $filter
      * @param bool                 $stripe_tags
      * @param bool                 $strtolower
@@ -1106,7 +1106,7 @@ final class UTF8
         $double_underscore_replacements = 0;
 
         // Fallback ...
-        if (trim($str) === '') {
+        if (\trim($str) === '') {
             $str = \uniqid('auto-generated-css-class', true);
         } else {
             $str = self::clean($str);
@@ -1294,7 +1294,7 @@ final class UTF8
      * Encode a string with emoji chars into a non-emoji string.
      *
      * INFO: opposite to UTF8::emoji_decode()
-     * 
+     *
      * EXAMPLE: <code>
      * UTF8::emoji_encode('foo 👹', false)); // 'foo CHARACTER_OGRE'
      * //
@@ -1336,7 +1336,7 @@ final class UTF8
      *
      * INFO:  This function will also try to fix broken / double encoding,
      *        so you can call this function also on a UTF-8 string and you don't mess up the string.
-     * 
+     *
      * EXAMPLE: <code>
      * UTF8::encode('ISO-8859-1', '-ABC-中文空白-'); // '-ABC-????-'
      * //
@@ -1951,22 +1951,22 @@ final class UTF8
      *
      * @see http://php.net/manual/en/function.filter-input.php
      *
-     * @param int    $type          <p>
-     *                              One of <b>INPUT_GET</b>, <b>INPUT_POST</b>,
-     *                              <b>INPUT_COOKIE</b>, <b>INPUT_SERVER</b>, or
-     *                              <b>INPUT_ENV</b>.
-     *                              </p>
-     * @param string $variable_name <p>
-     *                              Name of a variable to get.
-     *                              </p>
-     * @param int    $filter        [optional] <p>
-     *                              The ID of the filter to apply. The
-     *                              manual page lists the available filters.
-     *                              </p>
-     * @param int|array  $options   [optional] <p>
-     *                              Associative array of options or bitwise disjunction of flags. If filter
-     *                              accepts options, flags can be provided in "flags" field of array.
-     *                              </p>
+     * @param int       $type          <p>
+     *                                 One of <b>INPUT_GET</b>, <b>INPUT_POST</b>,
+     *                                 <b>INPUT_COOKIE</b>, <b>INPUT_SERVER</b>, or
+     *                                 <b>INPUT_ENV</b>.
+     *                                 </p>
+     * @param string    $variable_name <p>
+     *                                 Name of a variable to get.
+     *                                 </p>
+     * @param int       $filter        [optional] <p>
+     *                                 The ID of the filter to apply. The
+     *                                 manual page lists the available filters.
+     *                                 </p>
+     * @param array|int $options       [optional] <p>
+     *                                 Associative array of options or bitwise disjunction of flags. If filter
+     *                                 accepts options, flags can be provided in "flags" field of array.
+     *                                 </p>
      *
      * @psalm-pure
      *
@@ -2007,28 +2007,28 @@ final class UTF8
      *
      * @see http://php.net/manual/en/function.filter-input-array.php
      *
-     * @param int   $type       <p>
-     *                          One of <b>INPUT_GET</b>, <b>INPUT_POST</b>,
-     *                          <b>INPUT_COOKIE</b>, <b>INPUT_SERVER</b>, or
-     *                          <b>INPUT_ENV</b>.
-     *                          </p>
-     * @param null|array $definition [optional] <p>
-     *                          An array defining the arguments. A valid key is a string
-     *                          containing a variable name and a valid value is either a filter type, or an array
-     *                          optionally specifying the filter, flags and options. If the value is an
-     *                          array, valid keys are filter which specifies the
-     *                          filter type,
-     *                          flags which specifies any flags that apply to the
-     *                          filter, and options which specifies any options that
-     *                          apply to the filter. See the example below for a better understanding.
-     *                          </p>
-     *                          <p>
-     *                          This parameter can be also an integer holding a filter constant. Then all values in the
-     *                          input array are filtered by this filter.
-     *                          </p>
-     * @param bool  $add_empty  [optional] <p>
-     *                          Add missing keys as <b>NULL</b> to the return value.
-     *                          </p>
+     * @param int        $type       <p>
+     *                               One of <b>INPUT_GET</b>, <b>INPUT_POST</b>,
+     *                               <b>INPUT_COOKIE</b>, <b>INPUT_SERVER</b>, or
+     *                               <b>INPUT_ENV</b>.
+     *                               </p>
+     * @param array|null $definition [optional] <p>
+     *                               An array defining the arguments. A valid key is a string
+     *                               containing a variable name and a valid value is either a filter type, or an array
+     *                               optionally specifying the filter, flags and options. If the value is an
+     *                               array, valid keys are filter which specifies the
+     *                               filter type,
+     *                               flags which specifies any flags that apply to the
+     *                               filter, and options which specifies any options that
+     *                               apply to the filter. See the example below for a better understanding.
+     *                               </p>
+     *                               <p>
+     *                               This parameter can be also an integer holding a filter constant. Then all values in the
+     *                               input array are filtered by this filter.
+     *                               </p>
+     * @param bool       $add_empty  [optional] <p>
+     *                               Add missing keys as <b>NULL</b> to the return value.
+     *                               </p>
      *
      * @psalm-pure
      *
@@ -2066,54 +2066,54 @@ final class UTF8
      *
      * @see http://php.net/manual/en/function.filter-var.php
      *
-     * @param int|string|float|null $variable <p>
-     *                        Value to filter.
-     *                        </p>
-     * @param int   $filter   [optional] <p>
-     *                        The ID of the filter to apply. The
-     *                        manual page lists the available filters.
-     *                        </p>
-     * @param array|int $options  [optional] <p>
-     *                        Associative array of options or bitwise disjunction of flags. If filter
-     *                        accepts options, flags can be provided in "flags" field of array. For
-     *                        the "callback" filter, callable type should be passed. The
-     *                        callback must accept one argument, the value to be filtered, and return
-     *                        the value after filtering/sanitizing it.
-     *                        </p>
-     *                        <p>
-     *                        <code>
-     *                        // for filters that accept options, use this format
-     *                        $options = array(
-     *                        'options' => array(
-     *                        'default' => 3, // value to return if the filter fails
-     *                        // other options here
-     *                        'min_range' => 0
-     *                        ),
-     *                        'flags' => FILTER_FLAG_ALLOW_OCTAL,
-     *                        );
-     *                        $var = filter_var('0755', FILTER_VALIDATE_INT, $options);
-     *                        // for filter that only accept flags, you can pass them directly
-     *                        $var = filter_var('oops', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-     *                        // for filter that only accept flags, you can also pass as an array
-     *                        $var = filter_var('oops', FILTER_VALIDATE_BOOLEAN,
-     *                        array('flags' => FILTER_NULL_ON_FAILURE));
-     *                        // callback validate filter
-     *                        function foo($value)
-     *                        {
-     *                        // Expected format: Surname, GivenNames
-     *                        if (strpos($value, ", ") === false) return false;
-     *                        list($surname, $givennames) = explode(", ", $value, 2);
-     *                        $empty = (empty($surname) || empty($givennames));
-     *                        $notstrings = (!is_string($surname) || !is_string($givennames));
-     *                        if ($empty || $notstrings) {
-     *                        return false;
-     *                        } else {
-     *                        return $value;
-     *                        }
-     *                        }
-     *                        $var = filter_var('Doe, Jane Sue', FILTER_CALLBACK, array('options' => 'foo'));
-     *                        </code>
-     *                        </p>
+     * @param float|int|string|null $variable <p>
+     *                                        Value to filter.
+     *                                        </p>
+     * @param int                   $filter   [optional] <p>
+     *                                        The ID of the filter to apply. The
+     *                                        manual page lists the available filters.
+     *                                        </p>
+     * @param array|int             $options  [optional] <p>
+     *                                        Associative array of options or bitwise disjunction of flags. If filter
+     *                                        accepts options, flags can be provided in "flags" field of array. For
+     *                                        the "callback" filter, callable type should be passed. The
+     *                                        callback must accept one argument, the value to be filtered, and return
+     *                                        the value after filtering/sanitizing it.
+     *                                        </p>
+     *                                        <p>
+     *                                        <code>
+     *                                        // for filters that accept options, use this format
+     *                                        $options = array(
+     *                                        'options' => array(
+     *                                        'default' => 3, // value to return if the filter fails
+     *                                        // other options here
+     *                                        'min_range' => 0
+     *                                        ),
+     *                                        'flags' => FILTER_FLAG_ALLOW_OCTAL,
+     *                                        );
+     *                                        $var = filter_var('0755', FILTER_VALIDATE_INT, $options);
+     *                                        // for filter that only accept flags, you can pass them directly
+     *                                        $var = filter_var('oops', FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+     *                                        // for filter that only accept flags, you can also pass as an array
+     *                                        $var = filter_var('oops', FILTER_VALIDATE_BOOLEAN,
+     *                                        array('flags' => FILTER_NULL_ON_FAILURE));
+     *                                        // callback validate filter
+     *                                        function foo($value)
+     *                                        {
+     *                                        // Expected format: Surname, GivenNames
+     *                                        if (strpos($value, ", ") === false) return false;
+     *                                        list($surname, $givennames) = explode(", ", $value, 2);
+     *                                        $empty = (empty($surname) || empty($givennames));
+     *                                        $notstrings = (!is_string($surname) || !is_string($givennames));
+     *                                        if ($empty || $notstrings) {
+     *                                        return false;
+     *                                        } else {
+     *                                        return $value;
+     *                                        }
+     *                                        }
+     *                                        $var = filter_var('Doe, Jane Sue', FILTER_CALLBACK, array('options' => 'foo'));
+     *                                        </code>
+     *                                        </p>
      *
      * @psalm-pure
      *
@@ -2163,7 +2163,7 @@ final class UTF8
      * @param array<mixed> $data       <p>
      *                                 An array with string keys containing the data to filter.
      *                                 </p>
-     * @param array|int        $definition [optional] <p>
+     * @param array|int    $definition [optional] <p>
      *                                 An array defining the arguments. A valid key is a string
      *                                 containing a variable name and a valid value is either a
      *                                 filter type, or an
@@ -3467,8 +3467,8 @@ final class UTF8
     /**
      * alias for "UTF8::is_binary()"
      *
-     * @param string|int $str
-     * @param bool  $strict
+     * @param int|string $str
+     * @param bool       $strict
      *
      * @psalm-pure
      *
@@ -3684,7 +3684,7 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::is_base64('4KSu4KWL4KSo4KS/4KSa'); // true</code>
      *
-     * @param null|string $str                   <p>The input string.</p>
+     * @param string|null $str                   <p>The input string.</p>
      * @param bool        $empty_string_is_valid [optional] <p>Is an empty string valid base64 or not?</p>
      *
      * @psalm-pure
@@ -3716,8 +3716,8 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::is_binary(01); // true</code>
      *
-     * @param string|int $input
-     * @param bool  $strict
+     * @param int|string $input
+     * @param bool       $strict
      *
      * @psalm-pure
      *
@@ -3842,7 +3842,7 @@ final class UTF8
      * A variable is considered empty if it does not exist or if its value equals FALSE.
      * empty() does not generate a warning if the variable does not exist.
      *
-     * @param string|int|float|array $str
+     * @param array|float|int|string $str
      *
      * @psalm-pure
      *
@@ -4166,8 +4166,8 @@ final class UTF8
      * UTF8::is_utf32(file_get_contents('utf-8.txt')); // false
      * </code>
      *
-     * @param string $str                      <p>The input string.</p>
-     * @param bool  $check_if_string_is_binary
+     * @param string $str                       <p>The input string.</p>
+     * @param bool   $check_if_string_is_binary
      *
      * @psalm-pure
      *
@@ -4742,7 +4742,7 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return string|mixed e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.<br>Will return a empty string as fallback (by default)
+     * @return mixed|string e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.<br>Will return a empty string as fallback (by default)
      *
      * @template TNormalizeEncodingFallback
      * @psalm-param TNormalizeEncodingFallback $fallback
@@ -5117,17 +5117,17 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::range('κ', 'ζ'); // array('κ', 'ι', 'θ', 'η', 'ζ',)</code>
      *
-     * @param int|string     $var1      <p>Numeric or hexadecimal code points, or a UTF-8 character to start from.</p>
-     * @param int|string     $var2      <p>Numeric or hexadecimal code points, or a UTF-8 character to end at.</p>
-     * @param bool      $use_ctype <p>use ctype to detect numeric and hexadecimal, otherwise we will use a simple
-     *                             "is_numeric"</p>
-     * @param string    $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
-     * @param float|int $step      [optional] <p>
-     *                             If a step value is given, it will be used as the
-     *                             increment between elements in the sequence. step
-     *                             should be given as a positive number. If not specified,
-     *                             step will default to 1.
-     *                             </p>
+     * @param int|string $var1      <p>Numeric or hexadecimal code points, or a UTF-8 character to start from.</p>
+     * @param int|string $var2      <p>Numeric or hexadecimal code points, or a UTF-8 character to end at.</p>
+     * @param bool       $use_ctype <p>use ctype to detect numeric and hexadecimal, otherwise we will use a simple
+     *                              "is_numeric"</p>
+     * @param string     $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
+     * @param float|int  $step      [optional] <p>
+     *                              If a step value is given, it will be used as the
+     *                              increment between elements in the sequence. step
+     *                              should be given as a positive number. If not specified,
+     *                              step will default to 1.
+     *                              </p>
      *
      * @psalm-pure
      *
@@ -5339,7 +5339,7 @@ final class UTF8
 
     /**
      * Remove the BOM from UTF-8 / UTF-16 / UTF-32 strings.
-     * 
+     *
      * EXAMPLE: <code>UTF8::remove_bom("\xEF\xBB\xBFΜπορώ να"); // 'Μπορώ να'</code>
      *
      * @param string $str <p>The input string.</p>
@@ -5375,7 +5375,7 @@ final class UTF8
 
     /**
      * Removes duplicate occurrences of a string in another string.
-     * 
+     *
      * EXAMPLE: <code>UTF8::remove_duplicates('öäü-κόσμεκόσμε-äöü', 'κόσμε'); // 'öäü-κόσμε-äöü'</code>
      *
      * @param string          $str  <p>The base string.</p>
@@ -5442,7 +5442,7 @@ final class UTF8
      * Remove invisible characters from a string.
      *
      * e.g.: This prevents sandwiching null characters between ascii characters, like Java\0script.
-     * 
+     *
      * EXAMPLE: <code>UTF8::remove_invisible_characters("κόσ\0με"); // 'κόσμε'</code>
      *
      * copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
@@ -5606,7 +5606,7 @@ final class UTF8
      * Replace the diamond question mark (�) and invalid-UTF8 chars with the replacement.
      *
      * EXAMPLE: <code>UTF8::replace_diamond_question_mark('中文空白�', ''); // '中文空白'</code>
-     * 
+     *
      * @param string $str                        <p>The input string</p>
      * @param string $replacement_char           <p>The replacement character.</p>
      * @param bool   $process_invalid_utf8_chars <p>Convert invalid UTF-8 chars </p>
@@ -7802,24 +7802,24 @@ final class UTF8
      * @see http://php.net/manual/en/function.str-replace.php
      *
      * @param string|string[] $search  <p>
-     *                       The value being searched for, otherwise known as the needle.
-     *                       An array may be used to designate multiple needles.
-     *                       </p>
+     *                                 The value being searched for, otherwise known as the needle.
+     *                                 An array may be used to designate multiple needles.
+     *                                 </p>
      * @param string|string[] $replace <p>
-     *                       The replacement value that replaces found search
-     *                       values. An array may be used to designate multiple replacements.
-     *                       </p>
+     *                                 The replacement value that replaces found search
+     *                                 values. An array may be used to designate multiple replacements.
+     *                                 </p>
      * @param string|string[] $subject <p>
-     *                       The string or array being searched and replaced on,
-     *                       otherwise known as the haystack.
-     *                       </p>
-     *                       <p>
-     *                       If subject is an array, then the search and
-     *                       replace is performed with every entry of
-     *                       subject, and the return value is an array as
-     *                       well.
-     *                       </p>
-     * @param int   $count   [optional] If passed, this will hold the number of matched and replaced needles
+     *                                 The string or array being searched and replaced on,
+     *                                 otherwise known as the haystack.
+     *                                 </p>
+     *                                 <p>
+     *                                 If subject is an array, then the search and
+     *                                 replace is performed with every entry of
+     *                                 subject, and the return value is an array as
+     *                                 well.
+     *                                 </p>
+     * @param int             $count   [optional] If passed, this will hold the number of matched and replaced needles
      *
      * @psalm-pure
      *
@@ -9744,8 +9744,8 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::string(array(246, 228, 252)); // 'öäü'</code>
      *
-     * @param int[]|string[]|int|string $intOrHex <p>Integer or Hexadecimal codepoints.</p>
-     *                                            
+     * @param int|int[]|string|string[] $intOrHex <p>Integer or Hexadecimal codepoints.</p>
+     *
      * @psalm-param int[]|numeric-string[]|int|numeric-string $intOrHex
      *
      * @psalm-pure
@@ -11992,7 +11992,6 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::substr_count('中文空白', '文空', 1, 2); // 1</code>
      *
-     *
      * @see http://php.net/manual/en/function.substr-count.php
      *
      * @param string $haystack   <p>The string to search in.</p>
@@ -12778,7 +12777,7 @@ final class UTF8
     }
 
     /**
-     * @param int|string|bool $str
+     * @param bool|int|string $str
      *
      * @psalm-param bool|int|numeric-string $str
      *
@@ -13089,7 +13088,7 @@ final class UTF8
      * Returns the given input as string, or null if the input isn't int|float|string
      * and do not implement the "__toString()" method.
      *
-     * @param object|string|null|int|float $input
+     * @param float|int|object|string|null $input
      *
      * @psalm-pure
      *
@@ -13136,7 +13135,7 @@ final class UTF8
      *
      * We can only use the original-function, if we use <= 7-Bit in the string / chars
      * but the check for ASCII (7-Bit) cost more time, then we can safe here.
-     * 
+     *
      * EXAMPLE: <code>UTF8::trim('   -ABC-中文空白-  '); // '-ABC-中文空白-'</code>
      *
      * @param string      $str   <p>The string to be trimmed</p>
