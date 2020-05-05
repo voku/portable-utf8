@@ -543,8 +543,8 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::chr(0x2603); // '☃'</code>
      *
-     * @param int|string $code_point <p>The code point for which to generate a character.</p>
-     * @param string     $encoding   [optional] <p>Default is UTF-8</p>
+     * @param int    $code_point <p>The code point for which to generate a character.</p>
+     * @param string $encoding   [optional] <p>Default is UTF-8</p>
      *
      * @psalm-pure
      *
@@ -589,7 +589,7 @@ final class UTF8
             return $CHAR_CACHE[$cache_key];
         }
 
-        if ($code_point <= 127) { // use "simple"-char only until "\x80"
+        if ($code_point <= 0x80) { // only for "simple"-chars
 
             if (self::$CHR === null) {
                 self::$CHR = self::getData('chr');
@@ -631,12 +631,7 @@ final class UTF8
         }
 
         $code_point = (int) $code_point;
-        if ($code_point <= 0x7F) {
-            /**
-             * @psalm-suppress PossiblyNullArrayAccess
-             */
-            $chr = self::$CHR[$code_point];
-        } elseif ($code_point <= 0x7FF) {
+        if ($code_point <= 0x7FF) {
             /**
              * @psalm-suppress PossiblyNullArrayAccess
              */
@@ -1873,9 +1868,9 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a')</code>
      *
-     * @param mixed  $var
-     * @param int    $normalization_form
-     * @param string $leading_combining
+     * @param array|object|string $var
+     * @param int                 $normalization_form
+     * @param string              $leading_combining
      *
      * @psalm-pure
      *
@@ -1918,6 +1913,7 @@ final class UTF8
                         }
                     }
 
+                    \assert(\is_string($var));
                     if (
                         $var[0] >= "\x80"
                         &&
@@ -1935,6 +1931,10 @@ final class UTF8
             default:
                 // nothing
         }
+
+        /** @noinspection PhpSillyAssignmentInspection */
+        /** @psalm-var TFilter $var */
+        $var = $var;
 
         return $var;
     }
@@ -2779,7 +2779,7 @@ final class UTF8
     public static function hex_to_chr(string $hexdec)
     {
         /** @noinspection PhpUsageOfSilenceOperatorInspection - Invalid characters passed for attempted conversion, these have been ignored */
-        return self::decimal_to_chr(@\hexdec($hexdec));
+        return self::decimal_to_chr((int) @\hexdec($hexdec));
     }
 
     /**
@@ -3783,7 +3783,7 @@ final class UTF8
             \fclose($fp);
         }
 
-        if ($block === '') {
+        if ($block === '' || $block === false) {
             return false;
         }
 
@@ -4648,7 +4648,7 @@ final class UTF8
 
         $codepoint_max = \max($codepoints);
 
-        return self::chr($codepoint_max);
+        return self::chr((int) $codepoint_max);
     }
 
     /**
@@ -4680,7 +4680,7 @@ final class UTF8
      * @psalm-pure
      *
      * @return bool
-     *              <strong>true</strong> if available, <strong>false</strong> otherwise
+     *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
      */
     public static function mbstring_loaded(): bool
     {
@@ -4696,7 +4696,8 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return string|null the character with the lowest code point than others, returns null on failure or empty input
+     * @return string|null
+     *                     <p>The character with the lowest code point than others, returns null on failure or empty input.</p>
      */
     public static function min($arg)
     {
@@ -4711,7 +4712,7 @@ final class UTF8
 
         $codepoint_min = \min($codepoints);
 
-        return self::chr($codepoint_min);
+        return self::chr((int) $codepoint_min);
     }
 
     /**
@@ -4742,10 +4743,11 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return mixed|string e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.<br>Will return a empty string as fallback (by default)
+     * @return mixed|string
+     *                      <p>e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.<br>Will return a empty string as fallback (by default)</p>
      *
      * @template TNormalizeEncodingFallback
-     * @psalm-param TNormalizeEncodingFallback $fallback
+     * @psalm-param string|TNormalizeEncodingFallback $fallback
      * @psalm-return string|TNormalizeEncodingFallback
      */
     public static function normalize_encoding($encoding, $fallback = '')
@@ -5174,11 +5176,11 @@ final class UTF8
             $start = (int) $var1;
         } /** @noinspection PhpComposerExtensionStubsInspection */ elseif ($use_ctype && \ctype_xdigit($var1) && \ctype_xdigit($var2)) {
             $is_xdigit = true;
-            $start = (int) self::hex_to_int($var1);
+            $start = (int) self::hex_to_int((string) $var1);
         } elseif (!$use_ctype && \is_numeric($var1)) {
             $start = (int) $var1;
         } else {
-            $start = self::ord($var1);
+            $start = self::ord((string) $var1);
         }
 
         if (!$start) {
@@ -5188,11 +5190,11 @@ final class UTF8
         if ($is_digit) {
             $end = (int) $var2;
         } elseif ($is_xdigit) {
-            $end = (int) self::hex_to_int($var2);
+            $end = (int) self::hex_to_int((string) $var2);
         } elseif (!$use_ctype && \is_numeric($var2)) {
             $end = (int) $var2;
         } else {
-            $end = self::ord($var2);
+            $end = self::ord((string) $var2);
         }
 
         if (!$end) {
@@ -6715,6 +6717,7 @@ final class UTF8
 
         /**
          * @psalm-suppress PossiblyNullArgument
+         * @psalm-var TStrIReplaceSubject $subject
          */
         $subject = \preg_replace($search, $replacement, $subject, -1, $count);
 
@@ -7810,7 +7813,7 @@ final class UTF8
      *                                 values. An array may be used to designate multiple replacements.
      *                                 </p>
      * @param string|string[] $subject <p>
-     *                                 The string or array being searched and replaced on,
+     *                                 The string or array ofstrings being searched and replaced on,
      *                                 otherwise known as the haystack.
      *                                 </p>
      *                                 <p>
@@ -7828,6 +7831,8 @@ final class UTF8
      * @template TStrReplaceSubject
      * @psalm-param TStrReplaceSubject $subject
      * @psalm-return TStrReplaceSubject
+     *
+     * @deprecated please use \str_replace() instead
      */
     public static function str_replace(
         $search,
@@ -7837,13 +7842,16 @@ final class UTF8
     ) {
         /**
          * @psalm-suppress PossiblyNullArgument
+         * @psalm-var TStrReplaceSubject $return;
          */
-        return \str_replace(
+        $return = \str_replace(
             $search,
             $replace,
             $subject,
             $count
         );
+
+        return $return;
     }
 
     /**
@@ -12904,7 +12912,7 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::to_utf8(["\u0063\u0061\u0074"]); // array('cat')</code>
      *
-     * @param string|string[] $str                        <p>Any string or array.</p>
+     * @param string|string[] $str                        <p>Any string or array of strings.</p>
      * @param bool            $decode_html_entity_to_utf8 <p>Set to true, if you need to decode html-entities.</p>
      *
      * @psalm-pure
@@ -12928,7 +12936,10 @@ final class UTF8
             return $str;
         }
 
-        return self::to_utf8_string($str, $decode_html_entity_to_utf8);
+        /** @psalm-var TToUtf8 $str */
+        $str = self::to_utf8_string($str, $decode_html_entity_to_utf8);
+
+        return $str;
     }
 
     /**
@@ -13116,13 +13127,15 @@ final class UTF8
             return (string) $input;
         }
 
-        if (
-            $input_type === 'object'
-            /** @var object $input - hack for psalm */
-            &&
-            \method_exists($input, '__toString')
-        ) {
-            return (string) $input;
+        if ($input_type === 'object') {
+            /** @noinspection PhpSillyAssignmentInspection */
+            /** @var object $input - hack for psalm / phpstan */
+            $input = $input;
+            /** @noinspection NestedPositiveIfStatementsInspection */
+            /** @noinspection MissingOrEmptyGroupStatementInspection */
+            if (\method_exists($input, '__toString')) {
+                return (string) $input;
+            }
         }
 
         return null;
