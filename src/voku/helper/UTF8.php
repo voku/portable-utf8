@@ -7813,7 +7813,7 @@ final class UTF8
      *                                 values. An array may be used to designate multiple replacements.
      *                                 </p>
      * @param string|string[] $subject <p>
-     *                                 The string or array ofstrings being searched and replaced on,
+     *                                 The string or array of strings being searched and replaced on,
      *                                 otherwise known as the haystack.
      *                                 </p>
      *                                 <p>

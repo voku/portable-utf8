@@ -94,6 +94,10 @@ foreach ($reflection->getMethods() as $method) {
         continue;
     }
 
+    if ($method->isDeprecated()) {
+        continue;
+    }
+
     if (UTF8::str_starts_with($method->getShortName(), '_')) {
         continue;
     }

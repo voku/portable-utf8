@@ -182,7 +182,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#char_atstring-str-int-index-string-encoding-string">char_at</a>
 </td></tr><tr><td><a href="#charsstring-str-string">chars</a>
 </td><td><a href="#checkforsupport-string">checkForSupport</a>
-</td><td><a href="#chrintstring-code_point-string-encoding-string">chr</a>
+</td><td><a href="#chrint-code_point-string-encoding-string">chr</a>
 </td><td><a href="#chr_mapcallable-callback-string-str-string">chr_map</a>
 </td></tr><tr><td><a href="#chr_size_liststring-str-string">chr_size_list</a>
 </td><td><a href="#chr_to_decimalstring-char-string">chr_to_decimal</a>
@@ -207,10 +207,10 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td></tr><tr><td><a href="#extract_textstring-str-string-search-intnull-length-string-replacer_for_skipped_text-string-encoding-string">extract_text</a>
 </td><td><a href="#file_get_contentsstring-filename-bool-use_include_path-resourcenull-context-intnull-offset-intnull-max_length-int-timeout-bool-convert_to_utf8-string-from_encoding-string">file_get_contents</a>
 </td><td><a href="#file_has_bomstring-file_path-string">file_has_bom</a>
-</td><td><a href="#filtermixed-var-int-normalization_form-string-leading_combining-string">filter</a>
-</td></tr><tr><td><a href="#filter_inputint-type-string-variable_name-int-filter-intarray-options-intarray">filter_input</a>
-</td><td><a href="#filter_input_arrayint-type-nullarray-definition-bool-add_empty-bool">filter_input_array</a>
-</td><td><a href="#filter_varintstringfloatnull-variable-int-filter-arrayint-options-arrayint">filter_var</a>
+</td><td><a href="#filterarrayobjectstring-var-int-normalization_form-string-leading_combining-string">filter</a>
+</td></tr><tr><td><a href="#filter_inputint-type-string-variable_name-int-filter-arrayint-options-arrayint">filter_input</a>
+</td><td><a href="#filter_input_arrayint-type-arraynull-definition-bool-add_empty-bool">filter_input_array</a>
+</td><td><a href="#filter_varfloatintstringnull-variable-int-filter-arrayint-options-arrayint">filter_var</a>
 </td><td><a href="#filter_var_arrayarray-data-arrayint-definition-bool-add_empty-bool">filter_var_array</a>
 </td></tr><tr><td><a href="#finfo_loaded-bool">finfo_loaded</a>
 </td><td><a href="#first_charstring-str-int-n-string-encoding-string">first_char</a>
@@ -242,7 +242,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#intl_loaded-string">intl_loaded</a>
 </td></tr><tr><td><a href="#isasciistring-str-string">isAscii</a>
 </td><td><a href="#isbase64string-str-string">isBase64</a>
-</td><td><a href="#isbinarystringint-str-bool-strict-bool">isBinary</a>
+</td><td><a href="#isbinaryintstring-str-bool-strict-bool">isBinary</a>
 </td><td><a href="#isbomstring-utf8_chr-string">isBom</a>
 </td></tr><tr><td><a href="#ishtmlstring-str-string">isHtml</a>
 </td><td><a href="#isjsonstring-str-string">isJson</a>
@@ -252,12 +252,12 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#is_alphastring-str-string">is_alpha</a>
 </td><td><a href="#is_alphanumericstring-str-string">is_alphanumeric</a>
 </td><td><a href="#is_asciistring-str-string">is_ascii</a>
-</td></tr><tr><td><a href="#is_base64nullstring-str-bool-empty_string_is_valid-bool">is_base64</a>
-</td><td><a href="#is_binarystringint-input-bool-strict-bool">is_binary</a>
+</td></tr><tr><td><a href="#is_base64stringnull-str-bool-empty_string_is_valid-bool">is_base64</a>
+</td><td><a href="#is_binaryintstring-input-bool-strict-bool">is_binary</a>
 </td><td><a href="#is_binary_filestring-file-string">is_binary_file</a>
 </td><td><a href="#is_blankstring-str-string">is_blank</a>
 </td></tr><tr><td><a href="#is_bomstring-str-string">is_bom</a>
-</td><td><a href="#is_emptystringintfloatarray-str-stringintfloatarray">is_empty</a>
+</td><td><a href="#is_emptyarrayfloatintstring-str-arrayfloatintstring">is_empty</a>
 </td><td><a href="#is_hexadecimalstring-str-string">is_hexadecimal</a>
 </td><td><a href="#is_htmlstring-str-string">is_html</a>
 </td></tr><tr><td><a href="#is_jsonstring-str-bool-only_array_or_object_results_are_valid-bool">is_json</a>
@@ -396,7 +396,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#strcmpstring-str1-string-str2-string">strcmp</a>
 </td><td><a href="#strcspnstring-str-string-char_list-int-offset-int-length-string-encoding-string">strcspn</a>
 </td><td><a href="#strichrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-bool">strichr</a>
-</td></tr><tr><td><a href="#stringintstringintstring-intorhex-intstringintstring">string</a>
+</td></tr><tr><td><a href="#stringintintstringstring-intorhex-intintstringstring">string</a>
 </td><td><a href="#string_has_bomstring-str-string">string_has_bom</a>
 </td><td><a href="#strip_tagsstring-str-string-allowable_tags-bool-clean_utf8-bool">strip_tags</a>
 </td><td><a href="#strip_whitespacestring-str-string">strip_whitespace</a>
@@ -447,12 +447,12 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td></tr><tr><td><a href="#tolatin1stringstring-str-stringstring">toLatin1</a>
 </td><td><a href="#toutf8stringstring-str-stringstring">toUTF8</a>
 </td><td><a href="#to_asciistring-str-string-unknown-bool-strict-bool">to_ascii</a>
-</td><td><a href="#to_booleanintstringbool-str-intstringbool">to_boolean</a>
+</td><td><a href="#to_booleanboolintstring-str-boolintstring">to_boolean</a>
 </td></tr><tr><td><a href="#to_filenamestring-str-bool-use_transliterate-string-fallback_char-string">to_filename</a>
 </td><td><a href="#to_intstring-str-string">to_int</a>
 </td><td><a href="#to_iso8859stringstring-str-stringstring">to_iso8859</a>
 </td><td><a href="#to_latin1stringstring-str-stringstring">to_latin1</a>
-</td></tr><tr><td><a href="#to_stringobjectstringnullintfloat-input-objectstringnullintfloat">to_string</a>
+</td></tr><tr><td><a href="#to_stringfloatintobjectstringnull-input-floatintobjectstringnull">to_string</a>
 </td><td><a href="#to_utf8stringstring-str-bool-decode_html_entity_to_utf8-bool">to_utf8</a>
 </td><td><a href="#to_utf8_stringstring-str-bool-decode_html_entity_to_utf8-bool">to_utf8_string</a>
 </td><td><a href="#trimstring-str-stringnull-chars-stringnull">trim</a>
@@ -621,7 +621,7 @@ __nothing__
 
 --------
 
-## chr(int|string $code_point, string $encoding): string
+## chr(int $code_point, string $encoding): string
 <a href="#class-methods">↑</a>
 Generates a UTF-8 encoded character from the given code point.
 
@@ -630,7 +630,7 @@ INFO: opposite to UTF8::ord()
 EXAMPLE: <code>UTF8::chr(0x2603); // '☃'</code>
 
 **Parameters:**
-- int|string $code_point <p>The code point for which to generate a character.</p>
+- int $code_point <p>The code point for which to generate a character.</p>
 - string $encoding [optional] <p>Default is UTF-8</p>
 
 **Return:**
@@ -1088,14 +1088,14 @@ EXAMPLE: <code>UTF8::file_has_bom('utf8_with_bom.txt'); // true</code>
 
 --------
 
-## filter(mixed $var, int $normalization_form, string $leading_combining): string
+## filter(array|object|string $var, int $normalization_form, string $leading_combining): string
 <a href="#class-methods">↑</a>
 Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
 EXAMPLE: <code>UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a')</code>
 
 **Parameters:**
-- mixed $var 
+- array|object|string $var 
 - int $normalization_form 
 - string $leading_combining 
 
@@ -1104,7 +1104,7 @@ EXAMPLE: <code>UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a'
 
 --------
 
-## filter_input(int $type, string $variable_name, int $filter, int|array $options): int|array
+## filter_input(int $type, string $variable_name, int $filter, array|int $options): array|int
 <a href="#class-methods">↑</a>
 "filter_input()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1128,7 +1128,7 @@ Name of a variable to get.
 The ID of the filter to apply. The
 manual page lists the available filters.
 </p>
-- int|array $options [optional] <p>
+- array|int $options [optional] <p>
 Associative array of options or bitwise disjunction of flags. If filter
 accepts options, flags can be provided in "flags" field of array.
 </p>
@@ -1142,7 +1142,7 @@ returns <b>FALSE</b> if the variable is not set and <b>NULL</b> if the filter fa
 
 --------
 
-## filter_input_array(int $type, null|array $definition, bool $add_empty): bool
+## filter_input_array(int $type, array|null $definition, bool $add_empty): bool
 <a href="#class-methods">↑</a>
 "filter_input_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1159,7 +1159,7 @@ One of <b>INPUT_GET</b>, <b>INPUT_POST</b>,
 <b>INPUT_COOKIE</b>, <b>INPUT_SERVER</b>, or
 <b>INPUT_ENV</b>.
 </p>
-- null|array $definition [optional] <p>
+- array|null $definition [optional] <p>
 An array defining the arguments. A valid key is a string
 containing a variable name and a valid value is either a filter type, or an array
 optionally specifying the filter, flags and options. If the value is an
@@ -1187,7 +1187,7 @@ is not set and <b>NULL</b> if the filter fails.
 
 --------
 
-## filter_var(int|string|float|null $variable, int $filter, array|int $options): array|int
+## filter_var(float|int|string|null $variable, int $filter, array|int $options): array|int
 <a href="#class-methods">↑</a>
 "filter_var()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1196,7 +1196,7 @@ Filters a variable with a specified filter.
 EXAMPLE: <code>UTF8::filter_var('-ABC-中文空白-', FILTER_VALIDATE_URL); // false</code>
 
 **Parameters:**
-- int|string|float|null $variable <p>
+- float|int|string|null $variable <p>
 Value to filter.
 </p>
 - int $filter [optional] <p>
@@ -1975,12 +1975,12 @@ alias for "UTF8::is_base64()"
 
 --------
 
-## isBinary(string|int $str, bool $strict): bool
+## isBinary(int|string $str, bool $strict): bool
 <a href="#class-methods">↑</a>
 alias for "UTF8::is_binary()"
 
 **Parameters:**
-- string|int $str 
+- int|string $str 
 - bool $strict 
 
 **Return:**
@@ -2106,14 +2106,14 @@ EXAMPLE: <code>UTF8::is_ascii('白'); // false</code>
 
 --------
 
-## is_base64(null|string $str, bool $empty_string_is_valid): bool
+## is_base64(string|null $str, bool $empty_string_is_valid): bool
 <a href="#class-methods">↑</a>
 Returns true if the string is base64 encoded, false otherwise.
 
 EXAMPLE: <code>UTF8::is_base64('4KSu4KWL4KSo4KS/4KSa'); // true</code>
 
 **Parameters:**
-- null|string $str <p>The input string.</p>
+- string|null $str <p>The input string.</p>
 - bool $empty_string_is_valid [optional] <p>Is an empty string valid base64 or not?</p>
 
 **Return:**
@@ -2121,14 +2121,14 @@ EXAMPLE: <code>UTF8::is_base64('4KSu4KWL4KSo4KS/4KSa'); // true</code>
 
 --------
 
-## is_binary(string|int $input, bool $strict): bool
+## is_binary(int|string $input, bool $strict): bool
 <a href="#class-methods">↑</a>
 Check if the input is binary... (is look like a hack).
 
 EXAMPLE: <code>UTF8::is_binary(01); // true</code>
 
 **Parameters:**
-- string|int $input 
+- int|string $input 
 - bool $strict 
 
 **Return:**
@@ -2178,7 +2178,7 @@ EXAMPLE: <code>UTF8::is_bom("\xef\xbb\xbf"); // true</code>
 
 --------
 
-## is_empty(string|int|float|array $str): string|int|float|array
+## is_empty(array|float|int|string $str): array|float|int|string
 <a href="#class-methods">↑</a>
 Determine whether the string is considered to be empty.
 
@@ -2186,7 +2186,7 @@ A variable is considered empty if it does not exist or if its value equals FALSE
 empty() does not generate a warning if the variable does not exist.
 
 **Parameters:**
-- string|int|float|array $str 
+- array|float|int|string $str 
 
 **Return:**
 - bool <p>Whether or not $str is empty().</p>
@@ -2592,7 +2592,7 @@ Checks whether mbstring is available on the server.
 __nothing__
 
 **Return:**
-- bool <strong>true</strong> if available, <strong>false</strong> otherwise
+- bool <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
 
 --------
 
@@ -2606,7 +2606,7 @@ EXAMPLE: <code>UTF8::min('abc-äöü-中文空白'); // '-'</code>
 - string|string[] $arg <strong>A UTF-8 encoded string or an array of such strings.</strong>
 
 **Return:**
-- string|null the character with the lowest code point than others, returns null on failure or empty input
+- string|null <p>The character with the lowest code point than others, returns null on failure or empty input.</p>
 
 --------
 
@@ -2634,7 +2634,7 @@ EXAMPLE: <code>UTF8::normalize_encoding('UTF8'); // 'UTF-8'</code>
 - mixed $fallback <p>e.g.: UTF-8</p>
 
 **Return:**
-- string|mixed e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.<br>Will return a empty string as fallback (by default)
+- mixed|string <p>e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.<br>Will return a empty string as fallback (by default)</p>
 
 --------
 
@@ -3847,7 +3847,7 @@ The replacement value that replaces found search
 values. An array may be used to designate multiple replacements.
 </p>
 - string|string[] $subject <p>
-The string or array being searched and replaced on,
+The string or array of strings being searched and replaced on,
 otherwise known as the haystack.
 </p>
 <p>
@@ -4490,7 +4490,7 @@ alias for "UTF8::stristr()"
 
 --------
 
-## string(int[]|string[]|int|string $intOrHex): int[]|string[]|int|string
+## string(int|int[]|string|string[] $intOrHex): int|int[]|string|string[]
 <a href="#class-methods">↑</a>
 Create a UTF-8 string from code points.
 
@@ -4499,7 +4499,7 @@ INFO: opposite to UTF8::codepoints()
 EXAMPLE: <code>UTF8::string(array(246, 228, 252)); // 'öäü'</code>
 
 **Parameters:**
-- int[]|string[]|int|string $intOrHex <p>Integer or Hexadecimal codepoints.</p>
+- int|int[]|string|string[] $intOrHex <p>Integer or Hexadecimal codepoints.</p>
 
 **Return:**
 - string <p>A UTF-8 encoded string.</p>
@@ -5513,12 +5513,12 @@ performance</p>
 
 --------
 
-## to_boolean(int|string|bool $str): int|string|bool
+## to_boolean(bool|int|string $str): bool|int|string
 <a href="#class-methods">↑</a>
 
 
 **Parameters:**
-- int|string|bool $str 
+- bool|int|string $str 
 
 **Return:**
 - bool 
@@ -5578,13 +5578,13 @@ alias for "UTF8::to_iso8859()"
 
 --------
 
-## to_string(object|string|null|int|float $input): object|string|null|int|float
+## to_string(float|int|object|string|null $input): float|int|object|string|null
 <a href="#class-methods">↑</a>
 Returns the given input as string, or null if the input isn't int|float|string
 and do not implement the "__toString()" method.
 
 **Parameters:**
-- object|string|null|int|float $input 
+- float|int|object|string|null $input 
 
 **Return:**
 - string|null <p>null if the input isn't int|float|string and has no "__toString()" method</p>
@@ -5605,7 +5605,7 @@ case.</li>
 EXAMPLE: <code>UTF8::to_utf8(["\u0063\u0061\u0074"]); // array('cat')</code>
 
 **Parameters:**
-- string|string[] $str <p>Any string or array.</p>
+- string|string[] $str <p>Any string or array of strings.</p>
 - bool $decode_html_entity_to_utf8 <p>Set to true, if you need to decode html-entities.</p>
 
 **Return:**
