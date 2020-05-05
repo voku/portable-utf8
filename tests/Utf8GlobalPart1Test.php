@@ -676,6 +676,8 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
         foreach ($tests as $before => $after) {
             static::assertSame($after, UTF8::decimal_to_chr($before));
+            static::assertSame($before, UTF8::chr_to_decimal(UTF8::decimal_to_chr($before)), 'tested: ' . $after);
+            static::assertSame($after, UTF8::decimal_to_chr(UTF8::chr_to_decimal(UTF8::decimal_to_chr($before))));
         }
     }
 
@@ -3485,6 +3487,10 @@ abc	áßç	क際👽 	क際👽
                     252,
                 ]
             )
+        );
+        static::assertSame(
+            'ö',
+            UTF8::string(246)
         );
         static::assertSame(
             'ㅡㅡ',

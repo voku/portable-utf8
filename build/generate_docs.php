@@ -140,10 +140,7 @@ foreach ($reflection->getMethods() as $method) {
 
     $methodWithType = $method->getShortName() . '(' . implode(', ', $paramsTypes) . '): ' . implode('|', $returnsTypes);
 
-    $description = (string)$doc->getDescription();
-    if (!$description) {
-        $description = $doc->getSummary();
-    }
+    $description = trim($doc->getSummary() . "\n\n" . $doc->getDescription());
 
     $methodTemplate->set('name', $methodWithType);
     $methodTemplate->set('description', $description);
@@ -194,4 +191,4 @@ $indexStrResult = '
 
 $documentTemplate->set('__functions_index__', $indexStrResult);
 
-file_put_contents(__DIR__ . '/README_TEST.md', $documentTemplate->format());
+file_put_contents(__DIR__ . '/../README.md', $documentTemplate->format());

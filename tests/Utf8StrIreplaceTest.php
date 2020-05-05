@@ -48,6 +48,13 @@ final class Utf8StrIreplaceTest extends \PHPUnit\Framework\TestCase
         $str = 'Iñtërnâtiônàlizætiøn';
         $replaced = 'Iñtërnâtiônàlizætiøn';
         static::assertSame($replaced, u::str_ireplace('', 'x', $str));
+
+        // --
+
+        static::assertSame('Iñtërnâtiônàlizætiøn', u::str_ireplace('', null, $str));
+        static::assertSame('Iñtërnâtiônàlizætiøn', u::str_ireplace([], null, $str));
+        static::assertSame('Iñtërnâtiônàlizætiøn', u::str_ireplace(null, null, $str));
+        static::assertSame('', u::str_ireplace(null, null, null));
     }
 
     public function testReplaceCount()

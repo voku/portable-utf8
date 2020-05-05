@@ -3575,6 +3575,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             static::assertFalse(UTF8::stripos('', ' '));
             static::assertFalse(UTF8::stripos('', ''));
             static::assertSame(1, UTF8::stripos('aςσb', 'ΣΣ'));
+            static::assertSame(1, UTF8::stripos('aσσb', 'ΣΣ'));
             static::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
             static::assertSame(4, UTF8::stripos('öäü-κόσμε-κόσμε-κόσμε', 'Κ'));
             static::assertSame(4, UTF8::stripos('ABC-ÖÄÜ-中文空白-中文空白', 'ö'));

@@ -37,6 +37,11 @@ final class Utf8CompliantTest extends \PHPUnit\Framework\TestCase
         static::assertFalse(u::is_utf8($str));
     }
 
+    public function testNull()
+    {
+        static::assertTrue(u::is_utf8(null));
+    }
+
     public function testEmptyString()
     {
         $str = '';
