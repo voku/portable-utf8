@@ -17,7 +17,7 @@ $phpUtf8Class = $phpClasses[UTF8::class];
 $templateDocument = file_get_contents(__DIR__ . '/docs/base.md');
 
 $templateMethodParam = <<<RAW
-- %param%
+- `%param%`
 RAW;
 
 /** @noinspection HtmlUnknownAnchorTarget */
@@ -30,7 +30,7 @@ $templateMethod = <<<RAW
 %params%
 
 **Return:**
-- %return%
+- `%return%`
 
 --------
 
@@ -67,21 +67,11 @@ foreach ($phpUtf8Class->methods as $method) {
     // -- params
     $params = [];
     $paramsTypes = [];
-    foreach ($method->parameters as $tagParam) {
-        /** @var \voku\SimplePhpParser\Model\PHPParameter $tagParam */
-
-        if (
-            $tagParam->typeFromPhpDoc !== $tagParam->typeFromPhpDocSimple
-            &&
-            strpos($tagParam->typeFromPhpDoc, 'mixed') === false
-        ) {
-            throw new Error('Return type error: ' . $method->name . ' param ' . $tagParam->name . ' : ' . $tagParam->typeFromPhpDoc . ' !== ' . $tagParam->typeFromPhpDocSimple . ' | ' . print_r($tagParam, true));
-        }
-
+    foreach ($method->parameters as $param) {
         $paramsTemplate = new TemplateFormatter($templateMethodParam);
-        $paramsTemplate->set('param', $tagParam->typeMaybeWithComment);
+        $paramsTemplate->set('param', ($param->typeFromPhpDocPslam ?: $param->typeFromPhpDoc) . UTF8::str_replace_beginning($param->typeMaybeWithComment, $param->typeFromPhpDoc, ''));
         $params[] = $paramsTemplate->format();
-        $paramsTypes[] = $tagParam->typeFromPhpDoc . ' ' . '$' . $tagParam->name;
+        $paramsTypes[] = $param->typeFromPhpDoc . ' ' . '$' . $param->name;
     }
 
     if (count($params) !== 0) {
@@ -91,13 +81,6 @@ foreach ($phpUtf8Class->methods as $method) {
     }
 
     // -- return
-    if (
-        $method->returnTypeFromPhpDoc !== $method->returnTypeFromPhpDocSimple
-        &&
-        strpos($method->returnTypeFromPhpDoc, 'mixed') === false
-    ) {
-        throw new Error('Return type error: ' . $method->name . ' : ' . $method->returnTypeFromPhpDoc . ' !== ' . $method->returnTypeFromPhpDocSimple . ' | ' . print_r($method, true));
-    }
 
     $methodWithType = $method->name . '(' . implode(', ', $paramsTypes) . '): ' . $method->returnTypeFromPhpDoc;
 
