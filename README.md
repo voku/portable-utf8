@@ -181,294 +181,255 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#callbackcallable-callback-string-str-string">callback</a>
 </td><td><a href="#char_atstring-str-int-index-string-encoding-string">char_at</a>
 </td></tr><tr><td><a href="#charsstring-str-string">chars</a>
-</td><td><a href="#checkforsupport-string">checkForSupport</a>
-</td><td><a href="#chrint-code_point-string-encoding-string">chr</a>
+</td><td><a href="#checkforsupport-truenull">checkForSupport</a>
+</td><td><a href="#chrint-code_point-string-encoding-stringnull">chr</a>
 </td><td><a href="#chr_mapcallable-callback-string-str-string">chr_map</a>
-</td></tr><tr><td><a href="#chr_size_liststring-str-string">chr_size_list</a>
-</td><td><a href="#chr_to_decimalstring-char-string">chr_to_decimal</a>
+</td></tr><tr><td><a href="#chr_size_liststring-str-int">chr_size_list</a>
+</td><td><a href="#chr_to_decimalstring-char-int">chr_to_decimal</a>
 </td><td><a href="#chr_to_hexintstring-char-string-prefix-string">chr_to_hex</a>
-</td><td><a href="#chr_to_intstring-chr-string">chr_to_int</a>
-</td></tr><tr><td><a href="#chunk_splitstring-body-int-chunk_length-string-end-string">chunk_split</a>
-</td><td><a href="#cleanstring-str-bool-remove_bom-bool-normalize_whitespace-bool-normalize_msword-bool-keep_non_breaking_space-bool-replace_diamond_question_mark-bool-remove_invisible_characters-bool-remove_invisible_characters_url_encoded-bool">clean</a>
+</td><td><a href="#chunk_splitstring-body-int-chunk_length-string-end-string">chunk_split</a>
+</td></tr><tr><td><a href="#cleanstring-str-bool-remove_bom-bool-normalize_whitespace-bool-normalize_msword-bool-keep_non_breaking_space-bool-replace_diamond_question_mark-bool-remove_invisible_characters-bool-remove_invisible_characters_url_encoded-string">clean</a>
 </td><td><a href="#cleanupstring-str-string">cleanup</a>
-</td><td><a href="#codepointsstringstring-arg-bool-use_u_style-bool">codepoints</a>
-</td></tr><tr><td><a href="#collapse_whitespacestring-str-string">collapse_whitespace</a>
-</td><td><a href="#count_charsstring-str-bool-clean_utf8-bool-try_to_use_mb_functions-bool">count_chars</a>
-</td><td><a href="#css_identifierstring-str-arraystringstring-filter-bool-stripe_tags-bool-strtolower-bool">css_identifier</a>
+</td><td><a href="#codepointsstringstring-arg-bool-use_u_style-intstring">codepoints</a>
+</td><td><a href="#collapse_whitespacestring-str-string">collapse_whitespace</a>
+</td></tr><tr><td><a href="#count_charsstring-str-bool-clean_utf8-bool-try_to_use_mb_functions-int">count_chars</a>
+</td><td><a href="#css_identifierstring-str-string-filter-bool-stripe_tags-bool-strtolower-string">css_identifier</a>
 </td><td><a href="#css_stripe_media_queriesstring-str-string">css_stripe_media_queries</a>
-</td></tr><tr><td><a href="#ctype_loaded-string">ctype_loaded</a>
-</td><td><a href="#decimal_to_chrintstring-int-intstring">decimal_to_chr</a>
-</td><td><a href="#decode_mimeheaderstring-str-string-encoding-string">decode_mimeheader</a>
-</td><td><a href="#emoji_decodestring-str-bool-use_reversible_string_mappings-bool">emoji_decode</a>
-</td></tr><tr><td><a href="#emoji_encodestring-str-bool-use_reversible_string_mappings-bool">emoji_encode</a>
-</td><td><a href="#emoji_from_country_codestring-country_code_iso_3166_1-string">emoji_from_country_code</a>
+</td><td><a href="#ctype_loaded-bool">ctype_loaded</a>
+</td></tr><tr><td><a href="#decimal_to_chrintstring-int-string">decimal_to_chr</a>
+</td><td><a href="#decode_mimeheaderstring-str-string-encoding-falsestring">decode_mimeheader</a>
+</td><td><a href="#emoji_decodestring-str-bool-use_reversible_string_mappings-string">emoji_decode</a>
+</td><td><a href="#emoji_encodestring-str-bool-use_reversible_string_mappings-string">emoji_encode</a>
+</td></tr><tr><td><a href="#emoji_from_country_codestring-country_code_iso_3166_1-string">emoji_from_country_code</a>
 </td><td><a href="#encodestring-to_encoding-string-str-bool-auto_detect_the_from_encoding-string-from_encoding-string">encode</a>
-</td><td><a href="#encode_mimeheaderstring-str-string-from_charset-string-to_charset-string-transfer_encoding-string-linefeed-int-indent-int">encode_mimeheader</a>
-</td></tr><tr><td><a href="#extract_textstring-str-string-search-intnull-length-string-replacer_for_skipped_text-string-encoding-string">extract_text</a>
-</td><td><a href="#file_get_contentsstring-filename-bool-use_include_path-resourcenull-context-intnull-offset-intnull-max_length-int-timeout-bool-convert_to_utf8-string-from_encoding-string">file_get_contents</a>
-</td><td><a href="#file_has_bomstring-file_path-string">file_has_bom</a>
-</td><td><a href="#filterarrayobjectstring-var-int-normalization_form-string-leading_combining-string">filter</a>
-</td></tr><tr><td><a href="#filter_inputint-type-string-variable_name-int-filter-arrayint-options-arrayint">filter_input</a>
-</td><td><a href="#filter_input_arrayint-type-arraynull-definition-bool-add_empty-bool">filter_input_array</a>
-</td><td><a href="#filter_varfloatintstringnull-variable-int-filter-arrayint-options-arrayint">filter_var</a>
-</td><td><a href="#filter_var_arrayarray-data-arrayint-definition-bool-add_empty-bool">filter_var_array</a>
-</td></tr><tr><td><a href="#finfo_loaded-bool">finfo_loaded</a>
-</td><td><a href="#first_charstring-str-int-n-string-encoding-string">first_char</a>
-</td><td><a href="#fits_insidestring-str-int-box_size-int">fits_inside</a>
+</td><td><a href="#encode_mimeheaderstring-str-string-from_charset-string-to_charset-string-transfer_encoding-string-linefeed-int-indent-falsestring">encode_mimeheader</a>
+</td><td><a href="#extract_textstring-str-string-search-intnull-length-string-replacer_for_skipped_text-string-encoding-string">extract_text</a>
+</td></tr><tr><td><a href="#file_get_contentsstring-filename-bool-use_include_path-resourcenull-context-intnull-offset-intnull-max_length-int-timeout-bool-convert_to_utf8-string-from_encoding-falsestring">file_get_contents</a>
+</td><td><a href="#file_has_bomstring-file_path-bool">file_has_bom</a>
+</td><td><a href="#filterarrayobjectstring-var-int-normalization_form-string-leading_combining-mixed">filter</a>
+</td><td><a href="#filter_inputint-type-string-variable_name-int-filter-arrayint-options-mixed">filter_input</a>
+</td></tr><tr><td><a href="#filter_input_arrayint-type-arraynull-definition-bool-add_empty-mixed">filter_input_array</a>
+</td><td><a href="#filter_varfloatintstringnull-variable-int-filter-arrayint-options-mixed">filter_var</a>
+</td><td><a href="#filter_var_arrayarray-data-arrayint-definition-bool-add_empty-mixed">filter_var_array</a>
+</td><td><a href="#finfo_loaded-bool">finfo_loaded</a>
+</td></tr><tr><td><a href="#first_charstring-str-int-n-string-encoding-string">first_char</a>
+</td><td><a href="#fits_insidestring-str-int-box_size-bool">fits_inside</a>
 </td><td><a href="#fix_simple_utf8string-str-string">fix_simple_utf8</a>
-</td></tr><tr><td><a href="#fix_utf8stringstring-str-stringstring">fix_utf8</a>
-</td><td><a href="#getchardirectionstring-char-string">getCharDirection</a>
-</td><td><a href="#getsupportinfostringnull-key-stringnull">getSupportInfo</a>
-</td><td><a href="#get_file_typestring-str-array-fallback-array">get_file_type</a>
-</td></tr><tr><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-string">get_random_string</a>
-</td><td><a href="#get_unique_stringintstring-extra_entropy-bool-use_md5-bool">get_unique_string</a>
-</td><td><a href="#hasbomstring-str-string">hasBom</a>
-</td><td><a href="#has_lowercasestring-str-string">has_lowercase</a>
-</td></tr><tr><td><a href="#has_uppercasestring-str-string">has_uppercase</a>
-</td><td><a href="#has_whitespacestring-str-string">has_whitespace</a>
-</td><td><a href="#hex_to_chrstring-hexdec-string">hex_to_chr</a>
-</td><td><a href="#hex_to_intstring-hexdec-string">hex_to_int</a>
-</td></tr><tr><td><a href="#html_decodestring-str-int-flags-string-encoding-string">html_decode</a>
+</td><td><a href="#fix_utf8stringstring-str-stringstring">fix_utf8</a>
+</td></tr><tr><td><a href="#getchardirectionstring-char-string">getCharDirection</a>
+</td><td><a href="#getsupportinfostringnull-key-mixed">getSupportInfo</a>
+</td><td><a href="#get_file_typestring-str-array-fallback-stringnull">get_file_type</a>
+</td><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-string">get_random_string</a>
+</td></tr><tr><td><a href="#get_unique_stringintstring-extra_entropy-bool-use_md5-string">get_unique_string</a>
+</td><td><a href="#has_lowercasestring-str-bool">has_lowercase</a>
+</td><td><a href="#has_uppercasestring-str-bool">has_uppercase</a>
+</td><td><a href="#has_whitespacestring-str-bool">has_whitespace</a>
+</td></tr><tr><td><a href="#hex_to_chrstring-hexdec-falsestring">hex_to_chr</a>
+</td><td><a href="#hex_to_intstring-hexdec-falseint">hex_to_int</a>
 </td><td><a href="#html_encodestring-str-bool-keep_ascii_chars-string-encoding-string">html_encode</a>
 </td><td><a href="#html_entity_decodestring-str-int-flags-string-encoding-string">html_entity_decode</a>
-</td><td><a href="#html_escapestring-str-string-encoding-string">html_escape</a>
-</td></tr><tr><td><a href="#html_stripe_empty_tagsstring-str-string">html_stripe_empty_tags</a>
-</td><td><a href="#htmlentitiesstring-str-int-flags-string-encoding-bool-double_encode-bool">htmlentities</a>
-</td><td><a href="#htmlspecialcharsstring-str-int-flags-string-encoding-bool-double_encode-bool">htmlspecialchars</a>
-</td><td><a href="#iconv_loaded-bool">iconv_loaded</a>
-</td></tr><tr><td><a href="#int_to_chrintstring-int-intstring">int_to_chr</a>
+</td></tr><tr><td><a href="#html_escapestring-str-string-encoding-string">html_escape</a>
+</td><td><a href="#html_stripe_empty_tagsstring-str-string">html_stripe_empty_tags</a>
+</td><td><a href="#htmlentitiesstring-str-int-flags-string-encoding-bool-double_encode-string">htmlentities</a>
+</td><td><a href="#htmlspecialcharsstring-str-int-flags-string-encoding-bool-double_encode-string">htmlspecialchars</a>
+</td></tr><tr><td><a href="#iconv_loaded-bool">iconv_loaded</a>
 </td><td><a href="#int_to_hexint-int-string-prefix-string">int_to_hex</a>
-</td><td><a href="#intlchar_loaded-string">intlChar_loaded</a>
-</td><td><a href="#intl_loaded-string">intl_loaded</a>
-</td></tr><tr><td><a href="#isasciistring-str-string">isAscii</a>
-</td><td><a href="#isbase64string-str-string">isBase64</a>
-</td><td><a href="#isbinaryintstring-str-bool-strict-bool">isBinary</a>
-</td><td><a href="#isbomstring-utf8_chr-string">isBom</a>
-</td></tr><tr><td><a href="#ishtmlstring-str-string">isHtml</a>
-</td><td><a href="#isjsonstring-str-string">isJson</a>
-</td><td><a href="#isutf16string-str-string">isUtf16</a>
-</td><td><a href="#isutf32string-str-string">isUtf32</a>
-</td></tr><tr><td><a href="#isutf8string-str-bool-strict-bool">isUtf8</a>
-</td><td><a href="#is_alphastring-str-string">is_alpha</a>
-</td><td><a href="#is_alphanumericstring-str-string">is_alphanumeric</a>
-</td><td><a href="#is_asciistring-str-string">is_ascii</a>
-</td></tr><tr><td><a href="#is_base64stringnull-str-bool-empty_string_is_valid-bool">is_base64</a>
-</td><td><a href="#is_binaryintstring-input-bool-strict-bool">is_binary</a>
-</td><td><a href="#is_binary_filestring-file-string">is_binary_file</a>
-</td><td><a href="#is_blankstring-str-string">is_blank</a>
-</td></tr><tr><td><a href="#is_bomstring-str-string">is_bom</a>
-</td><td><a href="#is_emptyarrayfloatintstring-str-arrayfloatintstring">is_empty</a>
-</td><td><a href="#is_hexadecimalstring-str-string">is_hexadecimal</a>
-</td><td><a href="#is_htmlstring-str-string">is_html</a>
-</td></tr><tr><td><a href="#is_jsonstring-str-bool-only_array_or_object_results_are_valid-bool">is_json</a>
-</td><td><a href="#is_lowercasestring-str-string">is_lowercase</a>
-</td><td><a href="#is_printablestring-str-string">is_printable</a>
-</td><td><a href="#is_punctuationstring-str-string">is_punctuation</a>
-</td></tr><tr><td><a href="#is_serializedstring-str-string">is_serialized</a>
-</td><td><a href="#is_uppercasestring-str-string">is_uppercase</a>
+</td><td><a href="#intlchar_loaded-bool">intlChar_loaded</a>
+</td><td><a href="#intl_loaded-bool">intl_loaded</a>
+</td></tr><tr><td><a href="#is_alphastring-str-bool">is_alpha</a>
+</td><td><a href="#is_alphanumericstring-str-bool">is_alphanumeric</a>
+</td><td><a href="#is_asciistring-str-bool">is_ascii</a>
+</td><td><a href="#is_base64stringnull-str-bool-empty_string_is_valid-bool">is_base64</a>
+</td></tr><tr><td><a href="#is_binaryintstring-input-bool-strict-bool">is_binary</a>
+</td><td><a href="#is_binary_filestring-file-bool">is_binary_file</a>
+</td><td><a href="#is_blankstring-str-bool">is_blank</a>
+</td><td><a href="#is_bomstring-str-bool">is_bom</a>
+</td></tr><tr><td><a href="#is_emptyarrayfloatintstring-str-bool">is_empty</a>
+</td><td><a href="#is_hexadecimalstring-str-bool">is_hexadecimal</a>
+</td><td><a href="#is_htmlstring-str-bool">is_html</a>
+</td><td><a href="#is_jsonstring-str-bool-only_array_or_object_results_are_valid-bool">is_json</a>
+</td></tr><tr><td><a href="#is_lowercasestring-str-bool">is_lowercase</a>
+</td><td><a href="#is_printablestring-str-bool">is_printable</a>
+</td><td><a href="#is_punctuationstring-str-bool">is_punctuation</a>
+</td><td><a href="#is_serializedstring-str-bool">is_serialized</a>
+</td></tr><tr><td><a href="#is_uppercasestring-str-bool">is_uppercase</a>
 </td><td><a href="#is_urlstring-url-bool-disallow_localhost-bool">is_url</a>
-</td><td><a href="#is_utf16string-str-bool-check_if_string_is_binary-bool">is_utf16</a>
-</td></tr><tr><td><a href="#is_utf32string-str-bool-check_if_string_is_binary-bool">is_utf32</a>
-</td><td><a href="#is_utf8intstringstringnull-str-bool-strict-bool">is_utf8</a>
-</td><td><a href="#json_decodestring-json-bool-assoc-int-depth-int-options-int">json_decode</a>
-</td><td><a href="#json_encodemixed-value-int-options-int-depth-int">json_encode</a>
-</td></tr><tr><td><a href="#json_loaded-int">json_loaded</a>
-</td><td><a href="#lcfirststring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">lcfirst</a>
-</td><td><a href="#lcwordstring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">lcword</a>
-</td><td><a href="#lcwordsstring-str-string-exceptions-string-char_list-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">lcwords</a>
-</td></tr><tr><td><a href="#lowercasefirststring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">lowerCaseFirst</a>
-</td><td><a href="#ltrimstring-str-stringnull-chars-stringnull">ltrim</a>
-</td><td><a href="#maxstringstring-arg-stringstring">max</a>
-</td><td><a href="#max_chr_widthstring-str-string">max_chr_width</a>
-</td></tr><tr><td><a href="#mbstring_loaded-string">mbstring_loaded</a>
-</td><td><a href="#minstringstring-arg-stringstring">min</a>
-</td><td><a href="#normalizeencodingmixed-encoding-mixed-fallback-mixed">normalizeEncoding</a>
-</td><td><a href="#normalize_encodingmixed-encoding-mixed-fallback-mixed">normalize_encoding</a>
-</td></tr><tr><td><a href="#normalize_line_endingstring-str-stringstring-replacer-stringstring">normalize_line_ending</a>
+</td><td><a href="#is_utf16string-str-bool-check_if_string_is_binary-falseint">is_utf16</a>
+</td><td><a href="#is_utf32string-str-bool-check_if_string_is_binary-falseint">is_utf32</a>
+</td></tr><tr><td><a href="#is_utf8intstringstringnull-str-bool-strict-bool">is_utf8</a>
+</td><td><a href="#json_decodestring-json-bool-assoc-int-depth-int-options-mixed">json_decode</a>
+</td><td><a href="#json_encodemixed-value-int-options-int-depth-falsestring">json_encode</a>
+</td><td><a href="#json_loaded-bool">json_loaded</a>
+</td></tr><tr><td><a href="#lcfirststring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">lcfirst</a>
+</td><td><a href="#lcwordsstring-str-string-exceptions-string-char_list-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">lcwords</a>
+</td><td><a href="#ltrimstring-str-stringnull-chars-string">ltrim</a>
+</td><td><a href="#maxstringstring-arg-stringnull">max</a>
+</td></tr><tr><td><a href="#max_chr_widthstring-str-int">max_chr_width</a>
+</td><td><a href="#mbstring_loaded-bool">mbstring_loaded</a>
+</td><td><a href="#minstringstring-arg-stringnull">min</a>
+</td><td><a href="#normalize_encodingmixed-encoding-mixed-fallback-mixedstring">normalize_encoding</a>
+</td></tr><tr><td><a href="#normalize_line_endingstring-str-stringstring-replacer-string">normalize_line_ending</a>
 </td><td><a href="#normalize_mswordstring-str-string">normalize_msword</a>
-</td><td><a href="#normalize_whitespacestring-str-bool-keep_non_breaking_space-bool-keep_bidi_unicode_controls-bool">normalize_whitespace</a>
-</td><td><a href="#ordstring-chr-string-encoding-string">ord</a>
+</td><td><a href="#normalize_whitespacestring-str-bool-keep_non_breaking_space-bool-keep_bidi_unicode_controls-string">normalize_whitespace</a>
+</td><td><a href="#ordstring-chr-string-encoding-int">ord</a>
 </td></tr><tr><td><a href="#parse_strstring-str-array-result-bool-clean_utf8-bool">parse_str</a>
 </td><td><a href="#pcre_utf8_support-bool">pcre_utf8_support</a>
-</td><td><a href="#rangeintstring-var1-intstring-var2-bool-use_ctype-string-encoding-floatint-step-floatint">range</a>
-</td><td><a href="#rawurldecodestring-str-bool-multi_decode-bool">rawurldecode</a>
+</td><td><a href="#rangeintstring-var1-intstring-var2-bool-use_ctype-string-encoding-floatint-step-string">range</a>
+</td><td><a href="#rawurldecodestring-str-bool-multi_decode-string">rawurldecode</a>
 </td></tr><tr><td><a href="#regex_replacestring-str-string-pattern-string-replacement-string-options-string-delimiter-string">regex_replace</a>
-</td><td><a href="#removebomstring-str-string">removeBOM</a>
 </td><td><a href="#remove_bomstring-str-string">remove_bom</a>
-</td><td><a href="#remove_duplicatesstring-str-stringstring-what-stringstring">remove_duplicates</a>
-</td></tr><tr><td><a href="#remove_htmlstring-str-string-allowable_tags-string">remove_html</a>
-</td><td><a href="#remove_html_breaksstring-str-string-replacement-string">remove_html_breaks</a>
+</td><td><a href="#remove_duplicatesstring-str-stringstring-what-string">remove_duplicates</a>
+</td><td><a href="#remove_htmlstring-str-string-allowable_tags-string">remove_html</a>
+</td></tr><tr><td><a href="#remove_html_breaksstring-str-string-replacement-string">remove_html_breaks</a>
 </td><td><a href="#remove_invisible_charactersstring-str-bool-url_encoded-string-replacement-string">remove_invisible_characters</a>
 </td><td><a href="#remove_leftstring-str-string-substring-string-encoding-string">remove_left</a>
-</td></tr><tr><td><a href="#remove_rightstring-str-string-substring-string-encoding-string">remove_right</a>
-</td><td><a href="#replacestring-str-string-search-string-replacement-bool-case_sensitive-bool">replace</a>
-</td><td><a href="#replace_allstring-str-array-search-arraystring-replacement-bool-case_sensitive-bool">replace_all</a>
-</td><td><a href="#replace_diamond_question_markstring-str-string-replacement_char-bool-process_invalid_utf8_chars-bool">replace_diamond_question_mark</a>
-</td></tr><tr><td><a href="#rtrimstring-str-stringnull-chars-stringnull">rtrim</a>
-</td><td><a href="#showsupportbool-useecho-bool">showSupport</a>
+</td><td><a href="#remove_rightstring-str-string-substring-string-encoding-string">remove_right</a>
+</td></tr><tr><td><a href="#replacestring-str-string-search-string-replacement-bool-case_sensitive-string">replace</a>
+</td><td><a href="#replace_allstring-str-array-search-arraystring-replacement-bool-case_sensitive-string">replace_all</a>
+</td><td><a href="#replace_diamond_question_markstring-str-string-replacement_char-bool-process_invalid_utf8_chars-string">replace_diamond_question_mark</a>
+</td><td><a href="#rtrimstring-str-stringnull-chars-string">rtrim</a>
+</td></tr><tr><td><a href="#showsupportbool-useecho-stringvoid">showSupport</a>
 </td><td><a href="#single_chr_html_encodestring-char-bool-keep_ascii_chars-string-encoding-string">single_chr_html_encode</a>
-</td><td><a href="#spaces_to_tabsstring-str-int-tab_length-int">spaces_to_tabs</a>
-</td></tr><tr><td><a href="#splitintstring-str-int-length-bool-clean_utf8-bool">split</a>
-</td><td><a href="#str_beginsstring-haystack-string-needle-string">str_begins</a>
-</td><td><a href="#str_camelizestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">str_camelize</a>
-</td><td><a href="#str_capitalize_namestring-str-string">str_capitalize_name</a>
-</td></tr><tr><td><a href="#str_containsstring-haystack-string-needle-bool-case_sensitive-bool">str_contains</a>
+</td><td><a href="#spaces_to_tabsstring-str-int-tab_length-string">spaces_to_tabs</a>
+</td><td><a href="#str_camelizestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">str_camelize</a>
+</td></tr><tr><td><a href="#str_capitalize_namestring-str-string">str_capitalize_name</a>
+</td><td><a href="#str_containsstring-haystack-string-needle-bool-case_sensitive-bool">str_contains</a>
 </td><td><a href="#str_contains_allstring-haystack-array-needles-bool-case_sensitive-bool">str_contains_all</a>
 </td><td><a href="#str_contains_anystring-haystack-array-needles-bool-case_sensitive-bool">str_contains_any</a>
-</td><td><a href="#str_dasherizestring-str-string-encoding-string">str_dasherize</a>
-</td></tr><tr><td><a href="#str_delimitstring-str-string-delimiter-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">str_delimit</a>
-</td><td><a href="#str_detect_encodingstring-str-string">str_detect_encoding</a>
-</td><td><a href="#str_endsstring-haystack-string-needle-string">str_ends</a>
-</td><td><a href="#str_ends_withstring-haystack-string-needle-string">str_ends_with</a>
-</td></tr><tr><td><a href="#str_ends_with_anystring-str-string-substrings-string">str_ends_with_any</a>
+</td></tr><tr><td><a href="#str_dasherizestring-str-string-encoding-string">str_dasherize</a>
+</td><td><a href="#str_delimitstring-str-string-delimiter-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">str_delimit</a>
+</td><td><a href="#str_detect_encodingstring-str-falsestring">str_detect_encoding</a>
+</td><td><a href="#str_ends_withstring-haystack-string-needle-bool">str_ends_with</a>
+</td></tr><tr><td><a href="#str_ends_with_anystring-str-string-substrings-bool">str_ends_with_any</a>
 </td><td><a href="#str_ensure_leftstring-str-string-substring-string">str_ensure_left</a>
 </td><td><a href="#str_ensure_rightstring-str-string-substring-string">str_ensure_right</a>
 </td><td><a href="#str_humanizestring-str-string">str_humanize</a>
-</td></tr><tr><td><a href="#str_ibeginsstring-haystack-string-needle-string">str_ibegins</a>
-</td><td><a href="#str_iendsstring-haystack-string-needle-string">str_iends</a>
-</td><td><a href="#str_iends_withstring-haystack-string-needle-string">str_iends_with</a>
-</td><td><a href="#str_iends_with_anystring-str-string-substrings-string">str_iends_with_any</a>
-</td></tr><tr><td><a href="#str_iindex_firststring-str-string-needle-int-offset-string-encoding-string">str_iindex_first</a>
-</td><td><a href="#str_iindex_laststring-str-string-needle-int-offset-string-encoding-string">str_iindex_last</a>
-</td><td><a href="#str_index_firststring-str-string-needle-int-offset-string-encoding-string">str_index_first</a>
-</td><td><a href="#str_index_laststring-str-string-needle-int-offset-string-encoding-string">str_index_last</a>
-</td></tr><tr><td><a href="#str_insertstring-str-string-substring-int-index-string-encoding-string">str_insert</a>
-</td><td><a href="#str_ireplacestringstring-search-stringstring-replacement-stringstring-subject-int-count-int">str_ireplace</a>
-</td><td><a href="#str_ireplace_beginningstring-str-string-search-string-replacement-string">str_ireplace_beginning</a>
+</td></tr><tr><td><a href="#str_iends_withstring-haystack-string-needle-bool">str_iends_with</a>
+</td><td><a href="#str_iends_with_anystring-str-string-substrings-bool">str_iends_with_any</a>
+</td><td><a href="#str_insertstring-str-string-substring-int-index-string-encoding-string">str_insert</a>
+</td><td><a href="#str_ireplacestringstring-search-stringstring-replacement-stringstring-subject-int-count-stringstring">str_ireplace</a>
+</td></tr><tr><td><a href="#str_ireplace_beginningstring-str-string-search-string-replacement-string">str_ireplace_beginning</a>
 </td><td><a href="#str_ireplace_endingstring-str-string-search-string-replacement-string">str_ireplace_ending</a>
-</td></tr><tr><td><a href="#str_istarts_withstring-haystack-string-needle-string">str_istarts_with</a>
-</td><td><a href="#str_istarts_with_anystring-str-array-substrings-array">str_istarts_with_any</a>
-</td><td><a href="#str_isubstr_after_first_separatorstring-str-string-separator-string-encoding-string">str_isubstr_after_first_separator</a>
+</td><td><a href="#str_istarts_withstring-haystack-string-needle-bool">str_istarts_with</a>
+</td><td><a href="#str_istarts_with_anystring-str-array-substrings-bool">str_istarts_with_any</a>
+</td></tr><tr><td><a href="#str_isubstr_after_first_separatorstring-str-string-separator-string-encoding-string">str_isubstr_after_first_separator</a>
 </td><td><a href="#str_isubstr_after_last_separatorstring-str-string-separator-string-encoding-string">str_isubstr_after_last_separator</a>
-</td></tr><tr><td><a href="#str_isubstr_before_first_separatorstring-str-string-separator-string-encoding-string">str_isubstr_before_first_separator</a>
+</td><td><a href="#str_isubstr_before_first_separatorstring-str-string-separator-string-encoding-string">str_isubstr_before_first_separator</a>
 </td><td><a href="#str_isubstr_before_last_separatorstring-str-string-separator-string-encoding-string">str_isubstr_before_last_separator</a>
-</td><td><a href="#str_isubstr_firststring-str-string-needle-bool-before_needle-string-encoding-string">str_isubstr_first</a>
+</td></tr><tr><td><a href="#str_isubstr_firststring-str-string-needle-bool-before_needle-string-encoding-string">str_isubstr_first</a>
 </td><td><a href="#str_isubstr_laststring-str-string-needle-bool-before_needle-string-encoding-string">str_isubstr_last</a>
-</td></tr><tr><td><a href="#str_last_charstring-str-int-n-string-encoding-string">str_last_char</a>
+</td><td><a href="#str_last_charstring-str-int-n-string-encoding-string">str_last_char</a>
 </td><td><a href="#str_limitstring-str-int-length-string-str_add_on-string-encoding-string">str_limit</a>
-</td><td><a href="#str_limit_after_wordstring-str-int-length-string-str_add_on-string-encoding-string">str_limit_after_word</a>
+</td></tr><tr><td><a href="#str_limit_after_wordstring-str-int-length-string-str_add_on-string-encoding-string">str_limit_after_word</a>
 </td><td><a href="#str_longest_common_prefixstring-str1-string-str2-string-encoding-string">str_longest_common_prefix</a>
-</td></tr><tr><td><a href="#str_longest_common_substringstring-str1-string-str2-string-encoding-string">str_longest_common_substring</a>
+</td><td><a href="#str_longest_common_substringstring-str1-string-str2-string-encoding-string">str_longest_common_substring</a>
 </td><td><a href="#str_longest_common_suffixstring-str1-string-str2-string-encoding-string">str_longest_common_suffix</a>
-</td><td><a href="#str_matches_patternstring-str-string-pattern-string">str_matches_pattern</a>
-</td><td><a href="#str_offset_existsstring-str-int-offset-string-encoding-string">str_offset_exists</a>
-</td></tr><tr><td><a href="#str_offset_getstring-str-int-index-string-encoding-string">str_offset_get</a>
+</td></tr><tr><td><a href="#str_matches_patternstring-str-string-pattern-bool">str_matches_pattern</a>
+</td><td><a href="#str_offset_existsstring-str-int-offset-string-encoding-bool">str_offset_exists</a>
+</td><td><a href="#str_offset_getstring-str-int-index-string-encoding-string">str_offset_get</a>
 </td><td><a href="#str_padstring-str-int-pad_length-string-pad_string-intstring-pad_type-string-encoding-string">str_pad</a>
-</td><td><a href="#str_pad_bothstring-str-int-length-string-pad_str-string-encoding-string">str_pad_both</a>
+</td></tr><tr><td><a href="#str_pad_bothstring-str-int-length-string-pad_str-string-encoding-string">str_pad_both</a>
 </td><td><a href="#str_pad_leftstring-str-int-length-string-pad_str-string-encoding-string">str_pad_left</a>
-</td></tr><tr><td><a href="#str_pad_rightstring-str-int-length-string-pad_str-string-encoding-string">str_pad_right</a>
-</td><td><a href="#str_repeatstring-str-int-multiplier-int">str_repeat</a>
-</td><td><a href="#str_replacestringstring-search-stringstring-replace-stringstring-subject-int-count-int">str_replace</a>
-</td><td><a href="#str_replace_beginningstring-str-string-search-string-replacement-string">str_replace_beginning</a>
-</td></tr><tr><td><a href="#str_replace_endingstring-str-string-search-string-replacement-string">str_replace_ending</a>
+</td><td><a href="#str_pad_rightstring-str-int-length-string-pad_str-string-encoding-string">str_pad_right</a>
+</td><td><a href="#str_repeatstring-str-int-multiplier-string">str_repeat</a>
+</td></tr><tr><td><a href="#str_replace_beginningstring-str-string-search-string-replacement-string">str_replace_beginning</a>
+</td><td><a href="#str_replace_endingstring-str-string-search-string-replacement-string">str_replace_ending</a>
 </td><td><a href="#str_replace_firststring-search-string-replace-string-subject-string">str_replace_first</a>
 </td><td><a href="#str_replace_laststring-search-string-replace-string-subject-string">str_replace_last</a>
-</td><td><a href="#str_shufflestring-str-string-encoding-string">str_shuffle</a>
-</td></tr><tr><td><a href="#str_slicestring-str-int-start-int-end-string-encoding-string">str_slice</a>
+</td></tr><tr><td><a href="#str_shufflestring-str-string-encoding-string">str_shuffle</a>
+</td><td><a href="#str_slicestring-str-int-start-int-end-string-encoding-falsestring">str_slice</a>
 </td><td><a href="#str_snakeizestring-str-string-encoding-string">str_snakeize</a>
-</td><td><a href="#str_sortstring-str-bool-unique-bool-desc-bool">str_sort</a>
-</td><td><a href="#str_splitintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-bool">str_split</a>
-</td></tr><tr><td><a href="#str_split_arrayintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-bool">str_split_array</a>
-</td><td><a href="#str_split_patternstring-str-string-pattern-int-limit-int">str_split_pattern</a>
-</td><td><a href="#str_starts_withstring-haystack-string-needle-string">str_starts_with</a>
-</td><td><a href="#str_starts_with_anystring-str-array-substrings-array">str_starts_with_any</a>
-</td></tr><tr><td><a href="#str_substr_after_first_separatorstring-str-string-separator-string-encoding-string">str_substr_after_first_separator</a>
+</td><td><a href="#str_sortstring-str-bool-unique-bool-desc-string">str_sort</a>
+</td></tr><tr><td><a href="#str_splitintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split</a>
+</td><td><a href="#str_split_arrayintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split_array</a>
+</td><td><a href="#str_split_patternstring-str-string-pattern-int-limit-string">str_split_pattern</a>
+</td><td><a href="#str_starts_withstring-haystack-string-needle-bool">str_starts_with</a>
+</td></tr><tr><td><a href="#str_starts_with_anystring-str-array-substrings-bool">str_starts_with_any</a>
+</td><td><a href="#str_substr_after_first_separatorstring-str-string-separator-string-encoding-string">str_substr_after_first_separator</a>
 </td><td><a href="#str_substr_after_last_separatorstring-str-string-separator-string-encoding-string">str_substr_after_last_separator</a>
 </td><td><a href="#str_substr_before_first_separatorstring-str-string-separator-string-encoding-string">str_substr_before_first_separator</a>
-</td><td><a href="#str_substr_before_last_separatorstring-str-string-separator-string-encoding-string">str_substr_before_last_separator</a>
-</td></tr><tr><td><a href="#str_substr_firststring-str-string-needle-bool-before_needle-string-encoding-string">str_substr_first</a>
+</td></tr><tr><td><a href="#str_substr_before_last_separatorstring-str-string-separator-string-encoding-string">str_substr_before_last_separator</a>
+</td><td><a href="#str_substr_firststring-str-string-needle-bool-before_needle-string-encoding-string">str_substr_first</a>
 </td><td><a href="#str_substr_laststring-str-string-needle-bool-before_needle-string-encoding-string">str_substr_last</a>
 </td><td><a href="#str_surroundstring-str-string-substring-string">str_surround</a>
-</td><td><a href="#str_titleizestring-str-arraystringnull-ignore-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool-use_trim_first-stringnull-word_define_chars-stringnull">str_titleize</a>
-</td></tr><tr><td><a href="#str_titleize_for_humansstring-str-array-ignore-string-encoding-string">str_titleize_for_humans</a>
-</td><td><a href="#str_to_binarystring-str-string">str_to_binary</a>
-</td><td><a href="#str_to_linesstring-str-bool-remove_empty_values-intnull-remove_short_values-intnull">str_to_lines</a>
-</td><td><a href="#str_to_wordsstring-str-string-char_list-bool-remove_empty_values-intnull-remove_short_values-intnull">str_to_words</a>
-</td></tr><tr><td><a href="#str_transliteratestring-str-string-unknown-bool-strict-bool">str_transliterate</a>
+</td></tr><tr><td><a href="#str_titleizestring-str-arraystringnull-ignore-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool-use_trim_first-stringnull-word_define_chars-string">str_titleize</a>
+</td><td><a href="#str_titleize_for_humansstring-str-array-ignore-string-encoding-string">str_titleize_for_humans</a>
+</td><td><a href="#str_to_binarystring-str-falsestring">str_to_binary</a>
+</td><td><a href="#str_to_linesstring-str-bool-remove_empty_values-intnull-remove_short_values-string">str_to_lines</a>
+</td></tr><tr><td><a href="#str_to_wordsstring-str-string-char_list-bool-remove_empty_values-intnull-remove_short_values-string">str_to_words</a>
 </td><td><a href="#str_truncatestring-str-int-length-string-substring-string-encoding-string">str_truncate</a>
-</td><td><a href="#str_truncate_safestring-str-int-length-string-substring-string-encoding-bool-ignore_do_not_split_words_for_one_word-bool">str_truncate_safe</a>
+</td><td><a href="#str_truncate_safestring-str-int-length-string-substring-string-encoding-bool-ignore_do_not_split_words_for_one_word-string">str_truncate_safe</a>
 </td><td><a href="#str_underscoredstring-str-string">str_underscored</a>
-</td></tr><tr><td><a href="#str_upper_camelizestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">str_upper_camelize</a>
-</td><td><a href="#str_upper_firststring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">str_upper_first</a>
-</td><td><a href="#str_word_countstring-str-int-format-string-char_list-string">str_word_count</a>
-</td><td><a href="#strcasecmpstring-str1-string-str2-string-encoding-string">strcasecmp</a>
-</td></tr><tr><td><a href="#strchrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-bool">strchr</a>
-</td><td><a href="#strcmpstring-str1-string-str2-string">strcmp</a>
-</td><td><a href="#strcspnstring-str-string-char_list-int-offset-int-length-string-encoding-string">strcspn</a>
-</td><td><a href="#strichrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-bool">strichr</a>
-</td></tr><tr><td><a href="#stringintintstringstring-intorhex-intintstringstring">string</a>
-</td><td><a href="#string_has_bomstring-str-string">string_has_bom</a>
-</td><td><a href="#strip_tagsstring-str-string-allowable_tags-bool-clean_utf8-bool">strip_tags</a>
-</td><td><a href="#strip_whitespacestring-str-string">strip_whitespace</a>
-</td></tr><tr><td><a href="#striposstring-haystack-string-needle-int-offset-string-encoding-bool-clean_utf8-bool">stripos</a>
-</td><td><a href="#stripos_in_bytestring-haystack-string-needle-int-offset-int">stripos_in_byte</a>
-</td><td><a href="#stristrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-bool">stristr</a>
-</td><td><a href="#strlenstring-str-string-encoding-bool-clean_utf8-bool">strlen</a>
-</td></tr><tr><td><a href="#strlen_in_bytestring-str-string">strlen_in_byte</a>
-</td><td><a href="#strnatcasecmpstring-str1-string-str2-string-encoding-string">strnatcasecmp</a>
-</td><td><a href="#strnatcmpstring-str1-string-str2-string">strnatcmp</a>
-</td><td><a href="#strncasecmpstring-str1-string-str2-int-len-string-encoding-string">strncasecmp</a>
-</td></tr><tr><td><a href="#strncmpstring-str1-string-str2-int-len-string-encoding-string">strncmp</a>
-</td><td><a href="#strpbrkstring-haystack-string-char_list-string">strpbrk</a>
-</td><td><a href="#strposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-bool">strpos</a>
-</td><td><a href="#strpos_in_bytestring-haystack-string-needle-int-offset-int">strpos_in_byte</a>
-</td></tr><tr><td><a href="#strrchrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-bool">strrchr</a>
+</td></tr><tr><td><a href="#str_upper_camelizestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">str_upper_camelize</a>
+</td><td><a href="#str_word_countstring-str-int-format-string-char_list-intstring">str_word_count</a>
+</td><td><a href="#strcasecmpstring-str1-string-str2-string-encoding-int">strcasecmp</a>
+</td><td><a href="#strcmpstring-str1-string-str2-int">strcmp</a>
+</td></tr><tr><td><a href="#strcspnstring-str-string-char_list-int-offset-int-length-string-encoding-int">strcspn</a>
+</td><td><a href="#stringintintstringstring-intorhex-string">string</a>
+</td><td><a href="#string_has_bomstring-str-bool">string_has_bom</a>
+</td><td><a href="#strip_tagsstring-str-string-allowable_tags-bool-clean_utf8-string">strip_tags</a>
+</td></tr><tr><td><a href="#strip_whitespacestring-str-string">strip_whitespace</a>
+</td><td><a href="#striposstring-haystack-string-needle-int-offset-string-encoding-bool-clean_utf8-falseint">stripos</a>
+</td><td><a href="#stripos_in_bytestring-haystack-string-needle-int-offset-falseint">stripos_in_byte</a>
+</td><td><a href="#stristrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">stristr</a>
+</td></tr><tr><td><a href="#strlenstring-str-string-encoding-bool-clean_utf8-falseint">strlen</a>
+</td><td><a href="#strlen_in_bytestring-str-int">strlen_in_byte</a>
+</td><td><a href="#strnatcasecmpstring-str1-string-str2-string-encoding-int">strnatcasecmp</a>
+</td><td><a href="#strnatcmpstring-str1-string-str2-int">strnatcmp</a>
+</td></tr><tr><td><a href="#strncasecmpstring-str1-string-str2-int-len-string-encoding-int">strncasecmp</a>
+</td><td><a href="#strncmpstring-str1-string-str2-int-len-string-encoding-int">strncmp</a>
+</td><td><a href="#strpbrkstring-haystack-string-char_list-falsestring">strpbrk</a>
+</td><td><a href="#strposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-falseint">strpos</a>
+</td></tr><tr><td><a href="#strpos_in_bytestring-haystack-string-needle-int-offset-falseint">strpos_in_byte</a>
+</td><td><a href="#strrchrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">strrchr</a>
 </td><td><a href="#strrevstring-str-string-encoding-string">strrev</a>
-</td><td><a href="#strrichrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-bool">strrichr</a>
-</td><td><a href="#strriposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-bool">strripos</a>
-</td></tr><tr><td><a href="#strripos_in_bytestring-haystack-string-needle-int-offset-int">strripos_in_byte</a>
-</td><td><a href="#strrposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-bool">strrpos</a>
-</td><td><a href="#strrpos_in_bytestring-haystack-string-needle-int-offset-int">strrpos_in_byte</a>
-</td><td><a href="#strspnstring-str-string-mask-int-offset-int-length-string-encoding-string">strspn</a>
-</td></tr><tr><td><a href="#strstrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-bool">strstr</a>
-</td><td><a href="#strstr_in_bytestring-haystack-string-needle-bool-before_needle-bool">strstr_in_byte</a>
-</td><td><a href="#strtocasefoldstring-str-bool-full-bool-clean_utf8-string-encoding-stringnull-lang-bool-lower-bool">strtocasefold</a>
-</td><td><a href="#strtolowerstring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">strtolower</a>
-</td></tr><tr><td><a href="#strtoupperstring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">strtoupper</a>
-</td><td><a href="#strtrstring-str-stringstring-from-stringstring-to-stringstring">strtr</a>
-</td><td><a href="#strwidthstring-str-string-encoding-bool-clean_utf8-bool">strwidth</a>
-</td><td><a href="#substrstring-str-int-offset-int-length-string-encoding-bool-clean_utf8-bool">substr</a>
-</td></tr><tr><td><a href="#substr_comparestring-str1-string-str2-int-offset-intnull-length-bool-case_insensitivity-string-encoding-string">substr_compare</a>
-</td><td><a href="#substr_countstring-haystack-string-needle-int-offset-int-length-string-encoding-bool-clean_utf8-bool">substr_count</a>
-</td><td><a href="#substr_count_in_bytestring-haystack-string-needle-int-offset-int-length-int">substr_count_in_byte</a>
-</td><td><a href="#substr_count_simplestring-str-string-substring-bool-case_sensitive-string-encoding-string">substr_count_simple</a>
-</td></tr><tr><td><a href="#substr_ileftstring-haystack-string-needle-string">substr_ileft</a>
-</td><td><a href="#substr_in_bytestring-str-int-offset-int-length-int">substr_in_byte</a>
+</td><td><a href="#strrichrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">strrichr</a>
+</td></tr><tr><td><a href="#strriposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-falseint">strripos</a>
+</td><td><a href="#strripos_in_bytestring-haystack-string-needle-int-offset-falseint">strripos_in_byte</a>
+</td><td><a href="#strrposstring-haystack-intstring-needle-int-offset-string-encoding-bool-clean_utf8-falseint">strrpos</a>
+</td><td><a href="#strrpos_in_bytestring-haystack-string-needle-int-offset-falseint">strrpos_in_byte</a>
+</td></tr><tr><td><a href="#strspnstring-str-string-mask-int-offset-int-length-string-encoding-falseint">strspn</a>
+</td><td><a href="#strstrstring-haystack-string-needle-bool-before_needle-string-encoding-bool-clean_utf8-falsestring">strstr</a>
+</td><td><a href="#strstr_in_bytestring-haystack-string-needle-bool-before_needle-falsestring">strstr_in_byte</a>
+</td><td><a href="#strtocasefoldstring-str-bool-full-bool-clean_utf8-string-encoding-stringnull-lang-bool-lower-string">strtocasefold</a>
+</td></tr><tr><td><a href="#strtolowerstring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">strtolower</a>
+</td><td><a href="#strtoupperstring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">strtoupper</a>
+</td><td><a href="#strtrstring-str-stringstring-from-stringstring-to-string">strtr</a>
+</td><td><a href="#strwidthstring-str-string-encoding-bool-clean_utf8-int">strwidth</a>
+</td></tr><tr><td><a href="#substrstring-str-int-offset-int-length-string-encoding-bool-clean_utf8-falsestring">substr</a>
+</td><td><a href="#substr_comparestring-str1-string-str2-int-offset-intnull-length-bool-case_insensitivity-string-encoding-int">substr_compare</a>
+</td><td><a href="#substr_countstring-haystack-string-needle-int-offset-int-length-string-encoding-bool-clean_utf8-falseint">substr_count</a>
+</td><td><a href="#substr_count_in_bytestring-haystack-string-needle-int-offset-int-length-falseint">substr_count_in_byte</a>
+</td></tr><tr><td><a href="#substr_count_simplestring-str-string-substring-bool-case_sensitive-string-encoding-int">substr_count_simple</a>
+</td><td><a href="#substr_ileftstring-haystack-string-needle-string">substr_ileft</a>
+</td><td><a href="#substr_in_bytestring-str-int-offset-int-length-falsestring">substr_in_byte</a>
 </td><td><a href="#substr_irightstring-haystack-string-needle-string">substr_iright</a>
-</td><td><a href="#substr_leftstring-haystack-string-needle-string">substr_left</a>
-</td></tr><tr><td><a href="#substr_replacestringstring-str-stringstring-replacement-intint-offset-intintnull-length-string-encoding-string">substr_replace</a>
+</td></tr><tr><td><a href="#substr_leftstring-haystack-string-needle-string">substr_left</a>
+</td><td><a href="#substr_replacestringstring-str-stringstring-replacement-intint-offset-intintnull-length-string-encoding-stringstring">substr_replace</a>
 </td><td><a href="#substr_rightstring-haystack-string-needle-string-encoding-string">substr_right</a>
-</td><td><a href="#swapcasestring-str-string-encoding-bool-clean_utf8-bool">swapCase</a>
-</td><td><a href="#symfony_polyfill_used-bool">symfony_polyfill_used</a>
-</td></tr><tr><td><a href="#tabs_to_spacesstring-str-int-tab_length-int">tabs_to_spaces</a>
-</td><td><a href="#titlecasestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">titlecase</a>
-</td><td><a href="#toasciistring-str-string-subst_chr-bool-strict-bool">toAscii</a>
-</td><td><a href="#toiso8859stringstring-str-stringstring">toIso8859</a>
-</td></tr><tr><td><a href="#tolatin1stringstring-str-stringstring">toLatin1</a>
-</td><td><a href="#toutf8stringstring-str-stringstring">toUTF8</a>
-</td><td><a href="#to_asciistring-str-string-unknown-bool-strict-bool">to_ascii</a>
-</td><td><a href="#to_booleanboolintstring-str-boolintstring">to_boolean</a>
-</td></tr><tr><td><a href="#to_filenamestring-str-bool-use_transliterate-string-fallback_char-string">to_filename</a>
-</td><td><a href="#to_intstring-str-string">to_int</a>
+</td><td><a href="#swapcasestring-str-string-encoding-bool-clean_utf8-string">swapCase</a>
+</td></tr><tr><td><a href="#symfony_polyfill_used-bool">symfony_polyfill_used</a>
+</td><td><a href="#tabs_to_spacesstring-str-int-tab_length-string">tabs_to_spaces</a>
+</td><td><a href="#titlecasestring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">titlecase</a>
+</td><td><a href="#to_asciistring-str-string-unknown-bool-strict-string">to_ascii</a>
+</td></tr><tr><td><a href="#to_booleanboolintstring-str-bool">to_boolean</a>
+</td><td><a href="#to_filenamestring-str-bool-use_transliterate-string-fallback_char-string">to_filename</a>
+</td><td><a href="#to_intstring-str-intnull">to_int</a>
 </td><td><a href="#to_iso8859stringstring-str-stringstring">to_iso8859</a>
-</td><td><a href="#to_latin1stringstring-str-stringstring">to_latin1</a>
-</td></tr><tr><td><a href="#to_stringfloatintobjectstringnull-input-floatintobjectstringnull">to_string</a>
-</td><td><a href="#to_utf8stringstring-str-bool-decode_html_entity_to_utf8-bool">to_utf8</a>
-</td><td><a href="#to_utf8_stringstring-str-bool-decode_html_entity_to_utf8-bool">to_utf8_string</a>
-</td><td><a href="#trimstring-str-stringnull-chars-stringnull">trim</a>
-</td></tr><tr><td><a href="#ucfirststring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-bool">ucfirst</a>
-</td><td><a href="#ucwordstring-str-string-encoding-bool-clean_utf8-bool">ucword</a>
-</td><td><a href="#ucwordsstring-str-string-exceptions-string-char_list-string-encoding-bool-clean_utf8-bool">ucwords</a>
-</td><td><a href="#urldecodestring-str-bool-multi_decode-bool">urldecode</a>
-</td></tr><tr><td><a href="#urldecode_fix_win1252_chars-bool">urldecode_fix_win1252_chars</a>
-</td><td><a href="#utf8_decodestring-str-bool-keep_utf8_chars-bool">utf8_decode</a>
-</td><td><a href="#utf8_encodestring-str-string">utf8_encode</a>
-</td><td><a href="#utf8_fix_win1252_charsstring-str-string">utf8_fix_win1252_chars</a>
-</td></tr><tr><td><a href="#whitespace_table-string">whitespace_table</a>
+</td></tr><tr><td><a href="#to_stringfloatintobjectstringnull-input-stringnull">to_string</a>
+</td><td><a href="#to_utf8stringstring-str-bool-decode_html_entity_to_utf8-stringstring">to_utf8</a>
+</td><td><a href="#to_utf8_stringstring-str-bool-decode_html_entity_to_utf8-string">to_utf8_string</a>
+</td><td><a href="#trimstring-str-stringnull-chars-string">trim</a>
+</td></tr><tr><td><a href="#ucfirststring-str-string-encoding-bool-clean_utf8-stringnull-lang-bool-try_to_keep_the_string_length-string">ucfirst</a>
+</td><td><a href="#ucwordsstring-str-string-exceptions-string-char_list-string-encoding-bool-clean_utf8-string">ucwords</a>
+</td><td><a href="#urldecodestring-str-bool-multi_decode-string">urldecode</a>
+</td><td><a href="#utf8_decodestring-str-bool-keep_utf8_chars-string">utf8_decode</a>
+</td></tr><tr><td><a href="#utf8_encodestring-str-string">utf8_encode</a>
+</td><td><a href="#whitespace_table-string">whitespace_table</a>
 </td><td><a href="#words_limitstring-str-int-limit-string-str_add_on-string">words_limit</a>
-</td><td><a href="#wordwrapstring-str-int-width-string-break-bool-cut-bool">wordwrap</a>
-</td><td><a href="#wordwrap_per_linestring-str-int-width-string-break-bool-cut-bool-add_final_break-stringnull-delimiter-stringnull">wordwrap_per_line</a>
-</td></tr><tr><td><a href="#ws-stringnull">ws</a>
+</td><td><a href="#wordwrapstring-str-int-width-string-break-bool-cut-string">wordwrap</a>
+</td></tr><tr><td><a href="#wordwrap_per_linestring-str-int-width-string-break-bool-cut-bool-add_final_break-stringnull-delimiter-string">wordwrap_per_line</a>
+</td><td><a href="#ws-string">ws</a>
 </td></tr>
 </table>
 
@@ -505,7 +466,7 @@ EXAMPLE: <code>UTF8::add_bom_to_string('fòô'); // "\xEF\xBB\xBF" . 'fòô'</co
 
 --------
 
-## array_change_key_case(array<string,mixed> $array, int $case, string $encoding): string
+## array_change_key_case(array<string,mixed> $array, int $case, string $encoding): string[]
 <a href="#class-methods">↑</a>
 Changes all keys in an array.
 
@@ -527,14 +488,14 @@ string. An optional offset may be supplied from which to begin the
 search for the start string.
 
 **Parameters:**
-- string $str 
+- string $str
 - string $start <p>Delimiter marking the start of the substring.</p>
 - string $end <p>Delimiter marking the end of the substring.</p>
 - int $offset [optional] <p>Index from which to begin the search. Default: 0</p>
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -550,7 +511,7 @@ EXAMPLE: <code>UTF8::binary_to_str('11110000100111111001100010000011'); // '😃
 - string $bin 1|0
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -570,16 +531,16 @@ __nothing__
 
 --------
 
-## callback(callable $callback, string $str): string
+## callback(callable $callback, string $str): string[]
 <a href="#class-methods">↑</a>
 
 
 **Parameters:**
-- callable $callback 
-- string $str 
+- callable $callback
+- string $str
 
 **Return:**
-- string[] 
+- string[]
 
 --------
 
@@ -597,7 +558,7 @@ Returns the character at $index, with indexes starting at 0.
 
 --------
 
-## chars(string $str): string
+## chars(string $str): string[]
 <a href="#class-methods">↑</a>
 Returns an array consisting of the characters in the string.
 
@@ -609,7 +570,7 @@ Returns an array consisting of the characters in the string.
 
 --------
 
-## checkForSupport(): string
+## checkForSupport(): true|null
 <a href="#class-methods">↑</a>
 This method will auto-detect your server environment for UTF-8 support.
 
@@ -617,11 +578,11 @@ This method will auto-detect your server environment for UTF-8 support.
 __nothing__
 
 **Return:**
-- bool|null 
+- true|null
 
 --------
 
-## chr(int $code_point, string $encoding): string
+## chr(int $code_point, string $encoding): string|null
 <a href="#class-methods">↑</a>
 Generates a UTF-8 encoded character from the given code point.
 
@@ -638,7 +599,7 @@ EXAMPLE: <code>UTF8::chr(0x2603); // '☃'</code>
 
 --------
 
-## chr_map(callable $callback, string $str): string
+## chr_map(callable $callback, string $str): string[]
 <a href="#class-methods">↑</a>
 Applies callback to all characters of a string.
 
@@ -653,7 +614,7 @@ EXAMPLE: <code>UTF8::chr_map([UTF8::class, 'strtolower'], 'Κόσμε'); // ['�
 
 --------
 
-## chr_size_list(string $str): string
+## chr_size_list(string $str): int[]
 <a href="#class-methods">↑</a>
 Generates an array of byte length of each character of a Unicode string.
 
@@ -672,7 +633,7 @@ EXAMPLE: <code>UTF8::chr_size_list('中文空白-test'); // [3, 3, 3, 3, 1, 1, 1
 
 --------
 
-## chr_to_decimal(string $char): string
+## chr_to_decimal(string $char): int
 <a href="#class-methods">↑</a>
 Get a decimal code representation of a specific character.
 
@@ -684,7 +645,7 @@ EXAMPLE: <code>UTF8::chr_to_decimal('§'); // 0xa7</code>
 - string $char <p>The input character.</p>
 
 **Return:**
-- int 
+- int
 
 --------
 
@@ -700,18 +661,6 @@ EXAMPLE: <code>UTF8::chr_to_hex('§'); // U+00a7</code>
 
 **Return:**
 - string <p>The code point encoded as U+xxxx.</p>
-
---------
-
-## chr_to_int(string $chr): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::chr_to_decimal()"
-
-**Parameters:**
-- string $chr 
-
-**Return:**
-- int 
 
 --------
 
@@ -731,7 +680,7 @@ EXAMPLE: <code>UTF8::chunk_split('ABC-ÖÄÜ-中文空白-κόσμε', 3); // "
 
 --------
 
-## clean(string $str, bool $remove_bom, bool $normalize_whitespace, bool $normalize_msword, bool $keep_non_breaking_space, bool $replace_diamond_question_mark, bool $remove_invisible_characters, bool $remove_invisible_characters_url_encoded): bool
+## clean(string $str, bool $remove_bom, bool $normalize_whitespace, bool $normalize_msword, bool $keep_non_breaking_space, bool $replace_diamond_question_mark, bool $remove_invisible_characters, bool $remove_invisible_characters_url_encoded): string
 <a href="#class-methods">↑</a>
 Accepts a string and removes all non-UTF-8 characters from it + extras if needed.
 
@@ -774,11 +723,11 @@ EXAMPLE: <code>UTF8::cleanup("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃 -
 - string $str <p>The input string.</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## codepoints(string|string[] $arg, bool $use_u_style): bool
+## codepoints(string|string[] $arg, bool $use_u_style): int[]|string[]
 <a href="#class-methods">↑</a>
 Accepts a string or a array of strings and returns an array of Unicode code points.
 
@@ -796,10 +745,10 @@ UTF8::codepoints('κöñ', true); // array('U+03ba', 'U+00f6', 'U+00f1')
 default, code points will be returned as integers.</p>
 
 **Return:**
-- (int|string)[] <p>
+- int[]|string[] <p>
 The array of code points:<br>
-array<int> for $u_style === false<br>
-array<string> for $u_style === true<br>
+int[] for $u_style === false<br>
+string[] for $u_style === true<br>
 </p>
 
 --------
@@ -818,7 +767,7 @@ multibyte whitespace such as the thin space and ideographic space.
 
 --------
 
-## count_chars(string $str, bool $clean_utf8, bool $try_to_use_mb_functions): bool
+## count_chars(string $str, bool $clean_utf8, bool $try_to_use_mb_functions): int[]
 <a href="#class-methods">↑</a>
 Returns count of characters used in a string.
 
@@ -835,7 +784,7 @@ their count as values.</p>
 
 --------
 
-## css_identifier(string $str, array<string,string> $filter, bool $stripe_tags, bool $strtolower): bool
+## css_identifier(string $str, string[] $filter, bool $stripe_tags, bool $strtolower): string
 <a href="#class-methods">↑</a>
 Create a valid CSS identifier for e.g. "class"- or "id"-attributes.
 
@@ -845,12 +794,12 @@ copy&past from https://github.com/drupal/core/blob/8.8.x/lib/Drupal/Component/Ut
 
 **Parameters:**
 - string $str <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
-- array<string,string> $filter 
-- bool $stripe_tags 
-- bool $strtolower 
+- string[] $filter
+- bool $stripe_tags
+- bool $strtolower
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -859,14 +808,14 @@ copy&past from https://github.com/drupal/core/blob/8.8.x/lib/Drupal/Component/Ut
 Remove css media-queries.
 
 **Parameters:**
-- string $str 
+- string $str
 
 **Return:**
-- string 
+- string
 
 --------
 
-## ctype_loaded(): string
+## ctype_loaded(): bool
 <a href="#class-methods">↑</a>
 Checks whether ctype is available on the server.
 
@@ -878,7 +827,7 @@ __nothing__
 
 --------
 
-## decimal_to_chr(int|string $int): int|string
+## decimal_to_chr(int|string $int): string
 <a href="#class-methods">↑</a>
 Converts an int value into a UTF-8 character.
 
@@ -887,28 +836,28 @@ INFO: opposite to UTF8::string()
 EXAMPLE: <code>UTF8::decimal_to_chr(931); // 'Σ'</code>
 
 **Parameters:**
-- int|string $int 
+- int|string $int
 
 **Return:**
-- string 
+- string
 
 --------
 
-## decode_mimeheader(string $str, string $encoding): string
+## decode_mimeheader(string $str, string $encoding): false|string
 <a href="#class-methods">↑</a>
 Decodes a MIME header field
 
 **Parameters:**
-- string $str 
+- string $str
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- bool|string <p>A decoded MIME field on success,
+- false|string <p>A decoded MIME field on success,
 or false if an error occurs during the decoding.</p>
 
 --------
 
-## emoji_decode(string $str, bool $use_reversible_string_mappings): bool
+## emoji_decode(string $str, bool $use_reversible_string_mappings): string
 <a href="#class-methods">↑</a>
 Decodes a string which was encoded by "UTF8::emoji_encode()".
 
@@ -927,11 +876,11 @@ When <b>TRUE</b>, we se a reversible string mapping
 between "emoji_encode" and "emoji_decode".</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## emoji_encode(string $str, bool $use_reversible_string_mappings): bool
+## emoji_encode(string $str, bool $use_reversible_string_mappings): string
 <a href="#class-methods">↑</a>
 Encode a string with emoji chars into a non-emoji string.
 
@@ -950,7 +899,7 @@ when <b>TRUE</b>, we use a reversible string mapping
 between "emoji_encode" and "emoji_decode"</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -993,16 +942,16 @@ string-encoding</p>
 A empty string will trigger the autodetect anyway.</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## encode_mimeheader(string $str, string $from_charset, string $to_charset, string $transfer_encoding, string $linefeed, int $indent): int
+## encode_mimeheader(string $str, string $from_charset, string $to_charset, string $transfer_encoding, string $linefeed, int $indent): false|string
 <a href="#class-methods">↑</a>
 
 
 **Parameters:**
-- string $str 
+- string $str
 - string $from_charset [optional] <p>Set the input charset.</p>
 - string $to_charset [optional] <p>Set the output charset.</p>
 - string $transfer_encoding [optional] <p>Set the transfer encoding.</p>
@@ -1010,7 +959,7 @@ A empty string will trigger the autodetect anyway.</p>
 - int $indent [optional] <p>Set the max length indent.</p>
 
 **Return:**
-- bool|string <p>An encoded MIME field on success,
+- false|string <p>An encoded MIME field on success,
 or false if an error occurs during the encoding.</p>
 
 --------
@@ -1027,11 +976,11 @@ Create an extract from a sentence, so if the search-string was found, it try to 
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## file_get_contents(string $filename, bool $use_include_path, resource|null $context, int|null $offset, int|null $max_length, int $timeout, bool $convert_to_utf8, string $from_encoding): string
+## file_get_contents(string $filename, bool $use_include_path, resource|null $context, int|null $offset, int|null $max_length, int $timeout, bool $convert_to_utf8, string $from_encoding): false|string
 <a href="#class-methods">↑</a>
 Reads entire file into a string.
 
@@ -1070,11 +1019,11 @@ like images or pdf will not be converted.</p>
 A empty string will trigger the autodetect anyway.</p>
 
 **Return:**
-- bool|string <p>The function returns the read data as string or <b>false</b> on failure.</p>
+- false|string <p>The function returns the read data as string or <b>false</b> on failure.</p>
 
 --------
 
-## file_has_bom(string $file_path): string
+## file_has_bom(string $file_path): bool
 <a href="#class-methods">↑</a>
 Checks if a file starts with BOM (Byte Order Mark) character.
 
@@ -1088,23 +1037,23 @@ EXAMPLE: <code>UTF8::file_has_bom('utf8_with_bom.txt'); // true</code>
 
 --------
 
-## filter(array|object|string $var, int $normalization_form, string $leading_combining): string
+## filter(array|object|string $var, int $normalization_form, string $leading_combining): mixed
 <a href="#class-methods">↑</a>
 Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
 EXAMPLE: <code>UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a')</code>
 
 **Parameters:**
-- array|object|string $var 
-- int $normalization_form 
-- string $leading_combining 
+- array|object|string $var
+- int $normalization_form
+- string $leading_combining
 
 **Return:**
-- mixed 
+- mixed
 
 --------
 
-## filter_input(int $type, string $variable_name, int $filter, array|int $options): array|int
+## filter_input(int $type, string $variable_name, int $filter, array|int $options): mixed
 <a href="#class-methods">↑</a>
 "filter_input()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1142,7 +1091,7 @@ returns <b>FALSE</b> if the variable is not set and <b>NULL</b> if the filter fa
 
 --------
 
-## filter_input_array(int $type, array|null $definition, bool $add_empty): bool
+## filter_input_array(int $type, array|null $definition, bool $add_empty): mixed
 <a href="#class-methods">↑</a>
 "filter_input_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1187,7 +1136,7 @@ is not set and <b>NULL</b> if the filter fails.
 
 --------
 
-## filter_var(float|int|string|null $variable, int $filter, array|int $options): array|int
+## filter_var(float|int|string|null $variable, int $filter, array|int $options): mixed
 <a href="#class-methods">↑</a>
 "filter_var()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1250,7 +1199,7 @@ $var = filter_var('Doe, Jane Sue', FILTER_CALLBACK, array('options' => 'foo'));
 
 --------
 
-## filter_var_array(array $data, array|int $definition, bool $add_empty): bool
+## filter_var_array(array $data, array|int $definition, bool $add_empty): mixed
 <a href="#class-methods">↑</a>
 "filter_var_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1326,11 +1275,11 @@ Returns the first $n characters of the string.
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## fits_inside(string $str, int $box_size): int
+## fits_inside(string $str, int $box_size): bool
 <a href="#class-methods">↑</a>
 Check if the number of Unicode characters isn't greater than the specified integer.
 
@@ -1361,7 +1310,7 @@ See: http://en.wikipedia.org/wiki/Windows-1252
 - string $str <p>The input string</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -1387,19 +1336,19 @@ Get character of a specific character.
 EXAMPLE: <code>UTF8::getCharDirection('ا'); // 'RTL'</code>
 
 **Parameters:**
-- string $char 
+- string $char
 
 **Return:**
 - string <p>'RTL' or 'LTR'.</p>
 
 --------
 
-## getSupportInfo(string|null $key): string|null
+## getSupportInfo(string|null $key): mixed
 <a href="#class-methods">↑</a>
 Check for php-support.
 
 **Parameters:**
-- string|null $key 
+- string|null $key
 
 **Return:**
 - mixed Return the full support-"array", if $key === null<br>
@@ -1408,17 +1357,17 @@ otherwise return <strong>null</strong>
 
 --------
 
-## get_file_type(string $str, array $fallback): array
+## get_file_type(string $str, array $fallback): string[]|null[]
 <a href="#class-methods">↑</a>
 Warning: this method only works for some file-types (png, jpg)
          if you need more supported types, please use e.g. "finfo"
 
 **Parameters:**
-- string $str 
+- string $str
 - array $fallback <p>with this keys: 'ext', 'mime', 'type'
 
 **Return:**
-- array<string,string|null> <p>with this keys: 'ext', 'mime', 'type'</p>
+- string[]|null[] <p>with this keys: 'ext', 'mime', 'type'</p>
 
 --------
 
@@ -1432,11 +1381,11 @@ Warning: this method only works for some file-types (png, jpg)
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## get_unique_string(int|string $extra_entropy, bool $use_md5): bool
+## get_unique_string(int|string $extra_entropy, bool $use_md5): string
 <a href="#class-methods">↑</a>
 
 
@@ -1445,23 +1394,11 @@ Warning: this method only works for some file-types (png, jpg)
 - bool $use_md5 [optional] <p>Return the unique identifier as md5-hash? Default: true</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## hasBom(string $str): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::string_has_bom()"
-
-**Parameters:**
-- string $str 
-
-**Return:**
-- bool 
-
---------
-
-## has_lowercase(string $str): string
+## has_lowercase(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains a lower case char, false otherwise.
 
@@ -1473,7 +1410,7 @@ Returns true if the string contains a lower case char, false otherwise.
 
 --------
 
-## has_uppercase(string $str): string
+## has_uppercase(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains an upper case char, false otherwise.
 
@@ -1485,7 +1422,7 @@ Returns true if the string contains an upper case char, false otherwise.
 
 --------
 
-## has_whitespace(string $str): string
+## has_whitespace(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains whitespace, false otherwise.
 
@@ -1497,7 +1434,7 @@ Returns true if the string contains whitespace, false otherwise.
 
 --------
 
-## hex_to_chr(string $hexdec): string
+## hex_to_chr(string $hexdec): false|string
 <a href="#class-methods">↑</a>
 Converts a hexadecimal value into a UTF-8 character.
 
@@ -1509,11 +1446,11 @@ EXAMPLE: <code>UTF8::hex_to_chr('U+00a7'); // '§'</code>
 - string $hexdec <p>The hexadecimal value.</p>
 
 **Return:**
-- bool|string one single UTF-8 character
+- false|string one single UTF-8 character
 
 --------
 
-## hex_to_int(string $hexdec): string
+## hex_to_int(string $hexdec): false|int
 <a href="#class-methods">↑</a>
 Converts hexadecimal U+xxxx code point representation to integer.
 
@@ -1525,21 +1462,7 @@ EXAMPLE: <code>UTF8::hex_to_int('U+00f1'); // 241</code>
 - string $hexdec <p>The hexadecimal code point representation.</p>
 
 **Return:**
-- bool|int <p>The code point, or false on failure.</p>
-
---------
-
-## html_decode(string $str, int $flags, string $encoding): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::html_entity_decode()"
-
-**Parameters:**
-- string $str 
-- int $flags 
-- string $encoding 
-
-**Return:**
-- string 
+- false|int <p>The code point, or false on failure.</p>
 
 --------
 
@@ -1640,11 +1563,11 @@ Handle code as HTML 5.
 Create a escape html version of the string via "UTF8::htmlspecialchars()".
 
 **Parameters:**
-- string $str 
+- string $str
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -1655,14 +1578,14 @@ Remove empty html-tag.
 e.g.: <pre><tag></tag></pre>
 
 **Parameters:**
-- string $str 
+- string $str
 
 **Return:**
-- string 
+- string
 
 --------
 
-## htmlentities(string $str, int $flags, string $encoding, bool $double_encode): bool
+## htmlentities(string $str, int $flags, string $encoding, bool $double_encode): string
 <a href="#class-methods">↑</a>
 Convert all applicable characters to HTML entities: UTF-8 version of htmlentities().
 
@@ -1771,7 +1694,7 @@ will be returned, unless either the <b>ENT_IGNORE</b> or
 
 --------
 
-## htmlspecialchars(string $str, int $flags, string $encoding, bool $double_encode): bool
+## htmlspecialchars(string $str, int $flags, string $encoding, bool $double_encode): string
 <a href="#class-methods">↑</a>
 Convert only special characters to HTML entities: UTF-8 version of htmlspecialchars()
 
@@ -1898,18 +1821,6 @@ __nothing__
 
 --------
 
-## int_to_chr(int|string $int): int|string
-<a href="#class-methods">↑</a>
-alias for "UTF8::decimal_to_chr()"
-
-**Parameters:**
-- int|string $int 
-
-**Return:**
-- string 
-
---------
-
 ## int_to_hex(int $int, string $prefix): string
 <a href="#class-methods">↑</a>
 Converts Integer to hexadecimal U+xxxx code point representation.
@@ -1927,7 +1838,7 @@ EXAMPLE: <code>UTF8::int_to_hex(241); // 'U+00f1'</code>
 
 --------
 
-## intlChar_loaded(): string
+## intlChar_loaded(): bool
 <a href="#class-methods">↑</a>
 Checks whether intl-char is available on the server.
 
@@ -1939,7 +1850,7 @@ __nothing__
 
 --------
 
-## intl_loaded(): string
+## intl_loaded(): bool
 <a href="#class-methods">↑</a>
 Checks whether intl is available on the server.
 
@@ -1951,121 +1862,7 @@ __nothing__
 
 --------
 
-## isAscii(string $str): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::is_ascii()"
-
-**Parameters:**
-- string $str 
-
-**Return:**
-- bool 
-
---------
-
-## isBase64(string $str): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::is_base64()"
-
-**Parameters:**
-- string $str 
-
-**Return:**
-- bool 
-
---------
-
-## isBinary(int|string $str, bool $strict): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::is_binary()"
-
-**Parameters:**
-- int|string $str 
-- bool $strict 
-
-**Return:**
-- bool 
-
---------
-
-## isBom(string $utf8_chr): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::is_bom()"
-
-**Parameters:**
-- string $utf8_chr 
-
-**Return:**
-- bool 
-
---------
-
-## isHtml(string $str): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::is_html()"
-
-**Parameters:**
-- string $str 
-
-**Return:**
-- bool 
-
---------
-
-## isJson(string $str): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::is_json()"
-
-**Parameters:**
-- string $str 
-
-**Return:**
-- bool 
-
---------
-
-## isUtf16(string $str): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::is_utf16()"
-
-**Parameters:**
-- string $str 
-
-**Return:**
-- bool|int <strong>false</strong> if is't not UTF16,<br>
-<strong>1</strong> for UTF-16LE,<br>
-<strong>2</strong> for UTF-16BE
-
---------
-
-## isUtf32(string $str): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::is_utf32()"
-
-**Parameters:**
-- string $str 
-
-**Return:**
-- bool|int <strong>false</strong> if is't not UTF16,
-<strong>1</strong> for UTF-32LE,
-<strong>2</strong> for UTF-32BE
-
---------
-
-## isUtf8(string $str, bool $strict): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::is_utf8()"
-
-**Parameters:**
-- string $str 
-- bool $strict 
-
-**Return:**
-- bool 
-
---------
-
-## is_alpha(string $str): string
+## is_alpha(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains only alphabetic chars, false otherwise.
 
@@ -2077,7 +1874,7 @@ Returns true if the string contains only alphabetic chars, false otherwise.
 
 --------
 
-## is_alphanumeric(string $str): string
+## is_alphanumeric(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains only alphabetic and numeric chars, false otherwise.
 
@@ -2089,7 +1886,7 @@ Returns true if the string contains only alphabetic and numeric chars, false oth
 
 --------
 
-## is_ascii(string $str): string
+## is_ascii(string $str): bool
 <a href="#class-methods">↑</a>
 Checks if a string is 7 bit ASCII.
 
@@ -2128,29 +1925,29 @@ Check if the input is binary... (is look like a hack).
 EXAMPLE: <code>UTF8::is_binary(01); // true</code>
 
 **Parameters:**
-- int|string $input 
-- bool $strict 
+- int|string $input
+- bool $strict
 
 **Return:**
-- bool 
+- bool
 
 --------
 
-## is_binary_file(string $file): string
+## is_binary_file(string $file): bool
 <a href="#class-methods">↑</a>
 Check if the file is binary.
 
 EXAMPLE: <code>UTF8::is_binary('./utf32.txt'); // true</code>
 
 **Parameters:**
-- string $file 
+- string $file
 
 **Return:**
-- bool 
+- bool
 
 --------
 
-## is_blank(string $str): string
+## is_blank(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains only whitespace chars, false otherwise.
 
@@ -2162,7 +1959,7 @@ Returns true if the string contains only whitespace chars, false otherwise.
 
 --------
 
-## is_bom(string $str): string
+## is_bom(string $str): bool
 <a href="#class-methods">↑</a>
 Checks if the given string is equal to any "Byte Order Mark".
 
@@ -2178,7 +1975,7 @@ EXAMPLE: <code>UTF8::is_bom("\xef\xbb\xbf"); // true</code>
 
 --------
 
-## is_empty(array|float|int|string $str): array|float|int|string
+## is_empty(array|float|int|string $str): bool
 <a href="#class-methods">↑</a>
 Determine whether the string is considered to be empty.
 
@@ -2186,14 +1983,14 @@ A variable is considered empty if it does not exist or if its value equals FALSE
 empty() does not generate a warning if the variable does not exist.
 
 **Parameters:**
-- array|float|int|string $str 
+- array|float|int|string $str
 
 **Return:**
 - bool <p>Whether or not $str is empty().</p>
 
 --------
 
-## is_hexadecimal(string $str): string
+## is_hexadecimal(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains only hexadecimal chars, false otherwise.
 
@@ -2205,7 +2002,7 @@ Returns true if the string contains only hexadecimal chars, false otherwise.
 
 --------
 
-## is_html(string $str): string
+## is_html(string $str): bool
 <a href="#class-methods">↑</a>
 Check if the string contains any HTML tags.
 
@@ -2235,7 +2032,7 @@ results.</p>
 
 --------
 
-## is_lowercase(string $str): string
+## is_lowercase(string $str): bool
 <a href="#class-methods">↑</a>
 
 
@@ -2247,7 +2044,7 @@ results.</p>
 
 --------
 
-## is_printable(string $str): string
+## is_printable(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains only printable (non-invisible) chars, false otherwise.
 
@@ -2259,7 +2056,7 @@ Returns true if the string contains only printable (non-invisible) chars, false 
 
 --------
 
-## is_punctuation(string $str): string
+## is_punctuation(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains only punctuation chars, false otherwise.
 
@@ -2271,7 +2068,7 @@ Returns true if the string contains only punctuation chars, false otherwise.
 
 --------
 
-## is_serialized(string $str): string
+## is_serialized(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string is serialized, false otherwise.
 
@@ -2283,7 +2080,7 @@ Returns true if the string is serialized, false otherwise.
 
 --------
 
-## is_uppercase(string $str): string
+## is_uppercase(string $str): bool
 <a href="#class-methods">↑</a>
 Returns true if the string contains only lower case chars, false
 otherwise.
@@ -2301,15 +2098,15 @@ otherwise.
 Check if $url is an correct url.
 
 **Parameters:**
-- string $url 
-- bool $disallow_localhost 
+- string $url
+- bool $disallow_localhost
 
 **Return:**
-- bool 
+- bool
 
 --------
 
-## is_utf16(string $str, bool $check_if_string_is_binary): bool
+## is_utf16(string $str, bool $check_if_string_is_binary): false|int
 <a href="#class-methods">↑</a>
 Check if the string is UTF-16.
 
@@ -2323,16 +2120,16 @@ UTF8::is_utf16(file_get_contents('utf-8.txt')); // false
 
 **Parameters:**
 - string $str <p>The input string.</p>
-- bool $check_if_string_is_binary 
+- bool $check_if_string_is_binary
 
 **Return:**
-- bool|int <strong>false</strong> if is't not UTF-16,<br>
+- false|int <strong>false</strong> if is't not UTF-16,<br>
 <strong>1</strong> for UTF-16LE,<br>
 <strong>2</strong> for UTF-16BE
 
 --------
 
-## is_utf32(string $str, bool $check_if_string_is_binary): bool
+## is_utf32(string $str, bool $check_if_string_is_binary): false|int
 <a href="#class-methods">↑</a>
 Check if the string is UTF-32.
 
@@ -2346,10 +2143,10 @@ UTF8::is_utf32(file_get_contents('utf-8.txt')); // false
 
 **Parameters:**
 - string $str <p>The input string.</p>
-- bool $check_if_string_is_binary 
+- bool $check_if_string_is_binary
 
 **Return:**
-- bool|int <strong>false</strong> if is't not UTF-32,<br>
+- false|int <strong>false</strong> if is't not UTF-32,<br>
 <strong>1</strong> for UTF-32LE,<br>
 <strong>2</strong> for UTF-32BE
 
@@ -2370,11 +2167,11 @@ UTF8::is_utf8(["Iñtërnâtiônàlizætiøn\xA0\xA1", 'bar']); // false
 - bool $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
 
 **Return:**
-- bool 
+- bool
 
 --------
 
-## json_decode(string $json, bool $assoc, int $depth, int $options): int
+## json_decode(string $json, bool $assoc, int $depth, int $options): mixed
 <a href="#class-methods">↑</a>
 (PHP 5 &gt;= 5.2.0, PECL json &gt;= 1.2.0)<br/>
 Decodes a JSON string
@@ -2413,7 +2210,7 @@ is deeper than the recursion limit.</p>
 
 --------
 
-## json_encode(mixed $value, int $options, int $depth): int
+## json_encode(mixed $value, int $options, int $depth): false|string
 <a href="#class-methods">↑</a>
 (PHP 5 &gt;= 5.2.0, PECL json &gt;= 1.2.0)<br/>
 Returns the JSON representation of a value.
@@ -2450,12 +2247,12 @@ Set the maximum depth. Must be greater than zero.
 </p>
 
 **Return:**
-- bool|string A JSON encoded <strong>string</strong> on success or<br>
+- false|string A JSON encoded <strong>string</strong> on success or<br>
 <strong>FALSE</strong> on failure
 
 --------
 
-## json_loaded(): int
+## json_loaded(): bool
 <a href="#class-methods">↑</a>
 Checks whether JSON is available on the server.
 
@@ -2467,7 +2264,7 @@ __nothing__
 
 --------
 
-## lcfirst(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
+## lcfirst(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): string
 <a href="#class-methods">↑</a>
 Makes string's first char lowercase.
 
@@ -2487,23 +2284,7 @@ tr</p>
 
 --------
 
-## lcword(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::lcfirst()"
-
-**Parameters:**
-- string $str 
-- string $encoding 
-- bool $clean_utf8 
-- string|null $lang 
-- bool $try_to_keep_the_string_length 
-
-**Return:**
-- string 
-
---------
-
-## lcwords(string $str, string[] $exceptions, string $char_list, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
+## lcwords(string $str, string[] $exceptions, string $char_list, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): string
 <a href="#class-methods">↑</a>
 Lowercase for all words in the string.
 
@@ -2520,27 +2301,11 @@ tr</p>
 -> ß</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## lowerCaseFirst(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::lcfirst()"
-
-**Parameters:**
-- string $str 
-- string $encoding 
-- bool $clean_utf8 
-- string|null $lang 
-- bool $try_to_keep_the_string_length 
-
-**Return:**
-- string 
-
---------
-
-## ltrim(string $str, string|null $chars): string|null
+## ltrim(string $str, string|null $chars): string
 <a href="#class-methods">↑</a>
 Strip whitespace or other characters from the beginning of a UTF-8 string.
 
@@ -2555,7 +2320,7 @@ EXAMPLE: <code>UTF8::ltrim('　中文空白　 '); // '中文空白　 '</code>
 
 --------
 
-## max(string[]|string $arg): string[]|string
+## max(string[]|string $arg): string|null
 <a href="#class-methods">↑</a>
 Returns the UTF-8 character with the maximum code point in the given data.
 
@@ -2569,7 +2334,7 @@ EXAMPLE: <code>UTF8::max('abc-äöü-中文空白'); // 'ø'</code>
 
 --------
 
-## max_chr_width(string $str): string
+## max_chr_width(string $str): int
 <a href="#class-methods">↑</a>
 Calculates and returns the maximum number of bytes taken by any
 UTF-8 encoded character in the given string.
@@ -2584,7 +2349,7 @@ EXAMPLE: <code>UTF8::max_chr_width('Intërnâtiônàlizætiøn'); // 2</code>
 
 --------
 
-## mbstring_loaded(): string
+## mbstring_loaded(): bool
 <a href="#class-methods">↑</a>
 Checks whether mbstring is available on the server.
 
@@ -2596,7 +2361,7 @@ __nothing__
 
 --------
 
-## min(string|string[] $arg): string|string[]
+## min(string|string[] $arg): string|null
 <a href="#class-methods">↑</a>
 Returns the UTF-8 character with the minimum code point in the given data.
 
@@ -2610,20 +2375,7 @@ EXAMPLE: <code>UTF8::min('abc-äöü-中文空白'); // '-'</code>
 
 --------
 
-## normalizeEncoding(mixed $encoding, mixed $fallback): mixed
-<a href="#class-methods">↑</a>
-alias for "UTF8::normalize_encoding()"
-
-**Parameters:**
-- mixed $encoding 
-- mixed $fallback 
-
-**Return:**
-- mixed 
-
---------
-
-## normalize_encoding(mixed $encoding, mixed $fallback): mixed
+## normalize_encoding(mixed $encoding, mixed $fallback): mixed|string
 <a href="#class-methods">↑</a>
 Normalize the encoding-"name" input.
 
@@ -2638,7 +2390,7 @@ EXAMPLE: <code>UTF8::normalize_encoding('UTF8'); // 'UTF-8'</code>
 
 --------
 
-## normalize_line_ending(string $str, string|string[] $replacer): string|string[]
+## normalize_line_ending(string $str, string|string[] $replacer): string
 <a href="#class-methods">↑</a>
 Standardize line ending to unix-like.
 
@@ -2666,7 +2418,7 @@ EXAMPLE: <code>UTF8::normalize_msword('„Abcdef…”'); // '"Abcdef..."'</code
 
 --------
 
-## normalize_whitespace(string $str, bool $keep_non_breaking_space, bool $keep_bidi_unicode_controls): bool
+## normalize_whitespace(string $str, bool $keep_non_breaking_space, bool $keep_bidi_unicode_controls): string
 <a href="#class-methods">↑</a>
 Normalize the whitespace.
 
@@ -2683,7 +2435,7 @@ bidirectional text chars.</p>
 
 --------
 
-## ord(string $chr, string $encoding): string
+## ord(string $chr, string $encoding): int
 <a href="#class-methods">↑</a>
 Calculates Unicode code point of the given UTF-8 encoded character.
 
@@ -2738,7 +2490,7 @@ __nothing__
 
 --------
 
-## range(int|string $var1, int|string $var2, bool $use_ctype, string $encoding, float|int $step): float|int
+## range(int|string $var1, int|string $var2, bool $use_ctype, string $encoding, float|int $step): string[]
 <a href="#class-methods">↑</a>
 Create an array containing a range of UTF-8 characters.
 
@@ -2758,11 +2510,11 @@ step will default to 1.
 </p>
 
 **Return:**
-- string[] 
+- string[]
 
 --------
 
-## rawurldecode(string $str, bool $multi_decode): bool
+## rawurldecode(string $str, bool $multi_decode): string
 <a href="#class-methods">↑</a>
 Multi decode HTML entity + fix urlencoded-win1252-chars.
 
@@ -2800,19 +2552,7 @@ Replaces all occurrences of $pattern in $str by $replacement.
 - string $delimiter [optional] <p>Delimiter the the regex. Default: '/'</p>
 
 **Return:**
-- string 
-
---------
-
-## removeBOM(string $str): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::remove_bom()"
-
-**Parameters:**
-- string $str 
-
-**Return:**
-- string 
+- string
 
 --------
 
@@ -2830,7 +2570,7 @@ EXAMPLE: <code>UTF8::remove_bom("\xEF\xBB\xBFΜπορώ να"); // 'Μπορώ �
 
 --------
 
-## remove_duplicates(string $str, string|string[] $what): string|string[]
+## remove_duplicates(string $str, string|string[] $what): string
 <a href="#class-methods">↑</a>
 Removes duplicate occurrences of a string in another string.
 
@@ -2917,7 +2657,7 @@ Returns a new string with the prefix $substring removed, if present.
 Returns a new string with the suffix $substring removed, if present.
 
 **Parameters:**
-- string $str 
+- string $str
 - string $substring <p>The suffix to remove.</p>
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
@@ -2926,7 +2666,7 @@ Returns a new string with the suffix $substring removed, if present.
 
 --------
 
-## replace(string $str, string $search, string $replacement, bool $case_sensitive): bool
+## replace(string $str, string $search, string $replacement, bool $case_sensitive): string
 <a href="#class-methods">↑</a>
 Replaces all occurrences of $search in $str by $replacement.
 
@@ -2941,7 +2681,7 @@ Replaces all occurrences of $search in $str by $replacement.
 
 --------
 
-## replace_all(string $str, array $search, array|string $replacement, bool $case_sensitive): bool
+## replace_all(string $str, array $search, array|string $replacement, bool $case_sensitive): string
 <a href="#class-methods">↑</a>
 Replaces all occurrences of $search in $str by $replacement.
 
@@ -2956,7 +2696,7 @@ Replaces all occurrences of $search in $str by $replacement.
 
 --------
 
-## replace_diamond_question_mark(string $str, string $replacement_char, bool $process_invalid_utf8_chars): bool
+## replace_diamond_question_mark(string $str, string $replacement_char, bool $process_invalid_utf8_chars): string
 <a href="#class-methods">↑</a>
 Replace the diamond question mark (�) and invalid-UTF8 chars with the replacement.
 
@@ -2972,7 +2712,7 @@ EXAMPLE: <code>UTF8::replace_diamond_question_mark('中文空白�', ''); // '�
 
 --------
 
-## rtrim(string $str, string|null $chars): string|null
+## rtrim(string $str, string|null $chars): string
 <a href="#class-methods">↑</a>
 Strip whitespace or other characters from the end of a UTF-8 string.
 
@@ -2987,15 +2727,15 @@ EXAMPLE: <code>UTF8::rtrim('-ABC-中文空白-  '); // '-ABC-中文空白-'</cod
 
 --------
 
-## showSupport(bool $useEcho): bool
+## showSupport(bool $useEcho): string|void
 <a href="#class-methods">↑</a>
 WARNING: Print native UTF-8 support (libs) by default, e.g. for debugging.
 
 **Parameters:**
-- bool $useEcho 
+- bool $useEcho
 
 **Return:**
-- string|void 
+- string|void
 
 --------
 
@@ -3015,47 +2755,20 @@ EXAMPLE: <code>UTF8::single_chr_html_encode('κ'); // '&#954;'</code>
 
 --------
 
-## spaces_to_tabs(string $str, int $tab_length): int
+## spaces_to_tabs(string $str, int $tab_length): string
 <a href="#class-methods">↑</a>
 
 
 **Parameters:**
-- string $str 
-- int $tab_length 
+- string $str
+- int $tab_length
 
 **Return:**
-- string 
+- string
 
 --------
 
-## split(int|string $str, int $length, bool $clean_utf8): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::str_split()"
-
-**Parameters:**
-- int|string $str 
-- int $length 
-- bool $clean_utf8 
-
-**Return:**
-- string[] 
-
---------
-
-## str_begins(string $haystack, string $needle): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::str_starts_with()"
-
-**Parameters:**
-- string $haystack 
-- string $needle 
-
-**Return:**
-- bool 
-
---------
-
-## str_camelize(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
+## str_camelize(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): string
 <a href="#class-methods">↑</a>
 Returns a camelCase version of the string. Trims surrounding spaces,
 capitalizes letters following digits, spaces, dashes and underscores,
@@ -3071,7 +2784,7 @@ tr</p>
 -> ß</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3081,7 +2794,7 @@ Returns the string with the first letter of each word capitalized,
 except for when the word is a name which shouldn't be capitalized.
 
 **Parameters:**
-- string $str 
+- string $str
 
 **Return:**
 - string <p>A string with $str capitalized.</p>
@@ -3147,11 +2860,11 @@ character of the string), and in place of spaces as well as underscores.
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## str_delimit(string $str, string $delimiter, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
+## str_delimit(string $str, string $delimiter, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): string
 <a href="#class-methods">↑</a>
 Returns a lowercase and trimmed string separated by the given delimiter.
 
@@ -3170,11 +2883,11 @@ tr</p>
 ß</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## str_detect_encoding(string $str): string
+## str_detect_encoding(string $str): false|string
 <a href="#class-methods">↑</a>
 Optimized "mb_detect_encoding()"-function -> with support for UTF-16 and UTF-32.
 
@@ -3187,25 +2900,12 @@ UTF8::str_detect_encoding('Abc'); // 'ASCII'
 - string $str <p>The input string.</p>
 
 **Return:**
-- bool|string The detected string-encoding e.g. UTF-8 or UTF-16BE,<br>
+- false|string The detected string-encoding e.g. UTF-8 or UTF-16BE,<br>
 otherwise it will return false e.g. for BINARY or not detected encoding.
 
 --------
 
-## str_ends(string $haystack, string $needle): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::str_ends_with()"
-
-**Parameters:**
-- string $haystack 
-- string $needle 
-
-**Return:**
-- bool 
-
---------
-
-## str_ends_with(string $haystack, string $needle): string
+## str_ends_with(string $haystack, string $needle): bool
 <a href="#class-methods">↑</a>
 Check if the string ends with the given substring.
 
@@ -3219,11 +2919,11 @@ UTF8::str_ends_with('BeginMiddleΚόσμε', 'κόσμε'); // false
 - string $needle <p>The substring to search for.</p>
 
 **Return:**
-- bool 
+- bool
 
 --------
 
-## str_ends_with_any(string $str, string[] $substrings): string[]
+## str_ends_with_any(string $str, string[] $substrings): bool
 <a href="#class-methods">↑</a>
 Returns true if the string ends with any of $substrings, false otherwise.
 
@@ -3248,7 +2948,7 @@ prepended.
 - string $substring <p>The substring to add if not present.</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3261,7 +2961,7 @@ Ensures that the string ends with $substring. If it doesn't, it's appended.
 - string $substring <p>The substring to add if not present.</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3271,40 +2971,14 @@ Capitalizes the first word of the string, replaces underscores with
 spaces, and strips '_id'.
 
 **Parameters:**
-- string $str 
+- string $str
 
 **Return:**
-- string 
+- string
 
 --------
 
-## str_ibegins(string $haystack, string $needle): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::str_istarts_with()"
-
-**Parameters:**
-- string $haystack 
-- string $needle 
-
-**Return:**
-- bool 
-
---------
-
-## str_iends(string $haystack, string $needle): string
-<a href="#class-methods">↑</a>
-alias for "UTF8::str_iends_with()"
-
-**Parameters:**
-- string $haystack 
-- string $needle 
-
-**Return:**
-- bool 
-
---------
-
-## str_iends_with(string $haystack, string $needle): string
+## str_iends_with(string $haystack, string $needle): bool
 <a href="#class-methods">↑</a>
 Check if the string ends with the given substring, case-insensitive.
 
@@ -3318,11 +2992,11 @@ UTF8::str_iends_with('BeginMiddleΚόσμε', 'κόσμε'); // true
 - string $needle <p>The substring to search for.</p>
 
 **Return:**
-- bool 
+- bool
 
 --------
 
-## str_iends_with_any(string $str, string[] $substrings): string[]
+## str_iends_with_any(string $str, string[] $substrings): bool
 <a href="#class-methods">↑</a>
 Returns true if the string ends with any of $substrings, false otherwise.
 
@@ -3337,76 +3011,6 @@ Returns true if the string ends with any of $substrings, false otherwise.
 
 --------
 
-## str_iindex_first(string $str, string $needle, int $offset, string $encoding): string
-<a href="#class-methods">↑</a>
-Returns the index of the first occurrence of $needle in the string,
-and false if not found. Accepts an optional offset from which to begin
-the search.
-
-**Parameters:**
-- string $str <p>The input string.</p>
-- string $needle <p>Substring to look for.</p>
-- int $offset [optional] <p>Offset from which to search. Default: 0</p>
-- string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
-
-**Return:**
-- bool|int <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
-
---------
-
-## str_iindex_last(string $str, string $needle, int $offset, string $encoding): string
-<a href="#class-methods">↑</a>
-Returns the index of the last occurrence of $needle in the string,
-and false if not found. Accepts an optional offset from which to begin
-the search. Offsets may be negative to count from the last character
-in the string.
-
-**Parameters:**
-- string $str <p>The input string.</p>
-- string $needle <p>Substring to look for.</p>
-- int $offset [optional] <p>Offset from which to search. Default: 0</p>
-- string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
-
-**Return:**
-- bool|int <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
-
---------
-
-## str_index_first(string $str, string $needle, int $offset, string $encoding): string
-<a href="#class-methods">↑</a>
-Returns the index of the first occurrence of $needle in the string,
-and false if not found. Accepts an optional offset from which to begin
-the search.
-
-**Parameters:**
-- string $str <p>The input string.</p>
-- string $needle <p>Substring to look for.</p>
-- int $offset [optional] <p>Offset from which to search. Default: 0</p>
-- string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
-
-**Return:**
-- bool|int <p>The occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
-
---------
-
-## str_index_last(string $str, string $needle, int $offset, string $encoding): string
-<a href="#class-methods">↑</a>
-Returns the index of the last occurrence of $needle in the string,
-and false if not found. Accepts an optional offset from which to begin
-the search. Offsets may be negative to count from the last character
-in the string.
-
-**Parameters:**
-- string $str <p>The input string.</p>
-- string $needle <p>Substring to look for.</p>
-- int $offset [optional] <p>Offset from which to search. Default: 0</p>
-- string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
-
-**Return:**
-- bool|int <p>The last occurrence's <strong>index</strong> if found, otherwise <strong>false</strong>.</p>
-
---------
-
 ## str_insert(string $str, string $substring, int $index, string $encoding): string
 <a href="#class-methods">↑</a>
 Inserts $substring into the string at the $index provided.
@@ -3418,11 +3022,11 @@ Inserts $substring into the string at the $index provided.
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## str_ireplace(string|string[] $search, string|string[] $replacement, string|string[] $subject, int $count): int
+## str_ireplace(string|string[] $search, string|string[] $replacement, string|string[] $subject, int $count): string|string[]
 <a href="#class-methods">↑</a>
 Case-insensitive and UTF-8 safe version of <function>str_replace</function>.
 
@@ -3481,7 +3085,7 @@ Replaces $search from the ending of string with $replacement.
 
 --------
 
-## str_istarts_with(string $haystack, string $needle): string
+## str_istarts_with(string $haystack, string $needle): bool
 <a href="#class-methods">↑</a>
 Check if the string starts with the given substring, case-insensitive.
 
@@ -3495,11 +3099,11 @@ UTF8::str_istarts_with('ΚόσμεMiddleEnd', 'κόσμε'); // true
 - string $needle <p>The substring to search for.</p>
 
 **Return:**
-- bool 
+- bool
 
 --------
 
-## str_istarts_with_any(string $str, array $substrings): array
+## str_istarts_with_any(string $str, array $substrings): bool
 <a href="#class-methods">↑</a>
 Returns true if the string begins with any of $substrings, false otherwise.
 
@@ -3524,7 +3128,7 @@ Gets the substring after the first occurrence of a separator.
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3538,7 +3142,7 @@ Gets the substring after the last occurrence of a separator.
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3552,7 +3156,7 @@ Gets the substring before the first occurrence of a separator.
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3566,7 +3170,7 @@ Gets the substring before the last occurrence of a separator.
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3581,7 +3185,7 @@ Gets the substring after (or before via "$before_needle") the first occurrence o
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3596,7 +3200,7 @@ Gets the substring after (or before via "$before_needle") the last occurrence of
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3610,7 +3214,7 @@ Returns the last $n characters of the string.
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3625,7 +3229,7 @@ Limit the number of characters in a string.
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3642,7 +3246,7 @@ EXAMPLE: <code>UTF8::str_limit_after_word('fòô bàř fòô', 8, ''); // 'fòô
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3656,7 +3260,7 @@ Returns the longest common prefix between the $str1 and $str2.
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3667,7 +3271,7 @@ Returns the longest common substring between the $str1 and $str2.
 In the case of ties, it returns that which occurs first.
 
 **Parameters:**
-- string $str1 
+- string $str1
 - string $str2 <p>Second string for comparison.</p>
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
@@ -3681,16 +3285,16 @@ In the case of ties, it returns that which occurs first.
 Returns the longest common suffix between the $str1 and $str2.
 
 **Parameters:**
-- string $str1 
+- string $str1
 - string $str2 <p>Second string for comparison.</p>
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## str_matches_pattern(string $str, string $pattern): string
+## str_matches_pattern(string $str, string $pattern): bool
 <a href="#class-methods">↑</a>
 Returns true if $str matches the supplied pattern, false otherwise.
 
@@ -3703,7 +3307,7 @@ Returns true if $str matches the supplied pattern, false otherwise.
 
 --------
 
-## str_offset_exists(string $str, int $offset, string $encoding): string
+## str_offset_exists(string $str, int $offset, string $encoding): bool
 <a href="#class-methods">↑</a>
 Returns whether or not a character exists at an index. Offsets may be
 negative to count from the last character in the string. Implements
@@ -3764,7 +3368,7 @@ Returns a new string of a given length such that both sides of the
 string are padded. Alias for "UTF8::str_pad()" with a $pad_type of 'both'.
 
 **Parameters:**
-- string $str 
+- string $str
 - int $length <p>Desired string length after padding.</p>
 - string $pad_str [optional] <p>String used to pad, defaults to space. Default: ' '</p>
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
@@ -3780,7 +3384,7 @@ Returns a new string of a given length such that the beginning of the
 string is padded. Alias for "UTF8::str_pad()" with a $pad_type of 'left'.
 
 **Parameters:**
-- string $str 
+- string $str
 - int $length <p>Desired string length after padding.</p>
 - string $pad_str [optional] <p>String used to pad, defaults to space. Default: ' '</p>
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
@@ -3796,7 +3400,7 @@ Returns a new string of a given length such that the end of the string
 is padded. Alias for "UTF8::str_pad()" with a $pad_type of 'right'.
 
 **Parameters:**
-- string $str 
+- string $str
 - int $length <p>Desired string length after padding.</p>
 - string $pad_str [optional] <p>String used to pad, defaults to space. Default: ' '</p>
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
@@ -3806,7 +3410,7 @@ is padded. Alias for "UTF8::str_pad()" with a $pad_type of 'right'.
 
 --------
 
-## str_repeat(string $str, int $multiplier): int
+## str_repeat(string $str, int $multiplier): string
 <a href="#class-methods">↑</a>
 Repeat a string.
 
@@ -3828,38 +3432,6 @@ will return an empty string.
 
 **Return:**
 - string <p>The repeated string.</p>
-
---------
-
-## str_replace(string|string[] $search, string|string[] $replace, string|string[] $subject, int $count): int
-<a href="#class-methods">↑</a>
-INFO: This is only a wrapper for "str_replace()"  -> the original functions is already UTF-8 safe.
-
-Replace all occurrences of the search string with the replacement string
-
-**Parameters:**
-- string|string[] $search <p>
-The value being searched for, otherwise known as the needle.
-An array may be used to designate multiple needles.
-</p>
-- string|string[] $replace <p>
-The replacement value that replaces found search
-values. An array may be used to designate multiple replacements.
-</p>
-- string|string[] $subject <p>
-The string or array of strings being searched and replaced on,
-otherwise known as the haystack.
-</p>
-<p>
-If subject is an array, then the search and
-replace is performed with every entry of
-subject, and the return value is an array as
-well.
-</p>
-- int $count [optional] If passed, this will hold the number of matched and replaced needles
-
-**Return:**
-- string|string[] this function returns a string or an array with the replaced values
 
 --------
 
@@ -3896,12 +3468,12 @@ Replaces $search from the ending of string with $replacement.
 Replace the first "$search"-term with the "$replace"-term.
 
 **Parameters:**
-- string $search 
-- string $replace 
-- string $subject 
+- string $search
+- string $replace
+- string $subject
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3910,12 +3482,12 @@ Replace the first "$search"-term with the "$replace"-term.
 Replace the last "$search"-term with the "$replace"-term.
 
 **Parameters:**
-- string $search 
-- string $replace 
-- string $subject 
+- string $search
+- string $replace
+- string $subject
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -3936,7 +3508,7 @@ EXAMPLE: <code>UTF8::str_shuffle('fòô bàř fòô'); // 'àòôřb ffòô '</c
 
 --------
 
-## str_slice(string $str, int $start, int $end, string $encoding): string
+## str_slice(string $str, int $start, int $end, string $encoding): false|string
 <a href="#class-methods">↑</a>
 Returns the substring beginning at $start, and up to, but not including
 the index specified by $end. If $end is omitted, the function extracts
@@ -3944,13 +3516,13 @@ the remaining string. If $end is negative, it is computed from the end
 of the string.
 
 **Parameters:**
-- string $str 
+- string $str
 - int $start <p>Initial index from which to begin extraction.</p>
 - int $end [optional] <p>Index at which to end extraction. Default: null</p>
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- bool|string <p>The extracted substring.</p><p>If <i>str</i> is shorter than <i>start</i>
+- false|string <p>The extracted substring.</p><p>If <i>str</i> is shorter than <i>start</i>
 characters long, <b>FALSE</b> will be returned.
 
 --------
@@ -3960,7 +3532,7 @@ characters long, <b>FALSE</b> will be returned.
 Convert a string to e.g.: "snake_case"
 
 **Parameters:**
-- string $str 
+- string $str
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
@@ -3968,7 +3540,7 @@ Convert a string to e.g.: "snake_case"
 
 --------
 
-## str_sort(string $str, bool $unique, bool $desc): bool
+## str_sort(string $str, bool $unique, bool $desc): string
 <a href="#class-methods">↑</a>
 Sort all characters according to code points.
 
@@ -3984,7 +3556,7 @@ EXAMPLE: <code>UTF8::str_sort('  -ABC-中文空白-  '); // '    ---ABC中文白
 
 --------
 
-## str_split(int|string $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): bool
+## str_split(int|string $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): string[]
 <a href="#class-methods">↑</a>
 Convert a string to an array of unicode characters.
 
@@ -4004,7 +3576,7 @@ string.</p>
 
 --------
 
-## str_split_array(int[]|string[] $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): bool
+## str_split_array(int[]|string[] $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): string[][]
 <a href="#class-methods">↑</a>
 Convert a string to an array of Unicode characters.
 
@@ -4026,14 +3598,14 @@ string.</p>
 
 --------
 
-## str_split_pattern(string $str, string $pattern, int $limit): int
+## str_split_pattern(string $str, string $pattern, int $limit): string[]
 <a href="#class-methods">↑</a>
 Splits the string with the provided regular expression, returning an
 array of strings. An optional integer $limit will truncate the
 results.
 
 **Parameters:**
-- string $str 
+- string $str
 - string $pattern <p>The regex with which to split the string.</p>
 - int $limit [optional] <p>Maximum number of results to return. Default: -1 === no limit</p>
 
@@ -4042,7 +3614,7 @@ results.
 
 --------
 
-## str_starts_with(string $haystack, string $needle): string
+## str_starts_with(string $haystack, string $needle): bool
 <a href="#class-methods">↑</a>
 Check if the string starts with the given substring.
 
@@ -4056,11 +3628,11 @@ UTF8::str_starts_with('ΚόσμεMiddleEnd', 'κόσμε'); // false
 - string $needle <p>The substring to search for.</p>
 
 **Return:**
-- bool 
+- bool
 
 --------
 
-## str_starts_with_any(string $str, array $substrings): array
+## str_starts_with_any(string $str, array $substrings): bool
 <a href="#class-methods">↑</a>
 Returns true if the string begins with any of $substrings, false otherwise.
 
@@ -4085,7 +3657,7 @@ Gets the substring after the first occurrence of a separator.
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -4099,7 +3671,7 @@ Gets the substring after the last occurrence of a separator.
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -4113,7 +3685,7 @@ Gets the substring before the first occurrence of a separator.
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -4127,7 +3699,7 @@ Gets the substring before the last occurrence of a separator.
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -4142,7 +3714,7 @@ Gets the substring after (or before via "$before_needle") the first occurrence o
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -4157,7 +3729,7 @@ Gets the substring after (or before via "$before_needle") the last occurrence of
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -4166,7 +3738,7 @@ Gets the substring after (or before via "$before_needle") the last occurrence of
 Surrounds $str with the given substring.
 
 **Parameters:**
-- string $str 
+- string $str
 - string $substring <p>The substring to add to both sides.</p>
 
 **Return:**
@@ -4174,7 +3746,7 @@ Surrounds $str with the given substring.
 
 --------
 
-## str_titleize(string $str, array|string[]|null $ignore, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length, bool $use_trim_first, string|null $word_define_chars): string|null
+## str_titleize(string $str, array|string[]|null $ignore, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length, bool $use_trim_first, string|null $word_define_chars): string
 <a href="#class-methods">↑</a>
 Returns a trimmed string with the first letter of each word capitalized.
 
@@ -4182,7 +3754,7 @@ Also accepts an array, $ignore, allowing you to list words not to be
 capitalized.
 
 **Parameters:**
-- string $str 
+- string $str
 - array|string[]|null $ignore [optional] <p>An array of words not to capitalize or
 null. Default: null</p>
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
@@ -4212,7 +3784,7 @@ capitalized.
 Adapted from John Gruber's script.
 
 **Parameters:**
-- string $str 
+- string $str
 - array $ignore <p>An array of words not to capitalize.</p>
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
@@ -4221,7 +3793,7 @@ Adapted from John Gruber's script.
 
 --------
 
-## str_to_binary(string $str): string
+## str_to_binary(string $str): false|string
 <a href="#class-methods">↑</a>
 Get a binary representation of a specific string.
 
@@ -4231,52 +3803,38 @@ EXAPLE: <code>UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'
 - string $str <p>The input string.</p>
 
 **Return:**
-- bool|string <p>false on error</p>
+- false|string <p>false on error</p>
 
 --------
 
-## str_to_lines(string $str, bool $remove_empty_values, int|null $remove_short_values): int|null
+## str_to_lines(string $str, bool $remove_empty_values, int|null $remove_short_values): string[]
 <a href="#class-methods">↑</a>
 
 
 **Parameters:**
-- string $str 
+- string $str
 - bool $remove_empty_values <p>Remove empty values.</p>
 - int|null $remove_short_values <p>The min. string length or null to disable</p>
 
 **Return:**
-- string[] 
+- string[]
 
 --------
 
-## str_to_words(string $str, string $char_list, bool $remove_empty_values, int|null $remove_short_values): int|null
+## str_to_words(string $str, string $char_list, bool $remove_empty_values, int|null $remove_short_values): string[]
 <a href="#class-methods">↑</a>
 Convert a string into an array of words.
 
 EXAMPLE: <code>UTF8::str_to_words('中文空白 oöäü#s', '#') // array('', '中文空白', ' ', 'oöäü#s', '')</code>
 
 **Parameters:**
-- string $str 
+- string $str
 - string $char_list <p>Additional chars for the definition of "words".</p>
 - bool $remove_empty_values <p>Remove empty values.</p>
 - int|null $remove_short_values <p>The min. string length or null to disable</p>
 
 **Return:**
-- string[] 
-
---------
-
-## str_transliterate(string $str, string $unknown, bool $strict): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::to_ascii()"
-
-**Parameters:**
-- string $str 
-- string $unknown 
-- bool $strict 
-
-**Return:**
-- string 
+- string[]
 
 --------
 
@@ -4287,7 +3845,7 @@ truncating occurs, the string is further truncated so that the substring
 may be appended without exceeding the desired length.
 
 **Parameters:**
-- string $str 
+- string $str
 - int $length <p>Desired length of the truncated string.</p>
 - string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
 - string $encoding [optional] <p>Default: 'UTF-8'</p>
@@ -4297,7 +3855,7 @@ may be appended without exceeding the desired length.
 
 --------
 
-## str_truncate_safe(string $str, int $length, string $substring, string $encoding, bool $ignore_do_not_split_words_for_one_word): bool
+## str_truncate_safe(string $str, int $length, string $substring, string $encoding, bool $ignore_do_not_split_words_for_one_word): string
 <a href="#class-methods">↑</a>
 Truncates the string to a given length, while ensuring that it does not
 split words. If $substring is provided, and truncating occurs, the
@@ -4305,7 +3863,7 @@ string is further truncated so that the substring may be appended without
 exceeding the desired length.
 
 **Parameters:**
-- string $str 
+- string $str
 - int $length <p>Desired length of the truncated string.</p>
 - string $substring [optional] <p>The substring to append if it can fit.
 Default:
@@ -4327,14 +3885,14 @@ of the first character of the string), and in place of spaces as well as
 dashes.
 
 **Parameters:**
-- string $str 
+- string $str
 
 **Return:**
 - string <p>The underscored string.</p>
 
 --------
 
-## str_upper_camelize(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
+## str_upper_camelize(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): string
 <a href="#class-methods">↑</a>
 Returns an UpperCamelCase version of the supplied string. It trims
 surrounding spaces, capitalizes letters following digits, spaces, dashes
@@ -4354,23 +3912,7 @@ tr</p>
 
 --------
 
-## str_upper_first(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::ucfirst()"
-
-**Parameters:**
-- string $str 
-- string $encoding 
-- bool $clean_utf8 
-- string|null $lang 
-- bool $try_to_keep_the_string_length 
-
-**Return:**
-- string 
-
---------
-
-## str_word_count(string $str, int $format, string $char_list): string
+## str_word_count(string $str, int $format, string $char_list): int|string[]
 <a href="#class-methods">↑</a>
 Get the number of words in a specific string.
 
@@ -4405,7 +3947,7 @@ UTF8::str_word_count('中文空白 öäü ab#c', 2, '#'); // array(0 => '中文�
 
 --------
 
-## strcasecmp(string $str1, string $str2, string $encoding): string
+## strcasecmp(string $str1, string $str2, string $encoding): int
 <a href="#class-methods">↑</a>
 Case-insensitive string comparison.
 
@@ -4425,23 +3967,7 @@ EXAMPLE: <code>UTF8::strcasecmp("iñtërnâtiôn\nàlizætiøn", "Iñtërnâtiô
 
 --------
 
-## strchr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::strstr()"
-
-**Parameters:**
-- string $haystack 
-- string $needle 
-- bool $before_needle 
-- string $encoding 
-- bool $clean_utf8 
-
-**Return:**
-- bool|string 
-
---------
-
-## strcmp(string $str1, string $str2): string
+## strcmp(string $str1, string $str2): int
 <a href="#class-methods">↑</a>
 Case-sensitive string comparison.
 
@@ -4458,39 +3984,23 @@ EXAMPLE: <code>UTF8::strcmp("iñtërnâtiôn\nàlizætiøn", "iñtërnâtiôn\n�
 
 --------
 
-## strcspn(string $str, string $char_list, int $offset, int $length, string $encoding): string
+## strcspn(string $str, string $char_list, int $offset, int $length, string $encoding): int
 <a href="#class-methods">↑</a>
 Find length of initial segment not matching mask.
 
 **Parameters:**
-- string $str 
-- string $char_list 
-- int $offset 
-- int $length 
+- string $str
+- string $char_list
+- int $offset
+- int $length
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- int 
+- int
 
 --------
 
-## strichr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::stristr()"
-
-**Parameters:**
-- string $haystack 
-- string $needle 
-- bool $before_needle 
-- string $encoding 
-- bool $clean_utf8 
-
-**Return:**
-- bool|string 
-
---------
-
-## string(int|int[]|string|string[] $intOrHex): int|int[]|string|string[]
+## string(int|int[]|string|string[] $intOrHex): string
 <a href="#class-methods">↑</a>
 Create a UTF-8 string from code points.
 
@@ -4506,7 +4016,7 @@ EXAMPLE: <code>UTF8::string(array(246, 228, 252)); // 'öäü'</code>
 
 --------
 
-## string_has_bom(string $str): string
+## string_has_bom(string $str): bool
 <a href="#class-methods">↑</a>
 Checks if string starts with "BOM" (Byte Order Mark Character) character.
 
@@ -4521,7 +4031,7 @@ EXAMPLE: <code>UTF8::string_has_bom("\xef\xbb\xbf foobar"); // true</code>
 
 --------
 
-## strip_tags(string $str, string $allowable_tags, bool $clean_utf8): bool
+## strip_tags(string $str, string $allowable_tags, bool $clean_utf8): string
 <a href="#class-methods">↑</a>
 Strip HTML and PHP tags from a string + clean invalid UTF-8.
 
@@ -4555,14 +4065,14 @@ and ideographic space.
 EXAMPLE: <code>UTF8::strip_whitespace('   Ο     συγγραφέας  '); // 'Οσυγγραφέας'</code>
 
 **Parameters:**
-- string $str 
+- string $str
 
 **Return:**
-- string 
+- string
 
 --------
 
-## stripos(string $haystack, string $needle, int $offset, string $encoding, bool $clean_utf8): bool
+## stripos(string $haystack, string $needle, int $offset, string $encoding, bool $clean_utf8): false|int
 <a href="#class-methods">↑</a>
 Find the position of the first occurrence of a substring in a string, case-insensitive.
 
@@ -4578,12 +4088,12 @@ EXAMPLE: <code>UTF8::stripos('aσσb', 'ΣΣ'); // 1</code> (σσ == ΣΣ)
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|int Return the <strong>(int)</strong> numeric position of the first occurrence of needle in the
+- false|int Return the <strong>(int)</strong> numeric position of the first occurrence of needle in the
 haystack string,<br> or <strong>false</strong> if needle is not found
 
 --------
 
-## stripos_in_byte(string $haystack, string $needle, int $offset): int
+## stripos_in_byte(string $haystack, string $needle, int $offset): false|int
 <a href="#class-methods">↑</a>
 Find the position of the first occurrence of a substring in a string, case-insensitive.
 
@@ -4599,12 +4109,12 @@ The search offset. If it is not specified, 0 is used.
 </p>
 
 **Return:**
-- bool|int <p>The numeric position of the first occurrence of needle in the
+- false|int <p>The numeric position of the first occurrence of needle in the
 haystack string. If needle is not found, it returns false.</p>
 
 --------
 
-## stristr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
+## stristr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): false|string
 <a href="#class-methods">↑</a>
 Returns all of haystack starting from and including the first occurrence of needle to the end.
 
@@ -4627,11 +4137,11 @@ haystack before the first occurrence of the needle (excluding the needle).
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|string <p>A sub-string,<br>or <strong>false</strong> if needle is not found.</p>
+- false|string <p>A sub-string,<br>or <strong>false</strong> if needle is not found.</p>
 
 --------
 
-## strlen(string $str, string $encoding, bool $clean_utf8): bool
+## strlen(string $str, string $encoding, bool $clean_utf8): false|int
 <a href="#class-methods">↑</a>
 Get the string length, not the byte-length!
 
@@ -4645,7 +4155,7 @@ EXAMPLE: <code>UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn")); // 20</code>
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|int <p>
+- false|int <p>
 The number <strong>(int)</strong> of characters in the string $str having character encoding
 $encoding.
 (One multi-byte character counted as +1).
@@ -4656,19 +4166,19 @@ chars.
 
 --------
 
-## strlen_in_byte(string $str): string
+## strlen_in_byte(string $str): int
 <a href="#class-methods">↑</a>
 Get string length in byte.
 
 **Parameters:**
-- string $str 
+- string $str
 
 **Return:**
-- int 
+- int
 
 --------
 
-## strnatcasecmp(string $str1, string $str2, string $encoding): string
+## strnatcasecmp(string $str1, string $str2, string $encoding): int
 <a href="#class-methods">↑</a>
 Case-insensitive string comparisons using a "natural order" algorithm.
 
@@ -4694,7 +4204,7 @@ UTF8::strcasecmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'); /
 
 --------
 
-## strnatcmp(string $str1, string $str2): string
+## strnatcmp(string $str1, string $str2): int
 <a href="#class-methods">↑</a>
 String comparisons using a "natural order" algorithm
 
@@ -4719,7 +4229,7 @@ UTF8::strcmp('10Hello world 中文空白!', '2Hello WORLD 中文空白!'); // -1
 
 --------
 
-## strncasecmp(string $str1, string $str2, int $len, string $encoding): string
+## strncasecmp(string $str1, string $str2, int $len, string $encoding): int
 <a href="#class-methods">↑</a>
 Case-insensitive string comparison of the first n characters.
 
@@ -4740,7 +4250,7 @@ UTF8::strcasecmp("iñtërnâtiôn\nàlizætiøn321", "iñtërnâtiôn\nàlizæti
 
 --------
 
-## strncmp(string $str1, string $str2, int $len, string $encoding): string
+## strncmp(string $str1, string $str2, int $len, string $encoding): int
 <a href="#class-methods">↑</a>
 String comparison of the first n characters.
 
@@ -4761,7 +4271,7 @@ UTF8::strncmp("Iñtërnâtiôn\nàlizætiøn321", "Iñtërnâtiôn\nàlizætiøn
 
 --------
 
-## strpbrk(string $haystack, string $char_list): string
+## strpbrk(string $haystack, string $char_list): false|string
 <a href="#class-methods">↑</a>
 Search a string for any of a set of characters.
 
@@ -4772,11 +4282,11 @@ EXAMPLE: <code>UTF8::strpbrk('-中文空白-', '白'); // '白-'</code>
 - string $char_list <p>This parameter is case-sensitive.</p>
 
 **Return:**
-- bool|string <p>The string starting from the character found, or false if it is not found.</p>
+- false|string <p>The string starting from the character found, or false if it is not found.</p>
 
 --------
 
-## strpos(string $haystack, int|string $needle, int $offset, string $encoding, bool $clean_utf8): bool
+## strpos(string $haystack, int|string $needle, int $offset, string $encoding, bool $clean_utf8): false|int
 <a href="#class-methods">↑</a>
 Find the position of the first occurrence of a substring in a string.
 
@@ -4792,12 +4302,12 @@ EXAMPLE: <code>UTF8::strpos('ABC-ÖÄÜ-中文空白-中文空白', '中'); // 8
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|int The <strong>(int)</strong> numeric position of the first occurrence of needle in the haystack
+- false|int The <strong>(int)</strong> numeric position of the first occurrence of needle in the haystack
 string.<br> If needle is not found it returns false.
 
 --------
 
-## strpos_in_byte(string $haystack, string $needle, int $offset): int
+## strpos_in_byte(string $haystack, string $needle, int $offset): false|int
 <a href="#class-methods">↑</a>
 Find the position of the first occurrence of a substring in a string.
 
@@ -4813,12 +4323,12 @@ The search offset. If it is not specified, 0 is used.
 </p>
 
 **Return:**
-- bool|int <p>The numeric position of the first occurrence of needle in the
+- false|int <p>The numeric position of the first occurrence of needle in the
 haystack string. If needle is not found, it returns false.</p>
 
 --------
 
-## strrchr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
+## strrchr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): false|string
 <a href="#class-methods">↑</a>
 Find the last occurrence of a character in a string within another.
 
@@ -4839,7 +4349,7 @@ from the last occurrence of needle to the end,
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|string <p>The portion of haystack or false if needle is not found.</p>
+- false|string <p>The portion of haystack or false if needle is not found.</p>
 
 --------
 
@@ -4858,7 +4368,7 @@ EXAMPLE: <code>UTF8::strrev('κ-öäü'); // 'üäö-κ'</code>
 
 --------
 
-## strrichr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
+## strrichr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): false|string
 <a href="#class-methods">↑</a>
 Find the last occurrence of a character in a string within another, case-insensitive.
 
@@ -4879,11 +4389,11 @@ from the last occurrence of needle to the end,
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|string <p>The portion of haystack or<br>false if needle is not found.</p>
+- false|string <p>The portion of haystack or<br>false if needle is not found.</p>
 
 --------
 
-## strripos(string $haystack, int|string $needle, int $offset, string $encoding, bool $clean_utf8): bool
+## strripos(string $haystack, int|string $needle, int $offset, string $encoding, bool $clean_utf8): false|int
 <a href="#class-methods">↑</a>
 Find the position of the last occurrence of a substring in a string, case-insensitive.
 
@@ -4897,12 +4407,12 @@ EXAMPLE: <code>UTF8::strripos('ABC-ÖÄÜ-中文空白-中文空白', '中'); //
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|int <p>The <strong>(int)</strong> numeric position of the last occurrence of needle in the haystack
+- false|int <p>The <strong>(int)</strong> numeric position of the last occurrence of needle in the haystack
 string.<br>If needle is not found, it returns false.</p>
 
 --------
 
-## strripos_in_byte(string $haystack, string $needle, int $offset): int
+## strripos_in_byte(string $haystack, string $needle, int $offset): false|int
 <a href="#class-methods">↑</a>
 Finds position of last occurrence of a string within another, case-insensitive.
 
@@ -4920,12 +4430,12 @@ to start searching.
 </p>
 
 **Return:**
-- bool|int <p>eturn the numeric position of the last occurrence of needle in the
+- false|int <p>eturn the numeric position of the last occurrence of needle in the
 haystack string, or false if needle is not found.</p>
 
 --------
 
-## strrpos(string $haystack, int|string $needle, int $offset, string $encoding, bool $clean_utf8): bool
+## strrpos(string $haystack, int|string $needle, int $offset, string $encoding, bool $clean_utf8): false|int
 <a href="#class-methods">↑</a>
 Find the position of the last occurrence of a substring in a string.
 
@@ -4942,12 +4452,12 @@ the end of the string.
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|int <p>The <strong>(int)</strong> numeric position of the last occurrence of needle in the haystack
+- false|int <p>The <strong>(int)</strong> numeric position of the last occurrence of needle in the haystack
 string.<br>If needle is not found, it returns false.</p>
 
 --------
 
-## strrpos_in_byte(string $haystack, string $needle, int $offset): int
+## strrpos_in_byte(string $haystack, string $needle, int $offset): false|int
 <a href="#class-methods">↑</a>
 Find the position of the last occurrence of a substring in a string.
 
@@ -4965,12 +4475,12 @@ prior to the end of the string.
 </p>
 
 **Return:**
-- bool|int <p>The numeric position of the last occurrence of needle in the
+- false|int <p>The numeric position of the last occurrence of needle in the
 haystack string. If needle is not found, it returns false.</p>
 
 --------
 
-## strspn(string $str, string $mask, int $offset, int $length, string $encoding): string
+## strspn(string $str, string $mask, int $offset, int $length, string $encoding): false|int
 <a href="#class-methods">↑</a>
 Finds the length of the initial segment of a string consisting entirely of characters contained within a given
 mask.
@@ -4985,11 +4495,11 @@ EXAMPLE: <code>UTF8::strspn('iñtërnâtiônàlizætiøn', 'itñ'); // '3'</code
 - string $encoding [optional] <p>Set the charset.</p>
 
 **Return:**
-- bool|int 
+- false|int
 
 --------
 
-## strstr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): bool
+## strstr(string $haystack, string $needle, bool $before_needle, string $encoding, bool $clean_utf8): false|string
 <a href="#class-methods">↑</a>
 Returns part of haystack string from the first occurrence of needle to the end of haystack.
 
@@ -5012,11 +4522,11 @@ haystack before the first occurrence of the needle (excluding the needle).
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|string A sub-string,<br>or <strong>false</strong> if needle is not found
+- false|string A sub-string,<br>or <strong>false</strong> if needle is not found
 
 --------
 
-## strstr_in_byte(string $haystack, string $needle, bool $before_needle): bool
+## strstr_in_byte(string $haystack, string $needle, bool $before_needle): false|string
 <a href="#class-methods">↑</a>
 Finds first occurrence of a string within another.
 
@@ -5038,12 +4548,12 @@ from the first occurrence of needle to the end,
 </p>
 
 **Return:**
-- bool|string <p>The portion of haystack,
+- false|string <p>The portion of haystack,
 or false if needle is not found.</p>
 
 --------
 
-## strtocasefold(string $str, bool $full, bool $clean_utf8, string $encoding, string|null $lang, bool $lower): bool
+## strtocasefold(string $str, bool $full, bool $clean_utf8, string $encoding, string|null $lang, bool $lower): string
 <a href="#class-methods">↑</a>
 Unicode transformation for case-less matching.
 
@@ -5062,11 +4572,11 @@ EXAMPLE: <code>UTF8::strtocasefold('ǰ◌̱'); // 'ǰ◌̱'</code>
 is for some languages better ...</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## strtolower(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
+## strtolower(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): string
 <a href="#class-methods">↑</a>
 Make a string lowercase.
 
@@ -5086,7 +4596,7 @@ tr</p>
 
 --------
 
-## strtoupper(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
+## strtoupper(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): string
 <a href="#class-methods">↑</a>
 Make a string uppercase.
 
@@ -5106,7 +4616,7 @@ tr</p>
 
 --------
 
-## strtr(string $str, string|string[] $from, string|string[] $to): string|string[]
+## strtr(string $str, string|string[] $from, string|string[] $to): string
 <a href="#class-methods">↑</a>
 Translate characters or replace sub-strings.
 
@@ -5130,7 +4640,7 @@ to the corresponding character in "to".</p>
 
 --------
 
-## strwidth(string $str, string $encoding, bool $clean_utf8): bool
+## strwidth(string $str, string $encoding, bool $clean_utf8): int
 <a href="#class-methods">↑</a>
 Return the width of a string.
 
@@ -5144,11 +4654,11 @@ EXAMPLE: <code>UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn")); // 21</code>
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- int 
+- int
 
 --------
 
-## substr(string $str, int $offset, int $length, string $encoding, bool $clean_utf8): bool
+## substr(string $str, int $offset, int $length, string $encoding, bool $clean_utf8): false|string
 <a href="#class-methods">↑</a>
 Get part of a string.
 
@@ -5162,13 +4672,13 @@ EXAMPLE: <code>UTF8::substr('中文空白', 1, 2); // '文空'</code>
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|string The portion of <i>str</i> specified by the <i>offset</i> and
+- false|string The portion of <i>str</i> specified by the <i>offset</i> and
 <i>length</i> parameters.</p><p>If <i>str</i> is shorter than <i>offset</i>
 characters long, <b>FALSE</b> will be returned.
 
 --------
 
-## substr_compare(string $str1, string $str2, int $offset, int|null $length, bool $case_insensitivity, string $encoding): string
+## substr_compare(string $str1, string $str2, int $offset, int|null $length, bool $case_insensitivity, string $encoding): int
 <a href="#class-methods">↑</a>
 Binary-safe comparison of two strings from an offset, up to a length of characters.
 
@@ -5197,7 +4707,7 @@ insensitive.</p>
 
 --------
 
-## substr_count(string $haystack, string $needle, int $offset, int $length, string $encoding, bool $clean_utf8): bool
+## substr_count(string $haystack, string $needle, int $offset, int $length, string $encoding, bool $clean_utf8): false|int
 <a href="#class-methods">↑</a>
 Count the number of substring occurrences.
 
@@ -5216,11 +4726,11 @@ greater than the haystack length.
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- bool|int <p>This functions returns an integer or false if there isn't a string.</p>
+- false|int <p>This functions returns an integer or false if there isn't a string.</p>
 
 --------
 
-## substr_count_in_byte(string $haystack, string $needle, int $offset, int $length): int
+## substr_count_in_byte(string $haystack, string $needle, int $offset, int $length): false|int
 <a href="#class-methods">↑</a>
 Count the number of substring occurrences.
 
@@ -5241,13 +4751,13 @@ greater than the haystack length.
 </p>
 
 **Return:**
-- bool|int <p>The number of times the
+- false|int <p>The number of times the
 needle substring occurs in the
 haystack string.</p>
 
 --------
 
-## substr_count_simple(string $str, string $substring, bool $case_sensitive, string $encoding): string
+## substr_count_simple(string $str, string $substring, bool $case_sensitive, string $encoding): int
 <a href="#class-methods">↑</a>
 Returns the number of occurrences of $substring in the given string.
 
@@ -5261,7 +4771,7 @@ by setting $case_sensitive to false.
 - string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
 
 **Return:**
-- int 
+- int
 
 --------
 
@@ -5283,7 +4793,7 @@ UTF8::substr_ileft('ΚόσμεMiddleEnd', 'κόσμε'); // 'MiddleEnd'
 
 --------
 
-## substr_in_byte(string $str, int $offset, int $length): int
+## substr_in_byte(string $str, int $offset, int $length): false|string
 <a href="#class-methods">↑</a>
 Get part of a string process in bytes.
 
@@ -5293,7 +4803,7 @@ Get part of a string process in bytes.
 - int $length [optional] <p>The maximum length of the returned string.</p>
 
 **Return:**
-- bool|string The portion of <i>str</i> specified by the <i>offset</i> and
+- false|string The portion of <i>str</i> specified by the <i>offset</i> and
 <i>length</i> parameters.</p><p>If <i>str</i> is shorter than <i>offset</i>
 characters long, <b>FALSE</b> will be returned.
 
@@ -5335,7 +4845,7 @@ UTF8::substr_left('ΚόσμεMiddleEnd', 'κόσμε'); // 'ΚόσμεMiddleE
 
 --------
 
-## substr_replace(string|string[] $str, string|string[] $replacement, int|int[] $offset, int|int[]|null $length, string $encoding): string
+## substr_replace(string|string[] $str, string|string[] $replacement, int|int[] $offset, int|int[]|null $length, string $encoding): string|string[]
 <a href="#class-methods">↑</a>
 Replace text within a portion of a string.
 
@@ -5386,7 +4896,7 @@ UTF8::substr_right('BeginMiddleΚόσμε', 'κόσμε'); // 'BeginMiddleΚ�
 
 --------
 
-## swapCase(string $str, string $encoding, bool $clean_utf8): bool
+## swapCase(string $str, string $encoding, bool $clean_utf8): string
 <a href="#class-methods">↑</a>
 Returns a case swapped version of the string.
 
@@ -5414,20 +4924,20 @@ __nothing__
 
 --------
 
-## tabs_to_spaces(string $str, int $tab_length): int
+## tabs_to_spaces(string $str, int $tab_length): string
 <a href="#class-methods">↑</a>
 
 
 **Parameters:**
-- string $str 
-- int $tab_length 
+- string $str
+- int $tab_length
 
 **Return:**
-- string 
+- string
 
 --------
 
-## titlecase(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
+## titlecase(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): string
 <a href="#class-methods">↑</a>
 Converts the first character of each word in the string to uppercase
 and all other chars to lowercase.
@@ -5446,57 +4956,7 @@ tr</p>
 
 --------
 
-## toAscii(string $str, string $subst_chr, bool $strict): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::to_ascii()"
-
-**Parameters:**
-- string $str 
-- string $subst_chr 
-- bool $strict 
-
-**Return:**
-- string 
-
---------
-
-## toIso8859(string|string[] $str): string|string[]
-<a href="#class-methods">↑</a>
-alias for "UTF8::to_iso8859()"
-
-**Parameters:**
-- string|string[] $str 
-
-**Return:**
-- string|string[] 
-
---------
-
-## toLatin1(string|string[] $str): string|string[]
-<a href="#class-methods">↑</a>
-alias for "UTF8::to_latin1()"
-
-**Parameters:**
-- string|string[] $str 
-
-**Return:**
-- string|string[] 
-
---------
-
-## toUTF8(string|string[] $str): string|string[]
-<a href="#class-methods">↑</a>
-alias for "UTF8::to_utf8()"
-
-**Parameters:**
-- string|string[] $str 
-
-**Return:**
-- string|string[] 
-
---------
-
-## to_ascii(string $str, string $unknown, bool $strict): bool
+## to_ascii(string $str, string $unknown, bool $strict): string
 <a href="#class-methods">↑</a>
 Convert a string into ASCII.
 
@@ -5509,19 +4969,19 @@ EXAMPLE: <code>UTF8::to_ascii('déjà σσς iıii'); // 'deja sss iiii'</code>
 performance</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## to_boolean(bool|int|string $str): bool|int|string
+## to_boolean(bool|int|string $str): bool
 <a href="#class-methods">↑</a>
 
 
 **Parameters:**
-- bool|int|string $str 
+- bool|int|string $str
 
 **Return:**
-- bool 
+- bool
 
 --------
 
@@ -5530,22 +4990,22 @@ performance</p>
 Convert given string to safe filename (and keep string case).
 
 **Parameters:**
-- string $str 
+- string $str
 - bool $use_transliterate No transliteration, conversion etc. is done by default - unsafe characters are
 simply replaced with hyphen.
-- string $fallback_char 
+- string $fallback_char
 
 **Return:**
-- string 
+- string
 
 --------
 
-## to_int(string $str): string
+## to_int(string $str): int|null
 <a href="#class-methods">↑</a>
 Returns the given string as an integer, or null if the string isn't numeric.
 
 **Parameters:**
-- string $str 
+- string $str
 
 **Return:**
 - int|null <p>null if the string isn't numeric</p>
@@ -5559,39 +5019,27 @@ Convert a string into "ISO-8859"-encoding (Latin-1).
 EXAMPLE: <code>UTF8::to_utf8(UTF8::to_iso8859('  -ABC-中文空白-  ')); // '  -ABC-????-  '</code>
 
 **Parameters:**
-- string|string[] $str 
+- string|string[] $str
 
 **Return:**
-- string|string[] 
+- string|string[]
 
 --------
 
-## to_latin1(string|string[] $str): string|string[]
-<a href="#class-methods">↑</a>
-alias for "UTF8::to_iso8859()"
-
-**Parameters:**
-- string|string[] $str 
-
-**Return:**
-- string|string[] 
-
---------
-
-## to_string(float|int|object|string|null $input): float|int|object|string|null
+## to_string(float|int|object|string|null $input): string|null
 <a href="#class-methods">↑</a>
 Returns the given input as string, or null if the input isn't int|float|string
 and do not implement the "__toString()" method.
 
 **Parameters:**
-- float|int|object|string|null $input 
+- float|int|object|string|null $input
 
 **Return:**
 - string|null <p>null if the input isn't int|float|string and has no "__toString()" method</p>
 
 --------
 
-## to_utf8(string|string[] $str, bool $decode_html_entity_to_utf8): bool
+## to_utf8(string|string[] $str, bool $decode_html_entity_to_utf8): string|string[]
 <a href="#class-methods">↑</a>
 This function leaves UTF-8 characters alone, while converting almost all non-UTF8 to UTF8.
 
@@ -5613,7 +5061,7 @@ EXAMPLE: <code>UTF8::to_utf8(["\u0063\u0061\u0074"]); // array('cat')</code>
 
 --------
 
-## to_utf8_string(string $str, bool $decode_html_entity_to_utf8): bool
+## to_utf8_string(string $str, bool $decode_html_entity_to_utf8): string
 <a href="#class-methods">↑</a>
 This function leaves UTF-8 characters alone, while converting almost all non-UTF8 to UTF8.
 
@@ -5635,7 +5083,7 @@ EXAMPLE: <code>UTF8::to_utf8_string("\u0063\u0061\u0074"); // 'cat'</code>
 
 --------
 
-## trim(string $str, string|null $chars): string|null
+## trim(string $str, string|null $chars): string
 <a href="#class-methods">↑</a>
 Strip whitespace or other characters from the beginning and end of a UTF-8 string.
 
@@ -5655,7 +5103,7 @@ EXAMPLE: <code>UTF8::trim('   -ABC-中文空白-  '); // '-ABC-中文空白-'</c
 
 --------
 
-## ucfirst(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): bool
+## ucfirst(string $str, string $encoding, bool $clean_utf8, string|null $lang, bool $try_to_keep_the_string_length): string
 <a href="#class-methods">↑</a>
 Makes string's first char uppercase.
 
@@ -5675,21 +5123,7 @@ tr</p>
 
 --------
 
-## ucword(string $str, string $encoding, bool $clean_utf8): bool
-<a href="#class-methods">↑</a>
-alias for "UTF8::ucfirst()"
-
-**Parameters:**
-- string $str 
-- string $encoding 
-- bool $clean_utf8 
-
-**Return:**
-- string 
-
---------
-
-## ucwords(string $str, string[] $exceptions, string $char_list, string $encoding, bool $clean_utf8): bool
+## ucwords(string $str, string[] $exceptions, string $char_list, string $encoding, bool $clean_utf8): string
 <a href="#class-methods">↑</a>
 Uppercase for all words in the string.
 
@@ -5704,11 +5138,11 @@ word.</p>
 - bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## urldecode(string $str, bool $multi_decode): bool
+## urldecode(string $str, bool $multi_decode): string
 <a href="#class-methods">↑</a>
 Multi decode HTML entity + fix urlencoded-win1252-chars.
 
@@ -5730,23 +5164,11 @@ e.g:
 - bool $multi_decode <p>Decode as often as possible.</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## urldecode_fix_win1252_chars(): bool
-<a href="#class-methods">↑</a>
-Return a array with "urlencoded"-win1252 -> UTF-8
-
-**Parameters:**
-__nothing__
-
-**Return:**
-- string[] 
-
---------
-
-## utf8_decode(string $str, bool $keep_utf8_chars): bool
+## utf8_decode(string $str, bool $keep_utf8_chars): string
 <a href="#class-methods">↑</a>
 Decodes a UTF-8 string to ISO-8859-1.
 
@@ -5754,10 +5176,10 @@ EXAMPLE: <code>UTF8::encode('UTF-8', UTF8::utf8_decode('-ABC-中文空白-')); /
 
 **Parameters:**
 - string $str <p>The input string.</p>
-- bool $keep_utf8_chars 
+- bool $keep_utf8_chars
 
 **Return:**
-- string 
+- string
 
 --------
 
@@ -5771,23 +5193,11 @@ EXAMPLE: <code>UTF8::utf8_decode(UTF8::utf8_encode('-ABC-中文空白-')); // '-
 - string $str <p>The input string.</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## utf8_fix_win1252_chars(string $str): string
-<a href="#class-methods">↑</a>
-fix -> utf8-win1252 chars
-
-**Parameters:**
-- string $str <p>The input string.</p>
-
-**Return:**
-- string 
-
---------
-
-## whitespace_table(): string
+## whitespace_table(): string[]
 <a href="#class-methods">↑</a>
 Returns an array with all utf8 whitespace characters.
 
@@ -5812,11 +5222,11 @@ EXAMPLE: <code>UTF8::words_limit('fòô bàř fòô', 2, ''); // 'fòô bàř'</
 - string $str_add_on <p>Replacement for the striped string.</p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## wordwrap(string $str, int $width, string $break, bool $cut): bool
+## wordwrap(string $str, int $width, string $break, bool $cut): string
 <a href="#class-methods">↑</a>
 Wraps a string to a given number of characters
 
@@ -5837,7 +5247,7 @@ a word that is larger than the given width, it is broken apart.
 
 --------
 
-## wordwrap_per_line(string $str, int $width, string $break, bool $cut, bool $add_final_break, string|null $delimiter): string|null
+## wordwrap_per_line(string $str, int $width, string $break, bool $cut, bool $add_final_break, string|null $delimiter): string
 <a href="#class-methods">↑</a>
 Line-Wrap the string after $limit, but split the string by "$delimiter" before ...
    ... so that we wrap the per line.
@@ -5860,11 +5270,11 @@ You can change the default behavior, where we split the string by newline.
 </p>
 
 **Return:**
-- string 
+- string
 
 --------
 
-## ws(): string|null
+## ws(): string[]
 <a href="#class-methods">↑</a>
 Returns an array of Unicode White Space characters.
 

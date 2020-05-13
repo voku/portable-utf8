@@ -971,11 +971,11 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return array<int|string>
+     * @return int[]|string[]
      *                           <p>
      *                           The array of code points:<br>
-     *                           array<int> for $u_style === false<br>
-     *                           array<string> for $u_style === true<br>
+     *                           int[] for $u_style === false<br>
+     *                           string[] for $u_style === true<br>
      *                           </p>
      */
     public static function codepoints($arg, bool $use_u_style = false): array
@@ -1075,14 +1075,16 @@ final class UTF8
      *
      * copy&past from https://github.com/drupal/core/blob/8.8.x/lib/Drupal/Component/Utility/Html.php#L95
      *
-     * @param string               $str         <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
-     * @param array<string,string> $filter
-     * @param bool                 $stripe_tags
-     * @param bool                 $strtolower
+     * @param string   $str         <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
+     * @param string[] $filter
+     * @param bool     $stripe_tags
+     * @param bool     $strtolower
      *
      * @psalm-pure
      *
      * @return string
+     *
+     * @psalm-param array<string,string> $filter
      */
     public static function css_identifier(
         string $str = '',
@@ -2519,8 +2521,8 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return array<string, string|null>
-     *                       <p>with this keys: 'ext', 'mime', 'type'</p>
+     * @return string[]|null[]
+     *                        <p>with this keys: 'ext', 'mime', 'type'</p>
      *
      * @phpstan-param array{ext: null|string, mime: null|string, type: null|string} $fallback
      */

@@ -1,11 +1,16 @@
 <?php
 
+/** @noinspection TransitiveDependenciesUsageInspection */
+
+use voku\build\Template\TemplateFormatter;
 use voku\helper\UTF8;
 
 require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
-$factory = \phpDocumentor\Reflection\DocBlockFactory::createInstance();
-$reflection = new ReflectionClass(UTF8::class);
+$phpFiles = \voku\SimplePhpParser\Parsers\PhpCodeParser::getPhpFiles(__DIR__ . '/../src/voku/helper/UTF8.php');
+$phpClasses = $phpFiles->getClasses();
+$phpUtf8Class = $phpClasses[UTF8::class];
 
 // -------------------------------------
 
@@ -15,10 +20,7 @@ $templateMethodParam = <<<RAW
 - %param%
 RAW;
 
-$templateMethodReturn = <<<RAW
-- %return%
-RAW;
-
+/** @noinspection HtmlUnknownAnchorTarget */
 $templateMethod = <<<RAW
 ## %name%
 <a href="#class-methods">↑</a>
@@ -28,7 +30,7 @@ $templateMethod = <<<RAW
 %params%
 
 **Return:**
-%return%
+- %return%
 
 --------
 
@@ -40,69 +42,23 @@ RAW;
 
 // -------------------------------------
 
-class TemplateFormatter
-{
-    /** @var array */
-    private $vars = [];
-
-    /** @var string */
-    private $template;
-
-    /**
-     * @param string $template
-     */
-    public function __construct(string $template)
-    {
-        $this->template = $template;
-    }
-
-    /**
-     * @param string $var
-     * @param string $value
-     *
-     * @return mixed
-     */
-    public function set(string $var, string $value): self
-    {
-        $this->vars[$var] = $value;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function format(): string
-    {
-        $s = $this->template;
-
-        foreach ($this->vars as $name => $value) {
-            $s = UTF8::replace($s, sprintf('%%%s%%', $name), $value);
-        }
-
-        return $s;
-    }
-}
-
-// -------------------------------------
-
 $functionsDocumentation = [];
 $functionsIndex = [];
 
-foreach ($reflection->getMethods() as $method) {
-    if (!$method->isPublic()) {
+foreach ($phpUtf8Class->methods as $method) {
+    assert($method instanceof \voku\SimplePhpParser\Model\PHPMethod);
+
+    if ($method->access !== 'public') {
         continue;
     }
 
-    if ($method->isDeprecated()) {
+    if ($method->is_deprecated) {
         continue;
     }
 
-    if (UTF8::str_starts_with($method->getShortName(), '_')) {
+    if (\strpos($method->name, '_') === 0) {
         continue;
     }
-
-    $doc = $factory->create($method->getDocComment());
 
     $methodIndexTemplate = new TemplateFormatter($templateIndexLink);
 
@@ -111,12 +67,21 @@ foreach ($reflection->getMethods() as $method) {
     // -- params
     $params = [];
     $paramsTypes = [];
-    foreach ($tagsInput = $doc->getTagsByName('param') as $tagParam) {
-        /** @var \phpDocumentor\Reflection\DocBlock\Tags\Param $tagParam */
+    foreach ($method->parameters as $tagParam) {
+        /** @var \voku\SimplePhpParser\Model\PHPParameter $tagParam */
+
+        if (
+            $tagParam->typeFromPhpDoc !== $tagParam->typeFromPhpDocSimple
+            &&
+            strpos($tagParam->typeFromPhpDoc, 'mixed') === false
+        ) {
+            throw new Error('Return type error: ' . $method->name . ' param ' . $tagParam->name . ' : ' . $tagParam->typeFromPhpDoc . ' !== ' . $tagParam->typeFromPhpDocSimple . ' | ' . print_r($tagParam, true));
+        }
+
         $paramsTemplate = new TemplateFormatter($templateMethodParam);
-        $paramsTemplate->set('param', (string)$tagParam);
+        $paramsTemplate->set('param', $tagParam->typeMaybeWithComment);
         $params[] = $paramsTemplate->format();
-        $paramsTypes[] = $tagParam->getType() . ' ' . '$' . $tagParam->getVariableName();
+        $paramsTypes[] = $tagParam->typeFromPhpDoc . ' ' . '$' . $tagParam->name;
     }
 
     if (count($params) !== 0) {
@@ -126,35 +91,27 @@ foreach ($reflection->getMethods() as $method) {
     }
 
     // -- return
-    $returns = [];
-    $returnsTypes = [];
-    foreach ($tagsInput = $doc->getTagsByName('return') as $tagReturn) {
-        /** @var \phpDocumentor\Reflection\DocBlock\Tags\Return_ $tagReturn */
-        $returnTemplate = new TemplateFormatter($templateMethodReturn);
-        $returnTemplate->set('return', (string)$tagReturn);
-        $returns[] = $returnTemplate->format();
-        $returnsTypes[] = $tagParam->getType();
+    if (
+        $method->returnTypeFromPhpDoc !== $method->returnTypeFromPhpDocSimple
+        &&
+        strpos($method->returnTypeFromPhpDoc, 'mixed') === false
+    ) {
+        throw new Error('Return type error: ' . $method->name . ' : ' . $method->returnTypeFromPhpDoc . ' !== ' . $method->returnTypeFromPhpDocSimple . ' | ' . print_r($method, true));
     }
 
-    if (count($returns) !== 0) {
-        $methodTemplate->set('return', implode("\n", $returns));
-    } else {
-        $methodTemplate->set('return', '__void__');
-    }
+    $methodWithType = $method->name . '(' . implode(', ', $paramsTypes) . '): ' . $method->returnTypeFromPhpDoc;
 
-    $methodWithType = $method->getShortName() . '(' . implode(', ', $paramsTypes) . '): ' . implode('|', $returnsTypes);
-
-    $description = trim($doc->getSummary() . "\n\n" . $doc->getDescription());
+    $description = trim($method->summary . "\n\n" . $method->description);
 
     $methodTemplate->set('name', $methodWithType);
     $methodTemplate->set('description', $description);
-    $methodTemplate->set('code', '```php echo ```');
+    $methodTemplate->set('return', $method->returnTypeMaybeWithComment);
 
-    $methodIndexTemplate->set('title', $method->getShortName());
+    $methodIndexTemplate->set('title', $method->name);
     $methodIndexTemplate->set('href', '#' . UTF8::css_identifier($methodWithType));
 
-    $functionsDocumentation[$method->getShortName()] = $methodTemplate->format();
-    $functionsIndex[$method->getShortName()] = $methodIndexTemplate->format();
+    $functionsDocumentation[$method->name] = $methodTemplate->format();
+    $functionsIndex[$method->name] = $methodIndexTemplate->format();
 }
 
 ksort($functionsDocumentation);

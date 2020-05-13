@@ -1,0 +1,10 @@
+{
+    "require-dev": {
+        "voku/simple-php-code-parser": "~0.1"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "voku\\build\\": "../build/"
+        }
+    }
+}
