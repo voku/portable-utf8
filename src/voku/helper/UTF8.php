@@ -972,11 +972,11 @@ final class UTF8
      * @psalm-pure
      *
      * @return int[]|string[]
-     *                           <p>
-     *                           The array of code points:<br>
-     *                           int[] for $u_style === false<br>
-     *                           string[] for $u_style === true<br>
-     *                           </p>
+     *                        <p>
+     *                        The array of code points:<br>
+     *                        int[] for $u_style === false<br>
+     *                        string[] for $u_style === true<br>
+     *                        </p>
      */
     public static function codepoints($arg, bool $use_u_style = false): array
     {
@@ -2521,8 +2521,8 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return string[]|null[]
-     *                        <p>with this keys: 'ext', 'mime', 'type'</p>
+     * @return null[]|string[]
+     *                         <p>with this keys: 'ext', 'mime', 'type'</p>
      *
      * @phpstan-param array{ext: null|string, mime: null|string, type: null|string} $fallback
      */
