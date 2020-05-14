@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.4.43 (2020-05-14)
+
+- fix auto-generate the "API documentation" in the README (via generate_docs.php)
+- optimize phpdoc comments
+- fix autoloader for test files
+
 ### 5.4.42 (2020-05-05)
 
 - add "UTF8::css_identifier()"
