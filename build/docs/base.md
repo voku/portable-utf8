@@ -170,9 +170,9 @@ The API from the "UTF8"-Class is written as small static methods that will match
 
 ## Class methods
 
-%__functions_index__%
+%__functions_index__voku\helper\UTF8__%
 
-%__functions_list__%
+%__functions_list__voku\helper\UTF8__%
 
 
 ## Unit Test

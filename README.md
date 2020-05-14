@@ -170,11 +170,9 @@ The API from the "UTF8"-Class is written as small static methods that will match
 
 ## Class methods
 
-
-<table>
-    <tr><td><a href="#accessstring-str-int-pos-string-encoding-string">access</a>
+<table><tr><td><a href="#accessstring-str-int-pos-string-encoding-string">access</a>
 </td><td><a href="#add_bom_to_stringstring-str-string">add_bom_to_string</a>
-</td><td><a href="#array_change_key_casearraystringmixed-array-int-case-string-encoding-string">array_change_key_case</a>
+</td><td><a href="#array_change_key_casearray-array-int-case-string-encoding-string">array_change_key_case</a>
 </td><td><a href="#betweenstring-str-string-start-string-end-int-offset-string-encoding-string">between</a>
 </td></tr><tr><td><a href="#binary_to_strstring-bin-string">binary_to_str</a>
 </td><td><a href="#bom-string">bom</a>
@@ -218,7 +216,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#fix_utf8stringstring-str-stringstring">fix_utf8</a>
 </td></tr><tr><td><a href="#getchardirectionstring-char-string">getCharDirection</a>
 </td><td><a href="#getsupportinfostringnull-key-mixed">getSupportInfo</a>
-</td><td><a href="#get_file_typestring-str-array-fallback-stringnull">get_file_type</a>
+</td><td><a href="#get_file_typestring-str-array-fallback-nullstring">get_file_type</a>
 </td><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-string">get_random_string</a>
 </td></tr><tr><td><a href="#get_unique_stringintstring-extra_entropy-bool-use_md5-string">get_unique_string</a>
 </td><td><a href="#has_lowercasestring-str-bool">has_lowercase</a>
@@ -430,9 +428,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#wordwrapstring-str-int-width-string-break-bool-cut-string">wordwrap</a>
 </td></tr><tr><td><a href="#wordwrap_per_linestring-str-int-width-string-break-bool-cut-bool-add_final_break-stringnull-delimiter-string">wordwrap_per_line</a>
 </td><td><a href="#ws-string">ws</a>
-</td></tr>
-</table>
-
+</td></tr></table>
 
 ## access(string $str, int $pos, string $encoding): string
 <a href="#class-methods">↑</a>
@@ -466,7 +462,7 @@ EXAMPLE: <code>UTF8::add_bom_to_string('fòô'); // "\xEF\xBB\xBF" . 'fòô'</co
 
 --------
 
-## array_change_key_case(array<string,mixed> $array, int $case, string $encoding): string[]
+## array_change_key_case(array $array, int $case, string $encoding): string[]
 <a href="#class-methods">↑</a>
 Changes all keys in an array.
 
@@ -1357,7 +1353,7 @@ otherwise return <strong>null</strong>`
 
 --------
 
-## get_file_type(string $str, array $fallback): string[]|null[]
+## get_file_type(string $str, array $fallback): null[]|string[]
 <a href="#class-methods">↑</a>
 Warning: this method only works for some file-types (png, jpg)
          if you need more supported types, please use e.g. "finfo"
@@ -1367,7 +1363,7 @@ Warning: this method only works for some file-types (png, jpg)
 - `array{ext: null|string, mime: null|string, type: null|string} $fallback <p>with this keys: 'ext', 'mime', 'type'`
 
 **Return:**
-- `string[]|null[] <p>with this keys: 'ext', 'mime', 'type'</p>`
+- `null[]|string[] <p>with this keys: 'ext', 'mime', 'type'</p>`
 
 --------
 
