@@ -2,7 +2,8 @@
 
 namespace voku\build\Template;
 
-class TemplateFormatter {
+class TemplateFormatter
+{
     /**
      * @var array<string, string>
      */
@@ -16,7 +17,8 @@ class TemplateFormatter {
     /**
      * @param string $template
      */
-    public function __construct(string $template) {
+    public function __construct(string $template)
+    {
         $this->template = $template;
     }
 
@@ -26,7 +28,8 @@ class TemplateFormatter {
      *
      * @return $this
      */
-    public function set(string $var, string $value): self {
+    public function set(string $var, string $value): self
+    {
         $this->vars[$var] = $value;
 
         return $this;
@@ -38,7 +41,8 @@ class TemplateFormatter {
      *
      * @return $this
      */
-    public function append(string $var, string $value): self {
+    public function append(string $var, string $value): self
+    {
         $this->vars[$var] = ($this->vars[$var] ?? '') . $value;
 
         return $this;
@@ -47,7 +51,8 @@ class TemplateFormatter {
     /**
      * @return string
      */
-    public function format(): string {
+    public function format(): string
+    {
         $s = $this->template;
 
         foreach ($this->vars as $name => $value) {
