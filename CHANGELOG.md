@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.44 (2020-05-24)
+
+- update vendor (ASCII) lib
+
 ### 5.4.43 (2020-05-14)
 
 - fix auto-generate the "API documentation" in the README (via generate_docs.php)
