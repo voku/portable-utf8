@@ -897,7 +897,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             'фото.jpg'                       => 'foto.jpg',
             'Фото.jpg'                       => 'Foto.jpg',
             'öäü  - test'                    => 'oau-test',
-            'שדגשדג.png'                     => 'shdgshdg.png',
+            'שדגשדג.png'                     => 'SHdgSHdg.png',
             '—©®±àáâãäåæÒÓÔÕÖ¼½¾§µçðþú–.jpg' => 'cr-aaaaaaaeOOOOO141234SSucdthu-.jpg',
             '000—©—©.txt'                    => '000-c-c.txt',
             ' '                              => '',
