@@ -87,4 +87,12 @@ final class Utf8LtrimTest extends \PHPUnit\Framework\TestCase
         static::assertSame($trimmed, u::ltrim($str, "ñ\n"));
         static::assertSame($trimmed, \ltrim($str, "ñ\n"));
     }
+
+    public function testLtrimWithCharacter0()
+    {
+        $str = "007";
+        $trimmed = '7';
+        static::assertSame($trimmed, u::ltrim($str, "0"));
+        static::assertSame($trimmed, \ltrim($str, "0"));
+    }
 }
