@@ -36,8 +36,8 @@ final class Utf8TrimTest extends \PHPUnit\Framework\TestCase
 
     public function testTrimWithCharacter0()
     {
-        $str = "00700";
+        $str = '00700';
         $trimmed = '7';
-        static::assertSame($trimmed, u::trim($str, "0"));
+        static::assertSame($trimmed, u::trim($str, '0'));
     }
 }

@@ -64,9 +64,9 @@ final class Utf8RtrimTest extends \PHPUnit\Framework\TestCase
 
     public function testRtrimWithCharacter0()
     {
-        $str = "00700";
+        $str = '00700';
         $trimmed = '007';
-        static::assertSame($trimmed, u::rtrim($str, "0"));
-        static::assertSame($trimmed, \rtrim($str, "0"));
+        static::assertSame($trimmed, u::rtrim($str, '0'));
+        static::assertSame($trimmed, \rtrim($str, '0'));
     }
 }
