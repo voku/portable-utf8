@@ -7862,7 +7862,9 @@ final class UTF8
      *                                 subject, and the return value is an array as
      *                                 well.
      *                                 </p>
-     * @param int|null        $count   [optional] If passed, this will hold the number of matched and replaced needles
+     * @param int|null $count          [optional] <p>
+     *                                 If passed, this will hold the number of matched and replaced needles.
+     *                                 </p>
      *
      * @psalm-pure
      *
