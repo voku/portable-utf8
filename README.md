@@ -1917,7 +1917,9 @@ EXAMPLE: <code>UTF8::is_base64('4KSu4KWL4KSo4KS/4KSa'); // true</code>
 
 ## is_binary(int|string $input, bool $strict): bool
 <a href="#voku-php-readme-class-methods">↑</a>
-Check if the input is binary... (is look like a hack).
+Check if the input is binary.
+
+.. (is look like a hack).
 
 EXAMPLE: <code>UTF8::is_binary(01); // true</code>
 
@@ -2599,7 +2601,9 @@ should not be stripped. Default: null
 
 ## remove_html_breaks(string $str, string $replacement): string
 <a href="#voku-php-readme-class-methods">↑</a>
-Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
+Remove all breaks [<br> | \r\n | \r | \n | .
+
+..] from the string.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
@@ -5246,8 +5250,10 @@ a word that is larger than the given width, it is broken apart.
 
 ## wordwrap_per_line(string $str, int $width, string $break, bool $cut, bool $add_final_break, string|null $delimiter): string
 <a href="#voku-php-readme-class-methods">↑</a>
-Line-Wrap the string after $limit, but split the string by "$delimiter" before ...
-   ... so that we wrap the per line.
+Line-Wrap the string after $limit, but split the string by "$delimiter" before .
+
+..
+... so that we wrap the per line.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`

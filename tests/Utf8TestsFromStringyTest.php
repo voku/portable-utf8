@@ -3832,7 +3832,8 @@ d
      */
     public function testUpperCaseFirst($expected, $str, $encoding = '')
     {
-        $result = UTF8::str_upper_first($str, $encoding);
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
+        $result = UTF8::str_upper_first($str, $encoding, false, null, false);
 
         static::assertSame($expected, $result);
     }

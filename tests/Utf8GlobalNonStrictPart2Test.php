@@ -955,6 +955,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame('bc', UTF8::substr_in_byte('abcde', 1, 2));
         static::assertSame('bc', UTF8::substr_in_byte('abcde', 1, 2));
         static::assertSame('bc', UTF8::substr_in_byte('abcde', 1, 2));
+        static::assertSame('bcde', UTF8::substr_in_byte('abcde', 1, null));
         static::assertSame('bcd', UTF8::substr_in_byte('abcde', 1, 3));
         static::assertSame('bc', UTF8::substr_in_byte('abcde', 1, 2));
 
@@ -1312,6 +1313,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
     public function testSwapCase()
     {
+        /** @noinspection SuspiciousArrayElementInspection */
         $tests = [
             1                                      => '1',
             -1                                     => '-1',
