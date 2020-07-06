@@ -70,6 +70,8 @@ matrix:
 
 install:
   - stty cols 120
+  - TRAVIS_PHP_INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - MAIN_PHP_INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - echo "php-config -> orig"
   - cat $TRAVIS_PHP_INI_FILE
   - cat $MAIN_PHP_INI_FILE
