@@ -1191,7 +1191,9 @@ final class UTF8
      * @psalm-pure
      *
      * @return bool
-     *              <strong>true</strong> if available, <strong>false</strong> otherwise
+     *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
+     *
+     * @internal <p>Please do not use it anymore, we will make is private in next major version.</p>
      */
     public static function ctype_loaded(): bool
     {
@@ -2242,7 +2244,9 @@ final class UTF8
      * @psalm-pure
      *
      * @return bool
-     *              <strong>true</strong> if available, <strong>false</strong> otherwise
+     *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
+     *
+     * @internal <p>Please do not use it anymore, we will make is private in next major version.</p>
      */
     public static function finfo_loaded(): bool
     {
@@ -3385,7 +3389,9 @@ final class UTF8
      * @psalm-pure
      *
      * @return bool
-     *              <strong>true</strong> if available, <strong>false</strong> otherwise
+     *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
+     *
+     * @internal <p>Please do not use it anymore, we will make is private in next major version.</p>
      */
     public static function iconv_loaded(): bool
     {
@@ -3440,7 +3446,9 @@ final class UTF8
      * @psalm-pure
      *
      * @return bool
-     *              <strong>true</strong> if available, <strong>false</strong> otherwise
+     *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
+     *
+     * @internal <p>Please do not use it anymore, we will make is private in next major version.</p>
      */
     public static function intlChar_loaded(): bool
     {
@@ -3453,7 +3461,9 @@ final class UTF8
      * @psalm-pure
      *
      * @return bool
-     *              <strong>true</strong> if available, <strong>false</strong> otherwise
+     *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
+     *
+     * @internal <p>Please do not use it anymore, we will make is private in next major version.</p>
      */
     public static function intl_loaded(): bool
     {
@@ -4425,7 +4435,9 @@ final class UTF8
      * @psalm-pure
      *
      * @return bool
-     *              <strong>true</strong> if available, <strong>false</strong> otherwise
+     *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
+     *
+     * @internal <p>Please do not use it anymore, we will make is private in next major version.</p>
      */
     public static function json_loaded(): bool
     {
@@ -4711,6 +4723,8 @@ final class UTF8
      *
      * @return bool
      *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
+     *
+     * @internal <p>Please do not use it anymore, we will make is private in next major version.</p>
      */
     public static function mbstring_loaded(): bool
     {
@@ -7862,7 +7876,7 @@ final class UTF8
      *                                 subject, and the return value is an array as
      *                                 well.
      *                                 </p>
-     * @param int|null $count          [optional] <p>
+     * @param int|null        $count   [optional] <p>
      *                                 If passed, this will hold the number of matched and replaced needles.
      *                                 </p>
      *
@@ -8347,7 +8361,7 @@ final class UTF8
             &&
             self::$SUPPORT['mbstring'] === true
         ) {
-            if (Bootup::is_php('7.4')) {
+            if (\function_exists('mb_str_split')) {
                 /**
                  * @psalm-suppress ImpureFunctionCall - why?
                  */
@@ -9833,8 +9847,10 @@ final class UTF8
      * @psalm-pure
      *
      * @return bool
+     *              <p>
      *              <strong>true</strong> if the string has BOM at the start,<br>
      *              <strong>false</strong> otherwise
+     *              </p>
      */
     public static function string_has_bom(string $str): bool
     {
@@ -11909,7 +11925,7 @@ final class UTF8
             return '';
         }
 
-        $length = $length ?? (int)$str_length;
+        $length = $length ?? (int) $str_length;
 
         if (
             $encoding !== 'UTF-8'
@@ -12633,7 +12649,9 @@ final class UTF8
      * @psalm-pure
      *
      * @return bool
-     *              <strong>true</strong> if in use, <strong>false</strong> otherwise
+     *              <p><strong>true</strong> if in use, <strong>false</strong> otherwise</p>
+     *
+     * @internal <p>Please do not use it anymore, we will make is private in next major version.</p>
      */
     public static function symfony_polyfill_used(): bool
     {

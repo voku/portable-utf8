@@ -216,7 +216,7 @@ class Bootup
      * @param string $version <p>e.g. "7.1"<p>
      *
      * @return bool
-     *              Return <strong>true</strong> if the current version is $version or higher
+     *              <p>Return <strong>true</strong> if the current version is $version or greater.</p>
      *
      * @psalm-pure
      */
