@@ -3,6 +3,8 @@ parameters:
     paths:
         - %currentWorkingDirectory%/src/
     ignoreErrors:
+        # false positives
+        - '#Function mb_str_split not found\.#'
         # ignore errors
         - '#Result of \|\| is always true#'
         - '#no value type specified in iterable type#'
