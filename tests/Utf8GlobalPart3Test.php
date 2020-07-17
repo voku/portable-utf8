@@ -830,6 +830,70 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testUtf8StrObfuscate()
+    {
+        $tests = [
+            '  -ABC-中文空白-  ' => '**************',
+            '      - ÖÄÜ- '  => '*************',
+            'öäü'            => '***',
+            ''               => '',
+            'a*b*'           => '****',
+        ];
+
+        foreach ($tests as $before => $after) {
+            static::assertSame(
+                $after,
+                UTF8::str_obfuscate(
+                    $before,
+                    1.0
+                ),
+                'tested: "' . $before . '"'
+            );
+        }
+
+        // ---
+
+        $tests = [
+            '  -ABC-中文空白-  ' => '##-###-####-##',
+            '      - ÖÄÜ- '  => '######-####-#',
+            'öäü'            => '###',
+            ''               => '',
+            'a*b*#*#'        => '#######',
+        ];
+
+        foreach ($tests as $before => $after) {
+            static::assertSame(
+                $after,
+                UTF8::str_obfuscate(
+                    $before,
+                    1.0,
+                    '#',
+                    ['-']
+                ),
+                'tested: "' . $before . '"'
+            );
+        }
+
+        // ---
+
+        $tests = [
+            'a*b*#*#+**++öäü' => '*******+**++***',
+        ];
+
+        foreach ($tests as $before => $after) {
+            static::assertSame(
+                $after,
+                UTF8::str_obfuscate(
+                    $before,
+                    1.0,
+                    '*',
+                    ['+', '*']
+                ),
+                'tested: "' . $before . '"'
+            );
+        }
+    }
+
     public function testUtf8FileWithBom()
     {
         $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8-bom.txt');

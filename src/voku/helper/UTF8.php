@@ -8971,6 +8971,72 @@ final class UTF8
     }
 
     /**
+     * Convert a string into a obfuscate string.
+     *
+     * EXAMPLE: <code>
+     * UTF8::str_obfuscate('lars@moelleken.org', 0.5, '*', ['@', '.']); // e.g. "l***@m**lleke*.*r*"
+     * </code>
+     *
+     * @param string   $str
+     * @param float    $percent
+     * @param string   $obfuscateChar
+     * @param string[] $keepChars
+     *
+     * @psalm-pure
+     *
+     * @return string
+     *                <p>The obfuscate string.</p>
+     */
+    public static function str_obfuscate(
+        string $str,
+        float $percent = 0.5,
+        string $obfuscateChar = '*',
+        array $keepChars = []
+    ): string {
+        $obfuscateCharHelper = "\u{2603}";
+        $str = \str_replace($obfuscateChar, $obfuscateCharHelper, $str);
+
+        $chars = self::chars($str);
+        $charsMax = \count($chars);
+        $charsMaxChange = \round($charsMax * $percent);
+        $charsCounter = 0;
+        $charKeyDone = [];
+
+        while ($charsCounter < $charsMaxChange) {
+            foreach ($chars as $charKey => $char) {
+                if (isset($charKeyDone[$charKey])) {
+                    continue;
+                }
+
+                if (\random_int(0, 100) > 50) {
+                    continue;
+                }
+
+                if ($char === $obfuscateChar) {
+                    continue;
+                }
+
+                ++$charsCounter;
+                $charKeyDone[$charKey] = true;
+
+                if ($charsCounter > $charsMaxChange) {
+                    break;
+                }
+
+                if (\in_array($char, $keepChars, true)) {
+                    continue;
+                }
+
+                $chars[$charKey] = $obfuscateChar;
+            }
+        }
+
+        $str = \implode('', $chars);
+
+        return \str_replace($obfuscateCharHelper, $obfuscateChar, $str);
+    }
+
+    /**
      * Returns a trimmed string in proper title case.
      *
      * Also accepts an array, $ignore, allowing you to list words not to be
