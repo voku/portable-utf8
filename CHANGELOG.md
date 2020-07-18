@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.46 (2020-07-18)
+
+- add "UTF8::str_obfuscate()"
+- optimize phpdocs
+
 ### 5.4.45 (2020-05-26)
 
 - fix UTF8::(l|r)trim | thanks @pmacko
