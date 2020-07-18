@@ -1,4 +1,5 @@
 parameters:
+    reportUnmatchedIgnoredErrors: false
     level: max
     paths:
         - %currentWorkingDirectory%/src/
