@@ -5403,7 +5403,7 @@ final class UTF8
 
         $str_length = \strlen($str);
         foreach (self::$BOM as $bom_string => $bom_byte_length) {
-            if (\strpos($str, $bom_string) === 0) {
+            if (\strncmp($str, $bom_string, $bom_byte_length) === 0) {
                 /** @var false|string $str_tmp - needed for PhpStan (stubs error) */
                 $str_tmp = \substr($str, $bom_byte_length, $str_length);
                 if ($str_tmp === false) {
@@ -5536,7 +5536,11 @@ final class UTF8
         string $substring,
         string $encoding = 'UTF-8'
     ): string {
-        if ($substring && \strpos($str, $substring) === 0) {
+        if (
+            $substring
+            &&
+            \strpos($str, $substring) === 0
+        ) {
             if ($encoding === 'UTF-8') {
                 return (string) \mb_substr(
                     $str,
@@ -6802,8 +6806,9 @@ final class UTF8
             return $str . $replacement;
         }
 
-        if (\stripos($str, $search) === 0) {
-            return $replacement . \substr($str, \strlen($search));
+        $searchLength = \strlen($search);
+        if (\strncasecmp($str, $search, $searchLength) === 0) {
+            return $replacement . \substr($str, $searchLength);
         }
 
         return $str;
@@ -7942,8 +7947,9 @@ final class UTF8
             return $str . $replacement;
         }
 
-        if (\strpos($str, $search) === 0) {
-            return $replacement . \substr($str, \strlen($search));
+        $searchLength = \strlen($search);
+        if (\strncmp($str, $search, $searchLength) === 0) {
+            return $replacement . \substr($str, $searchLength);
         }
 
         return $str;
@@ -8549,7 +8555,7 @@ final class UTF8
             return false;
         }
 
-        return \strpos($haystack, $needle) === 0;
+        return \strncmp($haystack, $needle, \strlen($needle)) === 0;
     }
 
     /**
@@ -8974,6 +8980,7 @@ final class UTF8
      * Convert a string into a obfuscate string.
      *
      * EXAMPLE: <code>
+     *
      * UTF8::str_obfuscate('lars@moelleken.org', 0.5, '*', ['@', '.']); // e.g. "l***@m**lleke*.*r*"
      * </code>
      *
@@ -9922,7 +9929,7 @@ final class UTF8
     {
         /** @noinspection PhpUnusedLocalVariableInspection */
         foreach (self::$BOM as $bom_string => &$bom_byte_length) {
-            if (\strpos($str, $bom_string) === 0) {
+            if (\strncmp($str, $bom_string, $bom_byte_length) === 0) {
                 return true;
             }
         }
@@ -14592,7 +14599,7 @@ final class UTF8
             if ($delimiter === '-') {
                 /** @noinspection AlterInForeachInspection */
                 foreach ((array) $special_cases['names'] as &$beginning) {
-                    if (self::strpos($name, $beginning, 0, $encoding) === 0) {
+                    if (\strncmp($name, $beginning, \strlen($beginning)) === 0) {
                         $continue = true;
 
                         break;
@@ -14602,7 +14609,7 @@ final class UTF8
 
             /** @noinspection AlterInForeachInspection */
             foreach ((array) $special_cases['prefixes'] as &$beginning) {
-                if (self::strpos($name, $beginning, 0, $encoding) === 0) {
+                if (\strncmp($name, $beginning, \strlen($beginning)) === 0) {
                     $continue = true;
 
                     break;

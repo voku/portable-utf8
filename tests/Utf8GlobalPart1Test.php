@@ -3343,6 +3343,31 @@ abc	áßç	क際👽 	क際👽
 
     public function testStrStartsWith()
     {
+        $loops = 2;
+
+        // ---
+
+        $str = 'ΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEndΚόσμεMiddleEnd';
+
+        $tests = [
+            'Κόσμε' => true,
+            'κόσμε' => false,
+            ''      => true,
+            ' '     => false,
+            // false   => false,
+            'Κ'   => true,
+            'End' => false,
+            'end' => false,
+        ];
+
+        for ($i = 0; $i <= $loops; ++$i) { // keep this loop for simple performance tests
+            foreach ($tests as $test => $result) {
+                static::assertSame($result, UTF8::str_starts_with($str, $test), 'tested: ' . $test);
+            }
+        }
+
+        // ---
+
         $str = 'ΚόσμεMiddleEnd';
 
         $tests = [
@@ -3356,8 +3381,10 @@ abc	áßç	क際👽 	क際👽
             'end' => false,
         ];
 
-        foreach ($tests as $test => $result) {
-            static::assertSame($result, UTF8::str_starts_with($str, $test), 'tested: ' . $test);
+        for ($i = 0; $i <= $loops; ++$i) { // keep this loop for simple performance tests
+            foreach ($tests as $test => $result) {
+                static::assertSame($result, UTF8::str_starts_with($str, $test), 'tested: ' . $test);
+            }
         }
     }
 

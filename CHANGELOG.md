@@ -1,5 +1,9 @@
 # Changelog
 
+### 5.4.47 (2020-07-26)
+
+- optimize performance by re-using the result of "strlen()" 
+
 ### 5.4.46 (2020-07-18)
 
 - add "UTF8::str_obfuscate()"
