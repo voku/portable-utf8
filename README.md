@@ -738,7 +738,7 @@ UTF8::codepoints('κöñ', true); // array('U+03ba', 'U+00f6', 'U+00f1')
 </code>
 
 **Parameters:**
-- `array<array-key, string>|string $arg <p>A UTF-8 encoded string or an array of such strings.</p>`
+- `string|string[] $arg <p>A UTF-8 encoded string or an array of such strings.</p>`
 - `bool $use_u_style <p>If True, will return code points in U+xxxx format,
 default, code points will be returned as integers.</p>`
 
@@ -997,7 +997,7 @@ As of PHP 5 the FILE_USE_INCLUDE_PATH can be used
 to trigger include path
 search.
 </p>`
-- `null|resource $context [optional] <p>
+- `resource|null $context [optional] <p>
 A valid context resource created with
 stream_context_create. If you don't need to use a
 custom context, you can skip this parameter by &null;.
@@ -1075,7 +1075,7 @@ Name of a variable to get.
 The ID of the filter to apply. The
 manual page lists the available filters.
 </p>`
-- `array<array-key, int>|int|null $options [optional] <p>
+- `int|int[]|null $options [optional] <p>
 Associative array of options or bitwise disjunction of flags. If filter
 accepts options, flags can be provided in "flags" field of array.
 </p>`
@@ -1106,7 +1106,7 @@ One of <b>INPUT_GET</b>, <b>INPUT_POST</b>,
 <b>INPUT_COOKIE</b>, <b>INPUT_SERVER</b>, or
 <b>INPUT_ENV</b>.
 </p>`
-- `array<array-key, mixed>|null $definition [optional] <p>
+- `array|null $definition [optional] <p>
 An array defining the arguments. A valid key is a string
 containing a variable name and a valid value is either a filter type, or an array
 optionally specifying the filter, flags and options. If the value is an
@@ -1143,14 +1143,14 @@ Filters a variable with a specified filter.
 EXAMPLE: <code>UTF8::filter_var('-ABC-中文空白-', FILTER_VALIDATE_URL); // false</code>
 
 **Parameters:**
-- `float|int|null|string $variable <p>
+- `float|int|string|null $variable <p>
 Value to filter.
 </p>`
 - `int $filter [optional] <p>
 The ID of the filter to apply. The
 manual page lists the available filters.
 </p>`
-- `array<array-key, int>|int|null $options [optional] <p>
+- `int|int[]|null $options [optional] <p>
 Associative array of options or bitwise disjunction of flags. If filter
 accepts options, flags can be provided in "flags" field of array. For
 the "callback" filter, callable type should be passed. The
@@ -1220,10 +1220,10 @@ UTF8::filter_var_array($data, $filters, true); // ['name' => 'Κόσμε', 'age'
 </code>
 
 **Parameters:**
-- `array<array-key, mixed> $data <p>
+- `array $data <p>
 An array with string keys containing the data to filter.
 </p>`
-- `array<array-key, mixed>|int|null $definition [optional] <p>
+- `array|int|null $definition [optional] <p>
 An array defining the arguments. A valid key is a string
 containing a variable name and a valid value is either a
 filter type, or an
@@ -1319,7 +1319,7 @@ Fix a double (or multiple) encoded UTF8 string.
 EXAMPLE: <code>UTF8::fix_utf8('FÃÂÂÂÂ©dÃÂÂÂÂ©ration'); // 'Fédération'</code>
 
 **Parameters:**
-- `array<array-key, string>|string $str you can use a string or an array of strings`
+- `string|string[] $str you can use a string or an array of strings`
 
 **Return:**
 - `string|string[] Will return the fixed input-"array" or
@@ -1346,7 +1346,7 @@ EXAMPLE: <code>UTF8::getCharDirection('ا'); // 'RTL'</code>
 Check for php-support.
 
 **Parameters:**
-- `null|string $key`
+- `string|null $key`
 
 **Return:**
 - `mixed Return the full support-"array", if $key === null<br>
@@ -1362,7 +1362,7 @@ Warning: this method only works for some file-types (png, jpg)
 
 **Parameters:**
 - `string $str`
-- `array{ext: null|string, mime: null|string, type: null|string} $fallback <p>with this keys: 'ext', 'mime', 'type'`
+- `array{ext: (null|string), mime: (null|string), type: (null|string)} $fallback <p>with this keys: 'ext', 'mime', 'type'`
 
 **Return:**
 - `null[]|string[] <p>with this keys: 'ext', 'mime', 'type'</p>`
@@ -1908,7 +1908,7 @@ Returns true if the string is base64 encoded, false otherwise.
 EXAMPLE: <code>UTF8::is_base64('4KSu4KWL4KSo4KS/4KSa'); // true</code>
 
 **Parameters:**
-- `null|string $str <p>The input string.</p>`
+- `string|null $str <p>The input string.</p>`
 - `bool $empty_string_is_valid [optional] <p>Is an empty string valid base64 or not?</p>`
 
 **Return:**
@@ -1983,7 +1983,7 @@ A variable is considered empty if it does not exist or if its value equals FALSE
 empty() does not generate a warning if the variable does not exist.
 
 **Parameters:**
-- `array<array-key, mixed>|float|int|string $str`
+- `array|float|int|string $str`
 
 **Return:**
 - `bool <p>Whether or not $str is empty().</p>`
@@ -2117,7 +2117,7 @@ UTF8::is_utf8(["Iñtërnâtiônàlizætiøn\xA0\xA1", 'bar']); // false
 </code>
 
 **Parameters:**
-- `array<array-key, string>|int|null|string $str <p>The input to be checked.</p>`
+- `int|string|string[]|null $str <p>The input to be checked.</p>`
 - `bool $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>`
 
 **Return:**
@@ -2274,7 +2274,7 @@ EXAMPLE: <code>UTF8::lcfirst('ÑTËRNÂTIÔNÀLIZÆTIØN'); // ñTËRNÂTIÔNÀL
 - `string $str <p>The input string</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt,
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt,
 tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
 -> ß</p>`
@@ -2290,12 +2290,12 @@ Lowercase for all words in the string.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `array<array-key, string> $exceptions [optional] <p>Exclusion for some words.</p>`
+- `string[] $exceptions [optional] <p>Exclusion for some words.</p>`
 - `string $char_list [optional] <p>Additional chars that contains to words and do
 not start a new word.</p>`
 - `string $encoding [optional] <p>Set the charset.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt,
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt,
 tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
 -> ß</p>`
@@ -2313,7 +2313,7 @@ EXAMPLE: <code>UTF8::ltrim('　中文空白　 '); // '中文空白　 '</code>
 
 **Parameters:**
 - `string $str <p>The string to be trimmed</p>`
-- `null|string $chars <p>Optional characters to be stripped</p>`
+- `string|null $chars <p>Optional characters to be stripped</p>`
 
 **Return:**
 - `string the string with unwanted characters stripped from the left`
@@ -2327,7 +2327,7 @@ Returns the UTF-8 character with the maximum code point in the given data.
 EXAMPLE: <code>UTF8::max('abc-äöü-中文空白'); // 'ø'</code>
 
 **Parameters:**
-- `array<array-key, string>|string $arg <p>A UTF-8 encoded string or an array of such strings.</p>`
+- `string[]|string $arg <p>A UTF-8 encoded string or an array of such strings.</p>`
 
 **Return:**
 - `string|null the character with the highest code point than others, returns null on failure or empty input`
@@ -2368,7 +2368,7 @@ Returns the UTF-8 character with the minimum code point in the given data.
 EXAMPLE: <code>UTF8::min('abc-äöü-中文空白'); // '-'</code>
 
 **Parameters:**
-- `array<array-key, string>|string $arg <strong>A UTF-8 encoded string or an array of such strings.</strong>`
+- `string|string[] $arg <strong>A UTF-8 encoded string or an array of such strings.</strong>`
 
 **Return:**
 - `string|null <p>The character with the lowest code point than others, returns null on failure or empty input.</p>`
@@ -2383,7 +2383,7 @@ EXAMPLE: <code>UTF8::normalize_encoding('UTF8'); // 'UTF-8'</code>
 
 **Parameters:**
 - `mixed $encoding <p>e.g.: ISO, UTF8, WINDOWS-1251 etc.</p>`
-- `TNormalizeEncodingFallback|string $fallback <p>e.g.: UTF-8</p>`
+- `string|TNormalizeEncodingFallback $fallback <p>e.g.: UTF-8</p>`
 
 **Return:**
 - `mixed|string <p>e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.<br>Will return a empty string as fallback (by default)</p>`
@@ -2396,7 +2396,7 @@ Standardize line ending to unix-like.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `array<array-key, string>|string $replacer <p>The replacer char e.g. "\n" (Linux) or "\r\n" (Windows). You can also use \PHP_EOL
+- `string|string[] $replacer <p>The replacer char e.g. "\n" (Linux) or "\r\n" (Windows). You can also use \PHP_EOL
 here.</p>`
 
 **Return:**
@@ -2467,7 +2467,7 @@ echo $array['Iñtërnâtiônéàlizætiøn']; // '測試'
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `array<array-key, mixed> $result <p>The result will be returned into this reference parameter.</p>`
+- `array $result <p>The result will be returned into this reference parameter.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
 
 **Return:**
@@ -2578,7 +2578,7 @@ EXAMPLE: <code>UTF8::remove_duplicates('öäü-κόσμεκόσμε-äöü', '
 
 **Parameters:**
 - `string $str <p>The base string.</p>`
-- `array<array-key, string>|string $what <p>String to search for in the base string.</p>`
+- `string|string[] $what <p>String to search for in the base string.</p>`
 
 **Return:**
 - `string <p>A string with removed duplicates.</p>`
@@ -2689,8 +2689,8 @@ Replaces all occurrences of $search in $str by $replacement.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `array<array-key, mixed> $search <p>The elements to search for.</p>`
-- `array<array-key, mixed>|string $replacement <p>The string to replace with.</p>`
+- `array $search <p>The elements to search for.</p>`
+- `array|string $replacement <p>The string to replace with.</p>`
 - `bool $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>`
 
 **Return:**
@@ -2722,7 +2722,7 @@ EXAMPLE: <code>UTF8::rtrim('-ABC-中文空白-  '); // '-ABC-中文空白-'</cod
 
 **Parameters:**
 - `string $str <p>The string to be trimmed.</p>`
-- `null|string $chars <p>Optional characters to be stripped.</p>`
+- `string|null $chars <p>Optional characters to be stripped.</p>`
 
 **Return:**
 - `string <p>A string with unwanted characters stripped from the right.</p>`
@@ -2780,7 +2780,7 @@ and removes spaces, dashes, as well as underscores.
 - `string $str <p>The input string.</p>`
 - `string $encoding [optional] <p>Default: 'UTF-8'</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt,
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt,
 tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
 -> ß</p>`
@@ -2827,7 +2827,7 @@ setting $case_sensitive to false.
 
 **Parameters:**
 - `string $haystack <p>The input string.</p>`
-- `array<array-key, mixed> $needles <p>SubStrings to look for.</p>`
+- `array $needles <p>SubStrings to look for.</p>`
 - `bool $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>`
 
 **Return:**
@@ -2843,7 +2843,7 @@ setting $case_sensitive to false.
 
 **Parameters:**
 - `string $haystack <p>The input string.</p>`
-- `array<array-key, mixed> $needles <p>SubStrings to look for.</p>`
+- `array $needles <p>SubStrings to look for.</p>`
 - `bool $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>`
 
 **Return:**
@@ -2879,7 +2879,7 @@ and underscores. Alpha delimiters are not converted to lowercase.
 - `string $delimiter <p>Sequence used to separate parts of the string.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt,
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt,
 tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ ->
 ß</p>`
@@ -2935,7 +2935,7 @@ Returns true if the string ends with any of $substrings, false otherwise.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `array<array-key, string> $substrings <p>Substrings to look for.</p>`
+- `string[] $substrings <p>Substrings to look for.</p>`
 
 **Return:**
 - `bool <p>Whether or not $str ends with $substring.</p>`
@@ -3008,7 +3008,7 @@ Returns true if the string ends with any of $substrings, false otherwise.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `array<array-key, string> $substrings <p>Substrings to look for.</p>`
+- `string[] $substrings <p>Substrings to look for.</p>`
 
 **Return:**
 - `bool <p>Whether or not $str ends with $substring.</p>`
@@ -3039,11 +3039,11 @@ UTF8::str_ireplace('lIzÆ', 'lise', 'Iñtërnâtiônàlizætiøn'); // 'Iñtërn
 </code>
 
 **Parameters:**
-- `array<array-key, string>|string $search <p>
+- `string|string[] $search <p>
 Every replacement with search array is
 performed on the result of previous replacement.
 </p>`
-- `array<array-key, string>|string $replacement <p>The replacement.</p>`
+- `string|string[] $replacement <p>The replacement.</p>`
 - `TStrIReplaceSubject $subject <p>
 If subject is an array, then the search and
 replace is performed with every entry of
@@ -3115,7 +3115,7 @@ Returns true if the string begins with any of $substrings, false otherwise.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `array<array-key, mixed> $substrings <p>Substrings to look for.</p>`
+- `array $substrings <p>Substrings to look for.</p>`
 
 **Return:**
 - `bool <p>Whether or not $str starts with $substring.</p>`
@@ -3316,6 +3316,7 @@ Returns true if $str matches the supplied pattern, false otherwise.
 Convert a string into a obfuscate string.
 
 EXAMPLE: <code>
+
 UTF8::str_obfuscate('lars@moelleken.org', 0.5, '*', ['@', '.']); // e.g. "l***@m**lleke*.*r*"
 </code>
 
@@ -3323,7 +3324,7 @@ UTF8::str_obfuscate('lars@moelleken.org', 0.5, '*', ['@', '.']); // e.g. "l***@m
 - `string $str`
 - `float $percent`
 - `string $obfuscateChar`
-- `array<array-key, string> $keepChars`
+- `string[] $keepChars`
 
 **Return:**
 - `string <p>The obfuscate string.</p>`
@@ -3608,7 +3609,7 @@ UTF8::str_split_array(['中文空白', 'test'], 2); // [['中文', '空白'], ['
 </code>
 
 **Parameters:**
-- `array<array-key, int|string> $input <p>The string[] or int[] to split into array.</p>`
+- `int[]|string[] $input <p>The string[] or int[] to split into array.</p>`
 - `int $length [optional] <p>Max character length of each array
 lement.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the
@@ -3663,7 +3664,7 @@ Returns true if the string begins with any of $substrings, false otherwise.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `array<array-key, mixed> $substrings <p>Substrings to look for.</p>`
+- `array $substrings <p>Substrings to look for.</p>`
 
 **Return:**
 - `bool <p>Whether or not $str starts with $substring.</p>`
@@ -3778,18 +3779,18 @@ capitalized.
 
 **Parameters:**
 - `string $str`
-- `array<array-key, mixed|string>|null $ignore [optional] <p>An array of words not to capitalize or
+- `array|string[]|null $ignore [optional] <p>An array of words not to capitalize or
 null. Default: null</p>`
 - `string $encoding [optional] <p>Default: 'UTF-8'</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the
 string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az,
+- `string|null $lang [optional] <p>Set the language for special cases: az,
 el, lt, tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length:
 e.g. ẞ -> ß</p>`
 - `bool $use_trim_first [optional] <p>true === trim the input string,
 first</p>`
-- `null|string $word_define_chars [optional] <p>An string of chars that will be used as
+- `string|null $word_define_chars [optional] <p>An string of chars that will be used as
 whitespace separator === words.</p>`
 
 **Return:**
@@ -3808,7 +3809,7 @@ Adapted from John Gruber's script.
 
 **Parameters:**
 - `string $str`
-- `array<array-key, mixed> $ignore <p>An array of words not to capitalize.</p>`
+- `array $ignore <p>An array of words not to capitalize.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
@@ -3925,7 +3926,7 @@ and underscores, and removes spaces, dashes, underscores.
 - `string $str <p>The input string.</p>`
 - `string $encoding [optional] <p>Default: 'UTF-8'</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt,
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt,
 tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
 -> ß</p>`
@@ -4032,7 +4033,7 @@ INFO: opposite to UTF8::codepoints()
 EXAMPLE: <code>UTF8::string(array(246, 228, 252)); // 'öäü'</code>
 
 **Parameters:**
-- `array<array-key, int|numeric-string>|int|numeric-string $intOrHex <p>Integer or Hexadecimal codepoints.</p>`
+- `int[]|numeric-string[]|int|numeric-string $intOrHex <p>Integer or Hexadecimal codepoints.</p>`
 
 **Return:**
 - `string <p>A UTF-8 encoded string.</p>`
@@ -4066,7 +4067,7 @@ EXAMPLE: <code>UTF8::strip_tags("<span>κόσμε\xa0\xa1</span>"); // 'κόσ
 - `string $str <p>
 The input string.
 </p>`
-- `null|string $allowable_tags [optional] <p>
+- `string|null $allowable_tags [optional] <p>
 You can use the optional second parameter to specify tags which should
 not be stripped.
 </p>
@@ -4592,7 +4593,7 @@ EXAMPLE: <code>UTF8::strtocasefold('ǰ◌̱'); // 'ǰ◌̱'</code>
 </p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
 - `string $encoding [optional] <p>Set the charset.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt, tr</p>`
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt, tr</p>`
 - `bool $lower [optional] <p>Use lowercase string, otherwise use uppercase string. PS: uppercase
 is for some languages better ...</p>`
 
@@ -4611,7 +4612,7 @@ EXAMPLE: <code>UTF8::strtolower('DÉJÀ Σσς Iıİi'); // 'déjà σσς iıii
 - `string $str <p>The string being lowercased.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt,
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt,
 tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
 -> ß</p>`
@@ -4631,7 +4632,7 @@ EXAMPLE: <code>UTF8::strtoupper('Déjà Σσς Iıİi'); // 'DÉJÀ ΣΣΣ IIİI
 - `string $str <p>The string being uppercased.</p>`
 - `string $encoding [optional] <p>Set the charset.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt,
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt,
 tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
 -> ß</p>`
@@ -4656,8 +4657,8 @@ UTF8::strtr('Hello 中文空白', $array); // '○●◎ earth'
 
 **Parameters:**
 - `string $str <p>The string being translated.</p>`
-- `array<array-key, string>|string $from <p>The string replacing from.</p>`
-- `array<array-key, string>|string $to [optional] <p>The string being translated to to.</p>`
+- `string|string[] $from <p>The string replacing from.</p>`
+- `string|string[] $to [optional] <p>The string being translated to to.</p>`
 
 **Return:**
 - `string <p>This function returns a copy of str, translating all occurrences of each character in "from"
@@ -4879,16 +4880,16 @@ EXAMPLE: <code>UTF8::substr_replace(array('Iñtërnâtiônàlizætiøn', 'foo'),
 source: https://gist.github.com/stemar/8287074
 
 **Parameters:**
-- `array<array-key, string>|string $str <p>The input string or an array of stings.</p>`
-- `array<array-key, string>|string $replacement <p>The replacement string or an array of stings.</p>`
-- `array<array-key, int>|int $offset <p>
+- `string|string[] $str <p>The input string or an array of stings.</p>`
+- `string|string[] $replacement <p>The replacement string or an array of stings.</p>`
+- `int|int[] $offset <p>
 If start is positive, the replacing will begin at the start'th offset
 into string.
 <br><br>
 If start is negative, the replacing will begin at the start'th character
 from the end of string.
 </p>`
-- `array<array-key, int>|int|null $length [optional] <p>If given and is positive, it represents the length of the
+- `int|int[]|null $length [optional] <p>If given and is positive, it represents the length of the
 portion of string which is to be replaced. If it is negative, it
 represents the number of characters from the end of string at which to
 stop replacing. If it is not given, then it will default to strlen(
@@ -4971,7 +4972,7 @@ and all other chars to lowercase.
 - `string $str <p>The input string.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt,
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt,
 tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
 -> ß</p>`
@@ -5044,7 +5045,7 @@ Convert a string into "ISO-8859"-encoding (Latin-1).
 EXAMPLE: <code>UTF8::to_utf8(UTF8::to_iso8859('  -ABC-中文空白-  ')); // '  -ABC-????-  '</code>
 
 **Parameters:**
-- `array<array-key, string>|string $str`
+- `string|string[] $str`
 
 **Return:**
 - `string|string[]`
@@ -5057,7 +5058,7 @@ Returns the given input as string, or null if the input isn't int|float|string
 and do not implement the "__toString()" method.
 
 **Parameters:**
-- `float|int|null|object|string $input`
+- `float|int|object|string|null $input`
 
 **Return:**
 - `string|null <p>null if the input isn't int|float|string and has no "__toString()" method</p>`
@@ -5121,7 +5122,7 @@ EXAMPLE: <code>UTF8::trim('   -ABC-中文空白-  '); // '-ABC-中文空白-'</c
 
 **Parameters:**
 - `string $str <p>The string to be trimmed</p>`
-- `null|string $chars [optional] <p>Optional characters to be stripped</p>`
+- `string|null $chars [optional] <p>Optional characters to be stripped</p>`
 
 **Return:**
 - `string <p>The trimmed string.</p>`
@@ -5138,7 +5139,7 @@ EXAMPLE: <code>UTF8::ucfirst('ñtërnâtiônàlizætiøn foo'); // 'Ñtërnâti�
 - `string $str <p>The input string.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
-- `null|string $lang [optional] <p>Set the language for special cases: az, el, lt,
+- `string|null $lang [optional] <p>Set the language for special cases: az, el, lt,
 tr</p>`
 - `bool $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
 -> ß</p>`
@@ -5156,7 +5157,7 @@ EXAMPLE: <code>UTF8::ucwords('iñt ërn âTi ônà liz æti øn'); // 'Iñt Ërn
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `array<array-key, string> $exceptions [optional] <p>Exclusion for some words.</p>`
+- `string[] $exceptions [optional] <p>Exclusion for some words.</p>`
 - `string $char_list [optional] <p>Additional chars that contains to words and do not start a new
 word.</p>`
 - `string $encoding [optional] <p>Set the charset.</p>`
@@ -5292,7 +5293,7 @@ a word that is larger than the given width, it is broken apart.
 If this flag is true, then the method will add a $break at the end
 of the result string.
 </p>`
-- `null|string $delimiter [optional] <p>
+- `string|null $delimiter [optional] <p>
 You can change the default behavior, where we split the string by newline.
 </p>`
 
