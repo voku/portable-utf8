@@ -104,6 +104,7 @@ The problem with "mbstring" and others is that most of the time you cannot ensur
 *   No extensions are required to run this library. Portable UTF-8 only needs PCRE library that is available by default since PHP 4.2.0 and cannot be disabled since PHP 5.3.0. "\u" modifier support in PCRE for UTF-8 handling is not a must.
 *   PHP 5.3 is the minimum requirement, and all later versions are fine with Portable UTF-8.
 *   PHP 7.0 is the minimum requirement since version 4.0 of Portable UTF-8, otherwise composer will install an older version
+*   PHP 8.0 support is also available and will adapt the behaviours of the native functions.
 *   To speed up string handling, it is recommended that you have "mbstring" or "iconv" available on your server, as well as the latest version of PCRE library
 *   Although Portable UTF-8 is easy to use; moving from native API to Portable UTF-8 may not be straight-forward for everyone. It is highly recommended that you do not update your scripts to include Portable UTF-8 or replace or change anything before you first know the reason and consequences. Most of the time, some native function may be all what you need.
 *   There is also a shim for "mbstring", "iconv" and "intl", so you can use it also on shared webspace. 
