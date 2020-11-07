@@ -6017,6 +6017,7 @@ final class UTF8
     ): bool {
         if ($case_sensitive) {
             if (\PHP_VERSION_ID >= 80000) {
+                /** @phpstan-ignore-next-line - only for PHP8 */
                 return \str_contains($haystack, $needle);
             }
 
@@ -6357,6 +6358,7 @@ final class UTF8
         }
 
         if (\PHP_VERSION_ID >= 80000) {
+            /** @phpstan-ignore-next-line - only for PHP8 */
             return \str_ends_with($haystack, $needle);
         }
 
@@ -8577,6 +8579,7 @@ final class UTF8
         }
 
         if (\PHP_VERSION_ID >= 80000) {
+            /** @phpstan-ignore-next-line - only for PHP8 */
             return \str_starts_with($haystack, $needle);
         }
 
