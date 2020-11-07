@@ -1012,20 +1012,20 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             static::assertStringContainsString('Hírek', $testString);
         } else {
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
-            static::contains('M	𝐌	𝑀	𝑴	𝖬	𝗠	𝘔	𝙈	ℳ	𝓜	𝔐	𝕸	𝙼	𝕄', $testString);
+            static::assertContains('M	𝐌	𝑀	𝑴	𝖬	𝗠	𝘔	𝙈	ℳ	𝓜	𝔐	𝕸	𝙼	𝕄', $testString);
 
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            static::contains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
+            static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
 
             $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            static::contains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
+            static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
 
             $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
             $testStringUtf8 = UTF8::clean($testString, true, true, true);
-            static::contains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testStringUtf8);
-            static::contains('<p>鼦</p>', $testStringUtf8);
-            static::contains('<li><a href="/">鼦վͼ</a></li>', $testStringUtf8);
-            static::contains('<B><a href="http://www.baidu.com/" >ٶ</a></B>', $testStringUtf8);
+            static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testStringUtf8);
+            static::assertContains('<p>鼦</p>', $testStringUtf8);
+            static::assertContains('<li><a href="/">鼦վͼ</a></li>', $testStringUtf8);
+            static::assertContains('<B><a href="http://www.baidu.com/" >ٶ</a></B>', $testStringUtf8);
 
             // ---
 
@@ -1033,14 +1033,14 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
                 static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
                 $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-                static::contains(
+                static::assertContains(
                     '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
                     $testString
                 );
 
                 static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
                 $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
-                static::contains(
+                static::assertContains(
                     '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
                     $testString
                 );
@@ -1048,48 +1048,48 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
             static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
-            static::contains('Iñtërnâtiônàlizætiøn', $testString);
+            static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
-            static::contains('Iñtërnâtiônàlizætiøn', $testString);
+            static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
-            static::contains('Iñtërnâtiônàlizætiøn', $testString);
+            static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
             if (UTF8::mbstring_loaded()) { // only with "mbstring"
 
                 $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-                static::contains(
+                static::assertContains(
                     '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
                     $testString
                 );
 
                 $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
-                static::contains(
+                static::assertContains(
                     '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
                     $testString
                 );
 
                 // text: with offset
                 $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
-                static::contains('There are better connections.', $testString);
+                static::assertContains('There are better connections.', $testString);
             }
 
             // text: with offset & max-length
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, null, 7, 11);
-            static::contains('Iñtërnât', $testString);
+            static::assertContains('Iñtërnât', $testString);
 
             // text: with offset & max-length + timeout
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt', false, null, 7, 10, 15);
-            static::contains('ñtërnâtiôn', $testString);
+            static::assertContains('ñtërnâtiôn', $testString);
 
             // text: with timeout
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, 7, null, 10);
-            static::contains('Iñtërnâtiônàlizætiøn', $testString);
+            static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
             // text: with max-length + timeout
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, null, 10, 10);
-            static::contains('Hírek', $testString);
+            static::assertContains('Hírek', $testString);
 
             $context = \stream_context_create(
                 [
@@ -1101,7 +1101,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
             // text: with max-length + timeout
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10);
-            static::contains('Hírek', $testString);
+            static::assertContains('Hírek', $testString);
 
             // text: do not convert to utf-8 + timeout
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10, false);
@@ -1109,7 +1109,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
             // text: do not convert to utf-8 + timeout
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, $context, null, 10, 10, false);
-            static::contains('Hírek', $testString);
+            static::assertContains('Hírek', $testString);
         }
     }
 
