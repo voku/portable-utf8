@@ -30,6 +30,7 @@ install:
   - curl -O https://scrutinizer-ci.com/ocular.phar
   - php composer.phar config -g github-oauth.github.com %GITHUB_TOKEN%
   - php composer.phar self-update
+  - php composer.phar clearcache
   - php composer.phar require php-coveralls/php-coveralls
   - php composer.phar install --prefer-dist --no-interaction
   - php composer.phar dump-autoload -o
