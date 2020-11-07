@@ -4,6 +4,7 @@ composer.lock
 
 # php (phpunit)
 build/logs/
+.phpunit.result.cache
 
 # gitbook
 _book/

@@ -18,11 +18,6 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
      */
     private $oldSupportArray;
 
-    protected function setUp()
-    {
-        \error_reporting(\E_ALL ^ \E_USER_WARNING);
-    }
-
     /**
      * Call protected/private method of a class.
      *
@@ -545,7 +540,7 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
     {
         $urldecode_fix_win1252_chars = UTF8::urldecode_fix_win1252_chars();
 
-        static::assertInternalType('array', $urldecode_fix_win1252_chars);
+        static::assertTrue(\is_array($urldecode_fix_win1252_chars));
         static::assertTrue(\count($urldecode_fix_win1252_chars) > 0);
     }
 
@@ -896,7 +891,7 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
     {
         $whitespace = UTF8::ws();
 
-        static::assertInternalType('array', $whitespace);
+        static::assertTrue(\is_array($whitespace));
         static::assertTrue(\count($whitespace) > 0);
     }
 

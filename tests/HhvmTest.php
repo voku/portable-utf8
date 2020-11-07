@@ -14,7 +14,7 @@ final class HhvmTest extends \PHPUnit\Framework\TestCase
     public function test1()
     {
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@\grapheme_extract([], 0));
+        static::assertFalse(@\grapheme_extract('', 0));
     }
 
     public function test2()
@@ -63,6 +63,6 @@ final class HhvmTest extends \PHPUnit\Framework\TestCase
     public function test8()
     {
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertSame('', @(\substr([], 0) . ''));
+        static::assertSame('', @(\substr('', 0) . ''));
     }
 }

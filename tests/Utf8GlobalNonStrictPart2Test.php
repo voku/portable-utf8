@@ -19,11 +19,6 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
      */
     private $oldSupportArray;
 
-    protected function setUp()
-    {
-        \error_reporting(\E_ALL ^ \E_USER_WARNING);
-    }
-
     /**
      * Call protected/private method of a class.
      *
@@ -213,10 +208,13 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         $text = 'This is a Simple text.';
 
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@\strpbrk($text, ''));
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertSame(@\strpbrk($text, ''), UTF8::strpbrk($text, ''));
+        if (!Bootup::is_php('8.0')) {
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\strpbrk($text, ''));
+
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(@\strpbrk($text, ''), UTF8::strpbrk($text, ''));
+        }
 
         static::assertFalse(\strpbrk('', 'mi'));
         static::assertSame(\strpbrk('', 'mi'), UTF8::strpbrk('', 'mi'));
@@ -294,9 +292,35 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
             // php compatible tests
 
+            if (!Bootup::is_php('8.0')) {
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertFalse(@\strpos('abc', ''));
+                static::assertFalse(UTF8::strpos('abc', ''));
+            } else {
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertSame(0, @\strpos('abc', ''));
+                static::assertSame(0, UTF8::strpos('abc', ''));
+            }
+
             /** @noinspection PhpUsageOfSilenceOperatorInspection */
-            static::assertFalse(@\strpos('abc', ''));
-            static::assertFalse(UTF8::strpos('abc', ''));
+            static::assertSame(@\strpos('', ''), UTF8::strpos('', ''));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(@\strpos(' ', ''), UTF8::strpos(' ', ''));
+            static::assertSame(\strpos('', ' '), UTF8::strpos('', ' '));
+            static::assertSame(\strpos(' ', ' '), UTF8::strpos(' ', ' '));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(@\strpos('DJ', ''), UTF8::strpos('DJ', ''));
+            static::assertSame(\strpos('DJ', ' '), UTF8::strpos('DJ', ' '));
+            static::assertSame(\strpos('', 'Σ'), UTF8::strpos('', 'Σ'));
+            static::assertSame(\strpos(' ', 'Σ'), UTF8::strpos(' ', 'Σ'));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(@\strpos('DJ', ''), UTF8::strpos('DJ', ''));
+            static::assertSame(\strpos('DJ', ' '), UTF8::strpos('DJ', ' '));
+            static::assertSame(\strpos('', 'Σ'), UTF8::strpos('', 'Σ'));
+            static::assertSame(\strpos(' ', 'Σ'), UTF8::strpos(' ', 'Σ'));
+
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(UTF8::strpos('abc', ''), @\strpos('abc', ''));
 
             static::assertFalse(\strpos('abc', 'd'));
             static::assertFalse(UTF8::strpos('abc', 'd'));
@@ -535,6 +559,19 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
     public function testStrrpos()
     {
+        static::assertSame(\strrpos('', ''), UTF8::strrpos('', ''));
+        static::assertSame(\strrpos(' ', ''), UTF8::strrpos(' ', ''));
+        static::assertSame(\strrpos('', ' '), UTF8::strrpos('', ' '));
+        static::assertSame(\strrpos(' ', ' '), UTF8::strrpos(' ', ' '));
+        static::assertSame(\strrpos('DJ', ''), UTF8::strrpos('DJ', ''));
+        static::assertSame(\strrpos('DJ', ' '), UTF8::strrpos('DJ', ' '));
+        static::assertSame(\strrpos('', 'Σ'), UTF8::strrpos('', 'Σ'));
+        static::assertSame(\strrpos(' ', 'Σ'), UTF8::strrpos(' ', 'Σ'));
+        static::assertSame(\strrpos('DJ', ''), UTF8::strrpos('DJ', ''));
+        static::assertSame(\strrpos('DJ', ' '), UTF8::strrpos('DJ', ' '));
+        static::assertSame(\strrpos('', 'Σ'), UTF8::strrpos('', 'Σ'));
+        static::assertSame(\strrpos(' ', 'Σ'), UTF8::strrpos(' ', 'Σ'));
+
         if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
             static::assertSame(1, \strrpos('한국어', '국'));
         } else {
@@ -568,9 +605,17 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         static::assertSame(1, UTF8::strrpos('11--', '1-', 0, 'UTF-8', false));
         static::assertSame(2, UTF8::strrpos('-11--', '1-', 0, 'UTF-8', false));
-        static::assertFalse(UTF8::strrpos('한국어', '', 0, 'UTF-8', false));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            static::assertFalse(UTF8::strrpos('한국어', '', 0, 'UTF-8', false));
+        } else {
+            static::assertSame(3, UTF8::strrpos('한국어', '', 0, 'UTF-8', false));
+        }
         static::assertSame(1, UTF8::strrpos('한국어', '국', 0, 'UTF8', true));
-        static::assertFalse(UTF8::strrpos('한국어', ''));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            static::assertFalse(UTF8::strrpos('한국어', ''));
+        } else {
+            static::assertSame(3, UTF8::strrpos('한국어', ''));
+        }
         static::assertSame(1, UTF8::strrpos('한국어', '국'));
         static::assertSame(6, UTF8::strrpos('κόσμε-κόσμε', 'κ'));
         static::assertSame(13, UTF8::strrpos('test κόσμε κόσμε test', 'σ'));
@@ -662,7 +707,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertNull($supportNull);
 
         $support = UTF8::getSupportInfo();
-        static::assertInternalType('array', $support);
+        static::assertTrue(\is_array($support));
 
         // language === "tr"
         if (
@@ -1042,41 +1087,65 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     {
         // php compatible tests
 
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@\substr_count('', ''));
-        static::assertFalse(UTF8::substr_count('', ''));
+        static::assertSame(\substr_count('', ' '), UTF8::substr_count('', ' '));
+        static::assertSame(\substr_count(' ', ' '), UTF8::substr_count(' ', ' '));
+        static::assertSame(\substr_count('DJ', ' '), UTF8::substr_count('DJ', ' '));
+        static::assertSame(\substr_count('', 'Σ'), UTF8::substr_count('', 'Σ'));
+        static::assertSame(\substr_count(' ', 'Σ'), UTF8::substr_count(' ', 'Σ'));
+        static::assertSame(\substr_count('DJ', ' '), UTF8::substr_count('DJ', ' '));
+        static::assertSame(\substr_count('', 'Σ'), UTF8::substr_count('', 'Σ'));
+        static::assertSame(\substr_count(' ', 'Σ'), UTF8::substr_count(' ', 'Σ'));
 
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@\substr_count('', '', 1));
-        static::assertFalse(UTF8::substr_count('', '', 1));
+        // ---
 
-        if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+        if (!\voku\helper\Bootup::is_php('8.0')) {
             /** @noinspection PhpUsageOfSilenceOperatorInspection */
-            static::assertNull(@\substr_count('', '', 1, 1));
-        } else {
-
-            /** @noinspection PhpUsageOfSilenceOperatorInspection */
-            static::assertFalse(@\substr_count('', '', 1, 1));
+            static::assertFalse(@\substr_count('', ''));
+            static::assertFalse(UTF8::substr_count('', ''));
         }
 
-        static::assertFalse(UTF8::substr_count('', '', 1, 1));
-
-        if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+        if (!\voku\helper\Bootup::is_php('8.0')) {
             /** @noinspection PhpUsageOfSilenceOperatorInspection */
-            static::assertNull(@\substr_count('', 'test', 1, 1));
-        } else {
-            /** @noinspection PhpUsageOfSilenceOperatorInspection */
-            static::assertFalse(@\substr_count('', 'test', 1, 1));
+            static::assertFalse(@\substr_count('', '', 1));
+            static::assertFalse(UTF8::substr_count('', '', 1));
         }
 
-        static::assertFalse(UTF8::substr_count('', 'test', 1, 1));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertNull(@\substr_count('', '', 1, 1));
+            } else {
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertFalse(@\substr_count('', '', 1, 1));
+            }
+        }
 
-        if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
-            /** @noinspection PhpUsageOfSilenceOperatorInspection */
-            static::assertNull(@\substr_count('test', '', 1, 1));
-        } else {
-            /** @noinspection PhpUsageOfSilenceOperatorInspection */
-            static::assertFalse(@\substr_count('test', '', 1, 1));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            static::assertFalse(UTF8::substr_count('', '', 1, 1));
+        }
+
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertNull(@\substr_count('', 'test', 1, 1));
+            } else {
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertFalse(@\substr_count('', 'test', 1, 1));
+            }
+        }
+
+        static::assertSame(0, UTF8::substr_count('', 'test', 1, 1));
+        static::assertSame(0, UTF8::substr_count('  ', 'test', 1, 1));
+        static::assertSame(0, \substr_count('  ', 'test', 1, 1));
+
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            if (UTF8::getSupportInfo('mbstring_func_overload') === true) {
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertNull(@\substr_count('test', '', 1, 1));
+            } else {
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertFalse(@\substr_count('test', '', 1, 1));
+            }
         }
 
         static::assertFalse(UTF8::substr_count('test', '', 1, 1));
@@ -1160,7 +1229,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         // UTF-8 tests
 
-        static::assertFalse(UTF8::substr_count('', '文空'));
+        static::assertSame(0, UTF8::substr_count('', '文空'));
         static::assertFalse(UTF8::substr_count('中文空白', ''));
         static::assertFalse(UTF8::substr_count('', ''));
 

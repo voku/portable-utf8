@@ -26,7 +26,8 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
         static::assertFalse(p::mb_internal_encoding('no-no'));
         static::assertSame('UTF-8', p::mb_internal_encoding());
 
-        p::mb_encode_mimeheader('');
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        @p::mb_encode_mimeheader('');
         static::assertTrue(true, 'mb_encode_mimeheader() is bugged. Please use iconv_mime_encode() instead');
     }
 
@@ -108,15 +109,24 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
 
     public function testmbStrpos()
     {
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@\mb_strpos('abc', ''));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame(0, @\mb_strpos('abc', ''));
+        } else {
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\mb_strpos('abc', ''));
+        }
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
         static::assertFalse(@\mb_strpos('abc', 'a', -1));
         static::assertFalse(\mb_strpos('abc', 'd'));
         static::assertFalse(\mb_strpos('abc', 'a', 3));
         static::assertSame(1, \mb_strpos('한국어', '국'));
         static::assertSame(3, \mb_stripos('DÉJÀ', 'à'));
-        static::assertFalse(\mb_strrpos('한국어', ''));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame(3, \mb_strrpos('한국어', '')); // ?
+        } else {
+            static::assertFalse(\mb_strrpos('한국어', ''));
+        }
         static::assertSame(1, \mb_strrpos('한국어', '국'));
         static::assertSame(3, \mb_strripos('DÉJÀ', 'à'));
         static::assertSame(1, \mb_stripos('aςσb', 'ΣΣ'));
@@ -147,7 +157,8 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
     public function testTestmbStrposEmptyDelimiter()
     {
         try {
-            \mb_strpos('abc', '');
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            @\mb_strpos('abc', '');
             static::assertTrue(true, 'The previous line should trigger a warning (Empty delimiter)');
         } catch (\PHPUnit\Framework\Error\Warning $e) {
             p::mb_strpos('abc', '');

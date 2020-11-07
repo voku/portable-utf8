@@ -1948,9 +1948,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testChars($expected, $str)
     {
         $result = UTF8::chars($str);
-        static::assertInternalType('array', $result);
+        static::assertTrue(\is_array($result));
         foreach ($result as $char) {
-            static::assertInternalType('string', $char);
+            static::assertTrue(\is_string($char));
         }
         static::assertSame($expected, $result);
     }
@@ -1979,7 +1979,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testContains($expected, $haystack, $needle, $caseSensitive = true)
     {
         $result = UTF8::str_contains($haystack, $needle, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -1994,7 +1994,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     public function testContainsAll($expected, $haystack, $needles, $caseSensitive = true)
     {
         $result = UTF8::str_contains_all($haystack, $needles, $caseSensitive);
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $haystack);
     }
 
@@ -2071,7 +2071,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
             $result = UTF8::str_iends_with($str, $substring);
         }
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2091,7 +2091,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
             $result = UTF8::str_iends_with_any($str, $substrings);
         }
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2263,7 +2263,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::has_lowercase($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2277,28 +2277,28 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::has_whitespace($str1);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertTrue($result, 'tested: ' . $str1);
 
         // ---
 
         $result = UTF8::has_whitespace($str2);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertTrue($result, 'tested: ' . $str2);
 
         // ---
 
         $result = UTF8::has_whitespace('');
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertFalse($result);
 
         // ---
 
         $result = UTF8::has_whitespace('abc-öäü');
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertFalse($result);
     }
 
@@ -2312,7 +2312,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::has_uppercase($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2433,7 +2433,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_alpha($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2447,7 +2447,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_alphanumeric($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2461,7 +2461,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_punctuation($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2475,7 +2475,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_base64($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2489,7 +2489,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_base64($str, true);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2503,7 +2503,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_blank($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2517,7 +2517,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_hexadecimal($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2552,7 +2552,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_json($str, false);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $str);
     }
 
@@ -2566,7 +2566,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_json($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $str);
     }
 
@@ -2580,7 +2580,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_lowercase($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2594,7 +2594,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_serialized($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2608,7 +2608,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::is_uppercase($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -2683,7 +2683,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::strlen($str, $encoding);
 
-        static::assertInternalType('int', $result);
+        static::assertTrue(\is_int($result));
         static::assertSame($expected, $result);
     }
 
@@ -2697,7 +2697,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::str_to_lines($str);
 
-        static::assertInternalType('array', $result);
+        static::assertTrue(\is_array($result));
         foreach ($result as $line) {
             self::assertUtf8String($line);
         }
@@ -3247,7 +3247,7 @@ d
     {
         $result = UTF8::str_split_pattern($str, $pattern, $limit);
 
-        static::assertInternalType('array', $result);
+        static::assertTrue(\is_array($result));
         foreach ($result as $string) {
             self::assertUtf8String($string);
         }
@@ -3275,7 +3275,7 @@ d
             $result = UTF8::str_istarts_with($str, $substring);
         }
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -3295,7 +3295,7 @@ d
             $result = UTF8::str_istarts_with_any($str, $substring);
         }
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 
@@ -3365,8 +3365,13 @@ d
             static::assertSame($testResult, UTF8::css_identifier($testString));
         }
 
-        static::assertContains('auto-generated-css-', UTF8::css_identifier());
-        static::assertContains('auto-generated-css-', UTF8::css_identifier(' '));
+        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+            static::assertStringContainsString('auto-generated-css-', UTF8::css_identifier());
+            static::assertStringContainsString('auto-generated-css-', UTF8::css_identifier(' '));
+        } else {
+            static::assertContains('auto-generated-css-', UTF8::css_identifier());
+            static::assertContains('auto-generated-css-', UTF8::css_identifier(' '));
+        }
     }
 
     public function testSubStringOf()
@@ -3616,7 +3621,7 @@ d
     {
         $result = UTF8::to_boolean($str);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result, 'tested: ' . $str);
     }
 
@@ -3962,7 +3967,7 @@ d
     {
         $result = UTF8::str_contains_any($haystack, $needles, $caseSensitive);
 
-        static::assertInternalType('boolean', $result);
+        static::assertTrue(\is_bool($result));
         static::assertSame($expected, $result);
     }
 

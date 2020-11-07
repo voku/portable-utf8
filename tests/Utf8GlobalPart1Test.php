@@ -17,11 +17,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
      */
     private $oldSupportArray;
 
-    protected function setUp()
-    {
-        \error_reporting(\E_ALL ^ \E_USER_WARNING);
-    }
-
     /**
      * helper-function for test -> "testCombineSomeUtf8Functions()"
      *
@@ -384,6 +379,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             // Invalid Sequence Identifier
             "\xa0\xa1" => ['��' => ''],
             // Valid 3 Octet Sequence
+            "\xc2\x80"     => ['' => ''],
             "\xe2\x82\xa1" => ['₡' => '₡'],
             // Invalid 3 Octet Sequence (in 2nd Octet)
             "\xe2\x28\xa1" => ['�(�' => '('],
@@ -910,105 +906,211 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testFileGetContents()
     {
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
-        static::assertContains('M	𝐌	𝑀	𝑴	𝖬	𝗠	𝘔	𝙈	ℳ	𝓜	𝔐	𝕸	𝙼	𝕄', $testString);
+        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
+            static::assertStringContainsString('M	𝐌	𝑀	𝑴	𝖬	𝗠	𝘔	𝙈	ℳ	𝓜	𝔐	𝕸	𝙼	𝕄', $testString);
 
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-        static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+            static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
 
-        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-        static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
+            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+            static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
 
-        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-        $testStringUtf8 = UTF8::clean($testString, true, true, true);
-        static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testStringUtf8);
-        static::assertContains('<p>鼦</p>', $testStringUtf8);
-        static::assertContains('<li><a href="/">鼦վͼ</a></li>', $testStringUtf8);
-        static::assertContains('<B><a href="http://www.baidu.com/" >ٶ</a></B>', $testStringUtf8);
+            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+            $testStringUtf8 = UTF8::clean($testString, true, true, true);
+            static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testStringUtf8);
+            static::assertStringContainsString('<p>鼦</p>', $testStringUtf8);
+            static::assertStringContainsString('<li><a href="/">鼦վͼ</a></li>', $testStringUtf8);
+            static::assertStringContainsString('<B><a href="http://www.baidu.com/" >ٶ</a></B>', $testStringUtf8);
 
-        // ---
+            // ---
 
-        if (UTF8::mbstring_loaded()) { // only with "mbstring"
+            if (UTF8::mbstring_loaded()) { // only with "mbstring"
 
-            static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-            static::assertContains(
-                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                $testString
+                static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
+                static::assertStringContainsString(
+                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                    $testString
+                );
+
+                static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
+                static::assertStringContainsString(
+                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                    $testString
+                );
+            }
+
+            static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
+            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
+            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
+            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+            if (UTF8::mbstring_loaded()) { // only with "mbstring"
+
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
+                static::assertStringContainsString(
+                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                    $testString
+                );
+
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
+                static::assertStringContainsString(
+                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                    $testString
+                );
+
+                // text: with offset
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
+                static::assertStringContainsString('There are better connections.', $testString);
+            }
+
+            // text: with offset & max-length
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, null, 7, 11);
+            static::assertStringContainsString('Iñtërnât', $testString);
+
+            // text: with offset & max-length + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt', false, null, 7, 10, 15);
+            static::assertStringContainsString('ñtërnâtiôn', $testString);
+
+            // text: with timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, 7, null, 10);
+            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+            // text: with max-length + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, null, 10, 10);
+            static::assertStringContainsString('Hírek', $testString);
+
+            $context = \stream_context_create(
+                [
+                    'http' => [
+                        'timeout' => 10,
+                    ],
+                ]
             );
 
-            static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
-            static::assertContains(
-                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                $testString
+            // text: with max-length + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10);
+            static::assertStringContainsString('Hírek', $testString);
+
+            // text: do not convert to utf-8 + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10, false);
+            if (\method_exists(__CLASS__, 'assertMatchesRegularExpression')) {
+                static::assertMatchesRegularExpression('#H.*rek#', $testString);
+            } else {
+                static::assertRegExp('#H.*rek#', $testString);
+            }
+
+            // text: do not convert to utf-8 + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, $context, null, 10, 10, false);
+            static::assertStringContainsString('Hírek', $testString);
+        } else {
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
+            static::assertStringContainsString('M	𝐌	𝑀	𝑴	𝖬	𝗠	𝘔	𝙈	ℳ	𝓜	𝔐	𝕸	𝙼	𝕄', $testString);
+
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+            static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
+
+            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+            static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
+
+            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+            $testStringUtf8 = UTF8::clean($testString, true, true, true);
+            static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testStringUtf8);
+            static::assertStringContainsString('<p>鼦</p>', $testStringUtf8);
+            static::assertStringContainsString('<li><a href="/">鼦վͼ</a></li>', $testStringUtf8);
+            static::assertStringContainsString('<B><a href="http://www.baidu.com/" >ٶ</a></B>', $testStringUtf8);
+
+            // ---
+
+            if (UTF8::mbstring_loaded()) { // only with "mbstring"
+
+                static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
+                static::assertStringContainsString(
+                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                    $testString
+                );
+
+                static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
+                static::assertStringContainsString(
+                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                    $testString
+                );
+            }
+
+            static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
+            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
+            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
+            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+            if (UTF8::mbstring_loaded()) { // only with "mbstring"
+
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
+                static::assertStringContainsString(
+                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                    $testString
+                );
+
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
+                static::assertStringContainsString(
+                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                    $testString
+                );
+
+                // text: with offset
+                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
+                static::assertStringContainsString('There are better connections.', $testString);
+            }
+
+            // text: with offset & max-length
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, null, 7, 11);
+            static::assertStringContainsString('Iñtërnât', $testString);
+
+            // text: with offset & max-length + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt', false, null, 7, 10, 15);
+            static::assertStringContainsString('ñtërnâtiôn', $testString);
+
+            // text: with timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, 7, null, 10);
+            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+            // text: with max-length + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, null, 10, 10);
+            static::assertStringContainsString('Hírek', $testString);
+
+            $context = \stream_context_create(
+                [
+                    'http' => [
+                        'timeout' => 10,
+                    ],
+                ]
             );
+
+            // text: with max-length + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10);
+            static::assertStringContainsString('Hírek', $testString);
+
+            // text: do not convert to utf-8 + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10, false);
+            static::assertRegExp('#H.*rek#', $testString);
+
+            // text: do not convert to utf-8 + timeout
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, $context, null, 10, 10, false);
+            static::assertStringContainsString('Hírek', $testString);
         }
-
-        static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
-        static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
-        static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
-        static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-        if (UTF8::mbstring_loaded()) { // only with "mbstring"
-
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-            static::assertContains(
-                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                $testString
-            );
-
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
-            static::assertContains(
-                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                $testString
-            );
-
-            // text: with offset
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
-            static::assertContains('There are better connections.', $testString);
-        }
-
-        // text: with offset & max-length
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, null, 7, 11);
-        static::assertContains('Iñtërnât', $testString);
-
-        // text: with offset & max-length + timeout
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt', false, null, 7, 10, 15);
-        static::assertContains('ñtërnâtiôn', $testString);
-
-        // text: with timeout
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, 7, null, 10);
-        static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-        // text: with max-length + timeout
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, null, 10, 10);
-        static::assertContains('Hírek', $testString);
-
-        $context = \stream_context_create(
-            [
-                'http' => [
-                    'timeout' => 10,
-                ],
-            ]
-        );
-
-        // text: with max-length + timeout
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10);
-        static::assertContains('Hírek', $testString);
-
-        // text: do not convert to utf-8 + timeout
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10, false);
-        static::assertRegExp('#H.*rek#', $testString);
-
-        // text: do not convert to utf-8 + timeout
-        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, $context, null, 10, 10, false);
-        static::assertContains('Hírek', $testString);
     }
 
     public function testFileGetContentsBinary()
@@ -2001,6 +2103,12 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testIsUtf16()
     {
+        if (UTF8::mbstring_loaded() === false) { // only with "mbstring"
+            static::markTestSkipped('only with "mbstring"');
+
+            return;
+        }
+
         $testArray = [
             1                                                                  => false,
             -1                                                                 => false,
@@ -2072,6 +2180,12 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testIsUtf32()
     {
+        if (UTF8::mbstring_loaded() === false) { // only with "mbstring"
+            static::markTestSkipped('only with "mbstring"');
+
+            return;
+        }
+
         $testArray = [
             1                                                                  => false,
             -1                                                                 => false,
@@ -2256,7 +2370,11 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         UTF8::showSupport();
         $support = \ob_get_clean();
 
-        static::assertContains('mbstring_func_overload', $support);
+        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+            static::assertStringContainsString('mbstring_func_overload', $support);
+        } else {
+            static::assertContains('mbstring_func_overload', $support);
+        }
     }
 
     public function testJsonEncode()
@@ -2570,13 +2688,15 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         $foo = '123';
         $test = '';
 
-        /** @noinspection NonSecureParseStrUsageInspection */
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        @\parse_str($str); // <- you don't need to use the second parameter, but it is more then recommended!!!
+        if (!Bootup::is_php('8.0')) {
+            /** @noinspection NonSecureParseStrUsageInspection */
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            @\parse_str($str); // <- you don't need to use the second parameter, but it is more then recommended!!!
 
-        static::assertSame($foo, [0 => 'bar']);
-        static::assertSame($test, 'lall');
-        static::assertSame($str, 'foo[]=bar&test=lall');
+            static::assertSame($foo, [0 => 'bar']);
+            static::assertSame($test, 'lall');
+            static::assertSame($str, 'foo[]=bar&test=lall');
+        }
 
         $foo = '123';
         $test = '';
@@ -3045,18 +3165,30 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             }
 
             foreach ($tests as $before => $after) {
-                static::assertSame($after, UTF8::str_detect_encoding($before), 'value: ' . $before);
+                /** @noinspection PhpUsageOfSilenceOperatorInspection */
+                static::assertSame($after, @UTF8::str_detect_encoding($before), 'value: ' . $before);
             }
         }
 
-        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-        static::assertContains('UTF-8', UTF8::str_detect_encoding($testString));
+        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+            static::assertStringContainsString('UTF-8', UTF8::str_detect_encoding($testString));
 
-        $testString = \file_get_contents(__DIR__ . '/fixtures/latin.txt');
-        static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString));
+            $testString = \file_get_contents(__DIR__ . '/fixtures/latin.txt');
+            static::assertStringContainsString('ISO-8859-1', UTF8::str_detect_encoding($testString));
 
-        $testString = \file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
-        static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString)); // ?
+            $testString = \file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
+            static::assertStringContainsString('ISO-8859-1', UTF8::str_detect_encoding($testString)); // ?
+        } else {
+            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+            static::assertContains('UTF-8', UTF8::str_detect_encoding($testString));
+
+            $testString = \file_get_contents(__DIR__ . '/fixtures/latin.txt');
+            static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString));
+
+            $testString = \file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
+            static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString)); // ?
+        }
     }
 
     public function testStrEndsWith()
@@ -3632,12 +3764,33 @@ abc	áßç	क際👽 	क際👽
                 $this->reactivateNativeUtf8Support();
             }
 
+            static::assertSame(\stripos('', ''), UTF8::stripos('', ''));
+            static::assertSame(\stripos(' ', ''), UTF8::stripos(' ', ''));
+            static::assertSame(\stripos('', ' '), UTF8::stripos('', ' '));
+            static::assertSame(\stripos(' ', ' '), UTF8::stripos(' ', ' '));
+            static::assertSame(\stripos('DJ', ''), UTF8::stripos('DJ', ''));
+            static::assertSame(\stripos('DJ', ' '), UTF8::stripos('DJ', ' '));
+            static::assertSame(\stripos('', 'Σ'), UTF8::stripos('', 'Σ'));
+            static::assertSame(\stripos(' ', 'Σ'), UTF8::stripos(' ', 'Σ'));
+            static::assertSame(\stripos('DJ', ''), UTF8::stripos('DJ', ''));
+            static::assertSame(\stripos('DJ', ' '), UTF8::stripos('DJ', ' '));
+            static::assertSame(\stripos('', 'Σ'), UTF8::stripos('', 'Σ'));
+            static::assertSame(\stripos(' ', 'Σ'), UTF8::stripos(' ', 'Σ'));
+
             static::assertFalse(UTF8::stripos('DÉJÀ', 'ä'));
             static::assertFalse(UTF8::stripos('DÉJÀ', ' '));
-            static::assertFalse(UTF8::stripos('DÉJÀ', ''));
+            if (!\voku\helper\Bootup::is_php('8.0')) {
+                static::assertFalse(UTF8::stripos('DÉJÀ', ''));
+            } else {
+                static::assertSame(0, UTF8::stripos('DÉJÀ', ''));
+            }
             static::assertFalse(UTF8::stripos('', 'ä'));
             static::assertFalse(UTF8::stripos('', ' '));
-            static::assertFalse(UTF8::stripos('', ''));
+            if (!\voku\helper\Bootup::is_php('8.0')) {
+                static::assertFalse(UTF8::stripos('', ''));
+            } else {
+                static::assertSame(0, UTF8::stripos('', ''));
+            }
             static::assertSame(1, UTF8::stripos('aςσb', 'ΣΣ'));
             static::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
             static::assertSame(4, UTF8::stripos('öäü-κόσμε-κόσμε-κόσμε', 'Κ'));
@@ -3650,7 +3803,8 @@ abc	áßç	क際👽 	क際👽
             static::assertSame(3, UTF8::stripos('DÉJÀ', 'à'));
             static::assertSame(3, UTF8::stripos('DÉJÀ', 'à', 1));
             static::assertSame(3, UTF8::stripos('DÉJÀ', 'à', 1, 'UTF-8'));
-            static::assertFalse(UTF8::stripos('DÉJÀ', 'à', 1, 'ISO'));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@UTF8::stripos('DÉJÀ', 'à', 1, 'ISO'));
         }
     }
 
@@ -3661,11 +3815,24 @@ abc	áßç	क際👽 	क際👽
 
     public function testStrrirpos()
     {
-        static::assertFalse(\strripos('', ''));
-        static::assertFalse(\strripos(' ', ''));
+        if (!Bootup::is_php('8.0')) {
+            static::assertFalse(\strripos('', ''));
+            static::assertFalse(\strripos(' ', ''));
+        } else {
+            static::assertSame(0, \strripos('', ''));
+            static::assertSame(1, \strripos(' ', ''));
+        }
         static::assertFalse(\strripos('', ' '));
-        static::assertFalse(\strripos('DJ', ''));
+        if (!Bootup::is_php('8.0')) {
+            static::assertFalse(\strripos('DJ', ''));
+        } else {
+            static::assertSame(2, \strripos('DJ', ''));
+        }
         static::assertFalse(\strripos('', 'J'));
+
+        static::assertSame(\strripos('', ''), UTF8::strripos('', ''));
+        static::assertSame(\strripos(' ', ''), UTF8::strripos(' ', ''));
+        static::assertSame(\strripos('DJ', ''), UTF8::strripos('DJ', ''));
 
         static::assertSame(1, UTF8::strripos('aσσb', 'ΣΣ'));
         static::assertSame(1, UTF8::strripos('aςσb', 'ΣΣ'));

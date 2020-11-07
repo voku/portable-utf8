@@ -170,7 +170,7 @@ return PhpCsFixer\Config::create()
                                 ],
                                 'phpdoc_var_without_name'                       => true,
                                 'php_unit_construct'                            => true,
-                                'php_unit_dedicate_assert'                      => true,
+                                'php_unit_dedicate_assert'                      => false, // this is not work for new PhpUnit + old PhpUnit versions
                                 'php_unit_expectation'                          => true,
                                 'php_unit_fqcn_annotation'                      => true,
                                 'php_unit_internal_class'                       => true,

@@ -39,33 +39,83 @@ final class Utf8StristrTest extends \PHPUnit\Framework\TestCase
         static::assertFalse(u::strstr($str, $search));
     }
 
+    public function testPhpCompatibility()
+    {
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame(@\stristr('', ''), UTF8::stristr('', ''));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame(@\stristr(' ', ''), UTF8::stristr(' ', ''));
+        static::assertSame(\stristr('', ' '), UTF8::stristr('', ' '));
+        static::assertSame(\stristr(' ', ' '), UTF8::stristr(' ', ' '));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame(@\stristr('DJ', ''), UTF8::stristr('DJ', ''));
+        static::assertSame(\stristr('DJ', ' '), UTF8::stristr('DJ', ' '));
+        static::assertSame(\stristr('', 'Σ'), UTF8::stristr('', 'Σ'));
+        static::assertSame(\stristr(' ', 'Σ'), UTF8::stristr(' ', 'Σ'));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame(@\stristr('DJ', ''), UTF8::stristr('DJ', ''));
+        static::assertSame(\stristr('DJ', ' '), UTF8::stristr('DJ', ' '));
+        static::assertSame(\stristr('', 'Σ'), UTF8::stristr('', 'Σ'));
+        static::assertSame(\stristr(' ', 'Σ'), UTF8::stristr(' ', 'Σ'));
+    }
+
     public function testEmptySearch()
     {
-        $str = 'iñtërnâtiônàlizætiøn';
-        $search = '';
-        static::assertFalse(u::stristr($str, $search));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            $str = 'iñtërnâtiônàlizætiøn';
+            $search = '';
+            static::assertFalse(u::stristr($str, $search));
+        } else {
+            $str = 'iñtërnâtiônàlizætiøn';
+            $search = '';
+            static::assertSame($str, u::stristr($str, $search));
+        }
 
         // ---
 
-        $str = 'iñtërnâtiônàlizætiøn';
-        $search = '';
-        static::assertFalse(UTF8::stristr($str, $search));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            $str = 'iñtërnâtiônàlizætiøn';
+            $search = '';
+            static::assertFalse(UTF8::stristr($str, $search));
 
-        $str = 'iñtërnâtiônàlizætiøn';
-        $search = '';
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@\stristr($str, $search));
+            $str = 'iñtërnâtiônàlizætiøn';
+            $search = '';
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\stristr($str, $search));
+        } else {
+            $str = 'iñtërnâtiônàlizætiøn';
+            $search = '';
+            static::assertSame($str, UTF8::stristr($str, $search));
+
+            $str = 'iñtërnâtiônàlizætiøn';
+            $search = '';
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame($str, @\stristr($str, $search));
+        }
 
         // ---
 
-        $str = 'int';
-        $search = null;
-        static::assertFalse(UTF8::stristr($str, (string) $search));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            $str = 'int';
+            $search = null;
+            static::assertFalse(UTF8::stristr($str, (string) $search));
+        } else {
+            $str = 'int';
+            $search = null;
+            static::assertSame($str, UTF8::stristr($str, (string) $search));
+        }
 
-        $str = 'int';
-        $search = null;
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@\stristr($str, (string) $search));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            $str = 'int';
+            $search = null;
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@\stristr($str, (string) $search));
+        } else {
+            $str = 'int';
+            $search = null;
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame($str, @\stristr($str, (string) $search));
+        }
     }
 
     public function testEmptyStr()

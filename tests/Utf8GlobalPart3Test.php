@@ -16,11 +16,6 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
      */
     private $oldSupportArray;
 
-    protected function setUp()
-    {
-        \error_reporting(\E_ALL ^ \E_USER_WARNING);
-    }
-
     /**
      * Call protected/private method of a class.
      *
@@ -700,7 +695,7 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
     {
         $urldecode_fix_win1252_chars = UTF8::urldecode_fix_win1252_chars();
 
-        static::assertInternalType('array', $urldecode_fix_win1252_chars);
+        static::assertTrue(\is_array($urldecode_fix_win1252_chars));
         static::assertTrue(\count($urldecode_fix_win1252_chars) > 0);
     }
 
@@ -960,6 +955,25 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
             static::assertSame($after[1], UTF8::strstr($before, '@'), 'tested: ' . $before);
         }
 
+        // ---
+
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame(@\strstr('', ''), UTF8::strstr('', ''));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame(@\strstr(' ', ''), UTF8::strstr(' ', ''));
+        static::assertSame(\strstr('', ' '), UTF8::strstr('', ' '));
+        static::assertSame(\strstr(' ', ' '), UTF8::strstr(' ', ' '));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame(@\strstr('DJ', ''), UTF8::strstr('DJ', ''));
+        static::assertSame(\strstr('DJ', ' '), UTF8::strstr('DJ', ' '));
+        static::assertSame(\strstr('', 'Σ'), UTF8::strstr('', 'Σ'));
+        static::assertSame(\strstr(' ', 'Σ'), UTF8::strstr(' ', 'Σ'));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame(@\strstr('DJ', ''), UTF8::strstr('DJ', ''));
+        static::assertSame(\strstr('DJ', ' '), UTF8::strstr('DJ', ' '));
+        static::assertSame(\strstr('', 'Σ'), UTF8::strstr('', 'Σ'));
+        static::assertSame(\strstr(' ', 'Σ'), UTF8::strstr(' ', 'Σ'));
+
         // --- UTF-8
 
         static::assertSame('ABC', UTF8::strstr('ABC@中文空白.com', '@', true, 'UTF-8'));
@@ -970,11 +984,15 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
 
         // --- ISO
 
-        static::assertSame('ABC', UTF8::strstr('ABC@中文空白.com', '@', true, 'ISO'));
-        static::assertSame('@中文空白.com', UTF8::strstr('ABC@中文空白.com', '@', false, 'ISO'));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame('ABC', @UTF8::strstr('ABC@中文空白.com', '@', true, 'ISO'));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame('@中文空白.com', @UTF8::strstr('ABC@中文空白.com', '@', false, 'ISO'));
 
-        static::assertSame('ABC@', UTF8::strstr('ABC@中文空白.com', '中文空白', true, 'ISO'));
-        static::assertSame('中文空白.com', UTF8::strstr('ABC@中文空白.com', '中文空白', false, 'ISO'));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame('ABC@', @UTF8::strstr('ABC@中文空白.com', '中文空白', true, 'ISO'));
+        /** @noinspection PhpUsageOfSilenceOperatorInspection */
+        static::assertSame('中文空白.com', @UTF8::strstr('ABC@中文空白.com', '中文空白', false, 'ISO'));
 
         // --- false
 
@@ -989,7 +1007,8 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
         $tests = UTF8::json_decode(UTF8::file_get_contents(__DIR__ . '/fixtures/valid.json'), true);
 
         foreach ($tests as $test) {
-            static::assertSame($test, UTF8::encode('UTF-8', $test));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertSame($test, @UTF8::encode('UTF-8', $test));
         }
     }
 
@@ -1105,7 +1124,7 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
     {
         $whitespace = UTF8::ws();
 
-        static::assertInternalType('array', $whitespace);
+        static::assertTrue(\is_array($whitespace));
         static::assertTrue(\count($whitespace) > 0);
     }
 

@@ -15,11 +15,24 @@ final class Utf8StrriposTest extends \PHPUnit\Framework\TestCase
 {
     public function testUtf8()
     {
-        static::assertFalse(\strripos('', ''));
-        static::assertFalse(\strripos(' ', ''));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            static::assertFalse(\strripos('', ''));
+            static::assertFalse(\strripos(' ', ''));
+        } else {
+            static::assertSame(0, \strripos('', ''));
+            static::assertSame(1, \strripos(' ', ''));
+        }
         static::assertFalse(\strripos('', ' '));
-        static::assertFalse(\strripos('DJ', ''));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            static::assertFalse(\strripos('DJ', ''));
+        } else {
+            static::assertSame(2, \strripos('DJ', ''));
+        }
         static::assertFalse(\strripos('', 'J'));
+
+        static::assertSame(\strripos('', ''), UTF8::strripos('', ''));
+        static::assertSame(\strripos(' ', ''), UTF8::strripos(' ', ''));
+        static::assertSame(\strripos('DJ', ''), UTF8::strripos('DJ', ''));
 
         static::assertSame(1, UTF8::strripos('aσσb', 'ΣΣ'));
         static::assertSame(1, UTF8::strripos('aςσb', 'ΣΣ'));

@@ -23,7 +23,7 @@ final class Utf8StrlenTest extends \PHPUnit\Framework\TestCase
     {
         if (u::mbstring_loaded() === true) { // only with "mbstring"
             $str = "Iñtërnâtiôn\xE9àlizætiøn";
-            static::assertSame(20, u::strlen($str));
+            static::assertSame(20, u::strlen($str, 'UTF-8', true));
         } else {
             static::markTestSkipped('only with "mbstring"');
         }

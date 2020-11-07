@@ -20,6 +20,8 @@ final class ShimIntlTest extends \PHPUnit\Framework\TestCase
         try {
             p::grapheme_extract([], 0);
             static::fail('Warning or notice expected');
+        } catch (\TypeError $e) {
+            static::assertTrue(true, 'Regular PHP 8 throws a warning');
         } catch (\PHPUnit\Framework\Error\Warning $e) {
             static::assertTrue(true, 'Regular PHP throws a warning');
         } catch (\PHPUnit\Framework\Error\Notice $e) {
@@ -57,9 +59,9 @@ final class ShimIntlTest extends \PHPUnit\Framework\TestCase
         static::assertSame('dé', p::grapheme_extract('déjà', 2, \GRAPHEME_EXTR_MAXCHARS));
 
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@p::grapheme_extract([], 0));
+        static::assertFalse(@p::grapheme_extract('', 0));
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@\grapheme_extract([], 0));
+        static::assertFalse(@\grapheme_extract('', 0));
     }
 
     public function testGraphemeStrlen()
@@ -85,35 +87,65 @@ final class ShimIntlTest extends \PHPUnit\Framework\TestCase
         //self::assertSame( false, grapheme_substr($c,  1, -4) );
         static::assertSame('j', \grapheme_substr($c, -2, -1));
         static::assertSame('', \grapheme_substr($c, -2, -2));
-        static::assertFalse(\grapheme_substr($c, 5, 0));
-        static::assertFalse(\grapheme_substr($c, -5, 0));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame('', \grapheme_substr($c, 5, 0));
+            static::assertSame('', \grapheme_substr($c, -5, 0));
+        } else {
+            static::assertFalse(\grapheme_substr($c, 5, 0));
+            static::assertFalse(\grapheme_substr($c, -5, 0));
+        }
 
         static::assertSame('jà', p::grapheme_substr($c, 2));
         static::assertSame('jà', p::grapheme_substr($c, -2));
         static::assertSame('jà', p::grapheme_substr($c, -2, 3));
         static::assertSame('', p::grapheme_substr($c, -1, 0));
-        static::assertFalse(p::grapheme_substr($c, 1, -4));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame('', p::grapheme_substr($c, 1, -4));
+        } else {
+            static::assertFalse(p::grapheme_substr($c, 1, -4));
+        }
         static::assertSame('j', p::grapheme_substr($c, -2, -1));
         static::assertSame('', p::grapheme_substr($c, -2, -2));
-        static::assertFalse(p::grapheme_substr($c, 5, 0));
-        static::assertFalse(p::grapheme_substr($c, -5, 0));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame('', p::grapheme_substr($c, 5, 0));
+            static::assertSame('', p::grapheme_substr($c, -5, 0));
+        } else {
+            static::assertFalse(p::grapheme_substr($c, 5, 0));
+            static::assertFalse(p::grapheme_substr($c, -5, 0));
+        }
 
         static::assertSame('jà', p::grapheme_substr($c, 2, 2147483647));
         static::assertSame('jà', p::grapheme_substr($c, -2, 2147483647));
         static::assertSame('jà', p::grapheme_substr($c, -2, 3));
         static::assertSame('', p::grapheme_substr($c, -1, 0));
-        static::assertFalse(p::grapheme_substr($c, 1, -4));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame('', p::grapheme_substr($c, 1, -4));
+        } else {
+            static::assertFalse(p::grapheme_substr($c, 1, -4));
+        }
         static::assertSame('j', p::grapheme_substr($c, -2, -1));
         static::assertSame('', p::grapheme_substr($c, -2, -2));
-        static::assertFalse(p::grapheme_substr($c, 5, 0));
-        static::assertFalse(p::grapheme_substr($c, -5, 0));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame('', p::grapheme_substr($c, 5, 0));
+            static::assertSame('', p::grapheme_substr($c, -5, 0));
+        } else {
+            static::assertFalse(p::grapheme_substr($c, 5, 0));
+            static::assertFalse(p::grapheme_substr($c, -5, 0));
+        }
     }
 
     public function testGraphemeStrpos()
     {
-        static::assertFalse(\grapheme_strpos('abc', ''));
-        static::assertFalse(\grapheme_strpos('abc', 'd'));
-        static::assertFalse(\grapheme_strpos('abc', 'a', 3));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame(0, \grapheme_strpos('abc', ''));
+            static::assertFalse(\grapheme_strpos('abc', 'd'));
+            static::assertFalse(\grapheme_strpos('abc', 'a', 3));
+        } else {
+            static::assertFalse(\grapheme_strpos('abc', ''));
+            static::assertFalse(\grapheme_strpos('abc', 'd'));
+            static::assertFalse(\grapheme_strpos('abc', 'a', 3));
+        }
+
         if (\defined('HHVM_VERSION_ID') || \PHP_VERSION_ID < 50535 || (50600 <= \PHP_VERSION_ID && \PHP_VERSION_ID < 50621) || (70000 <= \PHP_VERSION_ID && \PHP_VERSION_ID < 70006)) {
             static::assertSame(0, \grapheme_strpos('abc', 'a', -1));
         } else {
@@ -124,9 +156,14 @@ final class ShimIntlTest extends \PHPUnit\Framework\TestCase
                 static::assertTrue(true);
             }
         }
+
         static::assertSame(1, \grapheme_strpos('한국어', '국'));
         static::assertSame(3, \grapheme_stripos('DÉJÀ', 'à'));
-        static::assertFalse(\grapheme_strrpos('한국어', ''));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame(3, \grapheme_strrpos('한국어', '')); // ?
+        } else {
+            static::assertFalse(\grapheme_strrpos('한국어', ''));
+        }
         static::assertSame(1, \grapheme_strrpos('한국어', '국'));
         static::assertSame(3, \grapheme_strripos('DÉJÀ', 'à'));
 
