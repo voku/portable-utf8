@@ -1,6 +1,6 @@
 # Changelog
 
-### 5.5.0 (2020-11-07)
+### 5.4.48 (2020-11-07)
 
 - fix "UTF8::chr()" handling of non "int" code points
 - fix "UTF8::html_encode()" (parameter mismatch for "mb_encode_numericentity()")

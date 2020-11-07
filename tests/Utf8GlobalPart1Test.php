@@ -3210,6 +3210,21 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         foreach ($tests as $test => $result) {
             static::assertSame($result, UTF8::str_ends_with($str, $test), 'tested: ' . $test);
         }
+
+        if (\PHP_VERSION_ID >= 80000) {
+            static::assertSame(\str_ends_with('', ''), UTF8::str_ends_with('', ''));
+            static::assertSame(str_ends_with(' ', ''), UTF8::str_ends_with(' ', ''));
+            static::assertSame(str_ends_with('', ' '), UTF8::str_ends_with('', ' '));
+            static::assertSame(str_ends_with(' ', ' '), UTF8::str_ends_with(' ', ' '));
+            static::assertSame(str_ends_with('DJ', ''), UTF8::str_ends_with('DJ', ''));
+            static::assertSame(str_ends_with('DJ', ' '), UTF8::str_ends_with('DJ', ' '));
+            static::assertSame(str_ends_with('', 'Σ'), UTF8::str_ends_with('', 'Σ'));
+            static::assertSame(str_ends_with(' ', 'Σ'), UTF8::str_ends_with(' ', 'Σ'));
+            static::assertSame(str_ends_with('DJ', ''), UTF8::str_ends_with('DJ', ''));
+            static::assertSame(str_ends_with('DJ', ' '), UTF8::str_ends_with('DJ', ' '));
+            static::assertSame(str_ends_with('', 'Σ'), UTF8::str_ends_with('', 'Σ'));
+            static::assertSame(str_ends_with(' ', 'Σ'), UTF8::str_ends_with(' ', 'Σ'));
+        }
     }
 
     public function testStrIEndsWith()
@@ -3517,6 +3532,21 @@ abc	áßç	क際👽 	क際👽
             foreach ($tests as $test => $result) {
                 static::assertSame($result, UTF8::str_starts_with($str, $test), 'tested: ' . $test);
             }
+        }
+
+        if (\PHP_VERSION_ID >= 80000) {
+            static::assertSame(str_starts_with('', ''), UTF8::str_starts_with('', ''));
+            static::assertSame(str_starts_with(' ', ''), UTF8::str_starts_with(' ', ''));
+            static::assertSame(str_starts_with('', ' '), UTF8::str_starts_with('', ' '));
+            static::assertSame(str_starts_with(' ', ' '), UTF8::str_starts_with(' ', ' '));
+            static::assertSame(str_starts_with('DJ', ''), UTF8::str_starts_with('DJ', ''));
+            static::assertSame(str_starts_with('DJ', ' '), UTF8::str_starts_with('DJ', ' '));
+            static::assertSame(str_starts_with('', 'Σ'), UTF8::str_starts_with('', 'Σ'));
+            static::assertSame(str_starts_with(' ', 'Σ'), UTF8::str_starts_with(' ', 'Σ'));
+            static::assertSame(str_starts_with('DJ', ''), UTF8::str_starts_with('DJ', ''));
+            static::assertSame(str_starts_with('DJ', ' '), UTF8::str_starts_with('DJ', ' '));
+            static::assertSame(str_starts_with('', 'Σ'), UTF8::str_starts_with('', 'Σ'));
+            static::assertSame(str_starts_with(' ', 'Σ'), UTF8::str_starts_with(' ', 'Σ'));
         }
     }
 
