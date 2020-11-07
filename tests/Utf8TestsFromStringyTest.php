@@ -1980,7 +1980,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
     {
         $result = UTF8::str_contains($haystack, $needle, $caseSensitive);
         static::assertTrue(\is_bool($result));
-        static::assertSame($expected, $result);
+        static::assertSame($expected, $result, 'tested: "' . $haystack . '" and "' . $needle . '"');
     }
 
     /**

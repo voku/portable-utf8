@@ -6016,6 +6016,10 @@ final class UTF8
         bool $case_sensitive = true
     ): bool {
         if ($case_sensitive) {
+            if (\PHP_VERSION_ID >= 80000) {
+                return \str_contains($haystack, $needle);
+            }
+
             return \strpos($haystack, $needle) !== false;
         }
 
@@ -6350,6 +6354,10 @@ final class UTF8
 
         if ($haystack === '') {
             return false;
+        }
+
+        if (\PHP_VERSION_ID >= 80000) {
+            return \str_ends_with($haystack, $needle);
         }
 
         return \substr($haystack, -\strlen($needle)) === $needle;
@@ -8566,6 +8574,10 @@ final class UTF8
 
         if ($haystack === '') {
             return false;
+        }
+
+        if (\PHP_VERSION_ID >= 80000) {
+            return \str_starts_with($haystack, $needle);
         }
 
         return \strncmp($haystack, $needle, \strlen($needle)) === 0;
