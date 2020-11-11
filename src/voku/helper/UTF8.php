@@ -3689,16 +3689,17 @@ final class UTF8
     /**
      * Returns true if the string contains only printable (non-invisible) chars, false otherwise.
      *
-     * @param string $str <p>The input string.</p>
+     * @param string $str                       <p>The input string.</p>
+     * @param bool   $ignore_control_characters [optional] <p>Ignore control characters like [LRM] or [LSEP].</p>
      *
      * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains only printable (non-invisible) chars.</p>
      */
-    public static function is_printable(string $str): bool
+    public static function is_printable(string $str, bool $ignore_control_characters = false): bool
     {
-        return self::remove_invisible_characters($str) === $str;
+        return self::remove_invisible_characters($str, false, '', $ignore_control_characters) === $str;
     }
 
     /**
@@ -5495,14 +5496,15 @@ final class UTF8
      *
      * copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
      *
-     * @param string $str         <p>The input string.</p>
-     * @param bool   $url_encoded [optional] <p>
-     *                            Try to remove url encoded control character.
-     *                            WARNING: maybe contains false-positives e.g. aa%0Baa -> aaaa.
-     *                            <br>
-     *                            Default: false
-     *                            </p>
-     * @param string $replacement [optional] <p>The replacement character.</p>
+     * @param string $str                     <p>The input string.</p>
+     * @param bool   $url_encoded             [optional] <p>
+     *                                        Try to remove url encoded control character.
+     *                                        WARNING: maybe contains false-positives e.g. aa%0Baa -> aaaa.
+     *                                        <br>
+     *                                        Default: false
+     *                                        </p>
+     * @param string $replacement             [optional] <p>The replacement character.</p>
+     * @param bool   $keep_control_characters [optional] <p>Keep control characters like [LRM] or [LSEP].</p>
      *
      * @psalm-pure
      *
@@ -5512,12 +5514,14 @@ final class UTF8
     public static function remove_invisible_characters(
         string $str,
         bool $url_encoded = false,
-        string $replacement = ''
+        string $replacement = '',
+        bool $keep_control_characters = true
     ): string {
         return ASCII::remove_invisible_characters(
             $str,
             $url_encoded,
-            $replacement
+            $replacement,
+            $keep_control_characters
         );
     }
 

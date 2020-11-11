@@ -1,5 +1,10 @@
 # Changelog
 
+### 5.4.49 (2020-11-12)
+
+- "UTF8::normalize_whitespace()" -> can now also remove "control characters" if needed
+- "UTF8::is_printable()" -> fix for non-printable control characters
+
 ### 5.4.48 (2020-11-07)
 
 - fix "UTF8::chr()" handling of non "int" code points

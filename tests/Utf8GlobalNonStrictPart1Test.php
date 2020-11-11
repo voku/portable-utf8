@@ -2932,11 +2932,16 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε' => 'äöüäöüäöü-κόσμεκόσμεäöüäöüäöü-Κόσμεκόσμεäöüäöüäöü-κόσμεκόσμεäöüäöüäöü-κόσμεκόσμε',
             '  '                                                                               => '  ',
             ''                                                                                 => '',
+            '‎'                                                                                => '‎',
+            ' '                                                                                => ' ',
         ];
 
         foreach ($testArray as $before => $after) {
             static::assertSame($after, UTF8::remove_invisible_characters($before), 'error by ' . $before);
         }
+
+        static::assertSame('%*ł€! ‎|  ', UTF8::remove_invisible_characters('%*ł€! ‎|  '));
+        static::assertSame('%*ł€! |' . "\n " . "\t", UTF8::remove_invisible_characters('%*ł€! ‎|  ' . "\t", false, '', false));
 
         static::assertSame('κόσ?με 	%00 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", false, '?'));
         static::assertSame('κόσμε 	 | tes%20öäü%20\u00edtest', UTF8::remove_invisible_characters("κόσ\0με 	%00 | tes%20öäü%20\u00edtest", true, ''));
