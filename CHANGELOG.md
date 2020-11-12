@@ -1,8 +1,12 @@
 # Changelog
 
+### 5.4.50 (2020-11-12)
+
+- "UTF8::normalize_whitespace()" -> can now also normalize "control characters" if needed
+
 ### 5.4.49 (2020-11-12)
 
-- "UTF8::normalize_whitespace()" -> can now also remove "control characters" if needed
+- "UTF8::remove_invisible_characters()" -> can now also remove "control characters" if needed
 - "UTF8::is_printable()" -> fix for non-printable control characters
 
 ### 5.4.48 (2020-11-07)
