@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.4.51 (2020-12-02)
+
+- "UTF8::rawurldecode()" -> optimize performance
+- "UTF8::urldecode()" -> optimize performance
+- "UTF8::to_boolean() -> fix phpdoc
+
 ### 5.4.50 (2020-11-12)
 
 - "UTF8::normalize_whitespace()" -> can now also normalize "control characters" if needed
