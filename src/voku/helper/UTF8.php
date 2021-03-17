@@ -1218,7 +1218,9 @@ final class UTF8
      */
     public static function decimal_to_chr($int): string
     {
-        return self::html_entity_decode('&#' . $int . ';', \ENT_QUOTES | \ENT_HTML5);
+        // We cannot use ENT_HTML5 here, as carriage return (&#13;) is not
+        // a valid numeric entity with that document type.
+        return self::html_entity_decode('&#' . $int . ';', \ENT_QUOTES | \ENT_HTML401);
     }
 
     /**
@@ -9926,7 +9928,9 @@ final class UTF8
             $str .= '&#' . (int) $strPart . ';';
         }
 
-        return self::html_entity_decode($str, \ENT_QUOTES | \ENT_HTML5);
+        // We cannot use ENT_HTML5 here, as carriage return (&#13;) is not
+        // a valid numeric entity with that document type.
+        return self::html_entity_decode($str, \ENT_QUOTES | \ENT_HTML401);
     }
 
     /**
