@@ -1218,7 +1218,9 @@ final class UTF8
      */
     public static function decimal_to_chr($int): string
     {
-        return self::html_entity_decode('&#' . $int . ';', \ENT_QUOTES | \ENT_HTML5);
+        // We cannot use html_entity_decode() here, as it will not return
+        // characters for many values < 160.
+        return mb_convert_encoding('&#' . $int . ';', 'UTF-8', 'HTML-ENTITIES');
     }
 
     /**
@@ -9926,7 +9928,9 @@ final class UTF8
             $str .= '&#' . (int) $strPart . ';';
         }
 
-        return self::html_entity_decode($str, \ENT_QUOTES | \ENT_HTML5);
+        // We cannot use html_entity_decode() here, as it will not return
+        // characters for many values < 160.
+        return mb_convert_encoding($str, 'UTF-8', 'HTML-ENTITIES');
     }
 
     /**
