@@ -25,7 +25,11 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
         static::assertContains('UTF-8', p::mb_list_encodings());
 
         static::assertTrue(p::mb_internal_encoding('utf8'));
-        static::assertFalse(p::mb_internal_encoding('no-no'));
+
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            static::assertFalse(p::mb_internal_encoding('no-no'));
+        }
+
         static::assertSame('UTF-8', p::mb_internal_encoding());
 
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
@@ -135,15 +139,24 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
         static::assertSame(1, \mb_strripos('aςσb', 'ΣΣ'));
         static::assertSame(3, \mb_strrpos('ababab', 'b', -2));
 
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@p::mb_strpos('abc', ''));
-        /** @noinspection PhpUsageOfSilenceOperatorInspection */
-        static::assertFalse(@p::mb_strpos('abc', 'a', -1));
+
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@p::mb_strpos('abc', ''));
+            /** @noinspection PhpUsageOfSilenceOperatorInspection */
+            static::assertFalse(@p::mb_strpos('abc', 'a', -1));
+        }
+
         static::assertFalse(p::mb_strpos('abc', 'd'));
         static::assertFalse(p::mb_strpos('abc', 'a', 3));
         static::assertSame(1, p::mb_strpos('한국어', '국'));
 
-        static::assertFalse(p::mb_strrpos('한국어', ''));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame(3, p::mb_strrpos('한국어', ''));
+        } else {
+            static::assertFalse(p::mb_strrpos('한국어', ''));
+        }
+
         static::assertSame(1, p::mb_strrpos('한국어', '국'));
 
         if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {

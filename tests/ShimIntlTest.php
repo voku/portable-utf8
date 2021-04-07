@@ -169,7 +169,12 @@ final class ShimIntlTest extends \PHPUnit\Framework\TestCase
         static::assertSame(1, \grapheme_strrpos('한국어', '국'));
         static::assertSame(3, \grapheme_strripos('DÉJÀ', 'à'));
 
-        static::assertFalse(p::grapheme_strpos('abc', ''));
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame(0, p::grapheme_strpos('abc', ''));
+        } else {
+            static::assertFalse(p::grapheme_strpos('abc', ''));
+        }
+
         static::assertFalse(p::grapheme_strpos('abc', 'd'));
         static::assertFalse(p::grapheme_strpos('abc', 'a', 3));
         if (\defined('HHVM_VERSION_ID') || \PHP_VERSION_ID < 50535 || (50600 <= \PHP_VERSION_ID && \PHP_VERSION_ID < 50621) || (70000 <= \PHP_VERSION_ID && \PHP_VERSION_ID < 70006)) {
@@ -182,9 +187,16 @@ final class ShimIntlTest extends \PHPUnit\Framework\TestCase
                 static::assertTrue(true);
             }
         }
+
         static::assertSame(1, p::grapheme_strpos('한국어', '국'));
         static::assertSame(3, p::grapheme_stripos('DÉJÀ', 'à'));
-        static::assertFalse(p::grapheme_strrpos('한국어', ''));
+
+        if (\voku\helper\Bootup::is_php('8.0')) {
+            static::assertSame(3, p::grapheme_strrpos('한국어', ''));
+        } else {
+            static::assertFalse(p::grapheme_strrpos('한국어', ''));
+        }
+
         static::assertSame(1, p::grapheme_strrpos('한국어', '국'));
         static::assertSame(3, p::grapheme_strripos('DÉJÀ', 'à'));
         static::assertSame(16, p::grapheme_stripos('der Straße nach Paris', 'Paris'));
