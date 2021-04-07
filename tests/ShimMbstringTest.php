@@ -17,8 +17,10 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
 {
     public function testTestmbStubs()
     {
-        static::assertFalse(p::mb_substitute_character('?'));
-        static::assertSame('none', p::mb_substitute_character());
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            static::assertFalse(p::mb_substitute_character('?'));
+            static::assertSame('none', p::mb_substitute_character());
+        }
 
         static::assertContains('UTF-8', p::mb_list_encodings());
 
@@ -240,7 +242,11 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
     {
         static::assertSame('neutral', p::mb_language());
         static::assertTrue(p::mb_language('UNI'));
-        static::assertFalse(p::mb_language('ABC'));
+
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            static::assertFalse(p::mb_language('ABC'));
+        }
+
         static::assertSame('uni', p::mb_language());
     }
 

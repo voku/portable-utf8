@@ -31,7 +31,9 @@ final class ShimIntlTest extends \PHPUnit\Framework\TestCase
 
     public function testGraphemeExtract()
     {
-        static::assertFalse(p::grapheme_extract('abc', 1, -1));
+        if (!\voku\helper\Bootup::is_php('8.0')) {
+            static::assertFalse(p::grapheme_extract('abc', 1, -1));
+        }
 
         static::assertSame(\grapheme_extract('', 0), p::grapheme_extract('', 0));
         static::assertSame(\grapheme_extract('abc', 0), p::grapheme_extract('abc', 0));
