@@ -1510,7 +1510,6 @@ final class UTF8
         }
 
         if (self::$SUPPORT['mbstring'] === true) {
-            // warning: do not use the symfony polyfill here
             $str_encoded = \mb_convert_encoding(
                 $str,
                 $to_encoding,
@@ -8462,13 +8461,11 @@ final class UTF8
         }
 
         if ($length > 1) {
-            $ret = \array_chunk($ret, $length);
-
             return \array_map(
                 static function (array $item): string {
                     return \implode('', $item);
                 },
-                $ret
+                \array_chunk($ret, $length)
             );
         }
 
@@ -12145,10 +12142,9 @@ final class UTF8
         //
 
         // split to array, and remove invalid characters
-        $array = self::str_split($str);
-
+        // &&
         // extract relevant part, and join to make sting again
-        return \implode('', \array_slice($array, $offset, $length));
+        return \implode('', \array_slice(self::str_split($str), $offset, $length));
     }
 
     /**
@@ -13013,7 +13009,7 @@ final class UTF8
     }
 
     /**
-     * @param bool|int|float|string $str
+     * @param bool|float|int|string $str
      *
      * @psalm-pure
      *
