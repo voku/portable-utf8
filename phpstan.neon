@@ -4,13 +4,8 @@ parameters:
     paths:
         - %currentWorkingDirectory%/src/
     ignoreErrors:
-        # false positives
-        - '#Function mb_str_split not found\.#'
         # ignore errors
-        - '#Result of \|\| is always true#'
         - '#no value type specified in iterable type#'
-        - '#voku\\helper\\UTF8::substr_replace\(\) should return array<string>\|string but returns array<array<string>\|string>#'
-        - '#voku\\helper\\UTF8::str_replace_first\(\) should return string but returns array<string>\|string#'
-        - '#voku\\helper\\UTF8::str_replace_last\(\) should return string but returns array<string>\|string#'
-        - '#voku\\helper\\UTF8::str_split\(\) should return array<string> but returns array<array<string>>#'
-        - '#voku\\helper\\UTF8::encode\(\) should return string but returns array<string>\|string#'
+        - '#voku\\helper\\UTF8::substr_replace\(\) should return TSubstrReplace#'
+        - '#voku\\helper\\UTF8::fix_utf8\(\) should return TFixUtf8#'
+        - '#voku\\helper\\UTF8::to_iso8859\(\) should return TToIso8859#'

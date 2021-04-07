@@ -4059,6 +4059,10 @@ d
         yield [true, true];
         yield [true, 'true'];
         yield [true, '1'];
+        yield [true, '1.0'];
+        yield [true, 1.0];
+        yield [true, '2.1'];
+        yield [true, 2.1];
         yield [true, 1];
         yield [true, 'on'];
         yield [true, 'ON'];
@@ -4068,6 +4072,8 @@ d
         yield [false, 'false'];
         yield [false, '0'];
         yield [false, 0];
+        yield [false, '0.00'];
+        yield [false, 0.00];
         yield [false, 'off'];
         yield [false, 'OFF'];
         yield [false, 'no'];
