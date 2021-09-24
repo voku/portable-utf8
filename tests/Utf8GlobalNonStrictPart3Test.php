@@ -55,6 +55,8 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
             "a\xa0\xa1-öäü" => ['a-öäü' => 'a-öäü'],
             // Valid 2 Octet Sequence
             "\xc3\xb1" => ['ñ' => 'ñ'],
+            // Valid "control-char" cancel
+            "Stube ø2,85" => ['Stube ø2,85' => 'Stube ø2,85'],
             // Invalid 2 Octet Sequence
             "\xc3\x28" => ['�(' => '('],
             // Invalid Sequence Identifier

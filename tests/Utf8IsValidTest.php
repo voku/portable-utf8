@@ -49,6 +49,12 @@ final class Utf8IsValidTest extends \PHPUnit\Framework\TestCase
         static::assertTrue(u::isUtf8($str));
     }
 
+    public function testValidCancel()
+    {
+        $str = "";
+        static::assertTrue(u::isUtf8($str));
+    }
+
     public function testInvalidTwoOctetSequence()
     {
         $str = "Iñtërnâtiônàlizætiøn \xC3\x28 Iñtërnâtiônàlizætiøn";
