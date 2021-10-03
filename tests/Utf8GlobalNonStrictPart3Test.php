@@ -921,6 +921,8 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
 
     public function testUrlencodedString()
     {
+        static::assertSame(' ', UTF8::urldecode(UTF8::urldecode('&nbsp;')));
+        static::assertSame(' ', UTF8::rawurldecode(UTF8::rawurldecode('&nbsp;')));
         static::assertSame('product/category¿\'', UTF8::urldecode('product/category%bf%27'));
         static::assertSame('product/category¿\'', UTF8::rawurldecode('product/category%bf%27'));
         static::assertSame('&#112;&#114;&#111;&#100;&#117;&#99;&#116;&#47;&#99;&#97;&#116;&#101;&#103;&#111;&#114;&#121;&#37;&#98;&#102;&#37;&#50;&#55;', UTF8::html_encode('product/category%bf%27'));

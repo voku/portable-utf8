@@ -687,7 +687,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testFilterInput()
     {
-        static::assertNull(UTF8::filter_input(\INPUT_POST, 'foo', \FILTER_SANITIZE_STRING));
+        static::assertNull(UTF8::filter_input(\INPUT_POST, 'foo', \FILTER_SANITIZE_SPECIAL_CHARS));
     }
 
     public function testFilterInputArray()

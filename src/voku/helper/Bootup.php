@@ -199,6 +199,25 @@ class Bootup
     }
 
     /**
+     * Constant FILTER_SANITIZE_STRING polyfill for PHP > 8.1
+     *
+     * INFO: https://stackoverflow.com/a/69207369/1155858
+     *
+     * @param string $str
+     *
+     * @return false|string
+     */
+    public static function filter_sanitize_string_polyfill(string $str)
+    {
+        $str = \preg_replace('/\x00|<[^>]*>?/', '', $str);
+        if ($str === null) {
+            return false;
+        }
+
+        return \str_replace(["'", '"'], ['&#39;', '&#34;'], $str);
+    }
+
+    /**
      * @return bool
      */
     public static function initAll(): bool

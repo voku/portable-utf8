@@ -1828,7 +1828,7 @@ final class UTF8
         string $from_encoding = ''
     ) {
         // init
-        $filename = \filter_var($filename, \FILTER_SANITIZE_STRING);
+        $filename = Bootup::filter_sanitize_string_polyfill($filename);
         /** @noinspection CallableParameterUseCaseInTypeContextInspection - FP */
         if ($filename === false) {
             return false;
@@ -1984,7 +1984,7 @@ final class UTF8
      *
      * EXAMPLE: <code>
      * // _GET['foo'] = 'bar';
-     * UTF8::filter_input(INPUT_GET, 'foo', FILTER_SANITIZE_STRING)); // 'bar'
+     * UTF8::filter_input(INPUT_GET, 'foo', FILTER_UNSAFE_RAW)); // 'bar'
      * </code>
      *
      * @see http://php.net/manual/en/function.filter-input.php
@@ -2040,7 +2040,7 @@ final class UTF8
      *
      * EXAMPLE: <code>
      * // _GET['foo'] = 'bar';
-     * UTF8::filter_input_array(INPUT_GET, array('foo' => 'FILTER_SANITIZE_STRING')); // array('bar')
+     * UTF8::filter_input_array(INPUT_GET, array('foo' => 'FILTER_UNSAFE_RAW')); // array('bar')
      * </code>
      *
      * @see http://php.net/manual/en/function.filter-input-array.php
