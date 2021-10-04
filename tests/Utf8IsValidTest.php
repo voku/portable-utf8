@@ -51,7 +51,7 @@ final class Utf8IsValidTest extends \PHPUnit\Framework\TestCase
 
     public function testValidCancel()
     {
-        $str = "";
+        $str = '';
         static::assertTrue(u::isUtf8($str));
     }
 
