@@ -2310,7 +2310,7 @@ final class UTF8
                 self::$BROKEN_UTF8_FIX = self::getData('utf8_fix');
             }
 
-            $BROKEN_UTF8_TO_UTF8_KEYS_CACHE = \array_keys(self::$BROKEN_UTF8_FIX);
+            $BROKEN_UTF8_TO_UTF8_KEYS_CACHE = \array_keys(self::$BROKEN_UTF8_FIX ?: []);
             $BROKEN_UTF8_TO_UTF8_VALUES_CACHE = self::$BROKEN_UTF8_FIX;
         }
 
@@ -2477,7 +2477,7 @@ final class UTF8
                 ($c >= 0x10b00 && $c <= 0x10b35) ||
                 ($c >= 0x10b40 && $c <= 0x10b55) ||
                 ($c >= 0x10b58 && $c <= 0x10b72) ||
-                ($c >= 0x10b78 && $c <= 0x10b7f)
+                ($c >= 0x10b78)
             ) {
                 return 'RTL';
             }
@@ -7645,6 +7645,7 @@ final class UTF8
      */
     public static function str_sort(string $str, bool $unique = false, bool $desc = false): string
     {
+        /** @var int[] $array */
         $array = self::codepoints($str);
 
         if ($unique) {
@@ -12517,6 +12518,7 @@ final class UTF8
             return (string) $input;
         }
 
+        /** @phpstan-ignore-next-line - "gettype": FP? */
         if ($input_type === 'object' && \method_exists($input, '__toString')) {
             return (string) $input;
         }
@@ -12959,9 +12961,6 @@ final class UTF8
         }
 
         $str_split = \explode($break, $str);
-        if ($str_split === false) {
-            return '';
-        }
 
         /** @var string[] $charsArray */
         $charsArray = [];
