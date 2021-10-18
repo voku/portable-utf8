@@ -297,7 +297,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         foreach ($tests as $before => $after) {
             static::assertSame($after, UTF8::chr_to_decimal($before));
-            static::assertSame($after, UTF8::chr_to_int(UTF8::int_to_chr(UTF8::chr_to_int($before))));
+            static::assertSame($after, UTF8::chr_to_decimal(UTF8::decimal_to_chr(UTF8::chr_to_decimal($before))));
         }
     }
 
@@ -1427,7 +1427,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
 
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($actual, UTF8::html_decode(UTF8::html_encode($actual)), 'tested:' . $actual);
+            static::assertSame($actual, UTF8::html_entity_decode(UTF8::html_encode($actual)), 'tested:' . $actual);
         }
 
         foreach ($testArray as $actual => $expected) {
@@ -1452,7 +1452,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::html_encode($actual, true), 'tested:' . $actual);
-            static::assertSame($actual, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
+            static::assertSame($actual, UTF8::html_entity_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
         }
 
         // ---
@@ -1475,7 +1475,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
+            static::assertSame($expected, UTF8::html_entity_decode(UTF8::html_encode($actual, true)), 'tested:' . $actual);
         }
 
         // --- ISO
@@ -1489,7 +1489,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $actual => $expected) {
-            static::assertNotSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO')), 'tested:' . $actual);
+            static::assertNotSame($expected, UTF8::html_entity_decode(UTF8::html_encode($actual, true, 'ISO')), 'tested:' . $actual);
         }
 
         $testArray = [
@@ -1505,7 +1505,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO'), \ENT_QUOTES), 'tested:' . $actual);
+            static::assertSame($expected, UTF8::html_entity_decode(UTF8::html_encode($actual, true, 'ISO'), \ENT_QUOTES), 'tested:' . $actual);
         }
 
         // ---
@@ -1520,7 +1520,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             ];
 
             foreach ($testArray as $actual => $expected) {
-                static::assertSame($expected, UTF8::html_decode(UTF8::html_encode($actual, true, 'ISO'), \ENT_COMPAT), 'tested:' . $actual);
+                static::assertSame($expected, UTF8::html_entity_decode(UTF8::html_encode($actual, true, 'ISO'), \ENT_COMPAT), 'tested:' . $actual);
             }
         }
     }
@@ -1815,10 +1815,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::is_ascii($actual), 'error by ' . $actual);
         }
-
-        foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::isAscii($actual), 'error by ' . $actual);
-        }
     }
 
     public function testIsBase64()
@@ -1846,7 +1842,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::isBase64($before), 'tested:  ' . $before);
+            static::assertSame($after, UTF8::is_base64($before), 'tested:  ' . $before);
         }
     }
 
@@ -1946,7 +1942,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::isBinary($before, false), 'value: ' . $before);
             static::assertSame($after, UTF8::is_binary($before, false), 'value: ' . $before);
         }
     }
@@ -2049,7 +2044,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::isBinary($before, true), 'value: ' . $before);
             static::assertSame($after, UTF8::is_binary($before, true), 'value: ' . $before);
         }
     }
@@ -2067,7 +2061,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $test => $expected) {
-            static::assertSame($expected, UTF8::isBom($test), 'tested: ' . $test);
             static::assertSame($expected, UTF8::is_bom($test), 'tested: ' . $test);
         }
     }
@@ -2105,7 +2098,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         foreach ($testArray as $testString => $testResult) {
             static::assertSame($testResult, UTF8::is_html($testString), 'tested: ' . $testString);
-            static::assertSame($testResult, UTF8::isHtml($testString), 'tested: ' . $testString);
         }
     }
 
@@ -2163,21 +2155,21 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         $counter = 0;
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::isUtf16($actual), 'error by - ' . $counter . ' :' . $actual);
+            static::assertSame($expected, UTF8::is_utf16($actual), 'error by - ' . $counter . ' :' . $actual);
             ++$counter;
         }
 
-        static::assertFalse(UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
-        static::assertFalse(UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/utf-8-bom.txt')));
+        static::assertFalse(UTF8::is_utf16(\file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
+        static::assertFalse(UTF8::is_utf16(\file_get_contents(__DIR__ . '/fixtures/utf-8-bom.txt')));
 
-        static::assertSame(2, UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt')));
-        static::assertSame(2, UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/utf-16-be-bom.txt')));
+        static::assertSame(2, UTF8::is_utf16(\file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt')));
+        static::assertSame(2, UTF8::is_utf16(\file_get_contents(__DIR__ . '/fixtures/utf-16-be-bom.txt')));
 
-        static::assertSame(1, UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt')));
-        static::assertSame(1, UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/utf-16-le-bom.txt')));
+        static::assertSame(1, UTF8::is_utf16(\file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt')));
+        static::assertSame(1, UTF8::is_utf16(\file_get_contents(__DIR__ . '/fixtures/utf-16-le-bom.txt')));
 
-        static::assertSame(1, UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom.txt')));
-        static::assertSame(2, UTF8::isUtf16(\file_get_contents(__DIR__ . '/fixtures/sample-utf-16-be-bom.txt')));
+        static::assertSame(1, UTF8::is_utf16(\file_get_contents(__DIR__ . '/fixtures/sample-utf-16-le-bom.txt')));
+        static::assertSame(2, UTF8::is_utf16(\file_get_contents(__DIR__ . '/fixtures/sample-utf-16-be-bom.txt')));
     }
 
     public function testIsUtf32()
@@ -2234,15 +2226,15 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         $counter = 0;
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::isUtf32($actual), 'error by - ' . $counter . ' :' . $actual);
+            static::assertSame($expected, UTF8::is_utf32($actual), 'error by - ' . $counter . ' :' . $actual);
             ++$counter;
         }
 
-        static::assertFalse(UTF8::isUtf32(\file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
-        static::assertFalse(UTF8::isUtf32(\file_get_contents(__DIR__ . '/fixtures/utf-8-bom.txt')));
+        static::assertFalse(UTF8::is_utf32(\file_get_contents(__DIR__ . '/fixtures/utf-8.txt')));
+        static::assertFalse(UTF8::is_utf32(\file_get_contents(__DIR__ . '/fixtures/utf-8-bom.txt')));
 
-        static::assertSame(1, UTF8::isUtf32(\file_get_contents(__DIR__ . '/fixtures/sample-utf-32-le-bom.txt')));
-        static::assertSame(2, UTF8::isUtf32(\file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt')));
+        static::assertSame(1, UTF8::is_utf32(\file_get_contents(__DIR__ . '/fixtures/sample-utf-32-le-bom.txt')));
+        static::assertSame(2, UTF8::is_utf32(\file_get_contents(__DIR__ . '/fixtures/sample-utf-32-be-bom.txt')));
     }
 
     public function testIsUtf8()
@@ -2308,7 +2300,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         $counter = 0;
         foreach ($testArray as $actual => $expected) {
-            static::assertSame($expected, UTF8::isUtf8($actual), 'error by - ' . $counter . ' :' . $actual);
+            static::assertSame($expected, UTF8::is_utf8($actual), 'error by - ' . $counter . ' :' . $actual);
             ++$counter;
         }
 
@@ -2346,7 +2338,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
             static::assertSame(
                 ($after !== false),
-                UTF8::isJson($before),
+                UTF8::is_json($before),
                 'tested: ' . $before
             );
         }
@@ -2421,8 +2413,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         static::assertSame('dEJa', UTF8::lcfirst('dEJa'));
         static::assertSame('σσΣ', UTF8::lcfirst('σσΣ'));
 
-        // alias
-        static::assertSame('deja', UTF8::lcword('Deja'));
+        static::assertSame('deja', UTF8::lcwords('Deja'));
     }
 
     public function testLtrim()
@@ -2548,7 +2539,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::normalizeEncoding($before, ''), 'tested: ' . $before);
+            static::assertSame($after, UTF8::normalize_encoding($before, ''), 'tested: ' . $before);
         }
     }
 
@@ -2885,7 +2876,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
             foreach ($testBom as $count => &$test) {
-                $test = UTF8::removeBOM($test);
+                $test = UTF8::remove_bom($test);
 
                 static::assertSame(
                     'Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα',
@@ -2894,7 +2885,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
                 );
 
                 $test = UTF8::add_bom_to_string($test);
-                static::assertTrue(UTF8::hasBom($test)); // alias
+                static::assertTrue(UTF8::string_has_bom($test));
             }
             unset($test);
         }
@@ -3066,19 +3057,19 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
                     '空',
                     '白',
                 ],
-                UTF8::split('中文空白')
+                UTF8::str_split('中文空白')
             );
             static::assertSame(
                 [
                     '中文',
                     '空白',
                 ],
-                UTF8::split('中文空白', 2)
+                UTF8::str_split('中文空白', 2)
             );
-            static::assertSame(['中文空白'], UTF8::split('中文空白', 4));
-            static::assertSame(['中文空白'], UTF8::split('中文空白', 8));
+            static::assertSame(['中文空白'], UTF8::str_split('中文空白', 4));
+            static::assertSame(['中文空白'], UTF8::str_split('中文空白', 8));
 
-            static::assertSame(['1234'], UTF8::split(1234, 8));
+            static::assertSame(['1234'], UTF8::str_split(1234, 8));
         }
     }
 
@@ -3161,7 +3152,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
 
         foreach ($tests as $test => $result) {
-            static::assertSame($result, UTF8::str_ends($str, $test), 'tested: ' . $test);
+            static::assertSame($result, UTF8::str_ends_with($str, $test), 'tested: ' . $test);
         }
     }
 
@@ -3185,7 +3176,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
 
         foreach ($tests as $test => $result) {
-            static::assertSame($result, UTF8::str_iends($str, $test), 'tested: ' . $test);
+            static::assertSame($result, UTF8::str_iends_with($str, $test), 'tested: ' . $test);
         }
     }
 
@@ -3209,7 +3200,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
 
         foreach ($tests as $test => $result) {
-            static::assertSame($result, UTF8::str_ibegins($str, $test), 'tested: ' . $test);
+            static::assertSame($result, UTF8::str_istarts_with($str, $test), 'tested: ' . $test);
         }
     }
 
@@ -3426,7 +3417,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
 
         foreach ($tests as $test => $result) {
-            static::assertSame($result, UTF8::str_begins($str, $test), 'tested: ' . $test);
+            static::assertSame($result, UTF8::str_starts_with($str, $test), 'tested: ' . $test);
         }
     }
 

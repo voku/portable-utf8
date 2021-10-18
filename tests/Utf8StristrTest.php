@@ -21,11 +21,6 @@ final class Utf8StristrTest extends \PHPUnit\Framework\TestCase
 
         static::assertSame('nâtiônàlizætiøn', u::stristr($str, $search));
         static::assertSame('iñtër', u::stristr($str, $search, true));
-
-        // --- alias
-
-        static::assertSame('nâtiônàlizætiøn', u::strichr($str, $search));
-        static::assertSame('iñtër', u::strichr($str, $search, true));
     }
 
     public function testSubstrNoMatch()

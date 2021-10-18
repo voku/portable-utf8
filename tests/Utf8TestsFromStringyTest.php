@@ -2370,7 +2370,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      */
     public function testIndexOf($expected, $str, $subStr, $offset = 0, $encoding = '')
     {
-        $result = UTF8::str_index_first($str, $subStr, $offset, $encoding);
+        $result = UTF8::strpos($str, $subStr, $offset, $encoding);
 
         static::assertSame($expected, $result);
     }
@@ -2386,7 +2386,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      */
     public function testIndexOfLast($expected, $str, $subStr, $offset = 0, $encoding = '')
     {
-        $result = UTF8::str_index_last($str, $subStr, $offset, $encoding);
+        $result = UTF8::strrpos($str, $subStr, $offset, $encoding);
 
         static::assertSame($expected, $result);
     }
@@ -2402,7 +2402,7 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      */
     public function testIindexOfLast($expected, $str, $subStr, $offset = 0, $encoding = '')
     {
-        $result = UTF8::str_iindex_last($str, $subStr, $offset, $encoding);
+        $result = UTF8::strripos($str, $subStr, $offset, $encoding);
 
         static::assertSame($expected, $result);
     }
@@ -2849,7 +2849,7 @@ d
      */
     public function testLowerCaseFirst($expected, $str, $encoding = '')
     {
-        $result = UTF8::lowerCaseFirst($str, $encoding);
+        $result = UTF8::lcfirst($str, $encoding);
 
         static::assertSame($expected, $result);
     }
@@ -3838,7 +3838,7 @@ d
     public function testUpperCaseFirst($expected, $str, $encoding = '')
     {
         /** @noinspection ArgumentEqualsDefaultValueInspection */
-        $result = UTF8::str_upper_first($str, $encoding, false, null, false);
+        $result = UTF8::ucfirst($str, $encoding, false, null, false);
 
         static::assertSame($expected, $result);
     }

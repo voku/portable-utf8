@@ -46,10 +46,6 @@ final class Utf8StrposTest extends \PHPUnit\Framework\TestCase
         $str = 'ABC 123 ABC';
         static::assertSame(\strpos($str, 'B', 3), u::strpos($str, 'B', 3));
         static::assertSame(\stripos($str, 'b', 3), u::stripos($str, 'b', 3));
-
-        $str = 'ABC 123 ABC';
-        static::assertSame(\strpos($str, 'B', 3), u::str_index_first($str, 'B', 3));
-        static::assertSame(\stripos($str, 'b', 3), u::str_iindex_first($str, 'b', 3));
     }
 
     public function testEmptyStr()

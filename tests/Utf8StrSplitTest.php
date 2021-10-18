@@ -39,7 +39,7 @@ final class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
             'n',
         ];
 
-        static::assertSame($array, u::split($str));
+        static::assertSame($array, u::str_split($str));
     }
 
     public function testSplitFiveChars()
@@ -52,7 +52,7 @@ final class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
             'ætiøn',
         ];
 
-        static::assertSame($array, u::split($str, 5));
+        static::assertSame($array, u::str_split($str, 5));
     }
 
     public function testSplitSixChars()
@@ -65,7 +65,7 @@ final class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
             'øn',
         ];
 
-        static::assertSame($array, u::split($str, 6));
+        static::assertSame($array, u::str_split($str, 6));
     }
 
     public function testSplitLong()
@@ -75,7 +75,7 @@ final class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
             'Iñtërnâtiônàlizætiøn',
         ];
 
-        static::assertSame($array, u::split($str, 40));
+        static::assertSame($array, u::str_split($str, 40));
     }
 
     public function testSplitNewline()
@@ -109,7 +109,7 @@ final class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
             "\n",
         ];
 
-        static::assertSame($array, u::split($str));
+        static::assertSame($array, u::str_split($str));
     }
 
     public function testSplitZeroLength()
@@ -117,7 +117,7 @@ final class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
         $str = 'Iñtë';
         $array = [];
 
-        static::assertSame($array, u::split($str, 0));
+        static::assertSame($array, u::str_split($str, 0));
     }
 
     public function testSplitOneLength()
@@ -130,6 +130,6 @@ final class Utf8StrSplitTest extends \PHPUnit\Framework\TestCase
             'ë',
         ];
 
-        static::assertSame($array, u::split($str, 1));
+        static::assertSame($array, u::str_split($str, 1));
     }
 }

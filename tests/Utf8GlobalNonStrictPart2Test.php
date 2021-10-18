@@ -60,7 +60,6 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
 
         if (UTF8::mbstring_loaded()) { // only with "mbstring"
             static::assertSame(71, UTF8::strlen($string));
-            static::assertSame(71, UTF8::strlen($string, 'UTF-8', false));
         }
 
         $string_test1 = \strip_tags($string);
@@ -1434,13 +1433,10 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($tests as $before => $after) {
-            static::assertSame($after, UTF8::to_utf8(UTF8::to_latin1($before)));
+            static::assertSame($after, UTF8::to_utf8(UTF8::to_iso8859($before)));
         }
 
-        // alias
-        static::assertSame($tests, UTF8::to_utf8(UTF8::toIso8859($tests)));
-        static::assertSame($tests, UTF8::to_utf8(UTF8::to_latin1($tests)));
-        static::assertSame($tests, UTF8::toUTF8(UTF8::toLatin1($tests)));
+        static::assertSame($tests, UTF8::to_utf8(UTF8::to_iso8859($tests)));
     }
 
     private function reactivateNativeUtf8Support()

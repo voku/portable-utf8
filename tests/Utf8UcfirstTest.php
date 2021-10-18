@@ -77,7 +77,6 @@ final class Utf8UcfirstTest extends \PHPUnit\Framework\TestCase
         static::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ'));
         static::assertSame('ΣσΣ', UTF8::ucfirst('σσΣ' . "\x01\x02", 'UTF8', true));
 
-        // alias
-        static::assertSame('Öäü', UTF8::ucword('öäü'));
+        static::assertSame('Öäü', UTF8::ucwords('öäü'));
     }
 }

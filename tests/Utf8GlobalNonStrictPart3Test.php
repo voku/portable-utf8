@@ -538,14 +538,6 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testUrldecodeFixWin1252Chars()
-    {
-        $urldecode_fix_win1252_chars = UTF8::urldecode_fix_win1252_chars();
-
-        static::assertTrue(\is_array($urldecode_fix_win1252_chars));
-        static::assertTrue(\count($urldecode_fix_win1252_chars) > 0);
-    }
-
     public function testUtf8DecodeEncodeUtf8()
     {
         $tests = [
@@ -708,7 +700,7 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($testArray as $before => $after) {
-            static::assertSame($after, UTF8::utf8_fix_win1252_chars($before));
+            static::assertSame($after, UTF8::fix_simple_utf8($before));
         }
     }
 
@@ -739,8 +731,6 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
 
         foreach ($tests as $before => $after) {
             static::assertSame($after[0], UTF8::strstr($before, '@', true), 'tested: ' . $before);
-            // alias
-            static::assertSame($after[0], UTF8::strchr($before, '@', true), 'tested: ' . $before);
         }
 
         // ---
@@ -958,8 +948,6 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
         static::assertSame('<', UTF8::decimal_to_chr(60));
         static::assertSame('Σ', UTF8::decimal_to_chr(931));
         static::assertSame('Σ', UTF8::decimal_to_chr('0931'));
-        // alias
-        static::assertSame('Σ', UTF8::int_to_chr('0931'));
     }
 
     public function trimProvider(): \Iterator
