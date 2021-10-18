@@ -822,7 +822,7 @@ INFO: opposite to UTF8::string()
 EXAMPLE: <code>UTF8::decimal_to_chr(931); // 'Σ'</code>
 
 **Parameters:**
-- `int|numeric-string $int`
+- `int|string $int`
 
 **Return:**
 - `string`
@@ -1047,7 +1047,7 @@ Gets a specific external variable by name and optionally filters it.
 
 EXAMPLE: <code>
 // _GET['foo'] = 'bar';
-UTF8::filter_input(INPUT_GET, 'foo', FILTER_SANITIZE_STRING)); // 'bar'
+UTF8::filter_input(INPUT_GET, 'foo', FILTER_UNSAFE_RAW)); // 'bar'
 </code>
 
 **Parameters:**
@@ -1085,7 +1085,7 @@ Gets external variables and optionally filters them.
 
 EXAMPLE: <code>
 // _GET['foo'] = 'bar';
-UTF8::filter_input_array(INPUT_GET, array('foo' => 'FILTER_SANITIZE_STRING')); // array('bar')
+UTF8::filter_input_array(INPUT_GET, array('foo' => 'FILTER_UNSAFE_RAW')); // array('bar')
 </code>
 
 **Parameters:**
@@ -1307,11 +1307,11 @@ Fix a double (or multiple) encoded UTF8 string.
 EXAMPLE: <code>UTF8::fix_utf8('FÃÂÂÂÂ©dÃÂÂÂÂ©ration'); // 'Fédération'</code>
 
 **Parameters:**
-- `string|string[] $str you can use a string or an array of strings`
+- `TFixUtf8 $str you can use a string or an array of strings`
 
 **Return:**
-- `string|string[] Will return the fixed input-"array" or
-the fixed input-"string"`
+- `string|string[] <p>Will return the fixed input-"array" or
+the fixed input-"string".</p>`
 
 --------
 
@@ -1906,9 +1906,7 @@ EXAMPLE: <code>UTF8::is_base64('4KSu4KWL4KSo4KS/4KSa'); // true</code>
 
 ## is_binary(int|string $input, bool $strict): bool
 <a href="#voku-php-readme-class-methods">↑</a>
-Check if the input is binary.
-
-.. (is look like a hack).
+Check if the input is binary... (is look like a hack).
 
 EXAMPLE: <code>UTF8::is_binary(01); // true</code>
 
@@ -2592,9 +2590,7 @@ should not be stripped. Default: null
 
 ## remove_html_breaks(string $str, string $replacement): string
 <a href="#voku-php-readme-class-methods">↑</a>
-Remove all breaks [<br> | \r\n | \r | \n | .
-
-..] from the string.
+Remove all breaks [<br> | \r\n | \r | \n | ...] from the string.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
@@ -4871,7 +4867,7 @@ EXAMPLE: <code>UTF8::substr_replace(array('Iñtërnâtiônàlizætiøn', 'foo'),
 source: https://gist.github.com/stemar/8287074
 
 **Parameters:**
-- `string|string[] $str <p>The input string or an array of stings.</p>`
+- `TSubReplace $str <p>The input string or an array of stings.</p>`
 - `string|string[] $replacement <p>The replacement string or an array of stings.</p>`
 - `int|int[] $offset <p>
 If start is positive, the replacing will begin at the start'th offset
@@ -5036,7 +5032,7 @@ Convert a string into "ISO-8859"-encoding (Latin-1).
 EXAMPLE: <code>UTF8::to_utf8(UTF8::to_iso8859('  -ABC-中文空白-  ')); // '  -ABC-????-  '</code>
 
 **Parameters:**
-- `string|string[] $str`
+- `TToIso8859 $str`
 
 **Return:**
 - `string|string[]`
@@ -5266,10 +5262,8 @@ a word that is larger than the given width, it is broken apart.
 
 ## wordwrap_per_line(string $str, int $width, string $break, bool $cut, bool $add_final_break, string|null $delimiter): string
 <a href="#voku-php-readme-class-methods">↑</a>
-Line-Wrap the string after $limit, but split the string by "$delimiter" before .
-
-..
-... so that we wrap the per line.
+Line-Wrap the string after $limit, but split the string by "$delimiter" before ...
+   ... so that we wrap the per line.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
