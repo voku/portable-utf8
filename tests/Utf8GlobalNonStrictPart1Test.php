@@ -1920,6 +1920,11 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         // ---
 
+        $txt = file_get_contents(__DIR__ . '/fixtures/non_binary.txt');
+        static::assertFalse(UTF8::is_binary($txt, true));
+
+        // ---
+
         $tests = [
             'öäü'           => false,
             ''              => false,

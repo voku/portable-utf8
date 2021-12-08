@@ -3521,10 +3521,12 @@ final class UTF8
             return true;
         }
 
-        $test_length = \strlen($input);
-        $test_null_counting = \substr_count($input, "\x0", 0, $test_length);
-        if (($test_null_counting / $test_length) > 0.25) {
-            return true;
+        if (!$strict) {
+            $test_length = \strlen($input);
+            $test_null_counting = \substr_count($input, "\x0", 0, $test_length);
+            if (($test_null_counting / $test_length) > 0.25) {
+                return true;
+            }
         }
 
         if ($strict) {
@@ -3859,6 +3861,11 @@ final class UTF8
         // init
         $str = (string) $str;
         $str_chars = [];
+
+        // fix for the "binary"-check
+        if (self::string_has_bom($str)) {
+            $check_if_string_is_binary = false;
+        }
 
         if (
             $check_if_string_is_binary
@@ -5770,7 +5777,7 @@ final class UTF8
         // 1.) check binary strings (010001001...) like UTF-16 / UTF-32 / PDF / Images / ...
         //
 
-        if (self::is_binary($str, true)) {
+        if (self::is_binary($str, self::string_has_bom($str) ? false : true)) {
             $is_utf32 = self::is_utf32($str, false);
             if ($is_utf32 === 1) {
                 return 'UTF-32LE';
