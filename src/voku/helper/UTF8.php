@@ -321,8 +321,8 @@ final class UTF8
         $return = [];
         foreach ($array as $key => &$value) {
             $key = $case === \CASE_LOWER
-                ? self::strtolower( $key, $encoding)
-                : self::strtoupper( $key, $encoding);
+                ? self::strtolower($key, $encoding)
+                : self::strtoupper($key, $encoding);
 
             $return[$key] = $value;
         }
