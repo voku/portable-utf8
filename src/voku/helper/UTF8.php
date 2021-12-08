@@ -3870,7 +3870,7 @@ final class UTF8
         $str_chars = [];
 
         // fix for the "binary"-check
-        if (self::string_has_bom($str)) {
+        if ($check_if_string_is_binary !== false && self::string_has_bom($str)) {
             $check_if_string_is_binary = false;
         }
 
@@ -3967,6 +3967,11 @@ final class UTF8
         // init
         $str = (string) $str;
         $str_chars = [];
+
+        // fix for the "binary"-check
+        if ($check_if_string_is_binary !== false && self::string_has_bom($str)) {
+            $check_if_string_is_binary = false;
+        }
 
         if (
             $check_if_string_is_binary
