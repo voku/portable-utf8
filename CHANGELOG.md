@@ -1,5 +1,53 @@
 # Changelog
 
+### 6.0.0 (2021-12-08)
+
+Removed:
+- Bootup::filterRequestInputs();
+- Bootup::filterRequestUri();
+- UTF8::GRAPHEME_CLUSTER_RX
+- UTF8::chr_to_int() (please use UTF8::chr_to_decimal())
+- UTF8::hasBom() (please use UTF8::string_has_bom())
+- UTF8::html_decode() (please use UTF8::html_entity_decode())
+- UTF8::int_to_chr() (please use UTF8::decimal_to_chr())
+- UTF8::isAscii() (please use UTF8::is_ascii())
+- UTF8::isBase64() (please use UTF8::is_base64())
+- UTF8::isBinary() (please use UTF8::is_binary())
+- UTF8::isBom() (please use UTF8::is_bom())
+- UTF8::isHtml() (please use UTF8::is_html())
+- UTF8::isJson() (please use UTF8::is_json())
+- UTF8::isUtf16() (please use UTF8::is_utf16())
+- UTF8::isUtf32() (please use UTF8::is_utf32())
+- UTF8::isUtf8() (please use UTF8::is_utf8())
+- UTF8::lcword() (please use UTF8::lcfirst())
+- UTF8::lowerCaseFirst() (please use UTF8::lcfirst())
+- UTF8::normalizeEncoding() (please use UTF8::normalize_encoding())
+- UTF8::removeBOM() (please use UTF8::remove_bom())
+- UTF8::split() (please use UTF8::str_split())
+- UTF8::str_begins() (please use UTF8::str_starts_with())
+- UTF8::str_ends() (please use UTF8::str_ends_with())
+- UTF8::str_ibegins() (please use UTF8::str_istarts_with())
+- UTF8::str_iends() (please use UTF8::str_iends_with())
+- UTF8::str_iindex_first() (please use UTF8::stripos())
+- UTF8::str_iindex_last() (please use UTF8::strripos())
+- UTF8::str_index_first() (please use UTF8::strpos())
+- UTF8::str_index_last() (please use UTF8::strrpos())
+- UTF8::str_transliterate() (please use UTF8::to_ascii())
+- UTF8::str_upper_first() (please use UTF8::ucfirst())
+- UTF8::strchr() (please use UTF8::strstr()) 
+- UTF8::strichr() (please use UTF8::stristr())
+- UTF8::toAscii() (please use UTF8::to_ascii())
+- UTF8::toIso8859() (please use UTF8::to_iso8859())
+- UTF8::toLatin1() (please use UTF8::to_iso8859())
+- UTF8::to_latin1() (please use UTF8::to_iso8859())
+- UTF8::toUTF8() (please use UTF8::to_utf8())
+- UTF8::ucword() (please use UTF8::ucfirst())
+- UTF8::urldecode_fix_win1252_chars() (please use UTF8::urldecode())
+- UTF8::utf8_fix_win1252_chars() (please use UTF8::fix_simple_utf8())
+
+Fixed:
+- "UTF8::is_binary()" -> fix for strict usage
+
 ### 5.4.51 (2020-12-02)
 
 - "UTF8::rawurldecode()" -> optimize performance
