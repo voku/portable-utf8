@@ -1813,6 +1813,11 @@ final class UTF8
         }
 
         if (\is_int($max_length)) {
+
+            if ($max_length < 0) {
+                $max_length = 0;
+            }
+
             $data = \file_get_contents($filename, $use_include_path, $context, $offset, $max_length);
         } else {
             $data = \file_get_contents($filename, $use_include_path, $context, $offset);
@@ -4112,6 +4117,10 @@ final class UTF8
             throw new \RuntimeException('ext-json: is not installed');
         }
 
+        if ($depth < 1) {
+            $depth = 1;
+        }
+
         return \json_decode($json, $assoc, $depth, $options);
     }
 
@@ -4163,6 +4172,10 @@ final class UTF8
 
         if (self::$SUPPORT['json'] === false) {
             throw new \RuntimeException('ext-json: is not installed');
+        }
+
+        if ($depth < 1) {
+            $depth = 1;
         }
 
         return \json_encode($value, $options, $depth);

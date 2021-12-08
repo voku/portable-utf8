@@ -1,6 +1,6 @@
 parameters:
     reportUnmatchedIgnoredErrors: false
-    level: max
+    level: 8
     paths:
         - %currentWorkingDirectory%/src/
     ignoreErrors:
