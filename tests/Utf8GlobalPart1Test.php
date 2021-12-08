@@ -688,11 +688,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             'Berbée'         => 'Berbée',
         ];
 
-        // TODO: Is this is a bug in PHP 8.1 or not? :/
-        if (\PHP_VERSION_ID >= 80100) {
-            unset($tests['Berbée']);
-        }
-
         foreach ($tests as $before => $after) {
             static::assertSame($after, UTF8::encode('', $before, true), 'tested: ' . $before); // do nothing
         }
@@ -733,6 +728,11 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             'abc'            => 'abc',
             'Berbée'         => 'Berbée',
         ];
+
+        // TODO: Is this is a bug in PHP 8.1 or not? :/
+        if (\PHP_VERSION_ID >= 80100) {
+            unset($tests['Berbée']);
+        }
 
         foreach ($tests as $before => $after) {
             static::assertSame($after, UTF8::filter(UTF8::encode('ISo88591', $before, true)), 'tested: ' . $before); // ISO-8859-1
