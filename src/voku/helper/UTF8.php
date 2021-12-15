@@ -1813,7 +1813,6 @@ final class UTF8
         }
 
         if (\is_int($max_length)) {
-
             if ($max_length < 0) {
                 $max_length = 0;
             }
