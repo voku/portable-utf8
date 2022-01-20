@@ -81,7 +81,7 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public static function testDeletions()
+    public function testDeletions()
     {
         $testCases = [
             [

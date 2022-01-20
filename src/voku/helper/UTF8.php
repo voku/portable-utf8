@@ -13166,14 +13166,14 @@ final class UTF8
     {
         // find all utf-8 characters
         $matches = [];
-        if (! preg_match_all('/[\xC0-\xF7][\x80-\xBF]+/', $str, $matches)) {
+        if (!\preg_match_all('/[\xC0-\xF7][\x80-\xBF]+/', $str, $matches)) {
             return; // plain ascii string
         }
 
         // update the encoding map with the characters not already met
         $mapCount = \count($map);
         foreach ($matches[0] as $mbc) {
-            if (! isset($map[$mbc])) {
+            if (!isset($map[$mbc])) {
                 $map[$mbc] = \chr(128 + $mapCount);
                 $mapCount++;
             }
