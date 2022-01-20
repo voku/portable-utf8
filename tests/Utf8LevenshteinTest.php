@@ -145,10 +145,10 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
 
         $longString = \str_repeat('ё', 256);
 
-        $this->expectWarning();
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         UTF8::levenshtein($longString, 'ё');
 
-        $this->expectWarning();
+        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
         UTF8::levenshtein('ё', $longString);
     }
 }
