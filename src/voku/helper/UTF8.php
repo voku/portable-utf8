@@ -13155,6 +13155,8 @@ final class UTF8
      * Thus it supports up to 128 different multibyte code points max over
      * the whole set of strings sharing this encoding.
      *
+     * Source: https://github.com/KEINOS/mb_levenshtein
+     *
      * @param  string $str  UTF-8 string to be converted to extended ASCII.
      * @param  array  $map  Reference of the map.
      *
