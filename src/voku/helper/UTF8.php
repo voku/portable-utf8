@@ -4318,7 +4318,7 @@ final class UTF8
     }
 
     /**
-     * Levenshtein function with UTF-8 support.
+     * Calculate Levenshtein distance between two strings.
      *
      * For better performance, in a real application with a single input string
      * matched against many strings from a database, you will probably want to pre-
