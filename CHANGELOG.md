@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.2 (2022-01-24)
+
+- update vendor (ASCII) lib
+
 ### 6.0.1 (2022-01-24)
 
 - add "UTF8::levenshtein()" | thanks @NewEXE
