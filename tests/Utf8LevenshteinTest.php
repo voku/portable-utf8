@@ -39,7 +39,8 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
         foreach ($testCases as $case) {
             static::assertSame(
                 $case['expectedDistance'],
-                UTF8::levenshtein($case['str1'], $case['str2'], $case['insertionCost'])
+                UTF8::levenshtein($case['str1'], $case['str2'], $case['insertionCost']),
+                'tested: ' . print_r($case, true)
             );
         }
     }
@@ -76,7 +77,8 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
         foreach ($testCases as $case) {
             static::assertSame(
                 $case['expectedDistance'],
-                UTF8::levenshtein($case['str1'], $case['str2'], 1, $case['replacementCost'])
+                UTF8::levenshtein($case['str1'], $case['str2'], 1, $case['replacementCost']),
+                'tested: ' . print_r($case, true)
             );
         }
     }
@@ -119,7 +121,8 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
         foreach ($testCases as $case) {
             static::assertSame(
                 $case['expectedDistance'],
-                UTF8::levenshtein($case['str1'], $case['str2'], 1, 1, $case['deletionCost'])
+                UTF8::levenshtein($case['str1'], $case['str2'], 1, 1, $case['deletionCost']),
+                'tested: ' . print_r($case, true)
             );
         }
     }
@@ -145,10 +148,12 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
 
         $longString = \str_repeat('ё', 256);
 
-        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
-        UTF8::levenshtein($longString, 'ё');
+        if (\PHP_VERSION_ID < 80000) {
+            $this->expectException(\PHPUnit\Framework\Error\Warning::class);
+            UTF8::levenshtein($longString, 'ё');
 
-        $this->expectException(\PHPUnit\Framework\Error\Warning::class);
-        UTF8::levenshtein('ё', $longString);
+            $this->expectException(\PHPUnit\Framework\Error\Warning::class);
+            UTF8::levenshtein('ё', $longString);
+        }
     }
 }

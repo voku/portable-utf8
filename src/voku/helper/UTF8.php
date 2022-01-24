@@ -4335,13 +4335,16 @@ final class UTF8
      *
      * @return int
      */
-    public static function levenshtein(string $str1, string $str2, int $insertionCost = 1, int $replacementCost = 1, int $deletionCost = 1)
-    {
-        $charMap = [];
-        self::convertMbAscii($str1, $charMap);
-        self::convertMbAscii($str2, $charMap);
+    public static function levenshtein(
+        string $str1,
+        string $str2,
+        int $insertionCost = 1,
+        int $replacementCost = 1,
+        int $deletionCost = 1
+    ): int {
+        $result = ASCII::to_ascii_remap($str1, $str2);
 
-        return \levenshtein($str1, $str2, $insertionCost, $replacementCost, $deletionCost);
+        return \levenshtein($result[0], $result[1], $insertionCost, $replacementCost, $deletionCost);
     }
 
     /**
@@ -13142,45 +13145,6 @@ final class UTF8
     public static function ws(): array
     {
         return self::$WHITESPACE;
-    }
-
-    /**
-     * Convert an UTF-8 encoded string to a single-byte string suitable for
-     * functions such as levenshtein.
-     *
-     * The function simply uses (and updates) a tailored dynamic encoding
-     * (in/out map parameter) where non-ascii characters are remapped to
-     * the range [128-255] in order of appearance.
-     *
-     * Thus it supports up to 128 different multibyte code points max over
-     * the whole set of strings sharing this encoding.
-     *
-     * Source: https://github.com/KEINOS/mb_levenshtein
-     *
-     * @param  string $str  UTF-8 string to be converted to extended ASCII.
-     * @param  array  $map  Reference of the map.
-     *
-     * @return void
-     */
-    private static function convertMbAscii(string &$str, array &$map)
-    {
-        // find all utf-8 characters
-        $matches = [];
-        if (!\preg_match_all('/[\xC0-\xF7][\x80-\xBF]+/', $str, $matches)) {
-            return; // plain ascii string
-        }
-
-        // update the encoding map with the characters not already met
-        $mapCount = \count($map);
-        foreach ($matches[0] as $mbc) {
-            if (!isset($map[$mbc])) {
-                $map[$mbc] = \chr(128 + $mapCount);
-                $mapCount++;
-            }
-        }
-
-        // finally remap non-ascii characters
-        $str = \strtr($str, $map);
     }
 
     /**
