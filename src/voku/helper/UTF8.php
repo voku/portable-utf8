@@ -4318,6 +4318,33 @@ final class UTF8
     }
 
     /**
+     * Calculate Levenshtein distance between two strings.
+     *
+     * For better performance, in a real application with a single input string
+     * matched against many strings from a database, you will probably want to pre-
+     * encode the input only once and use \levenshtein().
+     *
+     * Source: https://github.com/KEINOS/mb_levenshtein
+     * @see https://www.php.net/manual/en/function.levenshtein
+     *
+     * @param  string  $str1            <p>One of the strings being evaluated for Levenshtein distance.</p>
+     * @param  string  $str2            <p>One of the strings being evaluated for Levenshtein distance.</p>
+     * @param  integer $insertionCost   [optional] <p>Defines the cost of insertion.</p>
+     * @param  integer $replacementCost [optional] <p>Defines the cost of replacement.</p>
+     * @param  integer $deletionCost    [optional] <p>Defines the cost of deletion.</p>
+     *
+     * @return int
+     */
+    public static function levenshtein(string $str1, string $str2, int $insertionCost = 1, int $replacementCost = 1, int $deletionCost = 1)
+    {
+        $charMap = [];
+        self::convertMbAscii($str1, $charMap);
+        self::convertMbAscii($str2, $charMap);
+
+        return \levenshtein($str1, $str2, $insertionCost, $replacementCost, $deletionCost);
+    }
+
+    /**
      * Strip whitespace or other characters from the beginning of a UTF-8 string.
      *
      * EXAMPLE: <code>UTF8::ltrim('　中文空白　 '); // '中文空白　 '</code>
@@ -13115,6 +13142,45 @@ final class UTF8
     public static function ws(): array
     {
         return self::$WHITESPACE;
+    }
+
+    /**
+     * Convert an UTF-8 encoded string to a single-byte string suitable for
+     * functions such as levenshtein.
+     *
+     * The function simply uses (and updates) a tailored dynamic encoding
+     * (in/out map parameter) where non-ascii characters are remapped to
+     * the range [128-255] in order of appearance.
+     *
+     * Thus it supports up to 128 different multibyte code points max over
+     * the whole set of strings sharing this encoding.
+     *
+     * Source: https://github.com/KEINOS/mb_levenshtein
+     *
+     * @param  string $str  UTF-8 string to be converted to extended ASCII.
+     * @param  array  $map  Reference of the map.
+     *
+     * @return void
+     */
+    private static function convertMbAscii(string &$str, array &$map)
+    {
+        // find all utf-8 characters
+        $matches = [];
+        if (!\preg_match_all('/[\xC0-\xF7][\x80-\xBF]+/', $str, $matches)) {
+            return; // plain ascii string
+        }
+
+        // update the encoding map with the characters not already met
+        $mapCount = \count($map);
+        foreach ($matches[0] as $mbc) {
+            if (!isset($map[$mbc])) {
+                $map[$mbc] = \chr(128 + $mapCount);
+                $mapCount++;
+            }
+        }
+
+        // finally remap non-ascii characters
+        $str = \strtr($str, $map);
     }
 
     /**
