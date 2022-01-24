@@ -16,6 +16,6 @@
   "author": "Lars Moelleken <lars@moelleken.org> (https://moelleken.org)",
   "license": "MIT",
   "devDependencies": {
-    "gitbook-cli": "^2.1.0"
+    "gitbook-cli": "2.3.2"
   }
 }
