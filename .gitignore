@@ -1,4 +1,4 @@
-# composer
+# php (composer)
 vendor
 composer.lock
 
@@ -6,15 +6,8 @@ composer.lock
 build/logs/
 .phpunit.result.cache
 
-# gitbook
-_book/
-
-# phpcs fixer
+# php (phpcs fixer)
 .php_cs.cache
-
-# node
-node_modules/
-npm-debug.log
 
 # PhpStorm
 .idea/

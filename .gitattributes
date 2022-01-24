@@ -3,7 +3,6 @@
 /build export-ignore
 /doc export-ignore
 /tests export-ignore
-/.bookignore export-ignore
 /.editorconfig export-ignore
 /.php_cs.cache export-ignore
 /.scrutinizer.yml export-ignore
@@ -14,7 +13,6 @@
 /.travis.yml export-ignore
 /.whitesource export-ignore
 /appveyor.yml export-ignore
-/book.json export-ignore
 /circle.yml export-ignore
 /phpstan.neon export-ignore
 /phpcs.php_cs export-ignore
