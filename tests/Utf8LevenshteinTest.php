@@ -137,6 +137,7 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
         static::assertSame(0, UTF8::levenshtein('', '', 1));
         static::assertSame(0, UTF8::levenshtein('', '', 1, 2));
         static::assertSame(0, UTF8::levenshtein('', '', 1, 2, 3));
+        static::assertSame(0, UTF8::levenshtein('', '', 3, 2, 1));
     }
 
     public function testLargeStrings()
@@ -155,5 +156,10 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
             $this->expectException(\PHPUnit\Framework\Error\Warning::class);
             UTF8::levenshtein('ё', $longString);
         }
+    }
+
+    public function testEqualStrings()
+    {
+        static::assertSame(0, UTF8::levenshtein('厕所在哪里', '厕所在哪里'));
     }
 }
