@@ -160,6 +160,8 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
 
     public function testEqualStrings()
     {
-        static::assertSame(0, UTF8::levenshtein('厕所在哪里', '厕所在哪里'));
+        $s = '厕所在哪里';
+        static::assertSame(0, UTF8::levenshtein($s, $s));
+        static::assertSame(0, \levenshtein($s, $s));
     }
 }
