@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
                         ->setUsingCache(false)
                         ->setRiskyAllowed(true)
                         ->setRules(
@@ -72,13 +72,11 @@ return PhpCsFixer\Config::create()
                                 */
                                 'logical_operators'                             => true,
                                 'lowercase_cast'                                => true,
-                                'lowercase_constants'                           => true,
                                 'lowercase_keywords'                            => true,
                                 'lowercase_static_reference'                    => true,
                                 'magic_constant_casing'                         => true,
                                 'magic_method_casing'                           => true,
                                 'method_argument_space'                         => [
-                                    'ensure_fully_multiline'           => true,
                                     'keep_multiple_spaces_after_comma' => false,
                                 ],
                                 'method_chaining_indentation'                   => true,
@@ -87,9 +85,10 @@ return PhpCsFixer\Config::create()
                                 'multiline_whitespace_before_semicolons'        => [
                                     'strategy' => 'no_multi_line',
                                 ],
+
                                 'native_constant_invocation'                    => true,
                                 'native_function_casing'                        => true,
-                                'native_function_invocation'                    => true,
+                                'native_function_invocation'                    => false,
                                 'new_with_braces'                               => true,
                                 'no_alias_functions'                            => true,
                                 'no_alternative_syntax'                         => true,
@@ -113,7 +112,6 @@ return PhpCsFixer\Config::create()
                                 'no_null_property_initialization'               => true,
                                 'no_php4_constructor'                           => true,
                                 'no_short_bool_cast'                            => true,
-                                'no_short_echo_tag'                             => true,
                                 'no_singleline_whitespace_before_semicolons'    => true,
                                 'no_spaces_after_function_name'                 => true,
                                 'no_spaces_around_offset'                       => true,
@@ -147,7 +145,6 @@ return PhpCsFixer\Config::create()
                                 'phpdoc_align'                                  => true,
                                 'phpdoc_annotation_without_dot'                 => true,
                                 'phpdoc_indent'                                 => true,
-                                'phpdoc_inline_tag'                             => true,
                                 'phpdoc_no_access'                              => true,
                                 'phpdoc_no_alias_tag'                           => true,
                                 'phpdoc_no_empty_return'                        => false, // allow void
@@ -178,14 +175,12 @@ return PhpCsFixer\Config::create()
                                 'php_unit_mock'                                 => true,
                                 'php_unit_namespaced'                           => true,
                                 'php_unit_no_expectation_annotation'            => true,
-                                'php_unit_ordered_covers'                       => true,
                                 'php_unit_set_up_tear_down_visibility'          => true,
                                 'php_unit_strict'                               => true,
                                 'php_unit_test_annotation'                      => true,
                                 'php_unit_test_case_static_method_calls'        => true,
                                 'php_unit_test_class_requires_covers'           => false,
                                 'pow_to_exponentiation'                         => true,
-                                'pre_increment'                                 => true,
                                 'protected_to_private'                          => true,
                                 'return_assignment'                             => true,
                                 'return_type_declaration'                       => true,
@@ -193,7 +188,6 @@ return PhpCsFixer\Config::create()
                                 'semicolon_after_instruction'                   => true,
                                 'set_type_to_cast'                              => true,
                                 'short_scalar_cast'                             => true,
-                                'silenced_deprecation_error'                    => false,
                                 'simplified_null_return'                        => false, // maybe better for readability, so keep it ...
                                 'single_blank_line_at_eof'                      => true,
                                 'single_class_element_per_statement'            => true,
@@ -214,7 +208,6 @@ return PhpCsFixer\Config::create()
                                 'switch_case_space'                             => true,
                                 'ternary_operator_spaces'                       => true,
                                 'ternary_to_null_coalescing'                    => true,
-                                'trailing_comma_in_multiline_array'             => true,
                                 'trim_array_spaces'                             => true,
                                 'unary_operator_spaces'                         => true,
                                 'visibility_required'                           => true,
@@ -231,7 +224,7 @@ return PhpCsFixer\Config::create()
                         ->setLineEnding("\n")
                         ->setFinder(
                             PhpCsFixer\Finder::create()
-                                             ->in(['src/', 'tests/'])
+                                             ->in(['src/voku/helper/'])
                                              ->name('*.php')
                                              ->ignoreDotFiles(true)
                                              ->ignoreVCS(true)
