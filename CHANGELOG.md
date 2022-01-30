@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.3 (2022-01-30)
+
+- optimize phpdocs
+
 ### 6.0.2 (2022-01-24)
 
 - update vendor (ASCII) lib
