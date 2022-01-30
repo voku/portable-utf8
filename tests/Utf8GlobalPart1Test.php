@@ -2192,7 +2192,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         static::assertSame(2, UTF8::is_utf16(\file_get_contents(__DIR__ . '/fixtures/sample-utf-16-be-bom.txt')));
     }
 
-    public function testis_utf32()
+    public function testIsUtf32()
     {
         if (UTF8::mbstring_loaded() === false) { // only with "mbstring"
             static::markTestSkipped('only with "mbstring"');

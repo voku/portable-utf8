@@ -17,21 +17,21 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
     {
         $testCases = [
             [
-                'str1' => 'Düsseldorf',
-                'str2' => 'Düsseldorfü',
-                'insertionCost' => 1,
+                'str1'             => 'Düsseldorf',
+                'str2'             => 'Düsseldorfü',
+                'insertionCost'    => 1,
                 'expectedDistance' => 1,
             ],
             [
-                'str1' => 'SPÓLDZIELNIA',
-                'str2' => 'SPÓLDZIELNIÓA',
-                'insertionCost' => 1,
+                'str1'             => 'SPÓLDZIELNIA',
+                'str2'             => 'SPÓLDZIELNIÓA',
+                'insertionCost'    => 1,
                 'expectedDistance' => 1,
             ],
             [
-                'str1' => 'SPÓLDZIELNIA',
-                'str2' => 'SPÓLDZIELNIÓA',
-                'insertionCost' => 2,
+                'str1'             => 'SPÓLDZIELNIA',
+                'str2'             => 'SPÓLDZIELNIÓA',
+                'insertionCost'    => 2,
                 'expectedDistance' => 2,
             ],
         ];
@@ -49,27 +49,27 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
     {
         $testCases = [
             [
-                'str1' => 'Düsseldorf',
-                'str2' => 'Dusseldorf',
-                'replacementCost' => 1,
+                'str1'             => 'Düsseldorf',
+                'str2'             => 'Dusseldorf',
+                'replacementCost'  => 1,
                 'expectedDistance' => 1,
             ],
             [
-                'str1' => 'notre',
-                'str2' => 'nôtre',
-                'replacementCost' => 1,
+                'str1'             => 'notre',
+                'str2'             => 'nôtre',
+                'replacementCost'  => 1,
                 'expectedDistance' => 1,
             ],
             [
-                'str1' => 'notre',
-                'str2' => 'nôtre',
-                'replacementCost' => 2,
+                'str1'             => 'notre',
+                'str2'             => 'nôtre',
+                'replacementCost'  => 2,
                 'expectedDistance' => 2,
             ],
             [
-                'str1' => 'Ё-маё',
-                'str2' => 'Е-мае',
-                'replacementCost' => 1,
+                'str1'             => 'Ё-маё',
+                'str2'             => 'Е-мае',
+                'replacementCost'  => 1,
                 'expectedDistance' => 2,
             ],
         ];
@@ -87,33 +87,33 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
     {
         $testCases = [
             [
-                'str1' => 'notre',
-                'str2' => 'ntre',
-                'deletionCost' => 1,
+                'str1'             => 'notre',
+                'str2'             => 'ntre',
+                'deletionCost'     => 1,
                 'expectedDistance' => 1,
             ],
             [
-                'str1' => 'notre',
-                'str2' => 'ntre',
-                'deletionCost' => 2,
+                'str1'             => 'notre',
+                'str2'             => 'ntre',
+                'deletionCost'     => 2,
                 'expectedDistance' => 2,
             ],
             [
-                'str1' => 'Düsseldorf',
-                'str2' => 'Düsseldo',
-                'deletionCost' => 1,
+                'str1'             => 'Düsseldorf',
+                'str2'             => 'Düsseldo',
+                'deletionCost'     => 1,
                 'expectedDistance' => 2,
             ],
             [
-                'str1' => 'Düsseldorf',
-                'str2' => '',
-                'deletionCost' => 1,
+                'str1'             => 'Düsseldorf',
+                'str2'             => '',
+                'deletionCost'     => 1,
                 'expectedDistance' => 10,
             ],
             [
-                'str1' => 'Ё-маё',
-                'str2' => '-маё',
-                'deletionCost' => 1,
+                'str1'             => 'Ё-маё',
+                'str2'             => '-маё',
+                'deletionCost'     => 1,
                 'expectedDistance' => 1,
             ],
         ];

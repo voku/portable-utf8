@@ -1064,7 +1064,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(1, \substr_compare('abcde', 'bc', 1, 3));
         static::assertSame(1, UTF8::substr_compare('abcde', 'bc', 1, 3));
 
-        if (stripos(PHP_OS, 'WIN') === 0) {
+        if (stripos(\PHP_OS, 'WIN') === 0) {
             static::assertSame(-1, \substr_compare('abcde', 'cd', 1, 2));
             static::assertSame(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
         } else {

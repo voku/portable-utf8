@@ -145,7 +145,6 @@ final class ShimMbstringTest extends \PHPUnit\Framework\TestCase
         static::assertSame(1, \mb_strripos('aςσb', 'ΣΣ'));
         static::assertSame(3, \mb_strrpos('ababab', 'b', -2));
 
-
         if (!\voku\helper\Bootup::is_php('8.0')) {
             /** @noinspection PhpUsageOfSilenceOperatorInspection */
             static::assertFalse(@p::mb_strpos('abc', ''));

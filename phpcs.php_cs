@@ -224,7 +224,7 @@ return (new PhpCsFixer\Config())
                         ->setLineEnding("\n")
                         ->setFinder(
                             PhpCsFixer\Finder::create()
-                                             ->in(['src/voku/helper/'])
+                                             ->in(['src/', 'tests/'])
                                              ->name('*.php')
                                              ->ignoreDotFiles(true)
                                              ->ignoreVCS(true)
