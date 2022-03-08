@@ -4351,6 +4351,8 @@ final class UTF8
      * @param int    $deletionCost    [optional] <p>Defines the cost of deletion.</p>
      *
      * @return int
+     *             <p>Returns the Levenshtein-Distance between the two argument strings or -1,<br>
+     *             if one of the argument strings is longer than the limit of 255 characters.</p>
      */
     public static function levenshtein(
         string $str1,
@@ -4359,6 +4361,10 @@ final class UTF8
         int $replacementCost = 1,
         int $deletionCost = 1
     ): int {
+        if ($str1 === $str2) {
+            return 0;
+        }
+
         $result = ASCII::to_ascii_remap($str1, $str2);
 
         return \levenshtein($result[0], $result[1], $insertionCost, $replacementCost, $deletionCost);
