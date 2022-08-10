@@ -2205,7 +2205,7 @@ is deeper than the recursion limit.</p>`
 (PHP 5 &gt;= 5.2.0, PECL json &gt;= 1.2.0)<br/>
 Returns the JSON representation of a value.
 
-EXAMPLE: <code>UTF8::json_enocde(array(1, '¥', 'ä')); // '[1,"\u00a5","\u00e4"]'</code>
+EXAMPLE: <code>UTF8::json_encode(array(1, '¥', 'ä')); // '[1,"\u00a5","\u00e4"]'</code>
 
 **Parameters:**
 - `mixed $value <p>
