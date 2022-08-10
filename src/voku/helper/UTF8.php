@@ -11395,7 +11395,11 @@ final class UTF8
 
         // otherwise we need the string-length
         $str_length = 0;
-        if ($offset || $length === null) {
+        if (
+            $offset
+            ||
+            $length === null /* @phpstan-ignore-line | can be NULL here?! */
+        ) {
             $str_length = self::strlen($str, $encoding);
         }
 
