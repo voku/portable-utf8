@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.5 (2022-08-10)
+
+- PHP 8.2: Fix ${var} string interpolation deprecation | thanks @Ayesh
+
 ### 6.0.4 (2022-03-08)
 
 - "To people of Russia": There is a war in Ukraine right now. The forces of the Russian Federation are attacking civilians.
