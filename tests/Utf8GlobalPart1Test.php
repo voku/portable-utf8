@@ -329,6 +329,12 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         $expected = "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε";
 
         static::assertSame($expected, $result);
+
+        // ---
+
+        $result = UTF8::chunk_split('', 3);
+
+        static::assertSame('', $result);
     }
 
     public function testNormalizeLineEnding()
@@ -589,6 +595,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
         // --- U+xxxx format
 
+        static::assertSame([0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'], UTF8::codepoints(['κ', 'ö', 'ñ'], true));
         static::assertSame([0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'], UTF8::codepoints('κöñ', true));
         static::assertSame(
             [0 => 'U+03ba', 1 => 'U+00f6', 2 => 'U+00f1'],

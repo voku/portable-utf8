@@ -673,6 +673,8 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         foreach ($testArray as $actual => $expected) {
             static::assertSame($expected, UTF8::count_chars($actual, true), 'error by ' . $actual);
         }
+
+        static::assertSame([], UTF8::count_chars('', true));
     }
 
     public function testDecimalToChr()
