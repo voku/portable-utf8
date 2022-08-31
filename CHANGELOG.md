@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.7 (2022-09-01)
+
+- optimize phpdocs (use Conditional Return Types)
+
 ### 6.0.6 (2022-08-31)
 
 - optimize phpdocs
