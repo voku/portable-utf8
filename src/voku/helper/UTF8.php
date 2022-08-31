@@ -1443,6 +1443,7 @@ final class UTF8
         }
 
         if ($from_encoding === 'HTML-ENTITIES') {
+            /* @phpstan-ignore-next-line | $str has manybe changed */
             $str = self::html_entity_decode($str, \ENT_COMPAT);
             $from_encoding = '';
         }
@@ -3012,6 +3013,10 @@ final class UTF8
      *
      * @return string
      *                <p>The decoded string.</p>
+     *
+     * @template T as string
+     * @phpstan-param T $str
+     * @phpstan-return (T is non-empty-string ? non-empty-string : string)
      */
     public static function html_entity_decode(
         string $str,
