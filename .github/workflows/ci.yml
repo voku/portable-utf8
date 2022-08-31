@@ -17,8 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         php: [
-            7.0,
-            7.1,
             7.2,
             7.3,
             7.4,
@@ -54,10 +52,6 @@ jobs:
         run: |
           if [[ "${{ matrix.composer }}" == "lowest" ]]; then
             composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable
-          elif [[ "${{ matrix.php }}" == "7.0" ]]; then
-            composer update --prefer-dist --no-interaction --ignore-platform-reqs
-          elif [[ "${{ matrix.php }}" == "7.1" ]]; then
-            composer update --prefer-dist --no-interaction --ignore-platform-reqs
           elif [[ "${{ matrix.composer }}" == "basic" ]]; then
             composer update --prefer-dist --no-interaction
           fi;
