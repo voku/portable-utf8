@@ -1,5 +1,12 @@
 # Changelog
 
+### 6.0.6 (2022-08-31)
+
+- optimize phpdocs
+- optimize "from"-encoding in "UTF8::encode()"
+- fix error handling in "UTF8::str_split()" for PHP >= 8.0
+- fix error handling in "UTF8::str_capitalize_name_helper()" for PHP >= 8.0
+
 ### 6.0.5 (2022-08-10)
 
 - PHP 8.2: Fix ${var} string interpolation deprecation | thanks @Ayesh
