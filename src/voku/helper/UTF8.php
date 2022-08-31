@@ -21,7 +21,7 @@ namespace voku\helper;
  * - [4] https://www.youtube.com/watch?v=8K-bkqKKf2A "Sumy under attack"
  * - [5] https://cloudfront-us-east-2.images.arcpublishing.com/reuters/K4MTMLEHTRKGFK3GSKAT4GR3NE.jpg "Irpin under attack"
  *
- * @psalm-immutable
+ * @immutable
  */
 final class UTF8
 {
@@ -459,7 +459,7 @@ final class UTF8
     /**
      * @alias of UTF8::chr_map()
      *
-     * @param callable $callback
+     * @param callable(string): string $callback
      * @param string   $str
      *
      * @psalm-pure
@@ -604,12 +604,16 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::chr() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
 
-        if (!\is_int($code_point) || $code_point <= 0) {
+        if (
+            !\is_int($code_point) /* @phpstan-ignore-line | hack for bad inputs */
+            ||
+            $code_point <= 0
+        ) {
             return null;
         }
 
@@ -694,7 +698,7 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::chr_map([UTF8::class, 'strtolower'], 'Κόσμε'); // ['κ','ό', 'σ', 'μ', 'ε']</code>
      *
-     * @param callable $callback <p>The callback function.</p>
+     * @param callable(string): string $callback <p>The callback function.</p>
      * @param string   $str      <p>UTF-8 string to run callback on.</p>
      *
      * @psalm-pure
@@ -994,6 +998,7 @@ final class UTF8
 
         /**
          * @psalm-suppress DocblockTypeContradiction
+         * @phpstan-ignore-next-line hack for bad inputs
          */
         if (!\is_array($arg)) {
             return [];
@@ -1202,7 +1207,7 @@ final class UTF8
     {
         // We cannot use html_entity_decode() here, as it will not return
         // characters for many values < 160.
-        return mb_convert_encoding('&#' . $int . ';', 'UTF-8', 'HTML-ENTITIES');
+        return \mb_convert_encoding('&#' . $int . ';', 'UTF-8', 'HTML-ENTITIES');
     }
 
     /**
@@ -1402,6 +1407,21 @@ final class UTF8
             return $str;
         }
 
+        if ($from_encoding === 'JSON') {
+            $str = self::json_decode($str);
+            $from_encoding = '';
+        }
+
+        if ($from_encoding === 'BASE64') {
+            $str = \base64_decode($str, true);
+            $from_encoding = '';
+        }
+
+        if ($from_encoding === 'HTML-ENTITIES') {
+            $str = self::html_entity_decode($str, \ENT_COMPAT);
+            $from_encoding = '';
+        }
+
         if ($to_encoding === 'JSON') {
             $return = self::json_encode($str);
             if ($return === false) {
@@ -1410,34 +1430,23 @@ final class UTF8
 
             return $return;
         }
-        if ($from_encoding === 'JSON') {
-            $str = self::json_decode($str);
-            $from_encoding = '';
-        }
 
         if ($to_encoding === 'BASE64') {
             return \base64_encode($str);
-        }
-        if ($from_encoding === 'BASE64') {
-            $str = \base64_decode($str, true);
-            $from_encoding = '';
         }
 
         if ($to_encoding === 'HTML-ENTITIES') {
             return self::html_encode($str, true);
         }
-        if ($from_encoding === 'HTML-ENTITIES') {
-            $str = self::html_entity_decode($str, \ENT_COMPAT);
-            $from_encoding = '';
-        }
 
-        $from_encoding_auto_detected = false;
         if (
             $auto_detect_the_from_encoding
             ||
             !$from_encoding
         ) {
             $from_encoding_auto_detected = self::str_detect_encoding($str);
+        } else {
+            $from_encoding_auto_detected = false;
         }
 
         // DEBUG
@@ -1479,6 +1488,7 @@ final class UTF8
                 $from_encoding === 'UTF-8'
             )
         ) {
+            /* @phpstan-ignore-next-line | $str has manybe changed */
             return self::to_iso8859($str);
         }
 
@@ -1492,7 +1502,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::encode() without mbstring cannot handle "' . $to_encoding . '" encoding', \E_USER_WARNING);
         }
@@ -2096,7 +2106,7 @@ final class UTF8
      *                                        The ID of the filter to apply. The
      *                                        manual page lists the available filters.
      *                                        </p>
-     * @param int|int[]|null        $options  [optional] <p>
+     * @param int|int[]             $options  [optional] <p>
      *                                        Associative array of options or bitwise disjunction of flags. If filter
      *                                        accepts options, flags can be provided in "flags" field of array. For
      *                                        the "callback" filter, callable type should be passed. The
@@ -2146,7 +2156,7 @@ final class UTF8
     public static function filter_var(
         $variable,
         int $filter = \FILTER_DEFAULT,
-        $options = null
+        $options = 0
     ) {
         /**
          * @psalm-suppress ImpureFunctionCall - we use func_num_args only for args count matching here
@@ -2157,7 +2167,6 @@ final class UTF8
             $variable = \filter_var($variable, $filter, $options);
         }
 
-        /* @phpstan-ignore-next-line | magic frm self::filter :/ */
         return self::filter($variable);
     }
 
@@ -2187,7 +2196,7 @@ final class UTF8
      * @param array<string, mixed>          $data       <p>
      *                                                  An array with string keys containing the data to filter.
      *                                                  </p>
-     * @param array<string, mixed>|int|null $definition [optional] <p>
+     * @param array<string, mixed>|int      $definition [optional] <p>
      *                                                  An array defining the arguments. A valid key is a string
      *                                                  containing a variable name and a valid value is either a
      *                                                  filter type, or an
@@ -2217,7 +2226,7 @@ final class UTF8
      */
     public static function filter_var_array(
         array $data,
-        $definition = null,
+        $definition = 0,
         bool $add_empty = true
     ) {
         /**
@@ -2357,7 +2366,7 @@ final class UTF8
      *                         <p>Will return the fixed input-"array" or
      *                         the fixed input-"string".</p>
      *
-     * @template TFixUtf8
+     * @template TFixUtf8 as string|string[]
      * @phpstan-param TFixUtf8 $str
      * @phpstan-return TFixUtf8
      */
@@ -2375,7 +2384,7 @@ final class UTF8
             return $str;
         }
 
-        $str = (string) $str;
+        $str = (string) $str; /* @phpstan-ignore-line | TFixUtf8 is string here */
         $last = '';
         while ($last !== $str) {
             $last = $str;
@@ -2645,6 +2654,7 @@ final class UTF8
                     $rand_int = \mt_rand(0, $max_length - 1);
                 }
                 $char = \mb_substr($possible_chars, $rand_int, 1);
+                /* @phpstan-ignore-next-line | "false" was at least the return type in the past, or? */
                 if ($char !== false) {
                     $str .= $char;
                     ++$i;
@@ -2772,7 +2782,8 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return false|string one single UTF-8 character
+     * @return string
+     *                      <p>One single UTF-8 character.</p>
      */
     public static function hex_to_chr(string $hexdec)
     {
@@ -2954,7 +2965,8 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return string the decoded string
+     * @return string
+     *                <p>The decoded string.</p>
      */
     public static function html_entity_decode(
         string $str,
@@ -2987,7 +2999,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::html_entity_decode() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -3646,7 +3658,7 @@ final class UTF8
      * A variable is considered empty if it does not exist or if its value equals FALSE.
      * empty() does not generate a warning if the variable does not exist.
      *
-     * @param array|float|int|string $str
+     * @param array<array-key, mixed>|float|int|string $str
      *
      * @psalm-pure
      *
@@ -3899,7 +3911,7 @@ final class UTF8
 
         if (self::$SUPPORT['mbstring'] === false) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::is_utf16() without mbstring may did not work correctly', \E_USER_WARNING);
         }
@@ -3912,12 +3924,7 @@ final class UTF8
             $test2 = \mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
             $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
             if ($test3 === $test) {
-                /**
-                 * @psalm-suppress RedundantCondition
-                 */
-                if ($str_chars === []) {
-                    $str_chars = self::count_chars($str, true, false);
-                }
+                $str_chars = self::count_chars($str, true, false);
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
                     if (\in_array($test3char, $str_chars, true)) {
                         ++$maybe_utf16le;
@@ -3998,7 +4005,7 @@ final class UTF8
 
         if (self::$SUPPORT['mbstring'] === false) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::is_utf32() without mbstring may did not work correctly', \E_USER_WARNING);
         }
@@ -4011,12 +4018,7 @@ final class UTF8
             $test2 = \mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
             $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
             if ($test3 === $test) {
-                /**
-                 * @psalm-suppress RedundantCondition
-                 */
-                if ($str_chars === []) {
-                    $str_chars = self::count_chars($str, true, false);
-                }
+                $str_chars = self::count_chars($str, true, false);
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
                     if (\in_array($test3char, $str_chars, true)) {
                         ++$maybe_utf32le;
@@ -4231,7 +4233,8 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return string the resulting string
+     * @return string
+     *                <p>The resulting string.</p>
      */
     public static function lcfirst(
         string $str,
@@ -4908,6 +4911,7 @@ final class UTF8
             /**
              * @psalm-suppress RedundantConditionGivenDocblockType
              * @psalm-suppress DocblockTypeContradiction
+             * @phpstan-ignore-next-line | ignore wrong inputs
              */
             if (!\is_numeric($step)) {
                 throw new \InvalidArgumentException('$step need to be a number, type given: ' . \gettype($step));
@@ -5120,6 +5124,7 @@ final class UTF8
 
         /**
          * @psalm-suppress RedundantConditionGivenDocblockType
+         * @phpstan-ignore-next-line | ignore wrong inputs
          */
         if (\is_array($what)) {
             foreach ($what as $item) {
@@ -5444,6 +5449,8 @@ final class UTF8
      * @psalm-pure
      *
      * @return string|void
+     *
+     * @phpstan-return ($useEcho is true ? void : string)
      */
     public static function showSupport(bool $useEcho = true)
     {
@@ -6773,7 +6780,7 @@ final class UTF8
                 $char = \mb_substr($str1, $i, 1);
 
                 if (
-                    $char !== false
+                    $char !== false /* @phpstan-ignore-line | old polyfill will return false, or? */
                     &&
                     $char === \mb_substr($str2, $i, 1)
                 ) {
@@ -6930,7 +6937,7 @@ final class UTF8
                 $char = \mb_substr($str1, -$i, 1);
 
                 if (
-                    $char !== false
+                    $char !== false /* @phpstan-ignore-line | old polyfill will return false, or? */
                     &&
                     $char === \mb_substr($str2, -$i, 1)
                 ) {
@@ -7556,7 +7563,7 @@ final class UTF8
 
             foreach ($indexes as &$i) {
                 $tmp_sub_str = \mb_substr($str, $i, 1);
-                if ($tmp_sub_str !== false) {
+                if ($tmp_sub_str !== false) { /* @phpstan-ignore-line | old polyfill will return false, or? */
                     $shuffled_str .= $tmp_sub_str;
                 }
             }
@@ -7833,10 +7840,15 @@ final class UTF8
             self::$SUPPORT['mbstring'] === true
         ) {
             if (\function_exists('mb_str_split')) {
-                /**
-                 * @psalm-suppress ImpureFunctionCall - why?
-                 */
-                $return = \mb_str_split($input, $length);
+                try {
+                    /**
+                     * @psalm-suppress ImpureFunctionCall - why?
+                     */
+                    $return = \mb_str_split($input, $length);
+                } catch (\Error $e) {
+                    // PHP >= 8.0 : mb_str_split() will now throw ValueError on error. Previously, mb_str_split() returned false instead.
+                    $return = false;
+                }
                 if ($return !== false) {
                     return $return;
                 }
@@ -8718,13 +8730,11 @@ final class UTF8
      */
     public static function str_to_binary(string $str)
     {
-        /** @var array|false $value - needed for PhpStan (stubs error) */
         $value = \unpack('H*', $str);
         if ($value === false) {
             return false;
         }
 
-        /** @noinspection OffsetOperationsInspection */
         return \base_convert($value[1], 16, 2);
     }
 
@@ -9156,9 +9166,7 @@ final class UTF8
         }
 
         return \strcmp(
-            /** @phpstan-ignore-next-line - we use only NFD */
             \Normalizer::normalize($str1, \Normalizer::NFD),
-            /** @phpstan-ignore-next-line - we use only NFD */
             \Normalizer::normalize($str2, \Normalizer::NFD)
         );
     }
@@ -9518,7 +9526,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::stristr() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -9629,7 +9637,7 @@ final class UTF8
             self::$SUPPORT['iconv'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::strlen() without mbstring / iconv cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -9655,7 +9663,8 @@ final class UTF8
             self::$SUPPORT['intl'] === true
         ) {
             $return_tmp = \grapheme_strlen($str);
-            if ($return_tmp !== null) {
+            /* @phpstan-ignore-next-line | "grapheme_strlen" will maybe return "null" for empty-strings and "false" on error */
+            if ($return_tmp !== false && $return_tmp !== null) {
                 return $return_tmp;
             }
         }
@@ -9978,7 +9987,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::strpos() without mbstring / iconv cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -10199,7 +10208,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::strrchr() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -10287,7 +10296,7 @@ final class UTF8
                 $i = (int) \mb_strlen($str);
                 while ($i--) {
                     $reversed_tmp = \mb_substr($str, $i, 1);
-                    if ($reversed_tmp !== false) {
+                    if ($reversed_tmp !== false) { /* @phpstan-ignore-line | old polyfill will return false, or? */
                         $reversed .= $reversed_tmp;
                     }
                 }
@@ -10480,7 +10489,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::strripos() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -10652,7 +10661,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::strrpos() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -10887,7 +10896,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::strstr() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -11091,7 +11100,7 @@ final class UTF8
                 $language_code = $lang . '-Lower';
                 if (!\in_array($language_code, self::$INTL_TRANSLITERATOR_LIST, true)) {
                     /**
-                     * @psalm-suppress ImpureFunctionCall - is is only a warning
+                     * @psalm-suppress ImpureFunctionCall - this is only a warning
                      */
                     \trigger_error('UTF8::strtolower() cannot handle special language: ' . $lang . ' | supported: ' . \print_r(self::$INTL_TRANSLITERATOR_LIST, true), \E_USER_WARNING);
 
@@ -11102,7 +11111,7 @@ final class UTF8
             }
 
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::strtolower() without intl cannot handle the "lang" parameter: ' . $lang, \E_USER_WARNING);
         }
@@ -11171,7 +11180,7 @@ final class UTF8
                 $language_code = $lang . '-Upper';
                 if (!\in_array($language_code, self::$INTL_TRANSLITERATOR_LIST, true)) {
                     /**
-                     * @psalm-suppress ImpureFunctionCall - is is only a warning
+                     * @psalm-suppress ImpureFunctionCall - this is only a warning
                      */
                     \trigger_error('UTF8::strtoupper() without intl for special language: ' . $lang, \E_USER_WARNING);
 
@@ -11182,7 +11191,7 @@ final class UTF8
             }
 
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::strtolower() without intl cannot handle the "lang"-parameter: ' . $lang, \E_USER_WARNING);
         }
@@ -11245,7 +11254,12 @@ final class UTF8
                 }
             }
 
-            $from = \array_combine($from, $to);
+            try {
+                $from = \array_combine($from, $to);
+            } catch (\Error $e) {
+                // PHP >= 8.0 : array_combine() will now throw a ValueError if the number of elements for each array is not equal; previously this function returned false instead.
+                $from = false;
+            }
             if ($from === false) {
                 throw new \InvalidArgumentException('The number of elements for each array isn\'t equal or the arrays are empty: (from: ' . \print_r($from, true) . ' | to: ' . \print_r($to, true) . ')');
             }
@@ -11426,7 +11440,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::substr() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -11623,7 +11637,7 @@ final class UTF8
             self::$SUPPORT['mbstring'] === false
         ) {
             /**
-             * @psalm-suppress ImpureFunctionCall - is is only a warning
+             * @psalm-suppress ImpureFunctionCall - this is only a warning
              */
             \trigger_error('UTF8::substr_count() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
@@ -11814,9 +11828,9 @@ final class UTF8
      * @psalm-pure
      *
      * @return false|string
-     *                      The portion of <i>str</i> specified by the <i>offset</i> and
+     *                      <p>The portion of <i>str</i> specified by the <i>offset</i> and
      *                      <i>length</i> parameters.</p><p>If <i>str</i> is shorter than <i>offset</i>
-     *                      characters long, <b>FALSE</b> will be returned.
+     *                      characters long, <b>FALSE</b> will be returned.</p>
      */
     public static function substr_in_byte(string $str, int $offset = 0, int $length = null)
     {
@@ -11934,7 +11948,7 @@ final class UTF8
      * @return string|string[]
      *                         <p>The result string is returned. If string is an array then array is returned.</p>
      *
-     * @template TSubstrReplace
+     * @template TSubstrReplace string|string[]
      * @phpstan-param TSubstrReplace $str
      * @phpstan-return TSubstrReplace
      */
@@ -12351,7 +12365,7 @@ final class UTF8
      *
      * @return string|string[]
      *
-     * @template TToIso8859
+     * @template TToIso8859 as string|string[]
      * @phpstan-param TToIso8859 $str
      * @phpstan-return TToIso8859
      */
@@ -12365,6 +12379,7 @@ final class UTF8
             return $str;
         }
 
+        /* @phpstan-ignore-next-line | FP? -> "Cannot cast TToIso8859 of array<string>|string to string." it's a string here */
         $str = (string) $str;
         if ($str === '') {
             return '';
@@ -13121,6 +13136,8 @@ final class UTF8
      *                                     You can change the default behavior, where we split the string by newline.
      *                                     </p>
      *
+     * @phpstan-param non-empty-string $delimiter
+     *
      * @psalm-pure
      *
      * @return string
@@ -13380,7 +13397,7 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return array
+     * @return array<array-key, mixed>
      */
     private static function getData(string $file)
     {
@@ -13494,7 +13511,7 @@ final class UTF8
      * @param string $class
      *
      * @return string
-     *                *
+     *
      * @psalm-pure
      */
     private static function rxClass(string $s, string $class = '')
@@ -13512,6 +13529,7 @@ final class UTF8
             return $RX_CLASS_CACHE[$cache_key];
         }
 
+        $class_array = [];
         $class_array[] = $class;
 
         /** @noinspection SuspiciousLoopInspection */
@@ -13550,6 +13568,8 @@ final class UTF8
      * @param string $delimiter
      * @param string $encoding
      *
+     * @phpstan-param non-empty-string $delimiter
+     *
      * @psalm-pure
      *
      * @return string
@@ -13560,7 +13580,12 @@ final class UTF8
         string $encoding = 'UTF-8'
     ) {
         // init
-        $name_helper_array = \explode($delimiter, $names);
+        try {
+            $name_helper_array = \explode($delimiter, $names);
+        } catch (\Error $e) {
+            // PHP >= 8.0 : explode() will now throw ValueError when separator parameter is given an empty string (""). Previously, explode() returned false instead.
+            $name_helper_array = false;
+        }
         if ($name_helper_array === false) {
             return '';
         }
@@ -13693,7 +13718,6 @@ final class UTF8
         if (isset(self::$WIN1252_TO_UTF8[$ordC1])) { // found in Windows-1252 special cases
             $buf .= self::$WIN1252_TO_UTF8[$ordC1];
         } else {
-            /** @noinspection OffsetOperationsInspection */
             $cc1 = self::$CHR[$ordC1 / 64] | "\xC0";
             $cc2 = ((string) $input & "\x3F") | "\x80";
             $buf .= $cc1 . $cc2;

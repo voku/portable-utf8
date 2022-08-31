@@ -177,6 +177,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
     public function testCharOtherEncoding()
     {
         $testArray = [
+            'a'    => null,
+            'a1'   => null,
+            '1a'   => null,
             ''     => null,
             '39'   => '\'',
             '40'   => '(',

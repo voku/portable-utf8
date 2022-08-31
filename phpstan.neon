@@ -1,11 +1,65 @@
+includes:
+    - phar://%currentWorkingDirectory%/vendor/phpstan/phpstan/phpstan.phar/conf/bleedingEdge.neon
+    - %currentWorkingDirectory%/vendor/voku/phpstan-rules/rules.neon
 parameters:
-    reportUnmatchedIgnoredErrors: false
     level: 8
     paths:
         - %currentWorkingDirectory%/src/
+    voku:
+        classesNotInIfConditions: [
+            AbstractValueObject
+        ]
+    parallel:
+        processTimeout: 600.0
+    tmpDir: /tmp/phpstan_portable_utf8
+    tipsOfTheDay: false
+    reportUnmatchedIgnoredErrors: false
+    checkMissingIterableValueType: true
+    checkMissingCallableSignature: true
+    polluteScopeWithLoopInitialAssignments: true
+    polluteScopeWithAlwaysIterableForeach: true
+    checkAlwaysTrueInstanceof: true
+    checkAlwaysTrueCheckTypeFunctionCall: true
+    checkAlwaysTrueStrictComparison: true
+    checkExplicitMixedMissingReturn: true
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    reportMaybesInMethodSignatures: true
+    reportStaticMethodSignatures: false
+    checkTooWideReturnTypesInProtectedAndPublicMethods: false
+    checkUninitializedProperties: true
+    earlyTerminatingMethodCalls:
+    earlyTerminatingFunctionCalls:
+    dynamicConstantNames:
+    excludePaths:
+    bootstrapFiles:
+        - %currentWorkingDirectory%/bootstrap.php
     ignoreErrors:
-        # ignore errors
-        - '#no value type specified in iterable type#'
         - '#voku\\helper\\UTF8::substr_replace\(\) should return TSubstrReplace#'
-        - '#voku\\helper\\UTF8::fix_utf8\(\) should return TFixUtf8#'
-        - '#voku\\helper\\UTF8::to_iso8859\(\) should return TToIso8859#'
+        - '#readonly property cannot have a default value#'
+rules:
+    - PHPStan\Rules\DisallowedConstructs\DisallowedBacktickRule
+    - PHPStan\Rules\DisallowedConstructs\DisallowedImplicitArrayCreationRule
+    - PHPStan\Rules\Functions\ClosureUsesThisRule
+    - PHPStan\Rules\Methods\WrongCaseOfInheritedMethodRule
+    - PHPStan\Rules\Operators\OperandInArithmeticPostDecrementRule
+    - PHPStan\Rules\Operators\OperandInArithmeticPostIncrementRule
+    - PHPStan\Rules\Operators\OperandInArithmeticPreDecrementRule
+    - PHPStan\Rules\Operators\OperandInArithmeticPreIncrementRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticAdditionRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticDivisionRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticExponentiationRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticModuloRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticMultiplicationRule
+    - PHPStan\Rules\Operators\OperandsInArithmeticSubtractionRule
+    - PHPStan\Rules\StrictCalls\DynamicCallOnStaticMethodsCallableRule
+    - PHPStan\Rules\StrictCalls\DynamicCallOnStaticMethodsRule
+    - PHPStan\Rules\DisallowedConstructs\DisallowedImplicitArrayCreationRule
+    - PHPStan\Rules\Functions\ClosureUsesThisRule
+    - PHPStan\Rules\SwitchConditions\MatchingTypeInSwitchCaseConditionRule
+    - TheCodingMachine\PHPStan\Rules\Conditionals\SwitchMustContainDefaultRule
+    - TheCodingMachine\PHPStan\Rules\Exceptions\EmptyExceptionRule
+    - TheCodingMachine\PHPStan\Rules\Exceptions\DoNotThrowExceptionBaseClassRule
+services:
+    -
+        class: PHPStan\Rules\Operators\OperatorRuleHelper
