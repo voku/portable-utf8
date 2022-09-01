@@ -13255,12 +13255,11 @@ final class UTF8
      *                                     You can change the default behavior, where we split the string by newline.
      *                                     </p>
      *
-     * @phpstan-param non-empty-string $delimiter
-     *
      * @psalm-pure
      *
      * @return string
      *
+     * @phpstan-param non-empty-string $delimiter
      * @phpstan-param int<1, max> $width
      */
     public static function wordwrap_per_line(
