@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.9 (2022-09-01)
+
+- optimize phpdocs (use int-range)
+
 ### 6.0.8 (2022-09-01)
 
 - optimize phpdocs (use Conditional Return Types) v2
