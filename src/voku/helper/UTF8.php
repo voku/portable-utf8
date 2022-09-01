@@ -5839,9 +5839,15 @@ final class UTF8
 
     /**
      * Returns a lowercase and trimmed string separated by the given delimiter.
+     *
      * Delimiters are inserted before uppercase characters (with the exception
      * of the first character of the string), and in place of spaces, dashes,
      * and underscores. Alpha delimiters are not converted to lowercase.
+     *
+     * EXAMPLE: <code>
+     * UTF8::str_delimit('test case, '#'); // 'test#case'
+     * UTF8::str_delimit('test -case', '**'); // 'test**case'
+     * </code>
      *
      * @param string      $str                           <p>The input string.</p>
      * @param string      $delimiter                     <p>Sequence used to separate parts of the string.</p>
@@ -5855,6 +5861,10 @@ final class UTF8
      * @psalm-pure
      *
      * @return string
+     *
+     * @template T as string
+     * @phpstan-param T $str
+     * @phpstan-return (T is non-empty-string ? non-empty-string : string)
      */
     public static function str_delimit(
         string $str,
@@ -6090,7 +6100,11 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return string
+     * @template T as string
+     * @template TSub as string
+     * @phpstan-param T $str
+     * @phpstan-param TSub $substring
+     * @phpstan-return (TSub is non-empty-string ? non-empty-string : (T is non-empty-string ? non-empty-string : string))
      */
     public static function str_ensure_left(string $str, string $substring): string
     {
@@ -6114,6 +6128,12 @@ final class UTF8
      * @psalm-pure
      *
      * @return string
+     *
+     * @template T as string
+     * @template TSub as string
+     * @phpstan-param T $str
+     * @phpstan-param TSub $substring
+     * @phpstan-return (TSub is non-empty-string ? non-empty-string : (T is non-empty-string ? non-empty-string : string))
      */
     public static function str_ensure_right(string $str, string $substring): string
     {

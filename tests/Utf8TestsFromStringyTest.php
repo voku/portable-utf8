@@ -400,6 +400,9 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
      */
     public function delimitProvider(): \Iterator
     {
+        yield ['', '', ''];
+        yield ['', '', '*'];
+        yield ['testcase', 'testCase', ''];
         yield ['test*case', 'testCase', '*'];
         yield ['test&case', 'Test-Case', '&'];
         yield ['test#case', 'test case', '#'];

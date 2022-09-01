@@ -162,21 +162,21 @@ The API from the "UTF8"-Class is written as small static methods that will match
 ## Class methods
 
 <p id="voku-php-readme-class-methods"></p><table><tr><td><a href="#accessstring-str-int-pos-string-encoding-string">access</a>
-</td><td><a href="#add_bom_to_stringstring-str-string">add_bom_to_string</a>
+</td><td><a href="#add_bom_to_stringstring-str-non-empty-string">add_bom_to_string</a>
 </td><td><a href="#array_change_key_casearray-array-int-case-string-encoding-string">array_change_key_case</a>
 </td><td><a href="#betweenstring-str-string-start-string-end-int-offset-string-encoding-string">between</a>
 </td></tr><tr><td><a href="#binary_to_strstring-bin-string">binary_to_str</a>
-</td><td><a href="#bom-string">bom</a>
-</td><td><a href="#callbackcallable-callback-string-str-string">callback</a>
+</td><td><a href="#bom-non-empty-string">bom</a>
+</td><td><a href="#callbackcallablestring--string-callback-string-str-string">callback</a>
 </td><td><a href="#char_atstring-str-int-index-string-encoding-string">char_at</a>
 </td></tr><tr><td><a href="#charsstring-str-string">chars</a>
 </td><td><a href="#checkforsupport-truenull">checkForSupport</a>
 </td><td><a href="#chrint-code_point-string-encoding-stringnull">chr</a>
-</td><td><a href="#chr_mapcallable-callback-string-str-string">chr_map</a>
+</td><td><a href="#chr_mapcallablestring--string-callback-string-str-string">chr_map</a>
 </td></tr><tr><td><a href="#chr_size_liststring-str-int">chr_size_list</a>
 </td><td><a href="#chr_to_decimalstring-char-int">chr_to_decimal</a>
 </td><td><a href="#chr_to_hexintstring-char-string-prefix-string">chr_to_hex</a>
-</td><td><a href="#chunk_splitstring-body-int-chunk_length-string-end-string">chunk_split</a>
+</td><td><a href="#chunk_splitstring-str-int-chunk_length-string-end-string">chunk_split</a>
 </td></tr><tr><td><a href="#cleanstring-str-bool-remove_bom-bool-normalize_whitespace-bool-normalize_msword-bool-keep_non_breaking_space-bool-replace_diamond_question_mark-bool-remove_invisible_characters-bool-remove_invisible_characters_url_encoded-string">clean</a>
 </td><td><a href="#cleanupstring-str-string">cleanup</a>
 </td><td><a href="#codepointsstringstring-arg-bool-use_u_style-intstring">codepoints</a>
@@ -198,8 +198,8 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#filterarrayobjectstring-var-int-normalization_form-string-leading_combining-mixed">filter</a>
 </td><td><a href="#filter_inputint-type-string-variable_name-int-filter-intintnull-options-mixed">filter_input</a>
 </td></tr><tr><td><a href="#filter_input_arrayint-type-arraynull-definition-bool-add_empty-arraystringmixedfalsenull">filter_input_array</a>
-</td><td><a href="#filter_varfloatintstringnull-variable-int-filter-intintnull-options-mixed">filter_var</a>
-</td><td><a href="#filter_var_arrayarray-data-arrayintnull-definition-bool-add_empty-arraystringmixedfalsenull">filter_var_array</a>
+</td><td><a href="#filter_varfloatintstringnull-variable-int-filter-intint-options-mixed">filter_var</a>
+</td><td><a href="#filter_var_arrayarray-data-arrayint-definition-bool-add_empty-arraystringmixedfalsenull">filter_var_array</a>
 </td><td><a href="#finfo_loaded-bool">finfo_loaded</a>
 </td></tr><tr><td><a href="#first_charstring-str-int-n-string-encoding-string">first_char</a>
 </td><td><a href="#fits_insidestring-str-int-box_size-bool">fits_inside</a>
@@ -209,11 +209,11 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#getsupportinfostringnull-key-mixed">getSupportInfo</a>
 </td><td><a href="#get_file_typestring-str-array-fallback">get_file_type</a>
 </td><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-string">get_random_string</a>
-</td></tr><tr><td><a href="#get_unique_stringintstring-extra_entropy-bool-use_md5-string">get_unique_string</a>
+</td></tr><tr><td><a href="#get_unique_stringintstring-extra_entropy-bool-use_md5-non-empty-string">get_unique_string</a>
 </td><td><a href="#has_lowercasestring-str-bool">has_lowercase</a>
 </td><td><a href="#has_uppercasestring-str-bool">has_uppercase</a>
 </td><td><a href="#has_whitespacestring-str-bool">has_whitespace</a>
-</td></tr><tr><td><a href="#hex_to_chrstring-hexdec-falsestring">hex_to_chr</a>
+</td></tr><tr><td><a href="#hex_to_chrstring-hexdec-string">hex_to_chr</a>
 </td><td><a href="#hex_to_intstring-hexdec-falseint">hex_to_int</a>
 </td><td><a href="#html_encodestring-str-bool-keep_ascii_chars-string-encoding-string">html_encode</a>
 </td><td><a href="#html_entity_decodestring-str-intnull-flags-string-encoding-string">html_entity_decode</a>
@@ -264,7 +264,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td></tr><tr><td><a href="#ordstring-chr-string-encoding-int">ord</a>
 </td><td><a href="#parse_strstring-str-array-result-bool-clean_utf8-bool">parse_str</a>
 </td><td><a href="#pcre_utf8_support-bool">pcre_utf8_support</a>
-</td><td><a href="#rangeintstring-var1-intstring-var2-bool-use_ctype-string-encoding-floatint-step-string">range</a>
+</td><td><a href="#rangeintstring-var1-intstring-var2-bool-use_ctype-string-encoding-floatint-step-liststring">range</a>
 </td></tr><tr><td><a href="#rawurldecodestring-str-bool-multi_decode-string">rawurldecode</a>
 </td><td><a href="#regex_replacestring-str-string-pattern-string-replacement-string-options-string-delimiter-string">regex_replace</a>
 </td><td><a href="#remove_bomstring-str-string">remove_bom</a>
@@ -291,7 +291,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#str_detect_encodingstring-str-falsestring">str_detect_encoding</a>
 </td></tr><tr><td><a href="#str_ends_withstring-haystack-string-needle-bool">str_ends_with</a>
 </td><td><a href="#str_ends_with_anystring-str-string-substrings-bool">str_ends_with_any</a>
-</td><td><a href="#str_ensure_leftstring-str-string-substring-string">str_ensure_left</a>
+</td><td><a href="#str_ensure_leftstring-str-string-substring">str_ensure_left</a>
 </td><td><a href="#str_ensure_rightstring-str-string-substring-string">str_ensure_right</a>
 </td></tr><tr><td><a href="#str_humanizestring-str-string">str_humanize</a>
 </td><td><a href="#str_iends_withstring-haystack-string-needle-bool">str_iends_with</a>
@@ -331,7 +331,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#str_slicestring-str-int-start-intnull-end-string-encoding-falsestring">str_slice</a>
 </td></tr><tr><td><a href="#str_snakeizestring-str-string-encoding-string">str_snakeize</a>
 </td><td><a href="#str_sortstring-str-bool-unique-bool-desc-string">str_sort</a>
-</td><td><a href="#str_splitintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split</a>
+</td><td><a href="#str_splitintstring-str-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split</a>
 </td><td><a href="#str_split_arrayintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split_array</a>
 </td></tr><tr><td><a href="#str_split_patternstring-str-string-pattern-int-limit-string">str_split_pattern</a>
 </td><td><a href="#str_starts_withstring-haystack-string-needle-bool">str_starts_with</a>
@@ -347,7 +347,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#str_titleize_for_humansstring-str-string-ignore-string-encoding-string">str_titleize_for_humans</a>
 </td></tr><tr><td><a href="#str_to_binarystring-str-falsestring">str_to_binary</a>
 </td><td><a href="#str_to_linesstring-str-bool-remove_empty_values-intnull-remove_short_values-string">str_to_lines</a>
-</td><td><a href="#str_to_wordsstring-str-string-char_list-bool-remove_empty_values-intnull-remove_short_values-string">str_to_words</a>
+</td><td><a href="#str_to_wordsstring-str-string-char_list-bool-remove_empty_values-intnull-remove_short_values-liststring">str_to_words</a>
 </td><td><a href="#str_truncatestring-str-int-length-string-substring-string-encoding-string">str_truncate</a>
 </td></tr><tr><td><a href="#str_truncate_safestring-str-int-length-string-substring-string-encoding-bool-ignore_do_not_split_words_for_one_word-string">str_truncate_safe</a>
 </td><td><a href="#str_underscoredstring-str-string">str_underscored</a>
@@ -439,7 +439,7 @@ EXAMPLE: <code>UTF8::access('fòô', 1); // 'ò'</code>
 
 --------
 
-## add_bom_to_string(string $str): string
+## add_bom_to_string(string $str): non-empty-string
 <a href="#voku-php-readme-class-methods">↑</a>
 Prepends UTF-8 BOM character to the string and returns the whole string.
 
@@ -451,7 +451,7 @@ EXAMPLE: <code>UTF8::add_bom_to_string('fòô'); // "\xEF\xBB\xBF" . 'fòô'</co
 - `string $str <p>The input string.</p>`
 
 **Return:**
-- `string <p>The output string that contains BOM.</p>`
+- `non-empty-string <p>The output string that contains BOM.</p>`
 
 --------
 
@@ -504,7 +504,7 @@ EXAMPLE: <code>UTF8::binary_to_str('11110000100111111001100010000011'); // '😃
 
 --------
 
-## bom(): string
+## bom(): non-empty-string
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns the UTF-8 Byte Order Mark Character.
 
@@ -516,16 +516,16 @@ EXAMPLE: <code>UTF8::bom(); // "\xEF\xBB\xBF"</code>
 __nothing__
 
 **Return:**
-- `string <p>UTF-8 Byte Order Mark.</p>`
+- `non-empty-string <p>UTF-8 Byte Order Mark.</p>`
 
 --------
 
-## callback(callable $callback, string $str): string[]
+## callback(callable(string ): string $callback, string $str): string[]
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
-- `callable $callback`
+- `callable(string ): string $callback`
 - `string $str`
 
 **Return:**
@@ -552,7 +552,7 @@ Returns the character at $index, with indexes starting at 0.
 Returns an array consisting of the characters in the string.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 
 **Return:**
 - `string[] <p>An array of chars.</p>`
@@ -588,14 +588,14 @@ EXAMPLE: <code>UTF8::chr(0x2603); // '☃'</code>
 
 --------
 
-## chr_map(callable $callback, string $str): string[]
+## chr_map(callable(string ): string $callback, string $str): string[]
 <a href="#voku-php-readme-class-methods">↑</a>
 Applies callback to all characters of a string.
 
 EXAMPLE: <code>UTF8::chr_map([UTF8::class, 'strtolower'], 'Κόσμε'); // ['κ','ό', 'σ', 'μ', 'ε']</code>
 
 **Parameters:**
-- `callable $callback <p>The callback function.</p>`
+- `callable(string ): string $callback`
 - `string $str <p>UTF-8 string to run callback on.</p>`
 
 **Return:**
@@ -615,7 +615,7 @@ Generates an array of byte length of each character of a Unicode string.
 EXAMPLE: <code>UTF8::chr_size_list('中文空白-test'); // [3, 3, 3, 3, 1, 1, 1, 1, 1]</code>
 
 **Parameters:**
-- `string $str <p>The original unicode string.</p>`
+- `T $str <p>The original unicode string.</p>`
 
 **Return:**
 - `int[] <p>An array of byte lengths of each character.</p>`
@@ -653,14 +653,14 @@ EXAMPLE: <code>UTF8::chr_to_hex('§'); // U+00a7</code>
 
 --------
 
-## chunk_split(string $body, int $chunk_length, string $end): string
+## chunk_split(string $str, int $chunk_length, string $end): string
 <a href="#voku-php-readme-class-methods">↑</a>
 Splits a string into smaller chunks and multiple lines, using the specified line ending character.
 
 EXAMPLE: <code>UTF8::chunk_split('ABC-ÖÄÜ-中文空白-κόσμε', 3); // "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε"</code>
 
 **Parameters:**
-- `string $body <p>The original string to be split.</p>`
+- `T $str <p>The original string to be split.</p>`
 - `int $chunk_length [optional] <p>The maximum character length of a chunk.</p>`
 - `string $end [optional] <p>The character(s) to be inserted at the end of each chunk.</p>`
 
@@ -718,7 +718,7 @@ EXAMPLE: <code>UTF8::cleanup("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃 -
 
 ## codepoints(string|string[] $arg, bool $use_u_style): int[]|string[]
 <a href="#voku-php-readme-class-methods">↑</a>
-Accepts a string or a array of strings and returns an array of Unicode code points.
+Accepts a string or an array of chars and returns an array of Unicode code points.
 
 INFO: opposite to UTF8::string()
 
@@ -729,7 +729,7 @@ UTF8::codepoints('κöñ', true); // array('U+03ba', 'U+00f6', 'U+00f1')
 </code>
 
 **Parameters:**
-- `string|string[] $arg <p>A UTF-8 encoded string or an array of such strings.</p>`
+- `T $arg <p>A UTF-8 encoded string or an array of such chars.</p>`
 - `bool $use_u_style <p>If True, will return code points in U+xxxx format,
 default, code points will be returned as integers.</p>`
 
@@ -763,7 +763,7 @@ Returns count of characters used in a string.
 EXAMPLE: <code>UTF8::count_chars('κaκbκc'); // array('κ' => 3, 'a' => 1, 'b' => 1, 'c' => 1)</code>
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
 - `bool $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use`
 
@@ -955,7 +955,7 @@ or false if an error occurs during the encoding.</p>`
 
 ## extract_text(string $str, string $search, int|null $length, string $replacer_for_skipped_text, string $encoding): string
 <a href="#voku-php-readme-class-methods">↑</a>
-Create an extract from a sentence, so if the search-string was found, it try to centered in the output.
+Create an extract from a sentence, so if the search-string was found, it tries to center in the output.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
@@ -1125,7 +1125,7 @@ is not set and <b>NULL</b> if the filter fails.
 
 --------
 
-## filter_var(float|int|string|null $variable, int $filter, int|int[]|null $options): mixed
+## filter_var(float|int|string|null $variable, int $filter, int|int[] $options): mixed
 <a href="#voku-php-readme-class-methods">↑</a>
 "filter_var()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1141,7 +1141,7 @@ Value to filter.
 The ID of the filter to apply. The
 manual page lists the available filters.
 </p>`
-- `int|int[]|null $options [optional] <p>
+- `int|int[] $options [optional] <p>
 Associative array of options or bitwise disjunction of flags. If filter
 accepts options, flags can be provided in "flags" field of array. For
 the "callback" filter, callable type should be passed. The
@@ -1188,7 +1188,7 @@ $var = filter_var('Doe, Jane Sue', FILTER_CALLBACK, array('options' => 'foo'));
 
 --------
 
-## filter_var_array(array $data, array|int|null $definition, bool $add_empty): array<string,mixed>|false|null
+## filter_var_array(array $data, array|int $definition, bool $add_empty): array<string,mixed>|false|null
 <a href="#voku-php-readme-class-methods">↑</a>
 "filter_var_array()"-wrapper with normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
@@ -1214,7 +1214,7 @@ UTF8::filter_var_array($data, $filters, true); // ['name' => 'Κόσμε', 'age'
 - `array<string, mixed> $data <p>
 An array with string keys containing the data to filter.
 </p>`
-- `array<string, mixed>|int|null $definition [optional] <p>
+- `array<string, mixed>|int $definition [optional] <p>
 An array defining the arguments. A valid key is a string
 containing a variable name and a valid value is either a
 filter type, or an
@@ -1259,8 +1259,8 @@ __nothing__
 Returns the first $n characters of the string.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `int $n <p>Number of characters to retrieve from the start.</p>`
+- `T $str <p>The input string.</p>`
+- `it<1, max> $n <p>Number of characters to retrieve from the start.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
@@ -1365,7 +1365,7 @@ Warning: this method only works for some file-types (png, jpg)
 
 
 **Parameters:**
-- `int $length <p>Length of the random string.</p>`
+- `int<1, max> $length <p>Length of the random string.</p>`
 - `string $possible_chars [optional] <p>Characters string for the random selection.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
@@ -1374,7 +1374,7 @@ Warning: this method only works for some file-types (png, jpg)
 
 --------
 
-## get_unique_string(int|string $extra_entropy, bool $use_md5): string
+## get_unique_string(int|string $extra_entropy, bool $use_md5): non-empty-string
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
@@ -1383,7 +1383,7 @@ Warning: this method only works for some file-types (png, jpg)
 - `bool $use_md5 [optional] <p>Return the unique identifier as md5-hash? Default: true</p>`
 
 **Return:**
-- `string`
+- `non-empty-string`
 
 --------
 
@@ -1423,7 +1423,7 @@ Returns true if the string contains whitespace, false otherwise.
 
 --------
 
-## hex_to_chr(string $hexdec): false|string
+## hex_to_chr(string $hexdec): string
 <a href="#voku-php-readme-class-methods">↑</a>
 Converts a hexadecimal value into a UTF-8 character.
 
@@ -1435,7 +1435,7 @@ EXAMPLE: <code>UTF8::hex_to_chr('U+00a7'); // '§'</code>
 - `string $hexdec <p>The hexadecimal value.</p>`
 
 **Return:**
-- `false|string one single UTF-8 character`
+- `string <p>One single UTF-8 character.</p>`
 
 --------
 
@@ -1464,12 +1464,12 @@ INFO: opposite to UTF8::html_decode()
 EXAMPLE: <code>UTF8::html_encode('中文空白'); // '&#20013;&#25991;&#31354;&#30333;'</code>
 
 **Parameters:**
-- `string $str <p>The Unicode string to be encoded as numbered entities.</p>`
+- `T $str <p>The Unicode string to be encoded as numbered entities.</p>`
 - `bool $keep_ascii_chars [optional] <p>Keep ASCII chars.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
-- `string HTML numbered entities`
+- `string <p>HTML numbered entities.</p>`
 
 --------
 
@@ -1490,7 +1490,7 @@ INFO: opposite to UTF8::html_encode()
 EXAMPLE: <code>UTF8::html_entity_decode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白'</code>
 
 **Parameters:**
-- `string $str <p>
+- `T $str <p>
 The input string.
 </p>`
 - `int|null $flags [optional] <p>
@@ -1543,7 +1543,7 @@ Handle code as HTML 5.
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
-- `string the decoded string`
+- `string <p>The decoded string.</p>`
 
 --------
 
@@ -1692,7 +1692,7 @@ INFO: Take a look at "UTF8::htmlentities()"
 EXAMPLE: <code>UTF8::htmlspecialchars('<白-öäü>'); // '&lt;白-öäü&gt;'</code>
 
 **Parameters:**
-- `string $str <p>
+- `T $str <p>
 The string being converted.
 </p>`
 - `int $flags [optional] <p>
@@ -1788,13 +1788,12 @@ encode existing html entities, the default is to convert everything.
 </p>`
 
 **Return:**
-- `string the converted string.
-</p>
+- `string <p>The converted string.</p>
 <p>
 If the input <i>string</i> contains an invalid code unit
 sequence within the given <i>encoding</i> an empty string
 will be returned, unless either the <b>ENT_IGNORE</b> or
-<b>ENT_SUBSTITUTE</b> flags are set`
+<b>ENT_SUBSTITUTE</b> flags are set.</p>`
 
 --------
 
@@ -1972,7 +1971,7 @@ A variable is considered empty if it does not exist or if its value equals FALSE
 empty() does not generate a warning if the variable does not exist.
 
 **Parameters:**
-- `array|float|int|string $str`
+- `array<array-key, mixed>|float|int|string $str`
 
 **Return:**
 - `bool <p>Whether or not $str is empty().</p>`
@@ -2225,7 +2224,7 @@ Bitmask consisting of <b>JSON_HEX_QUOT</b>,
 <b>JSON_HEX_AMP</b>,
 <b>JSON_HEX_APOS</b>,
 <b>JSON_NUMERIC_CHECK</b>,
-<b>JSON_PRETTY_PRint,
+<b>JSON_PRETTY_PRINT</b>,
 <b>JSON_UNESCAPED_SLASHES</b>,
 <b>JSON_FORCE_OBJECT</b>,
 <b>JSON_UNESCAPED_UNICODE</b>. The behaviour of these
@@ -2237,8 +2236,8 @@ Set the maximum depth. Must be greater than zero.
 </p>`
 
 **Return:**
-- `false|string A JSON encoded <strong>string</strong> on success or<br>
-<strong>FALSE</strong> on failure`
+- `false|string <p>A JSON encoded <strong>string</strong> on success or<br>
+<strong>FALSE</strong> on failure.</p>`
 
 --------
 
@@ -2270,7 +2269,7 @@ tr</p>`
 -> ß</p>`
 
 **Return:**
-- `string the resulting string`
+- `string <p>The resulting string.</p>`
 
 --------
 
@@ -2503,7 +2502,7 @@ __nothing__
 
 --------
 
-## range(int|string $var1, int|string $var2, bool $use_ctype, string $encoding, float|int $step): string[]
+## range(int|string $var1, int|string $var2, bool $use_ctype, string $encoding, float|int $step): list<string>
 <a href="#voku-php-readme-class-methods">↑</a>
 Create an array containing a range of UTF-8 characters.
 
@@ -2523,7 +2522,7 @@ step will default to 1.
 </p>`
 
 **Return:**
-- `string[]`
+- `list<string>`
 
 --------
 
@@ -2545,7 +2544,7 @@ e.g:
 'D%%25C3%%2583%%25C2%%25BCsseldorf' => 'Düsseldorf'
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 - `bool $multi_decode <p>Decode as often as possible.</p>`
 
 **Return:**
@@ -2760,7 +2759,7 @@ Converts a UTF-8 character to HTML Numbered Entity like "&#123;".
 EXAMPLE: <code>UTF8::single_chr_html_encode('κ'); // '&#954;'</code>
 
 **Parameters:**
-- `string $char <p>The Unicode character to be encoded as numbered entity.</p>`
+- `T $char <p>The Unicode character to be encoded as numbered entity.</p>`
 - `bool $keep_ascii_chars <p>Set to <strong>true</strong> to keep ASCII chars.</>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
@@ -2774,7 +2773,7 @@ EXAMPLE: <code>UTF8::single_chr_html_encode('κ'); // '&#954;'</code>
 
 
 **Parameters:**
-- `string $str`
+- `T $str`
 - `int $tab_length`
 
 **Return:**
@@ -2834,7 +2833,7 @@ $case_sensitive to false.
 ## str_contains_all(string $haystack, scalar[] $needles, bool $case_sensitive): bool
 <a href="#voku-php-readme-class-methods">↑</a>
 Returns true if the string contains all $needles, false otherwise. By
-default the comparison is case-sensitive, but can be made insensitive by
+default, the comparison is case-sensitive, but can be made insensitive by
 setting $case_sensitive to false.
 
 **Parameters:**
@@ -2886,8 +2885,13 @@ Delimiters are inserted before uppercase characters (with the exception
 of the first character of the string), and in place of spaces, dashes,
 and underscores. Alpha delimiters are not converted to lowercase.
 
+EXAMPLE: <code>
+UTF8::str_delimit('test case, '#'); // 'test#case'
+UTF8::str_delimit('test -case', '**'); // 'test**case'
+</code>
+
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 - `string $delimiter <p>Sequence used to separate parts of the string.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>`
@@ -2954,17 +2958,17 @@ Returns true if the string ends with any of $substrings, false otherwise.
 
 --------
 
-## str_ensure_left(string $str, string $substring): string
+## str_ensure_left(string $str, string $substring): 
 <a href="#voku-php-readme-class-methods">↑</a>
 Ensures that the string begins with $substring. If it doesn't, it's
 prepended.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `string $substring <p>The substring to add if not present.</p>`
+- `T $str <p>The input string.</p>`
+- `TSub $substring <p>The substring to add if not present.</p>`
 
 **Return:**
-- `string`
+- `TSub is non-empty-string ? non-empty-string : (T is non-empty-string ? non-empty-string : string`
 
 --------
 
@@ -2973,8 +2977,8 @@ prepended.
 Ensures that the string ends with $substring. If it doesn't, it's appended.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `string $substring <p>The substring to add if not present.</p>`
+- `T $str <p>The input string.</p>`
+- `TSub $substring <p>The substring to add if not present.</p>`
 
 **Return:**
 - `string`
@@ -3239,8 +3243,8 @@ Returns the last $n characters of the string.
 Limit the number of characters in a string.
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `int $length [optional] <p>Default: 100</p>`
+- `T $str <p>The input string.</p>`
+- `int<1, max> $length [optional] <p>Default: 100</p>`
 - `string $str_add_on [optional] <p>Default: …</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
@@ -3256,8 +3260,8 @@ Limit the number of characters in a string, but also after the next word.
 EXAMPLE: <code>UTF8::str_limit_after_word('fòô bàř fòô', 8, ''); // 'fòô bàř'</code>
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
-- `int $length [optional] <p>Default: 100</p>`
+- `T $str <p>The input string.</p>`
+- `int<1, max> $length [optional] <p>Default: 100</p>`
 - `string $str_add_on [optional] <p>Default: …</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
@@ -3453,10 +3457,10 @@ Repeat a string.
 EXAMPLE: <code>UTF8::str_repeat("°~\xf0\x90\x28\xbc", 2); // '°~ð(¼°~ð(¼'</code>
 
 **Parameters:**
-- `string $str <p>
+- `T $str <p>
 The string to be repeated.
 </p>`
-- `int $multiplier <p>
+- `int<1, max> $multiplier <p>
 Number of time the input string should be
 repeated.
 </p>
@@ -3536,7 +3540,7 @@ INFO: uses random algorithm which is weak for cryptography purposes
 EXAMPLE: <code>UTF8::str_shuffle('fòô bàř fòô'); // 'àòôřb ffòô '</code>
 
 **Parameters:**
-- `string $str <p>The input string</p>`
+- `T $str <p>The input string</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
@@ -3592,14 +3596,14 @@ EXAMPLE: <code>UTF8::str_sort('  -ABC-中文空白-  '); // '    ---ABC中文白
 
 --------
 
-## str_split(int|string $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): string[]
+## str_split(int|string $str, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): string[]
 <a href="#voku-php-readme-class-methods">↑</a>
 Convert a string to an array of unicode characters.
 
 EXAMPLE: <code>UTF8::str_split('中文空白'); // array('中', '文', '空', '白')</code>
 
 **Parameters:**
-- `int|string $input <p>The string or int to split into array.</p>`
+- `int|string $str <p>The string or int to split into array.</p>`
 - `int $length [optional] <p>Max character length of each array
 element.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the
@@ -3774,8 +3778,8 @@ Gets the substring after (or before via "$before_needle") the last occurrence of
 Surrounds $str with the given substring.
 
 **Parameters:**
-- `string $str`
-- `string $substring <p>The substring to add to both sides.</p>`
+- `T $str`
+- `TSub $substring <p>The substring to add to both sides.</p>`
 
 **Return:**
 - `string <p>A string with the substring both prepended and appended.</p>`
@@ -3857,7 +3861,7 @@ EXAPLE: <code>UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'
 
 --------
 
-## str_to_words(string $str, string $char_list, bool $remove_empty_values, int|null $remove_short_values): string[]
+## str_to_words(string $str, string $char_list, bool $remove_empty_values, int|null $remove_short_values): list<string>
 <a href="#voku-php-readme-class-methods">↑</a>
 Convert a string into an array of words.
 
@@ -3870,7 +3874,7 @@ EXAMPLE: <code>UTF8::str_to_words('中文空白 oöäü#s', '#') // array('', '�
 - `int|null $remove_short_values <p>The min. string length or null to disable</p>`
 
 **Return:**
-- `string[]`
+- `list<string>`
 
 --------
 
@@ -4841,9 +4845,9 @@ Get part of a string process in bytes.
 - `int|null $length [optional] <p>The maximum length of the returned string.</p>`
 
 **Return:**
-- `false|string The portion of <i>str</i> specified by the <i>offset</i> and
+- `false|string <p>The portion of <i>str</i> specified by the <i>offset</i> and
 <i>length</i> parameters.</p><p>If <i>str</i> is shorter than <i>offset</i>
-characters long, <b>FALSE</b> will be returned.`
+characters long, <b>FALSE</b> will be returned.</p>`
 
 --------
 
@@ -5113,7 +5117,7 @@ case.</li>
 EXAMPLE: <code>UTF8::to_utf8_string("\u0063\u0061\u0074"); // 'cat'</code>
 
 **Parameters:**
-- `string $str <p>Any string.</p>`
+- `T $str <p>Any string.</p>`
 - `bool $decode_html_entity_to_utf8 <p>Set to true, if you need to decode html-entities.</p>`
 
 **Return:**
@@ -5198,7 +5202,7 @@ e.g:
 'D%%25C3%%2583%%25C2%%25BCsseldorf' => 'Düsseldorf'
 
 **Parameters:**
-- `string $str <p>The input string.</p>`
+- `T $str <p>The input string.</p>`
 - `bool $multi_decode <p>Decode as often as possible.</p>`
 
 **Return:**
@@ -5256,7 +5260,7 @@ EXAMPLE: <code>UTF8::words_limit('fòô bàř fòô', 2, ''); // 'fòô bàř'</
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $limit <p>The limit of words as integer.</p>`
+- `int<1, max> $limit <p>The limit of words as integer.</p>`
 - `string $str_add_on <p>Replacement for the striped string.</p>`
 
 **Return:**
@@ -5272,7 +5276,7 @@ EXAMPLE: <code>UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 2, '<br>', true)); 
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $width [optional] <p>The column width.</p>`
+- `int<1, max> $width [optional] <p>The column width.</p>`
 - `string $break [optional] <p>The line is broken using the optional break parameter.</p>`
 - `bool $cut [optional] <p>
 If the cut is set to true, the string is
@@ -5292,7 +5296,7 @@ Line-Wrap the string after $limit, but split the string by "$delimiter" before .
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $width [optional] <p>The column width.</p>`
+- `int<1, max> $width [optional] <p>The column width.</p>`
 - `string $break [optional] <p>The line is broken using the optional break parameter.</p>`
 - `bool $cut [optional] <p>
 If the cut is set to true, the string is
@@ -5303,7 +5307,7 @@ a word that is larger than the given width, it is broken apart.
 If this flag is true, then the method will add a $break at the end
 of the result string.
 </p>`
-- `string|null $delimiter [optional] <p>
+- `non-empty-string $delimiter [optional] <p>
 You can change the default behavior, where we split the string by newline.
 </p>`
 
