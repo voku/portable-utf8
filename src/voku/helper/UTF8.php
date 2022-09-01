@@ -1868,6 +1868,7 @@ final class UTF8
         }
 
         if (\is_int($max_length)) {
+            /* @phpstan-ignore-next-line | we do not trust the phpdoc check */
             if ($max_length < 0) {
                 $max_length = 0;
             }
@@ -2664,7 +2665,11 @@ final class UTF8
      * @param string      $possible_chars [optional] <p>Characters string for the random selection.</p>
      * @param string      $encoding       [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return non-empty-string
+     * @return string
+     *
+     * @template T as string
+     * @phpstan-param T $possible_chars
+     * @phpstan-return (T is non-empty-string ? non-empty-string : '')
      */
     public static function get_random_string(
         int $length,
@@ -7122,9 +7127,9 @@ final class UTF8
      * ArrayAccess interface, and throws an OutOfBoundsException if the index
      * does not exist.
      *
-     * @param string $str      <p>The input string.</p>
-     * @param int    $index    <p>The <strong>index</strong> from which to retrieve the char.</p>
-     * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
+     * @param string      $str      <p>The input string.</p>
+     * @param int<1, max> $index    <p>The <strong>index</strong> from which to retrieve the char.</p>
+     * @param string      $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @throws \OutOfBoundsException if the positive or negative offset does not exist
      *
@@ -7139,6 +7144,7 @@ final class UTF8
         $length = (int) self::strlen($str);
 
         if (
+            /* @phpstan-ignore-next-line | we do not trust the phpdoc check */
             ($index >= 0 && $length <= $index)
             ||
             $length < \abs($index)
@@ -7858,7 +7864,7 @@ final class UTF8
      * </code>
      *
      * @param int[]|string[] $input                   <p>The string[] or int[] to split into array.</p>
-     * @param int<int, max>  $length                  [optional] <p>Max character length of each array
+     * @param int<1, max>    $length                  [optional] <p>Max character length of each array
      *                                                element.</p>
      * @param bool           $clean_utf8              [optional] <p>Remove non UTF-8 chars from the
      *                                                string.</p>
@@ -7867,8 +7873,8 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return string[][]
-     *                    <p>An array containing chunks of the input.</p>
+     * @return list<list<string>>
+     *                            <p>An array containing chunks of the input.</p>
      */
     public static function str_split_array(
         array $input,
@@ -7885,7 +7891,7 @@ final class UTF8
             );
         }
 
-        /** @var string[][] $input */
+        /** @var list<list<string>> $input */
         return $input;
     }
 
@@ -7904,8 +7910,8 @@ final class UTF8
      *
      * @psalm-pure
      *
-     * @return string[]
-     *                  <p>An array containing chunks of chars from the input.</p>
+     * @return list<string>
+     *                      <p>An array containing chunks of chars from the input.</p>
      */
     public static function str_split(
         $str,
@@ -7913,6 +7919,7 @@ final class UTF8
         bool $clean_utf8 = false,
         bool $try_to_use_mb_functions = true
     ): array {
+        /* @phpstan-ignore-next-line | we do not trust the phpdoc check */
         if ($length <= 0) {
             return [];
         }

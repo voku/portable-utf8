@@ -208,7 +208,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td></tr><tr><td><a href="#getchardirectionstring-char-string">getCharDirection</a>
 </td><td><a href="#getsupportinfostringnull-key-mixed">getSupportInfo</a>
 </td><td><a href="#get_file_typestring-str-array-fallback">get_file_type</a>
-</td><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-non-empty-string">get_random_string</a>
+</td><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-string">get_random_string</a>
 </td></tr><tr><td><a href="#get_unique_stringintstring-extra_entropy-bool-use_md5-non-empty-string">get_unique_string</a>
 </td><td><a href="#has_lowercasestring-str-bool">has_lowercase</a>
 </td><td><a href="#has_uppercasestring-str-bool">has_uppercase</a>
@@ -331,8 +331,8 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td><td><a href="#str_slicestring-str-int-start-intnull-end-string-encoding-falsestring">str_slice</a>
 </td></tr><tr><td><a href="#str_snakeizestring-str-string-encoding-string">str_snakeize</a>
 </td><td><a href="#str_sortstring-str-bool-unique-bool-desc-string">str_sort</a>
-</td><td><a href="#str_splitintstring-str-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split</a>
-</td><td><a href="#str_split_arrayarray-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions">str_split_array</a>
+</td><td><a href="#str_splitintstring-str-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-liststring">str_split</a>
+</td><td><a href="#str_split_arrayintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-listliststring">str_split_array</a>
 </td></tr><tr><td><a href="#str_split_patternstring-str-string-pattern-int-limit-string">str_split_pattern</a>
 </td><td><a href="#str_starts_withstring-haystack-string-needle-bool">str_starts_with</a>
 </td><td><a href="#str_starts_with_anystring-str-scalar-substrings-bool">str_starts_with_any</a>
@@ -1360,17 +1360,17 @@ Warning: this method only works for some file-types (png, jpg)
 
 --------
 
-## get_random_string(int $length, string $possible_chars, string $encoding): non-empty-string
+## get_random_string(int $length, string $possible_chars, string $encoding): string
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
 **Parameters:**
 - `int<1, max> $length <p>Length of the random string.</p>`
-- `string $possible_chars [optional] <p>Characters string for the random selection.</p>`
+- `T $possible_chars [optional] <p>Characters string for the random selection.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
-- `non-empty-string`
+- `string`
 
 --------
 
@@ -3372,7 +3372,7 @@ does not exist.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $index <p>The <strong>index</strong> from which to retrieve the char.</p>`
+- `int<1, max> $index <p>The <strong>index</strong> from which to retrieve the char.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
@@ -3596,7 +3596,7 @@ EXAMPLE: <code>UTF8::str_sort('  -ABC-中文空白-  '); // '    ---ABC中文白
 
 --------
 
-## str_split(int|string $str, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): string[]
+## str_split(int|string $str, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): list<string>
 <a href="#voku-php-readme-class-methods">↑</a>
 Convert a string to an array of unicode characters.
 
@@ -3612,22 +3612,29 @@ string.</p>`
 "mb_substr"</p>`
 
 **Return:**
-- `string[] <p>An array containing chunks of chars from the input.</p>`
+- `list<string> <p>An array containing chunks of chars from the input.</p>`
 
 --------
 
-## str_split_array(array $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): 
+## str_split_array(int[]|string[] $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): list<list<string>>
 <a href="#voku-php-readme-class-methods">↑</a>
+Convert a string to an array of Unicode characters.
 
+EXAMPLE: <code>
+UTF8::str_split_array(['中文空白', 'test'], 2); // [['中文', '空白'], ['te', 'st']]
+</code>
 
 **Parameters:**
-- `array $input`
-- `int $length`
-- `bool $clean_utf8`
-- `bool $try_to_use_mb_functions`
+- `int[]|string[] $input <p>The string[] or int[] to split into array.</p>`
+- `int<1, max> $length [optional] <p>Max character length of each array
+element.</p>`
+- `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the
+string.</p>`
+- `bool $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
+"mb_substr"</p>`
 
 **Return:**
-- `array`
+- `list<list<string>> <p>An array containing chunks of the input.</p>`
 
 --------
 
