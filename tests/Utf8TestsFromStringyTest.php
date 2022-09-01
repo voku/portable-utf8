@@ -2177,6 +2177,11 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         // ----------------
 
         $testString = 'this is only a Fork of UTF8';
+        static::assertSame('…Fork of UTF8', UTF8::extract_text($testString, 'Fork', 0), 'tested: ' . $testString);
+
+        // ----------------
+
+        $testString = 'this is only a Fork of UTF8';
         static::assertSame('…a Fork of UTF8', UTF8::extract_text($testString, 'Fork', 5), 'tested: ' . $testString);
 
         // ----------------

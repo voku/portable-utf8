@@ -478,9 +478,9 @@ final class UTF8
     /**
      * Returns the character at $index, with indexes starting at 0.
      *
-     * @param string $str      <p>The input string.</p>
-     * @param int    $index    <p>Position of the character.</p>
-     * @param string $encoding [optional] <p>Default is UTF-8</p>
+     * @param string      $str        <p>The input string.</p>
+     * @param int<1, max> $index <p>Position of the character.</p>
+     * @param string      $encoding   [optional] <p>Default is UTF-8</p>
      *
      * @psalm-pure
      *
@@ -843,9 +843,9 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::chunk_split('ABC-ÖÄÜ-中文空白-κόσμε', 3); // "ABC\r\n-ÖÄ\r\nÜ-中\r\n文空白\r\n-κό\r\nσμε"</code>
      *
-     * @param string    $str          <p>The original string to be split.</p>
-     * @param int       $chunk_length [optional] <p>The maximum character length of a chunk.</p>
-     * @param string    $end          [optional] <p>The character(s) to be inserted at the end of each chunk.</p>
+     * @param string      $str          <p>The original string to be split.</p>
+     * @param int<1, max> $chunk_length [optional] <p>The maximum character length of a chunk.</p>
+     * @param string      $end          [optional] <p>The character(s) to be inserted at the end of each chunk.</p>
      *
      * @psalm-pure
      *
@@ -1560,12 +1560,12 @@ final class UTF8
     }
 
     /**
-     * @param string $str
-     * @param string $from_charset      [optional] <p>Set the input charset.</p>
-     * @param string $to_charset        [optional] <p>Set the output charset.</p>
-     * @param string $transfer_encoding [optional] <p>Set the transfer encoding.</p>
-     * @param string $linefeed          [optional] <p>Set the used linefeed.</p>
-     * @param int    $indent            [optional] <p>Set the max length indent.</p>
+     * @param string      $str
+     * @param string      $from_charset      [optional] <p>Set the input charset.</p>
+     * @param string      $to_charset        [optional] <p>Set the output charset.</p>
+     * @param string      $transfer_encoding [optional] <p>Set the transfer encoding.</p>
+     * @param string      $linefeed          [optional] <p>Set the used linefeed.</p>
+     * @param int<1, max> $indent            [optional] <p>Set the max length indent.</p>
      *
      * @psalm-pure
      *
@@ -1820,7 +1820,7 @@ final class UTF8
      * @param int|null      $offset           [optional] <p>
      *                                        The offset where the reading starts.
      *                                        </p>
-     * @param int|null      $max_length       [optional] <p>
+     * @param int<0, max>|null $max_length       [optional] <p>
      *                                        Maximum length of data read. The default is to read until end
      *                                        of file is reached.
      *                                        </p>
@@ -2289,9 +2289,9 @@ final class UTF8
     /**
      * Returns the first $n characters of the string.
      *
-     * @param string $str      <p>The input string.</p>
-     * @param int    $n        <p>Number of characters to retrieve from the start.</p>
-     * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
+     * @param string      $str      <p>The input string.</p>
+     * @param int<1, max> $n        <p>Number of characters to retrieve from the start.</p>
+     * @param string      $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @psalm-pure
      *
@@ -2299,7 +2299,6 @@ final class UTF8
      *
      * @template T as string
      * @phpstan-param T $str
-     * @phpstan-param int<1, max> $n
      * @phpstan-return (T is non-empty-string ? non-empty-string : string)
      */
     public static function first_char(
@@ -2661,13 +2660,11 @@ final class UTF8
     }
 
     /**
-     * @param int    $length         <p>Length of the random string.</p>
-     * @param string $possible_chars [optional] <p>Characters string for the random selection.</p>
-     * @param string $encoding       [optional] <p>Set the charset for e.g. "mb_" function</p>
+     * @param int<1, max> $length         <p>Length of the random string.</p>
+     * @param string      $possible_chars [optional] <p>Characters string for the random selection.</p>
+     * @param string      $encoding       [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @return string
-     *
-     * @phpstan-param int<1, max> $length
+     * @return non-empty-string
      */
     public static function get_random_string(
         int $length,
@@ -5567,8 +5564,8 @@ final class UTF8
     }
 
     /**
-     * @param string $str
-     * @param int    $tab_length
+     * @param string      $str
+     * @param int<1, max> $tab_length
      *
      * @psalm-pure
      *
@@ -6733,10 +6730,10 @@ final class UTF8
     /**
      * Limit the number of characters in a string.
      *
-     * @param string $str        <p>The input string.</p>
-     * @param int    $length     [optional] <p>Default: 100</p>
-     * @param string $str_add_on [optional] <p>Default: …</p>
-     * @param string $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
+     * @param string      $str        <p>The input string.</p>
+     * @param int<1, max> $length     [optional] <p>Default: 100</p>
+     * @param string      $str_add_on [optional] <p>Default: …</p>
+     * @param string      $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @psalm-pure
      *
@@ -6744,7 +6741,6 @@ final class UTF8
      *
      * @template T as string
      * @phpstan-param T $str
-     * @phpstan-param int<1, max> $length
      * @phpstan-return (T is non-empty-string ? non-empty-string : string)
      */
     public static function str_limit(
@@ -6785,10 +6781,10 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::str_limit_after_word('fòô bàř fòô', 8, ''); // 'fòô bàř'</code>
      *
-     * @param string $str        <p>The input string.</p>
-     * @param int    $length     [optional] <p>Default: 100</p>
-     * @param string $str_add_on [optional] <p>Default: …</p>
-     * @param string $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
+     * @param string      $str        <p>The input string.</p>
+     * @param int<1, max> $length     [optional] <p>Default: 100</p>
+     * @param string      $str_add_on [optional] <p>Default: …</p>
+     * @param string      $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
      * @psalm-pure
      *
@@ -6796,7 +6792,6 @@ final class UTF8
      *
      * @template T as string
      * @phpstan-param T $str
-     * @phpstan-param int<1, max> $length
      * @phpstan-return (T is non-empty-string ? non-empty-string : string)
      */
     public static function str_limit_after_word(
@@ -7414,10 +7409,10 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::str_repeat("°~\xf0\x90\x28\xbc", 2); // '°~ð(¼°~ð(¼'</code>
      *
-     * @param string $str        <p>
+     * @param string      $str   <p>
      *                           The string to be repeated.
      *                           </p>
-     * @param int    $multiplier <p>
+     * @param int<1, max> $multiplier <p>
      *                           Number of time the input string should be
      *                           repeated.
      *                           </p>
@@ -7434,7 +7429,6 @@ final class UTF8
      *
      * @template T as string
      * @phpstan-param T $str
-     * @phpstan-param int<1, max> $multiplier
      * @phpstan-return (T is non-empty-string ? non-empty-string : string)
      */
     public static function str_repeat(string $str, int $multiplier): string
@@ -7864,8 +7858,8 @@ final class UTF8
      * </code>
      *
      * @param int[]|string[] $input                   <p>The string[] or int[] to split into array.</p>
-     * @param int            $length                  [optional] <p>Max character length of each array
-     *                                                lement.</p>
+     * @param int<int, max>  $length                  [optional] <p>Max character length of each array
+     *                                                element.</p>
      * @param bool           $clean_utf8              [optional] <p>Remove non UTF-8 chars from the
      *                                                string.</p>
      * @param bool           $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
@@ -7900,12 +7894,12 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::str_split('中文空白'); // array('中', '文', '空', '白')</code>
      *
-     * @param int|string $str                     <p>The string or int to split into array.</p>
-     * @param int        $length                  [optional] <p>Max character length of each array
+     * @param int|string  $str                     <p>The string or int to split into array.</p>
+     * @param int<1, max> $length                  [optional] <p>Max character length of each array
      *                                            element.</p>
-     * @param bool       $clean_utf8              [optional] <p>Remove non UTF-8 chars from the
+     * @param bool        $clean_utf8              [optional] <p>Remove non UTF-8 chars from the
      *                                            string.</p>
-     * @param bool       $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
+     * @param bool        $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
      *                                            "mb_substr"</p>
      *
      * @psalm-pure
@@ -13123,15 +13117,13 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::words_limit('fòô bàř fòô', 2, ''); // 'fòô bàř'</code>
      *
-     * @param string $str        <p>The input string.</p>
-     * @param int    $limit      <p>The limit of words as integer.</p>
-     * @param string $str_add_on <p>Replacement for the striped string.</p>
+     * @param string      $str        <p>The input string.</p>
+     * @param int<1, max> $limit      <p>The limit of words as integer.</p>
+     * @param string      $str_add_on <p>Replacement for the striped string.</p>
      *
      * @psalm-pure
      *
      * @return string
-     *
-     * @phpstan-param int<1, max> $limit
      */
     public static function words_limit(
         string $str,
@@ -13167,10 +13159,10 @@ final class UTF8
      *
      * @see http://php.net/manual/en/function.wordwrap.php
      *
-     * @param string $str   <p>The input string.</p>
-     * @param int    $width [optional] <p>The column width.</p>
-     * @param string $break [optional] <p>The line is broken using the optional break parameter.</p>
-     * @param bool   $cut   [optional] <p>
+     * @param string      $str   <p>The input string.</p>
+     * @param int<1, max> $width [optional] <p>The column width.</p>
+     * @param string      $break [optional] <p>The line is broken using the optional break parameter.</p>
+     * @param bool        $cut   [optional] <p>
      *                      If the cut is set to true, the string is
      *                      always wrapped at or before the specified width. So if you have
      *                      a word that is larger than the given width, it is broken apart.
@@ -13180,8 +13172,6 @@ final class UTF8
      *
      * @return string
      *                <p>The given string wrapped at the specified column.</p>
-     *
-     * @phpstan-param int<1, max> $width
      */
     public static function wordwrap(
         string $str,
@@ -13260,7 +13250,7 @@ final class UTF8
      *    ... so that we wrap the per line.
      *
      * @param string      $str             <p>The input string.</p>
-     * @param int         $width           [optional] <p>The column width.</p>
+     * @param int<1, max> $width           [optional] <p>The column width.</p>
      * @param string      $break           [optional] <p>The line is broken using the optional break parameter.</p>
      * @param bool        $cut             [optional] <p>
      *                                     If the cut is set to true, the string is
@@ -13271,16 +13261,13 @@ final class UTF8
      *                                     If this flag is true, then the method will add a $break at the end
      *                                     of the result string.
      *                                     </p>
-     * @param string|null $delimiter       [optional] <p>
+     * @param non-empty-string|null $delimiter       [optional] <p>
      *                                     You can change the default behavior, where we split the string by newline.
      *                                     </p>
      *
      * @psalm-pure
      *
      * @return string
-     *
-     * @phpstan-param non-empty-string $delimiter
-     * @phpstan-param int<1, max> $width
      */
     public static function wordwrap_per_line(
         string $str,

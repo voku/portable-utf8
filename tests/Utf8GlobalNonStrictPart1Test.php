@@ -3301,6 +3301,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         static::assertSame('______中文空白', UTF8::str_pad('中文空白', 10, '_', \STR_PAD_LEFT));
         static::assertSame('___中文空白___', UTF8::str_pad('中文空白', 10, '_', \STR_PAD_BOTH));
         static::assertSame('中文空白', UTF8::str_pad('中文空白', 0, '_', \STR_PAD_BOTH));
+        static::assertSame('中文空白', UTF8::str_pad('中文空白', -1, '_', \STR_PAD_BOTH));
 
         $toPad = '<IñtërnëT>'; // 10 characters
         $padding = 'ø__'; // 4 characters

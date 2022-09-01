@@ -208,7 +208,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td></tr><tr><td><a href="#getchardirectionstring-char-string">getCharDirection</a>
 </td><td><a href="#getsupportinfostringnull-key-mixed">getSupportInfo</a>
 </td><td><a href="#get_file_typestring-str-array-fallback">get_file_type</a>
-</td><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-string">get_random_string</a>
+</td><td><a href="#get_random_stringint-length-string-possible_chars-string-encoding-non-empty-string">get_random_string</a>
 </td></tr><tr><td><a href="#get_unique_stringintstring-extra_entropy-bool-use_md5-non-empty-string">get_unique_string</a>
 </td><td><a href="#has_lowercasestring-str-bool">has_lowercase</a>
 </td><td><a href="#has_uppercasestring-str-bool">has_uppercase</a>
@@ -332,7 +332,7 @@ The API from the "UTF8"-Class is written as small static methods that will match
 </td></tr><tr><td><a href="#str_snakeizestring-str-string-encoding-string">str_snakeize</a>
 </td><td><a href="#str_sortstring-str-bool-unique-bool-desc-string">str_sort</a>
 </td><td><a href="#str_splitintstring-str-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split</a>
-</td><td><a href="#str_split_arrayintstring-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions-string">str_split_array</a>
+</td><td><a href="#str_split_arrayarray-input-int-length-bool-clean_utf8-bool-try_to_use_mb_functions">str_split_array</a>
 </td></tr><tr><td><a href="#str_split_patternstring-str-string-pattern-int-limit-string">str_split_pattern</a>
 </td><td><a href="#str_starts_withstring-haystack-string-needle-bool">str_starts_with</a>
 </td><td><a href="#str_starts_with_anystring-str-scalar-substrings-bool">str_starts_with_any</a>
@@ -539,7 +539,7 @@ Returns the character at $index, with indexes starting at 0.
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
-- `int $index <p>Position of the character.</p>`
+- `int<1, max> $index <p>Position of the character.</p>`
 - `string $encoding [optional] <p>Default is UTF-8</p>`
 
 **Return:**
@@ -661,7 +661,7 @@ EXAMPLE: <code>UTF8::chunk_split('ABC-ÖÄÜ-中文空白-κόσμε', 3); // "
 
 **Parameters:**
 - `T $str <p>The original string to be split.</p>`
-- `int $chunk_length [optional] <p>The maximum character length of a chunk.</p>`
+- `int<1, max> $chunk_length [optional] <p>The maximum character length of a chunk.</p>`
 - `string $end [optional] <p>The character(s) to be inserted at the end of each chunk.</p>`
 
 **Return:**
@@ -945,7 +945,7 @@ A empty string will trigger the autodetect anyway.</p>`
 - `string $to_charset [optional] <p>Set the output charset.</p>`
 - `string $transfer_encoding [optional] <p>Set the transfer encoding.</p>`
 - `string $linefeed [optional] <p>Set the used linefeed.</p>`
-- `int $indent [optional] <p>Set the max length indent.</p>`
+- `int<1, max> $indent [optional] <p>Set the max length indent.</p>`
 
 **Return:**
 - `false|string <p>An encoded MIME field on success,
@@ -996,7 +996,7 @@ custom context, you can skip this parameter by &null;.
 - `int|null $offset [optional] <p>
 The offset where the reading starts.
 </p>`
-- `int|null $max_length [optional] <p>
+- `int<0, max>|null $max_length [optional] <p>
 Maximum length of data read. The default is to read until end
 of file is reached.
 </p>`
@@ -1260,7 +1260,7 @@ Returns the first $n characters of the string.
 
 **Parameters:**
 - `T $str <p>The input string.</p>`
-- `it<1, max> $n <p>Number of characters to retrieve from the start.</p>`
+- `int<1, max> $n <p>Number of characters to retrieve from the start.</p>`
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
@@ -1360,7 +1360,7 @@ Warning: this method only works for some file-types (png, jpg)
 
 --------
 
-## get_random_string(int $length, string $possible_chars, string $encoding): string
+## get_random_string(int $length, string $possible_chars, string $encoding): non-empty-string
 <a href="#voku-php-readme-class-methods">↑</a>
 
 
@@ -1370,7 +1370,7 @@ Warning: this method only works for some file-types (png, jpg)
 - `string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>`
 
 **Return:**
-- `string`
+- `non-empty-string`
 
 --------
 
@@ -2774,7 +2774,7 @@ EXAMPLE: <code>UTF8::single_chr_html_encode('κ'); // '&#954;'</code>
 
 **Parameters:**
 - `T $str`
-- `int $tab_length`
+- `int<1, max> $tab_length`
 
 **Return:**
 - `string`
@@ -3604,7 +3604,7 @@ EXAMPLE: <code>UTF8::str_split('中文空白'); // array('中', '文', '空', '�
 
 **Parameters:**
 - `int|string $str <p>The string or int to split into array.</p>`
-- `int $length [optional] <p>Max character length of each array
+- `int<1, max> $length [optional] <p>Max character length of each array
 element.</p>`
 - `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the
 string.</p>`
@@ -3616,25 +3616,18 @@ string.</p>`
 
 --------
 
-## str_split_array(int[]|string[] $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): string[][]
+## str_split_array(array $input, int $length, bool $clean_utf8, bool $try_to_use_mb_functions): 
 <a href="#voku-php-readme-class-methods">↑</a>
-Convert a string to an array of Unicode characters.
 
-EXAMPLE: <code>
-UTF8::str_split_array(['中文空白', 'test'], 2); // [['中文', '空白'], ['te', 'st']]
-</code>
 
 **Parameters:**
-- `int[]|string[] $input <p>The string[] or int[] to split into array.</p>`
-- `int $length [optional] <p>Max character length of each array
-lement.</p>`
-- `bool $clean_utf8 [optional] <p>Remove non UTF-8 chars from the
-string.</p>`
-- `bool $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
-"mb_substr"</p>`
+- `array $input`
+- `int $length`
+- `bool $clean_utf8`
+- `bool $try_to_use_mb_functions`
 
 **Return:**
-- `string[][] <p>An array containing chunks of the input.</p>`
+- `array`
 
 --------
 
@@ -5307,7 +5300,7 @@ a word that is larger than the given width, it is broken apart.
 If this flag is true, then the method will add a $break at the end
 of the result string.
 </p>`
-- `non-empty-string $delimiter [optional] <p>
+- `non-empty-string|null $delimiter [optional] <p>
 You can change the default behavior, where we split the string by newline.
 </p>`
 
