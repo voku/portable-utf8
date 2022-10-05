@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.10 (2022-10-06)
+
+- optimize phpdocs (use positive-int)
+
 ### 6.0.9 (2022-09-01)
 
 - optimize phpdocs (use int-range)
