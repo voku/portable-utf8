@@ -738,7 +738,7 @@ final class UTF8
      *
      * @template T as string
      * @phpstan-param T $str
-     * @phpstan-return (T is non-empty-string ? non-empty-list<int> : list<int>)
+     * @phpstan-return (T is non-empty-string ? non-empty-list<1|2|3|4> : list<1|2|3|4>)
      */
     public static function chr_size_list(string $str): array
     {
@@ -747,6 +747,7 @@ final class UTF8
         }
 
         if (self::$SUPPORT['mbstring_func_overload'] === true) {
+            /* @phpstan-ignore-next-line | str_split only give one char, so that we only got int<1,4> */
             return \array_map(
                 static function (string $data): int {
                     // "mb_" is available if overload is used, so use it ...
@@ -756,6 +757,7 @@ final class UTF8
             );
         }
 
+        /* @phpstan-ignore-next-line | str_split only give one char, so that we only got int<1,4> */
         return \array_map('\strlen', self::str_split($str));
     }
 
@@ -1948,6 +1950,7 @@ final class UTF8
         switch (\gettype($var)) {
             case 'object':
             case 'array':
+                /* @phpstan-ignore-next-line | object & array are both iterable */
                 foreach ($var as &$v) {
                     $v = self::filter($v, $normalization_form, $leading_combining);
                 }
@@ -4502,6 +4505,8 @@ final class UTF8
      *
      * @return int
      *             <p>Max byte lengths of the given chars.</p>
+     *
+     * @phpstan-return 0|1|2|3|4
      */
     public static function max_chr_width(string $str): int
     {
@@ -4621,11 +4626,8 @@ final class UTF8
             return 'ISO-8859-1';
         }
 
-        if (
-            $encoding === '1' // only a fallback, for non "strict_types" usage ...
-            ||
-            $encoding === '0' // only a fallback, for non "strict_types" usage ...
-        ) {
+        // only a fallback, for non "strict_types" usage ...
+        if ($encoding === '1') {
             return $fallback;
         }
 
@@ -8913,6 +8915,8 @@ final class UTF8
      * @psalm-pure
      *
      * @return list<string>
+     *
+     * @phpstan-return ($remove_empty_values is true ? list<string> : non-empty-list<string>)
      */
     public static function str_to_words(
         string $str,
@@ -9197,6 +9201,9 @@ final class UTF8
      *
      * @return int|string[]
      *                      <p>The number of words in the string.</p>
+     *
+     * @phpstan-param 0|1|2 $format
+     * @phpstan-return ($format is 2 ? array<int, string> : ($format is 1 ? list<string> : 0|positive-int))
      */
     public static function str_word_count(string $str, int $format = 0, string $char_list = '')
     {
@@ -9209,17 +9216,24 @@ final class UTF8
             for ($i = 1; $i < $len; $i += 2) {
                 $number_of_words[] = $str_parts[$i];
             }
-        } elseif ($format === 2) {
+
+            return $number_of_words;
+        }
+
+        if ($format === 2) {
             $number_of_words = [];
             $offset = (int) self::strlen($str_parts[0]);
             for ($i = 1; $i < $len; $i += 2) {
                 $number_of_words[$offset] = $str_parts[$i];
                 $offset += (int) self::strlen($str_parts[$i]) + (int) self::strlen($str_parts[$i + 1]);
             }
-        } else {
-            $number_of_words = (int) (($len - 1) / 2);
+
+            return $number_of_words;
         }
 
+        $number_of_words = (int) (($len - 1) / 2);
+
+        /* @phpstan-ignore-next-line | it should be 0|positive-int, maybe nested "phpstan-return" is not working? */
         return $number_of_words;
     }
 
@@ -9305,6 +9319,8 @@ final class UTF8
      * @psalm-pure
      *
      * @return int
+     *
+     * @phpstan-return 0|positive-int
      */
     public static function strcspn(
         string $str,
@@ -9505,6 +9521,8 @@ final class UTF8
      * @return false|int
      *                   Return the <strong>(int)</strong> numeric position of the first occurrence of needle in the
      *                   haystack string,<br> or <strong>false</strong> if needle is not found
+     *
+     * @phpstan-return false|0|positive-int
      */
     public static function stripos(
         string $haystack,
@@ -9705,6 +9723,8 @@ final class UTF8
      *                   Can return <strong>false</strong>, if e.g. mbstring is not installed and we process invalid
      *                   chars.
      *                   </p>
+     *
+     * @phpstan-return false|0|positive-int
      */
     public static function strlen(
         string $str,
@@ -9821,6 +9841,8 @@ final class UTF8
      * @psalm-pure
      *
      * @return int
+     *
+     * @phpstan-return 0|positive-int
      */
     public static function strlen_in_byte(string $str): int
     {
@@ -10029,6 +10051,8 @@ final class UTF8
      * @return false|int
      *                   The <strong>(int)</strong> numeric position of the first occurrence of needle in the haystack
      *                   string.<br> If needle is not found it returns false.
+     *
+     * @phpstan-return false|0|positive-int
      */
     public static function strpos(
         string $haystack,
@@ -10201,6 +10225,8 @@ final class UTF8
      * @return false|int
      *                   <p>The numeric position of the first occurrence of needle in the
      *                   haystack string. If needle is not found, it returns false.</p>
+     *
+     * @phpstan-return false|0|positive-int
      */
     public static function strpos_in_byte(string $haystack, string $needle, int $offset = 0)
     {
@@ -10234,6 +10260,8 @@ final class UTF8
      * @return false|int
      *                   <p>The numeric position of the first occurrence of needle in the
      *                   haystack string. If needle is not found, it returns false.</p>
+     *
+     * @phpstan-return false|0|positive-int
      */
     public static function stripos_in_byte(string $haystack, string $needle, int $offset = 0)
     {
@@ -11408,6 +11436,8 @@ final class UTF8
      * @psalm-pure
      *
      * @return int
+     *
+     * @phpstan-return 0|positive-int
      */
     public static function strwidth(
         string $str,
@@ -11451,6 +11481,7 @@ final class UTF8
         $wide = 0;
         $str = (string) \preg_replace('/[\x{1100}-\x{115F}\x{2329}\x{232A}\x{2E80}-\x{303E}\x{3040}-\x{A4CF}\x{AC00}-\x{D7A3}\x{F900}-\x{FAFF}\x{FE10}-\x{FE19}\x{FE30}-\x{FE6F}\x{FF00}-\x{FF60}\x{FFE0}-\x{FFE6}\x{20000}-\x{2FFFD}\x{30000}-\x{3FFFD}]/u', '', $str, -1, $wide);
 
+        /* @phpstan-ignore-next-line | should return 0|positive-int */
         return ($wide << 1) + (int) self::strlen($str);
     }
 
@@ -11872,6 +11903,8 @@ final class UTF8
      * @psalm-pure
      *
      * @return int
+     *
+     * @phpstan-return 0|positive-int
      */
     public static function substr_count_simple(
         string $str,

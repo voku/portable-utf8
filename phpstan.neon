@@ -37,6 +37,8 @@ parameters:
     ignoreErrors:
         - '#voku\\helper\\UTF8::substr_replace\(\) should return TSubstrReplace#'
         - '#readonly property cannot have a default value#'
+        - '#should return int<0, max>\|false but returns int\.#'
+        - '#should return int<0, max>\|false but returns int\|false\.#'
 rules:
     - PHPStan\Rules\DisallowedConstructs\DisallowedBacktickRule
     - PHPStan\Rules\DisallowedConstructs\DisallowedImplicitArrayCreationRule

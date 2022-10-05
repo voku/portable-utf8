@@ -254,6 +254,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
     public function testChrSizeList()
     {
         $testArray = [
+            ' ' => [
+                1,
+            ],
             "中文空白\xF0\x90\x8C\xBC" => [
                 3,
                 3,
