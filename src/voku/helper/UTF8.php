@@ -5037,7 +5037,8 @@ final class UTF8
      *
      * @return mixed
      */
-    public static function getUrlParamFromArray(string $param, array $data) {
+    public static function getUrlParamFromArray(string $param, array $data)
+    {
         /**
          * @param array<array-key, mixed> $searchArray
          * @param array<array-key, mixed> $array
@@ -5062,7 +5063,7 @@ final class UTF8
          * @param string $string
          * @return array|null
          */
-        $getUrlKeyArgsFromString = static function(string $string) {
+        $getUrlKeyArgsFromString = static function (string $string) {
             if (!self::str_contains($string, '?')) {
                 $string = '?' . $string;
             }
