@@ -5029,6 +5029,64 @@ final class UTF8
     }
 
     /**
+     * @param array<array-key, mixed> $data
+     *
+     * @return mixed
+     */
+    public static function getUrlParamFromArray(string $param, array $data) {
+        /**
+         * @param array<array-key, mixed> $searchArray
+         * @param array<array-key, mixed> $array
+         *
+         * @return mixed
+         */
+        $getUrlArgFromArrayHelper = static function (array $searchArray, array $array) use (&$getUrlArgFromArrayHelper) {
+            foreach ($searchArray as $key => $value) {
+                if (isset($array[$key])) {
+                    if (\is_array($value) && \is_array($array[$key])) {
+                        return $getUrlArgFromArrayHelper($value, $array[$key]);
+                    }
+
+                    return $array[$key];
+                }
+            }
+
+            return null;
+        };
+
+        /**
+         * @param string $string
+         * @return array|null
+         */
+        $getUrlKeyArgsFromString = static function(string $string) {
+            if (!self::str_contains($string, '?')) {
+                $string = '?' . $string;
+            }
+
+            $args = parse_url($string, PHP_URL_QUERY);
+            if ($args) {
+                $query = [];
+                parse_str($args, $query);
+
+                return $query;
+            }
+
+            return null;
+        };
+
+        if (isset($data[$param])) {
+            return $data[$param];
+        }
+
+        $paramKeys = $getUrlKeyArgsFromString($param);
+        if ($paramKeys !== null) {
+            return $getUrlArgFromArrayHelper($paramKeys, $data);
+        }
+
+        return null;
+    }
+
+    /**
      * Multi decode HTML entity + fix urlencoded-win1252-chars.
      *
      * EXAMPLE: <code>UTF8::rawurldecode('tes%20öäü%20\u00edtest+test'); // 'tes öäü ítest+test'</code>
@@ -13126,8 +13184,9 @@ final class UTF8
             return '';
         }
 
+        /** @noinspection PhpUsageOfSilenceOperatorInspection | TODO for PHP > 8.2: find a replacement for this */
         /** @var false|string $str - the polyfill maybe return false */
-        $str = \utf8_encode($str);
+        $str = @\utf8_encode($str);
 
         if ($str === false) {
             return '';

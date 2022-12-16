@@ -65,7 +65,7 @@ final class ShimIconvTest extends \PHPUnit\Framework\TestCase
 
         if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
             static::assertSame('nud', p::iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
-            static::assertSame(\utf8_decode('déjà'), p::iconv('CP1252', 'ISO-8859-1', \utf8_decode('déjà')));
+            static::assertSame(UTF8::utf8_decode('déjà'), p::iconv('CP1252', 'ISO-8859-1', UTF8::utf8_decode('déjà')));
             static::assertSame('déjà', p::iconv('UTF-8', 'utf8', 'déjà'));
             static::assertSame('deja noeud', p::iconv('UTF-8', 'US-ASCII//TRANSLIT', 'déjà nœud'));
         }
