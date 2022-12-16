@@ -11,7 +11,6 @@ use voku\helper\UTF8 as u;
  */
 final class Utf8GetUrlParamFromArrayTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testInvalidSixOctetSequence()
     {
         // init
