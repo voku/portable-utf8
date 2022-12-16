@@ -38,7 +38,7 @@ final class Utf8GetUrlParamFromArrayTest extends \PHPUnit\Framework\TestCase
         $array['fooo'][3432] = 'lall1';
 
         static::assertSame(
-            'lal1',
+            'lall1',
             u::getUrlParamFromArray('fooo[3432]', $array)
         );
 

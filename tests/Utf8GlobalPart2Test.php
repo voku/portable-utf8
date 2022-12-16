@@ -886,13 +886,8 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(1, \substr_compare('abcde', 'bc', 1, 3));
         static::assertSame(1, UTF8::substr_compare('abcde', 'bc', 1, 3));
 
-        if (stripos(\PHP_OS, 'WIN') === 0) {
-            static::assertSame(-1, \substr_compare('abcde', 'cd', 1, 2));
-            static::assertSame(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
-        } else {
-            static::assertSame(-65793, \substr_compare('abcde', 'cd', 1, 2));
-            static::assertSame(-65793, UTF8::substr_compare('abcde', 'cd', 1, 2));
-        }
+        static::assertSame(-1, \substr_compare('abcde', 'cd', 1, 2));
+        static::assertSame(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
 
         // UTF-8 tests
 
