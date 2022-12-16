@@ -5029,6 +5029,10 @@ final class UTF8
     }
 
     /**
+     * Get data from an array via array like string.
+     *
+     * EXAMPLE: <code>$array['foo'][123] = 'lall'; UTF8::getUrlParamFromArray('foo[123]', $array); // 'lall'</code>
+     *
      * @param array<array-key, mixed> $data
      *
      * @return mixed
