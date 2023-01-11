@@ -1045,6 +1045,7 @@ final class UTF8
             );
         }
 
+        /* @phpstan-ignore-next-line | FP? */
         return $arg;
     }
 
@@ -8192,6 +8193,7 @@ final class UTF8
         if ($length > 1) {
             return \array_map(
                 static function (array $item): string {
+                    /* @phpstan-ignore-next-line | "array_map + array_chunk" is not supported by phpstan?! */
                     return \implode('', $item);
                 },
                 \array_chunk($ret, $length)
@@ -12909,6 +12911,7 @@ final class UTF8
             ||
             $input_type === 'double'
         ) {
+            /* @phpstan-ignore-next-line | "gettype" is not supported by phpstan?! */
             return (string) $input;
         }
 

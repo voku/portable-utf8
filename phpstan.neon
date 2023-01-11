@@ -30,7 +30,6 @@ parameters:
     checkUninitializedProperties: true
     earlyTerminatingMethodCalls:
     earlyTerminatingFunctionCalls:
-    dynamicConstantNames:
     excludePaths:
     bootstrapFiles:
         - %currentWorkingDirectory%/bootstrap.php
