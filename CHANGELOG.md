@@ -1,5 +1,10 @@
 # Changelog
 
+### 6.0.12 (2023-01-11)
+
+- added "UTF8::remove_iright()" 
+- added "UTF8::remove_ileft()"
+
 ### 6.0.11 (2022-12-16)
 
 - test with PHP 8.2
