@@ -3019,6 +3019,52 @@ d
     }
 
     /**
+     * @dataProvider removeRightProvider()
+     *
+     * @param $expected
+     * @param $str
+     * @param $substring
+     * @param $encoding
+     */
+    public function testRemoveiRight($expected, $str, $substring, $encoding = '')
+    {
+        $result = UTF8::remove_iright($str, strtoupper($substring), $encoding);
+        static::assertSame($expected, $result);
+
+        $result = UTF8::remove_iright($str, strtolower($substring), $encoding);
+        static::assertSame($expected, $result);
+
+        $result = UTF8::remove_iright(strtoupper($str), $substring, $encoding);
+        static::assertSame(strtoupper($expected), $result);
+
+        $result = UTF8::remove_iright(strtolower($str), $substring, $encoding);
+        static::assertSame(strtolower($expected), $result);
+    }
+
+    /**
+     * @dataProvider removeLeftProvider()
+     *
+     * @param $expected
+     * @param $str
+     * @param $substring
+     * @param $encoding
+     */
+    public function testRemoveiLeft($expected, $str, $substring, $encoding = '')
+    {
+        $result = UTF8::remove_ileft($str, strtoupper($substring), $encoding);
+        static::assertSame($expected, $result);
+
+        $result = UTF8::remove_ileft($str, strtolower($substring), $encoding);
+        static::assertSame($expected, $result);
+
+        $result = UTF8::remove_ileft(strtoupper($str), $substring, $encoding);
+        static::assertSame(strtoupper($expected), $result);
+
+        $result = UTF8::remove_ileft(strtolower($str), $substring, $encoding);
+        static::assertSame(strtolower($expected), $result);
+    }
+
+    /**
      * @dataProvider repeatProvider()
      *
      * @param $expected
