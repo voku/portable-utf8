@@ -3313,6 +3313,25 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testStrLimitInByte()
+    {
+        $testArray = [
+            ['th...', 'this is a test', 5, '...'],
+            ['this ...', 'this is öäü-foo test', 8, '...'],
+            ['fòô ', 'fòô bàř fòô', 6, ''],
+            ['', "fòô bàř \x00fòô", 0, ''],
+            ['', "fòô bàř \x00fòô", -1, ''],
+            ['fòô白', "fòô bàř \x00fòô", 8, '白'],
+            ['白', '白白 白白', 3, ''],
+            ['白白白', '白白白', 100, ''],
+            ['', '', 1, ''],
+        ];
+
+        foreach ($testArray as $test) {
+            static::assertSame($test[0], UTF8::str_limit_in_byte($test[1], $test[2], $test[3]), 'tested: ' . $test[1]);
+        }
+    }
+
     public function testStrLimitAfterWord()
     {
         $testArray = [

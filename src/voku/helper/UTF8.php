@@ -6933,6 +6933,46 @@ final class UTF8
     }
 
     /**
+     * Limit the number of characters in a string in bytes.
+     *
+     * @param string      $str        <p>The input string.</p>
+     * @param int<1, max> $length     [optional] <p>Default: 100</p>
+     * @param string      $str_add_on [optional] <p>Default: ...</p>
+     * @param string      $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
+     *
+     * @psalm-pure
+     *
+     * @return string
+     *
+     * @template T as string
+     * @phpstan-param T $str
+     * @phpstan-return (T is non-empty-string ? non-empty-string : string)
+     */
+    public static function str_limit_in_byte(
+        string $str,
+        int $length = 100,
+        string $str_add_on = '...',
+        string $encoding = 'UTF-8'
+    ): string {
+        if (
+            $str === ''
+            ||
+            /* @phpstan-ignore-next-line | we do not trust the phpdoc check */
+            $length <= 0
+        ) {
+            return '';
+        }
+
+        $encoding = self::normalize_encoding($encoding, 'UTF-8');
+
+        if ((int) self::strlen_in_byte($str, $encoding) <= $length) {
+            return $str;
+        }
+
+        return ((string) self::substr_in_byte($str, 0, $length - (int) self::strlen_in_byte($str_add_on), $encoding)) . $str_add_on;
+    }
+
+    /**
      * Limit the number of characters in a string, but also after the next word.
      *
      * EXAMPLE: <code>UTF8::str_limit_after_word('fòô bàř fòô', 8, ''); // 'fòô bàř'</code>
