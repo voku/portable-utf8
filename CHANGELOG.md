@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.13 (2023-03-08)
+
+- added "UTF8::str_limit_in_byte()"
+
 ### 6.0.12 (2023-01-11)
 
 - added "UTF8::remove_iright()" 
