@@ -451,7 +451,6 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
     public function testTrim($input, $output)
     {
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {

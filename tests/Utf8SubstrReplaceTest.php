@@ -30,7 +30,6 @@ final class Utf8SubstrReplaceTest extends \PHPUnit\Framework\TestCase
     public function testNegative()
     {
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-
             $str = 'testing';
             $replaced = \substr_replace($str, 'foo', 0, -2);
             static::assertSame($replaced, u::substr_replace($str, 'foo', 0, -2));

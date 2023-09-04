@@ -16,9 +16,9 @@ final class Utf8StrPadTest extends \PHPUnit\Framework\TestCase
     public function testStrPad()
     {
         $toPad = '<IñtërnëT>'; // 10 characters
-    $padding = 'ø__'; // 4 characters
+        $padding = 'ø__'; // 4 characters
 
-    static::assertSame($toPad . '          ', u::str_pad($toPad, 20));
+        static::assertSame($toPad . '          ', u::str_pad($toPad, 20));
         static::assertSame('          ' . $toPad, u::str_pad($toPad, 20, ' ', \STR_PAD_LEFT));
         static::assertSame('     ' . $toPad . '     ', u::str_pad($toPad, 20, ' ', \STR_PAD_BOTH));
 

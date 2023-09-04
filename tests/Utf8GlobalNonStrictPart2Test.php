@@ -92,7 +92,6 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -282,7 +281,6 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     public function testStrpos()
     {
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -366,7 +364,6 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             // --- invalid UTF-8
 
             if (UTF8::getSupportInfo('mbstring') === true) { // only with "mbstring"
-
                 static::assertSame(15, UTF8::strpos('ABC-ÖÄÜ-💩-' . "\xc3\x28" . '中文空白-中文空白' . "\xf0\x28\x8c\x28" . 'abc', '白'));
 
                 if (Bootup::is_php('7.1')) {

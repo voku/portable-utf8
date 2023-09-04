@@ -54,7 +54,6 @@ final class Utf8ToAsciiTest extends \PHPUnit\Framework\TestCase
     {
         $testsStrict = [];
         if (UTF8::intl_loaded()) {
-
             // ---
 
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
