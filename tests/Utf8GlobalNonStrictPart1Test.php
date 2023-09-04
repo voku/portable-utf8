@@ -217,7 +217,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
 
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -959,7 +958,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         // ---
 
         if (UTF8::mbstring_loaded()) { // only with "mbstring"
-
             static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
             if (\method_exists(__CLASS__, 'assertStringContainsString')) {
@@ -1012,7 +1010,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         }
 
         if (UTF8::mbstring_loaded()) { // only with "mbstring"
-
             $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
             if (\method_exists(__CLASS__, 'assertStringContainsString')) {
                 static::assertStringContainsString(
@@ -1358,7 +1355,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -2614,7 +2610,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -2656,7 +2651,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -2712,7 +2706,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -3082,7 +3075,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
     {
         $oldSupportArray = null;
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -3132,7 +3124,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -3690,7 +3681,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
     public function testStripos()
     {
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {

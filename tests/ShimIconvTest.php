@@ -19,16 +19,16 @@ final class ShimIconvTest extends \PHPUnit\Framework\TestCase
         // Native iconv() behavior varies between versions and OS for these two tests
         // See e.g. https://bugs.php.net/52211
         if (
-        !\defined('HHVM_VERSION')
-        &&
-        (
-            \PHP_VERSION_ID >= 50610
-            ||
-            (\PHP_VERSION_ID >= 50526 && \PHP_VERSION_ID < 50600)
-            ||
-            '\\' === \DIRECTORY_SEPARATOR
-        )
-    ) {
+            !\defined('HHVM_VERSION')
+            &&
+            (
+                \PHP_VERSION_ID >= 50610
+                ||
+                (\PHP_VERSION_ID >= 50526 && \PHP_VERSION_ID < 50600)
+                ||
+                '\\' === \DIRECTORY_SEPARATOR
+            )
+        ) {
             /** @noinspection PhpUsageOfSilenceOperatorInspection */
             static::assertSame(\PHP_VERSION_ID >= 50400 ? false : 'n', @\iconv('UTF-8', 'ISO-8859-1', 'nœud'));
             static::assertSame('nud', \iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
@@ -45,8 +45,7 @@ final class ShimIconvTest extends \PHPUnit\Framework\TestCase
                 static::assertSame('nud', @\iconv('UTF-8', 'ISO-8859-1//IGNORE', 'nœud'));
             }
         } else {
-
-      // See e.g. https://bugs.php.net/52211
+            // See e.g. https://bugs.php.net/52211
             /** @noinspection PhpUndefinedConstantInspection */
             if (\defined('HHVM_VERSION') && HHVM_VERSION_ID >= 30901) {
                 /** @noinspection PhpUsageOfSilenceOperatorInspection */

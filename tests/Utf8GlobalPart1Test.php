@@ -211,7 +211,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         }
 
         for ($i = 0; $i < 200; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -965,7 +964,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             // ---
 
             if (UTF8::mbstring_loaded()) { // only with "mbstring"
-
                 static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
                 $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
                 static::assertStringContainsString(
@@ -992,7 +990,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
 
             if (UTF8::mbstring_loaded()) { // only with "mbstring"
-
                 $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
                 static::assertStringContainsString(
                     '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
@@ -1069,7 +1066,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             // ---
 
             if (UTF8::mbstring_loaded()) { // only with "mbstring"
-
                 static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
                 $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
                 static::assertContains(
@@ -1096,7 +1092,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
 
             if (UTF8::mbstring_loaded()) { // only with "mbstring"
-
                 $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
                 static::assertContains(
                     '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
@@ -1354,7 +1349,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -2609,7 +2603,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -2651,7 +2644,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i < 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -3131,7 +3123,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
     {
         $oldSupportArray = null;
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -3181,7 +3172,6 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         ];
 
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
@@ -3372,9 +3362,9 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         static::assertSame('___中文空白___', UTF8::str_pad('中文空白', 10, '_', \STR_PAD_BOTH));
 
         $toPad = '<IñtërnëT>'; // 10 characters
-    $padding = 'ø__'; // 4 characters
+        $padding = 'ø__'; // 4 characters
 
-    static::assertSame($toPad . '          ', UTF8::str_pad($toPad, 20));
+        static::assertSame($toPad . '          ', UTF8::str_pad($toPad, 20));
         static::assertSame('          ' . $toPad, UTF8::str_pad($toPad, 20, ' ', \STR_PAD_LEFT));
         static::assertSame('     ' . $toPad . '     ', UTF8::str_pad($toPad, 20, ' ', \STR_PAD_BOTH));
 
@@ -3861,7 +3851,6 @@ abc	áßç	क際👽 	क際👽
     public function testStripos()
     {
         for ($i = 0; $i <= 2; ++$i) { // keep this loop for simple performance tests
-
             if ($i === 0) {
                 $this->disableNativeUtf8Support();
             } elseif ($i > 0) {
