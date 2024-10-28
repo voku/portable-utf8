@@ -4369,7 +4369,7 @@ final class UTF8
             if ($chars !== null) {
                 /** @noinspection PregQuoteUsageInspection */
                 $chars = \preg_quote($chars);
-                $pattern = "^[${chars}]+";
+                $pattern = "^[{$chars}]+";
             } else {
                 $pattern = '^[\\s]+';
             }
@@ -4379,7 +4379,7 @@ final class UTF8
 
         if ($chars !== null) {
             $chars = \preg_quote($chars, '/');
-            $pattern = "^[${chars}]+";
+            $pattern = "^[{$chars}]+";
         } else {
             $pattern = '^[\\s]+';
         }
@@ -5401,7 +5401,7 @@ final class UTF8
             if ($chars !== null) {
                 /** @noinspection PregQuoteUsageInspection */
                 $chars = \preg_quote($chars);
-                $pattern = "[${chars}]+$";
+                $pattern = "[{$chars}]+$";
             } else {
                 $pattern = '[\\s]+$';
             }
@@ -5411,7 +5411,7 @@ final class UTF8
 
         if ($chars !== null) {
             $chars = \preg_quote($chars, '/');
-            $pattern = "[${chars}]+$";
+            $pattern = "[{$chars}]+$";
         } else {
             $pattern = '[\\s]+$';
         }
@@ -12612,7 +12612,7 @@ final class UTF8
             if ($chars !== null) {
                 /** @noinspection PregQuoteUsageInspection */
                 $chars = \preg_quote($chars);
-                $pattern = "^[${chars}]+|[${chars}]+\$";
+                $pattern = "^[{$chars}]+|[{$chars}]+\$";
             } else {
                 $pattern = '^[\\s]+|[\\s]+$';
             }
@@ -12622,7 +12622,7 @@ final class UTF8
 
         if ($chars !== null) {
             $chars = \preg_quote($chars, '/');
-            $pattern = "^[${chars}]+|[${chars}]+\$";
+            $pattern = "^[{$chars}]+|[{$chars}]+\$";
         } else {
             $pattern = '^[\\s]+|[\\s]+$';
         }
