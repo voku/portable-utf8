@@ -14069,7 +14069,7 @@ final class UTF8
         if (isset(self::$WIN1252_TO_UTF8[$ordC1])) { // found in Windows-1252 special cases
             $buf .= self::$WIN1252_TO_UTF8[$ordC1];
         } else {
-            $cc1 = self::$CHR[$ordC1 / 64] | "\xC0";
+            $cc1 = self::$CHR[intval(floor($ordC1 / 64))] | "\xC0";
             $cc2 = ((string) $input & "\x3F") | "\x80";
             $buf .= $cc1 . $cc2;
         }
