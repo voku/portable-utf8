@@ -27,7 +27,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "symfony/polyfill-php72": "~1.0",
         "symfony/polyfill-iconv": "~1.0",
         "symfony/polyfill-intl-grapheme": "~1.0",
