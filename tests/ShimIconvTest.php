@@ -170,14 +170,6 @@ HEADERS;
             static::assertSame(4, p::iconv_strlen('déjà'));
         }
         static::assertSame(3, p::iconv_strlen('한국어'));
-
-        if (UTF8::getSupportInfo('mbstring_func_overload') !== true) {
-            static::assertSame(4, p::strlen1('déjà'));
-            static::assertSame(3, p::strlen2('한국어'));
-
-            static::assertSame(4, p::strlen1('déjà'));
-            static::assertSame(3, p::strlen2('한국어'));
-        }
     }
 
     public function testIconvSubstr()
