@@ -628,6 +628,7 @@ final class UTF8
         }
 
         if ($code_point <= 0x80) { // only for "simple"-chars
+
             if (self::$CHR === null) {
                 self::$CHR = self::getData('chr');
             }
@@ -8176,6 +8177,7 @@ final class UTF8
             \preg_match_all('/./us', $str, $return_array);
             $ret = $return_array[0] ?? [];
         } else {
+
             // fallback
 
             $ret = [];
@@ -9195,13 +9197,13 @@ final class UTF8
         }
 
         return (
-            (string) self::substr(
-                $str,
-                0,
-                $length,
-                $encoding
-            )
-        ) . $substring;
+               (string) self::substr(
+                   $str,
+                   0,
+                   $length,
+                   $encoding
+               )
+               ) . $substring;
     }
 
     /**
@@ -12803,7 +12805,9 @@ final class UTF8
             $c1 = $str[$i];
 
             if ($c1 >= "\xC0") { // should be converted to UTF8, if it's not UTF8 already
+
                 if ($c1 <= "\xDF") { // looks like 2 bytes UTF8
+
                     $c2 = $i + 1 >= $max ? "\x00" : $str[$i + 1];
 
                     if ($c2 >= "\x80" && $c2 <= "\xBF") { // yeah, almost sure it's UTF8 already
@@ -12813,6 +12817,7 @@ final class UTF8
                         $buf .= self::to_utf8_convert_helper($c1);
                     }
                 } elseif ($c1 >= "\xE0" && $c1 <= "\xEF") { // looks like 3 bytes UTF8
+
                     $c2 = $i + 1 >= $max ? "\x00" : $str[$i + 1];
                     $c3 = $i + 2 >= $max ? "\x00" : $str[$i + 2];
 
@@ -12823,6 +12828,7 @@ final class UTF8
                         $buf .= self::to_utf8_convert_helper($c1);
                     }
                 } elseif ($c1 >= "\xF0" && $c1 <= "\xF7") { // looks like 4 bytes UTF8
+
                     $c2 = $i + 1 >= $max ? "\x00" : $str[$i + 1];
                     $c3 = $i + 2 >= $max ? "\x00" : $str[$i + 2];
                     $c4 = $i + 3 >= $max ? "\x00" : $str[$i + 3];
@@ -12834,11 +12840,14 @@ final class UTF8
                         $buf .= self::to_utf8_convert_helper($c1);
                     }
                 } else { // doesn't look like UTF8, but should be converted
+
                     $buf .= self::to_utf8_convert_helper($c1);
                 }
             } elseif (($c1 & "\xC0") === "\x80") { // needs conversion
+
                 $buf .= self::to_utf8_convert_helper($c1);
             } else { // it doesn't need conversion
+
                 $buf .= $c1;
             }
         }
@@ -13253,7 +13262,7 @@ final class UTF8
                 case "\xF0":
                     ++$i;
 
-                    // no break
+                // no break
 
                 case "\xE0":
                     $str[$j] = $no_char_found;
@@ -13633,6 +13642,7 @@ final class UTF8
                     return false;
                 }
             } elseif ((0xC0 & $in) === 0x80) {
+
                 // When mState is non-zero, we expect a continuation of the multi-octet
                 // sequence
 
