@@ -9517,7 +9517,7 @@ final class UTF8
         string $char_list,
         int $offset = 0,
         ?int $length = null,
-        ?string $encoding = 'UTF-8'
+        string $encoding = 'UTF-8'
     ): int {
         if ($encoding !== 'UTF-8' && $encoding !== 'CP850') {
             $encoding = self::normalize_encoding($encoding, 'UTF-8');
