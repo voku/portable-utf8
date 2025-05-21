@@ -11878,10 +11878,25 @@ final class UTF8
             ||
             $length !== null
         ) {
-            $encoding = self::normalize_encoding($encoding, 'UTF-8');
+            if ($encoding === 'UTF-8') {
+                if (\PHP_VERSION_ID < 70400) {
+                    if ($length === null) {
+                        $str1 = (string) \mb_substr($str1, $offset);
+                    } else {
+                        $str1 = (string)\mb_substr($str1, $offset, $length);
+                    }
 
-            $str1 = (string) self::substr($str1, $offset, $length, $encoding);
-            $str2 = (string) self::substr($str2, 0, (int) self::strlen($str1), $encoding);
+                    $str2 = (string) \mb_substr($str2, 0, (int) self::strlen($str1), $encoding);
+                } else {
+                    $str1 = (string) self::substr($str1, $offset, $length, $encoding);
+                    $str2 = (string) self::substr($str2, 0, (int) self::strlen($str1), $encoding);
+                }
+            } else {
+                $encoding = self::normalize_encoding($encoding, 'UTF-8');
+
+                $str1 = (string) self::substr($str1, $offset, $length, $encoding);
+                $str2 = (string) self::substr($str2, 0, (int) self::strlen($str1), $encoding);
+            }
         }
 
         if ($case_insensitivity) {
