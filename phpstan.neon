@@ -5,10 +5,6 @@ parameters:
     level: 8
     paths:
         - %currentWorkingDirectory%/src/
-    voku:
-        classesNotInIfConditions: [
-            AbstractValueObject
-        ]
     parallel:
         processTimeout: 600.0
     tmpDir: /tmp/phpstan_portable_utf8
