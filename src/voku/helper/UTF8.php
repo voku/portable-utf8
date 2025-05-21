@@ -13314,9 +13314,41 @@ final class UTF8
             return '';
         }
 
-        /** @noinspection PhpUsageOfSilenceOperatorInspection | TODO for PHP > 8.2: find a replacement for this */
-        /** @var false|string $str - the polyfill maybe return false */
-        $str = @\utf8_encode($str);
+        if (\PHP_VERSION_ID < 80200) {
+            $str = @\utf8_encode($str);
+        } else {
+            if (self::$ORD === null) {
+                self::$ORD = self::getData('ord');
+            }
+
+            if (self::$CHR === null) {
+                self::$CHR = self::getData('chr');
+            }
+
+            // Duplicate the string to avoid overwriting characters in-place
+            $str .= $str;
+
+            $len = self::strlen_in_byte($str);
+            $halfLen = $len >> 1;
+
+            for ($i = $halfLen, $j = 0; $i < $len; ++$i, ++$j) {
+                switch (true) {
+                    case $str[$i] < "\x80":
+                        $str[$j] = $str[$i];
+                        break;
+                    case $str[$i] < "\xC0":
+                        $str[$j] = "\xC2";
+                        $str[++$j] = $str[$i];
+                        break;
+                    default:
+                        $str[$j] = "\xC3";
+                        $str[++$j] = self::$CHR[self::$ORD[$str[$i]] - 64];
+                        break;
+                }
+            }
+
+            $str = self::substr_in_byte($str, 0, $j);
+        }
 
         if ($str === false) {
             return '';
