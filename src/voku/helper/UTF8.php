@@ -13811,8 +13811,8 @@ final class UTF8
         /** @noinspection PhpUsageOfSilenceOperatorInspection */
         /** @noinspection DeprecatedIniOptionsInspection */
         return \defined('MB_OVERLOAD_STRING')
-               &&
-               ((int) @\ini_get('mbstring.func_overload') & \MB_OVERLOAD_STRING);
+            &&
+            ((int) @\ini_get('mbstring.func_overload') & \MB_OVERLOAD_STRING);
     }
 
     /**
