@@ -9491,10 +9491,20 @@ final class UTF8
             return 0;
         }
 
-        return \strcmp(
+        $cmp = \strcmp(
             \Normalizer::normalize($str1, \Normalizer::NFD),
             \Normalizer::normalize($str2, \Normalizer::NFD)
         );
+
+        if (\PHP_VERSION_ID < 70400) {
+            if (!is_int($cmp)) {
+                return $cmp < 0 ? -1 : ($cmp > 0 ? 1 : 0);
+            }
+
+            return $cmp === 0 ? 0 : ($cmp < 0 ? -1 : 1);
+        }
+
+        return $cmp;
     }
 
     /**
@@ -11865,7 +11875,7 @@ final class UTF8
      *             <strong>&gt; 0</strong> if str1 is greater than str2,<br>
      *             <strong>0</strong> if they are equal
      */
-    public static function substr_compare(
+    public static function  substr_compare(
         string $str1,
         string $str2,
         int $offset = 0,
@@ -12038,7 +12048,7 @@ final class UTF8
                 &&
                 ($length + $offset) <= 0
                 &&
-                \PHP_VERSION_ID < 71000 // output from "substr_count()" have changed in PHP 7.1
+                \PHP_VERSION_ID < 70100 // output from "substr_count()" have changed in PHP 7.1
             ) {
                 return false;
             }
