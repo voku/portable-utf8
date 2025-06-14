@@ -3857,7 +3857,7 @@ d
 
         if (UTF8::mbstring_loaded()) { // only with "mbstring"
             if (Bootup::is_php('8.3')) { // https://github.com/php/php-src/issues/14703
-                static::assertSame("κόσμε?", UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
+                static::assertSame('κόσμε?', UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
             } else {
                 static::assertSame("κόσμε\xa0", UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
             }
