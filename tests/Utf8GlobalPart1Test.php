@@ -142,7 +142,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             'ΚΌΣΜΕ' => 'g',
         ];
 
-        static::assertSame($result, $expected);
+        static::assertSame($expected, $result);
 
         // lower
 
@@ -169,7 +169,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             'test-ß' => 'i',
         ];
 
-        static::assertSame($result, $expected);
+        static::assertSame($expected, $result);
     }
 
     public function testCharOtherEncoding()

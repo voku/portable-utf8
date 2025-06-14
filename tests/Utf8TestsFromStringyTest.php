@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace voku\tests;
 
+use voku\helper\Bootup;
 use voku\helper\UTF8;
 
 /**
@@ -3855,7 +3856,11 @@ d
         static::assertSame('man', UTF8::str_truncate_safe("man\u{303}ana", 3, '', 'UTF-8', true));
 
         if (UTF8::mbstring_loaded()) { // only with "mbstring"
-            static::assertSame("κόσμε\xa0", UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
+            if (Bootup::is_php('8.3')) { // https://github.com/php/php-src/issues/14703
+                static::assertSame("κόσμε?", UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
+            } else {
+                static::assertSame("κόσμε\xa0", UTF8::str_truncate_safe("κόσμε\xa0\xa1", 6));
+            }
         }
     }
 

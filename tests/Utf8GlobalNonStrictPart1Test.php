@@ -144,7 +144,7 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'ΚΌΣΜΕ' => 'g',
         ];
 
-        static::assertSame($result, $expected);
+        static::assertSame($expected, $result);
 
         // lower
 
@@ -162,16 +162,27 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         $result = UTF8::array_change_key_case($array, \CASE_LOWER);
 
-        $expected = [
-            'foo'    => 'e',
-            1        => 'b',
-            0        => 'c',
-            'σσσ'    => 'f',
-            'κόσμε'  => 'g',
-            'test-ß' => 'i',
-        ];
+        if (\PHP_VERSION_ID >= 80300) {
+            $expected = [
+                'foo' => 'e',
+                1 => 'b',
+                0 => 'c',
+                'σσς' => 'f',
+                'κόσμε' => 'g',
+                'test-ß' => 'i',
+            ];
+        } else {
+            $expected = [
+                'foo' => 'e',
+                1 => 'b',
+                0 => 'c',
+                'σσσ' => 'f',
+                'κόσμε' => 'g',
+                'test-ß' => 'i',
+            ];
+        }
 
-        static::assertSame($result, $expected);
+        static::assertSame($expected, $result);
     }
 
     public function testCharOtherEncoding()
