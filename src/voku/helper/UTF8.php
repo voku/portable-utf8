@@ -1108,7 +1108,7 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::css_identifier('123foo/bar!!!'); // _23foo-bar</code>
      *
-     * copy&past from https://github.com/drupal/core/blob/8.8.x/lib/Drupal/Component/Utility/Html.php#L95
+     * copy&paste from https://github.com/drupal/core/blob/8.8.x/lib/Drupal/Component/Utility/Html.php#L95
      *
      * @param string   $str        <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
      * @param string[] $filter
@@ -3086,7 +3086,7 @@ final class UTF8
     }
 
     /**
-     * Create a escape html version of the string via "UTF8::htmlspecialchars()".
+     * Create an escaped HTML version of the string via `UTF8::htmlspecialchars()`.
      *
      * @param string $str
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
@@ -5303,7 +5303,7 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::remove_invisible_characters("κόσ\0με"); // 'κόσμε'</code>
      *
-     * copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
+     * copy&paste from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
      *
      * @param string $str                           <p>The input string.</p>
      * @param bool   $url_encoded                   [optional] <p>
@@ -13363,7 +13363,7 @@ final class UTF8
      *
      * @param string      $str        <p>The input string.</p>
      * @param int<1, max> $limit      <p>The limit of words as integer.</p>
-     * @param string      $str_add_on <p>Replacement for the striped string.</p>
+     * @param string      $str_add_on <p>Replacement for the stripped string.</p>
      *
      * @psalm-pure
      *
