@@ -661,7 +661,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             $tests += [
                 'ABC-ΣΣ' => 'abc-σς',
                 'ΣΣΣ'    => 'σσς',
-                'DINÇ'   => 'dınç',
+                'DINÇ'   => 'dinç',
             ];
         } else {
             $tests += [
