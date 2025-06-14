@@ -9496,15 +9496,11 @@ final class UTF8
             \Normalizer::normalize($str2, \Normalizer::NFD)
         );
 
-        if (\PHP_VERSION_ID < 70400) {
-            if (!is_int($cmp)) {
-                return $cmp < 0 ? -1 : ($cmp > 0 ? 1 : 0);
-            }
-
-            return $cmp === 0 ? 0 : ($cmp < 0 ? -1 : 1);
+        if (!is_int($cmp)) {
+            return $cmp < 0 ? -1 : ($cmp > 0 ? 1 : 0);
         }
 
-        return $cmp;
+        return $cmp === 0 ? 0 : ($cmp < 0 ? -1 : 1);
     }
 
     /**
