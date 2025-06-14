@@ -160,14 +160,25 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
         $result = UTF8::array_change_key_case($array, \CASE_LOWER);
 
-        $expected = [
-            'foo'    => 'e',
-            1        => 'b',
-            0        => 'c',
-            'σσσ'    => 'f',
-            'κόσμε'  => 'g',
-            'test-ß' => 'i',
-        ];
+        if (Bootup::is_php('8.3')) {
+            $expected = [
+                'foo'    => 'e',
+                1        => 'b',
+                0        => 'c',
+                'σσς'    => 'f',
+                'κόσμε'  => 'g',
+                'test-ß' => 'i',
+            ];
+        } else {
+            $expected = [
+                'foo'    => 'e',
+                1        => 'b',
+                0        => 'c',
+                'σσσ'    => 'f',
+                'κόσμε'  => 'g',
+                'test-ß' => 'i',
+            ];
+        }
 
         static::assertSame($expected, $result);
     }

@@ -654,18 +654,20 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             'ㅈㅅ-Sorry'      => 'ㅈㅅ-sorry',
             'ㅡㅡ-WTF'        => 'ㅡㅡ-wtf',
             'Å/å, Æ/æ, Ø/ø' => 'å/å, æ/æ, ø/ø',
-            'ΣΣΣ'           => 'σσσ', // result for language === "tr" --> "σσς"
-            'DINÇ'          => 'dinç', // result for language === "tr" --> "dınç"
             'TeSt-ẞ'        => 'test-ß',
         ];
 
         if (Bootup::is_php('8.3')) {
             $tests += [
                 'ABC-ΣΣ' => 'abc-σς',
+                'ΣΣΣ'    => 'σσς',
+                'DINÇ'   => 'dınç',
             ];
         } else {
             $tests += [
                 'ABC-ΣΣ' => 'abc-σσ', // result for language === "tr" --> "abc-σς"
+                'ΣΣΣ'    => 'σσσ', // result for language === "tr" --> "σσς"
+                'DINÇ'   => 'dinç', // result for language === "tr" --> "dınç"
             ];
         }
 

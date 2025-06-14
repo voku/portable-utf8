@@ -561,12 +561,23 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
             'ㅎㄹ..-Daebak'   => 'ㅎㄹ..-daebak',
             'ㅈㅅ-Sorry'      => 'ㅈㅅ-sorry',
             'ㅡㅡ-WTF'        => 'ㅡㅡ-wtf',
-            'ABC-ΣΣ'        => 'abc-σσ', // result for language === "tr" --> "abc-σς"
             'Å/å, Æ/æ, Ø/ø' => 'å/å, æ/æ, ø/ø',
-            'ΣΣΣ'           => 'σσσ', // result for language === "tr" --> "σσς"
-            'DINÇ'          => 'dinç', // result for language === "tr" --> "dınç"
             'TeSt-ẞ'        => 'test-ß',
         ];
+
+        if (Bootup::is_php('8.3')) {
+            $tests += [
+                'ABC-ΣΣ' => 'abc-σς',
+                'ΣΣΣ'    => 'σσς',
+                'DINÇ'   => 'dınç',
+            ];
+        } else {
+            $tests += [
+                'ABC-ΣΣ' => 'abc-σσ', // result for language === "tr" --> "abc-σς"
+                'ΣΣΣ'    => 'σσσ', // result for language === "tr" --> "σσς"
+                'DINÇ'   => 'dinç', // result for language === "tr" --> "dınç"
+            ];
+        }
 
         if (
             Bootup::is_php('7.3')
@@ -811,7 +822,11 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(20, UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
 
         if (UTF8::mbstring_loaded()) { // only with "mbstring"
-            static::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+            if (Bootup::is_php('8.3')) {
+                static::assertSame(21, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+            } else {
+                static::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', false));
+            }
         }
 
         static::assertSame(20, UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn", 'UTF8', true));
