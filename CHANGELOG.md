@@ -1,5 +1,14 @@
 # Changelog
 
+### 6.0.14 (2025-06-14)
+
+- PHP 8.4 compatibility: updated nullable parameter types and resolved deprecations
+- fixed "UTF8::strcmp()" for negative values and older PHP versions
+- fixed "UTF8::substr_compare()" results across PHP versions
+- addressed PHP 8.2 variable interpolation and float-to-int deprecation warnings
+- removed incorrect annotation from "Bootup" class
+
+
 ### 6.0.13 (2023-03-08)
 
 - added "UTF8::str_limit_in_byte()"
