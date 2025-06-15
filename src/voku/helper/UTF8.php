@@ -816,6 +816,8 @@ final class UTF8
     /**
      * Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.
      *
+     * INFO: opposite to UTF8::hex_to_chr()
+     *
      * EXAMPLE: <code>UTF8::chr_to_hex('§'); // U+00a7</code>
      *
      * @param int|string $char   <p>The input character</p>
@@ -1218,7 +1220,7 @@ final class UTF8
     /**
      * Converts an int value into a UTF-8 character.
      *
-     * INFO: opposite to UTF8::string()
+     * INFO: opposite to UTF8::chr_to_decimal()
      *
      * EXAMPLE: <code>UTF8::decimal_to_chr(931); // 'Σ'</code>
      *
@@ -2872,7 +2874,7 @@ final class UTF8
     /**
      * Converts a UTF-8 string to a series of HTML numbered entities.
      *
-     * INFO: opposite to UTF8::html_decode()
+     * INFO: opposite to UTF8::html_entity_decode()
      *
      * EXAMPLE: <code>UTF8::html_encode('中文空白'); // '&#20013;&#25991;&#31354;&#30333;'</code>
      *
@@ -9030,6 +9032,8 @@ final class UTF8
 
     /**
      * Get a binary representation of a specific string.
+     *
+     * INFO: opposite to UTF8::binary_to_str()
      *
      * EXAPLE: <code>UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'</code>
      *
