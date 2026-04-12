@@ -11956,7 +11956,7 @@ final class UTF8
             return \mb_substr($str, $offset, $length, 'CP850'); // 8-BIT
         }
 
-        return \substr($str, $offset, $length ?? 2147483647);
+        return (string) \substr($str, $offset, $length ?? 2147483647);
     }
 
     /**
