@@ -17,9 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         php: [
-            7.2,
-            7.3,
-            7.4,
             8.0,
             8.1,
             8.2,
@@ -33,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.33.0
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
@@ -42,10 +39,10 @@ jobs:
 
       - name: Determine composer cache directory
         id: composer-cache
-        run: echo "::set-output name=directory::$(composer config cache-dir)"
+        run: echo "directory=$(composer config cache-dir)" >> "$GITHUB_OUTPUT"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.directory }}
           key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -64,11 +61,11 @@ jobs:
       - name: Run tests
         run: |
           mkdir -p build/logs
-          php vendor/bin/phpunit -c phpunit.xml --coverage-clover=build/logs/clover.xml
+          php vendor/bin/phpunit -c phpunit.xml
 
       - name: Run phpstan
         continue-on-error: true
-        if: ${{ matrix.php == '8.0' }}
+        if: ${{ matrix.php == '8.4' }}
         run: |
           php vendor/bin/phpstan analyse
 
