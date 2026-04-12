@@ -91,6 +91,7 @@ class Bootup
      * @return bool
      *              <p>Return <strong>true</strong> if the current version is $version or greater.</p>
      *
+     * @psalm-pure
      */
     public static function is_php($version): bool
     {

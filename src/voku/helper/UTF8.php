@@ -25,8 +25,6 @@ namespace voku\helper;
  */
 final class UTF8
 {
-    private const MIN_ENCODING_DETECTION_OVERLAP = 3;
-
     /**
      * Bom => Byte-Length
      *
@@ -415,7 +413,7 @@ final class UTF8
     /**
      * Convert binary into a string.
      *
-     * INFO: opposite to UTF8::str_to_binary()
+     * @see UTF8::str_to_binary() Opposite operation
      *
      * EXAMPLE: <code>UTF8::binary_to_str('11110000100111111001100010000011'); // '😃'</code>
      *
@@ -566,7 +564,7 @@ final class UTF8
     /**
      * Generates a UTF-8 encoded character from the given code point.
      *
-     * INFO: opposite to UTF8::ord()
+     * @see UTF8::ord() Opposite operation
      *
      * EXAMPLE: <code>UTF8::chr(0x2603); // '☃'</code>
      *
@@ -753,7 +751,7 @@ final class UTF8
     /**
      * Get a decimal code representation of a specific character.
      *
-     * INFO: opposite to UTF8::decimal_to_chr()
+     * @see UTF8::decimal_to_chr() Opposite operation
      *
      * EXAMPLE: <code>UTF8::chr_to_decimal('§'); // 0xa7</code>
      *
@@ -804,6 +802,8 @@ final class UTF8
 
     /**
      * Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.
+     *
+     * @see UTF8::hex_to_chr() Opposite operation
      *
      * EXAMPLE: <code>UTF8::chr_to_hex('§'); // U+00a7</code>
      *
@@ -968,7 +968,7 @@ final class UTF8
     /**
      * Accepts a string or an array of chars and returns an array of Unicode code points.
      *
-     * INFO: opposite to UTF8::string()
+     * @see UTF8::string() Opposite operation
      *
      * EXAMPLE: <code>
      * UTF8::codepoints('κöñ'); // array(954, 246, 241)
@@ -1028,6 +1028,7 @@ final class UTF8
             );
         }
 
+        /* @phpstan-ignore-next-line | FP? */
         return $arg;
     }
 
@@ -1089,7 +1090,7 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::css_identifier('123foo/bar!!!'); // _23foo-bar</code>
      *
-     * copy&past from https://github.com/drupal/core/blob/8.8.x/lib/Drupal/Component/Utility/Html.php#L95
+     * copy&paste from https://github.com/drupal/core/blob/8.8.x/lib/Drupal/Component/Utility/Html.php#L95
      *
      * @param string   $str        <p>INFO: if no identifier is given e.g. " " or "", we will create a unique string automatically</p>
      * @param string[] $filter
@@ -1196,7 +1197,7 @@ final class UTF8
     /**
      * Converts an int value into a UTF-8 character.
      *
-     * INFO: opposite to UTF8::string()
+     * @see UTF8::chr_to_decimal() Opposite operation
      *
      * EXAMPLE: <code>UTF8::decimal_to_chr(931); // 'Σ'</code>
      *
@@ -1216,6 +1217,8 @@ final class UTF8
 
     /**
      * Decodes a MIME header field
+     *
+     * @see UTF8::encode_mimeheader() Opposite operation
      *
      * @param string $str
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
@@ -1267,7 +1270,7 @@ final class UTF8
     /**
      * Decodes a string which was encoded by "UTF8::emoji_encode()".
      *
-     * INFO: opposite to UTF8::emoji_encode()
+     * @see UTF8::emoji_encode() Opposite operation
      *
      * EXAMPLE: <code>
      * UTF8::emoji_decode('foo CHARACTER_OGRE', false); // 'foo 👹'
@@ -1288,6 +1291,7 @@ final class UTF8
         bool $use_reversible_string_mappings = false
     ): string {
         if (self::$EMOJI_KEYS_CACHE === null) {
+            /** @phpstan-ignore-next-line - we need to load the data first */
             self::initEmojiData();
         }
 
@@ -1309,7 +1313,7 @@ final class UTF8
     /**
      * Encode a string with emoji chars into a non-emoji string.
      *
-     * INFO: opposite to UTF8::emoji_decode()
+     * @see UTF8::emoji_decode() Opposite operation
      *
      * EXAMPLE: <code>
      * UTF8::emoji_encode('foo 👹', false)); // 'foo CHARACTER_OGRE'
@@ -1330,6 +1334,7 @@ final class UTF8
         bool $use_reversible_string_mappings = false
     ): string {
         if (self::$EMOJI_KEYS_CACHE === null) {
+            /** @phpstan-ignore-next-line - we need to load the data first */
             self::initEmojiData();
         }
 
@@ -1533,6 +1538,8 @@ final class UTF8
     }
 
     /**
+     * @see UTF8::decode_mimeheader() Opposite operation
+     *
      * @param string      $str
      * @param string      $from_charset      [optional] <p>Set the input charset.</p>
      * @param string      $to_charset        [optional] <p>Set the output charset.</p>
@@ -2089,6 +2096,7 @@ final class UTF8
             $a = \filter_input_array($type, $definition, $add_empty);
         }
 
+        /* @phpstan-ignore-next-line | magic frm self::filter :/ */
         return self::filter($a);
     }
 
@@ -2238,6 +2246,7 @@ final class UTF8
             $a = \filter_var_array($data, $definition, $add_empty);
         }
 
+        /* @phpstan-ignore-next-line | magic frm self::filter :/ */
         return self::filter($a);
     }
 
@@ -2362,26 +2371,47 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::fix_utf8('FÃÂÂÂÂ©dÃÂÂÂÂ©ration'); // 'Fédération'</code>
      *
-     * @param string|string[] $str you can use a string or an array of strings
+     * @param mixed $str you can use a string or an array of strings
      *
      *
-     * @return string|string[]
-     *                         <p>Will return the fixed input-"array" or
-     *                         the fixed input-"string".</p>
+     * @return mixed
+     *                <p>Will return the fixed input-"array" or
+     *                the fixed input-"string".</p>
      *
+     * @template TFixUtf8 as string|string[]
+     * @phpstan-param TFixUtf8 $str
+     * @phpstan-return TFixUtf8
      */
     public static function fix_utf8($str)
     {
         if (\is_array($str)) {
-            $fixed = [];
-            foreach ($str as $key => $v) {
-                $fixed[$key] = self::fix_utf8_string((string) $v);
+            foreach ($str as &$v) {
+                $v = self::fix_utf8($v);
             }
+            unset($v);
 
-            return $fixed;
+            /**
+             * @psalm-suppress InvalidReturnStatement
+             */
+            return $str;
         }
 
-        return self::fix_utf8_string((string) $str);
+        $str = (string) $str; /* @phpstan-ignore-line | TFixUtf8 is string here */
+        $last = '';
+        while ($last !== $str) {
+            $last = $str;
+            /**
+             * @psalm-suppress PossiblyInvalidArgument
+             */
+            $str = self::to_utf8(
+                self::utf8_decode($str, true)
+            );
+        }
+
+        /**
+         * @psalm-suppress InvalidReturnStatement
+         */
+        return $str;
     }
 
     /**
@@ -2549,8 +2579,9 @@ final class UTF8
             return $fallback;
         }
 
+        /** @var false|string $str_info - needed for PhpStan (stubs error) */
         $str_info = \substr($str, 0, 2);
-        if (\strlen($str_info) !== 2) {
+        if ($str_info === false || \strlen($str_info) !== 2) {
             return $fallback;
         }
 
@@ -2753,7 +2784,7 @@ final class UTF8
     /**
      * Converts a hexadecimal value into a UTF-8 character.
      *
-     * INFO: opposite to UTF8::chr_to_hex()
+     * @see UTF8::chr_to_hex() Opposite operation
      *
      * EXAMPLE: <code>UTF8::hex_to_chr('U+00a7'); // '§'</code>
      *
@@ -2772,7 +2803,7 @@ final class UTF8
     /**
      * Converts hexadecimal U+xxxx code point representation to integer.
      *
-     * INFO: opposite to UTF8::int_to_hex()
+     * @see UTF8::int_to_hex() Opposite operation
      *
      * EXAMPLE: <code>UTF8::hex_to_int('U+00f1'); // 241</code>
      *
@@ -2801,7 +2832,7 @@ final class UTF8
     /**
      * Converts a UTF-8 string to a series of HTML numbered entities.
      *
-     * INFO: opposite to UTF8::html_decode()
+     * @see UTF8::html_entity_decode() Opposite operation
      *
      * EXAMPLE: <code>UTF8::html_encode('中文空白'); // '&#20013;&#25991;&#31354;&#30333;'</code>
      *
@@ -2839,19 +2870,25 @@ final class UTF8
             }
 
             if ($encoding === 'UTF-8') {
+                /** @var false|string|null $return - needed for PhpStan (stubs error) */
                 $return = \mb_encode_numericentity(
                     $str,
                     [$start_code, 0xfffff, 0, 0xfffff]
                 );
-                return $return;
+                if ($return !== null && $return !== false) {
+                    return $return;
+                }
             }
 
+            /** @var false|string|null $return - needed for PhpStan (stubs error) */
             $return = \mb_encode_numericentity(
                 $str,
                 [$start_code, 0xfffff, 0, 0xfffff],
                 $encoding
             );
-            return $return;
+            if ($return !== null && $return !== false) {
+                return $return;
+            }
         }
 
         //
@@ -2880,7 +2917,7 @@ final class UTF8
      *
      * Convert all HTML entities to their applicable characters.
      *
-     * INFO: opposite to UTF8::html_encode()
+     * @see UTF8::html_encode() Opposite operation
      *
      * EXAMPLE: <code>UTF8::html_entity_decode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白'</code>
      *
@@ -2995,11 +3032,15 @@ final class UTF8
                     );
                 }
 
-                $str = \html_entity_decode(
-                    $str,
-                    $flags,
-                    $encoding
-                );
+                try {
+                    $str = \html_entity_decode(
+                        $str,
+                        $flags,
+                        $encoding
+                    );
+                } catch (\ValueError $e) {
+                    break;
+                }
             }
         } while ($str_compare !== $str);
 
@@ -3007,7 +3048,7 @@ final class UTF8
     }
 
     /**
-     * Create a escape html version of the string via "UTF8::htmlspecialchars()".
+     * Create an escaped HTML version of the string via `UTF8::htmlspecialchars()`.
      *
      * @param string $str
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
@@ -3333,7 +3374,7 @@ final class UTF8
     /**
      * Converts Integer to hexadecimal U+xxxx code point representation.
      *
-     * INFO: opposite to UTF8::hex_to_int()
+     * @see UTF8::hex_to_int() Opposite operation
      *
      * EXAMPLE: <code>UTF8::int_to_hex(241); // 'U+00f1'</code>
      *
@@ -3883,7 +3924,7 @@ final class UTF8
             if ($test3 === $test) {
                 $str_chars = self::count_chars($str, true, false);
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
-                    if (isset($str_chars[$test3char])) {
+                    if (\in_array($test3char, $str_chars, true)) {
                         ++$maybe_utf16le;
                     }
                 }
@@ -3901,7 +3942,7 @@ final class UTF8
                     $str_chars = self::count_chars($str, true, false);
                 }
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
-                    if (isset($str_chars[$test3char])) {
+                    if (\in_array($test3char, $str_chars, true)) {
                         ++$maybe_utf16be;
                     }
                 }
@@ -3909,8 +3950,7 @@ final class UTF8
             }
         }
 
-        // Require a small overlap threshold to avoid classifying unrelated binary payloads as UTF-16.
-        if ((\max($maybe_utf16be, $maybe_utf16le) >= self::MIN_ENCODING_DETECTION_OVERLAP) && $maybe_utf16be !== $maybe_utf16le) {
+        if ($maybe_utf16be !== $maybe_utf16le) {
             if ($maybe_utf16le > $maybe_utf16be) {
                 return 1;
             }
@@ -3977,7 +4017,7 @@ final class UTF8
             if ($test3 === $test) {
                 $str_chars = self::count_chars($str, true, false);
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
-                    if (isset($str_chars[$test3char])) {
+                    if (\in_array($test3char, $str_chars, true)) {
                         ++$maybe_utf32le;
                     }
                 }
@@ -3995,7 +4035,7 @@ final class UTF8
                     $str_chars = self::count_chars($str, true, false);
                 }
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
-                    if (isset($str_chars[$test3char])) {
+                    if (\in_array($test3char, $str_chars, true)) {
                         ++$maybe_utf32be;
                     }
                 }
@@ -4003,8 +4043,7 @@ final class UTF8
             }
         }
 
-        // Require a small overlap threshold to avoid classifying unrelated binary payloads as UTF-32.
-        if ((\max($maybe_utf32be, $maybe_utf32le) >= self::MIN_ENCODING_DETECTION_OVERLAP) && $maybe_utf32be !== $maybe_utf32le) {
+        if ($maybe_utf32be !== $maybe_utf32le) {
             if ($maybe_utf32le > $maybe_utf32be) {
                 return 1;
             }
@@ -4675,7 +4714,7 @@ final class UTF8
     /**
      * Calculates Unicode code point of the given UTF-8 encoded character.
      *
-     * INFO: opposite to UTF8::chr()
+     * @see UTF8::chr() Opposite operation
      *
      * EXAMPLE: <code>UTF8::ord('☃'); // 0x2603</code>
      *
@@ -5015,7 +5054,7 @@ final class UTF8
                  */
                 $str = \rawurldecode(
                     self::html_entity_decode(
-                        self::to_utf8_string($str),
+                        self::to_utf8($str),
                         \ENT_QUOTES | \ENT_HTML5
                     )
                 );
@@ -5026,7 +5065,7 @@ final class UTF8
              */
             $str = \rawurldecode(
                 self::html_entity_decode(
-                    self::to_utf8_string($str),
+                    self::to_utf8($str),
                     \ENT_QUOTES | \ENT_HTML5
                 )
             );
@@ -5090,9 +5129,15 @@ final class UTF8
         $str_length = \strlen($str);
         foreach (self::$BOM as $bom_string => $bom_byte_length) {
             if (\strncmp($str, $bom_string, $bom_byte_length) === 0) {
+                /** @var false|string $str_tmp - needed for PhpStan (stubs error) */
                 $str_tmp = \substr($str, $bom_byte_length, $str_length);
+                if ($str_tmp === false) {
+                    return '';
+                }
+
                 $str_length -= $bom_byte_length;
-                $str = $str_tmp;
+
+                $str = (string) $str_tmp;
             }
         }
 
@@ -5169,7 +5214,7 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::remove_invisible_characters("κόσ\0με"); // 'κόσμε'</code>
      *
-     * copy&past from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
+     * copy&paste from https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
      *
      * @param string $str                           <p>The input string.</p>
      * @param bool   $url_encoded                   [optional] <p>
@@ -5379,12 +5424,7 @@ final class UTF8
             return \str_replace($search, $replacement, $str);
         }
 
-        $replaced = self::str_ireplace($search, $replacement, $str);
-        if (!\is_string($replaced)) {
-            throw new \RuntimeException('UTF8::str_ireplace() returned a non-string result.');
-        }
-
-        return $replaced;
+        return self::str_ireplace($search, $replacement, $str);
     }
 
     /**
@@ -5409,12 +5449,7 @@ final class UTF8
             return \str_replace($search, $replacement, $str);
         }
 
-        $replaced = self::str_ireplace($search, $replacement, $str);
-        if (!\is_string($replaced)) {
-            throw new \RuntimeException('UTF8::str_ireplace() returned a non-string result.');
-        }
-
-        return $replaced;
+        return self::str_ireplace($search, $replacement, $str);
     }
 
     /**
@@ -5734,7 +5769,7 @@ final class UTF8
         bool $case_sensitive = true
     ): bool {
         if ($case_sensitive) {
-            if (Bootup::is_php('8.0')) {
+            if (\PHP_VERSION_ID >= 80000) {
                 return \str_contains($haystack, $needle);
             }
 
@@ -6057,7 +6092,7 @@ final class UTF8
             return false;
         }
 
-        if (Bootup::is_php('8.0')) {
+        if (\PHP_VERSION_ID >= 80000) {
             return \str_ends_with($haystack, $needle);
         }
 
@@ -6282,8 +6317,8 @@ final class UTF8
      *                                     Every replacement with search array is
      *                                     performed on the result of previous replacement.
      *                                     </p>
-     * @param string|string[]|null $replacement <p>The replacement.</p>
-     * @param string|string[]|null $subject     <p>
+     * @param string|string[] $replacement <p>The replacement.</p>
+     * @param string|string[] $subject     <p>
      *                                     If subject is an array, then the search and
      *                                     replace is performed with every entry of
      *                                     subject, and the return value is an array as
@@ -6295,12 +6330,13 @@ final class UTF8
      *                                     reference.
      *                                     </p>
      *
-     * @param-out int $count
-     *
      *
      * @return string|string[]
      *                         <p>A string or an array of replacements.</p>
      *
+     * @template TStrIReplaceSubject
+     * @phpstan-param TStrIReplaceSubject $subject
+     * @phpstan-return TStrIReplaceSubject
      */
     public static function str_ireplace($search, $replacement, $subject, &$count = null)
     {
@@ -6324,10 +6360,11 @@ final class UTF8
             $subject = '';
         }
 
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         * @phpstan-var TStrIReplaceSubject $subject
+         */
         $subject = \preg_replace($search, $replacement, $subject, -1, $count);
-        if ($subject === null) {
-            throw new \RuntimeException('preg_replace() failed: ' . \preg_last_error_msg());
-        }
 
         return $subject;
     }
@@ -7471,26 +7508,38 @@ final class UTF8
      *                                 subject, and the return value is an array as
      *                                 well.
      *                                 </p>
-     * @param int             $count   [optional] <p>
+     * @param int|null        $count   [optional] <p>
      *                                 If passed, this will hold the number of matched and replaced needles.
      *                                 </p>
-     *
-     * @param-out int $count
      *
      *
      * @return string|string[]
      *                         <p>This function returns a string or an array with the replaced values.</p>
      *
+     * @template TStrReplaceSubject
+     * @phpstan-param TStrReplaceSubject $subject
+     * @phpstan-return TStrReplaceSubject
+     *
      * @deprecated please use \str_replace() instead
      */
-    public static function str_replace($search, $replace, $subject, &$count = null)
-    {
-        return \str_replace(
+    public static function str_replace(
+        $search,
+        $replace,
+        $subject,
+        ?int &$count = null
+    ) {
+        /**
+         * @psalm-suppress PossiblyNullArgument
+         * @phpstan-var TStrReplaceSubject $return;
+         */
+        $return = \str_replace(
             $search,
             $replace,
             $subject,
             $count
         );
+
+        return $return;
     }
 
     /**
@@ -8111,7 +8160,7 @@ final class UTF8
             return false;
         }
 
-        if (Bootup::is_php('8.0')) {
+        if (\PHP_VERSION_ID >= 80000) {
             return \str_starts_with($haystack, $needle);
         }
 
@@ -8785,6 +8834,8 @@ final class UTF8
     /**
      * Get a binary representation of a specific string.
      *
+     * @see UTF8::binary_to_str() Opposite operation
+     *
      * EXAPLE: <code>UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'</code>
      *
      * @param string $str <p>The input string.</p>
@@ -8994,7 +9045,11 @@ final class UTF8
                 return $substring;
             }
 
-            $truncated = (string) \mb_substr($str, 0, $length);
+            /** @var false|string $truncated - needed for PhpStan (stubs error) */
+            $truncated = \mb_substr($str, 0, $length);
+            if ($truncated === false) {
+                return '';
+            }
 
             // if the last word was truncated
             $space_position = \mb_strpos($str, ' ', $length - 1);
@@ -9304,7 +9359,7 @@ final class UTF8
     /**
      * Create a UTF-8 string from code points.
      *
-     * INFO: opposite to UTF8::codepoints()
+     * @see UTF8::codepoints() Opposite operation
      *
      * EXAMPLE: <code>UTF8::string(array(246, 228, 252)); // 'öäü'</code>
      *
@@ -9456,16 +9511,14 @@ final class UTF8
         bool $clean_utf8 = false
     ) {
         if ($haystack === '') {
-            if (Bootup::is_php('8.0')) {
-                if ($needle === '') {
-                    return 0;
-                }
+            if (\PHP_VERSION_ID >= 80000 && $needle === '') {
+                return 0;
             }
 
             return false;
         }
 
-        if ($needle === '' && !Bootup::is_php('8.0')) {
+        if ($needle === '' && \PHP_VERSION_ID < 80000) {
             return false;
         }
 
@@ -9978,7 +10031,7 @@ final class UTF8
         bool $clean_utf8 = false
     ) {
         if ($haystack === '') {
-            if (Bootup::is_php('8.0')) {
+            if (\PHP_VERSION_ID >= 80000) {
                 if ($needle === '') {
                     return 0;
                 }
@@ -9994,15 +10047,14 @@ final class UTF8
         $needle = (string) $needle;
 
         if ($haystack === '') {
-            if ($needle === '') {
-                /** @phpstan-ignore-next-line runtime PHP compatibility */
-                return Bootup::is_php('8.0') ? 0 : false;
+            if (\PHP_VERSION_ID >= 80000 && $needle === '') {
+                return 0;
             }
 
             return false;
         }
 
-        if ($needle === '' && !Bootup::is_php('8.0')) {
+        if ($needle === '' && \PHP_VERSION_ID < 80000) {
             return false;
         }
 
@@ -10483,7 +10535,7 @@ final class UTF8
         bool $clean_utf8 = false
     ) {
         if ($haystack === '') {
-            if (Bootup::is_php('8.0')) {
+            if (\PHP_VERSION_ID >= 80000) {
                 if ($needle === '') {
                     return 0;
                 }
@@ -10499,15 +10551,14 @@ final class UTF8
         $needle = (string) $needle;
 
         if ($haystack === '') {
-            if ($needle === '') {
-                /** @phpstan-ignore-next-line runtime PHP compatibility */
-                return Bootup::is_php('8.0') ? 0 : false;
+            if (\PHP_VERSION_ID >= 80000 && $needle === '') {
+                return 0;
             }
 
             return false;
         }
 
-        if ($needle === '' && !Bootup::is_php('8.0')) {
+        if ($needle === '' && \PHP_VERSION_ID < 80000) {
             return false;
         }
 
@@ -10670,10 +10721,8 @@ final class UTF8
         $needle = (string) $needle;
 
         if ($haystack === '') {
-            if (Bootup::is_php('8.0')) {
-                if ($needle === '') {
-                    return 0;
-                }
+            if (\PHP_VERSION_ID >= 80000 && $needle === '') {
+                return 0;
             }
 
             return false;
@@ -10777,7 +10826,12 @@ final class UTF8
             return false;
         }
 
+        /** @var false|string $str_tmp - needed for PhpStan (stubs error) */
         $str_tmp = \substr($haystack, 0, $pos);
+        if ($str_tmp === false) {
+            return false;
+        }
+
         return $offset + (int) self::strlen($str_tmp);
     }
 
@@ -10894,7 +10948,7 @@ final class UTF8
         bool $clean_utf8 = false
     ) {
         if ($haystack === '') {
-            if (Bootup::is_php('8.0') && $needle === '') {
+            if (\PHP_VERSION_ID >= 80000 && $needle === '') {
                 return '';
             }
 
@@ -10909,7 +10963,7 @@ final class UTF8
         }
 
         if ($needle === '') {
-            if (Bootup::is_php('8.0')) {
+            if (\PHP_VERSION_ID >= 80000) {
                 return $haystack;
             }
 
@@ -11741,12 +11795,16 @@ final class UTF8
                 &&
                 ($length + $offset) <= 0
                 &&
-                !Bootup::is_php('7.1') // output from "substr_count()" have changed in PHP 7.1
+                \PHP_VERSION_ID < 70100 // output from "substr_count()" have changed in PHP 7.1
             ) {
                 return false;
             }
 
+            /** @var false|string $haystack_tmp - needed for PhpStan (stubs error) */
             $haystack_tmp = \substr($haystack, $offset, $length);
+            if ($haystack_tmp === false) {
+                $haystack_tmp = '';
+            }
             $haystack = (string) $haystack_tmp;
         }
 
@@ -12376,18 +12434,21 @@ final class UTF8
      *
      * @return string|string[]
      *
+     * @template TToIso8859 as string|string[]
+     * @phpstan-param TToIso8859 $str
+     * @phpstan-return (TToIso8859 is string ? string : string[])
      */
     public static function to_iso8859($str)
     {
         if (\is_array($str)) {
-            $encoded = [];
-            foreach ($str as $key => $v) {
-                $encoded[$key] = self::utf8_decode((string) $v);
+            foreach ($str as &$v) {
+                $v = self::to_iso8859($v);
             }
 
-            return $encoded;
+            return $str;
         }
 
+        /* @phpstan-ignore-next-line | FP? -> "Cannot cast TToIso8859 of array<string>|string to string." it's a string here */
         $str = (string) $str;
         if ($str === '') {
             return '';
@@ -12415,6 +12476,9 @@ final class UTF8
      * @return string|string[]
      *                         <p>The UTF-8 encoded string</p>
      *
+     * @template TToUtf8 as string|string[]
+     * @phpstan-param TToUtf8 $str
+     * @phpstan-return (TToUtf8 is string ? string : string[])
      */
     public static function to_utf8($str, bool $decode_html_entity_to_utf8 = false)
     {
@@ -12837,7 +12901,7 @@ final class UTF8
                  */
                 $str = \urldecode(
                     self::html_entity_decode(
-                        self::to_utf8_string($str),
+                        self::to_utf8($str),
                         \ENT_QUOTES | \ENT_HTML5
                     )
                 );
@@ -12848,7 +12912,7 @@ final class UTF8
              */
             $str = \urldecode(
                 self::html_entity_decode(
-                    self::to_utf8_string($str),
+                    self::to_utf8($str),
                     \ENT_QUOTES | \ENT_HTML5
                 )
             );
@@ -12859,6 +12923,8 @@ final class UTF8
 
     /**
      * Decodes a UTF-8 string to ISO-8859-1.
+     *
+     * @see UTF8::utf8_encode() Opposite operation
      *
      * EXAMPLE: <code>UTF8::encode('UTF-8', UTF8::utf8_decode('-ABC-中文空白-')); // '-ABC-????-'</code>
      *
@@ -12913,7 +12979,11 @@ final class UTF8
             }
         }
 
+        /** @var false|string $return - needed for PhpStan (stubs error) */
         $return = \substr($str, 0, $j);
+        if ($return === false) {
+            $return = '';
+        }
 
         if (
             $keep_utf8_chars
@@ -12928,6 +12998,8 @@ final class UTF8
 
     /**
      * Encodes an ISO-8859-1 string to UTF-8.
+     *
+     * @see UTF8::utf8_decode() Opposite operation
      *
      * EXAMPLE: <code>UTF8::utf8_decode(UTF8::utf8_encode('-ABC-中文空白-')); // '-ABC-中文空白-'</code>
      *
@@ -12995,20 +13067,6 @@ final class UTF8
     public static function whitespace_table(): array
     {
         return self::$WHITESPACE_TABLE;
-    }
-
-    private static function fix_utf8_string(string $str): string
-    {
-        $last = '';
-        while ($last !== $str) {
-            $last = $str;
-            /**
-             * @psalm-suppress PossiblyInvalidArgument
-             */
-            $str = self::to_utf8_string(self::utf8_decode($str, true));
-        }
-
-        return $str;
     }
 
     /**
