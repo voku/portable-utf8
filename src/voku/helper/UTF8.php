@@ -3074,11 +3074,15 @@ final class UTF8
                     );
                 }
 
-                $str = \html_entity_decode(
-                    $str,
-                    $flags,
-                    $encoding
-                );
+                try {
+                    $str = \html_entity_decode(
+                        $str,
+                        $flags,
+                        $encoding
+                    );
+                } catch (\ValueError $e) {
+                    break;
+                }
             }
         } while ($str_compare !== $str);
 
