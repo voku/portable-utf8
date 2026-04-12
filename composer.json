@@ -62,5 +62,10 @@
         "psr-4": {
             "voku\\tests\\": "tests/"
         }
+    },
+    "config": {
+        "platform": {
+            "php": "7.2.0"
+        }
     }
 }
