@@ -691,6 +691,32 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testUrlDecodeMethodsHandleValueError()
+    {
+        $sharedTests = [
+            'D%26%23xFC%3Bsseldorf' => 'Düsseldorf',
+            '<a href="&#38&#35&#49&#48&#54&#38&#35&#57&#55&#38&#35&#49&#49&#56&#38&#35&#57&#55&#38&#35&#49&#49&#53&#38&#35&#57&#57&#38&#35&#49&#49&#52&#38&#35&#49&#48&#53&#38&#35&#49&#49&#50&#38&#35&#49&#49&#54&#38&#35&#53&#56&#59&#117;&#115;&#101;&#114;&#64;&#100;&#111;&#109;&#97;&#105;&#110;&#46;&#101;&#120;&#97;&#109;&#112;&#108;&#101;">foo</a>' => '<a href="javascript:user@domain.example">foo</a>',
+        ];
+
+        foreach ($sharedTests as $before => $after) {
+            try {
+                static::assertSame($after, UTF8::urldecode($before), 'testing urldecode: ' . $before);
+                static::assertSame($after, UTF8::rawurldecode($before), 'testing rawurldecode: ' . $before);
+            } catch (\ValueError $e) {
+                static::fail('Unexpected ValueError for "' . $before . '": ' . $e->getMessage());
+            }
+        }
+
+        $urlDecodeOnly = 'tes%20öäü%20\u00edtest+test';
+
+        try {
+            static::assertSame('tes öäü ítest test', UTF8::urldecode($urlDecodeOnly), 'testing urldecode: ' . $urlDecodeOnly);
+            static::assertSame('tes öäü ítest+test', UTF8::rawurldecode($urlDecodeOnly), 'testing rawurldecode: ' . $urlDecodeOnly);
+        } catch (\ValueError $e) {
+            static::fail('Unexpected ValueError for "' . $urlDecodeOnly . '": ' . $e->getMessage());
+        }
+    }
+
     public function testUtf8DecodeEncodeUtf8()
     {
         $tests = [
