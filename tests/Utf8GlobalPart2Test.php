@@ -1117,11 +1117,7 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         static::assertNull(UTF8::to_string(false));
 
         $testString = UTF8::to_string(new \ReflectionMethod(new UTF8(), 'showSupport'));
-        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-            static::assertStringContainsString('WARNING:', $testString);
-        } else {
-            static::assertContains('WARNING:', $testString);
-        }
+        static::assertStringContainsString('WARNING:', $testString);
     }
 
     public function testSubstrILeft()

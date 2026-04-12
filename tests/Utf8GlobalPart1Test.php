@@ -955,207 +955,103 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
 
     public function testFileGetContents()
     {
-        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
-            static::assertStringContainsString('M	𝐌	𝑀	𝑴	𝖬	𝗠	𝘔	𝙈	ℳ	𝓜	𝔐	𝕸	𝙼	𝕄', $testString);
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
+        static::assertStringContainsString('M	𝐌	𝑀	𝑴	𝖬	𝗠	𝘔	𝙈	ℳ	𝓜	𝔐	𝕸	𝙼	𝕄', $testString);
 
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+        static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
 
-            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
+        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+        static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
 
-            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            $testStringUtf8 = UTF8::clean($testString, true, true, true);
-            static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testStringUtf8);
-            static::assertStringContainsString('<p>鼦</p>', $testStringUtf8);
-            static::assertStringContainsString('<li><a href="/">鼦վͼ</a></li>', $testStringUtf8);
-            static::assertStringContainsString('<B><a href="http://www.baidu.com/" >ٶ</a></B>', $testStringUtf8);
+        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+        $testStringUtf8 = UTF8::clean($testString, true, true, true);
+        static::assertStringContainsString('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testStringUtf8);
+        static::assertStringContainsString('<p>鼦</p>', $testStringUtf8);
+        static::assertStringContainsString('<li><a href="/">鼦վͼ</a></li>', $testStringUtf8);
+        static::assertStringContainsString('<B><a href="http://www.baidu.com/" >ٶ</a></B>', $testStringUtf8);
 
-            // ---
+        // ---
 
-            if (UTF8::mbstring_loaded()) { // only with "mbstring"
-                static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-                static::assertStringContainsString(
-                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                    $testString
-                );
-
-                static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
-                static::assertStringContainsString(
-                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                    $testString
-                );
-            }
-
-            static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
-            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
-
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
-            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
-
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
-            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
-
-            if (UTF8::mbstring_loaded()) { // only with "mbstring"
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-                static::assertStringContainsString(
-                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                    $testString
-                );
-
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
-                static::assertStringContainsString(
-                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                    $testString
-                );
-
-                // text: with offset
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
-                static::assertStringContainsString('There are better connections.', $testString);
-            }
-
-            // text: with offset & max-length
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, null, 7, 11);
-            static::assertStringContainsString('Iñtërnât', $testString);
-
-            // text: with offset & max-length + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt', false, null, 7, 10, 15);
-            static::assertStringContainsString('ñtërnâtiôn', $testString);
-
-            // text: with timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, 7, null, 10);
-            static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
-
-            // text: with max-length + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, null, 10, 10);
-            static::assertStringContainsString('Hírek', $testString);
-
-            $context = \stream_context_create(
-                [
-                    'http' => [
-                        'timeout' => 10,
-                    ],
-                ]
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
+            static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
+            static::assertStringContainsString(
+                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                $testString
             );
 
-            // text: with max-length + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10);
-            static::assertStringContainsString('Hírek', $testString);
-
-            // text: do not convert to utf-8 + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10, false);
-            if (\method_exists(__CLASS__, 'assertMatchesRegularExpression')) {
-                static::assertMatchesRegularExpression('#H.*rek#', $testString);
-            } else {
-                static::assertRegExp('#H.*rek#', $testString);
-            }
-
-            // text: do not convert to utf-8 + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, $context, null, 10, 10, false);
-            static::assertStringContainsString('Hírek', $testString);
-        } else {
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-unicode-chart.txt');
-            static::assertContains('M	𝐌	𝑀	𝑴	𝖬	𝗠	𝘔	𝙈	ℳ	𝓜	𝔐	𝕸	𝙼	𝕄', $testString);
-
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
-
-            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testString);
-
-            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            $testStringUtf8 = UTF8::clean($testString, true, true, true);
-            static::assertContains('վṩ鼦Ѷ鼦ַ鼦ٷվݡ', $testStringUtf8);
-            static::assertContains('<p>鼦</p>', $testStringUtf8);
-            static::assertContains('<li><a href="/">鼦վͼ</a></li>', $testStringUtf8);
-            static::assertContains('<B><a href="http://www.baidu.com/" >ٶ</a></B>', $testStringUtf8);
-
-            // ---
-
-            if (UTF8::mbstring_loaded()) { // only with "mbstring"
-                static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-be.txt'));
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-                static::assertContains(
-                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                    $testString
-                );
-
-                static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
-                static::assertContains(
-                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                    $testString
-                );
-            }
-
-            static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
-            static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
-            static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
-            static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-            if (UTF8::mbstring_loaded()) { // only with "mbstring"
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
-                static::assertContains(
-                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                    $testString
-                );
-
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
-                static::assertContains(
-                    '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
-                    $testString
-                );
-
-                // text: with offset
-                $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
-                static::assertContains('There are better connections.', $testString);
-            }
-
-            // text: with offset & max-length
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, null, 7, 11);
-            static::assertContains('Iñtërnât', $testString);
-
-            // text: with offset & max-length + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt', false, null, 7, 10, 15);
-            static::assertContains('ñtërnâtiôn', $testString);
-
-            // text: with timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, 7, null, 10);
-            static::assertContains('Iñtërnâtiônàlizætiøn', $testString);
-
-            // text: with max-length + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, null, 10, 10);
-            static::assertContains('Hírek', $testString);
-
-            $context = \stream_context_create(
-                [
-                    'http' => [
-                        'timeout' => 10,
-                    ],
-                ]
+            static::assertTrue(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-16-le.txt'));
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt');
+            static::assertStringContainsString(
+                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                $testString
             );
-
-            // text: with max-length + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10);
-            static::assertContains('Hírek', $testString);
-
-            // text: do not convert to utf-8 + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10, false);
-            static::assertRegExp('#H.*rek#', $testString);
-
-            // text: do not convert to utf-8 + timeout
-            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, $context, null, 10, 10, false);
-            static::assertContains('Hírek', $testString);
         }
+
+        static::assertFalse(UTF8::is_binary_file(__DIR__ . '/fixtures/utf-8.txt'));
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt');
+        static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt');
+        static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
+        static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+        if (UTF8::mbstring_loaded()) { // only with "mbstring"
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-be.txt');
+            static::assertStringContainsString(
+                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                $testString
+            );
+
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 0);
+            static::assertStringContainsString(
+                '<p>Today’s Internet users are not the same users who were online a decade ago. There are better connections.',
+                $testString
+            );
+
+            // text: with offset
+            $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-16-le.txt', false, null, 5);
+            static::assertStringContainsString('There are better connections.', $testString);
+        }
+
+        // text: with offset & max-length
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, null, 7, 11);
+        static::assertStringContainsString('Iñtërnât', $testString);
+
+        // text: with offset & max-length + timeout
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/latin.txt', false, null, 7, 10, 15);
+        static::assertStringContainsString('ñtërnâtiôn', $testString);
+
+        // text: with timeout
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, 7, null, 10);
+        static::assertStringContainsString('Iñtërnâtiônàlizætiøn', $testString);
+
+        // text: with max-length + timeout
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, null, null, 10, 10);
+        static::assertStringContainsString('Hírek', $testString);
+
+        $context = \stream_context_create(
+            [
+                'http' => [
+                    'timeout' => 10,
+                ],
+            ]
+        );
+
+        // text: with max-length + timeout
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10);
+        static::assertStringContainsString('Hírek', $testString);
+
+        // text: do not convert to utf-8 + timeout
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt', false, $context, null, 10, 10, false);
+        static::assertMatchesRegularExpression('#H.*rek#', $testString);
+
+        // text: do not convert to utf-8 + timeout
+        $testString = UTF8::file_get_contents(__DIR__ . '/fixtures/utf-8.txt', false, $context, null, 10, 10, false);
+        static::assertStringContainsString('Hírek', $testString);
     }
 
     public function testFileGetContentsBinary()
@@ -2401,11 +2297,7 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
         UTF8::showSupport();
         $support = \ob_get_clean();
 
-        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-            static::assertStringContainsString('mbstring_func_overload', $support);
-        } else {
-            static::assertContains('mbstring_func_overload', $support);
-        }
+        static::assertStringContainsString('mbstring_func_overload', $support);
     }
 
     public function testJsonEncode()
@@ -3195,25 +3087,14 @@ final class Utf8GlobalPart1Test extends \PHPUnit\Framework\TestCase
             }
         }
 
-        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            static::assertStringContainsString('UTF-8', UTF8::str_detect_encoding($testString));
+        $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
+        static::assertStringContainsString('UTF-8', UTF8::str_detect_encoding($testString));
 
-            $testString = \file_get_contents(__DIR__ . '/fixtures/latin.txt');
-            static::assertStringContainsString('ISO-8859-1', UTF8::str_detect_encoding($testString));
+        $testString = \file_get_contents(__DIR__ . '/fixtures/latin.txt');
+        static::assertStringContainsString('ISO-8859-1', UTF8::str_detect_encoding($testString));
 
-            $testString = \file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
-            static::assertStringContainsString('ISO-8859-1', UTF8::str_detect_encoding($testString)); // ?
-        } else {
-            $testString = \file_get_contents(__DIR__ . '/fixtures/sample-html.txt');
-            static::assertContains('UTF-8', UTF8::str_detect_encoding($testString));
-
-            $testString = \file_get_contents(__DIR__ . '/fixtures/latin.txt');
-            static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString));
-
-            $testString = \file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
-            static::assertContains('ISO-8859-1', UTF8::str_detect_encoding($testString)); // ?
-        }
+        $testString = \file_get_contents(__DIR__ . '/fixtures/iso-8859-7.txt');
+        static::assertStringContainsString('ISO-8859-1', UTF8::str_detect_encoding($testString)); // ?
     }
 
     public function testStrEndsWith()

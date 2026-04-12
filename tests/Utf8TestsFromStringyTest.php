@@ -3424,13 +3424,8 @@ d
         static::assertStringContainsString('foo', UTF8::css_identifier('<p>foo</p>', [], true));
         static::assertStringContainsString('auto-generated-css-', UTF8::css_identifier('<p></p>', [], true));
 
-        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
-            static::assertStringContainsString('auto-generated-css-', UTF8::css_identifier());
-            static::assertStringContainsString('auto-generated-css-', UTF8::css_identifier(' '));
-        } else {
-            static::assertContains('auto-generated-css-', UTF8::css_identifier());
-            static::assertContains('auto-generated-css-', UTF8::css_identifier(' '));
-        }
+        static::assertStringContainsString('auto-generated-css-', UTF8::css_identifier());
+        static::assertStringContainsString('auto-generated-css-', UTF8::css_identifier(' '));
     }
 
     public function testSubStringOf()
