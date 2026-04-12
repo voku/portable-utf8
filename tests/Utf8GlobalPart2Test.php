@@ -898,11 +898,7 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(1, \substr_compare('abcde', 'bc', 1, 3));
         static::assertSame(1, UTF8::substr_compare('abcde', 'bc', 1, 3));
 
-        if (\PHP_VERSION_ID < 80200) {
-            static::assertSame(-1, \substr_compare('abcde', 'cd', 1, 2));
-        } else {
-            static::assertTrue(\substr_compare('abcde', 'cd', 1, 2) < 0);
-        }
+        static::assertTrue(\substr_compare('abcde', 'cd', 1, 2) < 0);
         static::assertSame(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
 
         // UTF-8 tests
@@ -1119,7 +1115,11 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         static::assertNull(UTF8::to_string(false));
 
         $testString = UTF8::to_string(new \ReflectionMethod(new UTF8(), 'showSupport'));
-        static::assertStringContainsString('WARNING:', $testString);
+        if (\method_exists(__CLASS__, 'assertStringContainsString')) {
+            static::assertStringContainsString('WARNING:', $testString);
+        } else {
+            static::assertContains('WARNING:', $testString);
+        }
     }
 
     public function testSubstrILeft()
