@@ -2374,8 +2374,8 @@ final class UTF8
     {
         if (\is_array($str)) {
             $fixed = [];
-            foreach ($str as $v) {
-                $fixed[] = self::fix_utf8_string((string) $v);
+            foreach ($str as $key => $v) {
+                $fixed[$key] = self::fix_utf8_string((string) $v);
             }
 
             return $fixed;
@@ -5380,8 +5380,9 @@ final class UTF8
         }
 
         $replaced = self::str_ireplace($search, $replacement, $str);
-
-        \assert(\is_string($replaced));
+        if (!\is_string($replaced)) {
+            throw new \RuntimeException('UTF8::str_ireplace() returned a non-string result.');
+        }
 
         return $replaced;
     }
@@ -5409,8 +5410,9 @@ final class UTF8
         }
 
         $replaced = self::str_ireplace($search, $replacement, $str);
-
-        \assert(\is_string($replaced));
+        if (!\is_string($replaced)) {
+            throw new \RuntimeException('UTF8::str_ireplace() returned a non-string result.');
+        }
 
         return $replaced;
     }
@@ -6324,7 +6326,7 @@ final class UTF8
 
         $subject = \preg_replace($search, $replacement, $subject, -1, $count);
         if ($subject === null) {
-            throw new \RuntimeException('preg_replace() failed.');
+            throw new \RuntimeException('preg_replace() failed: ' . \preg_last_error_msg());
         }
 
         return $subject;
