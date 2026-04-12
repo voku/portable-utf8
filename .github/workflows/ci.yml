@@ -42,7 +42,7 @@ jobs:
 
       - name: Determine composer cache directory
         id: composer-cache
-        run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+        run: echo "directory=$(composer config cache-dir)" >> "$GITHUB_OUTPUT"
 
       - name: Cache composer dependencies
         uses: actions/cache@v4.2.3
