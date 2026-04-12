@@ -2374,29 +2374,13 @@ final class UTF8
             /** @var array<string> $str */
             $fixed = [];
             foreach ($str as $v) {
-                $item = (string) $v;
-                $last = '';
-                while ($last !== $item) {
-                    $last = $item;
-                    $item = self::to_utf8_string(self::utf8_decode($item, true));
-                }
-                $fixed[] = $item;
+                $fixed[] = self::fix_utf8_string((string) $v);
             }
 
             return $fixed;
         }
 
-        $str = (string) $str;
-        $last = '';
-        while ($last !== $str) {
-            $last = $str;
-            /**
-             * @psalm-suppress PossiblyInvalidArgument
-             */
-            $str = self::to_utf8_string(self::utf8_decode($str, true));
-        }
-
-        return $str;
+        return self::fix_utf8_string((string) $str);
     }
 
     /**
@@ -3924,7 +3908,8 @@ final class UTF8
             }
         }
 
-        if (($maybe_utf16be >= 3 || $maybe_utf16le >= 3) && $maybe_utf16be !== $maybe_utf16le) {
+        // Require a small overlap threshold to avoid classifying unrelated binary payloads as UTF-16.
+        if ((\max($maybe_utf16be, $maybe_utf16le) >= 3) && $maybe_utf16be !== $maybe_utf16le) {
             if ($maybe_utf16le > $maybe_utf16be) {
                 return 1;
             }
@@ -4017,7 +4002,8 @@ final class UTF8
             }
         }
 
-        if (($maybe_utf32be >= 3 || $maybe_utf32le >= 3) && $maybe_utf32be !== $maybe_utf32le) {
+        // Require a small overlap threshold to avoid classifying unrelated binary payloads as UTF-32.
+        if ((\max($maybe_utf32be, $maybe_utf32le) >= 3) && $maybe_utf32be !== $maybe_utf32le) {
             if ($maybe_utf32le > $maybe_utf32be) {
                 return 1;
             }
@@ -5394,7 +5380,9 @@ final class UTF8
 
         $replaced = self::str_ireplace($search, $replacement, $str);
 
-        return \is_string($replaced) ? $replaced : '';
+        \assert(\is_string($replaced));
+
+        return $replaced;
     }
 
     /**
@@ -5421,7 +5409,9 @@ final class UTF8
 
         $replaced = self::str_ireplace($search, $replacement, $str);
 
-        return \is_string($replaced) ? $replaced : '';
+        \assert(\is_string($replaced));
+
+        return $replaced;
     }
 
     /**
@@ -6333,7 +6323,9 @@ final class UTF8
 
         $subject = \preg_replace($search, $replacement, $subject, -1, $count);
 
-        return $subject ?? '';
+        \assert($subject !== null);
+
+        return $subject;
     }
 
     /**
@@ -8006,6 +7998,8 @@ final class UTF8
         }
 
         if ($length > 1) {
+            $return_array = [[]];
+
             return \array_map(
                 static function (array $item): string {
                     return \implode('', $item);
@@ -12999,6 +12993,20 @@ final class UTF8
     public static function whitespace_table(): array
     {
         return self::$WHITESPACE_TABLE;
+    }
+
+    private static function fix_utf8_string(string $str): string
+    {
+        $last = '';
+        while ($last !== $str) {
+            $last = $str;
+            /**
+             * @psalm-suppress PossiblyInvalidArgument
+             */
+            $str = self::to_utf8_string(self::utf8_decode($str, true));
+        }
+
+        return $str;
     }
 
     /**
