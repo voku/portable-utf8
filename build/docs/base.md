@@ -95,7 +95,7 @@ This removes any overhead from these polyfills as they are no longer part of you
 }
 ```
 
-##  Why Portable UTF-8?[]()
+## Why Portable UTF-8?
 PHP 5 and earlier versions have no native Unicode support. To bridge the gap, there exist several extensions like "mbstring", "iconv" and "intl".
 
 The problem with "mbstring" and others is that most of the time you cannot ensure presence of a specific one on a server. If you rely on one of these, your application is no more portable. This problem gets even severe for open source applications that have to run on different servers with different configurations. Considering these, I decided to write a library:
