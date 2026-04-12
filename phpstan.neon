@@ -5,6 +5,16 @@ parameters:
     level: 8
     paths:
         - src
+    strictRules:
+        allRules: false
+        disallowedBacktick: true
+        disallowedImplicitArrayCreation: true
+        closureUsesThis: true
+        matchingInheritedMethodNames: true
+        numericOperandsInArithmeticOperators: true
+        strictFunctionCalls: true
+        dynamicCallOnStaticMethod: true
+        switchConditionsMatchingType: true
     parallel:
         processTimeout: 600.0
     tmpDir: /tmp/phpstan_portable_utf8
@@ -16,4 +26,3 @@ parameters:
         - '#voku\\helper\\UTF8::substr_replace\(\) should return TSubstrReplace#'
         - '#readonly property cannot have a default value#'
         - '#should return int<0, max>\|false but returns int\.#'
-        - '#should return int<0, max>\|false but returns int\|false\.#'
