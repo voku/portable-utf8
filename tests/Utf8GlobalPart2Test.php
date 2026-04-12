@@ -898,8 +898,10 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
         static::assertSame(1, \substr_compare('abcde', 'bc', 1, 3));
         static::assertSame(1, UTF8::substr_compare('abcde', 'bc', 1, 3));
 
-        if (\PHP_VERSION_ID != 80000 && \PHP_VERSION_ID != 80100) { // PHP 8.0 + 8.1 can not handle this native test, ok. :/
+        if (\PHP_VERSION_ID < 80200) {
             static::assertSame(-1, \substr_compare('abcde', 'cd', 1, 2));
+        } else {
+            static::assertTrue(\substr_compare('abcde', 'cd', 1, 2) < 0);
         }
         static::assertSame(-1, UTF8::substr_compare('abcde', 'cd', 1, 2));
 
