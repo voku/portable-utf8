@@ -42,7 +42,7 @@ jobs:
 
       - name: Determine composer cache directory
         id: composer-cache
-        run: echo "::set-output name=directory::$(composer config cache-dir)"
+        run: echo "directory=$(composer config cache-dir)" >> "$GITHUB_OUTPUT"
 
       - name: Cache composer dependencies
         uses: actions/cache@v4.2.3
@@ -66,12 +66,6 @@ jobs:
           mkdir -p build/logs
           php vendor/bin/phpunit -c phpunit.xml --coverage-clover=build/logs/clover.xml
 
-      - name: Run phpstan
-        continue-on-error: true
-        if: ${{ matrix.php == '8.0' }}
-        run: |
-          php vendor/bin/phpstan analyse
-
       - name: Upload coverage results to Coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -91,3 +85,42 @@ jobs:
           name: logs_composer-${{ matrix.composer }}_php-${{ matrix.php }}
           path: |
             build/logs
+
+  phpstan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@2.33.0
+        with:
+          php-version: 8.4
+          coverage: none
+          extensions: zip
+          tools: composer
+
+      - name: Determine composer cache directory
+        id: composer-cache
+        run: echo "directory=$(composer config cache-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4.2.3
+        with:
+          path: ${{ steps.composer-cache.outputs.directory }}
+          key: phpstan-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: phpstan-composer-
+
+      - name: Install runtime dependencies
+        run: |
+          composer update --prefer-dist --no-interaction --no-dev
+          composer dump-autoload -o
+
+      - name: Install PHPStan
+        run: |
+          composer require --dev --no-interaction phpstan/phpstan:^2.1 phpstan/phpstan-strict-rules:^2.0
+
+      - name: Run PHPStan
+        run: |
+          php vendor/bin/phpstan analyse

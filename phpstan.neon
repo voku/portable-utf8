@@ -1,62 +1,19 @@
 includes:
-    - phar://%currentWorkingDirectory%/vendor/phpstan/phpstan/phpstan.phar/conf/bleedingEdge.neon
-    - %currentWorkingDirectory%/vendor/voku/phpstan-rules/rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
 parameters:
     level: 8
     paths:
-        - %currentWorkingDirectory%/src/
+        - src
     parallel:
         processTimeout: 600.0
     tmpDir: /tmp/phpstan_portable_utf8
     tipsOfTheDay: false
-    reportUnmatchedIgnoredErrors: false
-    checkMissingIterableValueType: true
-    checkMissingCallableSignature: true
-    polluteScopeWithLoopInitialAssignments: true
-    polluteScopeWithAlwaysIterableForeach: true
-    checkAlwaysTrueInstanceof: true
-    checkAlwaysTrueCheckTypeFunctionCall: true
-    checkAlwaysTrueStrictComparison: true
-    checkExplicitMixedMissingReturn: true
-    checkFunctionNameCase: true
-    checkInternalClassCaseSensitivity: true
-    reportMaybesInMethodSignatures: true
-    reportStaticMethodSignatures: false
-    checkTooWideReturnTypesInProtectedAndPublicMethods: false
-    checkUninitializedProperties: true
-    earlyTerminatingMethodCalls:
-    earlyTerminatingFunctionCalls:
-    excludePaths:
+    reportUnmatchedIgnoredErrors: true
     bootstrapFiles:
-        - %currentWorkingDirectory%/bootstrap.php
+        - bootstrap.php
     ignoreErrors:
         - '#voku\\helper\\UTF8::substr_replace\(\) should return TSubstrReplace#'
         - '#readonly property cannot have a default value#'
         - '#should return int<0, max>\|false but returns int\.#'
         - '#should return int<0, max>\|false but returns int\|false\.#'
-rules:
-    - PHPStan\Rules\DisallowedConstructs\DisallowedBacktickRule
-    - PHPStan\Rules\DisallowedConstructs\DisallowedImplicitArrayCreationRule
-    - PHPStan\Rules\Functions\ClosureUsesThisRule
-    - PHPStan\Rules\Methods\WrongCaseOfInheritedMethodRule
-    - PHPStan\Rules\Operators\OperandInArithmeticPostDecrementRule
-    - PHPStan\Rules\Operators\OperandInArithmeticPostIncrementRule
-    - PHPStan\Rules\Operators\OperandInArithmeticPreDecrementRule
-    - PHPStan\Rules\Operators\OperandInArithmeticPreIncrementRule
-    - PHPStan\Rules\Operators\OperandsInArithmeticAdditionRule
-    - PHPStan\Rules\Operators\OperandsInArithmeticDivisionRule
-    - PHPStan\Rules\Operators\OperandsInArithmeticExponentiationRule
-    - PHPStan\Rules\Operators\OperandsInArithmeticModuloRule
-    - PHPStan\Rules\Operators\OperandsInArithmeticMultiplicationRule
-    - PHPStan\Rules\Operators\OperandsInArithmeticSubtractionRule
-    - PHPStan\Rules\StrictCalls\DynamicCallOnStaticMethodsCallableRule
-    - PHPStan\Rules\StrictCalls\DynamicCallOnStaticMethodsRule
-    - PHPStan\Rules\DisallowedConstructs\DisallowedImplicitArrayCreationRule
-    - PHPStan\Rules\Functions\ClosureUsesThisRule
-    - PHPStan\Rules\SwitchConditions\MatchingTypeInSwitchCaseConditionRule
-    - TheCodingMachine\PHPStan\Rules\Conditionals\SwitchMustContainDefaultRule
-    - TheCodingMachine\PHPStan\Rules\Exceptions\EmptyExceptionRule
-    - TheCodingMachine\PHPStan\Rules\Exceptions\DoNotThrowExceptionBaseClassRule
-services:
-    -
-        class: PHPStan\Rules\Operators\OperatorRuleHelper
