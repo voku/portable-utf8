@@ -7483,7 +7483,8 @@ final class UTF8
      *
      * @deprecated please use \str_replace() instead
      */
-    public static function str_replace($search, $replace, $subject, &$count = null) {
+    public static function str_replace($search, $replace, $subject, &$count = null)
+    {
         return \str_replace(
             $search,
             $replace,
