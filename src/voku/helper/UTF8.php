@@ -417,7 +417,7 @@ final class UTF8
     /**
      * Convert binary into a string.
      *
-     * INFO: opposite to UTF8::str_to_binary()
+     * @see UTF8::str_to_binary() Opposite operation
      *
      * EXAMPLE: <code>UTF8::binary_to_str('11110000100111111001100010000011'); // '😃'</code>
      *
@@ -573,7 +573,7 @@ final class UTF8
     /**
      * Generates a UTF-8 encoded character from the given code point.
      *
-     * INFO: opposite to UTF8::ord()
+     * @see UTF8::ord() Opposite operation
      *
      * EXAMPLE: <code>UTF8::chr(0x2603); // '☃'</code>
      *
@@ -763,7 +763,7 @@ final class UTF8
     /**
      * Get a decimal code representation of a specific character.
      *
-     * INFO: opposite to UTF8::decimal_to_chr()
+     * @see UTF8::decimal_to_chr() Opposite operation
      *
      * EXAMPLE: <code>UTF8::chr_to_decimal('§'); // 0xa7</code>
      *
@@ -815,6 +815,8 @@ final class UTF8
 
     /**
      * Get hexadecimal code point (U+xxxx) of a UTF-8 encoded character.
+     *
+     * @see UTF8::hex_to_chr() Opposite operation
      *
      * EXAMPLE: <code>UTF8::chr_to_hex('§'); // U+00a7</code>
      *
@@ -983,7 +985,7 @@ final class UTF8
     /**
      * Accepts a string or an array of chars and returns an array of Unicode code points.
      *
-     * INFO: opposite to UTF8::string()
+     * @see UTF8::string() Opposite operation
      *
      * EXAMPLE: <code>
      * UTF8::codepoints('κöñ'); // array(954, 246, 241)
@@ -1218,7 +1220,7 @@ final class UTF8
     /**
      * Converts an int value into a UTF-8 character.
      *
-     * INFO: opposite to UTF8::string()
+     * @see UTF8::chr_to_decimal() Opposite operation
      *
      * EXAMPLE: <code>UTF8::decimal_to_chr(931); // 'Σ'</code>
      *
@@ -1239,6 +1241,8 @@ final class UTF8
 
     /**
      * Decodes a MIME header field
+     *
+     * @see UTF8::encode_mimeheader() Opposite operation
      *
      * @param string $str
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
@@ -1291,7 +1295,7 @@ final class UTF8
     /**
      * Decodes a string which was encoded by "UTF8::emoji_encode()".
      *
-     * INFO: opposite to UTF8::emoji_encode()
+     * @see UTF8::emoji_encode() Opposite operation
      *
      * EXAMPLE: <code>
      * UTF8::emoji_decode('foo CHARACTER_OGRE', false); // 'foo 👹'
@@ -1335,7 +1339,7 @@ final class UTF8
     /**
      * Encode a string with emoji chars into a non-emoji string.
      *
-     * INFO: opposite to UTF8::emoji_decode()
+     * @see UTF8::emoji_decode() Opposite operation
      *
      * EXAMPLE: <code>
      * UTF8::emoji_encode('foo 👹', false)); // 'foo CHARACTER_OGRE'
@@ -1562,6 +1566,8 @@ final class UTF8
     }
 
     /**
+     * @see UTF8::decode_mimeheader() Opposite operation
+     *
      * @param string      $str
      * @param string      $from_charset      [optional] <p>Set the input charset.</p>
      * @param string      $to_charset        [optional] <p>Set the output charset.</p>
@@ -2822,7 +2828,7 @@ final class UTF8
     /**
      * Converts a hexadecimal value into a UTF-8 character.
      *
-     * INFO: opposite to UTF8::chr_to_hex()
+     * @see UTF8::chr_to_hex() Opposite operation
      *
      * EXAMPLE: <code>UTF8::hex_to_chr('U+00a7'); // '§'</code>
      *
@@ -2842,7 +2848,7 @@ final class UTF8
     /**
      * Converts hexadecimal U+xxxx code point representation to integer.
      *
-     * INFO: opposite to UTF8::int_to_hex()
+     * @see UTF8::int_to_hex() Opposite operation
      *
      * EXAMPLE: <code>UTF8::hex_to_int('U+00f1'); // 241</code>
      *
@@ -2872,7 +2878,7 @@ final class UTF8
     /**
      * Converts a UTF-8 string to a series of HTML numbered entities.
      *
-     * INFO: opposite to UTF8::html_decode()
+     * @see UTF8::html_entity_decode() Opposite operation
      *
      * EXAMPLE: <code>UTF8::html_encode('中文空白'); // '&#20013;&#25991;&#31354;&#30333;'</code>
      *
@@ -2958,7 +2964,7 @@ final class UTF8
      *
      * Convert all HTML entities to their applicable characters.
      *
-     * INFO: opposite to UTF8::html_encode()
+     * @see UTF8::html_encode() Opposite operation
      *
      * EXAMPLE: <code>UTF8::html_entity_decode('&#20013;&#25991;&#31354;&#30333;'); // '中文空白'</code>
      *
@@ -3421,7 +3427,7 @@ final class UTF8
     /**
      * Converts Integer to hexadecimal U+xxxx code point representation.
      *
-     * INFO: opposite to UTF8::hex_to_int()
+     * @see UTF8::hex_to_int() Opposite operation
      *
      * EXAMPLE: <code>UTF8::int_to_hex(241); // 'U+00f1'</code>
      *
@@ -4797,7 +4803,7 @@ final class UTF8
     /**
      * Calculates Unicode code point of the given UTF-8 encoded character.
      *
-     * INFO: opposite to UTF8::chr()
+     * @see UTF8::chr() Opposite operation
      *
      * EXAMPLE: <code>UTF8::ord('☃'); // 0x2603</code>
      *
@@ -9035,7 +9041,9 @@ final class UTF8
     /**
      * Get a binary representation of a specific string.
      *
-     * EXAPLE: <code>UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'</code>
+     * @see UTF8::binary_to_str() Opposite operation
+     *
+     * EXAMPLE: <code>UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'</code>
      *
      * @param string $str <p>The input string.</p>
      *
@@ -9573,7 +9581,7 @@ final class UTF8
     /**
      * Create a UTF-8 string from code points.
      *
-     * INFO: opposite to UTF8::codepoints()
+     * @see UTF8::codepoints() Opposite operation
      *
      * EXAMPLE: <code>UTF8::string(array(246, 228, 252)); // 'öäü'</code>
      *
@@ -13214,6 +13222,8 @@ final class UTF8
     /**
      * Decodes a UTF-8 string to ISO-8859-1.
      *
+     * @see UTF8::utf8_encode() Opposite operation
+     *
      * EXAMPLE: <code>UTF8::encode('UTF-8', UTF8::utf8_decode('-ABC-中文空白-')); // '-ABC-????-'</code>
      *
      * @param string $str             <p>The input string.</p>
@@ -13286,6 +13296,8 @@ final class UTF8
 
     /**
      * Encodes an ISO-8859-1 string to UTF-8.
+     *
+     * @see UTF8::utf8_decode() Opposite operation
      *
      * EXAMPLE: <code>UTF8::utf8_decode(UTF8::utf8_encode('-ABC-中文空白-')); // '-ABC-中文空白-'</code>
      *
