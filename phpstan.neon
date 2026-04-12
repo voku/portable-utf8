@@ -51,8 +51,6 @@ rules:
     - PHPStan\Rules\Operators\OperandsInArithmeticSubtractionRule
     - PHPStan\Rules\StrictCalls\DynamicCallOnStaticMethodsCallableRule
     - PHPStan\Rules\StrictCalls\DynamicCallOnStaticMethodsRule
-    - PHPStan\Rules\DisallowedConstructs\DisallowedImplicitArrayCreationRule
-    - PHPStan\Rules\Functions\ClosureUsesThisRule
     - PHPStan\Rules\SwitchConditions\MatchingTypeInSwitchCaseConditionRule
     - TheCodingMachine\PHPStan\Rules\Conditionals\SwitchMustContainDefaultRule
     - TheCodingMachine\PHPStan\Rules\Exceptions\EmptyExceptionRule
