@@ -8856,7 +8856,7 @@ final class UTF8
      *
      * @see UTF8::binary_to_str() Opposite operation
      *
-     * EXAPLE: <code>UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'</code>
+     * EXAMPLE: <code>UTF8::str_to_binary('😃'); // '11110000100111111001100010000011'</code>
      *
      * @param string $str <p>The input string.</p>
      *
@@ -13120,7 +13120,7 @@ final class UTF8
      *
      * @param string      $str        <p>The input string.</p>
      * @param int<1, max> $limit      <p>The limit of words as integer.</p>
-     * @param string      $str_add_on <p>Replacement for the striped string.</p>
+     * @param string      $str_add_on <p>Replacement for the stripped string.</p>
      *
      *
      * @return string
