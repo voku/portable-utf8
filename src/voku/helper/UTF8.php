@@ -7957,7 +7957,6 @@ final class UTF8
         // this is only an old fallback
         /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
         /** @phpstan-ignore-next-line - old code :/ */
-        /** @phpstan-ignore-next-line - old code :/ */
         $str = $str;
         /** @phpstan-ignore-next-line - old code :/ */
         if (\is_array($str)) {
