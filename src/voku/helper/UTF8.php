@@ -25,6 +25,8 @@ namespace voku\helper;
  */
 final class UTF8
 {
+    private const MIN_ENCODING_DETECTION_OVERLAP = 3;
+
     /**
      * Bom => Byte-Length
      *
@@ -2371,7 +2373,6 @@ final class UTF8
     public static function fix_utf8($str)
     {
         if (\is_array($str)) {
-            /** @var array<string> $str */
             $fixed = [];
             foreach ($str as $v) {
                 $fixed[] = self::fix_utf8_string((string) $v);
@@ -3909,7 +3910,7 @@ final class UTF8
         }
 
         // Require a small overlap threshold to avoid classifying unrelated binary payloads as UTF-16.
-        if ((\max($maybe_utf16be, $maybe_utf16le) >= 3) && $maybe_utf16be !== $maybe_utf16le) {
+        if ((\max($maybe_utf16be, $maybe_utf16le) >= self::MIN_ENCODING_DETECTION_OVERLAP) && $maybe_utf16be !== $maybe_utf16le) {
             if ($maybe_utf16le > $maybe_utf16be) {
                 return 1;
             }
@@ -4003,7 +4004,7 @@ final class UTF8
         }
 
         // Require a small overlap threshold to avoid classifying unrelated binary payloads as UTF-32.
-        if ((\max($maybe_utf32be, $maybe_utf32le) >= 3) && $maybe_utf32be !== $maybe_utf32le) {
+        if ((\max($maybe_utf32be, $maybe_utf32le) >= self::MIN_ENCODING_DETECTION_OVERLAP) && $maybe_utf32be !== $maybe_utf32le) {
             if ($maybe_utf32le > $maybe_utf32be) {
                 return 1;
             }
@@ -6322,8 +6323,9 @@ final class UTF8
         }
 
         $subject = \preg_replace($search, $replacement, $subject, -1, $count);
-
-        \assert($subject !== null);
+        if ($subject === null) {
+            throw new \RuntimeException('preg_replace() failed.');
+        }
 
         return $subject;
     }
@@ -7998,8 +8000,6 @@ final class UTF8
         }
 
         if ($length > 1) {
-            $return_array = [[]];
-
             return \array_map(
                 static function (array $item): string {
                     return \implode('', $item);
@@ -12377,7 +12377,6 @@ final class UTF8
     public static function to_iso8859($str)
     {
         if (\is_array($str)) {
-            /** @var array<string> $str */
             $encoded = [];
             foreach ($str as $key => $v) {
                 $encoded[$key] = self::utf8_decode((string) $v);
