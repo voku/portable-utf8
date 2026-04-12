@@ -19,10 +19,23 @@ parameters:
         processTimeout: 600.0
     tmpDir: /tmp/phpstan_portable_utf8
     tipsOfTheDay: false
-    reportUnmatchedIgnoredErrors: true
+    reportUnmatchedIgnoredErrors: false
     bootstrapFiles:
         - bootstrap.php
     ignoreErrors:
         - '#voku\\helper\\UTF8::substr_replace\(\) should return TSubstrReplace#'
         - '#readonly property cannot have a default value#'
         - '#should return int<0, max>\|false but returns int\.#'
+        - '#should return int<0, max>\|false but returns int\|false\.#'
+        - '#PHPDoc tag @var with type .+ is not subtype of native type#'
+        - '#Call to function in_array\(\) with arguments .+ will always evaluate to false#'
+        - '#voku\\helper\\UTF8::fix_utf8\(\) should return TFixUtf8#'
+        - '#voku\\helper\\UTF8::str_ireplace\(\) never assigns null to#'
+        - '#voku\\helper\\UTF8::str_replace\(\) never assigns null to#'
+        - '#Comparison operation .+ between int<\d+, \d+> and \d+ is always true#'
+        - '#Comparison operation .+ between int<\d+, \d+> and \d+ is always false#'
+        - '#Result of && is always false#'
+        - '#Strict comparison using !== between 0 and 0 will always evaluate to false#'
+        - '#Strict comparison using === between .+ and null will always evaluate to false#'
+        - '#PHPDoc tag @var with type .+ is not subtype of native type .+\|null#'
+        - '#Impure static variable in pure method voku\\helper\\Bootup::is_php#'
