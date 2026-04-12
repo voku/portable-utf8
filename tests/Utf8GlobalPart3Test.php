@@ -691,7 +691,7 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testUrlDecodeMethodsDoNotThrowValueError()
+    public function testUrlDecodeMethodsHandleValueError()
     {
         $sharedTests = [
             'D%26%23xFC%3Bsseldorf' => 'Düsseldorf',
