@@ -524,11 +524,7 @@ final class UTF8
             $mbstringInternalEncoding = null;
             if (\function_exists('mb_internal_encoding')) {
                 $mbstringInternalEncodingTmp = \mb_internal_encoding();
-                if ($mbstringInternalEncodingTmp === false) {
-                    $mbstringInternalEncoding = null;
-                } else {
-                    $mbstringInternalEncoding = $mbstringInternalEncodingTmp;
-                }
+                $mbstringInternalEncoding = $mbstringInternalEncodingTmp !== false ? $mbstringInternalEncodingTmp : null;
             }
 
             self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();

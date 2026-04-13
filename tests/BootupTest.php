@@ -41,6 +41,8 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
             static::markTestSkipped('No non-UTF-8 mb_internal_encoding() value is available.');
         }
 
+        \mb_internal_encoding($testEncoding);
+
         $refProperty = (new \ReflectionClass(UTF8::class))->getProperty('SUPPORT');
         $refProperty->setAccessible(true);
         $support = $refProperty->getValue(null);
@@ -97,6 +99,8 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
             static::markTestSkipped('No non-UTF-8 mb_internal_encoding() value is available.');
         }
 
+        \mb_internal_encoding($testEncoding);
+
         $refProperty = (new \ReflectionClass(UTF8::class))->getProperty('SUPPORT');
         $refProperty->setAccessible(true);
         $support = $refProperty->getValue(null);
@@ -116,11 +120,18 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
 
     private function getNonUtf8InternalEncoding(): ?string
     {
+        $mbInternalEncoding = \mb_internal_encoding();
+
         foreach (['CP1252', 'Windows-1252', 'ISO-8859-1'] as $encoding) {
             if (\mb_internal_encoding($encoding) === true) {
-                return (string) \mb_internal_encoding();
+                $testEncoding = (string) \mb_internal_encoding();
+                \mb_internal_encoding((string) $mbInternalEncoding);
+
+                return $testEncoding;
             }
         }
+
+        \mb_internal_encoding((string) $mbInternalEncoding);
 
         return null;
     }
