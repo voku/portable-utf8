@@ -485,6 +485,19 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testMbRegexFallbacksStillWorkWhenMbstringIsAvailable()
+    {
+        $this->disableMbRegexSupport();
+
+        try {
+            static::assertSame('foo bar', UTF8::collapse_whitespace(" \tfoo \n bar\t "));
+            static::assertTrue(UTF8::has_uppercase('Σash'));
+            static::assertTrue(UTF8::is_uppercase('Σ'));
+        } finally {
+            $this->reactivateNativeUtf8Support();
+        }
+    }
+
     /**
      * @dataProvider trimProviderAdvancedWithMoreThenTwoBytes
      *
