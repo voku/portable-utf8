@@ -12,8 +12,8 @@
 ## Documentation
 
 - `README.md` is generated. Do not edit the generated API section by hand.
-- Regenerate it from the repository root with `php /home/runner/work/portable-utf8/portable-utf8/build/generate_docs.php`.
-- The generator reads `/home/runner/work/portable-utf8/portable-utf8/build/docs/base.md` and `/home/runner/work/portable-utf8/portable-utf8/src/voku/helper/UTF8.php`.
+- Regenerate it from the repository root with `php build/generate_docs.php`.
+- The generator reads `build/docs/base.md` and `src/voku/helper/UTF8.php`.
 
 ## Notes
 
