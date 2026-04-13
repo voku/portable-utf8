@@ -674,6 +674,88 @@ final class Utf8GlobalNonStrictPart3Test extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * Tests utf8_encode with raw ISO-8859-1 byte values, specifically the boundary
+     * conditions in the PHP 8.2+ implementation that replaces the deprecated utf8_encode().
+     */
+    public function testUtf8EncodeLatin1Bytes()
+    {
+        // ASCII boundary: 0x7F is the last ASCII byte, passed through unchanged
+        static::assertSame("\x7f", UTF8::utf8_encode("\x7f"));
+
+        // Lower boundary of the 0xC2-prefix range
+        static::assertSame("\xc2\x80", UTF8::utf8_encode("\x80"));
+
+        // Upper boundary of the 0xC2-prefix range
+        static::assertSame("\xc2\xbf", UTF8::utf8_encode("\xbf"));
+
+        // Lower boundary of the 0xC3-prefix range
+        static::assertSame("\xc3\x80", UTF8::utf8_encode("\xc0"));
+
+        // Upper boundary of the 0xC3-prefix range
+        static::assertSame("\xc3\xbf", UTF8::utf8_encode("\xff"));
+
+        // Common ISO-8859-1 characters
+        static::assertSame("\xc2\xa0", UTF8::utf8_encode("\xa0"), 'NBSP');
+        static::assertSame("\xc2\xa9", UTF8::utf8_encode("\xa9"), 'copyright sign');
+        static::assertSame("\xc3\x96", UTF8::utf8_encode("\xd6"), 'Ö');
+        static::assertSame("\xc3\xb6", UTF8::utf8_encode("\xf6"), 'ö');
+        static::assertSame("\xc3\xbc", UTF8::utf8_encode("\xfc"), 'ü');
+
+        // Mixed ASCII + extended ISO-8859-1 bytes
+        static::assertSame("hello\xc2\xa0world", UTF8::utf8_encode("hello\xa0world"), 'ASCII + NBSP');
+        static::assertSame("\xc2\x80\xc3\xbf", UTF8::utf8_encode("\x80\xff"), 'two extended bytes');
+
+        // Empty string
+        static::assertSame('', UTF8::utf8_encode(''));
+    }
+
+    /**
+     * Tests utf8_decode with specific UTF-8 byte sequences, including the boundaries
+     * that drive three-byte (→ '?') vs two-byte (→ ISO-8859-1 char) handling.
+     */
+    public function testUtf8DecodeLatin1Bytes()
+    {
+        // Pure ASCII passes through unchanged
+        static::assertSame('hello', UTF8::utf8_decode('hello'));
+
+        // Two-byte sequences decoding to ISO-8859-1 bytes
+        static::assertSame("\x80", UTF8::utf8_decode("\xc2\x80"), 'U+0080');
+        static::assertSame("\xa0", UTF8::utf8_decode("\xc2\xa0"), 'NBSP');
+        static::assertSame("\xa9", UTF8::utf8_decode("\xc2\xa9"), 'copyright sign');
+        static::assertSame("\xbf", UTF8::utf8_decode("\xc2\xbf"), '¿');
+        static::assertSame("\xc0", UTF8::utf8_decode("\xc3\x80"), 'À');
+        static::assertSame("\xe9", UTF8::utf8_decode("\xc3\xa9"), 'é');
+        static::assertSame("\xf6", UTF8::utf8_decode("\xc3\xb6"), 'ö');
+        static::assertSame("\xff", UTF8::utf8_decode("\xc3\xbf"), 'ÿ');
+
+        // Three-byte sequences must become '?' (cannot be represented in ISO-8859-1)
+        static::assertSame('?', UTF8::utf8_decode("\xe2\x80\x93"), 'en-dash (3-byte)');
+        static::assertSame('?', UTF8::utf8_decode("\xe2\x82\xac"), 'euro sign (3-byte)');
+
+        // Four-byte sequences must become '?'
+        static::assertSame('?', UTF8::utf8_decode("\xf0\x9f\x98\x80"), 'emoji (4-byte)');
+
+        // Empty string
+        static::assertSame('', UTF8::utf8_decode(''));
+    }
+
+    /**
+     * Verifies the round-trip property: utf8_decode(utf8_encode(byte)) === byte
+     * for all printable ISO-8859-1 byte values (0x20–0xFF).
+     */
+    public function testUtf8EncodeDecodeRoundTrip()
+    {
+        for ($byte = 0x20; $byte <= 0xFF; ++$byte) {
+            $char = \chr($byte);
+            static::assertSame(
+                $char,
+                UTF8::utf8_decode(UTF8::utf8_encode($char)),
+                \sprintf('round-trip failed for byte 0x%02X', $byte)
+            );
+        }
+    }
+
     public function testUtf8FileWithBom()
     {
         $bom = UTF8::file_has_bom(__DIR__ . '/fixtures/utf-8-bom.txt');
