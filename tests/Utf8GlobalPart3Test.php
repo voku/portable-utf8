@@ -910,17 +910,30 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
         // Four-byte sequences must become '?'
         static::assertSame('?', UTF8::utf8_decode("\xf0\x9f\x98\x80"), 'emoji (4-byte)');
 
+        // Truncated 2-byte sequence: lead byte with no continuation byte → '?'
+        static::assertSame('?', UTF8::utf8_decode("\xc2"), 'truncated 2-byte (lead only)');
+
+        // Invalid 2-byte sequence: lead byte + non-continuation byte
+        // The implementation decodes it using whatever bits are present (defined behavior, not a crash)
+        static::assertSame("\xa8", UTF8::utf8_decode("\xc2\x28"), 'invalid 2-byte (non-continuation)');
+
+        // Truncated 3-byte sequence: lead + only one continuation byte → '?'
+        static::assertSame('?', UTF8::utf8_decode("\xe2\x80"), 'truncated 3-byte');
+
+        // Isolated continuation byte passes through as-is (falls through to default branch)
+        static::assertSame("\x80", UTF8::utf8_decode("\x80"), 'isolated continuation byte');
+
         // Empty string
         static::assertSame('', UTF8::utf8_decode(''));
     }
 
     /**
      * Verifies the round-trip property: utf8_decode(utf8_encode(byte)) === byte
-     * for all printable ISO-8859-1 byte values (0x20–0xFF).
+     * for all ISO-8859-1 byte values (0x00–0xFF), including control characters.
      */
     public function testUtf8EncodeDecodeRoundTrip()
     {
-        for ($byte = 0x20; $byte <= 0xFF; ++$byte) {
+        for ($byte = 0x00; $byte <= 0xFF; ++$byte) {
             $char = \chr($byte);
             static::assertSame(
                 $char,

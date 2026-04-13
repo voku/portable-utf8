@@ -12997,6 +12997,12 @@ final class UTF8
             switch ($str[$i] & "\xF0") {
                 case "\xC0":
                 case "\xD0":
+                    if ($i + 1 >= $len) {
+                        // Truncated sequence: no continuation byte available
+                        $str[$j] = $no_char_found;
+
+                        break;
+                    }
                     $c = (self::$ORD[$str[$i] & "\x1F"] << 6) | self::$ORD[$str[++$i] & "\x3F"];
                     $str[$j] = $c < 256 ? self::$CHR[$c] : $no_char_found;
 
