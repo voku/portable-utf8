@@ -474,6 +474,30 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
         static::assertSame($output, UTF8::trim($input, ' '));
     }
 
+    public function testStrDelimitWithoutMbRegexStillUsesMbstringLowercase()
+    {
+        $this->disableMbRegexSupport();
+
+        try {
+            static::assertSame('σashΘcase', UTF8::str_delimit('Σash  Case', 'Θ', 'UTF-8'));
+        } finally {
+            $this->reactivateNativeUtf8Support();
+        }
+    }
+
+    public function testMbRegexFallbacksStillWorkWhenMbstringIsAvailable()
+    {
+        $this->disableMbRegexSupport();
+
+        try {
+            static::assertSame('foo bar', UTF8::collapse_whitespace(" \tfoo \n bar\t "));
+            static::assertTrue(UTF8::has_uppercase('Σash'));
+            static::assertTrue(UTF8::is_uppercase('Σ'));
+        } finally {
+            $this->reactivateNativeUtf8Support();
+        }
+    }
+
     /**
      * @dataProvider trimProviderAdvancedWithMoreThenTwoBytes
      *
@@ -1395,6 +1419,7 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
             'already_checked_via_portable_utf8' => true,
             'mbstring'                          => false,
             'mbstring_func_overload'            => false,
+            'mbstring_regex'                    => false,
             'mbstring_internal_encoding'        => 'UTF-8',
             'iconv'                             => false,
             'intl'                              => false,
@@ -1406,6 +1431,23 @@ final class Utf8GlobalPart3Test extends \PHPUnit\Framework\TestCase
             'json'                              => true,
             'symfony_polyfill_used'             => true,
         ];
+        $refProperty->setValue(null, $testArray);
+    }
+
+    private function disableMbRegexSupport()
+    {
+        $refProperty = (new \ReflectionObject(new UTF8()))->getProperty('SUPPORT');
+        $refProperty->setAccessible(true);
+
+        if ($this->oldSupportArray === null) {
+            $this->oldSupportArray = $refProperty->getValue(null);
+        }
+
+        $testArray = $this->oldSupportArray;
+        $testArray['already_checked_via_portable_utf8'] = true;
+        $testArray['mbstring'] = true;
+        $testArray['mbstring_regex'] = false;
+
         $refProperty->setValue(null, $testArray);
     }
 }

@@ -1339,6 +1339,7 @@ final class Utf8GlobalPart2Test extends \PHPUnit\Framework\TestCase
             'already_checked_via_portable_utf8' => true,
             'mbstring'                          => false,
             'mbstring_func_overload'            => false,
+            'mbstring_regex'                    => false,
             'mbstring_internal_encoding'        => 'UTF-8',
             'iconv'                             => false,
             'intl'                              => false,

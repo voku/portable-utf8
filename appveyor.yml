@@ -1,38 +1,34 @@
 build: false
 shallow_clone: false
-platform: 'x86'
+image: Visual Studio 2022
+platform: x64
 clone_folder: C:\projects\utf8
+
 branches:
   except:
     - gh-pages
 
 install:
   - ps: Set-Service wuauserv -StartupType Manual
-  - cinst -y curl
-  - cinst -y OpenSSL.Light
-  - SET PATH=C:\Program Files\OpenSSL;%PATH%
-  - cinst -y php --version "7.0.16"
-  - cd C:\tools\php70\ext
-  - curl -O https://xdebug.org/files/php_xdebug-2.4.1-7.0-vc14-nts-x86_64.dll
-  - cd C:\tools\php70
+  - choco install -y php --version "8.5.5"
+  - cd C:\tools\php85
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
   - echo extension_dir=ext >> php.ini
   - echo extension=php_openssl.dll >> php.ini
-  - echo extension=php_curl.dll >> php.ini
   - echo extension=php_mbstring.dll >> php.ini
   - echo extension=php_fileinfo.dll >> php.ini
-  - echo zend_extension_ts=php_xdebug-2.4.1-7.0-vc14-nts-x86_64.dll >> php.ini
-  - SET PATH=C:\tools\php70;%PATH%
+  - SET PATH=C:\tools\php85;%PATH%
   - cd C:\projects\utf8
+  - if exist build\logs rmdir /s /q build\logs
   - mkdir build\logs
-  - rm -rf vendor
-  - php -r "readfile('http://getcomposer.org/installer');" | php
-  - curl -O https://scrutinizer-ci.com/ocular.phar
-  - php composer.phar self-update
-  - php composer.phar clearcache
-  - php composer.phar config -g github-oauth.github.com %GITHUB_TOKEN%
-  - php composer.phar require php-coveralls/php-coveralls
+  - if exist vendor rmdir /s /q vendor
+  - ps: >-
+      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
+      Invoke-WebRequest https://getcomposer.org/installer -OutFile composer-setup.php
+  - php composer-setup.php
+  - del composer-setup.php
+  - php composer.phar clear-cache
   - php composer.phar install --prefer-dist --no-interaction
   - php composer.phar dump-autoload -o
 
@@ -41,4 +37,3 @@ test_script:
   - php.exe --version
   - dir
   - php.exe vendor\phpunit\phpunit\phpunit -c phpunit.xml
-  - php.exe ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml

@@ -149,11 +149,39 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
         $longString = \str_repeat('ё', 256);
 
         if (\PHP_VERSION_ID < 80000) {
-            $this->expectException(\PHPUnit\Framework\Error\Warning::class);
-            UTF8::levenshtein($longString, 'ё');
-
-            $this->expectException(\PHPUnit\Framework\Error\Warning::class);
-            UTF8::levenshtein('ё', $longString);
+            $this->assertWarningTriggered(static function () use ($longString): void {
+                UTF8::levenshtein($longString, 'ё');
+            });
+            $this->assertWarningTriggered(static function () use ($longString): void {
+                UTF8::levenshtein('ё', $longString);
+            });
         }
+    }
+
+    private function assertWarningTriggered(callable $callback): void
+    {
+        $warnings = [];
+
+        \set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+            if ($severity !== \E_WARNING) {
+                return false;
+            }
+
+            $warnings[] = [
+                'severity' => $severity,
+                'message' => $message,
+            ];
+
+            return true;
+        });
+
+        try {
+            $callback();
+        } finally {
+            \restore_error_handler();
+        }
+
+        static::assertCount(1, $warnings);
+        static::assertSame(\E_WARNING, $warnings[0]['severity']);
     }
 }
