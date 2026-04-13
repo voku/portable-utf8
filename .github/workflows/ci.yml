@@ -92,6 +92,10 @@ jobs:
 
   phpstan:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        phpstan-php-version: [70400, 80400]
     timeout-minutes: 10
     steps:
       - name: Checkout code
@@ -125,6 +129,6 @@ jobs:
         run: |
           composer require --dev --no-interaction phpstan/phpstan:^2.1 phpstan/phpstan-strict-rules:^2.0
 
-      - name: Run PHPStan
+      - name: Run PHPStan (PHP ${{ matrix.phpstan-php-version }})
         run: |
-          php vendor/bin/phpstan analyse
+          php vendor/bin/phpstan analyse --php-version=${{ matrix.phpstan-php-version }}
