@@ -3637,6 +3637,14 @@ abc	áßç	क際👽 	क際👽
         static::assertSame(['', 'iñt', ' ', 'ërn', ' ', 'I', ''], UTF8::str_to_words('iñt ërn I'));
         static::assertSame(['iñt', 'ërn', 'I'], UTF8::str_to_words('iñt ërn I', '', true));
         static::assertSame(['iñt', 'ërn'], UTF8::str_to_words('iñt ërn I', '', false, 1));
+        static::assertSame(['iñt', 'ërn'], UTF8::str_to_words('iñt ërn I', '', false, 2));
+        static::assertSame([], UTF8::str_to_words('iñt ërn I', '', false, 3));
+        static::assertSame(['iñt', 'ërn'], UTF8::str_to_words('iñt ërn I', '', true, 1));
+        static::assertSame(['iñt', 'ërn'], UTF8::str_to_words('iñt ërn I', '', true, 2));
+        static::assertSame([], UTF8::str_to_words('iñt ërn I', '', true, 3));
+        static::assertSame(['hello', 'world'], UTF8::str_to_words('hello world foo bar', '', true, 3));
+        static::assertSame(['hello', 'world'], UTF8::str_to_words('hello world foo bar', '', false, 3));
+        static::assertSame([], UTF8::str_to_words('', '', true, 1));
 
         // ---
 
@@ -3669,6 +3677,34 @@ abc	áßç	क際👽 	क際👽
         foreach ($testArray as $test => $unused) {
             static::assertSame($test, \implode(UTF8::str_to_words($test)), '');
         }
+    }
+
+    public function testStrToLines()
+    {
+        // basic split
+        static::assertSame(['hello', 'world', 'foo', ''], UTF8::str_to_lines("hello\nworld\nfoo\n"));
+
+        // remove_empty_values = true
+        static::assertSame(['hello', 'world', 'foo'], UTF8::str_to_lines("hello\nworld\nfoo\n", true));
+
+        // remove_short_values: removes lines with char length <= value
+        static::assertSame(['hello', 'world'], UTF8::str_to_lines("hello\nworld\nfoo\n", false, 3));
+        static::assertSame(['hello', 'world'], UTF8::str_to_lines("hello\nworld\nfoo\n", true, 3));
+
+        // remove_short_values with null (no filtering)
+        static::assertSame(['hello', 'world', 'foo', ''], UTF8::str_to_lines("hello\nworld\nfoo\n", false, null));
+
+        // empty string
+        static::assertSame([''], UTF8::str_to_lines('', false));
+        static::assertSame([], UTF8::str_to_lines('', true));
+        static::assertSame([''], UTF8::str_to_lines('', false, 3));
+        static::assertSame([], UTF8::str_to_lines('', true, 3));
+
+        // multibyte lines
+        static::assertSame(['中文空白'], UTF8::str_to_lines("中文空白\nöäü\na", false, 3));
+
+        // CRLF line endings
+        static::assertSame(['hello', 'world'], UTF8::str_to_lines("hello\r\nworld", false, 3));
     }
 
     public function testStrSplit()
