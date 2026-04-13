@@ -517,18 +517,34 @@ final class UTF8
     {
         if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
             self::$SUPPORT['already_checked_via_portable_utf8'] = true;
+            $autoEncodingChangeDisabled = PortableUtf8Config::isAutoEncodingChangeDisabled();
 
             // http://php.net/manual/en/book.mbstring.php
             self::$SUPPORT['mbstring'] = self::mbstring_loaded();
+            $mbstringInternalEncoding = null;
+            if (\function_exists('mb_internal_encoding')) {
+                $mbstringInternalEncodingTmp = \mb_internal_encoding();
+                $mbstringInternalEncoding = $mbstringInternalEncodingTmp !== false ? $mbstringInternalEncodingTmp : null; // @phpstan-ignore notIdentical.alwaysTrue
+            }
 
             self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();
             self::$SUPPORT['mbstring_regex'] = \function_exists('mb_ereg_match');
-            if (self::$SUPPORT['mbstring'] === true) {
+            if (
+                self::$SUPPORT['mbstring'] === true
+                &&
+                $autoEncodingChangeDisabled === false
+            ) {
                 \mb_internal_encoding('UTF-8');
-                if (self::$SUPPORT['mbstring_regex'] === true) {
+
+                if (
+                    self::$SUPPORT['mbstring_regex'] === true
+                    &&
+                    \function_exists('mb_regex_encoding')
+                ) {
                     \mb_regex_encoding('UTF-8');
                 }
-                self::$SUPPORT['mbstring_internal_encoding'] = 'UTF-8';
+
+                $mbstringInternalEncoding = 'UTF-8';
             }
 
             // http://php.net/manual/en/book.iconv.php
@@ -553,10 +569,18 @@ final class UTF8
             self::$SUPPORT['pcre_utf8'] = self::pcre_utf8_support();
 
             self::$SUPPORT['symfony_polyfill_used'] = self::symfony_polyfill_used();
-            if (self::$SUPPORT['symfony_polyfill_used'] === true) {
+            if (
+                self::$SUPPORT['symfony_polyfill_used'] === true
+                &&
+                $autoEncodingChangeDisabled === false
+                &&
+                \function_exists('mb_internal_encoding')
+            ) {
                 \mb_internal_encoding('UTF-8');
-                self::$SUPPORT['mbstring_internal_encoding'] = 'UTF-8';
+                $mbstringInternalEncoding = 'UTF-8';
             }
+
+            self::$SUPPORT['mbstring_internal_encoding'] = $mbstringInternalEncoding;
 
             return true;
         }

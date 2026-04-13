@@ -16,9 +16,128 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
 {
     public function testInitAll()
     {
-        Bootup::initAll();
+        $defaultCharset = \ini_get('default_charset');
+        \ini_set('default_charset', 'ISO-8859-1');
 
-        static::assertSame('UTF-8', \ini_get('default_charset'));
+        try {
+            Bootup::initAll();
+
+            static::assertSame('UTF-8', \ini_get('default_charset'));
+        } finally {
+            \ini_set('default_charset', (string) $defaultCharset);
+        }
+    }
+
+    public function testCheckForSupportSetsMbInternalEncodingByDefault()
+    {
+        if (!\function_exists('mb_internal_encoding')) {
+            static::markTestSkipped('mb_internal_encoding() is not available.');
+        }
+
+        $mbInternalEncoding = \mb_internal_encoding();
+        $testEncoding = $this->getNonUtf8InternalEncoding();
+
+        if ($testEncoding === null) {
+            static::markTestSkipped('No non-UTF-8 mb_internal_encoding() value is available.');
+        }
+
+        \mb_internal_encoding($testEncoding);
+
+        $refProperty = (new \ReflectionClass(UTF8::class))->getProperty('SUPPORT');
+        if (\PHP_VERSION_ID < 80100) {
+            $refProperty->setAccessible(true);
+        }
+        $support = $refProperty->getValue(null);
+        $refProperty->setValue(null, []);
+
+        try {
+            UTF8::checkForSupport();
+
+            static::assertNotSame([], $refProperty->getValue(null));
+            static::assertSame('UTF-8', \mb_internal_encoding());
+            static::assertSame('UTF-8', UTF8::getSupportInfo('mbstring_internal_encoding'));
+        } finally {
+            $refProperty->setValue(null, $support);
+            \mb_internal_encoding((string) $mbInternalEncoding);
+        }
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testInitAllCanSkipDefaultCharsetChangeViaConstant()
+    {
+        \define('PORTABLE_UTF8__DISABLE_AUTO_ENCODING', 1);
+
+        $defaultCharset = \ini_get('default_charset');
+        \ini_set('default_charset', 'ISO-8859-1');
+
+        try {
+            Bootup::initAll();
+
+            static::assertSame('ISO-8859-1', \ini_get('default_charset'));
+        } finally {
+            \ini_set('default_charset', (string) $defaultCharset);
+        }
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testCheckForSupportCanPreserveMbInternalEncodingViaConstant()
+    {
+        \define('PORTABLE_UTF8__DISABLE_AUTO_ENCODING', 1);
+
+        if (!\function_exists('mb_internal_encoding')) {
+            static::markTestSkipped('mb_internal_encoding() is not available.');
+        }
+
+        $mbInternalEncoding = \mb_internal_encoding();
+        $testEncoding = $this->getNonUtf8InternalEncoding();
+
+        if ($testEncoding === null) {
+            static::markTestSkipped('No non-UTF-8 mb_internal_encoding() value is available.');
+        }
+
+        \mb_internal_encoding($testEncoding);
+
+        $refProperty = (new \ReflectionClass(UTF8::class))->getProperty('SUPPORT');
+        if (\PHP_VERSION_ID < 80100) {
+            $refProperty->setAccessible(true);
+        }
+        $support = $refProperty->getValue(null);
+        $refProperty->setValue(null, []);
+
+        try {
+            UTF8::checkForSupport();
+
+            static::assertNotSame([], $refProperty->getValue(null));
+            static::assertSame($testEncoding, \mb_internal_encoding());
+            static::assertSame($testEncoding, UTF8::getSupportInfo('mbstring_internal_encoding'));
+        } finally {
+            $refProperty->setValue(null, $support);
+            \mb_internal_encoding((string) $mbInternalEncoding);
+        }
+    }
+
+    private function getNonUtf8InternalEncoding(): ?string
+    {
+        $mbInternalEncoding = \mb_internal_encoding();
+
+        foreach (['CP1252', 'Windows-1252', 'ISO-8859-1'] as $encoding) {
+            if (\mb_internal_encoding($encoding) === true) {
+                $testEncoding = (string) \mb_internal_encoding();
+                \mb_internal_encoding((string) $mbInternalEncoding);
+
+                return $testEncoding;
+            }
+        }
+
+        \mb_internal_encoding((string) $mbInternalEncoding);
+
+        return null;
     }
 
     public function testGetRandomBytes()

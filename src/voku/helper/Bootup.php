@@ -72,10 +72,19 @@ class Bootup
     }
 
     /**
+     * By default this keeps the historical behavior and sets UTF-8 related globals.
+     *
+     * Define "PORTABLE_UTF8__DISABLE_AUTO_ENCODING" before loading the composer
+     * autoloader to skip these automatic global encoding changes.
+     *
      * @return bool
      */
     public static function initAll(): bool
     {
+        if (PortableUtf8Config::isAutoEncodingChangeDisabled()) {
+            return true;
+        }
+
         $result = \ini_set('default_charset', 'UTF-8');
 
         // everything else is init via composer, so we are done here ...
