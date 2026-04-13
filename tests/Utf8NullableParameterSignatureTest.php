@@ -16,22 +16,7 @@ final class Utf8NullableParameterSignatureTest extends \PHPUnit\Framework\TestCa
      */
     public function testNullableParametersUseExplicitNullableTypes(string $methodName, string $parameterName, string $expectedType)
     {
-        $method = (new \ReflectionClass(UTF8::class))->getMethod($methodName);
-        $parameter = null;
-
-        foreach ($method->getParameters() as $currentParameter) {
-            if ($currentParameter->getName() === $parameterName) {
-                $parameter = $currentParameter;
-
-                break;
-            }
-        }
-
-        static::assertInstanceOf(
-            \ReflectionParameter::class,
-            $parameter,
-            'Failed to find parameter "' . $parameterName . '" on UTF8::' . $methodName . '().'
-        );
+        $parameter = $this->getParameter($methodName, $parameterName);
 
         $type = $parameter->getType();
 
@@ -70,5 +55,18 @@ final class Utf8NullableParameterSignatureTest extends \PHPUnit\Framework\TestCa
             ['wordwrap_per_line', 'delimiter', 'string'],
             ['reduce_string_array', 'remove_short_values', 'int'],
         ];
+    }
+
+    private function getParameter(string $methodName, string $parameterName): \ReflectionParameter
+    {
+        $method = (new \ReflectionClass(UTF8::class))->getMethod($methodName);
+
+        foreach ($method->getParameters() as $parameter) {
+            if ($parameter->getName() === $parameterName) {
+                return $parameter;
+            }
+        }
+
+        static::fail('Failed to find parameter "' . $parameterName . '" on UTF8::' . $methodName . '().');
     }
 }
