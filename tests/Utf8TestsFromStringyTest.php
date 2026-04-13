@@ -95,6 +95,11 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield ['camelΣase', 'camel σase', 'UTF-8'];
         yield ['στανιλCase', 'Στανιλ case', 'UTF-8'];
         yield ['σamelCase', 'σamel  Case', 'UTF-8'];
+        yield ['fooBar', 'FOO BAR'];
+        yield ['fooBar', 'FOO_BAR'];
+        yield ['fooBar', 'FOO-BAR'];
+        yield ['fòôBàř', 'FÒÔ BÀŘ', 'UTF-8'];
+        yield ['api2Url', 'API2URL'];
     }
 
     /**
@@ -4355,6 +4360,11 @@ d
         yield ['CamelΣase', 'camel σase', 'UTF-8'];
         yield ['ΣτανιλCase', 'στανιλ case', 'UTF-8'];
         yield ['ΣamelCase', 'Σamel  Case', 'UTF-8'];
+        yield ['FooBar', 'FOO BAR'];
+        yield ['FooBar', 'FOO_BAR'];
+        yield ['FooBar', 'FOO-BAR'];
+        yield ['FòôBàř', 'FÒÔ BÀŘ', 'UTF-8'];
+        yield ['Api2Url', 'API2URL'];
     }
 
     /**
