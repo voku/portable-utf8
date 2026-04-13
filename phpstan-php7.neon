@@ -1,0 +1,4 @@
+includes:
+    - phpstan.neon
+parameters:
+    phpVersion: 70400

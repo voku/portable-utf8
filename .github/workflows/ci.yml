@@ -95,7 +95,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        phpstan-php-version: [70400, 80400]
+        include:
+          - phpstan-config: phpstan.neon
+            label: "8.x"
+          - phpstan-config: phpstan-php7.neon
+            label: "7.x"
     timeout-minutes: 10
     steps:
       - name: Checkout code
@@ -129,6 +133,6 @@ jobs:
         run: |
           composer require --dev --no-interaction phpstan/phpstan:^2.1 phpstan/phpstan-strict-rules:^2.0
 
-      - name: Run PHPStan (PHP ${{ matrix.phpstan-php-version }})
+      - name: Run PHPStan (PHP ${{ matrix.label }})
         run: |
-          php vendor/bin/phpstan analyse --php-version=${{ matrix.phpstan-php-version }}
+          php vendor/bin/phpstan analyse -c ${{ matrix.phpstan-config }}
