@@ -1,0 +1,15 @@
+includes:
+    - phpstan.neon
+parameters:
+    phpVersion: 70400
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        - '#Function str_contains not found#'
+        - '#Function str_ends_with not found#'
+        - '#Function str_starts_with not found#'
+        - '#Caught class ValueError not found#'
+        - '#Dead catch - Error is never thrown in the try block#'
+        - '#should return string but returns string\|false#'
+        - '#PHPDoc tag @var with type .+ is not subtype of type .+#'
+        - '#Parameter \#1 \$val of function mb_convert_encoding expects array\|string, string\|false given#'
+        - '#Strict comparison using !== between int<0, max> and null will always evaluate to true#'

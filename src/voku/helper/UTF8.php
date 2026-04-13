@@ -267,7 +267,6 @@ final class UTF8
      * @param int    $pos      <p>The position of character to return.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>Single multi-byte character.</p>
@@ -294,7 +293,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return non-empty-string
      *                           <p>The output string that contains BOM.</p>
@@ -318,7 +316,6 @@ final class UTF8
      *                                       or <strong>CASE_LOWER</strong> (default)</p>
      * @param string               $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string[]
      *                  <p>An array with its keys lower- or uppercased.</p>
@@ -359,7 +356,6 @@ final class UTF8
      * @param int    $offset   [optional] <p>Index from which to begin the search. Default: 0</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -423,7 +419,6 @@ final class UTF8
      *
      * @param string $bin 1|0
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -448,7 +443,6 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::bom(); // "\xEF\xBB\xBF"</code>
      *
-     * @psalm-pure
      *
      * @return non-empty-string
      *                           <p>UTF-8 Byte Order Mark.</p>
@@ -464,7 +458,6 @@ final class UTF8
      * @param callable(string): string $callback
      * @param string   $str
      *
-     * @psalm-pure
      *
      * @return string[]
      *
@@ -482,7 +475,6 @@ final class UTF8
      * @param int<1, max> $index <p>Position of the character.</p>
      * @param string      $encoding   [optional] <p>Default is UTF-8</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The character at $index.</p>
@@ -501,7 +493,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return string[]
      *                  <p>An array of chars.</p>
@@ -580,7 +571,6 @@ final class UTF8
      * @param int    $code_point <p>The code point for which to generate a character.</p>
      * @param string $encoding   [optional] <p>Default is UTF-8</p>
      *
-     * @psalm-pure
      *
      * @return string|null
      *                     <p>Multi-byte character, returns null on failure or empty input.</p>
@@ -705,7 +695,6 @@ final class UTF8
      * @param callable(string): string $callback <p>The callback function.</p>
      * @param string   $str      <p>UTF-8 string to run callback on.</p>
      *
-     * @psalm-pure
      *
      * @return string[]
      *                  <p>The outcome of the callback, as array.</p>
@@ -730,7 +719,6 @@ final class UTF8
      *
      * @param string $str <p>The original unicode string.</p>
      *
-     * @psalm-pure
      *
      * @return int[]
      *               <p>An array of byte lengths of each character.</p>
@@ -769,7 +757,6 @@ final class UTF8
      *
      * @param string $char <p>The input character.</p>
      *
-     * @psalm-pure
      *
      * @return int
      */
@@ -823,7 +810,6 @@ final class UTF8
      * @param int|string $char   <p>The input character</p>
      * @param string     $prefix [optional]
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The code point encoded as U+xxxx.</p>
@@ -850,7 +836,6 @@ final class UTF8
      * @param int<1, max> $chunk_length [optional] <p>The maximum character length of a chunk.</p>
      * @param string      $end          [optional] <p>The character(s) to be inserted at the end of each chunk.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The chunked string.</p>
@@ -890,7 +875,6 @@ final class UTF8
      *                                                        maybe contains false-positives e.g. aa%0Baa -> aaaa.
      *                                                        </p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>An clean UTF-8 encoded string.</p>
@@ -951,7 +935,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -997,7 +980,6 @@ final class UTF8
      * @param bool            $use_u_style <p>If True, will return code points in U+xxxx format,
      *                                     default, code points will be returned as integers.</p>
      *
-     * @psalm-pure
      *
      * @return int[]|string[]
      *                        <p>
@@ -1057,7 +1039,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with trimmed $str and condensed whitespace.</p>
@@ -1080,7 +1061,6 @@ final class UTF8
      * @param bool   $clean_utf8              [optional] <p>Remove non UTF-8 chars from the string.</p>
      * @param bool   $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
      *
-     * @psalm-pure
      *
      * @return int[]
      *               <p>An associative array of Character as keys and
@@ -1117,7 +1097,6 @@ final class UTF8
      * @param bool     $strip_tags
      * @param bool     $strtolower
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -1189,7 +1168,6 @@ final class UTF8
      *
      * @param string $str
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -1205,7 +1183,6 @@ final class UTF8
     /**
      * Checks whether ctype is available on the server.
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
@@ -1228,7 +1205,6 @@ final class UTF8
      *
      * @phpstan-param int|numeric-string $int
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -1247,7 +1223,6 @@ final class UTF8
      * @param string $str
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>A decoded MIME field on success,
@@ -1308,7 +1283,6 @@ final class UTF8
      *                                               When <b>TRUE</b>, we se a reversible string mapping
      *                                               between "emoji_encode" and "emoji_decode".</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -1352,7 +1326,6 @@ final class UTF8
      *                                               when <b>TRUE</b>, we use a reversible string mapping
      *                                               between "emoji_encode" and "emoji_decode"</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -1404,7 +1377,6 @@ final class UTF8
      * @param string $from_encoding                 [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.<br>
      *                                              A empty string will trigger the autodetect anyway.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -1575,7 +1547,6 @@ final class UTF8
      * @param string      $linefeed          [optional] <p>Set the used linefeed.</p>
      * @param int<1, max> $indent            [optional] <p>Set the max length indent.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>An encoded MIME field on success,
@@ -1620,7 +1591,6 @@ final class UTF8
      * @param string   $replacer_for_skipped_text [optional] <p>Default: …</p>
      * @param string   $encoding                  [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -1839,7 +1809,6 @@ final class UTF8
      * @param string        $from_encoding    [optional] <p>e.g. 'UTF-16', 'UTF-8', 'ISO-8859-1', etc.<br>
      *                                        A empty string will trigger the autodetect anyway.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>The function returns the read data as string or <b>false</b> on failure.</p>
@@ -1921,7 +1890,6 @@ final class UTF8
      * @return bool
      *              <p><strong>true</strong> if the file has BOM at the start, <strong>false</strong> otherwise</p>
      *
-     * @psalm-pure
      */
     public static function file_has_bom(string $file_path): bool
     {
@@ -1942,7 +1910,6 @@ final class UTF8
      * @param int                 $normalization_form
      * @param string              $leading_combining
      *
-     * @psalm-pure
      *
      * @return mixed
      *
@@ -2041,7 +2008,6 @@ final class UTF8
      *                                      accepts options, flags can be provided in "flags" field of array.
      *                                      </p>
      *
-     * @psalm-pure
      *
      * @return mixed
      *               <p>
@@ -2049,6 +2015,8 @@ final class UTF8
      *               <i>variable_name</i> variable is not set. If the flag <b>FILTER_NULL_ON_FAILURE</b> is used, it
      *               returns <b>FALSE</b> if the variable is not set and <b>NULL</b> if the filter fails.
      *               </p>
+     *
+     * @phpstan-param 0|1|2|4|5 $type
      */
     public static function filter_input(
         int $type,
@@ -2103,7 +2071,6 @@ final class UTF8
      *                                              Add missing keys as <b>NULL</b> to the return value.
      *                                              </p>
      *
-     * @psalm-pure
      *
      * @return array<string, mixed>|false|null
      *                                         <p>
@@ -2112,6 +2079,8 @@ final class UTF8
      *                                         set. Or if the flag <b>FILTER_NULL_ON_FAILURE</b> is used, it returns <b>FALSE</b> if the variable
      *                                         is not set and <b>NULL</b> if the filter fails.
      *                                         </p>
+     *
+     * @phpstan-param 0|1|2|4|5 $type
      */
     public static function filter_input_array(
         int $type,
@@ -2189,7 +2158,6 @@ final class UTF8
      *                                        </code>
      *                                        </p>
      *
-     * @psalm-pure
      *
      * @return mixed
      *               <p>The filtered data, or <b>FALSE</b> if the filter fails.</p>
@@ -2256,7 +2224,6 @@ final class UTF8
      *                                                  Add missing keys as <b>NULL</b> to the return value.
      *                                                  </p>
      *
-     * @psalm-pure
      *
      * @return array<string, mixed>|false|null
      *                                         <p>
@@ -2286,7 +2253,6 @@ final class UTF8
     /**
      * Checks whether finfo is available on the server.
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
@@ -2305,7 +2271,6 @@ final class UTF8
      * @param int<1, max> $n        <p>Number of characters to retrieve from the start.</p>
      * @param string      $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -2342,7 +2307,6 @@ final class UTF8
      * @param string $str      the original string to be checked
      * @param int    $box_size the size in number of chars to be checked against string
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>TRUE</strong> if string is less than or equal to $box_size, <strong>FALSE</strong> otherwise.</p>
@@ -2365,7 +2329,6 @@ final class UTF8
      *
      * @param string $str <p>The input string</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -2408,13 +2371,12 @@ final class UTF8
      *
      * EXAMPLE: <code>UTF8::fix_utf8('FÃÂÂÂÂ©dÃÂÂÂÂ©ration'); // 'Fédération'</code>
      *
-     * @param string|string[] $str you can use a string or an array of strings
+     * @param mixed $str you can use a string or an array of strings
      *
-     * @psalm-pure
      *
-     * @return string|string[]
-     *                         <p>Will return the fixed input-"array" or
-     *                         the fixed input-"string".</p>
+     * @return mixed
+     *                <p>Will return the fixed input-"array" or
+     *                the fixed input-"string".</p>
      *
      * @template TFixUtf8 as string|string[]
      * @phpstan-param TFixUtf8 $str
@@ -2459,7 +2421,6 @@ final class UTF8
      *
      * @param string $char
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>'RTL' or 'LTR'.</p>
@@ -2575,7 +2536,6 @@ final class UTF8
      *
      * @param string|null $key
      *
-     * @psalm-pure
      *
      * @return mixed
      *               Return the full support-"array", if $key === null<br>
@@ -2606,7 +2566,6 @@ final class UTF8
      *
      * @return array{ext: null|string, mime: null|string, type: null|string}
      *
-     * @psalm-pure
      */
     public static function get_file_type(
         string $str,
@@ -2773,7 +2732,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not the string contains a lower case character.</p>
@@ -2792,7 +2750,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not the string contains whitespace.</p>
@@ -2811,7 +2768,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not the string contains an upper case character.</p>
@@ -2834,7 +2790,6 @@ final class UTF8
      *
      * @param string $hexdec <p>The hexadecimal value.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                      <p>One single UTF-8 character.</p>
@@ -2854,7 +2809,6 @@ final class UTF8
      *
      * @param string $hexdec <p>The hexadecimal code point representation.</p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>The code point, or false on failure.</p>
@@ -2886,7 +2840,6 @@ final class UTF8
      * @param bool   $keep_ascii_chars [optional] <p>Keep ASCII chars.</p>
      * @param string $encoding         [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>HTML numbered entities.</p>
@@ -3022,7 +2975,6 @@ final class UTF8
      *                           </p>
      * @param string   $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The decoded string.</p>
@@ -3101,7 +3053,6 @@ final class UTF8
      * @param string $str
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -3121,7 +3072,6 @@ final class UTF8
      *
      * @param string $str
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -3231,7 +3181,6 @@ final class UTF8
      *                              encode existing html entities. The default is to convert everything.
      *                              </p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>
@@ -3377,7 +3326,6 @@ final class UTF8
      *                              encode existing html entities, the default is to convert everything.
      *                              </p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The converted string.</p>
@@ -3412,7 +3360,6 @@ final class UTF8
     /**
      * Checks whether iconv is available on the server.
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
@@ -3434,7 +3381,6 @@ final class UTF8
      * @param int    $int    <p>The integer to be converted to hexadecimal code point.</p>
      * @param string $prefix [optional]
      *
-     * @psalm-pure
      *
      * @return string the code point, or empty string on failure
      */
@@ -3450,7 +3396,6 @@ final class UTF8
     /**
      * Checks whether intl-char is available on the server.
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
@@ -3465,7 +3410,6 @@ final class UTF8
     /**
      * Checks whether intl is available on the server.
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
@@ -3482,7 +3426,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains only alphabetic chars.</p>
@@ -3501,7 +3444,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains only alphanumeric chars.</p>
@@ -3520,7 +3462,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains only punctuation chars.</p>
@@ -3536,7 +3477,6 @@ final class UTF8
      * @param string $str                       <p>The input string.</p>
      * @param bool   $ignore_control_characters [optional] <p>Ignore control characters like [LRM] or [LSEP].</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains only printable (non-invisible) chars.</p>
@@ -3553,7 +3493,6 @@ final class UTF8
      *
      * @param string $str <p>The string to check.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>
@@ -3574,7 +3513,6 @@ final class UTF8
      * @param string|null $str                   <p>The input string.</p>
      * @param bool        $empty_string_is_valid [optional] <p>Is an empty string valid base64 or not?</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str is base64 encoded.</p>
@@ -3606,7 +3544,6 @@ final class UTF8
      * @param int|string $input
      * @param bool       $strict
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -3683,7 +3620,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains only whitespace characters.</p>
@@ -3706,7 +3642,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>true</strong> if the $utf8_chr is Byte Order Mark, <strong>false</strong> otherwise.</p>
@@ -3731,7 +3666,6 @@ final class UTF8
      *
      * @param array<array-key, mixed>|float|int|string $str
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str is empty().</p>
@@ -3746,7 +3680,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains only hexadecimal chars.</p>
@@ -3767,7 +3700,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains html elements.</p>
@@ -3794,7 +3726,6 @@ final class UTF8
      * @param string $url
      * @param bool   $disallow_localhost
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -3883,7 +3814,6 @@ final class UTF8
     /**
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains only lowercase chars.</p>
@@ -3902,7 +3832,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str is serialized.</p>
@@ -3926,7 +3855,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains only lower case characters.</p>
@@ -3954,7 +3882,6 @@ final class UTF8
      * @param string $str                       <p>The input string.</p>
      * @param bool   $check_if_string_is_binary
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <strong>false</strong> if is't not UTF-16,<br>
@@ -4048,7 +3975,6 @@ final class UTF8
      * @param string $str                       <p>The input string.</p>
      * @param bool   $check_if_string_is_binary
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <strong>false</strong> if is't not UTF-32,<br>
@@ -4140,7 +4066,6 @@ final class UTF8
      * @param int|string|string[]|null $str    <p>The input to be checked.</p>
      * @param bool                     $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -4190,7 +4115,6 @@ final class UTF8
      *                        is supported (default is to cast large integers as floats)
      *                        </p>
      *
-     * @psalm-pure
      *
      * @return mixed
      *               <p>The value encoded in <i>json</i> in appropriate PHP type. Values true, false and
@@ -4253,7 +4177,6 @@ final class UTF8
      *                       Set the maximum depth. Must be greater than zero.
      *                       </p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>A JSON encoded <strong>string</strong> on success or<br>
@@ -4277,7 +4200,6 @@ final class UTF8
     /**
      * Checks whether JSON is available on the server.
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
@@ -4302,7 +4224,6 @@ final class UTF8
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
      *                                                   -> ß</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The resulting string.</p>
@@ -4367,7 +4288,6 @@ final class UTF8
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
      *                                                   -> ß</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -4446,7 +4366,6 @@ final class UTF8
      * @param string      $str   <p>The string to be trimmed</p>
      * @param string|null $chars <p>Optional characters to be stripped</p>
      *
-     * @psalm-pure
      *
      * @return string the string with unwanted characters stripped from the left
      */
@@ -4485,7 +4404,6 @@ final class UTF8
      *
      * @param string|string[] $arg <p>A UTF-8 encoded string or an array of such strings.</p>
      *
-     * @psalm-pure
      *
      * @return string|null the character with the highest code point than others, returns null on failure or empty input
      */
@@ -4513,7 +4431,6 @@ final class UTF8
      *
      * @param string $str <p>The original Unicode string.</p>
      *
-     * @psalm-pure
      *
      * @return int
      *             <p>Max byte lengths of the given chars.</p>
@@ -4533,7 +4450,6 @@ final class UTF8
     /**
      * Checks whether mbstring is available on the server.
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>true</strong> if available, <strong>false</strong> otherwise</p>
@@ -4552,7 +4468,6 @@ final class UTF8
      *
      * @param string|string[] $arg <strong>A UTF-8 encoded string or an array of such strings.</strong>
      *
-     * @psalm-pure
      *
      * @return string|null
      *                     <p>The character with the lowest code point than others, returns null on failure or empty input.</p>
@@ -4581,7 +4496,6 @@ final class UTF8
      * @param mixed $encoding <p>e.g.: ISO, UTF8, WINDOWS-1251 etc.</p>
      * @param mixed $fallback <p>e.g.: UTF-8</p>
      *
-     * @psalm-pure
      *
      * @return mixed|string
      *                      <p>e.g.: ISO-8859-1, UTF-8, WINDOWS-1251 etc.<br>Will return a empty string as fallback (by default)</p>
@@ -4743,7 +4657,6 @@ final class UTF8
      * @param string|string[] $replacer <p>The replacer char e.g. "\n" (Linux) or "\r\n" (Windows). You can also use \PHP_EOL
      *                                  here.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with normalized line ending.</p>
@@ -4760,7 +4673,6 @@ final class UTF8
      *
      * @param string $str <p>The string to be normalized.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with normalized characters for commonly used chars in Word documents.</p>
@@ -4781,7 +4693,6 @@ final class UTF8
      *                                             bidirectional text chars.</p>
      * @param bool   $normalize_control_characters [optional] <p>Set to true, to convert e.g. LINE-, PARAGRAPH-SEPARATOR with "\n" and LINE TABULATION with "\t".</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with normalized whitespace.</p>
@@ -4810,7 +4721,6 @@ final class UTF8
      * @param string $chr      <p>The character of which to calculate code point.<p/>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return int
      *             <p>Unicode code point of the given character,<br>
@@ -4900,10 +4810,9 @@ final class UTF8
      * @see http://php.net/manual/en/function.parse-str.php
      *
      * @param string               $str        <p>The input string.</p>
-     * @param array<string, mixed> $result     <p>The result will be returned into this reference parameter.</p>
+     * @param array<int|string, mixed> $result <p>The result will be returned into this reference parameter.</p>
      * @param bool                 $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Will return <strong>false</strong> if php can't parse the string and we haven't any $result.</p>
@@ -4931,7 +4840,6 @@ final class UTF8
     /**
      * Checks if \u modifier is available that enables Unicode support in PCRE.
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>
@@ -4962,7 +4870,6 @@ final class UTF8
      *                              step will default to 1.
      *                              </p>
      *
-     * @psalm-pure
      *
      * @return list<string>
      */
@@ -5122,7 +5029,6 @@ final class UTF8
      * @param string $str          <p>The input string.</p>
      * @param bool   $multi_decode <p>Decode as often as possible.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The decoded URL, as a string.</p>
@@ -5177,7 +5083,6 @@ final class UTF8
      * @param string $options     [optional] <p>Matching conditions to be used.</p>
      * @param string $delimiter   [optional] <p>Delimiter the the regex. Default: '/'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -5211,7 +5116,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string without UTF-BOM.</p>
@@ -5248,7 +5152,6 @@ final class UTF8
      * @param string          $str  <p>The base string.</p>
      * @param string|string[] $what <p>String to search for in the base string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with removed duplicates.</p>
@@ -5280,7 +5183,6 @@ final class UTF8
      *                               should not be stripped. Default: null
      *                               </p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with without html tags.</p>
@@ -5296,7 +5198,6 @@ final class UTF8
      * @param string $str         <p>The input string.</p>
      * @param string $replacement [optional] <p>Default is a empty string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string without breaks.</p>
@@ -5325,7 +5226,6 @@ final class UTF8
      * @param string $replacement                   [optional] <p>The replacement character.</p>
      * @param bool   $keep_basic_control_characters [optional] <p>Keep control characters like [LRM] or [LSEP].</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string without invisible chars.</p>
@@ -5351,7 +5251,6 @@ final class UTF8
      * @param string $substring <p>The prefix to remove.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string without the prefix $substring.</p>
@@ -5393,7 +5292,6 @@ final class UTF8
      * @param string $substring <p>The suffix to remove.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string having a $str without the suffix $substring.</p>
@@ -5432,7 +5330,6 @@ final class UTF8
      * @param string $substring <p>The suffix to remove.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string having a $str without the suffix $substring.</p>
@@ -5471,7 +5368,6 @@ final class UTF8
      * @param string $substring <p>The prefix to remove.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string without the prefix $substring.</p>
@@ -5514,7 +5410,6 @@ final class UTF8
      * @param string $replacement    <p>The string to replace with.</p>
      * @param bool   $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with replaced parts.</p>
@@ -5540,7 +5435,6 @@ final class UTF8
      * @param string|string[] $replacement    <p>The string to replace with.</p>
      * @param bool            $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with replaced parts.</p>
@@ -5567,7 +5461,6 @@ final class UTF8
      * @param string $replacement_char           <p>The replacement character.</p>
      * @param bool   $process_invalid_utf8_chars <p>Convert invalid UTF-8 chars </p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string without diamond question marks (�).</p>
@@ -5626,7 +5519,6 @@ final class UTF8
      * @param string      $str   <p>The string to be trimmed.</p>
      * @param string|null $chars <p>Optional characters to be stripped.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with unwanted characters stripped from the right.</p>
@@ -5664,11 +5556,8 @@ final class UTF8
      *
      * @param bool $useEcho
      *
-     * @psalm-pure
      *
-     * @return string|void
-     *
-     * @phpstan-return ($useEcho is true ? void : string)
+     * @return string
      */
     public static function showSupport(bool $useEcho = true)
     {
@@ -5697,7 +5586,6 @@ final class UTF8
      * @param bool   $keep_ascii_chars <p>Set to <strong>true</strong> to keep ASCII chars.</>
      * @param string $encoding         [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The HTML numbered entity for the given character.</p>
@@ -5730,7 +5618,6 @@ final class UTF8
      * @param string      $str
      * @param int<1, max> $tab_length
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -5764,7 +5651,6 @@ final class UTF8
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
      *                                                   -> ß</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -5799,8 +5685,7 @@ final class UTF8
             /**
              * @param array $match
              *
-             * @psalm-pure
-             *
+                     *
              * @return string
              */
             static function (array $match) use ($use_mb_functions, $encoding, $lang, $try_to_keep_the_string_length): string {
@@ -5826,8 +5711,7 @@ final class UTF8
             /**
              * @param array $match
              *
-             * @psalm-pure
-             *
+                     *
              * @return string
              */
             static function (array $match) use ($use_mb_functions, $encoding, $clean_utf8, $lang, $try_to_keep_the_string_length): string {
@@ -5851,7 +5735,6 @@ final class UTF8
      *
      * @param string $str
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with $str capitalized.</p>
@@ -5876,7 +5759,6 @@ final class UTF8
      * @param string $needle         <p>Substring to look for.</p>
      * @param bool   $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $haystack contains $needle.</p>
@@ -5888,7 +5770,6 @@ final class UTF8
     ): bool {
         if ($case_sensitive) {
             if (\PHP_VERSION_ID >= 80000) {
-                /** @phpstan-ignore-next-line - only for PHP8 */
                 return \str_contains($haystack, $needle);
             }
 
@@ -5907,7 +5788,6 @@ final class UTF8
      * @param scalar[] $needles        <p>SubStrings to look for.</p>
      * @param bool     $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $haystack contains $needle.</p>
@@ -5947,7 +5827,6 @@ final class UTF8
      * @param scalar[] $needles        <p>SubStrings to look for.</p>
      * @param bool     $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str contains $needle.</p>
@@ -5990,7 +5869,6 @@ final class UTF8
      * @param string $str      <p>The input string.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6020,7 +5898,6 @@ final class UTF8
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ ->
      *                                                   ß</p>
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -6071,7 +5948,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>
@@ -6203,7 +6079,6 @@ final class UTF8
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -6218,7 +6093,6 @@ final class UTF8
         }
 
         if (\PHP_VERSION_ID >= 80000) {
-            /** @phpstan-ignore-next-line - only for PHP8 */
             return \str_ends_with($haystack, $needle);
         }
 
@@ -6233,7 +6107,6 @@ final class UTF8
      * @param string   $str        <p>The input string.</p>
      * @param string[] $substrings <p>Substrings to look for.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str ends with $substring.</p>
@@ -6260,7 +6133,6 @@ final class UTF8
      * @param string $str       <p>The input string.</p>
      * @param string $substring <p>The substring to add if not present.</p>
      *
-     * @psalm-pure
      *
      * @template T as string
      * @template TSub as string
@@ -6287,7 +6159,6 @@ final class UTF8
      * @param string $str       <p>The input string.</p>
      * @param string $substring <p>The substring to add if not present.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -6318,7 +6189,6 @@ final class UTF8
      *
      * @param string $str
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6350,7 +6220,6 @@ final class UTF8
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -6375,7 +6244,6 @@ final class UTF8
      * @param string   $str        <p>The input string.</p>
      * @param string[] $substrings <p>Substrings to look for.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str ends with $substring.</p>
@@ -6403,7 +6271,6 @@ final class UTF8
      * @param int    $index     <p>The index at which to insert the substring.</p>
      * @param string $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6463,7 +6330,6 @@ final class UTF8
      *                                     reference.
      *                                     </p>
      *
-     * @psalm-pure
      *
      * @return string|string[]
      *                         <p>A string or an array of replacements.</p>
@@ -6487,11 +6353,9 @@ final class UTF8
         }
 
         // fallback
-        /** @phpstan-ignore-next-line - only a fallback for PHP8 */
         if ($replacement === null) {
             $replacement = '';
         }
-        /** @phpstan-ignore-next-line - only a fallback for PHP8 */
         if ($subject === null) {
             $subject = '';
         }
@@ -6512,7 +6376,6 @@ final class UTF8
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The string after the replacement.</p>
@@ -6548,7 +6411,6 @@ final class UTF8
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The string after the replacement.</p>
@@ -6587,7 +6449,6 @@ final class UTF8
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -6612,7 +6473,6 @@ final class UTF8
      * @param string   $str        <p>The input string.</p>
      * @param scalar[] $substrings <p>Substrings to look for.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str starts with $substring.</p>
@@ -6643,7 +6503,6 @@ final class UTF8
      * @param string $separator <p>The string separator.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6683,7 +6542,6 @@ final class UTF8
      * @param string $separator <p>The string separator.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6723,7 +6581,6 @@ final class UTF8
      * @param string $separator <p>The string separator.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6755,7 +6612,6 @@ final class UTF8
      * @param string $separator <p>The string separator.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6793,7 +6649,6 @@ final class UTF8
      * @param bool   $before_needle [optional] <p>Default: false</p>
      * @param string $encoding      [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6832,7 +6687,6 @@ final class UTF8
      * @param bool   $before_needle [optional] <p>Default: false</p>
      * @param string $encoding      [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6870,7 +6724,6 @@ final class UTF8
      * @param int    $n        <p>Number of characters to retrieve from the end.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -6900,7 +6753,6 @@ final class UTF8
      * @param string      $str_add_on [optional] <p>Default: …</p>
      * @param string      $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -6949,7 +6801,6 @@ final class UTF8
      * @param string      $str_add_on [optional] <p>Default: ...</p>
      * @param string      $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -6974,10 +6825,12 @@ final class UTF8
 
         $encoding = self::normalize_encoding($encoding, 'UTF-8');
 
+        /* @phpstan-ignore-next-line | legacy signature usage */
         if ((int) self::strlen_in_byte($str, $encoding) <= $length) {
             return $str;
         }
 
+        /* @phpstan-ignore-next-line | legacy signature usage */
         return ((string) self::substr_in_byte($str, 0, $length - (int) self::strlen_in_byte($str_add_on), $encoding)) . $str_add_on;
     }
 
@@ -6991,7 +6844,6 @@ final class UTF8
      * @param string      $str_add_on [optional] <p>Default: …</p>
      * @param string      $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -7064,7 +6916,6 @@ final class UTF8
      * @param string $str2     <p>Second string for comparison.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -7129,7 +6980,6 @@ final class UTF8
      * @param string $str2     <p>Second string for comparison.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with its $str being the longest common substring.</p>
@@ -7219,7 +7069,6 @@ final class UTF8
      * @param string $str2     <p>Second string for comparison.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -7285,7 +7134,6 @@ final class UTF8
      * @param string $str     <p>The input string.</p>
      * @param string $pattern <p>Regex pattern to match against.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str matches the pattern.</p>
@@ -7304,7 +7152,6 @@ final class UTF8
      * @param int    $offset   <p>The index to check.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not the index exists.</p>
@@ -7336,7 +7183,6 @@ final class UTF8
      * @return string
      *                <p>The character at the specified index.</p>
      *
-     * @psalm-pure
      */
     public static function str_offset_get(string $str, int $index, string $encoding = 'UTF-8'): string
     {
@@ -7370,7 +7216,6 @@ final class UTF8
      *                               </p>
      * @param string     $encoding   [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>Returns the padded string.</p>
@@ -7532,7 +7377,6 @@ final class UTF8
      * @param string $pad_str  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The string with padding applied.</p>
@@ -7561,7 +7405,6 @@ final class UTF8
      * @param string $pad_str  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The string with left padding.</p>
@@ -7590,7 +7433,6 @@ final class UTF8
      * @param string $pad_str  [optional] <p>String used to pad, defaults to space. Default: ' '</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The string with right padding.</p>
@@ -7628,7 +7470,6 @@ final class UTF8
      *                           will return an empty string.
      *                           </p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The repeated string.</p>
@@ -7673,7 +7514,6 @@ final class UTF8
      *                                 If passed, this will hold the number of matched and replaced needles.
      *                                 </p>
      *
-     * @psalm-pure
      *
      * @return string|string[]
      *                         <p>This function returns a string or an array with the replaced values.</p>
@@ -7711,7 +7551,6 @@ final class UTF8
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string after the replacements.</p>
@@ -7750,7 +7589,6 @@ final class UTF8
      * @param string $search      <p>The string to search for.</p>
      * @param string $replacement <p>The replacement.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string after the replacements.</p>
@@ -7788,7 +7626,6 @@ final class UTF8
      * @param string $replace
      * @param string $subject
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -7823,7 +7660,6 @@ final class UTF8
      * @param string $replace
      * @param string $subject
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -7913,7 +7749,6 @@ final class UTF8
      * @param int|null $end      [optional] <p>Index at which to end extraction. Default: null</p>
      * @param string   $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>The extracted substring.</p><p>If <i>str</i> is shorter than <i>start</i>
@@ -7960,7 +7795,6 @@ final class UTF8
      * @param string $str
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string in snake_case.</p>
@@ -7986,8 +7820,7 @@ final class UTF8
             /**
              * @param string[] $matches
              *
-             * @psalm-pure
-             *
+                     *
              * @return string
              */
             static function (array $matches) use ($encoding): string {
@@ -8033,7 +7866,6 @@ final class UTF8
      * @param bool   $unique <p>Sort unique. If <strong>true</strong>, repeated characters are ignored.</p>
      * @param bool   $desc   <p>If <strong>true</strong>, will sort characters in reverse code point order.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string of sorted characters.</p>
@@ -8071,7 +7903,6 @@ final class UTF8
      * @param bool           $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
      *                                                "mb_substr"</p>
      *
-     * @psalm-pure
      *
      * @return list<list<string>>
      *                            <p>An array containing chunks of the input.</p>
@@ -8108,7 +7939,6 @@ final class UTF8
      * @param bool        $try_to_use_mb_functions [optional] <p>Set to false, if you don't want to use
      *                                            "mb_substr"</p>
      *
-     * @psalm-pure
      *
      * @return list<string>
      *                      <p>An array containing chunks of chars from the input.</p>
@@ -8126,8 +7956,9 @@ final class UTF8
 
         // this is only an old fallback
         /** @noinspection PhpSillyAssignmentInspection - hack for phpstan */
-        /** @var int|int[]|string|string[] $str */
+        /** @phpstan-ignore-next-line - old code :/ */
         $str = $str;
+        /** @phpstan-ignore-next-line - old code :/ */
         if (\is_array($str)) {
             /** @psalm-suppress InvalidReturnStatement */
             /** @phpstan-ignore-next-line - old code :/ */
@@ -8179,11 +8010,13 @@ final class UTF8
             } else {
                 $return_array = [];
                 \preg_match_all('/./us', $str, $return_array);
+                /** @phpstan-ignore-next-line - old code :/ */
                 $ret = $return_array[0] ?? [];
             }
         } elseif (self::$SUPPORT['pcre_utf8'] === true) {
             $return_array = [];
             \preg_match_all('/./us', $str, $return_array);
+            /** @phpstan-ignore-next-line - old code :/ */
             $ret = $return_array[0] ?? [];
         } else {
             // fallback
@@ -8241,7 +8074,6 @@ final class UTF8
         if ($length > 1) {
             return \array_map(
                 static function (array $item): string {
-                    /* @phpstan-ignore-next-line | "array_map + array_chunk" is not supported by phpstan?! */
                     return \implode('', $item);
                 },
                 \array_chunk($ret, $length)
@@ -8264,7 +8096,6 @@ final class UTF8
      * @param string $pattern <p>The regex with which to split the string.</p>
      * @param int    $limit   [optional] <p>Maximum number of results to return. Default: -1 === no limit</p>
      *
-     * @psalm-pure
      *
      * @return string[]
      *                  <p>An array of strings.</p>
@@ -8336,7 +8167,6 @@ final class UTF8
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -8351,7 +8181,6 @@ final class UTF8
         }
 
         if (\PHP_VERSION_ID >= 80000) {
-            /** @phpstan-ignore-next-line - only for PHP8 */
             return \str_starts_with($haystack, $needle);
         }
 
@@ -8366,7 +8195,6 @@ final class UTF8
      * @param string   $str        <p>The input string.</p>
      * @param scalar[] $substrings <p>Substrings to look for.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>Whether or not $str starts with $substring.</p>
@@ -8397,7 +8225,6 @@ final class UTF8
      * @param string $separator <p>The string separator.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -8439,7 +8266,6 @@ final class UTF8
      * @param string $separator <p>The string separator.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -8484,7 +8310,6 @@ final class UTF8
      * @param string $separator <p>The string separator.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -8530,7 +8355,6 @@ final class UTF8
      * @param string $separator <p>The string separator.</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -8576,7 +8400,6 @@ final class UTF8
      * @param bool   $before_needle [optional] <p>Default: false</p>
      * @param string $encoding      [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -8623,7 +8446,6 @@ final class UTF8
      * @param bool   $before_needle [optional] <p>Default: false</p>
      * @param string $encoding      [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -8668,7 +8490,6 @@ final class UTF8
      * @param string $str
      * @param string $substring <p>The substring to add to both sides.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with the substring both prepended and appended.</p>
@@ -8704,7 +8525,6 @@ final class UTF8
      * @param string|null   $word_define_chars             [optional] <p>An string of chars that will be used as
      *                                                     whitespace separator === words.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The titleized string.</p>
@@ -8793,7 +8613,6 @@ final class UTF8
      * @param string   $obfuscateChar
      * @param string[] $keepChars
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The obfuscate string.</p>
@@ -8861,7 +8680,6 @@ final class UTF8
      * @param string[] $ignore   <p>An array of words not to capitalize.</p>
      * @param string   $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The titleized string.</p>
@@ -8926,8 +8744,7 @@ final class UTF8
             /**
              * @param string[] $matches
              *
-             * @psalm-pure
-             *
+                     *
              * @return string
              */
             static function (array $matches) use ($encoding): string {
@@ -8964,8 +8781,7 @@ final class UTF8
             /**
              * @param string[] $matches
              *
-             * @psalm-pure
-             *
+                     *
              * @return string
              */
             static function (array $matches) use ($encoding): string {
@@ -8983,8 +8799,7 @@ final class UTF8
             /**
              * @param string[] $matches
              *
-             * @psalm-pure
-             *
+                     *
              * @return string
              */
             static function (array $matches) use ($encoding): string {
@@ -9004,8 +8819,7 @@ final class UTF8
             /**
              * @param string[] $matches
              *
-             * @psalm-pure
-             *
+                     *
              * @return string
              */
             static function (array $matches) use ($encoding): string {
@@ -9025,8 +8839,7 @@ final class UTF8
             /**
              * @param string[] $matches
              *
-             * @psalm-pure
-             *
+                     *
              * @return string
              */
             static function (array $matches) use ($encoding): string {
@@ -9047,7 +8860,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>false on error</p>
@@ -9067,7 +8879,6 @@ final class UTF8
      * @param bool     $remove_empty_values <p>Remove empty values.</p>
      * @param int|null $remove_short_values <p>The min. string length or null to disable</p>
      *
-     * @psalm-pure
      *
      * @return string[]
      */
@@ -9112,7 +8923,6 @@ final class UTF8
      * @param bool     $remove_empty_values <p>Remove empty values.</p>
      * @param int|null $remove_short_values <p>The min. string length or null to disable</p>
      *
-     * @psalm-pure
      *
      * @return list<string>
      *
@@ -9166,7 +8976,6 @@ final class UTF8
      * @param string $substring [optional] <p>The substring to append if it can fit. Default: ''</p>
      * @param string $encoding  [optional] <p>Default: 'UTF-8'</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string after truncating.</p>
@@ -9230,7 +9039,6 @@ final class UTF8
      * @param string $encoding                               [optional] <p>Default: 'UTF-8'</p>
      * @param bool   $ignore_do_not_split_words_for_one_word [optional] <p>Default: false</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string after truncating.</p>
@@ -9331,7 +9139,6 @@ final class UTF8
      *
      * @param string $str
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The underscored string.</p>
@@ -9354,7 +9161,6 @@ final class UTF8
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
      *                                                   -> ß</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string in UpperCamelCase.</p>
@@ -9397,7 +9203,6 @@ final class UTF8
      *                          </p>
      * @param string $char_list [optional] <p>Additional chars that contains to words and do not start a new word.</p>
      *
-     * @psalm-pure
      *
      * @return int|string[]
      *                      <p>The number of words in the string.</p>
@@ -9448,7 +9253,6 @@ final class UTF8
      * @param string $str2     <p>The second string.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return int
      *             <strong>&lt; 0</strong> if str1 is less than str2;<br>
@@ -9488,7 +9292,6 @@ final class UTF8
      * @param string $str1 <p>The first string.</p>
      * @param string $str2 <p>The second string.</p>
      *
-     * @psalm-pure
      *
      * @return int
      *             <strong>&lt; 0</strong> if str1 is less than str2<br>
@@ -9506,7 +9309,9 @@ final class UTF8
             \Normalizer::normalize($str2, \Normalizer::NFD)
         );
 
+        /* @phpstan-ignore-next-line | legacy defensive check */
         if (!is_int($cmp)) {
+            /* @phpstan-ignore-next-line | legacy defensive check */
             return $cmp < 0 ? -1 : ($cmp > 0 ? 1 : 0);
         }
 
@@ -9522,7 +9327,6 @@ final class UTF8
      * @param int|null $length
      * @param string   $encoding  [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return int
      *
@@ -9589,7 +9393,6 @@ final class UTF8
      *
      * @phpstan-param int[]|numeric-string[]|int|numeric-string $intOrHex
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A UTF-8 encoded string.</p>
@@ -9621,7 +9424,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p>
@@ -9660,7 +9462,6 @@ final class UTF8
      *                                    </p>
      * @param bool        $clean_utf8     [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The stripped string.</p>
@@ -9694,7 +9495,6 @@ final class UTF8
      *
      * @param string $str
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -9722,7 +9522,6 @@ final class UTF8
      * @param string $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool   $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   Return the <strong>(int)</strong> numeric position of the first occurrence of needle in the
@@ -9819,7 +9618,6 @@ final class UTF8
      * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool   $clean_utf8    [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>A sub-string,<br>or <strong>false</strong> if needle is not found.</p>
@@ -9918,7 +9716,6 @@ final class UTF8
      * @param string $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool   $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>
@@ -10011,7 +9808,6 @@ final class UTF8
             self::$SUPPORT['intl'] === true
         ) {
             $return_tmp = \grapheme_strlen($str);
-            /* @phpstan-ignore-next-line | "grapheme_strlen" will maybe return "null" for empty-strings and "false" on error */
             if ($return_tmp !== false && $return_tmp !== null) {
                 return $return_tmp;
             }
@@ -10044,7 +9840,6 @@ final class UTF8
      *
      * @param string $str
      *
-     * @psalm-pure
      *
      * @return int
      *
@@ -10081,7 +9876,6 @@ final class UTF8
      * @param string $str2     <p>The second string.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return int
      *             <strong>&lt; 0</strong> if str1 is less than str2<br>
@@ -10114,7 +9908,6 @@ final class UTF8
      * @param string $str1 <p>The first string.</p>
      * @param string $str2 <p>The second string.</p>
      *
-     * @psalm-pure
      *
      * @return int
      *             <strong>&lt; 0</strong> if str1 is less than str2;<br>
@@ -10147,7 +9940,6 @@ final class UTF8
      * @param int    $len      <p>The length of strings to be used in the comparison.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return int
      *             <strong>&lt; 0</strong> if <i>str1</i> is less than <i>str2</i>;<br>
@@ -10181,7 +9973,6 @@ final class UTF8
      * @param int    $len      <p>Number of characters to use in the comparison.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return int
      *             <strong>&lt; 0</strong> if <i>str1</i> is less than <i>str2</i>;<br>
@@ -10219,7 +10010,6 @@ final class UTF8
      * @param string $haystack  <p>The string where char_list is looked for.</p>
      * @param string $char_list <p>This parameter is case-sensitive.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>The string starting from the character found, or false if it is not found.</p>
@@ -10252,7 +10042,6 @@ final class UTF8
      * @param string     $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool       $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   The <strong>(int)</strong> numeric position of the first occurrence of needle in the haystack
@@ -10426,7 +10215,6 @@ final class UTF8
      *                         The search offset. If it is not specified, 0 is used.
      *                         </p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>The numeric position of the first occurrence of needle in the
@@ -10461,7 +10249,6 @@ final class UTF8
      *                         The search offset. If it is not specified, 0 is used.
      *                         </p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>The numeric position of the first occurrence of needle in the
@@ -10503,7 +10290,6 @@ final class UTF8
      * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool   $clean_utf8    [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>The portion of haystack or false if needle is not found.</p>
@@ -10622,7 +10408,6 @@ final class UTF8
      * @param string $str      <p>The input string.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The string with characters in the reverse sequence.</p>
@@ -10692,7 +10477,6 @@ final class UTF8
      * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool   $clean_utf8    [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>The portion of haystack or<br>false if needle is not found.</p>
@@ -10764,7 +10548,6 @@ final class UTF8
      * @param string     $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool       $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>The <strong>(int)</strong> numeric position of the last occurrence of needle in the haystack
@@ -10900,7 +10683,6 @@ final class UTF8
      *                         to start searching.
      *                         </p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>eturn the numeric position of the last occurrence of needle in the
@@ -10936,7 +10718,6 @@ final class UTF8
      * @param string     $encoding   [optional] <p>Set the charset.</p>
      * @param bool       $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>The <strong>(int)</strong> numeric position of the last occurrence of needle in the haystack
@@ -11095,7 +10876,6 @@ final class UTF8
      *                         prior to the end of the string.
      *                         </p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>The numeric position of the last occurrence of needle in the
@@ -11127,9 +10907,8 @@ final class UTF8
      * @param int|null $length   [optional]
      * @param string   $encoding [optional] <p>Set the charset.</p>
      *
-     * @psalm-pure
      *
-     * @return false|int
+     * @return int
      */
     public static function strspn(
         string $str,
@@ -11183,7 +10962,6 @@ final class UTF8
      * @param string $encoding      [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool   $clean_utf8    [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>A sub-string,<br>or <strong>false</strong> if needle is not found.</p>
@@ -11316,7 +11094,6 @@ final class UTF8
      *                              from the first occurrence of needle to the end,
      *                              </p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      <p>The portion of haystack,
@@ -11357,7 +11134,6 @@ final class UTF8
      * @param bool        $lower      [optional] <p>Use lowercase string, otherwise use uppercase string. PS: uppercase
      *                                is for some languages better ...</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -11411,7 +11187,6 @@ final class UTF8
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
      *                                                   -> ß</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>String with all alphabetic characters converted to lowercase.</p>
@@ -11491,7 +11266,6 @@ final class UTF8
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
      *                                                   -> ß</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>String with all alphabetic characters converted to uppercase.</p>
@@ -11574,7 +11348,6 @@ final class UTF8
      * @param string|string[] $from <p>The string replacing from.</p>
      * @param string|string[] $to   [optional] <p>The string being translated to to.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>This function returns a copy of str, translating all occurrences of each character in "from"
@@ -11639,7 +11412,6 @@ final class UTF8
      * @param string $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool   $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return int
      *
@@ -11687,7 +11459,6 @@ final class UTF8
         $wide = 0;
         $str = (string) \preg_replace('/[\x{1100}-\x{115F}\x{2329}\x{232A}\x{2E80}-\x{303E}\x{3040}-\x{A4CF}\x{AC00}-\x{D7A3}\x{F900}-\x{FAFF}\x{FE10}-\x{FE19}\x{FE30}-\x{FE6F}\x{FF00}-\x{FF60}\x{FFE0}-\x{FFE6}\x{20000}-\x{2FFFD}\x{30000}-\x{3FFFD}]/u', '', $str, -1, $wide);
 
-        /* @phpstan-ignore-next-line | should return 0|positive-int */
         return ($wide << 1) + (int) self::strlen($str);
     }
 
@@ -11704,7 +11475,6 @@ final class UTF8
      * @param string   $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool     $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|string
      *                      The portion of <i>str</i> specified by the <i>offset</i> and
@@ -11874,7 +11644,6 @@ final class UTF8
      *                                     insensitive.</p>
      * @param string   $encoding           [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return int
      *             <strong>&lt; 0</strong> if str1 is less than str2;<br>
@@ -11925,7 +11694,6 @@ final class UTF8
      * @param string   $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool     $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>This functions returns an integer or false if there isn't a string.</p>
@@ -12015,7 +11783,6 @@ final class UTF8
      *                           greater than the haystack length.
      *                           </p>
      *
-     * @psalm-pure
      *
      * @return false|int
      *                   <p>The number of times the
@@ -12089,7 +11856,6 @@ final class UTF8
      * @param bool   $case_sensitive [optional] <p>Whether or not to enforce case-sensitivity. Default: true</p>
      * @param string $encoding       [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return int
      *
@@ -12140,7 +11906,6 @@ final class UTF8
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>Return the sub-string.</p>
@@ -12169,12 +11934,10 @@ final class UTF8
      * @param int      $offset <p>The first position used in str.</p>
      * @param int|null $length [optional] <p>The maximum length of the returned string.</p>
      *
-     * @psalm-pure
      *
-     * @return false|string
-     *                      <p>The portion of <i>str</i> specified by the <i>offset</i> and
-     *                      <i>length</i> parameters.</p><p>If <i>str</i> is shorter than <i>offset</i>
-     *                      characters long, <b>FALSE</b> will be returned.</p>
+     * @return string
+     *                <p>The portion of <i>str</i> specified by the <i>offset</i> and
+     *                <i>length</i> parameters.</p>
      */
     public static function substr_in_byte(string $str, int $offset = 0, ?int $length = null)
     {
@@ -12193,7 +11956,7 @@ final class UTF8
             return \mb_substr($str, $offset, $length, 'CP850'); // 8-BIT
         }
 
-        return \substr($str, $offset, $length ?? 2147483647);
+        return (string) \substr($str, $offset, $length ?? 2147483647);
     }
 
     /**
@@ -12207,7 +11970,6 @@ final class UTF8
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>Return the sub-string.<p>
@@ -12240,7 +12002,6 @@ final class UTF8
      * @param string $haystack <p>The string to search in.</p>
      * @param string $needle   <p>The substring to search for.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>Return the sub-string.</p>
@@ -12287,7 +12048,6 @@ final class UTF8
      *                                     replacement into string at the given start offset.</p>
      * @param string          $encoding    [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string|string[]
      *                         <p>The result string is returned. If string is an array then array is returned.</p>
@@ -12433,7 +12193,6 @@ final class UTF8
      * @param string $needle   <p>The substring to search for.</p>
      * @param string $encoding [optional] <p>Set the charset for e.g. "mb_" function</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>Return the sub-string.</p>
@@ -12480,7 +12239,6 @@ final class UTF8
      * @param string $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
      * @param bool   $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>Each character's case swapped.</p>
@@ -12507,7 +12265,6 @@ final class UTF8
     /**
      * Checks whether symfony-polyfills are used.
      *
-     * @psalm-pure
      *
      * @return bool
      *              <p><strong>true</strong> if in use, <strong>false</strong> otherwise</p>
@@ -12536,7 +12293,6 @@ final class UTF8
      * @param string $str
      * @param int    $tab_length
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -12565,7 +12321,6 @@ final class UTF8
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
      *                                                   -> ß</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>A string with all characters of $str being title-cased.</p>
@@ -12618,7 +12373,6 @@ final class UTF8
      * @param bool   $strict  [optional] <p>Use "transliterator_transliterate()" from PHP-Intl | WARNING: bad
      *                        performance</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -12633,7 +12387,6 @@ final class UTF8
     /**
      * @param bool|float|int|string $str
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -12682,7 +12435,6 @@ final class UTF8
      *                                  simply replaced with hyphen.
      * @param string $fallback_char
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -12705,7 +12457,6 @@ final class UTF8
      *
      * @param string|string[] $str
      *
-     * @psalm-pure
      *
      * @return string|string[]
      *
@@ -12747,7 +12498,6 @@ final class UTF8
      * @param string|string[] $str                        <p>Any string or array of strings.</p>
      * @param bool            $decode_html_entity_to_utf8 <p>Set to true, if you need to decode html-entities.</p>
      *
-     * @psalm-pure
      *
      * @return string|string[]
      *                         <p>The UTF-8 encoded string</p>
@@ -12763,15 +12513,14 @@ final class UTF8
                 $v = self::to_utf8_string($v, $decode_html_entity_to_utf8);
             }
 
-            /** @phpstan-var TToUtf8 $str */
             return $str;
         }
 
+        /* @phpstan-ignore-next-line | narrows generic template at runtime */
         \assert(\is_string($str));
 
         $str = self::to_utf8_string($str, $decode_html_entity_to_utf8);
 
-        /** @phpstan-var TToUtf8 $str */
         return $str;
     }
 
@@ -12790,7 +12539,6 @@ final class UTF8
      * @param string $str                        <p>Any string.</p>
      * @param bool   $decode_html_entity_to_utf8 <p>Set to true, if you need to decode html-entities.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The UTF-8 encoded string</p>
@@ -12858,8 +12606,7 @@ final class UTF8
             /**
              * @param array $matches
              *
-             * @psalm-pure
-             *
+                     *
              * @return string
              */
             static function (array $matches): string {
@@ -12909,7 +12656,6 @@ final class UTF8
      *
      * @param string $str
      *
-     * @psalm-pure
      *
      * @return int|null
      *                  <p>null if the string isn't numeric</p>
@@ -12929,7 +12675,6 @@ final class UTF8
      *
      * @param float|int|object|string|null $input
      *
-     * @psalm-pure
      *
      * @return string|null
      *                     <p>null if the input isn't int|float|string and has no "__toString()" method</p>
@@ -12942,12 +12687,13 @@ final class UTF8
 
         $input_type = \gettype($input);
 
+        /* @phpstan-ignore-next-line | gettype() handling is intentionally explicit */
         if (
             $input_type === 'string'
             ||
             $input_type === 'integer'
             ||
-            $input_type === 'float'
+            $input_type === 'float' /* @phpstan-ignore-line | legacy gettype branch */
             ||
             $input_type === 'double'
         ) {
@@ -12976,7 +12722,6 @@ final class UTF8
      * @param string      $str   <p>The string to be trimmed</p>
      * @param string|null $chars [optional] <p>Optional characters to be stripped</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The trimmed string.</p>
@@ -13022,7 +12767,6 @@ final class UTF8
      * @param bool        $try_to_keep_the_string_length [optional] <p>true === try to keep the string length: e.g. ẞ
      *                                                   -> ß</p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The resulting string with with char uppercase.</p>
@@ -13098,7 +12842,6 @@ final class UTF8
      * @param string   $encoding   [optional] <p>Set the charset.</p>
      * @param bool     $clean_utf8 [optional] <p>Remove non UTF-8 chars from the string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -13174,7 +12917,6 @@ final class UTF8
      * @param string $str          <p>The input string.</p>
      * @param bool   $multi_decode <p>Decode as often as possible.</p>
      *
-     * @psalm-pure
      *
      * @return string
      *
@@ -13229,7 +12971,6 @@ final class UTF8
      * @param string $str             <p>The input string.</p>
      * @param bool   $keep_utf8_chars
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -13278,6 +13019,7 @@ final class UTF8
         }
 
         /** @var false|string $return - needed for PhpStan (stubs error) */
+        /** @phpstan-ignore-next-line | loop always initializes $j for non-empty input */
         $return = \substr($str, 0, $j);
         if ($return === false) {
             $return = '';
@@ -13303,7 +13045,6 @@ final class UTF8
      *
      * @param string $str <p>The input string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -13329,7 +13070,6 @@ final class UTF8
 
             $len = self::strlen_in_byte($str);
             $halfLen = $len >> 1;
-
             for ($i = $halfLen, $j = 0; $i < $len; ++$i, ++$j) {
                 switch (true) {
                     case $str[$i] < "\x80":
@@ -13346,9 +13086,11 @@ final class UTF8
                 }
             }
 
+            /** @phpstan-ignore-next-line | loop always initializes $j for non-empty input */
             $str = self::substr_in_byte($str, 0, $j);
         }
 
+        /** @phpstan-ignore-next-line | runtime fallback kept for legacy behavior */
         if ($str === false) {
             return '';
         }
@@ -13361,7 +13103,6 @@ final class UTF8
      *
      * @see http://www.bogofilter.org/pipermail/bogofilter/2003-March/001889.html
      *
-     * @psalm-pure
      *
      * @return string[]
      *                  An array with all known whitespace characters as values and the type of whitespace as keys
@@ -13381,7 +13122,6 @@ final class UTF8
      * @param int<1, max> $limit      <p>The limit of words as integer.</p>
      * @param string      $str_add_on <p>Replacement for the stripped string.</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -13428,7 +13168,6 @@ final class UTF8
      *                      a word that is larger than the given width, it is broken apart.
      *                      </p>
      *
-     * @psalm-pure
      *
      * @return string
      *                <p>The given string wrapped at the specified column.</p>
@@ -13525,7 +13264,6 @@ final class UTF8
      *                                     You can change the default behavior, where we split the string by newline.
      *                                     </p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -13562,7 +13300,6 @@ final class UTF8
     /**
      * Returns an array of Unicode White Space characters.
      *
-     * @psalm-pure
      *
      * @return string[]
      *                  <p>An array with numeric code point as key and White Space Character as value.</p>
@@ -13586,7 +13323,6 @@ final class UTF8
      * @param string $str    <p>The string to be checked.</p>
      * @param bool   $strict <p>Check also if the string is not UTF-16 or UTF-32.</p>
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -13729,7 +13465,6 @@ final class UTF8
      * @param bool   $use_lowercase      <p>Use uppercase by default, otherwise use lowercase.</p>
      * @param bool   $use_full_case_fold <p>Convert not only common cases.</p>
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -13781,7 +13516,6 @@ final class UTF8
      *
      * @param string $file
      *
-     * @psalm-pure
      *
      * @return array<array-key, mixed>
      */
@@ -13794,7 +13528,6 @@ final class UTF8
     }
 
     /**
-     * @psalm-pure
      *
      * @return true|null
      */
@@ -13808,8 +13541,9 @@ final class UTF8
             /**
              * @psalm-suppress ImpureFunctionCall - static sort function is used
              */
+            /** @phpstan-ignore-next-line | static cache is intentionally sorted in place */
             \uksort(
-                self::$EMOJI,
+                self::$EMOJI, /* @phpstan-ignore-line | static cache is intentionally sorted in place */
                 static function (string $a, string $b): int {
                     return \strlen($b) <=> \strlen($a);
                 }
@@ -13832,7 +13566,6 @@ final class UTF8
     /**
      * Checks whether mbstring "overloaded" is active on the server.
      *
-     * @psalm-pure
      *
      * @return bool
      */
@@ -13855,7 +13588,6 @@ final class UTF8
      * @param bool     $remove_empty_values
      * @param int|null $remove_short_values
      *
-     * @psalm-pure
      *
      * @return list<string>
      */
@@ -13898,7 +13630,6 @@ final class UTF8
      *
      * @return string
      *
-     * @psalm-pure
      */
     private static function rxClass(string $s, string $class = '')
     {
@@ -13956,7 +13687,6 @@ final class UTF8
      *
      * @phpstan-param non-empty-string $delimiter
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -14058,7 +13788,6 @@ final class UTF8
      *
      * @param string $str <p>The input string</p>
      *
-     * @psalm-pure
      *
      * @return string|null
      */
@@ -14079,7 +13808,6 @@ final class UTF8
     /**
      * @param int|string $input
      *
-     * @psalm-pure
      *
      * @return string
      */
@@ -14115,7 +13843,6 @@ final class UTF8
     /**
      * @param string $str
      *
-     * @psalm-pure
      *
      * @return string
      */
