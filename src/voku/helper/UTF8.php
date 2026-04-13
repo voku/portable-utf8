@@ -13563,11 +13563,13 @@ final class UTF8
                 continue;
             }
 
-            if (\strpos($line, "\t") === false) {
+            $parts = \explode("\t", $line, 2);
+
+            if (!isset($parts[1])) {
                 continue;
             }
 
-            [$key, $value] = \explode("\t", $line, 2);
+            [$key, $value] = $parts;
             $map[$key] = $value;
         }
 
