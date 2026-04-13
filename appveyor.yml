@@ -10,7 +10,7 @@ branches:
 
 install:
   - ps: Set-Service wuauserv -StartupType Manual
-  - cinst -y php --version "7.4.33"
+  - choco install -y php --version "7.4.33"
   - cd C:\tools\php74
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
