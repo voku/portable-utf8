@@ -35,15 +35,7 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         }
 
         $mbInternalEncoding = \mb_internal_encoding();
-        $testEncoding = null;
-
-        foreach (['CP1252', 'Windows-1252', 'ISO-8859-1'] as $encoding) {
-            if (\mb_internal_encoding($encoding) === true) {
-                $testEncoding = (string) \mb_internal_encoding();
-
-                break;
-            }
-        }
+        $testEncoding = $this->getNonUtf8InternalEncoding();
 
         if ($testEncoding === null) {
             static::markTestSkipped('No non-UTF-8 mb_internal_encoding() value is available.');
@@ -99,15 +91,7 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         }
 
         $mbInternalEncoding = \mb_internal_encoding();
-        $testEncoding = null;
-
-        foreach (['CP1252', 'Windows-1252', 'ISO-8859-1'] as $encoding) {
-            if (\mb_internal_encoding($encoding) === true) {
-                $testEncoding = (string) \mb_internal_encoding();
-
-                break;
-            }
-        }
+        $testEncoding = $this->getNonUtf8InternalEncoding();
 
         if ($testEncoding === null) {
             static::markTestSkipped('No non-UTF-8 mb_internal_encoding() value is available.');
@@ -128,6 +112,17 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
             $refProperty->setValue(null, $support);
             \mb_internal_encoding((string) $mbInternalEncoding);
         }
+    }
+
+    private function getNonUtf8InternalEncoding(): ?string
+    {
+        foreach (['CP1252', 'Windows-1252', 'ISO-8859-1'] as $encoding) {
+            if (\mb_internal_encoding($encoding) === true) {
+                return (string) \mb_internal_encoding();
+            }
+        }
+
+        return null;
     }
 
     public function testGetRandomBytes()

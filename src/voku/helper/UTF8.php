@@ -523,9 +523,11 @@ final class UTF8
             self::$SUPPORT['mbstring'] = self::mbstring_loaded();
             $mbstringInternalEncoding = null;
             if (\function_exists('mb_internal_encoding')) {
-                $mbstringInternalEncoding = \mb_internal_encoding();
-                if ($mbstringInternalEncoding === false) {
+                $mbstringInternalEncodingTmp = \mb_internal_encoding();
+                if ($mbstringInternalEncodingTmp === false) {
                     $mbstringInternalEncoding = null;
+                } else {
+                    $mbstringInternalEncoding = $mbstringInternalEncodingTmp;
                 }
             }
 
