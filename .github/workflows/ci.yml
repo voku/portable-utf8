@@ -98,8 +98,10 @@ jobs:
         include:
           - phpstan-config: phpstan.neon
             label: "8.x"
+            php: 8.4
           - phpstan-config: phpstan-php7.neon
             label: "7.x"
+            php: 7.4
     timeout-minutes: 10
     steps:
       - name: Checkout code
@@ -108,7 +110,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@2.33.0
         with:
-          php-version: 8.4
+          php-version: ${{ matrix.php }}
           coverage: none
           extensions: zip
           tools: composer
