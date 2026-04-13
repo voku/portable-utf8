@@ -53,10 +53,12 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         $refProperty->setAccessible(true);
         $support = $refProperty->getValue(null);
         $refProperty->setValue(null, []);
+        static::assertSame([], $refProperty->getValue(null));
 
         try {
             UTF8::checkForSupport();
 
+            static::assertNotSame([], $refProperty->getValue(null));
             static::assertSame($testEncoding, \mb_internal_encoding());
             static::assertSame($testEncoding, UTF8::getSupportInfo('mbstring_internal_encoding'));
         } finally {

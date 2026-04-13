@@ -527,11 +527,7 @@ final class UTF8
             self::$SUPPORT['mbstring_internal_encoding'] = $mbstringInternalEncoding === false ? null : $mbstringInternalEncoding;
 
             self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();
-            $mbstringRegexEncoding = false;
-            if (\function_exists('mb_regex_encoding')) {
-                $mbstringRegexEncoding = \mb_regex_encoding();
-            }
-            self::$SUPPORT['mbstring_regex'] = \function_exists('mb_ereg_match') && $mbstringRegexEncoding === 'UTF-8';
+            self::$SUPPORT['mbstring_regex'] = \function_exists('mb_ereg_match');
 
             // http://php.net/manual/en/book.iconv.php
             self::$SUPPORT['iconv'] = self::iconv_loaded();
