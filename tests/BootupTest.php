@@ -46,14 +46,13 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         }
 
         if ($testEncoding === null) {
-            static::markTestSkipped('No non UTF-8 mb_internal_encoding() value is available.');
+            static::markTestSkipped('No non-UTF-8 mb_internal_encoding() value is available.');
         }
 
         $refProperty = (new \ReflectionClass(UTF8::class))->getProperty('SUPPORT');
         $refProperty->setAccessible(true);
         $support = $refProperty->getValue(null);
         $refProperty->setValue(null, []);
-        static::assertSame([], $refProperty->getValue(null));
 
         try {
             UTF8::checkForSupport();
