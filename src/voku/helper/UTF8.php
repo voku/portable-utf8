@@ -522,9 +522,12 @@ final class UTF8
             self::$SUPPORT['mbstring'] = self::mbstring_loaded();
 
             self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();
+            self::$SUPPORT['mbstring_regex'] = \function_exists('mb_ereg_match');
             if (self::$SUPPORT['mbstring'] === true) {
                 \mb_internal_encoding('UTF-8');
-                \mb_regex_encoding('UTF-8');
+                if (self::$SUPPORT['mbstring_regex'] === true) {
+                    \mb_regex_encoding('UTF-8');
+                }
                 self::$SUPPORT['mbstring_internal_encoding'] = 'UTF-8';
             }
 
@@ -1045,7 +1048,7 @@ final class UTF8
      */
     public static function collapse_whitespace(string $str): string
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \trim((string) \mb_ereg_replace('[[:space:]]+', ' ', $str));
         }
 
@@ -2738,7 +2741,7 @@ final class UTF8
      */
     public static function has_lowercase(string $str): bool
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \mb_ereg_match('.*[[:lower:]]', $str);
         }
 
@@ -2756,7 +2759,7 @@ final class UTF8
      */
     public static function has_whitespace(string $str): bool
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \mb_ereg_match('.*[[:space:]]', $str);
         }
 
@@ -2774,7 +2777,7 @@ final class UTF8
      */
     public static function has_uppercase(string $str): bool
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \mb_ereg_match('.*[[:upper:]]', $str);
         }
 
@@ -3432,7 +3435,7 @@ final class UTF8
      */
     public static function is_alpha(string $str): bool
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \mb_ereg_match('^[[:alpha:]]*$', $str);
         }
 
@@ -3450,7 +3453,7 @@ final class UTF8
      */
     public static function is_alphanumeric(string $str): bool
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \mb_ereg_match('^[[:alnum:]]*$', $str);
         }
 
@@ -3626,7 +3629,7 @@ final class UTF8
      */
     public static function is_blank(string $str): bool
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \mb_ereg_match('^[[:space:]]*$', $str);
         }
 
@@ -3686,7 +3689,7 @@ final class UTF8
      */
     public static function is_hexadecimal(string $str): bool
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \mb_ereg_match('^[[:xdigit:]]*$', $str);
         }
 
@@ -3820,7 +3823,7 @@ final class UTF8
      */
     public static function is_lowercase(string $str): bool
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \mb_ereg_match('^[[:lower:]]*$', $str);
         }
 
@@ -3861,7 +3864,7 @@ final class UTF8
      */
     public static function is_uppercase(string $str): bool
     {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             return \mb_ereg_match('^[[:upper:]]*$', $str);
         }
 
@@ -4375,7 +4378,7 @@ final class UTF8
             return '';
         }
 
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             if ($chars !== null) {
                 /** @noinspection PregQuoteUsageInspection */
                 $chars = \preg_quote($chars);
@@ -5529,7 +5532,7 @@ final class UTF8
             return '';
         }
 
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             if ($chars !== null) {
                 /** @noinspection PregQuoteUsageInspection */
                 $chars = \preg_quote($chars);
@@ -5913,7 +5916,7 @@ final class UTF8
         ?string $lang = null,
         bool $try_to_keep_the_string_length = false
     ): string {
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             $str = (string) \mb_ereg_replace('\\B(\\p{Lu})', '-\1', \trim($str));
 
             $use_mb_functions = $lang === null && !$try_to_keep_the_string_length;
@@ -12732,7 +12735,7 @@ final class UTF8
             return '';
         }
 
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             if ($chars !== null) {
                 /** @noinspection PregQuoteUsageInspection */
                 $chars = \preg_quote($chars);
