@@ -27,11 +27,19 @@ final class Utf8NullableParameterSignatureTest extends \PHPUnit\Framework\TestCa
             }
         }
 
-        static::assertInstanceOf(\ReflectionParameter::class, $parameter);
+        static::assertInstanceOf(
+            \ReflectionParameter::class,
+            $parameter,
+            'Failed to find parameter "' . $parameterName . '" on UTF8::' . $methodName . '().'
+        );
 
         $type = $parameter->getType();
 
-        static::assertInstanceOf(\ReflectionNamedType::class, $type);
+        static::assertInstanceOf(
+            \ReflectionNamedType::class,
+            $type,
+            'Expected UTF8::' . $methodName . '()::$' . $parameterName . ' to use a named nullable type.'
+        );
         static::assertSame($expectedType, $type->getName());
         static::assertTrue($type->allowsNull());
         static::assertTrue($parameter->isDefaultValueAvailable());
