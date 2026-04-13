@@ -10,16 +10,15 @@ branches:
 
 install:
   - ps: Set-Service wuauserv -StartupType Manual
-  - choco install -y php --version "7.4.33"
-  - cd C:\tools\php74
+  - choco install -y php --version "8.5.5"
+  - cd C:\tools\php85
   - copy php.ini-production php.ini
   - echo date.timezone="UTC" >> php.ini
   - echo extension_dir=ext >> php.ini
   - echo extension=php_openssl.dll >> php.ini
   - echo extension=php_mbstring.dll >> php.ini
   - echo extension=php_fileinfo.dll >> php.ini
-  - echo extension=php_xml.dll >> php.ini
-  - SET PATH=C:\tools\php74;%PATH%
+  - SET PATH=C:\tools\php85;%PATH%
   - cd C:\projects\utf8
   - if exist build\logs rmdir /s /q build\logs
   - mkdir build\logs
