@@ -517,7 +517,7 @@ final class UTF8
     {
         if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
             self::$SUPPORT['already_checked_via_portable_utf8'] = true;
-            $autoEncodingChangeDisabled = self::isAutoEncodingChangeDisabled();
+            $autoEncodingChangeDisabled = PortableUtf8Config::isAutoEncodingChangeDisabled();
 
             // http://php.net/manual/en/book.mbstring.php
             self::$SUPPORT['mbstring'] = self::mbstring_loaded();
@@ -588,17 +588,6 @@ final class UTF8
         }
 
         return null;
-    }
-
-    private static function isAutoEncodingChangeDisabled(): bool
-    {
-        if (!\defined('PORTABLE_UTF8__DISABLE_AUTO_ENCODING')) {
-            return false;
-        }
-
-        return \constant('PORTABLE_UTF8__DISABLE_AUTO_ENCODING') === true
-            || \constant('PORTABLE_UTF8__DISABLE_AUTO_ENCODING') === 1
-            || \constant('PORTABLE_UTF8__DISABLE_AUTO_ENCODING') === '1';
     }
 
     /**
