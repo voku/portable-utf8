@@ -31,7 +31,9 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     public function invokeMethod(&$object, $methodName, array $parameters = [])
     {
         $method = (new \ReflectionClass(\get_class($object)))->getMethod($methodName);
-        $method->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $method->setAccessible(true);
+        }
 
         return $method->invokeArgs($object, $parameters);
     }
@@ -1453,7 +1455,9 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
         }
 
         $refProperty = (new \ReflectionObject(new UTF8()))->getProperty('SUPPORT');
-        $refProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $refProperty->setAccessible(true);
+        }
 
         $refProperty->setValue(null, $this->oldSupportArray);
     }
@@ -1461,7 +1465,9 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
     private function disableNativeUtf8Support()
     {
         $refProperty = (new \ReflectionObject(new UTF8()))->getProperty('SUPPORT');
-        $refProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $refProperty->setAccessible(true);
+        }
 
         if ($this->oldSupportArray === null) {
             $this->oldSupportArray = $refProperty->getValue(null);

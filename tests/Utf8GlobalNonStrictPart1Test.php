@@ -54,7 +54,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
     {
         $reflection = new \ReflectionClass(\get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $method->setAccessible(true);
+        }
 
         return $method->invokeArgs($object, $parameters);
     }
@@ -250,7 +252,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         // --
 
         $testArrayFail = [
-            null  => null, // fail
             ''    => null, // fail
             'foo' => null, // fail
             'fòô' => null, // fail
@@ -366,7 +367,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             // Valid defaults
             ''   => ['' => ''],
             ' '  => [' ' => ' '],
-            null => [null => ''],
             1    => [1 => '1'],
             '2'  => ['2' => '2'],
             '+1' => ['+1' => '+1'],
@@ -436,7 +436,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             // Valid defaults
             ''   => ['' => ''],
             ' '  => [' ' => ' '],
-            null => [null => ''],
             1    => [1 => '1'],
             '2'  => ['2' => '2'],
             '+1' => ['+1' => '+1'],
@@ -506,7 +505,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             // Valid defaults
             ''   => ['' => ''],
             ' '  => [' ' => ' '],
-            null => [null => ''],
             1    => [1 => '1'],
             '2'  => ['2' => '2'],
             '+1' => ['+1' => '+1'],
@@ -2470,7 +2468,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'öäü'            => 'öäü',
             1                => '1',
             ''               => '',
-            null             => '',
         ];
 
         foreach ($tests as $before => $after) {
@@ -2522,7 +2519,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             '中文空白'                 => '空',
             'Intërnâtiônàlizætiøn' => 'ø',
             false                  => null,
-            null                   => null,
             ''                     => null,
             ' '                    => ' ',
         ];
@@ -2542,7 +2538,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'öäü'                  => 2,
             'abc'                  => 1,
             ''                     => 0,
-            null                   => 0,
         ];
 
         foreach ($testArray as $actual => $expected) {
@@ -2560,7 +2555,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
             'ÖÄÜ'                 => 'Ä',
             '中文空白'                => '中',
             false                 => null,
-            null                  => null,
             ''                    => null,
             ' '                   => ' ',
         ];
@@ -3179,7 +3173,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         $tests = [
             'Κόσμε' => true,
             'κόσμε' => false,
-            null    => false,
             ''      => true,
             ' '     => false,
             false   => false,
@@ -3676,7 +3669,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
     public function testStripTags()
     {
         $tests = [
-            null                                                                      => '',
             ''                                                                        => '',
             ' '                                                                       => ' ',
             1                                                                         => '1',
@@ -3695,7 +3687,6 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
         // ---
 
         $tests = [
-            null                                                                      => '',
             ''                                                                        => '',
             ' '                                                                       => ' ',
             1                                                                         => '1',
@@ -3838,7 +3829,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
 
         $refObject = new \ReflectionObject(new UTF8());
         $refProperty = $refObject->getProperty('SUPPORT');
-        $refProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $refProperty->setAccessible(true);
+        }
 
         $refProperty->setValue(null, $this->oldSupportArray);
 
@@ -3849,7 +3842,9 @@ final class Utf8GlobalNonStrictPart1Test extends \PHPUnit\Framework\TestCase
     {
         $refObject = new \ReflectionObject(new UTF8());
         $refProperty = $refObject->getProperty('SUPPORT');
-        $refProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $refProperty->setAccessible(true);
+        }
 
         if ($this->oldSupportArray === null) {
             $this->oldSupportArray = $refProperty->getValue(null);

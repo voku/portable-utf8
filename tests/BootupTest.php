@@ -44,7 +44,9 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         \mb_internal_encoding($testEncoding);
 
         $refProperty = (new \ReflectionClass(UTF8::class))->getProperty('SUPPORT');
-        $refProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $refProperty->setAccessible(true);
+        }
         $support = $refProperty->getValue(null);
         $refProperty->setValue(null, []);
 
@@ -102,7 +104,9 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         \mb_internal_encoding($testEncoding);
 
         $refProperty = (new \ReflectionClass(UTF8::class))->getProperty('SUPPORT');
-        $refProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 80100) {
+            $refProperty->setAccessible(true);
+        }
         $support = $refProperty->getValue(null);
         $refProperty->setValue(null, []);
 

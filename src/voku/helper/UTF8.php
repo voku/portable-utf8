@@ -524,7 +524,7 @@ final class UTF8
             $mbstringInternalEncoding = null;
             if (\function_exists('mb_internal_encoding')) {
                 $mbstringInternalEncodingTmp = \mb_internal_encoding();
-                $mbstringInternalEncoding = $mbstringInternalEncodingTmp !== false ? $mbstringInternalEncodingTmp : null;
+                $mbstringInternalEncoding = $mbstringInternalEncodingTmp !== false ? $mbstringInternalEncodingTmp : null; // @phpstan-ignore notIdentical.alwaysTrue
             }
 
             self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();
