@@ -5672,6 +5672,10 @@ final class UTF8
             $encoding = self::normalize_encoding($encoding, 'UTF-8');
         }
 
+        if (\preg_match('/[-_\s\d]/u', $str) && !self::has_lowercase($str)) {
+            $str = self::strtolower($str, $encoding);
+        }
+
         $str = self::lcfirst(
             \trim($str),
             $encoding,
