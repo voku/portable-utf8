@@ -488,6 +488,7 @@ final class Utf8GlobalNonStrictPart2Test extends \PHPUnit\Framework\TestCase
             '👱🏿👱🏾👱🏽👱🏼👱🏻👱',
             '🧟‍♂️🧟‍♀️',
             '👩‍👩‍👧‍👦👨‍❤️‍💋‍👨',
+            '☺️☹️☠️👩🏿‍⚖️',
         ];
 
         foreach ($testArray as $actual) {

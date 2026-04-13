@@ -13534,10 +13534,42 @@ final class UTF8
      */
     private static function getData(string $file)
     {
+        /** @var array<array-key, mixed>|string $data */
+        $data = null;
+
         /** @noinspection PhpIncludeInspection */
         /** @noinspection UsingInclusionReturnValueInspection */
         /** @psalm-suppress UnresolvableInclude */
-        return include __DIR__ . '/data/' . $file . '.php';
+        $data = include __DIR__ . '/data/' . $file . '.php';
+
+        if (\is_array($data)) {
+            return $data;
+        }
+
+        return self::parseDataMap($data);
+    }
+
+    /**
+     * Parse compact tab-separated map data from "/data/*.php".
+     *
+     * @return array<string, string>
+     */
+    private static function parseDataMap(string $data): array
+    {
+        $map = [];
+
+        foreach (\explode("\n", $data) as $line) {
+            $line = \rtrim($line, "\r");
+
+            if ($line === '') {
+                continue;
+            }
+
+            [$key, $value] = \explode("\t", $line, 2);
+            $map[$key] = $value;
+        }
+
+        return $map;
     }
 
     /**
