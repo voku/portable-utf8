@@ -163,6 +163,10 @@ final class Utf8LevenshteinTest extends \PHPUnit\Framework\TestCase
         $warnings = [];
 
         \set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+            if ($severity !== \E_WARNING) {
+                return false;
+            }
+
             $warnings[] = [
                 'severity' => $severity,
                 'message' => $message,
