@@ -49,7 +49,7 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
             static::markTestSkipped('No non UTF-8 mb_internal_encoding() value is available.');
         }
 
-        $refProperty = (new \ReflectionObject(new UTF8()))->getProperty('SUPPORT');
+        $refProperty = (new \ReflectionClass(UTF8::class))->getProperty('SUPPORT');
         $refProperty->setAccessible(true);
         $support = $refProperty->getValue(null);
         $refProperty->setValue(null, []);

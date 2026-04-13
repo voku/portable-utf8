@@ -520,11 +520,17 @@ final class UTF8
 
             // http://php.net/manual/en/book.mbstring.php
             self::$SUPPORT['mbstring'] = self::mbstring_loaded();
-            $mbstringInternalEncoding = \function_exists('mb_internal_encoding') ? \mb_internal_encoding() : false;
+            $mbstringInternalEncoding = false;
+            if (\function_exists('mb_internal_encoding')) {
+                $mbstringInternalEncoding = \mb_internal_encoding();
+            }
             self::$SUPPORT['mbstring_internal_encoding'] = $mbstringInternalEncoding === false ? null : $mbstringInternalEncoding;
 
             self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();
-            $mbstringRegexEncoding = \function_exists('mb_regex_encoding') ? \mb_regex_encoding() : false;
+            $mbstringRegexEncoding = false;
+            if (\function_exists('mb_regex_encoding')) {
+                $mbstringRegexEncoding = \mb_regex_encoding();
+            }
             self::$SUPPORT['mbstring_regex'] = \function_exists('mb_ereg_match') && $mbstringRegexEncoding === 'UTF-8';
 
             // http://php.net/manual/en/book.iconv.php
