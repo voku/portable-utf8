@@ -13534,12 +13534,10 @@ final class UTF8
      */
     private static function getData(string $file)
     {
-        /** @var array<array-key, mixed>|string $data */
-        $data = null;
-
         /** @noinspection PhpIncludeInspection */
         /** @noinspection UsingInclusionReturnValueInspection */
         /** @psalm-suppress UnresolvableInclude */
+        /** @var array<array-key, mixed>|string $data */
         $data = include __DIR__ . '/data/' . $file . '.php';
 
         if (\is_array($data)) {
@@ -13562,6 +13560,10 @@ final class UTF8
             $line = \rtrim($line, "\r");
 
             if ($line === '') {
+                continue;
+            }
+
+            if (\strpos($line, "\t") === false) {
                 continue;
             }
 
