@@ -520,16 +520,10 @@ final class UTF8
 
             // http://php.net/manual/en/book.mbstring.php
             self::$SUPPORT['mbstring'] = self::mbstring_loaded();
+            self::$SUPPORT['mbstring_internal_encoding'] = \function_exists('mb_internal_encoding') ? \mb_internal_encoding() : null;
 
             self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();
-            self::$SUPPORT['mbstring_regex'] = \function_exists('mb_ereg_match');
-            if (self::$SUPPORT['mbstring'] === true) {
-                \mb_internal_encoding('UTF-8');
-                if (self::$SUPPORT['mbstring_regex'] === true) {
-                    \mb_regex_encoding('UTF-8');
-                }
-                self::$SUPPORT['mbstring_internal_encoding'] = 'UTF-8';
-            }
+            self::$SUPPORT['mbstring_regex'] = \function_exists('mb_ereg_match') && \function_exists('mb_regex_encoding') && \mb_regex_encoding() === 'UTF-8';
 
             // http://php.net/manual/en/book.iconv.php
             self::$SUPPORT['iconv'] = self::iconv_loaded();
@@ -553,10 +547,6 @@ final class UTF8
             self::$SUPPORT['pcre_utf8'] = self::pcre_utf8_support();
 
             self::$SUPPORT['symfony_polyfill_used'] = self::symfony_polyfill_used();
-            if (self::$SUPPORT['symfony_polyfill_used'] === true) {
-                \mb_internal_encoding('UTF-8');
-                self::$SUPPORT['mbstring_internal_encoding'] = 'UTF-8';
-            }
 
             return true;
         }

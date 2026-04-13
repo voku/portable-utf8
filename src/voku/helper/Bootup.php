@@ -72,15 +72,15 @@ class Bootup
     }
 
     /**
+     * Kept for BC, without changing process-wide ini settings.
+     *
      * @return bool
      */
     public static function initAll(): bool
     {
-        $result = \ini_set('default_charset', 'UTF-8');
-
         // everything else is init via composer, so we are done here ...
 
-        return $result !== false;
+        return true;
     }
 
     /**

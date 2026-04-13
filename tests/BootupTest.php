@@ -16,9 +16,53 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
 {
     public function testInitAll()
     {
-        Bootup::initAll();
+        $defaultCharset = \ini_get('default_charset');
+        \ini_set('default_charset', 'ISO-8859-1');
 
-        static::assertSame('UTF-8', \ini_get('default_charset'));
+        try {
+            Bootup::initAll();
+
+            static::assertSame('ISO-8859-1', \ini_get('default_charset'));
+        } finally {
+            \ini_set('default_charset', (string) $defaultCharset);
+        }
+    }
+
+    public function testCheckForSupportKeepsMbInternalEncoding()
+    {
+        if (!\function_exists('mb_internal_encoding')) {
+            static::markTestSkipped('mb_internal_encoding() is not available.');
+        }
+
+        $mbInternalEncoding = \mb_internal_encoding();
+        $testEncoding = null;
+
+        foreach (['CP1252', 'Windows-1252', 'ISO-8859-1'] as $encoding) {
+            if (\mb_internal_encoding($encoding) === true) {
+                $testEncoding = (string) \mb_internal_encoding();
+
+                break;
+            }
+        }
+
+        if ($testEncoding === null) {
+            static::markTestSkipped('No non UTF-8 mb_internal_encoding() value is available.');
+        }
+
+        $refProperty = (new \ReflectionObject(new UTF8()))->getProperty('SUPPORT');
+        $refProperty->setAccessible(true);
+        $support = $refProperty->getValue(null);
+        $refProperty->setValue(null, []);
+
+        try {
+            UTF8::checkForSupport();
+
+            static::assertSame($testEncoding, \mb_internal_encoding());
+            static::assertSame($testEncoding, UTF8::getSupportInfo('mbstring_internal_encoding'));
+        } finally {
+            $refProperty->setValue(null, $support);
+            \mb_internal_encoding((string) $mbInternalEncoding);
+        }
     }
 
     public function testGetRandomBytes()
