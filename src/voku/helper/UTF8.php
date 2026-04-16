@@ -517,7 +517,7 @@ final class UTF8
     {
         if (!isset(self::$SUPPORT['already_checked_via_portable_utf8'])) {
             self::$SUPPORT['already_checked_via_portable_utf8'] = true;
-            $autoEncodingChangeDisabled = PortableUtf8Config::isAutoEncodingChangeDisabled();
+            $autoEncodingChangeDisabled = Bootup::isAutoEncodingChangeDisabled();
 
             // http://php.net/manual/en/book.mbstring.php
             self::$SUPPORT['mbstring'] = self::mbstring_loaded();

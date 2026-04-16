@@ -1,7 +1,9 @@
 # Changelog
 
-### 6.0.14 (2025-06-14)
+### 6.1.0 (2026-04-17)
 
+- run all checks and tests up to PHP 8.5
+- raise the minimum PHP version from 7.0 to 7.1
 - PHP 8.5 compatibility: guard `ReflectionProperty::setAccessible()` / `ReflectionMethod::setAccessible()` (deprecated since PHP 8.1), replace `null` array keys with empty-string keys
 - PHP 8.4 compatibility: updated nullable parameter types and resolved deprecations
 - addressed PHP 8.2 variable interpolation and float-to-int deprecation warnings
@@ -11,10 +13,9 @@
 - fixed "UTF8::str_camelize()" for all-caps inputs (e.g. `FOO BAR` → `fooBar`, `API2URL` → `api2Url`)
 - fixed `mb_regex_encoding()` call when PHP is built with `--disable-mbregex`
 - fixed `utf8_decode()` truncated-sequence warning and improved handling of invalid/truncated UTF-8 sequences
-- fixed "Bootup" class to no longer mutate global `mbstring` encoding settings during bootstrap; added opt-out via `PORTABLE_UTF8_DISABLE_AUTO_FILTER` environment variable
+- fixed "Bootup" class to no longer mutate global `mbstring` encoding settings during bootstrap; added opt-out via `PORTABLE_UTF8__DISABLE_AUTO_ENCODING`
 - removed incorrect annotation from "Bootup" class
 - migrated static analysis to PHPStan 2.x
-
 
 ### 6.0.13 (2023-03-08)
 
