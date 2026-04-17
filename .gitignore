@@ -3,6 +3,7 @@ vendor
 composer.lock
 
 # php (phpunit)
+build/coverage/
 build/logs/
 .phpunit.result.cache
 
