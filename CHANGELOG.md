@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.1.1 (2026-04-17)
+
+- fixed "UTF8::html_entity_decode()" for PHP 7.x compatibility
+
 ### 6.1.0 (2026-04-17)
 
 - run all checks and tests up to PHP 8.5
