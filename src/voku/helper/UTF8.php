@@ -3046,6 +3046,7 @@ final class UTF8
             \trigger_error('UTF8::html_entity_decode() without mbstring cannot handle "' . $encoding . '" encoding', \E_USER_WARNING);
         }
 
+        $isPHP8 = \PHP_VERSION_ID >= 80000;
         do {
             $str_compare = $str;
 
@@ -3059,14 +3060,22 @@ final class UTF8
                     );
                 }
 
-                try {
+                if ($isPHP8) {
+                    try {
+                        $str = \html_entity_decode(
+                            $str,
+                            $flags,
+                            $encoding
+                        );
+                    } /** @noinspection PhpElementIsNotAvailableInCurrentPhpVersionInspection */ catch (\ValueError $e) {
+                        break;
+                    }
+                } else {
                     $str = \html_entity_decode(
                         $str,
                         $flags,
                         $encoding
                     );
-                } catch (\ValueError $e) {
-                    break;
                 }
             }
         } while ($str_compare !== $str);
