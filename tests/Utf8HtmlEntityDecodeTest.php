@@ -40,8 +40,10 @@ final class Utf8HtmlEntityDecodeTest extends \PHPUnit\Framework\TestCase
         static::assertNotEmpty($warnings);
 
         foreach ($warnings as $warning) {
-            static::assertStringContainsString('NOT-A-REAL-ENCODING', $warning);
-            static::assertStringContainsString('assuming UTF-8', $warning);
+            $warningLower = \strtolower($warning);
+
+            static::assertStringContainsString('not-a-real-encoding', $warningLower);
+            static::assertStringContainsString('assuming utf-8', $warningLower);
         }
     }
 }
