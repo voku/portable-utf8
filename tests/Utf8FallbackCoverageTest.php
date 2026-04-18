@@ -141,7 +141,36 @@ final class Utf8FallbackCoverageTest extends \PHPUnit\Framework\TestCase
         static::assertSame('', UTF8::str_titleize(''));
         static::assertSame('Foo Bar', UTF8::str_titleize("foo\x00 bar", null, 'UTF-8', true));
         static::assertSame('Foo bar Baz', UTF8::str_titleize('foo bar baz', ['bar'], 'ISO-8859-1'));
-        static::assertSame('İstanbul İzmir', UTF8::str_titleize('istanbul izmir', null, 'UTF-8', false, 'tr', true, false, ' '));
+
+        if (UTF8::getSupportInfo('intl') === true) {
+            static::assertSame('İstanbul İzmir', UTF8::str_titleize('istanbul izmir', null, 'UTF-8', false, 'tr', true, false, ' '));
+
+            return;
+        }
+
+        $warnings = [];
+
+        \set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+            if ($severity !== \E_USER_WARNING) {
+                return false;
+            }
+
+            $warnings[] = $message;
+
+            return true;
+        });
+
+        try {
+            static::assertSame('Istanbul Izmir', UTF8::str_titleize('istanbul izmir', null, 'UTF-8', false, 'tr', true, false, ' '));
+        } finally {
+            \restore_error_handler();
+        }
+
+        static::assertCount(4, $warnings);
+        foreach ($warnings as $warning) {
+            static::assertStringContainsString('without intl cannot handle the "lang"', $warning);
+            static::assertStringContainsString('tr', $warning);
+        }
     }
 
     public function testSubstrReplaceFallbackHandlesAsciiAndUtf8()

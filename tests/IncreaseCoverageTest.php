@@ -53,7 +53,32 @@ final class IncreaseCoverageTest extends \PHPUnit\Framework\TestCase
     public function testStrDelimitWithLang()
     {
         // Line 5977 or 5989 depending on mbstring_regex
-        static::assertSame('test-string', UTF8::str_delimit('testString', '-', 'UTF-8', false, 'Any'));
+        if (UTF8::getSupportInfo('intl') === true) {
+            static::assertSame('test-string', UTF8::str_delimit('testString', '-', 'UTF-8', false, 'Any'));
+
+            return;
+        }
+
+        $warnings = [];
+
+        \set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+            if ($severity !== \E_USER_WARNING) {
+                return false;
+            }
+
+            $warnings[] = $message;
+
+            return true;
+        });
+
+        try {
+            static::assertSame('test-string', UTF8::str_delimit('testString', '-', 'UTF-8', false, 'Any'));
+        } finally {
+            \restore_error_handler();
+        }
+
+        static::assertCount(1, $warnings);
+        static::assertStringContainsString('without intl cannot handle the "lang" parameter: Any', $warnings[0]);
     }
 
     public function testStrIendsWithEmptyHaystack()

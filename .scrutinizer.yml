@@ -1,3 +1,14 @@
+build:
+  nodes:
+    analysis:
+      dependencies:
+        override:
+          - command: curl -sS https://getcomposer.org/installer | php -- --2 --filename=composer2.phar
+          - command: php composer2.phar install --no-interaction --prefer-dist --no-scripts
+      tests:
+        override:
+          - php-scrutinizer-run
+
 tools:
   external_code_coverage:
     timeout: 800
