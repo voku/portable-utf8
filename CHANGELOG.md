@@ -1,5 +1,10 @@
 # Changelog
 
+### 6.1.2 (2026-04-19)
+
+- removed an unnecessary PHP 8-only fallback branch from "UTF8::html_entity_decode()"
+- corrected multiple UTF8 phpdoc examples and regenerated the README
+
 ### 6.1.1 (2026-04-17)
 
 - fixed "UTF8::html_entity_decode()" for PHP 7.x compatibility
