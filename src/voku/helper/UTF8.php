@@ -780,7 +780,7 @@ final class UTF8
      *
      * @see UTF8::decimal_to_chr() Opposite operation
      *
-     * EXAMPLE: <code>UTF8::chr_to_decimal('§'); // 0xa7</code>
+     * EXAMPLE: <code>UTF8::chr_to_decimal('§'); // 167</code>
      *
      * @param string $char <p>The input character.</p>
      *
@@ -958,7 +958,7 @@ final class UTF8
     /**
      * Clean-up a string and show only printable UTF-8 chars at the end  + fix UTF-8 encoding.
      *
-     * EXAMPLE: <code>UTF8::cleanup("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃 - DÃ¼sseldorf", true, true); // '„Abcdef  …” — 😃 - Düsseldorf'</code>
+     * EXAMPLE: <code>UTF8::cleanup("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃 - DÃ¼sseldorf"); // '„Abcdef  …” — 😃 - Düsseldorf'</code>
      *
      * @param string $str <p>The input string.</p>
      *
@@ -1343,9 +1343,9 @@ final class UTF8
      * @see UTF8::emoji_decode() Opposite operation
      *
      * EXAMPLE: <code>
-     * UTF8::emoji_encode('foo 👹', false)); // 'foo CHARACTER_OGRE'
+     * UTF8::emoji_encode('foo 👹', false); // 'foo CHARACTER_OGRE'
      * //
-     * UTF8::emoji_encode('foo 👹', true)); // 'foo _-_PORTABLE_UTF8_-_308095726_-_627590803_-_8FTU_ELBATROP_-_'
+     * UTF8::emoji_encode('foo 👹', true); // 'foo _-_PORTABLE_UTF8_-_308095726_-_627590803_-_8FTU_ELBATROP_-_'
      * </code>
      *
      * @param string $str                            <p>The input string</p>
@@ -1801,7 +1801,7 @@ final class UTF8
     /**
      * Reads entire file into a string.
      *
-     * EXAMPLE: <code>UTF8::file_get_contents('utf16le.txt'); // ...</code>
+     * EXAMPLE: <code>UTF8::file_get_contents('utf-16-le.txt'); // ...</code>
      *
      * WARNING: Do not use UTF-8 Option ($convert_to_utf8) for binary files (e.g.: images) !!!
      *
@@ -1931,7 +1931,7 @@ final class UTF8
     /**
      * Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
      *
-     * EXAMPLE: <code>UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a')</code>
+     * EXAMPLE: <code>UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a')</code>
      *
      * @param array|object|string $var
      * @param int                 $normalization_form
@@ -2013,7 +2013,7 @@ final class UTF8
      *
      * EXAMPLE: <code>
      * // _GET['foo'] = 'bar';
-     * UTF8::filter_input(INPUT_GET, 'foo', FILTER_UNSAFE_RAW)); // 'bar'
+     * UTF8::filter_input(INPUT_GET, 'foo', FILTER_UNSAFE_RAW); // 'bar'
      * </code>
      *
      * @see http://php.net/manual/en/function.filter-input.php
@@ -2070,7 +2070,7 @@ final class UTF8
      *
      * EXAMPLE: <code>
      * // _GET['foo'] = 'bar';
-     * UTF8::filter_input_array(INPUT_GET, array('foo' => 'FILTER_UNSAFE_RAW')); // array('bar')
+     * UTF8::filter_input_array(INPUT_GET, array('foo' => FILTER_UNSAFE_RAW)); // array('bar')
      * </code>
      *
      * @see http://php.net/manual/en/function.filter-input-array.php
@@ -3614,7 +3614,7 @@ final class UTF8
     /**
      * Check if the file is binary.
      *
-     * EXAMPLE: <code>UTF8::is_binary('./utf32.txt'); // true</code>
+     * EXAMPLE: <code>UTF8::is_binary_file('./utf-16-le.txt'); // true</code>
      *
      * @param string $file
      *
@@ -3988,9 +3988,9 @@ final class UTF8
      * Check if the string is UTF-32.
      *
      * EXAMPLE: <code>
-     * UTF8::is_utf32(file_get_contents('utf-32-le.txt')); // 1
+     * UTF8::is_utf32(file_get_contents('sample-utf-32-le-bom.txt')); // 1
      * //
-     * UTF8::is_utf32(file_get_contents('utf-32-be.txt')); // 2
+     * UTF8::is_utf32(file_get_contents('sample-utf-32-be-bom.txt')); // 2
      * //
      * UTF8::is_utf32(file_get_contents('utf-8.txt')); // false
      * </code>
@@ -9632,8 +9632,8 @@ final class UTF8
      * $str = 'iñtërnâtiônàlizætiøn';
      * $search = 'NÂT';
      *
-     * UTF8::stristr($str, $search)); // 'nâtiônàlizætiøn'
-     * UTF8::stristr($str, $search, true)); // 'iñtër'
+     * UTF8::stristr($str, $search); // 'nâtiônàlizætiøn'
+     * UTF8::stristr($str, $search, true); // 'iñtër'
      * </code>
      *
      * @param string $haystack      <p>The input string. Must be valid UTF-8.</p>
@@ -9733,9 +9733,9 @@ final class UTF8
     /**
      * Get the string length, not the byte-length!
      *
-     * INFO: use UTF8::strwidth() for the char-length
+     * INFO: use UTF8::strlen_in_byte() for the byte-length
      *
-     * EXAMPLE: <code>UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn")); // 20</code>
+     * EXAMPLE: <code>UTF8::strlen('Iñtërnâtiônàlizætiøn'); // 20</code>
      *
      * @see http://php.net/manual/en/function.mb-strlen.php
      *
@@ -10976,8 +10976,8 @@ final class UTF8
      * $str = 'iñtërnâtiônàlizætiøn';
      * $search = 'nât';
      *
-     * UTF8::strstr($str, $search)); // 'nâtiônàlizætiøn'
-     * UTF8::strstr($str, $search, true)); // 'iñtër'
+     * UTF8::strstr($str, $search); // 'nâtiônàlizætiøn'
+     * UTF8::strstr($str, $search, true); // 'iñtër'
      * </code>
      *
      * @param string $haystack      <p>The input string. Must be valid UTF-8.</p>
@@ -11431,9 +11431,9 @@ final class UTF8
     /**
      * Return the width of a string.
      *
-     * INFO: use UTF8::strlen() for the byte-length
+     * INFO: use UTF8::strlen_in_byte() for the byte-length
      *
-     * EXAMPLE: <code>UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn")); // 21</code>
+     * EXAMPLE: <code>UTF8::strwidth('Iñtërnâtiônàlizætiøn'); // 20</code>
      *
      * @param string $str        <p>The input string.</p>
      * @param string $encoding   [optional] <p>Set the charset for e.g. "mb_" function</p>
@@ -13188,7 +13188,7 @@ final class UTF8
     /**
      * Wraps a string to a given number of characters
      *
-     * EXAMPLE: <code>UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 2, '<br>', true)); // 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn'</code>
+     * EXAMPLE: <code>UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 2, '<br>', true); // 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn'</code>
      *
      * @see http://php.net/manual/en/function.wordwrap.php
      *

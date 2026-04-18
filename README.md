@@ -16,7 +16,7 @@
 
 ## Description
 
-It is written in PHP (PHP 7+) and can work without "mbstring", "iconv" or any other extra encoding php-extension on your server. 
+It is written in PHP (PHP 7.1+) and can work without "mbstring", "iconv" or any other extra encoding php-extension on your server. 
 
 The benefit of Portable UTF-8 is that it is easy to use, easy to bundle. This library will also 
 auto-detect your server environment and will use the installed php-extensions if they are available, 
@@ -103,9 +103,8 @@ The problem with "mbstring" and others is that most of the time you cannot ensur
 
 ## Requirements and Recommendations
 
-*   No extensions are required to run this library. Portable UTF-8 only needs PCRE library that is available by default since PHP 4.2.0 and cannot be disabled since PHP 5.3.0. "\u" modifier support in PCRE for UTF-8 handling is not a must.
-*   PHP 5.3 is the minimum requirement, and all later versions are fine with Portable UTF-8.
-*   PHP 7.0 is the minimum requirement since version 4.0 of Portable UTF-8, otherwise composer will install an older version
+*   No extensions are required to run this library. Portable UTF-8 only needs the PCRE library, which is available by default and cannot be disabled in supported PHP versions.
+*   PHP 7.1 is the current minimum requirement. If you need support for older PHP versions, Composer will resolve an older Portable UTF-8 release for you.
 *   PHP 8.0 support is also available and will adapt the behaviours of the native functions.
 *   To speed up string handling, it is recommended that you have "mbstring" or "iconv" available on your server, as well as the latest version of PCRE library
 *   Although Portable UTF-8 is easy to use; moving from native API to Portable UTF-8 may not be straight-forward for everyone. It is highly recommended that you do not update your scripts to include Portable UTF-8 or replace or change anything before you first know the reason and consequences. Most of the time, some native function may be all what you need.
@@ -696,7 +695,7 @@ maybe contains false-positives e.g. aa%0Baa -> aaaa.
 <a href="#voku-php-readme-class-methods">↑</a>
 Clean-up a string and show only printable UTF-8 chars at the end  + fix UTF-8 encoding.
 
-EXAMPLE: <code>UTF8::cleanup("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃 - DÃ¼sseldorf", true, true); // '„Abcdef  …” — 😃 - Düsseldorf'</code>
+EXAMPLE: <code>UTF8::cleanup("\xEF\xBB\xBF„Abcdef\xc2\xa0\x20…” — 😃 - DÃ¼sseldorf"); // '„Abcdef  …” — 😃 - Düsseldorf'</code>
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
@@ -935,7 +934,7 @@ Create an extract from a sentence, so if the search-string was found, it tries t
 <a href="#voku-php-readme-class-methods">↑</a>
 Reads entire file into a string.
 
-EXAMPLE: <code>UTF8::file_get_contents('utf16le.txt'); // ...</code>
+EXAMPLE: <code>UTF8::file_get_contents('utf-16-le.txt'); // ...</code>
 
 WARNING: Do not use UTF-8 Option ($convert_to_utf8) for binary files (e.g.: images) !!!
 
@@ -992,7 +991,7 @@ EXAMPLE: <code>UTF8::file_has_bom('utf8_with_bom.txt'); // true</code>
 <a href="#voku-php-readme-class-methods">↑</a>
 Normalizes to UTF-8 NFC, converting from WINDOWS-1252 when needed.
 
-EXAMPLE: <code>UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a')</code>
+EXAMPLE: <code>UTF8::filter(array("\xE9", 'à', 'a')); // array('é', 'à', 'a')</code>
 
 **Parameters:**
 - `array|object|string $var`
@@ -1012,7 +1011,7 @@ Gets a specific external variable by name and optionally filters it.
 
 EXAMPLE: <code>
 // _GET['foo'] = 'bar';
-UTF8::filter_input(INPUT_GET, 'foo', FILTER_UNSAFE_RAW)); // 'bar'
+UTF8::filter_input(INPUT_GET, 'foo', FILTER_UNSAFE_RAW); // 'bar'
 </code>
 
 **Parameters:**
@@ -1050,7 +1049,7 @@ Gets external variables and optionally filters them.
 
 EXAMPLE: <code>
 // _GET['foo'] = 'bar';
-UTF8::filter_input_array(INPUT_GET, array('foo' => 'FILTER_UNSAFE_RAW')); // array('bar')
+UTF8::filter_input_array(INPUT_GET, array('foo' => FILTER_UNSAFE_RAW)); // array('bar')
 </code>
 
 **Parameters:**
@@ -1882,7 +1881,7 @@ EXAMPLE: <code>UTF8::is_binary(01); // true</code>
 <a href="#voku-php-readme-class-methods">↑</a>
 Check if the file is binary.
 
-EXAMPLE: <code>UTF8::is_binary('./utf32.txt'); // true</code>
+EXAMPLE: <code>UTF8::is_binary_file('./utf-16-le.txt'); // true</code>
 
 **Parameters:**
 - `string $file`
@@ -2099,9 +2098,9 @@ UTF8::is_utf16(file_get_contents('utf-8.txt')); // false
 Check if the string is UTF-32.
 
 EXAMPLE: <code>
-UTF8::is_utf32(file_get_contents('utf-32-le.txt')); // 1
+UTF8::is_utf32(file_get_contents('sample-utf-32-le-bom.txt')); // 1
 //
-UTF8::is_utf32(file_get_contents('utf-32-be.txt')); // 2
+UTF8::is_utf32(file_get_contents('sample-utf-32-be-bom.txt')); // 2
 //
 UTF8::is_utf32(file_get_contents('utf-8.txt')); // false
 </code>
@@ -4154,8 +4153,8 @@ EXAMPLE: <code>
 $str = 'iñtërnâtiônàlizætiøn';
 $search = 'NÂT';
 
-UTF8::stristr($str, $search)); // 'nâtiônàlizætiøn'
-UTF8::stristr($str, $search, true)); // 'iñtër'
+UTF8::stristr($str, $search); // 'nâtiônàlizætiøn'
+UTF8::stristr($str, $search, true); // 'iñtër'
 </code>
 
 **Parameters:**
@@ -4177,9 +4176,9 @@ haystack before the first occurrence of the needle (excluding the needle).
 <a href="#voku-php-readme-class-methods">↑</a>
 Get the string length, not the byte-length!
 
-INFO: use UTF8::strwidth() for the char-length
+INFO: use UTF8::strlen_in_byte() for the byte-length
 
-EXAMPLE: <code>UTF8::strlen("Iñtërnâtiôn\xE9àlizætiøn")); // 20</code>
+EXAMPLE: <code>UTF8::strlen('Iñtërnâtiônàlizætiøn'); // 20</code>
 
 **Parameters:**
 - `string $str <p>The string being checked for length.</p>`
@@ -4539,8 +4538,8 @@ EXAMPLE: <code>
 $str = 'iñtërnâtiônàlizætiøn';
 $search = 'nât';
 
-UTF8::strstr($str, $search)); // 'nâtiônàlizætiøn'
-UTF8::strstr($str, $search, true)); // 'iñtër'
+UTF8::strstr($str, $search); // 'nâtiônàlizætiøn'
+UTF8::strstr($str, $search, true); // 'iñtër'
 </code>
 
 **Parameters:**
@@ -4676,9 +4675,9 @@ to the corresponding character in "to".</p>`
 <a href="#voku-php-readme-class-methods">↑</a>
 Return the width of a string.
 
-INFO: use UTF8::strlen() for the byte-length
+INFO: use UTF8::strlen_in_byte() for the byte-length
 
-EXAMPLE: <code>UTF8::strwidth("Iñtërnâtiôn\xE9àlizætiøn")); // 21</code>
+EXAMPLE: <code>UTF8::strwidth('Iñtërnâtiônàlizætiøn'); // 20</code>
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
@@ -5257,7 +5256,7 @@ EXAMPLE: <code>UTF8::words_limit('fòô bàř fòô', 2, ''); // 'fòô bàř'</
 <a href="#voku-php-readme-class-methods">↑</a>
 Wraps a string to a given number of characters
 
-EXAMPLE: <code>UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 2, '<br>', true)); // 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn'</code>
+EXAMPLE: <code>UTF8::wordwrap('Iñtërnâtiônàlizætiøn', 2, '<br>', true); // 'Iñ<br>të<br>rn<br>ât<br>iô<br>nà<br>li<br>zæ<br>ti<br>øn'</code>
 
 **Parameters:**
 - `string $str <p>The input string.</p>`
