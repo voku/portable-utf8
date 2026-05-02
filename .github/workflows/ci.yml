@@ -176,12 +176,20 @@ jobs:
           composer config --global --no-plugins allow-plugins.infection/extension-installer false
           composer require --dev --no-interaction infection/infection:^0.32.7 phpstan/phpstan:^2.1 phpstan/phpstan-strict-rules:^2.0
 
-      - name: Run Infection with PHPStan integration
+      - name: Run Infection function-signature checks
         env:
           XDEBUG_MODE: coverage
         run: |
           mkdir -p build/logs
-          php vendor/bin/infection --configuration=infection.json5 --threads=max --only-covering-test-cases --mutators=@function_signature --min-msi=0 --min-covered-msi=0 --ignore-msi-with-no-mutations
+          rm -rf /tmp/infection_portable_utf8
+          php vendor/bin/infection --configuration=infection.json5 --filter=src/voku/helper/Bootup.php --threads=max --only-covering-test-cases --mutators=@function_signature --min-msi=100 --min-covered-msi=100 --ignore-msi-with-no-mutations
+
+      - name: Run Infection unwrap-ltrim checks
+        env:
+          XDEBUG_MODE: coverage
+        run: |
+          rm -rf /tmp/infection_portable_utf8
+          php vendor/bin/infection --configuration=infection.json5 --filter=src/voku/helper/UTF8.php --threads=max --mutators=UnwrapLtrim --min-msi=100 --min-covered-msi=100 --ignore-msi-with-no-mutations
 
       - name: Archive Infection logs
         if: ${{ failure() }}
