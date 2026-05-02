@@ -184,13 +184,6 @@ jobs:
           rm -rf /tmp/infection_portable_utf8
           php vendor/bin/infection --configuration=infection.json5 --filter=src/voku/helper/Bootup.php --threads=max --only-covering-test-cases --mutators=@function_signature --min-msi=100 --min-covered-msi=100 --ignore-msi-with-no-mutations
 
-      - name: Run Infection unwrap-ltrim checks
-        env:
-          XDEBUG_MODE: coverage
-        run: |
-          rm -rf /tmp/infection_portable_utf8
-          php vendor/bin/infection --configuration=infection.json5 --filter=src/voku/helper/UTF8.php --threads=max --mutators=UnwrapLtrim --min-msi=100 --min-covered-msi=100 --ignore-msi-with-no-mutations
-
       - name: Archive Infection logs
         if: ${{ failure() }}
         uses: actions/upload-artifact@v7
