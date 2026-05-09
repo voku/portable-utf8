@@ -1,0 +1,15 @@
+{
+    "$schema": "https://infection.github.io/schema.json",
+    "source": {
+        "directories": [
+            "src"
+        ]
+    },
+    "timeout": 20,
+    "tmpDir": "/tmp/infection_portable_utf8",
+    "logs": {
+        "summary": "build/logs/infection-summary.log",
+        "summaryJson": "build/logs/infection-summary.json"
+    },
+    "staticAnalysisTool": "phpstan"
+}

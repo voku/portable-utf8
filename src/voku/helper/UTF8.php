@@ -13242,7 +13242,7 @@ final class UTF8
         $i = -1;
         $word_split = \wordwrap($word_split, $width, '#', $cut);
 
-        $max = \mb_strlen($word_split);
+        $max = \mb_strlen($word_split) - 1;
         /** @noinspection PhpAssignmentInConditionInspection - is ok here */
         while (($b = \mb_strpos($word_split, '#', $b + 1)) !== false) {
             for (++$i; $i < $b; ++$i) {
