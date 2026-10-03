@@ -8172,8 +8172,7 @@ final class UTF8
             $limit = -1;
         }
 
-        $pattern = \str_replace('/', '\\/', $pattern);
-        $array = \preg_split('/' . $pattern . '/u', $str, $limit);
+        $array = \preg_split('/' . \preg_quote($pattern, '/') . '/u', $str, $limit);
         if ($array === false) {
             return [];
         }
