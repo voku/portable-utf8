@@ -62,6 +62,17 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function testCheckForSupportDisablesDeprecatedMbRegexOnPhp86(): void
+    {
+        if (\PHP_VERSION_ID < 80600) {
+            static::markTestSkipped('mbregex is deprecated as of PHP 8.6.');
+        }
+
+        UTF8::checkForSupport();
+
+        static::assertFalse(UTF8::getSupportInfo('mbstring_regex'));
+    }
+
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
