@@ -67,7 +67,7 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         UTF8::checkForSupport();
 
         static::assertSame(
-            \PHP_VERSION_ID < 80600 && \function_exists('mb_ereg_match'),
+            !Bootup::is_php('8.6') && \function_exists('mb_ereg_match'),
             UTF8::getSupportInfo('mbstring_regex')
         );
     }
