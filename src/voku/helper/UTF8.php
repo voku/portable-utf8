@@ -528,7 +528,7 @@ final class UTF8
             }
 
             self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();
-            self::$SUPPORT['mbstring_regex'] = \PHP_VERSION_ID < 80600
+            self::$SUPPORT['mbstring_regex'] = !Bootup::is_php('8.6')
                 && \function_exists('mb_ereg_match');
             if (
                 self::$SUPPORT['mbstring'] === true
