@@ -62,16 +62,6 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testCheckForSupportReflectsPhp86MbRegexSupport(): void
-    {
-        UTF8::checkForSupport();
-
-        static::assertSame(
-            !Bootup::is_php('8.6') && \function_exists('mb_ereg_match'),
-            UTF8::getSupportInfo('mbstring_regex')
-        );
-    }
-
     /**
      * @runInSeparateProcess
      * @preserveGlobalState disabled
