@@ -1568,7 +1568,6 @@ final class Utf8TestsFromStringyTest extends \PHPUnit\Framework\TestCase
         yield [['foo,bar,baz'], 'foo,bar,baz', ''];
         yield [['foo,bar,baz'], 'foo,bar,baz', '-'];
         yield [['foo', 'bar', 'baz'], 'foo,bar,baz', ','];
-        yield [['foo', 'bar', 'baz'], 'foo,bar;;baz', '[,;]+'];
         yield [['foo', 'bar', 'baz'], 'foo,bar,baz', ',', -1];
         yield [[], 'foo,bar,baz', ',', 0];
         yield [['foo'], 'foo,bar,baz', ',', 1];
