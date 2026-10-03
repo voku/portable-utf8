@@ -16,6 +16,8 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
 {
     public function testInitAll()
     {
+        static::assertTrue((new \ReflectionMethod(Bootup::class, 'initAll'))->isPublic());
+
         $defaultCharset = \ini_get('default_charset');
         \ini_set('default_charset', 'ISO-8859-1');
 
@@ -142,6 +144,8 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRandomBytes()
     {
+        static::assertTrue((new \ReflectionMethod(Bootup::class, 'get_random_bytes'))->isPublic());
+
         $rand_false = Bootup::get_random_bytes(0);
         static::assertFalse($rand_false);
 
