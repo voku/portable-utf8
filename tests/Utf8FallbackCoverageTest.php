@@ -136,6 +136,16 @@ final class Utf8FallbackCoverageTest extends \PHPUnit\Framework\TestCase
         static::assertSame(['Añ', '€😀'], UTF8::str_split('Añ€😀', 2));
     }
 
+    public function testStrSplitPatternFallbackPreservesRegexSemantics()
+    {
+        $this->disableNativeUtf8Support();
+
+        static::assertSame(
+            ['one', 'two', 'three'],
+            UTF8::str_split_pattern("one  two\tthree", '\s+')
+        );
+    }
+
     public function testStrTitleizeSupportsIsoAndSpecialLanguageBranches()
     {
         static::assertSame('', UTF8::str_titleize(''));

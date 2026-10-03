@@ -528,7 +528,8 @@ final class UTF8
             }
 
             self::$SUPPORT['mbstring_func_overload'] = self::mbstring_overloaded();
-            self::$SUPPORT['mbstring_regex'] = \function_exists('mb_ereg_match');
+            self::$SUPPORT['mbstring_regex'] = !Bootup::is_php('8.6')
+                && \function_exists('mb_ereg_match');
             if (
                 self::$SUPPORT['mbstring'] === true
                 &&
@@ -8137,7 +8138,7 @@ final class UTF8
             return [$str];
         }
 
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             if ($limit >= 0) {
                 $result_tmp = \mb_split($pattern, $str);
                 if ($result_tmp === false) {
@@ -8171,7 +8172,7 @@ final class UTF8
             $limit = -1;
         }
 
-        $array = \preg_split('/' . \preg_quote($pattern, '/') . '/u', $str, $limit);
+        $array = \preg_split('/' . \str_replace('/', '\/', $pattern) . '/u', $str, $limit);
         if ($array === false) {
             return [];
         }
@@ -8915,7 +8916,7 @@ final class UTF8
             return $remove_empty_values ? [] : [''];
         }
 
-        if (self::$SUPPORT['mbstring'] === true) {
+        if (self::$SUPPORT['mbstring_regex'] === true) {
             $return = \mb_split("[\r\n]{1,2}", $str);
         } else {
             $return = \preg_split("/[\r\n]{1,2}/u", $str);
