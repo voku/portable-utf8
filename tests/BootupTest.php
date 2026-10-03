@@ -16,6 +16,8 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
 {
     public function testInitAll()
     {
+        static::assertFalse(Bootup::isAutoEncodingChangeDisabled());
+
         $defaultCharset = \ini_get('default_charset');
         \ini_set('default_charset', 'ISO-8859-1');
 
@@ -60,11 +62,6 @@ final class BootupTest extends \PHPUnit\Framework\TestCase
             $refProperty->setValue(null, $support);
             \mb_internal_encoding((string) $mbInternalEncoding);
         }
-    }
-
-    public function testAutoEncodingChangeIsEnabledByDefault(): void
-    {
-        static::assertFalse(Bootup::isAutoEncodingChangeDisabled());
     }
 
     /**
