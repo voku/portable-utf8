@@ -49,7 +49,7 @@ jobs:
         run: echo "directory=$(composer config cache-dir)" >> "$GITHUB_OUTPUT"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v6.0.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ steps.composer-cache.outputs.directory }}
           key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -121,7 +121,7 @@ jobs:
         run: echo "directory=$(composer config cache-dir)" >> "$GITHUB_OUTPUT"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v6.0.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ steps.composer-cache.outputs.directory }}
           key: phpstan-composer-${{ hashFiles('**/composer.json') }}
@@ -160,7 +160,7 @@ jobs:
         run: echo "directory=$(composer config cache-dir)" >> "$GITHUB_OUTPUT"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v6.0.0
+        uses: actions/cache@v6.1.0
         with:
           path: ${{ steps.composer-cache.outputs.directory }}
           key: infection-composer-${{ hashFiles('**/composer.json') }}
@@ -182,7 +182,7 @@ jobs:
         run: |
           mkdir -p build/logs
           rm -rf /tmp/infection_portable_utf8
-          php vendor/bin/infection --configuration=infection.json5 --filter=src/voku/helper/Bootup.php --threads=max --only-covering-test-cases --mutators=@function_signature --min-msi=100 --min-covered-msi=100 --ignore-msi-with-no-mutations
+          php vendor/bin/infection --configuration=infection.json5 --filter=src/voku/helper/Bootup.php --threads=max --test-framework-options="--filter=BootupTest" --mutators=@function_signature --min-msi=100 --min-covered-msi=100 --ignore-msi-with-no-mutations
 
       - name: Archive Infection logs
         if: ${{ failure() }}
