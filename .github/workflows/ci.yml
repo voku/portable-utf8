@@ -182,7 +182,7 @@ jobs:
         run: |
           mkdir -p build/logs
           rm -rf /tmp/infection_portable_utf8
-          php vendor/bin/infection --configuration=infection.json5 --filter=src/voku/helper/Bootup.php --threads=max --mutators=@function_signature --min-msi=100 --min-covered-msi=100 --ignore-msi-with-no-mutations
+          php vendor/bin/infection --configuration=infection.json5 --filter=src/voku/helper/Bootup.php --threads=max --test-framework-options="--filter=BootupTest" --mutators=@function_signature --min-msi=100 --min-covered-msi=100 --ignore-msi-with-no-mutations
 
       - name: Archive Infection logs
         if: ${{ failure() }}
