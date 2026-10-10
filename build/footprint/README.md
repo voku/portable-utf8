@@ -24,7 +24,7 @@ A deliberate semantic emoji update needs separate fixture/test review.
 The sibling `portable-utf8-benchmark/tools/footprint/` checkout contains the executable locked
 production-consumer installs, full mapping/API matrix, ICU experiment, mandatory-package
 prototype, diagnostic-aware differential tests, runtime samples, ADR and release notes.
-The full UTF8 Dist dependency closure saves 235,529 logical and 86,016 allocated bytes;
+The full UTF8 Dist dependency closure saves 235,496 logical and 86,016 allocated bytes;
 file counts and dependency requirements do not change. Ordered emoji row parsing retains
 ~50 KB more runtime memory in the measured native profile; it is a footprint trade-off.
 
