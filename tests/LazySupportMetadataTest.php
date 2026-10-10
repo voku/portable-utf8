@@ -11,6 +11,7 @@ final class LazySupportMetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @runInSeparateProcess
+     *
      * @preserveGlobalState disabled
      */
     public function testUnrelatedQueryDefersIncludeAndCompleteResultPreservesHistoricalShape(): void
@@ -32,6 +33,7 @@ final class LazySupportMetadataTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @runInSeparateProcess
+     *
      * @preserveGlobalState disabled
      */
     public function testDirectListRequestStillIncludesAndCachesData(): void
