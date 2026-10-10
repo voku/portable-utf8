@@ -36,6 +36,31 @@ final class LazySupportMetadataTest extends \PHPUnit\Framework\TestCase
      *
      * @preserveGlobalState disabled
      */
+    public function testDebugSupportOutputMaterializesDeferredList(): void
+    {
+        $before = UTF8::getSupportInfo();
+        UTF8::getSupportInfo('intl');
+        $file = \realpath(__DIR__ . '/../src/voku/helper/data/transliterator_list.php');
+        static::assertNotContains($file, \get_included_files());
+        $expected = $before;
+        $expected['intl__transliterator_list_ids'] = include $file;
+        $html = '<pre>';
+        foreach ($expected as $key => $value) {
+            $html .= $key . ' - ' . \print_r($value, true) . "\n<br>";
+        }
+        $html .= '</pre>';
+        static::assertSame($html, UTF8::showSupport(false));
+        \ob_start();
+        static::assertSame($html, UTF8::showSupport(true));
+        static::assertSame($html, \ob_get_clean());
+        static::assertSame($expected, UTF8::getSupportInfo());
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @preserveGlobalState disabled
+     */
     public function testDirectListRequestStillIncludesAndCachesData(): void
     {
         $file = \realpath(__DIR__ . '/../src/voku/helper/data/transliterator_list.php');

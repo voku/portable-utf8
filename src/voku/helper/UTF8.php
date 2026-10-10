@@ -182,6 +182,11 @@ final class UTF8
     private static $SUPPORT = [];
 
     /**
+     * @var bool
+     */
+    private static $SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING = false;
+
+    /**
      * @var string[]|null
      *
      * @phpstan-var array<string, string>|null
@@ -2572,7 +2577,7 @@ final class UTF8
      */
     public static function getSupportInfo(?string $key = null)
     {
-        if ($key === null && !\array_key_exists('intl__transliterator_list_ids', self::$SUPPORT)) {
+        if ($key === null && !self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING) {
             return self::$SUPPORT;
         }
 
@@ -2581,10 +2586,16 @@ final class UTF8
                 self::$INTL_TRANSLITERATOR_LIST = self::getData('transliterator_list');
             }
             self::$SUPPORT['intl__transliterator_list_ids'] = self::$INTL_TRANSLITERATOR_LIST;
+            self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING = false;
         } elseif (!\array_key_exists('intl__transliterator_list_ids', self::$SUPPORT)) {
             // Reserve the historical key position, but defer the unrelated data
             // include until the list or the complete support result is requested.
             self::$SUPPORT['intl__transliterator_list_ids'] = null;
+            self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING = true;
+        } elseif (!self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING) {
+            // Keyed queries historically restore the cached list even after a
+            // caller changes a reference exposed by showSupport().
+            self::$SUPPORT['intl__transliterator_list_ids'] = self::$INTL_TRANSLITERATOR_LIST;
         }
 
         return $key === null ? self::$SUPPORT : (self::$SUPPORT[$key] ?? null);
@@ -5592,6 +5603,10 @@ final class UTF8
     {
         // init
         $html = '';
+
+        if (self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING) {
+            self::getSupportInfo();
+        }
 
         $html .= '<pre>';
         foreach (self::$SUPPORT as $key => &$value) {
