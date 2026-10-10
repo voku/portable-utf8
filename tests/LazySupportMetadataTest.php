@@ -18,7 +18,9 @@ final class LazySupportMetadataTest extends \PHPUnit\Framework\TestCase
     {
         $before = UTF8::getSupportInfo();
         static::assertArrayNotHasKey('intl__transliterator_list_ids', $before);
-        static::assertSame($before['intl'], UTF8::getSupportInfo('intl'));
+        foreach ($before as $key => $value) {
+            static::assertSame($value, UTF8::getSupportInfo($key));
+        }
         static::assertNull(UTF8::getSupportInfo('not-a-supported-key'));
         $file = \realpath(__DIR__ . '/../src/voku/helper/data/transliterator_list.php');
         static::assertNotContains($file, \get_included_files());
