@@ -2572,17 +2572,22 @@ final class UTF8
      */
     public static function getSupportInfo(?string $key = null)
     {
-        if ($key === null) {
+        if ($key === null && !\array_key_exists('intl__transliterator_list_ids', self::$SUPPORT)) {
             return self::$SUPPORT;
         }
 
-        if (self::$INTL_TRANSLITERATOR_LIST === null) {
-            self::$INTL_TRANSLITERATOR_LIST = self::getData('transliterator_list');
+        if ($key === null || $key === 'intl__transliterator_list_ids') {
+            if (self::$INTL_TRANSLITERATOR_LIST === null) {
+                self::$INTL_TRANSLITERATOR_LIST = self::getData('transliterator_list');
+            }
+            self::$SUPPORT['intl__transliterator_list_ids'] = self::$INTL_TRANSLITERATOR_LIST;
+        } elseif (!\array_key_exists('intl__transliterator_list_ids', self::$SUPPORT)) {
+            // Reserve the historical key position, but defer the unrelated data
+            // include until the list or the complete support result is requested.
+            self::$SUPPORT['intl__transliterator_list_ids'] = null;
         }
-        // compatibility fix for old versions
-        self::$SUPPORT['intl__transliterator_list_ids'] = self::$INTL_TRANSLITERATOR_LIST;
 
-        return self::$SUPPORT[$key] ?? null;
+        return $key === null ? self::$SUPPORT : (self::$SUPPORT[$key] ?? null);
     }
 
     /**
