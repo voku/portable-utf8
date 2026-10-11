@@ -33,7 +33,8 @@
         "symfony/polyfill-intl-grapheme": "~1.0",
         "symfony/polyfill-intl-normalizer": "~1.0",
         "symfony/polyfill-mbstring": "~1.0",
-        "voku/portable-ascii": "~2.1.0"
+        "voku/portable-ascii": "~2.1.0",
+        "voku/portable-utf8-emoji-data": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0 || ~7.0 || ~8.0 || ~9.0"
