@@ -10106,7 +10106,7 @@ final class UTF8
     ) {
         if ($haystack === '') {
             if (\PHP_VERSION_ID >= 80000) {
-                if ($needle === '') {
+                if (\PHP_VERSION_ID >= 80000 && $needle === '') {
                     return 0;
                 }
             } else {
@@ -10610,7 +10610,7 @@ final class UTF8
     ) {
         if ($haystack === '') {
             if (\PHP_VERSION_ID >= 80000) {
-                if ($needle === '') {
+                if (\PHP_VERSION_ID >= 80000 && $needle === '') {
                     return 0;
                 }
             } else {
@@ -10780,7 +10780,7 @@ final class UTF8
     ) {
         if ($haystack === '') {
             if (\PHP_VERSION_ID >= 80000) {
-                if ($needle === '') {
+                if (\PHP_VERSION_ID >= 80000 && $needle === '') {
                     return 0;
                 }
             } else {

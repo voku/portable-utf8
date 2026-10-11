@@ -32,10 +32,12 @@ final class LazySupportMetadataTest extends \PHPUnit\Framework\TestCase
         if ($before['intl']) {
             static::assertSame('ı', UTF8::strtolower('I', 'UTF-8', false, 'tr'));
             static::assertSame('İ', UTF8::strtoupper('i', 'UTF-8', false, 'tr'));
-        } else {
-            static::assertSame('i', UTF8::strtolower('I'));
-            static::assertSame('I', UTF8::strtoupper('i'));
+
+            return;
         }
+
+        static::assertSame('i', UTF8::strtolower('I'));
+        static::assertSame('I', UTF8::strtoupper('i'));
     }
 
     /**
