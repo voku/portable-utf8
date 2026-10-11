@@ -1,0 +1,34 @@
+{
+    "caseFolding_full.php": {
+        "sha256": "fcb9181e90d30315d2386fc4488eee4a7e0f1b8f5fbf02aceafce0de151b6f35",
+        "entries": 2
+    },
+    "chr.php": {
+        "sha256": "e99ce48a2e559027760195fdbd9e49383b6d72c31b79a7863bb7892d1e1f9a43",
+        "entries": 256
+    },
+    "emoji.php": {
+        "sha256": "1c1face853e30131f8d5e540c81cb36788c90fc7f14a8c533a4817a665924d14",
+        "entries": 2789
+    },
+    "encodings.php": {
+        "sha256": "77162f68ccfe39d5aa59afd40a44f24ad49759c94435402cff35c0f9d50b0d3c",
+        "entries": 426
+    },
+    "ord.php": {
+        "sha256": "4e1e3e771434bf5a5e6eb26933b18886e441de1470bc2308afd005cff6f5f3ec",
+        "entries": 257
+    },
+    "transliterator_list.php": {
+        "sha256": "2aecb55ba4e8d7ed7124194da3301454a85c673a785f9bdafefa8678adf17970",
+        "entries": 655
+    },
+    "utf8_fix.php": {
+        "sha256": "bafed1b232e8801750af4e628e564d592f812551680f6e27bb49aaac827668d2",
+        "entries": 133
+    },
+    "win1252_to_utf8.php": {
+        "sha256": "de913e5912d313cbe2b9a17056119cd4505be1e4ed746b8671119fa430bba05a",
+        "entries": 122
+    }
+}

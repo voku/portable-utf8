@@ -13,3 +13,9 @@ parameters:
         - '#PHPDoc tag @var with type .+ is not subtype of type .+#'
         - '#Parameter \#1 \$val of function mb_convert_encoding expects array\|string, string\|false given#'
         - '#Strict comparison using !== between int<0, max> and null will always evaluate to true#'
+        # Keep the legacy PHP-version guards: PHPStan narrows these three branches
+        # after their earlier PHP 7 empty-haystack return, although PHP 8 needs them.
+        -
+            message: '#Comparison operation ">=" between int<80000, max> and 80000 is always true\.#'
+            path: src/voku/helper/UTF8.php
+            count: 3

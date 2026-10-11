@@ -1,0 +1,83 @@
+<?php
+
+declare(strict_types=1);
+
+namespace voku\tests;
+
+use voku\helper\UTF8;
+
+/** @internal */
+final class LazySupportMetadataTest extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * @runInSeparateProcess
+     *
+     * @preserveGlobalState disabled
+     */
+    public function testUnrelatedQueryDefersIncludeAndCompleteResultPreservesHistoricalShape(): void
+    {
+        $before = UTF8::getSupportInfo();
+        static::assertArrayNotHasKey('intl__transliterator_list_ids', $before);
+        foreach ($before as $key => $value) {
+            static::assertSame($value, UTF8::getSupportInfo($key));
+        }
+        static::assertNull(UTF8::getSupportInfo('not-a-supported-key'));
+        $file = \realpath(__DIR__ . '/../src/voku/helper/data/transliterator_list.php');
+        static::assertNotContains($file, \get_included_files());
+        $expected = $before;
+        $expected['intl__transliterator_list_ids'] = include $file; // NOSONAR: reload the array after UTF8 has included and cached it.
+        static::assertSame($expected, UTF8::getSupportInfo());
+        static::assertSame($expected['intl__transliterator_list_ids'], UTF8::getSupportInfo('intl__transliterator_list_ids'));
+        static::assertSame($expected, UTF8::getSupportInfo());
+        if ($before['intl']) {
+            static::assertSame('ı', UTF8::strtolower('I', 'UTF-8', false, 'tr'));
+            static::assertSame('İ', UTF8::strtoupper('i', 'UTF-8', false, 'tr'));
+
+            return;
+        }
+
+        static::assertSame('i', UTF8::strtolower('I'));
+        static::assertSame('I', UTF8::strtoupper('i'));
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @preserveGlobalState disabled
+     */
+    public function testDebugSupportOutputMaterializesDeferredList(): void
+    {
+        $before = UTF8::getSupportInfo();
+        UTF8::getSupportInfo('intl');
+        $file = \realpath(__DIR__ . '/../src/voku/helper/data/transliterator_list.php');
+        static::assertNotContains($file, \get_included_files());
+        $expected = $before;
+        $expected['intl__transliterator_list_ids'] = include $file; // NOSONAR: reload the array after UTF8 has included and cached it.
+        $html = '<pre>';
+        foreach ($expected as $key => $value) {
+            $html .= $key . ' - ' . \print_r($value, true) . "\n<br>";
+        }
+        $html .= '</pre>';
+        static::assertSame($html, UTF8::showSupport(false));
+        \ob_start();
+        static::assertSame($html, UTF8::showSupport(true));
+        static::assertSame($html, \ob_get_clean());
+        static::assertSame($expected, UTF8::getSupportInfo());
+    }
+
+    /**
+     * @runInSeparateProcess
+     *
+     * @preserveGlobalState disabled
+     */
+    public function testDirectListRequestStillIncludesAndCachesData(): void
+    {
+        $file = \realpath(__DIR__ . '/../src/voku/helper/data/transliterator_list.php');
+        static::assertNotContains($file, \get_included_files());
+        $list = UTF8::getSupportInfo('intl__transliterator_list_ids');
+        static::assertContains($file, \get_included_files());
+        static::assertSame(include $file, $list); // NOSONAR: reload the array after UTF8 has included and cached it.
+        static::assertSame($list, UTF8::getSupportInfo('intl__transliterator_list_ids'));
+        static::assertSame($list, UTF8::getSupportInfo()['intl__transliterator_list_ids']);
+    }
+}
