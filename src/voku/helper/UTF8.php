@@ -184,7 +184,7 @@ final class UTF8
     /**
      * @var bool
      */
-    private static $SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING = false;
+    private static $supportInfoTransliteratorListPending = false;
 
     /**
      * @var string[]|null
@@ -1245,7 +1245,7 @@ final class UTF8
     {
         // We cannot use html_entity_decode() here, as it will not return
         // characters for many values < 160.
-        return \mb_convert_encoding('&#' . $int . ';', 'UTF-8', 'HTML-ENTITIES');
+        return (string) \mb_convert_encoding('&#' . $int . ';', 'UTF-8', 'HTML-ENTITIES');
     }
 
     /**
@@ -2577,7 +2577,7 @@ final class UTF8
      */
     public static function getSupportInfo(?string $key = null)
     {
-        if ($key === null && !self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING) {
+        if ($key === null && !self::$supportInfoTransliteratorListPending) {
             return self::$SUPPORT;
         }
 
@@ -2586,13 +2586,13 @@ final class UTF8
                 self::$INTL_TRANSLITERATOR_LIST = self::getData('transliterator_list');
             }
             self::$SUPPORT['intl__transliterator_list_ids'] = self::$INTL_TRANSLITERATOR_LIST;
-            self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING = false;
+            self::$supportInfoTransliteratorListPending = false;
         } elseif (!\array_key_exists('intl__transliterator_list_ids', self::$SUPPORT)) {
             // Reserve the historical key position, but defer the unrelated data
             // include until the list or the complete support result is requested.
             self::$SUPPORT['intl__transliterator_list_ids'] = null;
-            self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING = true;
-        } elseif (!self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING) {
+            self::$supportInfoTransliteratorListPending = true;
+        } elseif (!self::$supportInfoTransliteratorListPending) {
             // Keyed queries historically restore the cached list even after a
             // caller changes a reference exposed by showSupport().
             self::$SUPPORT['intl__transliterator_list_ids'] = self::$INTL_TRANSLITERATOR_LIST;
@@ -3960,7 +3960,7 @@ final class UTF8
         $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16LE');
         if ($test) {
             $test2 = \mb_convert_encoding($test, 'UTF-16LE', 'UTF-8');
-            $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16LE');
+            $test3 = \mb_convert_encoding((string) $test2, 'UTF-8', 'UTF-16LE');
             if ($test3 === $test) {
                 $str_chars = self::count_chars($str, true, false);
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
@@ -3976,7 +3976,7 @@ final class UTF8
         $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-16BE');
         if ($test) {
             $test2 = \mb_convert_encoding($test, 'UTF-16BE', 'UTF-8');
-            $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-16BE');
+            $test3 = \mb_convert_encoding((string) $test2, 'UTF-8', 'UTF-16BE');
             if ($test3 === $test) {
                 if ($str_chars === []) {
                     $str_chars = self::count_chars($str, true, false);
@@ -4053,7 +4053,7 @@ final class UTF8
         $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32LE');
         if ($test) {
             $test2 = \mb_convert_encoding($test, 'UTF-32LE', 'UTF-8');
-            $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32LE');
+            $test3 = \mb_convert_encoding((string) $test2, 'UTF-8', 'UTF-32LE');
             if ($test3 === $test) {
                 $str_chars = self::count_chars($str, true, false);
                 foreach (self::count_chars($test3) as $test3char => &$test3charEmpty) {
@@ -4069,7 +4069,7 @@ final class UTF8
         $test = \mb_convert_encoding($str, 'UTF-8', 'UTF-32BE');
         if ($test) {
             $test2 = \mb_convert_encoding($test, 'UTF-32BE', 'UTF-8');
-            $test3 = \mb_convert_encoding($test2, 'UTF-8', 'UTF-32BE');
+            $test3 = \mb_convert_encoding((string) $test2, 'UTF-8', 'UTF-32BE');
             if ($test3 === $test) {
                 if ($str_chars === []) {
                     $str_chars = self::count_chars($str, true, false);
@@ -5604,7 +5604,7 @@ final class UTF8
         // init
         $html = '';
 
-        if (self::$SUPPORT_INFO_TRANSLITERATOR_LIST_PENDING) {
+        if (self::$supportInfoTransliteratorListPending) {
             self::getSupportInfo();
         }
 
@@ -9462,7 +9462,7 @@ final class UTF8
 
         // We cannot use html_entity_decode() here, as it will not return
         // characters for many values < 160.
-        return mb_convert_encoding($str, 'UTF-8', 'HTML-ENTITIES');
+        return (string) mb_convert_encoding($str, 'UTF-8', 'HTML-ENTITIES');
     }
 
     /**
@@ -10121,7 +10121,7 @@ final class UTF8
         $needle = (string) $needle;
 
         if ($haystack === '') {
-            if (\PHP_VERSION_ID >= 80000 && $needle === '') {
+            if ($needle === '') {
                 return 0;
             }
 
@@ -10625,7 +10625,7 @@ final class UTF8
         $needle = (string) $needle;
 
         if ($haystack === '') {
-            if (\PHP_VERSION_ID >= 80000 && $needle === '') {
+            if ($needle === '') {
                 return 0;
             }
 
@@ -10795,7 +10795,7 @@ final class UTF8
         $needle = (string) $needle;
 
         if ($haystack === '') {
-            if (\PHP_VERSION_ID >= 80000 && $needle === '') {
+            if ($needle === '') {
                 return 0;
             }
 

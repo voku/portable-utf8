@@ -3,11 +3,11 @@
 // Preserve mapping order and values; no compressor or new runtime dependency.
 $write = in_array('--write', $argv, true);
 $root = dirname(__DIR__, 2) . '/src/voku/helper/data/';
-$map = include $root . 'emoji.php';
+$map = include_once $root . 'emoji.php';
 $rows = [];
 foreach ($map as $name => $value) {
     if (strpos($name, 'CHARACTER_') !== 0 || strpbrk($name . $value, "\t\n\r") !== false) {
-        throw new RuntimeException('Unsupported emoji row: ' . $name);
+        throw new UnexpectedValueException('Unsupported emoji row: ' . $name);
     }
     $rows[] = substr($name, 10) . "\t" . $value;
 }
