@@ -13578,6 +13578,14 @@ final class UTF8
         /** @noinspection PhpIncludeInspection */
         /** @noinspection UsingInclusionReturnValueInspection */
         /** @psalm-suppress UnresolvableInclude */
+        if ($file === 'emoji') {
+            if (!\class_exists(\Voku\PortableUtf8EmojiData\EmojiMap::class)) {
+                throw new \RuntimeException('Mappings are unavailable. Install voku/portable-utf8-emoji-data and remove its replacement declaration from your root composer.json.');
+            }
+
+            return \Voku\PortableUtf8EmojiData\EmojiMap::load();
+        }
+
         return include __DIR__ . '/data/' . $file . '.php';
     }
 
